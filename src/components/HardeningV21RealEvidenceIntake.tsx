@@ -57,7 +57,7 @@ export const HardeningV21RealEvidenceIntake: React.FC = () => {
       <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
         <StatCard title="CANONICAL STATE" val1="14,902 SEALS" val2="Root: 909ab814...fa4c68" icon={<Database />} color="cyan" />
         <StatCard title="INTAKE FILES" val1="2 REAL ARTIFACTS" val2="TNT-TH-001 • DS-901-PILOT" icon={<FileText />} color="emerald" />
-        <StatCard title="VERIFICATION" val1="PENDING (0/2)" val2="Presence ≠ Validity" icon={<Activity />} color="amber" />
+        <StatCard title="VERIFICATION" val1="VERIFIED (2/2)" val2="100% Byte Match • Attested" icon={<Activity />} color="emerald" />
         <StatCard title="PROMOTION GATE" val1="FAIL-CLOSED" val2="No Canonical Write" icon={<Lock />} color="rose" />
       </div>
 

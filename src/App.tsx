@@ -59,6 +59,7 @@ import { CopilotAssistantDrawer } from './components/copilot/CopilotAssistantDra
 import { systemStateStore } from './store/systemStateStore';
 import { AudioEntropyController, SsotDriftWarning, SsotDriftToggleButton, QuantumAggregateEntropyIndicator } from './components/system/SystemStateComponents';
 import { ToastNotification, ToastMessage } from './components/ToastNotification';
+import { useNotificationWebSocket } from './hooks/useNotificationWebSocket';
 
 import {
   Sparkles,
@@ -613,6 +614,9 @@ function SovereignAppContent() {
   const removeToast = useCallback((id: string) => {
     setToasts((prev) => prev.filter((t) => t.id !== id));
   }, []);
+
+  // Connect to Node.js WebSocket Notification Service and pipe incoming alerts to toasts
+  useNotificationWebSocket(showToast);
   const [carrierPitchHz, setCarrierPitchHz] = useState<number>(882);
   const [snapshots, setSnapshots] = useState<HardwareSnapshot[]>(INITIAL_HARDWARE_SNAPSHOTS);
   const [lastSnapshotTime, setLastSnapshotTime] = useState<number>(0);

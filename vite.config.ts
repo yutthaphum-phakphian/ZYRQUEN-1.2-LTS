@@ -5,8 +5,19 @@ import { defineConfig } from 'vite';
 import { VitePWA } from 'vite-plugin-pwa';
 
 export default defineConfig(() => {
-  // กำหนด Base path ให้ตรงกับชื่อ Repository บน GitHub Pages
-  const basePath = '/';
+  // Determine Base Path for GitHub Pages, Cloud Run, or local dev
+  let rawBase = process.env.VITE_BASE_PATH || process.env.BASE_PATH || '';
+  if (!rawBase && process.env.GITHUB_REPOSITORY) {
+    const repoParts = process.env.GITHUB_REPOSITORY.split('/');
+    if (repoParts.length > 1 && !repoParts[1].endsWith('.github.io')) {
+      rawBase = `/${repoParts[1]}/`;
+    }
+  }
+  const basePath = rawBase
+    ? rawBase.startsWith('/')
+      ? (rawBase.endsWith('/') ? rawBase : `${rawBase}/`)
+      : `/${rawBase.endsWith('/') ? rawBase : `${rawBase}/`}`
+    : '/';
 
   return {
     base: basePath,
