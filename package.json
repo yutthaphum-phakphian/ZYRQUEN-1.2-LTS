@@ -41,7 +41,6 @@
     "socket.io": "^4.8.3",
     "socket.io-client": "^4.8.3",
     "three": "^0.185.1",
-    "vite": "^6.2.3",
     "ws": "^8.21.3"
   },
   "devDependencies": {
