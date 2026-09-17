@@ -6,6 +6,28 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>ZYRQUEN Ω∞ Sovereign World Engine</title>
     <meta name="description" content="Sovereign Operating System & Civilization Intelligence Control Plane - Block #849202 (Frozen v1.2 LTS)" />
+    <script>
+      // Filter benign Vite websocket disconnection warnings in sandboxed preview iframe
+      (function() {
+        if (typeof window === 'undefined') return;
+        var origConsoleError = console.error;
+        var origConsoleWarn = console.warn;
+        console.error = function() {
+          var first = arguments[0];
+          if (typeof first === 'string' && (first.indexOf('[vite]') !== -1 || first.indexOf('failed to connect to websocket') !== -1)) {
+            return;
+          }
+          return origConsoleError.apply(console, arguments);
+        };
+        console.warn = function() {
+          var first = arguments[0];
+          if (typeof first === 'string' && (first.indexOf('[vite]') !== -1 || first.indexOf('failed to connect to websocket') !== -1)) {
+            return;
+          }
+          return origConsoleWarn.apply(console, arguments);
+        };
+      })();
+    </script>
   </head>
   <body>
     <div id="root"></div>

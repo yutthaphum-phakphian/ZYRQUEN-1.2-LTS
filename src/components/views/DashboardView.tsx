@@ -42,6 +42,7 @@ import { GitHubSyncStatusUtility } from '../dashboard/GitHubSyncStatusUtility';
 import { QuickActionsMenu } from '../QuickActionsMenu';
 import { CopilotAutonomyNodePanel } from '../copilot/CopilotAutonomyNodePanel';
 import { SealValidationAnimation } from '../SealValidationAnimation';
+import { RealtimeUnifiedVerificationDashboard } from './RealtimeUnifiedVerificationDashboard';
 import {
   Activity,
   Cpu,
@@ -150,8 +151,8 @@ export const DashboardView: React.FC<DashboardViewProps> = ({
   onOpenCertificate,
   isForensicAuditMode = false,
 }) => {
-  // Main executive sections: Overview (clean summary), Sovereign Audit Dashboard, Chambers Explorer, Telemetry, Evidence, Android 16+ FCM Push
-  const [dashboardSection, setDashboardSection] = useState<'OVERVIEW' | 'AUDIT' | 'CHAMBERS' | 'TELEMETRY' | 'EVIDENCE' | 'FCM_PUSH'>('OVERVIEW');
+  // Main executive sections: Overview (clean summary), Core Verification & Live Telemetry, Sovereign Audit Dashboard, Chambers Explorer, Telemetry, Evidence, Android 16+ FCM Push
+  const [dashboardSection, setDashboardSection] = useState<'OVERVIEW' | 'VERIFICATION' | 'AUDIT' | 'CHAMBERS' | 'TELEMETRY' | 'EVIDENCE' | 'FCM_PUSH'>('OVERVIEW');
   const [activeCanvasTab, setActiveCanvasTab] = useState<'hologram' | 'atlas' | 'overview' | 'topology'>('hologram');
   const [isHealing, setIsHealing] = useState(false);
   const [healSuccess, setHealSuccess] = useState(false);
@@ -266,6 +267,18 @@ export const DashboardView: React.FC<DashboardViewProps> = ({
             >
               <Smartphone className="w-3.5 h-3.5 text-cyan-400" />
               <span>📱 Android 16+ FCM</span>
+            </button>
+
+            <button
+              onClick={() => {
+                playTone(920, 0.05);
+                setDashboardSection('VERIFICATION');
+              }}
+              className="px-3.5 py-2 rounded-xl bg-cyan-950/70 hover:bg-cyan-900/80 border border-cyan-400/60 text-cyan-200 font-mono text-xs font-bold flex items-center justify-center gap-2 transition-all max-[479px]:w-full shadow-[0_0_15px_rgba(6,182,212,0.3)]"
+              title="Open Core Verification & Live Telemetry Stream"
+            >
+              <ShieldCheck className="w-3.5 h-3.5 text-cyan-400" />
+              <span>🔐 Core Verification Panel</span>
             </button>
 
             <button
@@ -462,6 +475,24 @@ export const DashboardView: React.FC<DashboardViewProps> = ({
             }`}
           >
             <span>🌟 Executive Overview</span>
+          </button>
+
+          <button
+            onClick={() => {
+              playTone(720, 0.04);
+              setDashboardSection('VERIFICATION');
+            }}
+            className={`px-3.5 py-2 rounded-xl font-bold flex items-center gap-2 transition-all cursor-pointer max-[479px]:w-full max-[479px]:justify-start ${
+              dashboardSection === 'VERIFICATION'
+                ? 'bg-cyan-500/20 text-cyan-200 border border-cyan-400/50 shadow-[0_0_12px_rgba(6,182,212,0.25)]'
+                : 'text-zinc-400 hover:text-zinc-200 bg-white/5 border border-transparent'
+            }`}
+          >
+            <ShieldCheck className="w-3.5 h-3.5 text-cyan-400" />
+            <span>🔐 Core Verification &amp; Telemetry</span>
+            <span className="px-1.5 py-0.2 rounded bg-cyan-950 text-cyan-300 text-[10px] font-mono border border-cyan-500/30">
+              LIVE
+            </span>
           </button>
 
           <button
@@ -1022,6 +1053,16 @@ export const DashboardView: React.FC<DashboardViewProps> = ({
           <AggregateSystemEntropyChart />
           <SpatialEntropyHeatMap />
           <PerformanceDashboard />
+        </div>
+      )}
+
+      {/* TAB: CORE VERIFICATION & LIVE TELEMETRY DASHBOARD */}
+      {dashboardSection === 'VERIFICATION' && (
+        <div className="space-y-4 sm:space-y-5 animate-in fade-in duration-200 w-full min-w-0 max-w-full overflow-x-hidden max-[479px]:p-[12px] max-[479px]:space-y-3">
+          <RealtimeUnifiedVerificationDashboard
+            onNavigateToLedger={() => onNavigate('ledger')}
+            onOpenCertificate={onOpenCertificate}
+          />
         </div>
       )}
 

@@ -18,6 +18,7 @@ import {
   getAtmosphericCarrierState,
 } from './components/AudioSynthesizer';
 import { DashboardView } from './components/views/DashboardView';
+import { RealtimeUnifiedVerificationDashboard } from './components/views/RealtimeUnifiedVerificationDashboard';
 import { QuantumView } from './components/views/QuantumView';
 import { Chamber11QuantumRadar } from './components/views/Chamber11QuantumRadar';
 import { G11CanonicalCore } from './components/views/G11CanonicalCore';
@@ -1354,6 +1355,10 @@ function SovereignAppContent() {
       case 'canonical':
         return (
           <div className="space-y-6">
+            <RealtimeUnifiedVerificationDashboard
+              onNavigateToLedger={() => setCurrentView('ledger')}
+              onOpenCertificate={() => setIsCertificateOpen(true)}
+            />
             <CanonicalIntegrityDashboardView
               onNavigateToLedger={() => setCurrentView('ledger')}
             />
