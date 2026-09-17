@@ -1,28 +1,27 @@
-# .gitattributes configuration for ZYRQUEN Ω∞ Sovereign Kernel
-# Generated to enforce clean Language Statistics and minimize diff noise in Pull Requests
-# Grounded in the Sovereign React Artifact Technical Blueprint (LOCKED_FROZEN_v1.2_LTS)
+# ==============================================================================
+# ZYRQUEN Ω∞ Sovereign Kernel - .gitattributes
+# ==============================================================================
 
-# Mark all compiled single-file HTML bundles as generated to collapse them in diffs
+# ── Linguist Generated Rules (Hide from PR Diff & Language Stats) ──────────────
 *.html linguist-generated
 *agentic_artifact*.html linguist-generated
 *ULTIMATE_FINAL*.html linguist-generated
 
-# Mark all JSON databases, logs, and ledger exports as generated
-*.json linguist-generated
-*ledger*.json linguist-generated
+ledger*.json linguist-generated
 *results*.json linguist-generated
 *records*.json linguist-generated
 *manifest*.json linguist-generated
 
-# Mark text-based full codebase exports as generated
 *full-codebase*.txt linguist-generated
 
-# Mark all binary visual assets and PDF forensic reports as generated/documentation
 *.png linguist-generated
-*.pdf linguist-generated
 *.jpg linguist-generated
+*.jpeg linguist-generated
+*.gif linguist-generated
+*.pdf linguist-generated
+*.svg linguist-generated
 
-# Ensure Solidity, TypeScript, and Python remain the pure representation of the repository's active development
+# ── Line Ending Normalization (Cross-OS Consistency) ──────────────────────────
 *.sol text eol=lf
 *.tsx text eol=lf
 *.ts text eol=lf
