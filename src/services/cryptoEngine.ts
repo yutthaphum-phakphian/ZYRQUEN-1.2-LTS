@@ -1,4 +1,4 @@
-import { CANONICAL_CONSTANTS } from '../data/sovereignData.ts';
+import { CANONICAL_CONSTANTS } from '../data/sovereignData';
 
 export async function sha256Hex(message: string): Promise<string> {
   const encoder = new TextEncoder();

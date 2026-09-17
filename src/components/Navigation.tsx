@@ -1,6 +1,5 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { motion, AnimatePresence } from 'motion/react';
-import { PWAInstallButton } from "./PWAInstallButton";
 import { ViewType } from '../types';
 import { SYSTEM_METADATA } from '../data/canonicalData';
 import {

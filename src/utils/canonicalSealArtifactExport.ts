@@ -162,7 +162,7 @@ export function buildCanonicalSealArtifact(): DigitallySignedSealArtifact {
     pqcAlgorithm: c.pqcAlgorithm,
     keyFingerprint: c.expectedKeyFingerprint,
     signatureValid: c.signatureValid,
-    timestamp: c.timestamp,
+    timestamp: c.timestamp ?? new Date().toISOString(),
   }));
 
   const rawPayloadForDigest = JSON.stringify({

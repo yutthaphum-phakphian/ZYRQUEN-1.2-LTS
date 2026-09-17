@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { Zap, CheckCircle2, AlertTriangle, X, Play, RefreshCw } from 'lucide-react';
-import { soundFx } from '../services/audioEngine.ts';
-import { CANONICAL_CONSTANTS } from '../data/sovereignData.ts';
+import { soundFx } from '../services/audioEngine';
+import { CANONICAL_CONSTANTS } from '../data/sovereignData';
 
 interface PhoenixHealingModalProps {
   isOpen: boolean;

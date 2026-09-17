@@ -783,18 +783,18 @@ export const TelemetryAnomalyObserverTimeline: React.FC<
                       <span className="text-zinc-400">99.98%</span>
                     </div>
                     <div className="text-sm font-bold text-emerald-300">
-                      {activeSelected.snapshot.voltageStabilityPct}%
+                      {activeSelected.snapshot.voltageStabilityPct ?? 99.98}%
                     </div>
                     <div
                       className={`text-[10px] font-bold ${
-                        activeSelected.snapshot.voltageStabilityPct < 99.5
+                        (activeSelected.snapshot.voltageStabilityPct ?? 99.98) < 99.5
                           ? 'text-rose-400'
                           : 'text-emerald-400'
                       }`}
                     >
                       &Delta;{' '}
-                      {(activeSelected.snapshot.voltageStabilityPct - 99.98 >= 0 ? '+' : '') +
-                        (activeSelected.snapshot.voltageStabilityPct - 99.98).toFixed(2)}
+                      {((activeSelected.snapshot.voltageStabilityPct ?? 99.98) - 99.98 >= 0 ? '+' : '') +
+                        ((activeSelected.snapshot.voltageStabilityPct ?? 99.98) - 99.98).toFixed(2)}
                       %
                     </div>
                   </div>

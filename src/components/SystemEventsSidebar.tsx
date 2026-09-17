@@ -40,7 +40,7 @@ import { playTone, playAuditChime } from './AudioSynthesizer';
 import { SecuritySubTab } from './views/SecurityView';
 import { copyToClipboard } from '../utils/clipboard';
 import { ViewType } from '../types';
-import { automatedBackupService } from '../services/automatedBackupService';
+import { automatedBackupService, AutomatedBackupState } from '../services/automatedBackupService';
 
 interface ActionTooltipDetails {
   title: string;
@@ -229,7 +229,7 @@ export const SystemEventsSidebar: React.FC<SystemEventsSidebarProps> = ({
 }) => {
   const [filter, setFilter] = useState<SystemEventFilterType>('ALL');
   const [copiedId, setCopiedId] = useState<string | null>(null);
-  const [backupState, setBackupState] = useState(() => automatedBackupService.getState());
+  const [backupState, setBackupState] = useState<AutomatedBackupState>(() => automatedBackupService.getState());
   const [isDemoMode, setIsDemoMode] = useState<boolean>(false);
   const [hoveredActionTooltip, setHoveredActionTooltip] = useState<string | null>(null);
   const [isBulkAffirmed, setIsBulkAffirmed] = useState<boolean>(false);

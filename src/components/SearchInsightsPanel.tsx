@@ -257,7 +257,7 @@ export const SearchInsightsPanel: React.FC = () => {
                     fontSize: '11px',
                     fontFamily: 'monospace',
                   }}
-                  formatter={(val: number) => [`${val} Inquiries`, 'Query Volume']}
+                  formatter={(val: any) => [`${val} Inquiries`, 'Query Volume']}
                 />
                 <Bar dataKey="queries" radius={[0, 8, 8, 0]}>
                   {TOP_QUERY_TOPICS.map((entry, index) => (

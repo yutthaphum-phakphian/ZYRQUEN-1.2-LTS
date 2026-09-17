@@ -227,7 +227,7 @@ export const Room07MasterPanel: React.FC<Room07MasterPanelProps> = ({
                     ))}
                   </Pie>
                   <Tooltip
-                    formatter={(value: number) => `฿${value.toLocaleString()} THB`}
+                    formatter={(value: any) => `฿${Number(value).toLocaleString()} THB`}
                     contentStyle={{ backgroundColor: '#09090b', borderColor: '#27272a', borderRadius: '12px' }}
                   />
                 </PieChart>

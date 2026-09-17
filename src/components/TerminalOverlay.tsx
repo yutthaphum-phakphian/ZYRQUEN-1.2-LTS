@@ -1,8 +1,8 @@
 import React, { useState, useRef, useEffect } from 'react';
 import { Terminal as TerminalIcon, X, Maximize2, Minimize2 } from 'lucide-react';
-import { CANONICAL_CONSTANTS } from '../data/sovereignData.ts';
-import { verifyGenesisMerkleRoot } from '../services/cryptoEngine.ts';
-import { soundFx } from '../services/audioEngine.ts';
+import { CANONICAL_CONSTANTS } from '../data/sovereignData';
+import { verifyGenesisMerkleRoot } from '../services/cryptoEngine';
+import { soundFx } from '../services/audioEngine';
 
 interface TerminalOverlayProps {
   isOpen: boolean;

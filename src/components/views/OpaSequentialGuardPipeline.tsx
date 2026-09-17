@@ -137,7 +137,7 @@ export const OpaSequentialGuardPipeline: React.FC<OpaSequentialGuardPipelineProp
       agentDid: evaluationResult.agent_did,
       action: evaluationResult.action,
       riskLevel: 'HIGH',
-      guardTraces: evaluationResult.guard_traces.map((t) => ({
+      guardTraces: evaluationResult.guard_traces?.map((t) => ({
         guard_name: t.guard_name,
         status: t.status,
         latency_us: t.latency_us,

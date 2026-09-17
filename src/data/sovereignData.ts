@@ -1,4 +1,4 @@
-import { Chamber, OperatingModule, SatelliteNode, HSMUnit, VerificationPhase, InvariantRule, TreasuryAsset } from '../types.ts';
+import { Chamber, OperatingModule, SatelliteNode, HSMUnit, VerificationPhase, InvariantRule, TreasuryAsset } from '../types';
 
 export type { Chamber };
 

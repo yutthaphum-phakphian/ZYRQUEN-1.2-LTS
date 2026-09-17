@@ -584,7 +584,7 @@ export const SenateGovernanceView: React.FC = () => {
         agentDid: regoEvalResult.agent_did,
         action: regoEvalResult.action,
         riskLevel: 'HIGH',
-        guardTraces: regoEvalResult.guard_traces.map((g) => ({
+        guardTraces: regoEvalResult.guard_traces?.map((g) => ({
           guard_name: g.guard_name,
           status: g.status,
           latency_us: g.latency_us,

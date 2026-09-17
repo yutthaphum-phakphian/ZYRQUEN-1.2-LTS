@@ -1,6 +1,6 @@
 import React, { useEffect, useRef } from 'react';
 import { Sparkles, Maximize2, RefreshCw } from 'lucide-react';
-import { CANONICAL_CONSTANTS, SATELLITE_NODES } from '../data/sovereignData.ts';
+import { CANONICAL_CONSTANTS, SATELLITE_NODES } from '../data/sovereignData';
 
 export const QuantumVisualizer: React.FC = () => {
   const canvasRef = useRef<HTMLCanvasElement | null>(null);

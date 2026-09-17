@@ -1008,14 +1008,14 @@ export const SenateOpaMetricsPanel: React.FC<SenateOpaMetricsPanelProps> = ({ cl
                       </span>
                       <span
                         className={`px-2 py-0.5 rounded-md text-[10px] font-bold border ${
-                          bench.payload.input.request.risk_level === 'LOW'
+                          bench.payload?.input?.request?.risk_level === 'LOW'
                             ? 'bg-emerald-500/20 text-emerald-300 border-emerald-500/40'
-                            : bench.payload.input.request.risk_level === 'MEDIUM'
+                            : bench.payload?.input?.request?.risk_level === 'MEDIUM'
                             ? 'bg-sky-500/20 text-sky-300 border-sky-500/40'
                             : 'bg-purple-500/20 text-purple-300 border-purple-500/40'
                         }`}
                       >
-                        {bench.payload.input.request.risk_level} RISK
+                        {bench.payload?.input?.request?.risk_level} RISK
                       </span>
                       <span
                         className={`px-2 py-0.5 rounded-md text-[10px] font-bold border ${

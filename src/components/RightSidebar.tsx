@@ -13,10 +13,10 @@ import {
   Clock,
   Sparkles
 } from 'lucide-react';
-import { HSM_UNITS, CANONICAL_CONSTANTS } from '../data/sovereignData.ts';
-import { LogEntry } from '../types.ts';
-import { verifyGenesisMerkleRoot } from '../services/cryptoEngine.ts';
-import { soundFx } from '../services/audioEngine.ts';
+import { HSM_UNITS, CANONICAL_CONSTANTS } from '../data/sovereignData';
+import { LogEntry } from '../types';
+import { verifyGenesisMerkleRoot } from '../services/cryptoEngine';
+import { soundFx } from '../services/audioEngine';
 
 interface RightSidebarProps {
   logs: LogEntry[];

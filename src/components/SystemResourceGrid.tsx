@@ -180,7 +180,7 @@ export const SystemResourceGrid: React.FC = () => {
         .paddingRight(3)
         .paddingInner(4)
         .paddingBottom(3)
-        (root);
+        (root as any);
 
       const leaves = (root as d3.HierarchyRectangularNode<any>).leaves();
 
