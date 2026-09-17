@@ -577,7 +577,7 @@ export const ActiveEntropyRateMonitor: React.FC<ActiveEntropyRateMonitorProps> =
 
     // Define smooth animation transition
     const transitionDuration = isInitial ? 0 : 600;
-    const t = svg.transition().duration(transitionDuration).ease(d3.easeCubicOut);
+    const t = svg.transition().duration(transitionDuration).ease(d3.easeCubicOut) as any;
 
     // 3. Compute Scales
     const xScale = d3
@@ -602,7 +602,7 @@ export const ActiveEntropyRateMonitor: React.FC<ActiveEntropyRateMonitorProps> =
       .attr('y1', (d) => yScale(d))
       .attr('y2', (d) => yScale(d))
       .merge(gridSel)
-      .transition(t)
+      .transition(t as any)
       .attr('x1', 0)
       .attr('x2', innerWidth)
       .attr('y1', (d) => yScale(d))
@@ -632,28 +632,28 @@ export const ActiveEntropyRateMonitor: React.FC<ActiveEntropyRateMonitorProps> =
     // 6. Smooth Paths Transition
     g.select<SVGPathElement>('.stability-band')
       .datum(activeDataset)
-      .transition(t)
+      .transition(t as any)
       .attr('d', stabilityArea);
 
     g.select<SVGPathElement>('.entropy-area')
       .datum(activeDataset)
-      .transition(t)
+      .transition(t as any)
       .attr('d', areaGenerator);
 
     g.select<SVGPathElement>('.entropy-line')
       .datum(activeDataset)
-      .transition(t)
+      .transition(t as any)
       .attr('d', lineGenerator);
 
     g.select<SVGLineElement>('.baseline-line')
-      .transition(t)
+      .transition(t as any)
       .attr('x1', 0)
       .attr('x2', innerWidth)
       .attr('y1', yScale(baselineSystemEntropy))
       .attr('y2', yScale(baselineSystemEntropy));
 
     g.select<SVGTextElement>('.baseline-text')
-      .transition(t)
+      .transition(t as any)
       .attr('x', innerWidth - 6)
       .attr('y', yScale(baselineSystemEntropy) - 6)
       .text(`Baseline SSoT: ${baselineSystemEntropy.toLocaleString()} KBps`);
@@ -675,12 +675,12 @@ export const ActiveEntropyRateMonitor: React.FC<ActiveEntropyRateMonitorProps> =
 
       const pulseGroup = g.select('.pulse-point-group');
       pulseGroup.select('.pulse-halo')
-        .transition(t)
+        .transition(t as any)
         .attr('cx', curX)
         .attr('cy', curY);
 
       pulseGroup.select('.pulse-center')
-        .transition(t)
+        .transition(t as any)
         .attr('cx', curX)
         .attr('cy', curY);
     }
@@ -690,7 +690,7 @@ export const ActiveEntropyRateMonitor: React.FC<ActiveEntropyRateMonitorProps> =
     const peaksSel = g.select('.peaks-layer').selectAll<SVGGElement, any>('g.peak-node')
       .data(peaksData, (d: any) => `${d.timeLabel}-${d.entropyRateKBps}`);
 
-    peaksSel.exit().transition(t).attr('opacity', 0).remove();
+    peaksSel.exit().transition(t as any).attr('opacity', 0).remove();
 
     const peakEnter = peaksSel.enter().append('g').attr('class', 'peak-node').attr('opacity', 0);
     peakEnter.append('circle').attr('class', 'peak-glow-ring')
@@ -734,20 +734,20 @@ export const ActiveEntropyRateMonitor: React.FC<ActiveEntropyRateMonitorProps> =
       playTone(800, 0.05);
     });
 
-    peaksMerged.transition(t).attr('opacity', 1);
+    peaksMerged.transition(t as any).attr('opacity', 1);
     peaksMerged.select('.peak-glow-ring')
-      .transition(t)
-      .attr('cx', (d) => xScale(d.datasetIdx))
-      .attr('cy', (d) => yScale(d.entropyRateKBps));
+      .transition(t as any)
+      .attr('cx', (d) => xScale((d as any).datasetIdx))
+      .attr('cy', (d) => yScale((d as any).entropyRateKBps));
     peaksMerged.select('.peak-center-dot')
-      .transition(t)
-      .attr('cx', (d) => xScale(d.datasetIdx))
-      .attr('cy', (d) => yScale(d.entropyRateKBps));
+      .transition(t as any)
+      .attr('cx', (d) => xScale((d as any).datasetIdx))
+      .attr('cy', (d) => yScale((d as any).entropyRateKBps));
     peaksMerged.select('.peak-badge')
-      .transition(t)
-      .attr('transform', (d) => `translate(${xScale(d.datasetIdx)}, ${yScale(d.entropyRateKBps)})`);
+      .transition(t as any)
+      .attr('transform', (d) => `translate(${xScale((d as any).datasetIdx)}, ${yScale((d as any).entropyRateKBps)})`);
     peaksMerged.select('.peak-badge text')
-      .text((d) => `▲ ${d.entropyRateKBps.toLocaleString()} KBps`);
+      .text((d) => `▲ ${(d as any).entropyRateKBps.toLocaleString()} KBps`);
 
     // 9. Axes with Transition
     const xAxis = d3
@@ -765,7 +765,7 @@ export const ActiveEntropyRateMonitor: React.FC<ActiveEntropyRateMonitorProps> =
       });
 
     const xG = g.select<SVGGElement>('.x-axis');
-    xG.attr('transform', `translate(0, ${innerHeight})`).transition(t).call(xAxis);
+    xG.attr('transform', `translate(0, ${innerHeight})`).transition(t as any).call(xAxis);
     xG.select('.domain').attr('stroke', 'rgba(255, 255, 255, 0.2)');
     xG.selectAll('.tick line').attr('stroke', 'rgba(255, 255, 255, 0.15)');
     xG.selectAll('.tick text')
@@ -779,7 +779,7 @@ export const ActiveEntropyRateMonitor: React.FC<ActiveEntropyRateMonitorProps> =
       .tickFormat((d) => `${(Number(d) / 1000).toFixed(1)}k`);
 
     const yG = g.select<SVGGElement>('.y-axis');
-    yG.transition(t).call(yAxis);
+    yG.transition(t as any).call(yAxis);
     yG.select('.domain').attr('stroke', 'rgba(255, 255, 255, 0.2)');
     yG.selectAll('.tick line').attr('stroke', 'rgba(255, 255, 255, 0.15)');
     yG.selectAll('.tick text')

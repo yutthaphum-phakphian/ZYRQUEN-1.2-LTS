@@ -155,7 +155,7 @@ export const KeyboardShortcutsModal: React.FC<KeyboardShortcutsModalProps> = ({
                   onClick={() => {
                     playTone(550, 0.05);
                     onClose();
-                    onSelectView(item.view);
+                    onSelectView?.(item.view);
                   }}
                   className="p-2.5 rounded-xl bg-white/5 hover:bg-cyan-500/10 border border-white/8 hover:border-cyan-500/30 flex items-center justify-between text-left transition-all"
                 >

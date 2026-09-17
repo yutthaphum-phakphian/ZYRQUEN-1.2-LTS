@@ -62,7 +62,7 @@ interface UnifiedMultiverseControlPanelProps {
     metaHash?: string,
     severity?: 'info' | 'warning' | 'critical' | 'success',
     statuteRef?: string,
-    targetView?: string
+    targetView?: ViewType
   ) => void;
   isAudioActive: boolean;
   onToggleAudio: () => void;
@@ -619,7 +619,7 @@ export const UnifiedMultiverseControlPanel: React.FC<UnifiedMultiverseControlPan
               <PulseView
                 snapshots={snapshots}
                 onAddHardwareSnapshot={onAddHardwareSnapshot}
-                onAddSystemEvent={onAddSystemEvent}
+                onAddSystemEvent={onAddSystemEvent as any}
                 isSystemActivityFrozen={isSystemActivityFrozen}
               />
             </div>
@@ -648,7 +648,7 @@ export const UnifiedMultiverseControlPanel: React.FC<UnifiedMultiverseControlPan
         <PulseView
           snapshots={snapshots}
           onAddHardwareSnapshot={onAddHardwareSnapshot}
-          onAddSystemEvent={onAddSystemEvent}
+          onAddSystemEvent={onAddSystemEvent as any}
           isSystemActivityFrozen={isSystemActivityFrozen}
         />
       )}
@@ -665,7 +665,7 @@ export const UnifiedMultiverseControlPanel: React.FC<UnifiedMultiverseControlPan
       {activeMode === 'governance-heatmap' && (
         <GovernanceHealthHeatmap
           onNavigateToView={onNavigate}
-          onAddSystemEvent={onAddSystemEvent}
+          onAddSystemEvent={onAddSystemEvent as any}
         />
       )}
 
@@ -677,7 +677,7 @@ export const UnifiedMultiverseControlPanel: React.FC<UnifiedMultiverseControlPan
         <div className="space-y-6">
           <MultiverseNavigationGridPanel
             snapshots={snapshots}
-            onAddSystemEvent={onAddSystemEvent}
+            onAddSystemEvent={onAddSystemEvent as any}
             showEmbeddedPathProjection={true}
           />
         </div>

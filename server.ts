@@ -1521,7 +1521,7 @@ setInterval(() => {
 
 const GITHUB_REPO = "hugeplease66-debug/zyrquen-frozen-v1.2-lts";
 const GITHUB_API_URL = "https://api.github.com/repos/" + GITHUB_REPO + "/commits?per_page=1";
-let _commit_cache = { data: null, fetched_at: 0 };
+let _commit_cache: { data: any, fetched_at: number } = { data: null, fetched_at: 0 };
 const CACHE_TTL_SEC = 300; // 5 min
 
 async function fetch_latest_commit_from_github() {

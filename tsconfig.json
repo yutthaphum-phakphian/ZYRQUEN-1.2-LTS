@@ -14,6 +14,7 @@
     "resolveJsonModule": true,
     "isolatedModules": true,
     "allowJs": false,
+    "allowImportingTsExtensions": true,
     "types": ["node"]
   },
   "include": ["src", "server.ts", "scripts"],

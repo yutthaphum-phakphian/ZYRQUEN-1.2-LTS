@@ -3,7 +3,7 @@ import { Orbit, Play, ShieldAlert, Sparkles, CheckCircle2, RotateCw, Compass, Ra
 import { playAuditChime, playTone } from '../AudioSynthesizer';
 import { MultiversePathProjectionD3Graph } from '../MultiversePathProjectionD3Graph';
 import { MultiverseNavigationGridPanel } from '../MultiverseNavigationGridPanel';
-import { PathProjectionNode, HardwareSnapshot } from '../../types';
+import { PathProjectionNode, HardwareSnapshot, ViewType } from '../../types';
 
 interface MatrixViewProps {
   snapshots?: HardwareSnapshot[];
@@ -14,7 +14,7 @@ interface MatrixViewProps {
     metaHash?: string,
     severity?: 'info' | 'warning' | 'critical' | 'success',
     statuteRef?: string,
-    targetView?: string
+    targetView?: ViewType
   ) => void;
 }
 

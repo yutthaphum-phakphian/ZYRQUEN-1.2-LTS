@@ -41,7 +41,6 @@ import { GovernanceHealthHeatmap } from './components/views/GovernanceHealthHeat
 import { CivilizationEngineView } from './components/views/CivilizationEngineView';
 import { CanonicalIntegrityDashboardView } from './components/views/CanonicalIntegrityDashboardView';
 import { QuantumAuditFusionView } from './components/views/QuantumAuditFusionView';
-import { UnifiedAuditPlaybackConsole } from './components/views/UnifiedAuditPlaybackConsole';
 import { AdminConsole } from './components/AdminConsole';
 import { AuditAnalyticsDashboard } from './components/AuditAnalyticsDashboard';
 import { SovereignChambersControlPlane } from './components/SovereignChambersControlPlane';
@@ -1258,7 +1257,7 @@ function SovereignAppContent() {
             onOpenCertificate={() => setIsCertificateOpen(true)}
             snapshots={snapshots}
             onAddHardwareSnapshot={handleAddSnapshot}
-            onAddSystemEvent={addSystemEvent}
+            onAddSystemEvent={addSystemEvent as any}
             isAudioActive={isAudioActive}
             onToggleAudio={handleToggleAudio}
             isSystemActivityFrozen={isSystemActivityFrozen}
@@ -1269,16 +1268,16 @@ function SovereignAppContent() {
         return (
           <GovernanceHealthHeatmap
             onNavigateToView={setCurrentView}
-            onAddSystemEvent={addSystemEvent}
+            onAddSystemEvent={addSystemEvent as any}
           />
         );
       case 'council':
-        return <CouncilView onAddSystemEvent={addSystemEvent} />;
+        return <CouncilView onAddSystemEvent={addSystemEvent as any} />;
       case 'production':
         return (
           <ProductionReadinessView
             onNavigate={setCurrentView}
-            onAddSystemEvent={addSystemEvent}
+            onAddSystemEvent={addSystemEvent as any}
           />
         );
       case 'quantum':
@@ -1300,14 +1299,14 @@ function SovereignAppContent() {
             snapshots={snapshots}
             onOpenEventsSidebar={() => setIsEventsSidebarOpen(true)}
             onAddHardwareSnapshot={handleAddSnapshot}
-            onAddSystemEvent={addSystemEvent}
+            onAddSystemEvent={addSystemEvent as any}
             isSystemActivityFrozen={isSystemActivityFrozen}
           />
         );
       case 'forge':
         return <ForgeView />;
       case 'matrix':
-        return <MatrixView snapshots={snapshots} onAddSystemEvent={addSystemEvent} />;
+        return <MatrixView snapshots={snapshots} onAddSystemEvent={addSystemEvent as any} />;
       case 'archive':
         return <ArchiveView onNavigate={setCurrentView} />;
       case 'console':
@@ -1320,7 +1319,7 @@ function SovereignAppContent() {
           />
         );
       case 'security':
-        return <SecurityView onAddSystemEvent={addSystemEvent} />;
+        return <SecurityView onAddSystemEvent={addSystemEvent as any} />;
       case 'settings':
         return (
           <SettingsView
@@ -1335,7 +1334,7 @@ function SovereignAppContent() {
               setShowLoginLoader(true);
             }}
             onNotifyEvent={(title, desc, type) => addSystemEvent(type, title, desc, 'settings:profile_switch', 'info')}
-            onAddSystemEvent={addSystemEvent}
+            onAddSystemEvent={addSystemEvent as any}
           />
         );
       case 'legal':
@@ -1343,7 +1342,7 @@ function SovereignAppContent() {
           <LegalView
             onNavigate={setCurrentView}
             onOpenSearch={() => setIsLegalSearchOpen(true)}
-            onAddSystemEvent={addSystemEvent}
+            onAddSystemEvent={addSystemEvent as any}
           />
         );
       case 'canonical':
@@ -1919,7 +1918,7 @@ function SovereignAppContent() {
       <VoiceCommandOverlay 
         onNavigate={setCurrentView} 
         onCaptureSnapshot={() => handleAddSnapshot(createTelemetrySnapshot({ core0: 42, core1: 39, core2: 44, core3: 38 }, snapshots.length, snapshots[0]?.sealedHash))} 
-        onNotifyEvent={addSystemEvent} 
+        onNotifyEvent={addSystemEvent as any} 
       />
 
       {/* Sovereign Copilot Floating Launcher Button (Bottom-Right Anchor) */}

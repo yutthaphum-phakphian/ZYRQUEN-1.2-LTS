@@ -40,6 +40,7 @@ import { SYSTEM_METADATA } from '../../data/canonicalData';
 import { playAuditChime, playTone, playWarningTone } from '../AudioSynthesizer';
 import { speakSystemAlert } from '../../utils/textToSpeechService';
 import { LedgerExportService } from '../../services/ledgerExportService';
+import { ViewType } from '../../types';
 
 export type SealSeverity = 'NOMINAL' | 'LOW_JITTER' | 'CRITICAL_ANOMALY' | 'RECONCILED';
 
@@ -267,7 +268,7 @@ interface GovernanceHealthHeatmapProps {
     metaHash?: string,
     severity?: 'info' | 'warning' | 'critical' | 'success',
     statuteRef?: string,
-    targetView?: string
+    targetView?: ViewType
   ) => void;
 }
 

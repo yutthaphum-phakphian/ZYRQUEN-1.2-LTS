@@ -6,7 +6,7 @@ import { ViewType } from '../types';
 interface VoiceCommandOverlayProps {
   onNavigate: (view: ViewType) => void;
   onCaptureSnapshot: () => void;
-  onNotifyEvent: (type: any, title: string, desc: string, meta?: string, sev?: string) => void;
+  onNotifyEvent: (type: any, title: string, desc: string, meta?: string, sev?: "info" | "success" | "warning" | "critical") => void;
 }
 
 export const VoiceCommandOverlay: React.FC<VoiceCommandOverlayProps> = ({ onNavigate, onCaptureSnapshot, onNotifyEvent }) => {
