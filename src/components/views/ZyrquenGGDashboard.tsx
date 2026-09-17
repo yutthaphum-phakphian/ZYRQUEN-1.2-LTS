@@ -203,6 +203,23 @@ export const ZyrquenGGDashboard: React.FC<ZyrquenGGDashboardProps> = ({
           }),
         });
         data = await res.json();
+      } else if (endpointKey === 'fcm_devices') {
+        res = await fetch('/api/v1/fcm/devices');
+        data = await res.json();
+      } else if (endpointKey === 'fcm_history') {
+        res = await fetch('/api/v1/fcm/history');
+        data = await res.json();
+      } else if (endpointKey === 'fcm_test_push') {
+        res = await fetch('/api/v1/fcm/test-push', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            type: 'SECURITY',
+            title: '🚨 Chamber 02 Quarantine Engaged',
+            body: 'Risk Score 0.94 > 0.85. Zeroization engaged on TC-09 node.',
+          }),
+        });
+        data = await res.json();
       } else {
         throw new Error('Unknown endpoint');
       }
@@ -239,10 +256,20 @@ export const ZyrquenGGDashboard: React.FC<ZyrquenGGDashboardProps> = ({
     }
   };
 
-  // Run all 5 REST tests sequentially
+  // Run all REST tests sequentially
   const handleRunFullTestSuite = async () => {
     playTone(700, 0.08);
-    const endpoints = ['root', 'telemetry', 'audit_records', 'trace_replay', 'gold_seal_verify', 'reports_generate'];
+    const endpoints = [
+      'root',
+      'telemetry',
+      'audit_records',
+      'trace_replay',
+      'gold_seal_verify',
+      'reports_generate',
+      'fcm_devices',
+      'fcm_history',
+      'fcm_test_push',
+    ];
     for (const ep of endpoints) {
       await executeApiEndpoint(ep);
       await new Promise((r) => setTimeout(r, 200));
@@ -686,7 +713,7 @@ export const ZyrquenGGDashboard: React.FC<ZyrquenGGDashboardProps> = ({
               </button>
             </div>
 
-            <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-2 text-xs font-mono">
+            <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-3 xl:grid-cols-9 gap-2 text-xs font-mono">
               {[
                 { id: 'root', method: 'GET', path: '/', label: 'Root Status' },
                 { id: 'telemetry', method: 'GET', path: '/api/v1/telemetry', label: 'Telemetry' },
@@ -694,6 +721,9 @@ export const ZyrquenGGDashboard: React.FC<ZyrquenGGDashboardProps> = ({
                 { id: 'trace_replay', method: 'POST', path: '/api/v1/forensic/trace-replay', label: '12-Stage Trace' },
                 { id: 'gold_seal_verify', method: 'POST', path: '/api/v1/gold-seal/verify', label: 'Gold Seal Verify' },
                 { id: 'reports_generate', method: 'POST', path: '/api/v1/reports/generate', label: 'PDF Report' },
+                { id: 'fcm_devices', method: 'GET', path: '/api/v1/fcm/devices', label: 'FCM Devices' },
+                { id: 'fcm_history', method: 'GET', path: '/api/v1/fcm/history', label: 'FCM History' },
+                { id: 'fcm_test_push', method: 'POST', path: '/api/v1/fcm/test-push', label: 'FCM Push' },
               ].map((ep) => {
                 const res = apiResults[ep.id];
                 const isRunning = runningEndpoint === ep.id;
@@ -1254,6 +1284,34 @@ export const ZyrquenGGDashboard: React.FC<ZyrquenGGDashboardProps> = ({
                   title: '6. Generate Legal Forensic Report',
                   desc: 'สร้างรายงานหลักฐานคดีพร้อมใช้งานในชั้นศาล (PDF Bundle)',
                   payload: { block_height: 849202, target_format: 'PDF', include_forensic_stream: true },
+                },
+                {
+                  id: 'fcm_devices',
+                  method: 'GET',
+                  url: '/api/v1/fcm/devices',
+                  title: '7. FCM Android 16.0+ Device Registry',
+                  desc: 'ตรวจสอบอุปกรณ์และช่องทาง Notification Channels (Security/Telemetry/Audit)',
+                  payload: null,
+                },
+                {
+                  id: 'fcm_history',
+                  method: 'GET',
+                  url: '/api/v1/fcm/history',
+                  title: '8. FCM Push Dispatch History',
+                  desc: 'ดึงประวัติการส่ง Push Notifications พร้อมใบเสร็จ Latency Receipt',
+                  payload: null,
+                },
+                {
+                  id: 'fcm_test_push',
+                  method: 'POST',
+                  url: '/api/v1/fcm/test-push',
+                  title: '9. Dispatch Critical Push Notification',
+                  desc: 'ส่งสัญญาณแจ้งเตือนฉุกเฉินระดับ URGENT ไปยังคลัสเตอร์ Android 16.0+ (API 36)',
+                  payload: {
+                    type: 'SECURITY',
+                    title: '🚨 Chamber 02 Quarantine Engaged',
+                    body: 'Risk Score 0.94 > 0.85. Zeroization engaged on TC-09 node.',
+                  },
                 },
               ].map((item) => {
                 const res = apiResults[item.id];
