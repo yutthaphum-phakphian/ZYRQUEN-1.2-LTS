@@ -44,6 +44,7 @@ import { CopilotAutonomyNodePanel } from '../copilot/CopilotAutonomyNodePanel';
 import { SealValidationAnimation } from '../SealValidationAnimation';
 import { RealtimeUnifiedVerificationDashboard } from './RealtimeUnifiedVerificationDashboard';
 import { ZyrquenGGDashboard } from './ZyrquenGGDashboard';
+import { UnifiedProductionEngineCard } from './UnifiedProductionEngineCard';
 import {
   Activity,
   Cpu,
@@ -73,6 +74,7 @@ import {
   Bell,
   Smartphone,
   PlayCircle,
+  ExternalLink,
 } from 'lucide-react';
 import { playAuditChime, playTone } from '../AudioSynthesizer';
 import { ShieldAlert } from 'lucide-react';
@@ -281,6 +283,17 @@ export const DashboardView: React.FC<DashboardViewProps> = ({
               <Boxes className="w-3.5 h-3.5 text-cyan-300 animate-pulse" />
               <span>🎮 ZYRQUEN GG Dashboard</span>
             </button>
+
+            <a
+              href="/dashboard"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="px-3.5 py-2 rounded-xl bg-slate-900/90 hover:bg-slate-800 border border-cyan-500/50 text-cyan-300 font-mono text-xs font-semibold flex items-center justify-center gap-1.5 transition-all max-[479px]:w-full shadow-[0_0_12px_rgba(6,182,212,0.2)]"
+              title="Launch Cyber-Quantum Live Dashboard"
+            >
+              <ExternalLink className="w-3.5 h-3.5 text-cyan-400" />
+              <span>Cyber UI</span>
+            </a>
 
             <button
               onClick={() => {
@@ -624,6 +637,15 @@ export const DashboardView: React.FC<DashboardViewProps> = ({
       {/* TAB 1: EXECUTIVE OVERVIEW */}
       {dashboardSection === 'OVERVIEW' && (
         <div className="space-y-4 sm:space-y-5 animate-in fade-in duration-200 w-full min-w-0 max-w-full">
+          {/* ZYRQUEN Ω∞ Unified Production Engine & Sentinel Intercept Console */}
+          <UnifiedProductionEngineCard
+            onNavigate={onNavigate}
+            onOpenZyrquenGG={() => {
+              playTone(950, 0.05);
+              setDashboardSection('ZYRQUEN_GG');
+            }}
+          />
+
           {/* GitHub Synchronization Status Utility (Checksum & Merkle Parity Engine) */}
           <GitHubSyncStatusUtility />
 
