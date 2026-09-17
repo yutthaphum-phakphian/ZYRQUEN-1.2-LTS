@@ -1,5 +1,6 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { motion, AnimatePresence } from 'motion/react';
+import { PWAInstallButton } from "./PWAInstallButton";
 import { ViewType } from '../types';
 import { SYSTEM_METADATA } from '../data/canonicalData';
 import {
@@ -380,6 +381,7 @@ export const Navigation: React.FC<NavigationProps> = ({
         {/* Right Actions */}
         <div className="flex items-center gap-1.5 sm:gap-2 shrink-0">
           {/* GitHub Synchronization Warning & Drift Re-sync System */}
+          <PWAInstallButton />
           <GitHubSyncWarningNav />
 
           {/* Copilot Assistant Layer (Sovereign Epoch #849202) Trigger Button */}

@@ -19,6 +19,8 @@ import {
 } from './components/AudioSynthesizer';
 import { DashboardView } from './components/views/DashboardView';
 import { QuantumView } from './components/views/QuantumView';
+import { Chamber11QuantumRadar } from './components/views/Chamber11QuantumRadar';
+import { G11CanonicalCore } from './components/views/G11CanonicalCore';
 import { NexusView } from './components/views/NexusView';
 import { VaultView } from './components/views/VaultView';
 import { LedgerView } from './components/views/LedgerView';
@@ -1263,7 +1265,12 @@ function SovereignAppContent() {
           />
         );
       case 'quantum':
-        return <QuantumView />;
+        return (
+          <div className="space-y-6">
+            <QuantumView />
+            <Chamber11QuantumRadar />
+          </div>
+        );
       case 'nexus':
         return <NexusView />;
       case 'vault':
@@ -1324,9 +1331,12 @@ function SovereignAppContent() {
         );
       case 'canonical':
         return (
-          <CanonicalIntegrityDashboardView
-            onNavigateToLedger={() => setCurrentView('ledger')}
-          />
+          <div className="space-y-6">
+            <CanonicalIntegrityDashboardView
+              onNavigateToLedger={() => setCurrentView('ledger')}
+            />
+            <G11CanonicalCore />
+          </div>
         );
       case 'admin':
         return <AdminConsole />;
