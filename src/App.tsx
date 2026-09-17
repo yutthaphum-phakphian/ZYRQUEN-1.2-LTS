@@ -45,6 +45,7 @@ import { QuantumAuditFusionView } from './components/views/QuantumAuditFusionVie
 import { AdminConsole } from './components/AdminConsole';
 import { AuditAnalyticsDashboard } from './components/AuditAnalyticsDashboard';
 import { SovereignChambersControlPlane } from './components/SovereignChambersControlPlane';
+import { ZyrquenGGDashboard } from './components/views/ZyrquenGGDashboard';
 import { SYSTEM_METADATA } from './data/canonicalData';
 import { INITIAL_HARDWARE_SNAPSHOTS, createTelemetrySnapshot } from './utils/telemetrySnapshot';
 import { TelemetryAnomalyObserver } from './utils/telemetryAnomalyObserver';
@@ -279,6 +280,13 @@ const VIEW_PERSONAS: Record<ViewType, ViewPersona> = {
     orb2: 'bg-cyan-600/14',
     orb3: 'bg-emerald-600/10',
     accentGlow: 'rgba(99,102,241,0.12)',
+  },
+  zyrquen_gg: {
+    name: 'ZYRQUEN GG Sovereign Dashboard & Audit Trail API',
+    orb1: 'bg-cyan-600/20',
+    orb2: 'bg-indigo-600/15',
+    orb3: 'bg-emerald-600/12',
+    accentGlow: 'rgba(6,182,212,0.14)',
   },
 };
 
@@ -1391,6 +1399,8 @@ function SovereignAppContent() {
         return <AuditAnalyticsDashboard />;
       case 'chambers':
         return <SovereignChambersControlPlane />;
+      case 'zyrquen_gg':
+        return <ZyrquenGGDashboard onNavigate={setCurrentView} onOpenCertificate={() => setIsCertificateOpen(true)} />;
       default:
         return <DashboardView onNavigate={setCurrentView} onOpenCertificate={() => setIsCertificateOpen(true)} />;
     }

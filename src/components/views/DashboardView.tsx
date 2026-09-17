@@ -43,6 +43,7 @@ import { QuickActionsMenu } from '../QuickActionsMenu';
 import { CopilotAutonomyNodePanel } from '../copilot/CopilotAutonomyNodePanel';
 import { SealValidationAnimation } from '../SealValidationAnimation';
 import { RealtimeUnifiedVerificationDashboard } from './RealtimeUnifiedVerificationDashboard';
+import { ZyrquenGGDashboard } from './ZyrquenGGDashboard';
 import {
   Activity,
   Cpu,
@@ -151,8 +152,8 @@ export const DashboardView: React.FC<DashboardViewProps> = ({
   onOpenCertificate,
   isForensicAuditMode = false,
 }) => {
-  // Main executive sections: Overview (clean summary), Core Verification & Live Telemetry, Sovereign Audit Dashboard, Chambers Explorer, Telemetry, Evidence, Android 16+ FCM Push
-  const [dashboardSection, setDashboardSection] = useState<'OVERVIEW' | 'VERIFICATION' | 'AUDIT' | 'CHAMBERS' | 'TELEMETRY' | 'EVIDENCE' | 'FCM_PUSH'>('OVERVIEW');
+  // Main executive sections: Overview (clean summary), Zyrquen GG Dashboard, Core Verification & Live Telemetry, Sovereign Audit Dashboard, Chambers Explorer, Telemetry, Evidence, Android 16+ FCM Push
+  const [dashboardSection, setDashboardSection] = useState<'OVERVIEW' | 'ZYRQUEN_GG' | 'VERIFICATION' | 'AUDIT' | 'CHAMBERS' | 'TELEMETRY' | 'EVIDENCE' | 'FCM_PUSH'>('OVERVIEW');
   const [activeCanvasTab, setActiveCanvasTab] = useState<'hologram' | 'atlas' | 'overview' | 'topology'>('hologram');
   const [isHealing, setIsHealing] = useState(false);
   const [healSuccess, setHealSuccess] = useState(false);
@@ -267,6 +268,18 @@ export const DashboardView: React.FC<DashboardViewProps> = ({
             >
               <Smartphone className="w-3.5 h-3.5 text-cyan-400" />
               <span>📱 Android 16+ FCM</span>
+            </button>
+
+            <button
+              onClick={() => {
+                playTone(950, 0.05);
+                setDashboardSection('ZYRQUEN_GG');
+              }}
+              className="px-3.5 py-2 rounded-xl bg-gradient-to-r from-cyan-950 via-indigo-950 to-purple-950 hover:from-cyan-900 hover:to-purple-900 border border-cyan-400/80 text-cyan-200 font-mono text-xs font-bold flex items-center justify-center gap-2 transition-all max-[479px]:w-full shadow-[0_0_15px_rgba(6,182,212,0.35)] cursor-pointer"
+              title="Open ZYRQUEN GG Dashboard (Audit Trail API v1.2.0 & Cryptographic Evidence #849202)"
+            >
+              <Boxes className="w-3.5 h-3.5 text-cyan-300 animate-pulse" />
+              <span>🎮 ZYRQUEN GG Dashboard</span>
             </button>
 
             <button
@@ -479,6 +492,24 @@ export const DashboardView: React.FC<DashboardViewProps> = ({
 
           <button
             onClick={() => {
+              playTone(950, 0.04);
+              setDashboardSection('ZYRQUEN_GG');
+            }}
+            className={`px-3.5 py-2 rounded-xl font-bold flex items-center gap-2 transition-all cursor-pointer max-[479px]:w-full max-[479px]:justify-start ${
+              dashboardSection === 'ZYRQUEN_GG'
+                ? 'bg-gradient-to-r from-cyan-500/20 via-indigo-500/20 to-purple-500/20 text-cyan-200 border border-cyan-400/80 shadow-[0_0_15px_rgba(6,182,212,0.35)]'
+                : 'text-zinc-400 hover:text-zinc-200 bg-white/5 border border-transparent'
+            }`}
+          >
+            <Boxes className="w-3.5 h-3.5 text-cyan-400" />
+            <span>🎮 ZYRQUEN GG Dashboard</span>
+            <span className="px-1.5 py-0.2 rounded bg-cyan-950 text-cyan-300 text-[10px] font-mono border border-cyan-500/30">
+              v1.2 API
+            </span>
+          </button>
+
+          <button
+            onClick={() => {
               playTone(720, 0.04);
               setDashboardSection('VERIFICATION');
             }}
@@ -579,6 +610,16 @@ export const DashboardView: React.FC<DashboardViewProps> = ({
           Ω600_1000 • 10/10 REAL_HSM • Δ0.00%
         </div>
       </div>
+
+      {/* TAB 0: ZYRQUEN GG DASHBOARD (AUDIT TRAIL API & EVIDENCE #849202) */}
+      {dashboardSection === 'ZYRQUEN_GG' && (
+        <div className="space-y-4 sm:space-y-5 animate-in fade-in duration-200 w-full min-w-0 max-w-full">
+          <ZyrquenGGDashboard
+            onNavigate={onNavigate}
+            onOpenCertificate={onOpenCertificate}
+          />
+        </div>
+      )}
 
       {/* TAB 1: EXECUTIVE OVERVIEW */}
       {dashboardSection === 'OVERVIEW' && (

@@ -85,6 +85,7 @@ interface NavItem {
 
 export const NAVIGATION_ITEMS: NavItem[] = [
   { id: 'dashboard', labelEn: 'Dashboard', labelTh: 'ศูนย์บัญชาการ', icon: LayoutDashboard, dotColor: '#06B6D4', badge: 'HQ', shortcut: '1' },
+  { id: 'zyrquen_gg', labelEn: 'ZYRQUEN GG', labelTh: 'แผงควบคุม GG v1.2', icon: Boxes, dotColor: '#06B6D4', badge: 'GG API', shortcut: 'G' },
   { id: 'fusion', labelEn: 'Fusion Console', labelTh: 'รวมศูนย์นิติวิทยาศาสตร์', icon: Activity, dotColor: '#D946EF', badge: 'FUSION', shortcut: 'F' },
   { id: 'playback', labelEn: '12-Stage Replay', labelTh: 'จำลองสืบย้อน', icon: ShieldCheck, dotColor: '#F59E0B', badge: 'TRACE', shortcut: 'P' },
   { id: 'chambers', labelEn: '18 Chambers', labelTh: '18 ห้องอธิปไตย SSoT', icon: LayoutGrid, dotColor: '#6366F1', badge: '18 SSoT', shortcut: 'K' },

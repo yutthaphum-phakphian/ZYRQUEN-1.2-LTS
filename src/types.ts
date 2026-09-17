@@ -23,7 +23,8 @@ export type ViewType =
   | 'canonical'
   | 'admin'
   | 'analytics'
-  | 'chambers';
+  | 'chambers'
+  | 'zyrquen_gg';
 
 export interface AuditStage {
   id: string;
