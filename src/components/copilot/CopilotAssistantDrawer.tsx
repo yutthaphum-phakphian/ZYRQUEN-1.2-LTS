@@ -1,5 +1,6 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { motion, AnimatePresence, useMotionValue, useTransform, animate, PanInfo } from 'motion/react';
+import { Bot, Maximize2, Minimize2, X, Send } from 'lucide-react';
 import { copilotAssistantService, CopilotAssistantState } from '../../services/copilotAssistantService';
 import { githubSyncService } from '../../services/githubSyncService';
 import { SYSTEM_METADATA } from '../../data/canonicalData';
@@ -208,13 +209,13 @@ export const CopilotAssistantDrawer: React.FC<CopilotAssistantDrawerProps> = ({
         className={
           isMaximized
             ? 'fixed inset-0 z-50 flex items-center justify-center bg-black/80 backdrop-blur-md p-2 sm:p-6 font-mono pt-[env(safe-area-inset-top,0px)] pb-[env(safe-area-inset-bottom,0px)]'
-            : 'fixed inset-y-0 right-0 left-0 sm:left-auto sm:inset-auto sm:bottom-20 sm:right-6 z-50 w-full sm:w-[500px] md:w-[540px] h-full h-[100dvh] sm:h-[640px] sm:max-h-[82vh] bg-[#070a12] border-l sm:border border-cyan-500/40 rounded-none sm:rounded-2xl shadow-[0_10px_40px_rgba(0,0,0,0.9),0_0_25px_rgba(6,182,212,0.25)] flex flex-col overflow-hidden font-mono animate-in fade-in slide-in-from-right-6 sm:slide-in-from-bottom-6 duration-200 pl-[env(safe-area-inset-left,0px)] pr-[env(safe-area-inset-right,0px)]'
+            : 'fixed inset-y-0 right-0 left-0 sm:left-auto sm:inset-auto sm:bottom-24 sm:right-8 z-50 w-full sm:w-[500px] md:w-[540px] h-full h-[100dvh] sm:h-[680px] sm:max-h-[85vh] bg-[#070a12]/95 backdrop-blur-2xl border-l sm:border border-cyan-500/50 rounded-none sm:rounded-3xl shadow-[0_20px_50px_rgba(0,0,0,0.9),0_0_40px_rgba(6,182,212,0.3),inset_0_0_20px_rgba(6,182,212,0.1)] flex flex-col overflow-hidden font-mono animate-in fade-in slide-in-from-right-8 sm:slide-in-from-bottom-8 duration-300 pl-[env(safe-area-inset-left,0px)] pr-[env(safe-area-inset-right,0px)] ring-1 ring-white/5'
         }
       >
         <div
           className={
             isMaximized
-              ? 'w-full max-w-5xl h-full bg-[#070a12] border border-cyan-500/40 rounded-2xl flex flex-col shadow-2xl overflow-hidden'
+              ? 'w-full max-w-5xl h-full bg-[#070a12]/95 backdrop-blur-3xl border border-cyan-500/50 rounded-3xl flex flex-col shadow-2xl overflow-hidden ring-1 ring-white/5'
               : 'relative w-full h-full flex flex-col overflow-hidden'
           }
         >
@@ -265,11 +266,15 @@ export const CopilotAssistantDrawer: React.FC<CopilotAssistantDrawerProps> = ({
 
           {/* Window Header */}
           <div
-            className="p-3.5 sm:p-4 border-b border-cyan-500/20 bg-[#0a0f1e] flex items-center justify-between shrink-0 select-none sm:select-auto cursor-grab sm:cursor-default"
+            className="p-3.5 sm:p-4 border-b border-cyan-500/30 bg-gradient-to-r from-indigo-950/40 to-cyan-950/40 flex items-center justify-between shrink-0 select-none sm:select-auto cursor-grab sm:cursor-default"
           >
             <div className="flex items-center gap-2.5">
-              <div className="w-9 h-9 rounded-xl bg-[#070a12] border border-cyan-500/40 flex items-center justify-center text-lg shadow-[0_0_12px_rgba(6,182,212,0.25)]">
-                🧠
+              <div className="relative">
+                <div className="absolute inset-0 bg-cyan-400/20 blur-md rounded-xl animate-pulse" />
+                <div className="w-10 h-10 rounded-xl bg-[#070a12]/80 border border-cyan-400/50 flex items-center justify-center text-xl shadow-[0_0_15px_rgba(6,182,212,0.4)] backdrop-blur-sm relative z-10 group overflow-hidden">
+                  <div className="absolute inset-0 bg-gradient-to-tr from-cyan-500/10 to-indigo-500/10 group-hover:scale-110 transition-transform" />
+                  <Bot className="w-5 h-5 text-cyan-300" />
+                </div>
               </div>
               <div>
                 <div className="flex items-center gap-1.5">
@@ -300,35 +305,35 @@ export const CopilotAssistantDrawer: React.FC<CopilotAssistantDrawerProps> = ({
             >
               <button
                 onClick={() => setIsMaximized(!isMaximized)}
-                className="w-7 h-7 rounded-lg bg-[#070a12] hover:bg-cyan-950 border border-white/10 hover:border-cyan-500/40 text-zinc-400 hover:text-white flex items-center justify-center text-xs transition-colors cursor-pointer"
+                className="w-8 h-8 rounded-lg bg-cyan-950/30 hover:bg-cyan-900/50 border border-cyan-500/30 hover:border-cyan-400 text-cyan-400 hover:text-white flex items-center justify-center text-sm transition-colors cursor-pointer"
                 title={isMaximized ? 'ย่อหน้าต่าง (Restore)' : 'ขยายเต็มจอ (Maximize)'}
               >
-                {isMaximized ? '❐' : '□'}
+                {isMaximized ? <Minimize2 className="w-4 h-4" /> : <Maximize2 className="w-4 h-4" />}
               </button>
               <button
                 onClick={() => {
                   playTone(480, 0.04);
                   onClose();
                 }}
-                className="w-7 h-7 rounded-lg bg-[#070a12] hover:bg-red-950/60 border border-white/10 hover:border-red-500/40 text-zinc-400 hover:text-red-300 flex items-center justify-center text-xs transition-colors cursor-pointer"
+                className="w-8 h-8 rounded-lg bg-red-950/20 hover:bg-red-900/40 border border-red-500/20 hover:border-red-500/50 text-red-400 hover:text-red-300 flex items-center justify-center text-sm transition-colors cursor-pointer"
                 title="ปิดหน้าต่าง Copilot (Close)"
               >
-                ✕
+                <X className="w-4 h-4" />
               </button>
             </div>
           </div>
 
         {/* Drawer Mode Tabs: Dialogue vs Autonomy Node */}
-        <div className="bg-[#070a12] px-4 pt-2 border-b border-cyan-500/20 flex items-center gap-2 shrink-0">
+        <div className="bg-[#070a12]/80 backdrop-blur-md px-4 pt-3 border-b border-cyan-500/30 flex items-center gap-4 shrink-0 relative z-10">
           <button
             onClick={() => {
               playTone(600, 0.03);
               setDrawerMode('DIALOGUE');
             }}
-            className={`min-h-[44px] pb-2 px-3 text-xs font-bold border-b-2 transition-all cursor-pointer flex items-center justify-center gap-1.5 ${
+            className={`pb-3 px-2 text-xs font-bold border-b-2 transition-all cursor-pointer flex items-center justify-center gap-2 ${
               drawerMode === 'DIALOGUE'
-                ? 'border-cyan-400 text-cyan-300'
-                : 'border-transparent text-zinc-400 hover:text-zinc-200'
+                ? 'border-cyan-400 text-cyan-300 drop-shadow-[0_0_8px_rgba(34,211,238,0.8)]'
+                : 'border-transparent text-zinc-500 hover:text-zinc-300'
             }`}
           >
             <span>💬</span>
@@ -340,14 +345,14 @@ export const CopilotAssistantDrawer: React.FC<CopilotAssistantDrawerProps> = ({
               playTone(650, 0.03);
               setDrawerMode('AUTONOMY_PANEL');
             }}
-            className={`min-h-[44px] pb-2 px-3 text-xs font-bold border-b-2 transition-all cursor-pointer flex items-center justify-center gap-1.5 ${
+            className={`pb-3 px-2 text-xs font-bold border-b-2 transition-all cursor-pointer flex items-center justify-center gap-2 ${
               drawerMode === 'AUTONOMY_PANEL'
-                ? 'border-amber-400 text-amber-300'
-                : 'border-transparent text-zinc-400 hover:text-zinc-200'
+                ? 'border-amber-400 text-amber-300 drop-shadow-[0_0_8px_rgba(251,191,36,0.8)]'
+                : 'border-transparent text-zinc-500 hover:text-zinc-300'
             }`}
           >
             <span>⚡</span>
-            <span>Autonomy Node (Suggestions & Entropy)</span>
+            <span>Autonomy Node</span>
             {copilotState.suggestions.length > 0 && (
               <span className="px-1.5 py-0.2 rounded-full text-[9px] bg-amber-500 text-black font-bold">
                 {copilotState.suggestions.length}
@@ -357,69 +362,70 @@ export const CopilotAssistantDrawer: React.FC<CopilotAssistantDrawerProps> = ({
         </div>
 
         {/* 5 Copilot Sovereign Architecture Layers Strip */}
-        <div className="p-2.5 bg-[#0a0f1e]/60 border-b border-white/5 grid grid-cols-2 sm:grid-cols-5 gap-2 text-[10px] shrink-0">
-          <div className="p-1.5 rounded-lg bg-[#070a12] border border-cyan-500/20">
-            <div className="text-cyan-300 font-bold">⚡ Autonomy Node</div>
-            <div className="text-[#10B981]">Continuous Active</div>
+        <div className="p-3 bg-gradient-to-r from-[#0a0f1e]/80 to-indigo-950/20 backdrop-blur-md border-b border-white/5 grid grid-cols-2 sm:grid-cols-5 gap-2 text-[10px] shrink-0 relative z-10 shadow-inner">
+          <div className="p-2 rounded-xl bg-black/40 border border-cyan-500/20 hover:border-cyan-400/50 transition-colors shadow-sm">
+            <div className="text-cyan-300 font-bold flex items-center gap-1.5"><div className="w-1.5 h-1.5 rounded-full bg-cyan-400 animate-pulse" />⚡ Autonomy Node</div>
+            <div className="text-[#10B981] mt-0.5 ml-3">Continuous Active</div>
           </div>
-          <div className="p-1.5 rounded-lg bg-[#070a12] border border-cyan-500/20">
-            <div className="text-purple-300 font-bold">🧠 Memory Mesh</div>
-            <div className="text-zinc-400">{systemState.sealCount.toLocaleString()} Seals</div>
+          <div className="p-2 rounded-xl bg-black/40 border border-purple-500/20 hover:border-purple-400/50 transition-colors shadow-sm">
+            <div className="text-purple-300 font-bold flex items-center gap-1.5">🧠 Memory Mesh</div>
+            <div className="text-zinc-400 mt-0.5 ml-5">{systemState.sealCount.toLocaleString()} Seals</div>
           </div>
-          <div className="p-1.5 rounded-lg bg-[#070a12] border border-cyan-500/20">
-            <div className="text-[#D4AF37] font-bold">🌌 UI Renderer</div>
-            <div className="text-cyan-400">{copilotState.uiRendererMode} Mode</div>
+          <div className="p-2 rounded-xl bg-black/40 border border-amber-500/20 hover:border-amber-400/50 transition-colors shadow-sm">
+            <div className="text-[#D4AF37] font-bold flex items-center gap-1.5">🌌 UI Renderer</div>
+            <div className="text-amber-400 mt-0.5 ml-5">{copilotState.uiRendererMode} Mode</div>
           </div>
-          <div className="p-1.5 rounded-lg bg-[#070a12] border border-cyan-500/20">
-            <div className="text-emerald-300 font-bold">🛡️ Sentinel Reflex</div>
-            <div className="text-[#10B981]">Δ{systemState.ssotMutationDrift} Zero Drift</div>
+          <div className="p-2 rounded-xl bg-black/40 border border-emerald-500/20 hover:border-emerald-400/50 transition-colors shadow-sm">
+            <div className="text-emerald-300 font-bold flex items-center gap-1.5">🛡️ Sentinel Reflex</div>
+            <div className="text-[#10B981] mt-0.5 ml-5">Δ{systemState.ssotMutationDrift} Zero Drift</div>
           </div>
-          <div className="p-1.5 rounded-lg bg-[#070a12] border border-cyan-500/20 col-span-2 sm:col-span-1">
-            <div className="text-blue-300 font-bold">🇹🇭 Thai Semantic</div>
-            <div className="text-white">DSL/VM Ready</div>
+          <div className="p-2 rounded-xl bg-black/40 border border-blue-500/20 hover:border-blue-400/50 transition-colors shadow-sm col-span-2 sm:col-span-1">
+            <div className="text-blue-300 font-bold flex items-center gap-1.5">🇹🇭 Thai Semantic</div>
+            <div className="text-blue-100 mt-0.5 ml-5">DSL/VM Ready</div>
           </div>
         </div>
 
         {/* Interactive Hologram & Reflex Quick Controls Bar */}
-        <div className="p-2.5 bg-[#070a12] border-b border-white/5 flex flex-wrap items-center justify-between gap-2 shrink-0 text-xs">
-          <div className="flex items-center gap-1.5 flex-wrap">
-            <span className="text-zinc-500 text-[10px]">Hologram Controls:</span>
+        <div className="p-3 bg-[#0a0f1e]/80 backdrop-blur-md border-b border-white/5 flex flex-wrap items-center justify-between gap-3 shrink-0 text-xs relative z-10">
+          <div className="flex items-center gap-2 flex-wrap">
+            <span className="text-zinc-400 font-bold text-[10px] uppercase tracking-wider bg-white/5 px-2 py-1 rounded-md">Hologram:</span>
             <button
               onClick={() => handleToggleSphereTree('SPHERE')}
-              className={`px-2 py-0.5 rounded-lg border text-[11px] font-bold cursor-pointer transition-all ${
+              className={`px-3 py-1 rounded-lg border text-[11px] font-bold cursor-pointer transition-all ${
                 copilotState.uiRendererMode === 'SPHERE'
-                  ? 'bg-cyan-500 text-black border-cyan-400'
-                  : 'bg-[#0a0f1e] text-zinc-400 border-white/10 hover:border-cyan-500/40'
+                  ? 'bg-cyan-500 text-black border-cyan-400 shadow-[0_0_15px_rgba(6,182,212,0.4)]'
+                  : 'bg-[#070a12] text-zinc-400 border-white/10 hover:border-cyan-500/40 hover:text-cyan-200'
               }`}
             >
               🌌 Sphere
             </button>
             <button
               onClick={() => handleToggleSphereTree('TREE')}
-              className={`px-2 py-0.5 rounded-lg border text-[11px] font-bold cursor-pointer transition-all ${
+              className={`px-3 py-1 rounded-lg border text-[11px] font-bold cursor-pointer transition-all ${
                 copilotState.uiRendererMode === 'TREE'
-                  ? 'bg-cyan-500 text-black border-cyan-400'
-                  : 'bg-[#0a0f1e] text-zinc-400 border-white/10 hover:border-cyan-500/40'
+                  ? 'bg-cyan-500 text-black border-cyan-400 shadow-[0_0_15px_rgba(6,182,212,0.4)]'
+                  : 'bg-[#070a12] text-zinc-400 border-white/10 hover:border-cyan-500/40 hover:text-cyan-200'
               }`}
             >
               🌲 Tree
             </button>
             <button
               onClick={handleToggleSpin}
-              className={`px-2 py-0.5 rounded-lg border text-[11px] cursor-pointer transition-all ${
+              className={`px-3 py-1 rounded-lg border text-[11px] font-bold cursor-pointer transition-all ${
                 copilotState.uiSpinActive
-                  ? 'bg-cyan-950 text-cyan-200 border-cyan-400'
-                  : 'bg-[#0a0f1e] text-zinc-400 border-white/10'
+                  ? 'bg-cyan-900/60 text-cyan-200 border-cyan-400 shadow-[0_0_10px_rgba(6,182,212,0.2)]'
+                  : 'bg-[#070a12] text-zinc-400 border-white/10 hover:border-cyan-500/30'
               }`}
             >
-              {copilotState.uiSpinActive ? '⏸ Pause Spin' : '▶ 3D Spin'}
+              {copilotState.uiSpinActive ? '⏸ Pause Spin' : '▶ Auto-Spin'}
             </button>
           </div>
 
           <button
             onClick={handleRunSentinel}
-            className="px-2.5 py-1 rounded-lg bg-[#D4AF37] hover:bg-[#D4AF37]/90 text-[#070a12] font-bold text-[11px] flex items-center gap-1 shadow-[0_0_10px_rgba(212,175,55,0.3)] transition-all cursor-pointer"
+            className="px-3 py-1 rounded-lg bg-gradient-to-r from-amber-400 to-amber-500 hover:from-amber-300 hover:to-amber-400 text-amber-950 font-bold text-[11px] flex items-center gap-1.5 shadow-[0_0_15px_rgba(251,191,36,0.5)] hover:shadow-[0_0_25px_rgba(251,191,36,0.7)] transition-all cursor-pointer relative overflow-hidden group"
           >
+            <div className="absolute inset-0 bg-white/20 -translate-x-full group-hover:animate-[shimmer_1s_infinite]" />
             <span>🛡️</span>
             <span>Sentinel Sweep</span>
           </button>
@@ -436,21 +442,25 @@ export const CopilotAssistantDrawer: React.FC<CopilotAssistantDrawerProps> = ({
         {drawerMode === 'DIALOGUE' && (
           <>
             {/* Scrollable Main Area: Chat & Reflex Stream */}
-            <div className="flex-1 overflow-y-auto p-4 space-y-4 text-xs">
+            <div className="flex-1 overflow-y-auto p-4 space-y-5 text-xs">
               {/* Recent Autonomous Reflex Decisions Strip */}
-              <div className="p-3 rounded-xl bg-[#0a0f1e] border border-cyan-500/20 space-y-2">
-                <div className="flex items-center justify-between text-[10px] text-zinc-400 uppercase tracking-wider">
-                  <span>⚡ Live Autonomous Reflex Stream (Autonomy Node)</span>
-                  <span className="text-cyan-400 font-bold">SSoT Δ{systemState.ssotMutationDrift}</span>
+              <div className="p-3.5 rounded-2xl bg-[#0a0f1e]/80 border border-cyan-500/30 space-y-3 relative overflow-hidden group">
+                <div className="absolute inset-0 bg-gradient-to-r from-cyan-500/10 to-indigo-500/5 group-hover:opacity-100 opacity-50 transition-opacity" />
+                <div className="flex items-center justify-between text-[10px] text-cyan-200/80 uppercase tracking-wider relative z-10 font-bold">
+                  <div className="flex items-center gap-1.5">
+                    <span className="w-1.5 h-1.5 rounded-full bg-cyan-400 animate-pulse" />
+                    <span>Live Autonomous Reflex Stream</span>
+                  </div>
+                  <span className="text-cyan-400 font-bold bg-cyan-950/50 px-2 py-0.5 rounded border border-cyan-500/30">SSoT Δ{systemState.ssotMutationDrift}</span>
                 </div>
-                <div className="space-y-1.5">
+                <div className="space-y-2 relative z-10">
                   {copilotState.reflexLogs.slice(0, 3).map((log) => (
                     <div
                       key={log.id}
-                      className="p-2 rounded-lg bg-[#070a12] border border-white/5 flex items-start justify-between gap-2 text-[11px]"
+                      className="p-2.5 rounded-xl bg-black/60 border border-white/10 flex items-start justify-between gap-3 text-[11px] hover:border-cyan-500/40 transition-colors"
                     >
-                      <div className="space-y-0.5">
-                        <div className="text-zinc-200 font-medium">{log.messageTh}</div>
+                      <div className="space-y-1">
+                        <div className="text-zinc-200 font-medium leading-relaxed">{log.messageTh}</div>
                         {log.detail && <div className="text-[10px] text-zinc-500">{log.detail}</div>}
                       </div>
                       <span className="text-[9px] px-1.5 py-0.5 rounded bg-white/5 text-cyan-300 shrink-0 font-bold">
@@ -462,31 +472,41 @@ export const CopilotAssistantDrawer: React.FC<CopilotAssistantDrawerProps> = ({
               </div>
 
               {/* Chat Messages */}
-              <div className="space-y-3 pt-2">
+              <div className="space-y-4 pt-2 pb-4">
                 {copilotState.chatHistory.map((item) => (
                   <div
                     key={item.id}
                     className={`flex ${item.sender === 'user' ? 'justify-end' : 'justify-start'}`}
                   >
                     <div
-                      className={`max-w-[85%] rounded-2xl p-3.5 space-y-1 text-xs ${
+                      className={`max-w-[85%] rounded-2xl p-3.5 space-y-1.5 text-xs ${
                         item.sender === 'user'
-                          ? 'bg-cyan-500/20 border border-cyan-400/40 text-white rounded-br-none'
-                          : 'bg-[#0a0f1e] border border-white/10 text-zinc-200 rounded-bl-none shadow-md'
+                          ? 'bg-gradient-to-br from-cyan-900/40 to-cyan-950/40 border border-cyan-400/40 text-white rounded-br-sm shadow-[0_0_15px_rgba(6,182,212,0.15)]'
+                          : 'bg-gradient-to-br from-[#0a0f1e] to-black border border-white/10 text-zinc-200 rounded-bl-sm shadow-xl'
                       }`}
                     >
-                      <div className="flex items-center justify-between gap-2 text-[10px] text-zinc-400 pb-0.5">
-                        <span className="font-bold flex items-center gap-1">
-                          {item.sender === 'user' ? '👤 Sovereign Architect' : '🧠 Copilot Sovereign AI'}
+                      <div className="flex items-center justify-between gap-3 text-[10px] text-zinc-400 pb-1 border-b border-white/5">
+                        <span className="font-bold flex items-center gap-1.5">
+                          {item.sender === 'user' ? (
+                            <>
+                              <span className="text-cyan-400">👤</span>
+                              <span>Sovereign Architect</span>
+                            </>
+                          ) : (
+                            <>
+                              <Bot className="w-3.5 h-3.5 text-cyan-400" />
+                              <span className="text-cyan-100">Copilot Sovereign V5</span>
+                            </>
+                          )}
                         </span>
-                        <span>{item.timestamp.slice(11, 19)}</span>
+                        <span className="font-mono text-[9px] opacity-60">{item.timestamp.slice(11, 19)}</span>
                       </div>
-                      <p className="leading-relaxed whitespace-pre-wrap">{item.message}</p>
+                      <p className="leading-relaxed whitespace-pre-wrap mt-1">{item.message}</p>
                       {item.actionPayload && (
-                        <div className="pt-2">
+                        <div className="pt-2.5">
                           <button
                             onClick={() => handleActionPayload(item.actionPayload!)}
-                            className="w-full px-3 py-1.5 rounded-xl bg-gradient-to-r from-cyan-500/20 via-sky-500/25 to-cyan-500/20 hover:from-cyan-500/35 hover:to-sky-500/40 border border-cyan-400/50 text-cyan-200 hover:text-white font-bold text-[11px] flex items-center justify-center gap-1.5 shadow-[0_0_12px_rgba(6,182,212,0.25)] transition-all cursor-pointer"
+                            className="w-full px-3 py-2 rounded-xl bg-gradient-to-r from-cyan-500/20 via-sky-500/25 to-cyan-500/20 hover:from-cyan-500/30 hover:to-cyan-400/40 border border-cyan-400/50 text-cyan-200 hover:text-white font-bold text-[11px] flex items-center justify-center gap-1.5 shadow-[0_0_12px_rgba(6,182,212,0.25)] hover:shadow-[0_0_20px_rgba(6,182,212,0.4)] transition-all cursor-pointer"
                           >
                             <span>{item.actionPayload.label}</span>
                           </button>
@@ -513,27 +533,35 @@ export const CopilotAssistantDrawer: React.FC<CopilotAssistantDrawerProps> = ({
             </div>
 
             {/* Drawer Bottom Input Form */}
-            <div className="p-3 sm:p-4 bg-[#0a0f1e] border-t border-cyan-500/20 shrink-0 pb-[calc(0.75rem+env(safe-area-inset-bottom,0px))] sm:pb-4">
+            <div className="p-3 sm:p-4 bg-[#0a0f1e]/80 backdrop-blur-xl border-t border-cyan-500/30 shrink-0 pb-[calc(0.75rem+env(safe-area-inset-bottom,0px))] sm:pb-4 relative z-10">
               <form
                 onSubmit={(e) => {
                   e.preventDefault();
                   handleSendQuery();
                 }}
-                className="flex items-center gap-2"
+                className="flex items-center gap-2 relative"
               >
+                <div className="absolute inset-0 bg-cyan-400/5 blur-xl rounded-2xl pointer-events-none" />
                 <input
                   type="text"
                   placeholder="สั่งการ Copilot (เช่น สลับเป็นโหมด Sphere, วิเคราะห์ entropy, เช็ค minute 48)..."
                   value={inputQuery}
                   onChange={(e) => setInputQuery(e.target.value)}
-                  className="flex-1 bg-[#070a12] border border-cyan-500/30 rounded-xl px-3.5 py-2 text-xs text-white placeholder-zinc-500 focus:outline-none focus:border-cyan-400"
+                  className="relative flex-1 bg-[#070a12]/90 backdrop-blur-sm border border-cyan-500/40 rounded-xl px-4 py-2.5 text-xs text-white placeholder-zinc-500 focus:outline-none focus:border-cyan-400 focus:ring-1 focus:ring-cyan-400/50 transition-all"
                 />
                 <button
                   type="submit"
                   disabled={isProcessing || !inputQuery.trim()}
-                  className="px-4 py-2 rounded-xl bg-cyan-500 hover:bg-cyan-400 text-black font-bold text-xs shadow-[0_0_15px_rgba(6,182,212,0.4)] transition-all disabled:opacity-40 cursor-pointer shrink-0"
+                  className="relative px-4 py-2.5 rounded-xl bg-gradient-to-r from-cyan-500 to-cyan-400 hover:from-cyan-400 hover:to-cyan-300 text-black font-bold text-xs shadow-[0_0_20px_rgba(6,182,212,0.4)] hover:shadow-[0_0_30px_rgba(6,182,212,0.6)] transition-all disabled:opacity-40 cursor-pointer shrink-0 flex items-center justify-center gap-2"
                 >
-                  {isProcessing ? '⏳' : 'ส่งคำสั่ง'}
+                  {isProcessing ? (
+                    <div className="w-4 h-4 border-2 border-black/30 border-t-black rounded-full animate-spin" />
+                  ) : (
+                    <>
+                      <span>สั่งการ</span>
+                      <Send className="w-3.5 h-3.5" />
+                    </>
+                  )}
                 </button>
               </form>
             </div>

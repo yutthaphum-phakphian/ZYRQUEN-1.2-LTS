@@ -41,6 +41,7 @@ import { SovereignAuditDashboard } from '../SovereignAuditDashboard';
 import { GitHubSyncStatusUtility } from '../dashboard/GitHubSyncStatusUtility';
 import { QuickActionsMenu } from '../QuickActionsMenu';
 import { CopilotAutonomyNodePanel } from '../copilot/CopilotAutonomyNodePanel';
+import { SealValidationAnimation } from '../SealValidationAnimation';
 import {
   Activity,
   Cpu,
@@ -154,6 +155,7 @@ export const DashboardView: React.FC<DashboardViewProps> = ({
   const [isCanvasExpanded, setIsCanvasExpanded] = useState<boolean>(false);
   const [showBufferModal, setShowBufferModal] = useState<boolean>(false);
   const [selectedChamber, setSelectedChamber] = useState<string>('ROOM00');
+  const [isVerifyingSeals, setIsVerifyingSeals] = useState<boolean>(false);
 
   // Dynamic verified seals count based on 14,902 canonical baseline + appended valid snapshots
   const baselineCanonicalSeals = 14902;
@@ -196,6 +198,14 @@ export const DashboardView: React.FC<DashboardViewProps> = ({
 
   return (
     <div className="space-y-4 sm:space-y-5 max-w-full overflow-x-hidden animate-in fade-in duration-200 max-[479px]:p-[12px] max-[479px]:space-y-3">
+      <AnimatePresence>
+        {isVerifyingSeals && (
+          <SealValidationAnimation
+            onComplete={() => setIsVerifyingSeals(false)}
+            onClose={() => setIsVerifyingSeals(false)}
+          />
+        )}
+      </AnimatePresence>
 
       {/* Unified Executive Header & Single Status Bar (Density Reduction) */}
       <div className="p-3.5 sm:p-5 md:p-6 rounded-2xl bg-[#0a0f1e] border border-cyan-500/20 relative overflow-hidden shadow-xl max-[479px]:p-[12px]">
@@ -748,16 +758,28 @@ export const DashboardView: React.FC<DashboardViewProps> = ({
                   ))}
                 </div>
 
-                <button
-                  onClick={() => {
-                    playTone(600, 0.05);
-                    onNavigate('ledger');
-                  }}
-                  className="w-full py-2.5 rounded-xl bg-cyan-950/40 hover:bg-cyan-900/40 border border-cyan-500/30 text-cyan-300 font-mono text-xs flex items-center justify-center gap-2 transition-all cursor-pointer"
-                >
-                  <span>View Full Evidence Ledger &amp; 14,902 Seals</span>
-                  <ArrowRight className="w-3.5 h-3.5 text-cyan-400" />
-                </button>
+                <div className="flex gap-2 w-full mt-2">
+                  <button
+                    onClick={() => {
+                      playTone(600, 0.05);
+                      onNavigate('ledger');
+                    }}
+                    className="flex-1 py-2.5 rounded-xl bg-cyan-950/40 hover:bg-cyan-900/40 border border-cyan-500/30 text-cyan-300 font-mono text-xs flex items-center justify-center gap-2 transition-all cursor-pointer"
+                  >
+                    <span>Evidence Ledger</span>
+                    <ArrowRight className="w-3.5 h-3.5 text-cyan-400" />
+                  </button>
+                  <button
+                    onClick={() => {
+                      playTone(650, 0.05);
+                      setIsVerifyingSeals(true);
+                    }}
+                    className="flex-[1.5] py-2.5 rounded-xl bg-emerald-600 hover:bg-emerald-500 text-white font-mono text-xs font-bold flex items-center justify-center gap-2 transition-all cursor-pointer shadow-[0_0_15px_rgba(16,185,129,0.3)] hover:shadow-[0_0_20px_rgba(16,185,129,0.5)] border border-emerald-400"
+                  >
+                    <ShieldCheck className="w-4 h-4 text-emerald-100" />
+                    <span>Verify All 14,902 Seals</span>
+                  </button>
+                </div>
               </div>
 
               {/* Canonical Architecture Summary */}

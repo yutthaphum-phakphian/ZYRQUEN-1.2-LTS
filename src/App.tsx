@@ -88,7 +88,9 @@ import {
   Fingerprint,
   AlertOctagon,
   Clock,
-  Download
+  Download,
+  X,
+  Bot
 } from 'lucide-react';
 
 interface ViewPersona {
@@ -1922,33 +1924,60 @@ function SovereignAppContent() {
       />
 
       {/* Sovereign Copilot Floating Launcher Button (Bottom-Right Anchor) */}
-      <div className="fixed bottom-6 right-6 z-50 flex items-center gap-2 font-mono">
-        <button
-          id="btn-floating-copilot-trigger"
-          onClick={() => {
-            playTone(isCopilotOpen ? 520 : 740, 0.05);
-            setIsCopilotOpen((prev) => !prev);
-          }}
-          className={`group px-3.5 min-h-[44px] py-2.5 rounded-2xl border transition-all shadow-2xl flex items-center gap-2 cursor-pointer active:scale-95 text-xs ${
-            isCopilotOpen
-              ? 'bg-cyan-500 text-black border-cyan-400 shadow-[0_0_25px_rgba(6,182,212,0.5)]'
-              : 'bg-[#0a0f1e] hover:bg-[#0e162c] text-white border-cyan-500/40 hover:border-cyan-400 shadow-[0_0_20px_rgba(6,182,212,0.25)]'
-          }`}
-          title="เปิด/ปิด Copilot Sovereign AI Assistant (ตำแหน่งขวาล่าง)"
-        >
-          <span className="text-base group-hover:scale-110 transition-transform">🧠</span>
-          <span className="font-bold tracking-wide">Copilot</span>
-          <span className={`px-1.5 py-0.2 rounded text-[9px] border font-bold ${
-            isCopilotOpen
-              ? 'bg-black/20 text-black border-black/30'
-              : 'bg-emerald-950 text-[#10B981] border-emerald-500/30'
-          }`}>
-            Ω1
-          </span>
-          {isCopilotOpen && (
-            <span className="w-2 h-2 rounded-full bg-black animate-pulse" />
-          )}
-        </button>
+      <div className="fixed bottom-6 right-6 sm:bottom-8 sm:right-8 z-50 flex items-center gap-3 font-mono">
+        {!isCopilotOpen && (
+          <motion.div
+            initial={{ opacity: 0, x: 20 }}
+            animate={{ opacity: 1, x: 0 }}
+            className="hidden sm:flex items-center gap-2 bg-indigo-950/80 border border-indigo-500/30 px-3 py-1.5 rounded-xl shadow-lg backdrop-blur-md"
+          >
+            <div className="w-1.5 h-1.5 rounded-full bg-indigo-400 animate-pulse" />
+            <span className="text-[10px] text-indigo-200 font-bold tracking-wide">SYSTEM NOMINAL</span>
+          </motion.div>
+        )}
+        <div className="relative group">
+          {/* Animated Glow Backdrop */}
+          <div className={`absolute -inset-0.5 rounded-2xl blur-md opacity-60 group-hover:opacity-100 transition-opacity duration-500 ${isCopilotOpen ? 'bg-gradient-to-r from-cyan-400 to-emerald-400' : 'bg-gradient-to-r from-indigo-500 to-cyan-500'}`} />
+          
+          <button
+            id="btn-floating-copilot-trigger"
+            onClick={() => {
+              playTone(isCopilotOpen ? 520 : 740, 0.05);
+              setIsCopilotOpen((prev) => !prev);
+            }}
+            className={`relative px-4 min-h-[48px] py-2.5 rounded-2xl border transition-all duration-300 shadow-2xl flex items-center gap-2.5 cursor-pointer active:scale-95 text-sm overflow-hidden ${
+              isCopilotOpen
+                ? 'bg-gradient-to-r from-cyan-500 to-cyan-400 text-black border-cyan-300 shadow-[0_0_30px_rgba(6,182,212,0.6)]'
+                : 'bg-[#0a0f1e]/90 backdrop-blur-xl hover:bg-[#0e162c] text-white border-cyan-500/50 shadow-[0_0_20px_rgba(6,182,212,0.3)]'
+            }`}
+            title="Sovereign AI Copilot (Right Corner)"
+          >
+            {/* Shimmer Effect */}
+            {!isCopilotOpen && (
+              <div className="absolute inset-0 -translate-x-full bg-gradient-to-r from-transparent via-white/10 to-transparent group-hover:animate-[shimmer_1.5s_infinite]" />
+            )}
+            
+            <div className="relative flex items-center justify-center w-6 h-6">
+              {isCopilotOpen ? (
+                <X className="w-5 h-5 transition-transform duration-300 rotate-90 group-hover:rotate-180" />
+              ) : (
+                <>
+                  <div className="absolute inset-0 border border-cyan-400/30 rounded-full animate-[spin_4s_linear_infinite]" />
+                  <Bot className="w-4 h-4 text-cyan-400 group-hover:scale-110 transition-transform" />
+                </>
+              )}
+            </div>
+            <span className={`font-bold tracking-widest ${isCopilotOpen ? 'text-black' : 'bg-clip-text text-transparent bg-gradient-to-r from-white to-cyan-200'}`}>COPILOT</span>
+            <span className={`px-1.5 py-0.5 rounded flex items-center gap-1 text-[9px] border font-bold ${
+              isCopilotOpen
+                ? 'bg-black/20 text-black border-black/30'
+                : 'bg-indigo-950/60 text-cyan-300 border-cyan-500/30'
+            }`}>
+              <div className={`w-1.5 h-1.5 rounded-full ${isCopilotOpen ? 'bg-black animate-pulse' : 'bg-cyan-400 shadow-[0_0_5px_#22d3ee]'}`} />
+              v5.0
+            </span>
+          </button>
+        </div>
       </div>
 
       {/* Sovereign Copilot Assistant Window (Docked at Bottom-Right) */}
