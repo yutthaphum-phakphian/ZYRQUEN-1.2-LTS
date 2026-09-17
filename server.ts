@@ -1505,6 +1505,7 @@ app.get('/api/admin/users', (req, res) => {
   res.json({
     status: 'success',
     users: SOVEREIGN_USERS,
+    data: SOVEREIGN_USERS,
     databaseConnected: checkDatabaseConnection(),
     retrievedAtUtc: new Date().toISOString()
   });

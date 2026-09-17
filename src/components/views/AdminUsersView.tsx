@@ -114,7 +114,7 @@ export const AdminUsersView: React.FC = () => {
       if (!res.ok) {
         throw new Error(data.error || data.message || 'Failed to fetch users');
       }
-      const fetched = data.data || [];
+      const fetched = data.users || data.data || [];
       setUsers(fetched);
       setSelectedUserIds([]);
     } catch (err: any) {

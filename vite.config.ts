@@ -7,13 +7,16 @@ import { VitePWA } from 'vite-plugin-pwa';
 export default defineConfig(() => {
   // Determine Base Path for GitHub Pages, Cloud Run, or local dev
   let rawBase = process.env.VITE_BASE_PATH || process.env.BASE_PATH || '';
-  if (!rawBase && process.env.GITHUB_REPOSITORY) {
+  if ((!rawBase || rawBase === '/' || rawBase === '//') && process.env.GITHUB_REPOSITORY) {
     const repoParts = process.env.GITHUB_REPOSITORY.split('/');
     if (repoParts.length > 1 && !repoParts[1].endsWith('.github.io')) {
       rawBase = `/${repoParts[1]}/`;
     }
   }
-  const basePath = rawBase
+  if ((!rawBase || rawBase === '/' || rawBase === '//') && process.env.GITHUB_ACTIONS === 'true') {
+    rawBase = '/ZYRQUEN-1.2-LTS/';
+  }
+  const basePath = rawBase && rawBase !== '/' && rawBase !== '//'
     ? rawBase.startsWith('/')
       ? (rawBase.endsWith('/') ? rawBase : `${rawBase}/`)
       : `/${rawBase.endsWith('/') ? rawBase : `${rawBase}/`}`

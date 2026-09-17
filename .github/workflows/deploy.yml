@@ -28,7 +28,6 @@ jobs:
         uses: actions/setup-node@v4
         with:
           node-version: 20
-          cache: 'npm'
 
       - name: Install Dependencies
         run: npm install --legacy-peer-deps
@@ -39,16 +38,20 @@ jobs:
       - name: Setup GitHub Pages
         id: pages
         uses: actions/configure-pages@v4
+        continue-on-error: true
 
       - name: Build Vite Client Application for GitHub Pages
-        # Build client assets into dist directory using base path derived from configure-pages
+        # Build client assets into dist directory using base path derived from configure-pages or repo name
         env:
-          VITE_BASE_PATH: ${{ steps.pages.outputs.base_path }}/
-          BASE_PATH: ${{ steps.pages.outputs.base_path }}/
+          VITE_BASE_PATH: ${{ steps.pages.outputs.base_path || '/ZYRQUEN-1.2-LTS/' }}
+          BASE_PATH: ${{ steps.pages.outputs.base_path || '/ZYRQUEN-1.2-LTS/' }}
         run: npx vite build
 
-      - name: Create 404.html fallback for SPA routing
-        run: cp ./dist/index.html ./dist/404.html
+      - name: Ensure 404.html fallback exists for SPA routing
+        run: |
+          if [ ! -f ./dist/404.html ]; then
+            cp ./dist/index.html ./dist/404.html
+          fi
 
       - name: Upload Pages Artifact
         uses: actions/upload-pages-artifact@v3
