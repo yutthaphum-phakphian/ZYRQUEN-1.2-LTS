@@ -39,6 +39,7 @@ import {
   PanelLeft,
   ChevronLeft,
   ChevronRight,
+  Clock,
 } from 'lucide-react';
 import { playTone, getHarmonicCarrierSnapshot } from './AudioSynthesizer';
 import { PWAInstallButton } from './PWAInstallButton';
@@ -67,6 +68,9 @@ interface NavigationProps {
   onTriggerLoginLoader?: (mode?: 'login' | 'register' | 'switch_tenant') => void;
   isCopilotOpen?: boolean;
   onToggleCopilot?: () => void;
+  epochCountdown?: string;
+  isEmergencyLockdown?: boolean;
+  onToggleEmergencyLockdown?: () => void;
 }
 
 interface NavItem {
@@ -129,7 +133,27 @@ export const Navigation: React.FC<NavigationProps> = ({
   onTriggerLoginLoader,
   isCopilotOpen: externalIsCopilotOpen,
   onToggleCopilot,
+  epochCountdown: externalEpochCountdown,
+  isEmergencyLockdown = false,
+  onToggleEmergencyLockdown,
 }) => {
+  const [internalCountdown, setInternalCountdown] = useState<string>('00:00:00');
+
+  useEffect(() => {
+    const updateCountdown = () => {
+      const now = new Date();
+      const hours = String(23 - now.getHours()).padStart(2, '0');
+      const minutes = String(59 - now.getMinutes()).padStart(2, '0');
+      const seconds = String(59 - now.getSeconds()).padStart(2, '0');
+      setInternalCountdown(`${hours}:${minutes}:${seconds}`);
+    };
+    updateCountdown();
+    const interval = setInterval(updateCountdown, 1000);
+    return () => clearInterval(interval);
+  }, []);
+
+  const currentEpochCountdown = externalEpochCountdown || internalCountdown;
+
   const [carrierData, setCarrierData] = useState<{ volume: number; wavePath: string; frequency: number }>({
     volume: 0,
     wavePath: 'M 0 10 Q 25 10, 50 10 T 100 10',
@@ -381,6 +405,44 @@ export const Navigation: React.FC<NavigationProps> = ({
 
         {/* Right Actions */}
         <div className="flex items-center gap-1.5 sm:gap-2 shrink-0">
+          {/* Epoch Countdown Timer: SYNC_EPOCH_ROTATION */}
+          <div
+            id="nav-epoch-countdown"
+            className="hidden lg:flex items-center gap-1.5 px-2.5 py-1.5 rounded-xl bg-black/60 border border-cyan-500/30 text-xs font-mono shadow-[0_0_12px_rgba(6,182,212,0.15)] shrink-0 select-none"
+            title="Real-time Epoch Countdown Timer (SYNC_EPOCH_ROTATION: counting down to 00:00:00)"
+          >
+            <Clock className="w-3.5 h-3.5 text-cyan-400 animate-pulse" />
+            <span className="text-[10px] text-zinc-400 font-bold uppercase tracking-wider hidden xl:inline">SYNC_EPOCH_ROTATION:</span>
+            <span className="text-[10px] text-zinc-400 font-bold uppercase xl:hidden">EPOCH:</span>
+            <span className="text-amber-400 font-bold tracking-widest">{currentEpochCountdown}</span>
+          </div>
+
+          {/* Emergency Lockdown Toggle Button */}
+          {onToggleEmergencyLockdown && (
+            <button
+              id="btn-nav-emergency-lockdown"
+              type="button"
+              onClick={() => {
+                playTone(isEmergencyLockdown ? 520 : 280, 0.1);
+                onToggleEmergencyLockdown();
+              }}
+              className={`flex items-center gap-1.5 px-2.5 py-1.5 rounded-xl border font-mono text-xs transition-all cursor-pointer select-none active:scale-95 ${
+                isEmergencyLockdown
+                  ? 'bg-red-600 text-white border-red-400 shadow-[0_0_22px_rgba(239,68,68,0.9)] animate-pulse font-bold ring-2 ring-red-400/50'
+                  : 'bg-red-950/40 hover:bg-red-900/60 text-red-300 border-red-500/30 hover:border-red-500/60 shadow-[0_0_10px_rgba(239,68,68,0.15)]'
+              }`}
+              title="Simulate Critical Threat & Emergency Lockdown Border Glow (Quarantine Triggered)"
+            >
+              <span className={`w-2 h-2 rounded-full ${isEmergencyLockdown ? 'bg-white animate-ping' : 'bg-red-500'}`} />
+              <span className="hidden sm:inline font-bold">
+                {isEmergencyLockdown ? 'DISARM LOCKDOWN' : 'EMERGENCY LOCK'}
+              </span>
+              <span className="sm:hidden font-bold">
+                {isEmergencyLockdown ? 'DISARM' : 'ALERT'}
+              </span>
+            </button>
+          )}
+
           {/* GitHub Synchronization Warning & Drift Re-sync System */}
           <PWAInstallButton />
           <GitHubSyncWarningNav />

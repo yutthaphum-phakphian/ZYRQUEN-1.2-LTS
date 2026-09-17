@@ -57,6 +57,7 @@ import { OfflineIndicator } from './components/OfflineIndicator';
 import { NexusIntegrationLayer } from './components/NexusIntegrationLayer';
 import { SovereignLoginLoader } from './components/SovereignLoginLoader';
 import { CopilotAssistantDrawer } from './components/copilot/CopilotAssistantDrawer';
+import { ThaiComplianceTriggerMatrix } from './components/ThaiComplianceTriggerMatrix';
 import { systemStateStore } from './store/systemStateStore';
 import { AudioEntropyController, SsotDriftWarning, SsotDriftToggleButton, QuantumAggregateEntropyIndicator } from './components/system/SystemStateComponents';
 import { ToastNotification, ToastMessage } from './components/ToastNotification';
@@ -673,6 +674,21 @@ function SovereignAppContent() {
   const auditProgressPercent = ((TELEMETRY_AUDIT_INTERVAL_SEC - auditCountdownSec) / TELEMETRY_AUDIT_INTERVAL_SEC) * 100;
   const [isGateDetailsExpanded, setIsGateDetailsExpanded] = useState<boolean>(false);
   const [isGateTooltipVisible, setIsGateTooltipVisible] = useState<boolean>(false);
+  const [isEmergencyLockdown, setIsEmergencyLockdown] = useState<boolean>(false);
+  const [epochCountdown, setEpochCountdown] = useState<string>('00:00:00');
+
+  useEffect(() => {
+    const updateCountdown = () => {
+      const now = new Date();
+      const hours = String(23 - now.getHours()).padStart(2, '0');
+      const minutes = String(59 - now.getMinutes()).padStart(2, '0');
+      const seconds = String(59 - now.getSeconds()).padStart(2, '0');
+      setEpochCountdown(`${hours}:${minutes}:${seconds}`);
+    };
+    updateCountdown();
+    const interval = setInterval(updateCountdown, 1000);
+    return () => clearInterval(interval);
+  }, []);
   const [isMonochromeMode, setIsMonochromeMode] = useState<boolean>(() => {
     try {
       return localStorage.getItem('zyrquen_monochrome_mode') === 'true';
@@ -1441,7 +1457,35 @@ function SovereignAppContent() {
   }, [addSystemEvent]);
 
   return (
-    <div className={`min-h-screen w-full max-w-full overflow-x-hidden bg-[#07080F] text-zinc-100 font-sans selection:bg-cyan-500/30 selection:text-cyan-200 antialiased relative ${isMonochromeMode ? 'theme-monochrome' : ''}`}>
+    <div className={`min-h-screen w-full max-w-full overflow-x-hidden bg-[#07080F] text-zinc-100 font-sans selection:bg-cyan-500/30 selection:text-cyan-200 antialiased relative transition-all duration-500 ${isMonochromeMode ? 'theme-monochrome' : ''} ${isEmergencyLockdown ? 'border-4 border-red-600 shadow-[inset_0_0_60px_rgba(239,68,68,0.7),0_0_80px_rgba(239,68,68,0.85)] ring-4 ring-red-500/60' : ''}`}>
+      {/* Emergency Lockdown Floating Sentinel Alert */}
+      {isEmergencyLockdown && (
+        <div
+          id="emergency-lockdown-banner"
+          className="fixed top-20 left-1/2 -translate-x-1/2 z-50 px-5 py-2.5 rounded-2xl bg-red-950/95 border-2 border-red-500 text-red-100 shadow-[0_0_50px_rgba(239,68,68,0.85)] backdrop-blur-2xl flex items-center gap-3.5 animate-bounce"
+        >
+          <span className="w-3 h-3 rounded-full bg-red-500 animate-ping shrink-0" />
+          <div className="font-mono text-xs">
+            <span className="font-bold text-red-300 uppercase tracking-wider block">
+              🚨 EMERGENCY LOCKDOWN ACTIVE: Quarantine Triggered (Zero Threat Invariant)
+            </span>
+            <span className="text-zinc-300 text-[11px] font-sans">
+              Cryogenic Dilution Enclave isolated • Cross-Border egress blocked • Deca-Custodian Fail-Closed
+            </span>
+          </div>
+          <button
+            type="button"
+            onClick={() => {
+              playTone(720, 0.08);
+              setIsEmergencyLockdown(false);
+            }}
+            className="px-3 py-1 rounded-xl bg-red-600 hover:bg-red-500 text-white font-mono text-xs font-bold transition-all cursor-pointer shadow-md hover:scale-105 shrink-0"
+          >
+            Disarm Alert
+          </button>
+        </div>
+      )}
+
       {/* Background Persona Mesh Ambient Lighting with Smooth Morphing */}
       <div className="fixed inset-0 pointer-events-none z-0 overflow-hidden transition-all duration-1000 ease-in-out">
         {/* Dynamic Top Orb */}
@@ -1479,6 +1523,9 @@ function SovereignAppContent() {
         onToggleSidebar={handleToggleSidebar}
         isCopilotOpen={isCopilotOpen}
         onToggleCopilot={() => setIsCopilotOpen((prev) => !prev)}
+        epochCountdown={epochCountdown}
+        isEmergencyLockdown={isEmergencyLockdown}
+        onToggleEmergencyLockdown={() => setIsEmergencyLockdown((prev) => !prev)}
         onTriggerLoginLoader={(mode = 'login') => {
           setLoginLoaderMode(mode);
           setShowLoginLoader(true);
@@ -1586,6 +1633,17 @@ function SovereignAppContent() {
 
               {/* Right: Metrics, Drift Toggle, Trigger Button, Counters */}
               <div className="flex items-center gap-2.5 sm:gap-3 text-[11px] text-zinc-400 ml-auto flex-wrap sm:flex-nowrap">
+                {/* Epoch Countdown Timer: SYNC_EPOCH_ROTATION */}
+                <div
+                  className="hidden lg:flex items-center gap-1.5 px-2 py-0.5 rounded bg-black/50 border border-cyan-500/30 text-[10px] font-mono shadow-inner shrink-0 select-none"
+                  title="Real-time Epoch Countdown Timer (SYNC_EPOCH_ROTATION: counting down to 00:00:00)"
+                >
+                  <Clock className="w-3 h-3 text-cyan-400 animate-pulse" />
+                  <span className="text-zinc-500 uppercase tracking-wider hidden xl:inline">SYNC_EPOCH_ROTATION:</span>
+                  <span className="text-zinc-500 uppercase xl:hidden">EPOCH:</span>
+                  <span className="text-amber-400 font-bold tracking-widest">{epochCountdown}</span>
+                </div>
+
                 {/* SSoT Drift Deviation Simulator Toggle Button */}
                 <SsotDriftToggleButton />
 
@@ -1651,7 +1709,7 @@ function SovereignAppContent() {
               </div>
             </div>
 
-          {/* Expandable Section: Comprehensive ETDA & PDPA Trigger Matrix */}
+          {/* Expandable Section: Comprehensive ETDA & PDPA Trigger Matrix with Tabs, Audit Timeline & Force Scan */}
           <AnimatePresence>
             {isGateDetailsExpanded && (
               <motion.div
@@ -1661,149 +1719,12 @@ function SovereignAppContent() {
                 transition={{ duration: 0.28, ease: [0.16, 1, 0.3, 1] }}
                 className="border-t border-cyan-500/20 bg-[#060812]/95 px-4 sm:px-6 py-4 space-y-4"
               >
-                {/* Header Summary */}
-                <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 pb-3 border-b border-white/8 font-mono">
-                  <div className="flex items-center gap-2.5">
-                    <div className="w-8 h-8 rounded-xl bg-cyan-500/10 border border-cyan-500/30 flex items-center justify-center text-cyan-400">
-                      <Scale className="w-4 h-4" />
-                    </div>
-                    <div>
-                      <h4 className="text-sm font-bold text-zinc-100 flex items-center gap-2">
-                        <span>Thai Legal & Cryptographic Compliance Trigger Matrix</span>
-                        <span className="px-2 py-0.5 rounded text-[10px] font-mono font-bold bg-emerald-500/15 text-emerald-300 border border-emerald-500/30">
-                          ALL 6 TRIGGERS GREEN (100%)
-                        </span>
-                      </h4>
-                      <p className="text-xs text-zinc-400 font-sans">
-                        Sovereign Invariants under ETDA B.E. 2544 (2001/2019) & PDPA B.E. 2562 (2019) certified against Passport #EP-SOVEREIGN-01.
-                      </p>
-                    </div>
-                  </div>
-
-                  {/* Actions shortcut */}
-                  <div className="flex items-center gap-2 flex-wrap">
-                    <button
-                      type="button"
-                      onClick={() => setIsLegalSearchOpen(true)}
-                      className="px-2.5 py-1 rounded-lg bg-cyan-500/15 hover:bg-cyan-500/25 text-cyan-300 border border-cyan-500/35 text-[11px] font-sans font-medium flex items-center gap-1.5 transition-colors cursor-pointer"
-                    >
-                      <BookOpen className="w-3.5 h-3.5" />
-                      Search Thai Legal Corpus
-                    </button>
-                    <button
-                      type="button"
-                      onClick={() => setIsCertificateOpen(true)}
-                      className="px-2.5 py-1 rounded-lg bg-white/5 hover:bg-white/10 text-zinc-200 border border-white/10 text-[11px] font-sans font-medium flex items-center gap-1.5 transition-colors cursor-pointer"
-                    >
-                      <FileText className="w-3.5 h-3.5 text-emerald-400" />
-                      Inspect Cryptographic Certificate
-                    </button>
-                    <button
-                      type="button"
-                      onClick={handleBatchVerify}
-                      className="px-2.5 py-1 rounded-lg bg-emerald-500/15 hover:bg-emerald-500/25 text-emerald-300 border border-emerald-500/35 text-[11px] font-sans font-medium flex items-center gap-1.5 transition-colors cursor-pointer"
-                    >
-                      <ShieldCheck className="w-3.5 h-3.5" />
-                      Batch Verify Chambers
-                    </button>
-                    <button
-                      type="button"
-                      onClick={handleExportAuditLogs}
-                      className="px-2.5 py-1 rounded-lg bg-purple-500/15 hover:bg-purple-500/25 text-purple-300 border border-purple-500/35 text-[11px] font-sans font-medium flex items-center gap-1.5 transition-colors cursor-pointer"
-                    >
-                      <Download className="w-3.5 h-3.5" />
-                      Export Audit Log
-                    </button>
-                  </div>
-                </div>
-
-                {/* 6 Trigger Cards Grid */}
-                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-3 font-sans">
-                  {ETDA_PDPA_TRIGGERS.map((trigger) => (
-                    <div
-                      key={trigger.id}
-                      className="p-3.5 rounded-xl bg-[#090d1a]/80 border border-cyan-500/20 hover:border-cyan-500/40 transition-all space-y-2 group"
-                    >
-                      <div className="flex items-center justify-between gap-2 font-mono text-[10px]">
-                        <span className="text-cyan-400 font-bold px-1.5 py-0.5 rounded bg-cyan-500/10 border border-cyan-500/25">
-                          {trigger.section}
-                        </span>
-                        <span className="text-emerald-300 font-bold px-1.5 py-0.5 rounded bg-emerald-500/10 border border-emerald-500/30 flex items-center gap-1">
-                          <CheckCircle2 className="w-3 h-3 text-emerald-400" />
-                          {trigger.statusText}
-                        </span>
-                      </div>
-
-                      <div>
-                        <h5 className="text-xs font-bold text-zinc-100 group-hover:text-cyan-300 transition-colors">
-                          {trigger.title}
-                        </h5>
-                        <p className="text-[11px] text-cyan-400/90 font-medium font-thai">
-                          {trigger.titleTh}
-                        </p>
-                      </div>
-
-                      <p className="text-[11px] text-zinc-400 leading-relaxed font-sans">
-                        {trigger.description}
-                      </p>
-
-                      <div className="pt-2 border-t border-white/5 flex flex-col gap-1 font-mono text-[10px]">
-                        <div className="flex items-center justify-between text-zinc-400">
-                          <span className="text-zinc-500">PQC Scheme:</span>
-                          <span className="text-zinc-300 truncate max-w-[160px] text-right" title={trigger.pqcScheme}>
-                            {trigger.pqcScheme}
-                          </span>
-                        </div>
-                        <div className="flex items-center justify-between text-zinc-400">
-                          <span className="text-zinc-500">Anchor:</span>
-                          <span className="text-cyan-400/90 truncate max-w-[160px] text-right" title={trigger.anchor}>
-                            {trigger.anchor}
-                          </span>
-                        </div>
-
-                        {/* Forensic Audit Mode Overlay Metadata */}
-                        {isForensicAuditMode && (
-                          <div className="mt-1.5 pt-1.5 border-t border-purple-500/30 bg-purple-950/30 -mx-2 -mb-2 p-2 rounded-b-lg space-y-1 animate-in fade-in duration-200">
-                            <div className="flex items-center justify-between text-[9px] text-purple-300 font-bold">
-                              <span className="flex items-center gap-1">
-                                <Fingerprint className="w-2.5 h-2.5 text-purple-400" />
-                                <span>PQC SIG HASH:</span>
-                              </span>
-                              <span className="text-emerald-400 text-[8px]">VERIFIED (PASS)</span>
-                            </div>
-                            <div className="text-[8px] text-purple-200/90 font-mono break-all bg-black/60 p-1 rounded border border-purple-500/20">
-                              {trigger.id === 'etda-sec-09' && '0x5d8e71a0b3c4d5e6f7a8b9c0d1e2f3a4b5c6d7e8f9a0b1c2d3e4f5a6b7c8d9e0'}
-                              {trigger.id === 'etda-sec-26' && '0x14902_DECA_CUSTODIAN_FIPS140_3_L4_ACTIVE_SHIELD_SIG_909AB8'}
-                              {trigger.id === 'etda-sec-28' && '0x909ab814479844d8a14816bed34cdbb07528e18501da86fc4691763a43fa4c68'}
-                              {trigger.id === 'pdpa-sec-09' && '0x7b2274785f6964223a22534f562d4a554d502d343436222c22617574686f72223a224550227d'}
-                              {trigger.id === 'pdpa-sec-26' && '0x112233445566778899aabbccddeeff00112233445566778899aabbccddeeff00'}
-                              {trigger.id === 'pdpa-sec-28' && '0xdeadbeef00112233445566778899aabbccddeeff112233445566778899aabbcc'}
-                            </div>
-                            <div className="flex items-center justify-between text-[8px] text-zinc-400">
-                              <span>Timestamp: {new Date().toISOString().split('T')[0]} 05:05:30 ICT</span>
-                              <span className="text-cyan-400">Δ0.0% Invariant</span>
-                            </div>
-                          </div>
-                        )}
-                      </div>
-                    </div>
-                  ))}
-                </div>
-
-                {/* Bottom Sovereign Invariant Seal Strip */}
-                <div className="p-2.5 rounded-xl bg-black/40 border border-white/5 flex flex-wrap items-center justify-between gap-3 text-[11px] font-mono text-zinc-400">
-                  <div className="flex items-center gap-2">
-                    <span className="w-2 h-2 rounded-full bg-emerald-400 animate-pulse" />
-                    <span>Genesis Root: <strong className="text-zinc-200">909ab814...43fa4c68</strong></span>
-                    <span className="text-zinc-600 hidden sm:inline">•</span>
-                    <span className="hidden sm:inline">Canonical Block: <strong className="text-zinc-200">#849,202</strong></span>
-                  </div>
-                  <div className="flex items-center gap-2 ml-auto">
-                    <span>Sovereign Architect: <strong className="text-cyan-300">นายยุทธภูมิ พากเพียร</strong></span>
-                    <span className="text-zinc-600">•</span>
-                    <span className="text-emerald-400 font-semibold">SSoT Δ0.0% ZERO DRIFT</span>
-                  </div>
-                </div>
+                <ThaiComplianceTriggerMatrix
+                  onOpenLegalSearch={() => setIsLegalSearchOpen(true)}
+                  onOpenCertificate={() => setIsCertificateOpen(true)}
+                  onExportAuditLogs={handleExportAuditLogs}
+                  isForensicAuditMode={isForensicAuditMode}
+                />
               </motion.div>
             )}
           </AnimatePresence>
