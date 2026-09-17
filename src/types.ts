@@ -1,5 +1,7 @@
 export type ViewType =
   | 'dashboard'
+  | 'fusion'
+  | 'playback'
   | 'civilization'
   | 'studio'
   | 'unified'

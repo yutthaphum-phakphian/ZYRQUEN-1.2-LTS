@@ -551,6 +551,32 @@ app.get('/api/v1/telemetry', (req, res) => {
   });
 });
 
+app.get('/api/v1/telemetry/stream', (req, res) => {
+  res.setHeader('Content-Type', 'text/event-stream');
+  res.setHeader('Cache-Control', 'no-cache');
+  res.setHeader('Connection', 'keep-alive');
+
+  const sendTelemetry = () => {
+    const data = {
+      cryoTemp: 15.11 + (Math.random() * 0.02 - 0.01),
+      qOps: 851.9 + (Math.random() * 10 - 5),
+      coherence: 99.992 + (Math.random() * 0.002 - 0.001),
+      drift: 0.00,
+      seals: 14902,
+      block: 849202,
+      merkleRoot: '909ab814479844d8a14816bed34cdbb07528e18501da86fc4691763a43fa4c68',
+    };
+    res.write(`data: ${JSON.stringify(data)}\n\n`);
+  };
+
+  sendTelemetry();
+  const intervalId = setInterval(sendTelemetry, 1000);
+
+  req.on('close', () => {
+    clearInterval(intervalId);
+  });
+});
+
 // ── SOVEREIGN API LAYER (IMMUTABLE SSoT MUTATION = 0) ──
 
 // Auth API

@@ -36,9 +36,12 @@ import { CouncilView } from './components/views/CouncilView';
 import { LegalView } from './components/views/LegalView';
 import { StudioView } from './components/views/StudioView';
 import { UnifiedMultiverseControlPanel } from './components/views/UnifiedMultiverseControlPanel';
+import { UnifiedAuditPlaybackConsole } from './components/views/UnifiedAuditPlaybackConsole';
 import { GovernanceHealthHeatmap } from './components/views/GovernanceHealthHeatmap';
 import { CivilizationEngineView } from './components/views/CivilizationEngineView';
 import { CanonicalIntegrityDashboardView } from './components/views/CanonicalIntegrityDashboardView';
+import { QuantumAuditFusionView } from './components/views/QuantumAuditFusionView';
+import { UnifiedAuditPlaybackConsole } from './components/views/UnifiedAuditPlaybackConsole';
 import { AdminConsole } from './components/AdminConsole';
 import { AuditAnalyticsDashboard } from './components/AuditAnalyticsDashboard';
 import { SovereignChambersControlPlane } from './components/SovereignChambersControlPlane';
@@ -105,6 +108,13 @@ const VIEW_PERSONAS: Record<ViewType, ViewPersona> = {
     orb3: 'bg-emerald-600/8',
     accentGlow: 'rgba(6,182,212,0.06)',
   },
+  fusion: {
+    name: 'Quantum Audit & Telemetry Fusion',
+    orb1: 'bg-fuchsia-600/12',
+    orb2: 'bg-cyan-600/10',
+    orb3: 'bg-amber-500/10',
+    accentGlow: 'rgba(217,70,239,0.08)',
+  },
   civilization: {
     name: 'Civilization Engine & Multi-Agent Governance',
     orb1: 'bg-amber-600/14',
@@ -132,6 +142,13 @@ const VIEW_PERSONAS: Record<ViewType, ViewPersona> = {
     orb2: 'bg-teal-600/12',
     orb3: 'bg-cyan-600/10',
     accentGlow: 'rgba(16,185,129,0.09)',
+  },
+  playback: {
+    name: '12-Stage Forensic Trace Replay Console',
+    orb1: 'bg-amber-500/15',
+    orb2: 'bg-orange-600/10',
+    orb3: 'bg-cyan-600/10',
+    accentGlow: 'rgba(245,158,11,0.08)',
   },
   council: {
     name: '10/10 REAL_HSM Sovereign Council',
@@ -1340,6 +1357,10 @@ function SovereignAppContent() {
         );
       case 'admin':
         return <AdminConsole />;
+      case 'fusion':
+        return <QuantumAuditFusionView />;
+      case 'playback':
+        return <UnifiedAuditPlaybackConsole />;
       case 'analytics':
         return <AuditAnalyticsDashboard />;
       case 'chambers':
