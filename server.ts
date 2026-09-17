@@ -1,4 +1,11 @@
 
+if (typeof globalThis !== 'undefined' && (globalThis as any).__dirname === '.') {
+  delete (globalThis as any).__dirname;
+}
+if (typeof global !== 'undefined' && (global as any).__dirname === '.') {
+  delete (global as any).__dirname;
+}
+
 const FORENSIC_12_STAGES_DATA = [
     {
         "time": "0.00ms",
@@ -87,7 +94,16 @@ const io = new SocketIOServer(httpServer, {
 });
 
 // Native WebSocket Server for external audit parties & direct WS clients
-const wss = new WebSocketServer({ server: httpServer });
+const wss = new WebSocketServer({ noServer: true });
+
+httpServer.on('upgrade', (request, socket, head) => {
+  const url = request.url || '';
+  if (url.startsWith('/ws') || url.startsWith('/audit-ws')) {
+    wss.handleUpgrade(request, socket, head, (ws) => {
+      wss.emit('connection', ws, request);
+    });
+  }
+});
 
 // In-memory buffer for recent notifications
 const recentNotificationsBuffer: any[] = [];
@@ -1990,7 +2006,7 @@ async function setupApp() {
     const vite = await createViteServer({
       server: {
         middlewareMode: true,
-        hmr: process.env.DISABLE_HMR === 'true' ? false : undefined,
+        hmr: process.env.DISABLE_HMR === 'true' ? false : { server: httpServer },
       },
       appType: 'spa',
     });

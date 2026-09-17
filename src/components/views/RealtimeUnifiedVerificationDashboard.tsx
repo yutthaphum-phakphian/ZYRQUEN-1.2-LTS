@@ -147,7 +147,7 @@ export const RealtimeUnifiedVerificationDashboard: React.FC<{
     let ws: WebSocket | null = null;
     try {
       const protocol = window.location.protocol === 'https:' ? 'wss:' : 'ws:';
-      const wsUrl = `${protocol}//${window.location.host}`;
+      const wsUrl = `${protocol}//${window.location.host}/ws/notifications`;
       ws = new WebSocket(wsUrl);
 
       ws.onmessage = (event) => {

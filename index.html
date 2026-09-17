@@ -10,22 +10,69 @@
       // Filter benign Vite websocket disconnection warnings in sandboxed preview iframe
       (function() {
         if (typeof window === 'undefined') return;
+        var isViteMsg = function(arg) {
+          if (!arg) return false;
+          var str = '';
+          try {
+            str = typeof arg === 'string' ? arg : (arg.message || arg.stack || String(arg));
+          } catch(e) {
+            str = String(arg);
+          }
+          return str.indexOf('[vite]') !== -1 ||
+                 str.indexOf('failed to connect to websocket') !== -1 ||
+                 str.indexOf('WebSocket closed without opened') !== -1 ||
+                 (str.indexOf('WebSocket') !== -1 && str.indexOf('vite') !== -1);
+        };
+
+        var shouldSuppress = function(args) {
+          for (var i = 0; i < args.length; i++) {
+            if (isViteMsg(args[i])) return true;
+          }
+          return false;
+        };
+
         var origConsoleError = console.error;
         var origConsoleWarn = console.warn;
+        var origConsoleLog = console.log;
+        var origConsoleInfo = console.info;
+        var origConsoleDebug = console.debug;
+
         console.error = function() {
-          var first = arguments[0];
-          if (typeof first === 'string' && (first.indexOf('[vite]') !== -1 || first.indexOf('failed to connect to websocket') !== -1)) {
-            return;
-          }
+          if (shouldSuppress(arguments)) return;
           return origConsoleError.apply(console, arguments);
         };
         console.warn = function() {
-          var first = arguments[0];
-          if (typeof first === 'string' && (first.indexOf('[vite]') !== -1 || first.indexOf('failed to connect to websocket') !== -1)) {
-            return;
-          }
+          if (shouldSuppress(arguments)) return;
           return origConsoleWarn.apply(console, arguments);
         };
+        console.info = function() {
+          if (shouldSuppress(arguments)) return;
+          return origConsoleInfo.apply(console, arguments);
+        };
+        console.debug = function() {
+          if (shouldSuppress(arguments)) return;
+          return origConsoleDebug.apply(console, arguments);
+        };
+        console.log = function() {
+          if (shouldSuppress(arguments)) return;
+          return origConsoleLog.apply(console, arguments);
+        };
+
+        window.addEventListener('error', function(e) {
+          if (isViteMsg(e.message) || isViteMsg(e.error)) {
+            e.stopImmediatePropagation();
+            e.preventDefault();
+            return true;
+          }
+        }, true);
+
+        window.addEventListener('unhandledrejection', function(e) {
+          if (isViteMsg(e.reason)) {
+            e.stopImmediatePropagation();
+            e.preventDefault();
+            return true;
+          }
+        }, true);
       })();
     </script>
   </head>

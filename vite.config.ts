@@ -1,6 +1,14 @@
+if (typeof globalThis !== 'undefined' && (globalThis as any).__dirname === '.') {
+  delete (globalThis as any).__dirname;
+}
+if (typeof global !== 'undefined' && (global as any).__dirname === '.') {
+  delete (global as any).__dirname;
+}
+
 import tailwindcss from '@tailwindcss/vite';
 import react from '@vitejs/plugin-react';
 import path from 'path';
+import { fileURLToPath } from 'url';
 import { defineConfig } from 'vite';
 import { VitePWA } from 'vite-plugin-pwa';
 
@@ -127,7 +135,7 @@ export default defineConfig(() => {
     ],
     resolve: {
       alias: {
-        '@': path.resolve(__dirname, './src'),
+        '@': fileURLToPath(new URL('./src', import.meta.url)),
       },
     },
     server: {
