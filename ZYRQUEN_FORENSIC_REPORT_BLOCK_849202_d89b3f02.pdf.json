@@ -1,0 +1,15 @@
+{
+  "report_id": "d89b3f02-a178-4e89-91f5-420549b79e01",
+  "file_name": "ZYRQUEN_FORENSIC_REPORT_BLOCK_849202_d89b3f02.pdf",
+  "audit_seal_hash": "0x14902_GOLD_SEAL_BLOCK_849202_CANONICAL_FROZEN_PROOF_TOKEN_HASH",
+  "block_height": 849202,
+  "timestamp": "2026-09-16T23:28:17.093Z",
+  "format": "PDF",
+  "thai_compliance": {
+    "ETDA_Section_9": "FULL_COMPLIANCE",
+    "ETDA_Section_26": "FULL_COMPLIANCE",
+    "ETDA_Section_28": "FULL_COMPLIANCE",
+    "PDPA_Section_26_28": "FULL_COMPLIANCE",
+    "NCSA_CI_STD": "LEVEL_4_HSM_PROTECTED"
+  }
+}
