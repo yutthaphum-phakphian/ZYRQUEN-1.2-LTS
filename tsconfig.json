@@ -16,6 +16,6 @@
     "allowJs": false,
     "types": ["node"]
   },
-  "include": ["src", "server.ts", "scripts", "*.ts", "*.tsx"],
-  "exclude": ["node_modules", "dist"]
+  "include": ["src", "server.ts", "scripts"],
+  "exclude": ["node_modules", "dist", "zyrquen_artifacts", "charts", "docs"]
 }
