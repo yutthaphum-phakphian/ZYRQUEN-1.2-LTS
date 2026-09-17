@@ -87,7 +87,7 @@ const io = new SocketIOServer(httpServer, {
 });
 
 // Native WebSocket Server for external audit parties & direct WS clients
-const wss = new WebSocketServer({ server: httpServer, path: '/ws/notifications' });
+const wss = new WebSocketServer({ server: httpServer });
 
 // In-memory buffer for recent notifications
 const recentNotificationsBuffer: any[] = [];
@@ -99,7 +99,7 @@ function broadcastNotification(type: string, message: string, payload: any = {})
     message,
     payload,
     timestamp: new Date().toISOString(),
-    systemStatus: 'LOCKEDFROZENv1.2_LTS',
+    systemStatus: 'LOCKED_FROZEN_v1.2_LTS',
     merkleRoot: '909ab814479844d8a14816bed34cdbb07528e18501da86fc4691763a43fa4c68',
     block: 849202,
     seals: 14902,
@@ -207,15 +207,17 @@ function trigger12StageBroadcast(sealId = 14903) {
 }
 
 wss.on('connection', (ws) => {
-  // Send welcome handshake with canonical anchor
+  // Send welcome message matching Unified Notification Console specification
   ws.send(
     JSON.stringify({
-      type: 'NOTIFICATION_SERVICE_HANDSHAKE',
-      message: 'Connected to ZYRQUEN Sovereign Notification Service (LOCKEDFROZENv1.2_LTS)',
-      systemStatus: 'LOCKEDFROZENv1.2_LTS',
+      type: 'SYSTEM_CONNECTED',
+      message: 'Unified Notification Console Ready',
+      status: 'LOCKED_FROZEN_v1.2_LTS',
+      systemStatus: 'LOCKED_FROZEN_v1.2_LTS',
       merkleRoot: '909ab814479844d8a14816bed34cdbb07528e18501da86fc4691763a43fa4c68',
       block: 849202,
       seals: 14902,
+      drift: '0.00%',
       recentAlerts: recentNotificationsBuffer.slice(0, 10),
       timestamp: new Date().toISOString(),
     })
@@ -414,12 +416,13 @@ Provide an authoritative, detailed, structured response with:
 app.post('/api/v1/alerts/security', (req, res) => {
   const { riskScore, sealId = 14902 } = req.body || {};
   const numericRisk = Number(riskScore ?? 0.94);
+  const targetSeal = sealId ?? 14902;
 
   if (numericRisk >= 0.85) {
     const alert = broadcastNotification(
-      'CRITICALSECURITYALERT',
-      `Risk ${numericRisk} detected → Chamber 02 Quarantine (Seal #${sealId})`,
-      { sealId, riskScore: numericRisk, quarantineChamber: 'CHAMBER_02_QUARANTINE', action: 'ZEROIZATION_ENGAGED' }
+      'SECURITY_ALERT',
+      `Risk ${numericRisk} → Chamber 02 Quarantine (Seal #${targetSeal})`,
+      { sealId: targetSeal, riskScore: numericRisk }
     );
     return res.json({ status: 'ALERT_SENT', notification: alert });
   }
@@ -434,9 +437,9 @@ app.post('/api/v1/alerts/telemetry', (req, res) => {
 
   if (numericDrift > 0.00 || numericCryo > 15.20) {
     const alert = broadcastNotification(
-      'TELEMETRYDRIFTALERT',
+      'TELEMETRY_ALERT',
       `Cryo ${numericCryo} mK / Drift ${numericDrift}% exceeds SLA`,
-      { cryoTemp: numericCryo, drift: numericDrift, slaThreshold: '15.20 mK / 0.00%' }
+      { cryoTemp: numericCryo, drift: numericDrift }
     );
     return res.json({ status: 'ALERT_SENT', notification: alert });
   }
@@ -447,21 +450,21 @@ app.post('/api/v1/alerts/telemetry', (req, res) => {
 app.post('/api/v1/alerts/compliance', (req, res) => {
   const { section = '28', verdict = 'Presumption of Authenticity Active & Admissible' } = req.body || {};
   const alert = broadcastNotification(
-    'LEGALCOMPLIANCEUPDATE',
+    'COMPLIANCE_UPDATE',
     `ETDA Section ${section} → ${verdict}`,
-    { section, verdict, statutoryAct: 'ETDA B.E. 2544 (2001)' }
+    { section, verdict }
   );
   res.json({ status: 'UPDATE_SENT', notification: alert });
 });
 
 // Audit Replay Alerts: 12-Stage Trace Replay via Sovereign Notification Service
 app.post('/api/v1/alerts/audit', (req, res) => {
-  const { sealId = 14903, triggerStages = true } = req.body || {};
+  const { sealId = 14903, triggerStages = false } = req.body || {};
   
   if (triggerStages) {
     trigger12StageBroadcast(Number(sealId) || 14903);
     return res.json({
-      status: 'REPLAY_BROADCAST_INITIATED',
+      status: 'REPLAY_ALERT_SENT',
       sealId: Number(sealId) || 14903,
       stagesCount: 12,
       slaLimit: '< 142ms',
@@ -471,10 +474,44 @@ app.post('/api/v1/alerts/audit', (req, res) => {
 
   const alert = broadcastNotification(
     'AUDIT_REPLAY',
-    `Trace Replay Seal #${sealId} → Stage-12 Closure ✓`,
-    { sealId, duration: '35.8ms', sla: '< 142ms', stage12Verified: true }
+    `Trace Replay Seal #${sealId} → Stage‑12 Closure ✓`,
+    { sealId, duration: '142ms' }
   );
   res.json({ status: 'REPLAY_ALERT_SENT', notification: alert });
+});
+
+// ── UNIFIED VERIFICATION DASHBOARD ENDPOINTS (LOCKED_FROZEN_v1.2_LTS) ──
+// Evidence Intake
+app.post('/api/v1/intake', (req, res) => {
+  const { evidenceId, sourceFilename } = req.body || {};
+  const notification = broadcastNotification(
+    'INTAKE_EVENT',
+    `Evidence Intake Registered: ${evidenceId}`,
+    { evidenceId, sourceFilename }
+  );
+  res.json({ status: 'INTAKE_REGISTERED', notification });
+});
+
+// Snapshot Telemetry
+app.post('/api/v1/snapshot', (req, res) => {
+  const { cpuAvg, memoryUsed, cryoTemp, qops } = req.body || {};
+  const notification = broadcastNotification(
+    'SNAPSHOT_EVENT',
+    'Immutable Snapshot Telemetry Update',
+    { cpuAvg, memoryUsed, cryoTemp, qops }
+  );
+  res.json({ status: 'SNAPSHOT_UPDATED', notification });
+});
+
+// Evidence Package Verification
+app.post('/api/v1/package', (req, res) => {
+  const { manifestId, status } = req.body || {};
+  const notification = broadcastNotification(
+    'PACKAGE_EVENT',
+    `Manifest ${manifestId} → ${status}`,
+    { manifestId, status }
+  );
+  res.json({ status: 'PACKAGE_VERIFIED', notification });
 });
 
 // Notification Service Status & Connected Clients

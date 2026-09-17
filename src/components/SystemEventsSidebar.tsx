@@ -385,6 +385,14 @@ export const SystemEventsSidebar: React.FC<SystemEventsSidebarProps> = ({
     a.download = `zyrquen-events-log-${filter.toLowerCase()}-${Date.now()}.json`;
     a.click();
     URL.revokeObjectURL(url);
+
+    setBatchVerificationResult({
+      show: true,
+      valid: true,
+      message: `Downloaded ${filteredEvents.length} system events as formatted JSON (${filter} filter)`,
+      total: filteredEvents.length,
+      format: 'JSON',
+    });
   };
 
   const toggleSelectAll = () => {
@@ -689,6 +697,17 @@ export const SystemEventsSidebar: React.FC<SystemEventsSidebarProps> = ({
         </div>
 
         <div className="flex items-center gap-1.5 flex-wrap justify-end">
+          {/* Download Current System Event Logs as Formatted JSON */}
+          <button
+            id="btn-download-events-json"
+            onClick={handleExportCurrentEventLogJson}
+            className="px-2.5 py-1.5 rounded-xl bg-blue-950/70 hover:bg-blue-600/30 border border-blue-500/50 text-blue-300 hover:text-white transition-all flex items-center gap-1.5 shadow-[0_0_12px_rgba(59,130,246,0.2)] active:scale-95 cursor-pointer"
+            title="Download current system event logs as a formatted JSON file with audit metadata and hashes"
+          >
+            <Download className="w-3.5 h-3.5 text-blue-400" />
+            <span className="text-[10px] font-bold">Download JSON</span>
+          </button>
+
           {/* Batch CSV Export (Cryptographic Signatures) */}
           <button
             id="btn-export-batch-csv"
@@ -1253,6 +1272,18 @@ export const SystemEventsSidebar: React.FC<SystemEventsSidebarProps> = ({
                 >
                   <FileSpreadsheet className="w-3 h-3 text-emerald-400" />
                   <span>CSV Batch</span>
+                </button>
+
+                <button
+                  id="btn-download-events-json-bottom"
+                  onMouseEnter={() => setHoveredActionTooltip('bulkExportDossier')}
+                  onMouseLeave={() => setHoveredActionTooltip(null)}
+                  onClick={handleExportCurrentEventLogJson}
+                  className="px-2 py-1 rounded-lg bg-blue-500/20 hover:bg-blue-500/30 border border-blue-500/40 text-blue-300 text-[10px] font-bold flex items-center gap-1 transition-all shadow-[0_0_8px_rgba(59,130,246,0.2)]"
+                  title="Download current system event logs as formatted JSON"
+                >
+                  <Download className="w-3 h-3 text-blue-300" />
+                  <span>Download JSON</span>
                 </button>
 
                 <button
