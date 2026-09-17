@@ -1,6 +1,0 @@
-{
-  "name": "ZYRQUEN App",
-  "description": "App imported from yuththphumiphakpheiyr254-cloud/ZYRQUEN-1.2-LTS",
-  "requestFramePermissions": [],
-  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
-}

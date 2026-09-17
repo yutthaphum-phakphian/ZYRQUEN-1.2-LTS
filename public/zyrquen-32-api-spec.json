@@ -1,0 +1,13 @@
+{
+  "system": "ZYRQUEN_SOVEREIGN_SENTINEL_V6",
+  "incident_id": "ZQ-GREEN-DEP-849202-3908",
+  "timestamp_ms": 35.80,
+  "sla_ms": 142.0,
+  "sentinel_tier": 3,
+  "risk_assessment": {
+      "score": 0.94,
+      "threshold": 0.85,
+      "status": "CRITICAL_ATTACKER_DETECTED",
+      "anomalies": ["Voltage Jitter", "Geo Mismatch BKK->Unknown"]
+  }
+}

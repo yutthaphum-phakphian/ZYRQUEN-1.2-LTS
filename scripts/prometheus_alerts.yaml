@@ -1,0 +1,73 @@
+# =============================================================================
+# ZYRQUEN Ω∞ Senate Gate — Prometheus Enterprise Alert Rules v5.0 LTS
+# Real-time SLA Protection, Quorum Health & Post-Quantum Cryptographic Audits
+# =============================================================================
+
+apiVersion: monitoring.coreos.com/v1
+kind: PrometheusRule
+metadata:
+  name: senate-gate-enterprise-alerts
+  namespace: monitoring
+  labels:
+    role: alert-rules
+    app.kubernetes.io/name: senate-gate
+spec:
+  groups:
+    - name: senategate.sla.rules
+      rules:
+        # 1. P99 Latency SLA Violation Alert
+        - alert: SenateGateLatencyP99Breach
+          expr: histogram_quantile(0.99, sum(rate(senategate_eval_duration_seconds_bucket[1m])) by (le)) * 1000 > 1.00
+          for: 30s
+          labels:
+            severity: critical
+            tier: sovereign-governance
+          annotations:
+            summary: "Senate Gate p99 Evaluation Latency exceeds statutory SLA (< 1.00ms)"
+            description: "Current p99 evaluation latency is {{ $value | printf \"%.3f\" }}ms. JIT compiler cache or short-circuit evaluation pipeline degraded."
+            runbook_url: "https://ops.zyrquen.network/runbooks/senategate-latency-p99"
+
+        # 2. Quorum Supermajority Degradation Alert
+        - alert: SenateGateQuorumDegraded
+          expr: (sum(senategate_senate_nodes_active{status="ATTESTED"}) / sum(senategate_senate_nodes_active)) < 0.667
+          for: 15s
+          labels:
+            severity: critical
+            tier: sovereign-governance
+          annotations:
+            summary: "Active Senate Quorum has dropped below Supermajority (66.7%)"
+            description: "Only {{ $value | humanizePercentage }} of Senate nodes are currently attested. Quorum decisions may freeze or fail-closed."
+            runbook_url: "https://ops.zyrquen.network/runbooks/senategate-quorum-deficit"
+
+        # 3. Geo-Distributed Split-Brain Drift Anomaly
+        - alert: SenateGateCrossRegionDriftAnomaly
+          expr: max(senategate_cross_region_drift_blocks) > 0
+          for: 10s
+          labels:
+            severity: page
+            tier: sovereign-governance
+          annotations:
+            summary: "Geo-Distributed Consensus Merkle Drift Detected (> 0 blocks lag)"
+            description: "Cluster {{ $labels.target_region }} is lagging by {{ $value }} blocks. Immediate risk of split-brain consensus divergence."
+
+        # 4. HSM FIPS 140-3 Hardware Attestation Deficit
+        - alert: SenateGateHSMAttestationFailure
+          expr: count(senategate_node_hsm_fips_level < 4) > 0
+          for: 0m
+          labels:
+            severity: critical
+            tier: sovereign-governance
+          annotations:
+            summary: "Senate Node Hardware Security Module (HSM) below FIPS 140-3 Level 4"
+            description: "Detected node with unauthorized hardware attestation level. Immediate zero-trust revocation applied."
+
+        # 5. Volumetric Attack / Chaos Injection Spike
+        - alert: SenateGateVolumetricChaosSpike
+          expr: sum(rate(senategate_short_circuit_triggers_total{guard="LIFECYCLE_SUSPENDED"}[1m])) > 500
+          for: 1m
+          labels:
+            severity: warning
+            tier: sovereign-governance
+          annotations:
+            summary: "Massive influx of suspended agent authorization attempts (>500/s)"
+            description: "Fast-path short-circuit guard is absorbing heavy attack volume. Potential adversary recon activity."

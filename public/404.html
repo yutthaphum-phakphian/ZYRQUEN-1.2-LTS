@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <title>ZYRQUEN Ω∞ — Redirecting...</title>
+    <script>
+      // Single Page Apps for GitHub Pages and Static Servers
+      // Redirects 404 to index.html with route encoded in hash for HashRouter
+      (function () {
+        var pathSegments = window.location.pathname.split('/').filter(Boolean);
+        // Handle repository subpath or direct route
+        var repoName = pathSegments.length > 0 && !['dashboard', 'council', 'vault', 'ledger', 'pulse', 'quantum', 'nexus', 'forge', 'matrix', 'archive', 'console', 'security', 'settings', 'legal', 'canonical', 'civilization', 'studio', 'unified', 'heatmap', 'production'].includes(pathSegments[0]) ? pathSegments[0] : '';
+        var remainingPath = repoName ? pathSegments.slice(1).join('/') : pathSegments.join('/');
+        var targetHash = '#/' + remainingPath + (window.location.search || '');
+        var targetUrl = (repoName ? '/' + repoName + '/' : '/') + targetHash;
+        window.location.replace(targetUrl);
+      })();
+    </script>
+  </head>
+  <body style="background-color: #070a12; color: #fff; font-family: sans-serif; display: flex; align-items: center; justify-content: center; height: 100vh; margin: 0;">
+    <p>Redirecting to Sovereign Engine...</p>
+  </body>
+</html>

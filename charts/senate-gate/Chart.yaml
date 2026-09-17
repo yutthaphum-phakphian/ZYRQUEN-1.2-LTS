@@ -1,0 +1,17 @@
+apiVersion: v2
+name: senate-gate
+description: ZYRQUEN Ω∞ Senate Gate Enterprise Policy & Quorum Engine v5.0 LTS
+type: application
+version: 5.0.0
+appVersion: "5.0.0-LTS"
+keywords:
+  - zyrquen
+  - governance
+  - zero-trust
+  - opa
+  - rego
+  - pqc
+  - consensus
+maintainers:
+  - name: ZYRQUEN Sovereign Architecture Council
+    email: sovereign@zyrquen.network

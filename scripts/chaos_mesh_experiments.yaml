@@ -1,0 +1,91 @@
+# =============================================================================
+# ZYRQUEN Ω∞ Senate Gate — Chaos Mesh Enterprise Experiments v5.0 LTS
+# Validates Fault Tolerance, Split-Brain Resistance & Fail-Safe Under Attack
+# =============================================================================
+
+apiVersion: chaos-mesh.org/v1alpha1
+kind: PodChaos
+metadata:
+  name: senate-gate-random-pod-kill
+  namespace: chaos-testing
+spec:
+  action: pod-kill
+  mode: fixed
+  value: "2"
+  selector:
+    namespaces:
+      - senate-governance
+    labelSelectors:
+      app.kubernetes.io/name: senate-gate
+  scheduler:
+    cron: "@every 2m"
+  duration: "30s"
+---
+# Experiment 2: Network Latency & Jitter Attack (Simulates Trans-Oceanic Congestion)
+apiVersion: chaos-mesh.org/v1alpha1
+kind: NetworkChaos
+metadata:
+  name: senate-gate-cross-region-latency
+  namespace: chaos-testing
+spec:
+  action: delay
+  mode: all
+  selector:
+    namespaces:
+      - senate-governance
+    labelSelectors:
+      app.kubernetes.io/name: senate-gate
+  delay:
+    latency: "120ms"
+    jitter: "25ms"
+    correlation: "50"
+  duration: "60s"
+  scheduler:
+    cron: "@every 5m"
+---
+# Experiment 3: Split-Brain Quorum Partition Simulation
+apiVersion: chaos-mesh.org/v1alpha1
+kind: NetworkChaos
+metadata:
+  name: senate-gate-split-brain-partition
+  namespace: chaos-testing
+spec:
+  action: partition
+  mode: all
+  selector:
+    namespaces:
+      - senate-governance
+    labelSelectors:
+      app.kubernetes.io/name: senate-gate
+  direction: both
+  target:
+    mode: all
+    selector:
+      namespaces:
+        - senate-governance
+      labelSelectors:
+        topology.kubernetes.io/zone: "eu-central-1b"
+  duration: "45s"
+---
+# Experiment 4: CPU & Memory Stress Throttling
+apiVersion: chaos-mesh.org/v1alpha1
+kind: StressChaos
+metadata:
+  name: senate-gate-noisy-neighbor-stress
+  namespace: chaos-testing
+spec:
+  mode: fixed
+  value: "3"
+  selector:
+    namespaces:
+      - senate-governance
+    labelSelectors:
+      app.kubernetes.io/name: senate-gate
+  stressors:
+    cpu:
+      workers: 4
+      load: 85
+    memory:
+      workers: 2
+      size: "2Gi"
+  duration: "90s"

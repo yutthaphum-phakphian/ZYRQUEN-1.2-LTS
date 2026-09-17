@@ -1,0 +1,8 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" width="512" height="512">
+  <rect width="512" height="512" rx="100" fill="#070a12"/>
+  <rect x="24" y="24" width="464" height="464" rx="80" fill="none" stroke="#D4AF37" stroke-width="8"/>
+  <circle cx="256" cy="256" r="160" fill="none" stroke="#06B6D4" stroke-width="4" stroke-dasharray="12 8"/>
+  <text x="256" y="275" font-family="monospace, sans-serif" font-size="140" font-weight="900" fill="#D4AF37" text-anchor="middle" dominant-baseline="middle">Ω∞</text>
+  <text x="256" y="390" font-family="monospace, sans-serif" font-size="28" font-weight="700" fill="#06B6D4" text-anchor="middle">ZYRQUEN</text>
+  <text x="256" y="425" font-family="monospace, sans-serif" font-size="16" font-weight="600" fill="#A1A1AA" text-anchor="middle">BLOCK #849202</text>
+</svg>
