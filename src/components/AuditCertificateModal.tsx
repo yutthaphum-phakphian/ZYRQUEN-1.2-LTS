@@ -13,6 +13,7 @@ import {
 import { copyToClipboard } from '../utils/clipboard';
 import QRCode from 'qrcode';
 import { InteractivePdfPreviewModal } from './InteractivePdfPreviewModal';
+import { OfflineSealChainQrGenerator } from './OfflineSealChainQrGenerator';
 
 interface AuditCertificateModalProps {
   isOpen: boolean;
@@ -22,7 +23,7 @@ interface AuditCertificateModalProps {
 export const AuditCertificateModal: React.FC<AuditCertificateModalProps> = ({ isOpen, onClose }) => {
   const [copiedHash, setCopiedHash] = useState(false);
   const [copiedProof, setCopiedProof] = useState(false);
-  const [activeTab, setActiveTab] = useState<'certificate' | 'goldMaster' | 'treasury' | 'invariants' | 'stages' | 'custodians'>('goldMaster');
+  const [activeTab, setActiveTab] = useState<'certificate' | 'goldMaster' | 'treasury' | 'invariants' | 'stages' | 'custodians' | 'qrGenerator'>('goldMaster');
   const [isDossierPreviewOpen, setIsDossierPreviewOpen] = useState(false);
   const [isQrModalOpen, setIsQrModalOpen] = useState(false);
   const [qrCodeDataUrl, setQrCodeDataUrl] = useState<string>('');
@@ -162,6 +163,21 @@ export const AuditCertificateModal: React.FC<AuditCertificateModalProps> = ({ is
           <div className="flex items-center gap-2">
             <button
               onClick={() => {
+                playTone(600, 0.04);
+                setActiveTab('qrGenerator');
+              }}
+              className={`p-2 rounded-xl border font-mono text-xs flex items-center gap-1.5 transition-all shadow-[0_0_10px_rgba(6,182,212,0.2)] ${
+                activeTab === 'qrGenerator'
+                  ? 'bg-cyan-500 text-black border-cyan-400 font-bold'
+                  : 'bg-cyan-500/20 hover:bg-cyan-500/30 text-cyan-200 border-cyan-500/30'
+              }`}
+              title="Generate Offline Seal Chain Verification QR Code for External Auditors"
+            >
+              <QrCode className="w-4 h-4 text-cyan-400" />
+              <span className="hidden sm:inline">Offline QR</span>
+            </button>
+            <button
+              onClick={() => {
                 playTone(620, 0.04);
                 setIsDossierPreviewOpen(true);
               }}
@@ -219,6 +235,7 @@ export const AuditCertificateModal: React.FC<AuditCertificateModalProps> = ({ is
         <div className="stagger-2 px-6 border-b border-white/8 bg-black/40 flex items-center gap-2 overflow-x-auto no-scrollbar">
           {[
             { id: 'goldMaster', label: '🏆 Gold Master Forensic (10/10)' },
+            { id: 'qrGenerator', label: '📱 Offline Verification QR' },
             { id: 'certificate', label: 'Gold Master Seal' },
             { id: 'treasury', label: 'FIOS Treasury & SSoT Δ0' },
             { id: 'invariants', label: '10 System Invariants' },
@@ -819,6 +836,10 @@ export const AuditCertificateModal: React.FC<AuditCertificateModalProps> = ({ is
                 </div>
               ))}
             </div>
+          )}
+
+          {activeTab === 'qrGenerator' && (
+            <OfflineSealChainQrGenerator />
           )}
         </div>
       </div>

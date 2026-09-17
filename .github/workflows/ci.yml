@@ -1,0 +1,39 @@
+name: 🛡️ ZYRQUEN Ω∞ CI — Core Invariants, Tests & Build Gate
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  validate-and-test:
+    name: Lint, Test & Sovereign Build Gate v1.2 LTS
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+
+    steps:
+      - name: Checkout Codebase
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js Runtime
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: 'npm'
+
+      - name: Install Dependencies
+        run: npm install --legacy-peer-deps
+
+      - name: TypeScript & Static Lint Verification
+        run: npm run lint
+
+      - name: Execute Sovereign Unit Tests & Invariants Suite
+        run: npm test
+
+      - name: Build Vite Client Assets
+        run: npx vite build

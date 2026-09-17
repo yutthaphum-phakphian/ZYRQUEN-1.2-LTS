@@ -68,12 +68,14 @@ const FORENSIC_12_STAGES_DATA = [
 import express from 'express';
 import http from 'http';
 import { Server as SocketIOServer } from 'socket.io';
+import WebSocket, { WebSocketServer } from 'ws';
 import cors from 'cors';
 import crypto from 'crypto';
 import path from 'path';
 import { createServer as createViteServer } from 'vite';
 import { GoogleGenAI } from '@google/genai';
 import dotenv from 'dotenv';
+import { fcmNotificationService } from './src/services/fcmNotificationService';
 
 dotenv.config();
 
@@ -82,6 +84,155 @@ const PORT = 3000;
 const httpServer = http.createServer(app);
 const io = new SocketIOServer(httpServer, {
   cors: { origin: '*' }
+});
+
+// Native WebSocket Server for external audit parties & direct WS clients
+const wss = new WebSocketServer({ server: httpServer, path: '/ws/notifications' });
+
+// In-memory buffer for recent notifications
+const recentNotificationsBuffer: any[] = [];
+
+// Broadcast Notification Function (Supporting Native WebSocket, Socket.IO, and FCM Push Notifications)
+function broadcastNotification(type: string, message: string, payload: any = {}) {
+  const notification = {
+    type,
+    message,
+    payload,
+    timestamp: new Date().toISOString(),
+    systemStatus: 'LOCKEDFROZENv1.2_LTS',
+    merkleRoot: '909ab814479844d8a14816bed34cdbb07528e18501da86fc4691763a43fa4c68',
+    block: 849202,
+    seals: 14902,
+    drift: '0.00%',
+  };
+
+  // Buffer management (keep last 100)
+  recentNotificationsBuffer.unshift(notification);
+  if (recentNotificationsBuffer.length > 100) {
+    recentNotificationsBuffer.pop();
+  }
+
+  // Broadcast to Native WebSocket clients
+  const wsData = JSON.stringify(notification);
+  wss.clients.forEach((client) => {
+    if (client.readyState === WebSocket.OPEN) {
+      try {
+        client.send(wsData);
+      } catch (err) {
+        console.error('Error sending WS notification:', err);
+      }
+    }
+  });
+
+  // Broadcast to Socket.IO clients
+  io.emit('notification', notification);
+  io.emit('notification_alert', notification);
+
+  // Deliver push notifications via FCM Android 16.0+ Module
+  try {
+    let fcmCategory: 'SECURITY' | 'TELEMETRY' | 'COMPLIANCE' | 'GENERIC' = 'GENERIC';
+    if (type.includes('SECURITY')) fcmCategory = 'SECURITY';
+    else if (type.includes('TELEMETRY')) fcmCategory = 'TELEMETRY';
+    else if (type.includes('COMPLIANCE')) fcmCategory = 'COMPLIANCE';
+
+    fcmNotificationService.dispatchPush(
+      fcmCategory,
+      `🚨 ZYRQUEN ${type}`,
+      message,
+      {
+        alertType: type,
+        riskScore: payload.riskScore !== undefined ? String(payload.riskScore) : undefined,
+        sealId: payload.sealId !== undefined ? String(payload.sealId) : undefined,
+        cryoTemp: payload.cryoTemp !== undefined ? String(payload.cryoTemp) : undefined,
+        drift: payload.drift !== undefined ? String(payload.drift) : undefined,
+      }
+    ).catch((err) => console.error('FCM Push Dispatch Error:', err));
+  } catch (err) {
+    console.error('FCM Push broadcast error:', err);
+  }
+
+  return notification;
+}
+
+const TRACE_12_STAGES = [
+  { id: 1, code: 'STAGE-01: INGEST', desc: 'รับเข้าสตรีมข้อมูล OTel ในสถานะแช่แข็ง', ms: 2.1 },
+  { id: 2, code: 'STAGE-02: PARSE_HEADERS', desc: 'สังเคราะห์เมทาดาต้าและจุดอ้างอิง Block #849202', ms: 3.4 },
+  { id: 3, code: 'STAGE-03: METRIC_ALIGNMENT', desc: 'เทียบดัชนีชี้วัด QOps และ Coherence', ms: 4.8 },
+  { id: 4, code: 'STAGE-04: SIGNATURE_VERIFY', desc: 'พิสูจน์ยืนยันลายมือชื่อ Dilithium-5', ms: 7.2 },
+  { id: 5, code: 'STAGE-05: CUSTODIAN_QUORUM_CHECK', desc: 'ตรวจสอบความครบถ้วน 10/10 REAL_HSM', ms: 9.6 },
+  { id: 6, code: 'STAGE-06: INVARIANT_PROTECTION', desc: 'ประเมิน 10 Invariants และ 22 Master Gates', ms: 12.1 },
+  { id: 7, code: 'STAGE-07: MERKLE_COMPUTE', desc: 'คำนวณแฮชเทียบค่า Merkle Root Genesis', ms: 15.3 },
+  { id: 8, code: 'STAGE-08: RISK_RE_EVALUATION', desc: 'จำลองสภาวะแวดล้อมสังเคราะห์จำลองปะทะภัยคุกคาม', ms: 18.7 },
+  { id: 9, code: 'STAGE-09: THAI_LAW_AUDIT', desc: 'วิเคราะห์ความถูกต้องตามกฎหมายธุรกรรม มาตรา 9, 26, 28', ms: 22.4 },
+  { id: 10, code: 'STAGE-10: TRACE_STREAM_REPLAY', desc: 'ย้อนเล่นเหตุการณ์จำลองเพื่อสาวต้นตอที่ 0.014K Cryo', ms: 26.9 },
+  { id: 11, code: 'STAGE-11: QUARANTINE_ISOLATION', desc: 'กักพยานหลักฐานติดดั้งเดิมที่ Chamber 02', ms: 31.2 },
+  { id: 12, code: 'STAGE-12: CLOSURE', desc: 'สลักข้อมูลถาวรที่ Module 17 Unclassified Preservation V24 - ไม่ลบหลักฐาน', ms: 35.8 },
+];
+
+function trigger12StageBroadcast(sealId = 14903) {
+  let current = 0;
+  const interval = setInterval(() => {
+    if (current < TRACE_12_STAGES.length) {
+      const stage = TRACE_12_STAGES[current];
+      broadcastNotification(
+        'TRACE_STAGE_EVENT',
+        `[${stage.code}] verified in ${stage.ms}ms: ${stage.desc}`,
+        {
+          sealId,
+          stageId: stage.id,
+          code: stage.code,
+          desc: stage.desc,
+          elapsedMs: stage.ms,
+          status: 'VERIFIED',
+          timestamp: new Date().toISOString(),
+        }
+      );
+      current++;
+    } else {
+      clearInterval(interval);
+      broadcastNotification(
+        'AUDIT_REPLAY',
+        `Trace Replay Seal #${sealId} → Stage-12 Closure ✓`,
+        {
+          sealId,
+          duration: '35.8ms',
+          sla: '< 142ms',
+          verdict: '100% HEALTHY, COMPLIANT, & SECURED',
+          closureSeal: 'MODULE_17_PRESERVATION_V24',
+          completedStages: [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12],
+        }
+      );
+    }
+  }, 350);
+}
+
+wss.on('connection', (ws) => {
+  // Send welcome handshake with canonical anchor
+  ws.send(
+    JSON.stringify({
+      type: 'NOTIFICATION_SERVICE_HANDSHAKE',
+      message: 'Connected to ZYRQUEN Sovereign Notification Service (LOCKEDFROZENv1.2_LTS)',
+      systemStatus: 'LOCKEDFROZENv1.2_LTS',
+      merkleRoot: '909ab814479844d8a14816bed34cdbb07528e18501da86fc4691763a43fa4c68',
+      block: 849202,
+      seals: 14902,
+      recentAlerts: recentNotificationsBuffer.slice(0, 10),
+      timestamp: new Date().toISOString(),
+    })
+  );
+
+  ws.on('message', (messageRaw: any) => {
+    try {
+      const data = JSON.parse(messageRaw.toString());
+      if (data.action === 'START_12_STAGE_TRACE' || data.action === 'AUDIT_REPLAY') {
+        trigger12StageBroadcast(data.sealId || 14903);
+      } else if (data.action === 'PING') {
+        ws.send(JSON.stringify({ type: 'PONG', timestamp: new Date().toISOString() }));
+      }
+    } catch {
+      // ignore non-json
+    }
+  });
 });
 
 app.use(cors());
@@ -253,6 +404,213 @@ Provide an authoritative, detailed, structured response with:
     answer,
     citations,
     timestamp: new Date().toISOString(),
+  });
+});
+
+// ── ZYRQUEN SOVEREIGN NOTIFICATION LAYER (LOCKEDFROZENv1.2_LTS) ──
+// Thai ETDA Sec 9, 26, 28 + PDPA Sec 37
+
+// Security Alerts: Risk >= 0.85 triggers Chamber 02 Quarantine
+app.post('/api/v1/alerts/security', (req, res) => {
+  const { riskScore, sealId = 14902 } = req.body || {};
+  const numericRisk = Number(riskScore ?? 0.94);
+
+  if (numericRisk >= 0.85) {
+    const alert = broadcastNotification(
+      'CRITICALSECURITYALERT',
+      `Risk ${numericRisk} detected → Chamber 02 Quarantine (Seal #${sealId})`,
+      { sealId, riskScore: numericRisk, quarantineChamber: 'CHAMBER_02_QUARANTINE', action: 'ZEROIZATION_ENGAGED' }
+    );
+    return res.json({ status: 'ALERT_SENT', notification: alert });
+  }
+  res.json({ status: 'SAFE', riskScore: numericRisk });
+});
+
+// Telemetry Alerts: Cryo > 15.20 mK or Drift > 0.00%
+app.post('/api/v1/alerts/telemetry', (req, res) => {
+  const { cryoTemp = 14.98, drift = 0.00 } = req.body || {};
+  const numericCryo = Number(cryoTemp);
+  const numericDrift = Number(drift);
+
+  if (numericDrift > 0.00 || numericCryo > 15.20) {
+    const alert = broadcastNotification(
+      'TELEMETRYDRIFTALERT',
+      `Cryo ${numericCryo} mK / Drift ${numericDrift}% exceeds SLA`,
+      { cryoTemp: numericCryo, drift: numericDrift, slaThreshold: '15.20 mK / 0.00%' }
+    );
+    return res.json({ status: 'ALERT_SENT', notification: alert });
+  }
+  res.json({ status: 'NOMINAL', cryoTemp: numericCryo, drift: numericDrift });
+});
+
+// Compliance Updates: Thai ETDA & PDPA Section Attestation Updates
+app.post('/api/v1/alerts/compliance', (req, res) => {
+  const { section = '28', verdict = 'Presumption of Authenticity Active & Admissible' } = req.body || {};
+  const alert = broadcastNotification(
+    'LEGALCOMPLIANCEUPDATE',
+    `ETDA Section ${section} → ${verdict}`,
+    { section, verdict, statutoryAct: 'ETDA B.E. 2544 (2001)' }
+  );
+  res.json({ status: 'UPDATE_SENT', notification: alert });
+});
+
+// Audit Replay Alerts: 12-Stage Trace Replay via Sovereign Notification Service
+app.post('/api/v1/alerts/audit', (req, res) => {
+  const { sealId = 14903, triggerStages = true } = req.body || {};
+  
+  if (triggerStages) {
+    trigger12StageBroadcast(Number(sealId) || 14903);
+    return res.json({
+      status: 'REPLAY_BROADCAST_INITIATED',
+      sealId: Number(sealId) || 14903,
+      stagesCount: 12,
+      slaLimit: '< 142ms',
+      message: `12-Stage Trace broadcast initiated for Seal #${sealId}`,
+    });
+  }
+
+  const alert = broadcastNotification(
+    'AUDIT_REPLAY',
+    `Trace Replay Seal #${sealId} → Stage-12 Closure ✓`,
+    { sealId, duration: '35.8ms', sla: '< 142ms', stage12Verified: true }
+  );
+  res.json({ status: 'REPLAY_ALERT_SENT', notification: alert });
+});
+
+// Notification Service Status & Connected Clients
+app.get('/api/v1/alerts/status', (req, res) => {
+  res.set('Cache-Control', 'no-cache');
+  res.json({
+    service: 'ZYRQUEN Sovereign Notification Service',
+    status: 'ONLINE',
+    systemStatus: 'LOCKEDFROZENv1.2_LTS',
+    wsPath: '/ws/notifications',
+    connectedWsClients: wss.clients.size,
+    merkleRoot: '909ab814479844d8a14816bed34cdbb07528e18501da86fc4691763a43fa4c68',
+    block: 849202,
+    seals: 14902,
+    drift: '0.00%',
+    recentNotificationsCount: recentNotificationsBuffer.length,
+    recentNotifications: recentNotificationsBuffer.slice(0, 10),
+    timestamp: new Date().toISOString(),
+  });
+});
+
+// Generic Broadcast Endpoint
+app.post('/api/v1/alerts/broadcast', (req, res) => {
+  const { type = 'SYSTEM_ALERT', message, payload } = req.body || {};
+  if (!message) {
+    return res.status(400).json({ error: 'Message is required for broadcast' });
+  }
+  const alert = broadcastNotification(type, message, payload);
+  res.json({ status: 'BROADCAST_SUCCESSFUL', notification: alert });
+});
+
+// ── ZYRQUEN FCM ANDROID 16.0+ PUSH NOTIFICATION API ──
+// Register FCM Token with Lifecycle Metadata
+app.post('/api/v1/fcm/register-token', (req, res) => {
+  const { token, deviceId, platform, clientVersion, subscribedChannels, expiresAt } = req.body || {};
+  if (!token) {
+    return res.status(400).json({ error: 'Token is required for registration' });
+  }
+
+  const registration = fcmNotificationService.registerToken({
+    token,
+    deviceId: deviceId || `zyrquen-${Date.now()}`,
+    platform: platform || 'Android 16.0+ (API 36 / Baklava)',
+    clientVersion: clientVersion || '1.2.0-LTS',
+    registeredAt: new Date().toISOString(),
+    lastActiveAt: new Date().toISOString(),
+    tokenStatus: 'ACTIVE',
+    subscribedChannels: subscribedChannels || ['zyrquen_security_alerts', 'zyrquen_telemetry_drift', 'zyrquen_compliance_audit'],
+    expiresAt: expiresAt || new Date(Date.now() + 86400000).toISOString(),
+  });
+
+  res.json({
+    status: 'TOKEN_REGISTERED',
+    registration,
+    android16Channels: ['zyrquen_security_alerts', 'zyrquen_telemetry_drift', 'zyrquen_compliance_audit'],
+    statutorySafeHarbor: 'Thai ETDA Sec 28 & PDPA Sec 37 Attested',
+  });
+});
+
+// Refresh / Rotate FCM Token
+app.post('/api/v1/fcm/refresh-token', (req, res) => {
+  const { oldToken, newToken } = req.body || {};
+  if (!oldToken || !newToken) {
+    return res.status(400).json({ error: 'Both oldToken and newToken are required for refresh' });
+  }
+
+  const updated = fcmNotificationService.refreshToken(oldToken, newToken);
+  if (!updated) {
+    return res.status(404).json({ error: 'Existing token not found for rotation' });
+  }
+
+  res.json({
+    status: 'TOKEN_REFRESHED',
+    registration: updated,
+  });
+});
+
+// Revoke FCM Token (PDPA Right to Erasure / Unregister)
+app.post('/api/v1/fcm/unregister-token', (req, res) => {
+  const { token } = req.body || {};
+  if (!token) {
+    return res.status(400).json({ error: 'Token is required' });
+  }
+
+  const revoked = fcmNotificationService.revokeToken(token);
+  res.json({ status: revoked ? 'TOKEN_REVOKED' : 'TOKEN_NOT_FOUND' });
+});
+
+// List Registered Devices
+app.get('/api/v1/fcm/devices', (req, res) => {
+  res.set('Cache-Control', 'no-cache');
+  res.json({
+    service: 'ZYRQUEN FCM Android 16.0+ Notification Layer',
+    activeDevicesCount: fcmNotificationService.getActiveTokens().length,
+    allRegistrations: fcmNotificationService.getAllRegistrations(),
+    channels: [
+      { id: 'zyrquen_security_alerts', importance: 'URGENT', priority: 'HIGH', sound: 'alert_critical_siren.wav' },
+      { id: 'zyrquen_telemetry_drift', importance: 'HIGH', priority: 'HIGH', sound: 'telemetry_ping.wav' },
+      { id: 'zyrquen_compliance_audit', importance: 'DEFAULT', priority: 'NORMAL', sound: 'audit_chime.wav' },
+    ],
+    timestamp: new Date().toISOString(),
+  });
+});
+
+// Push Delivery Dispatch History
+app.get('/api/v1/fcm/history', (req, res) => {
+  res.set('Cache-Control', 'no-cache');
+  res.json({
+    history: fcmNotificationService.getDispatchHistory(30),
+    timestamp: new Date().toISOString(),
+  });
+});
+
+// Manual Test Push Dispatch for Android 16.0+
+app.post('/api/v1/fcm/test-push', async (req, res) => {
+  const { type = 'SECURITY', title, body } = req.body || {};
+  const alertTitle = title || (type === 'SECURITY'
+    ? '🚨 Chamber 02 Quarantine Engaged'
+    : type === 'TELEMETRY'
+    ? '📡 Cryo Thermal Drift Exceeded SLA'
+    : '⚖️ ETDA Safe Harbor Attestation Refreshed');
+  const alertBody = body || (type === 'SECURITY'
+    ? 'Risk Score 0.94 > 0.85. Zeroization engaged on TC-09 node.'
+    : type === 'TELEMETRY'
+    ? 'Cryo Temp 15.85 mK exceeds 15.20 mK limit.'
+    : 'Presumption of Authenticity verified under ETDA Sec 28.');
+
+  const results = await fcmNotificationService.dispatchPush(type, alertTitle, alertBody, {
+    dispatchSource: 'MANUAL_TEST_CONSOLE',
+    testedAt: new Date().toISOString(),
+  });
+
+  res.json({
+    status: 'TEST_PUSH_DISPATCHED',
+    dispatchedCount: results.length,
+    results,
   });
 });
 

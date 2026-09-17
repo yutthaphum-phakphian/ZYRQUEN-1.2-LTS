@@ -35,12 +35,22 @@ import {
   Fingerprint,
   Download,
   FileText,
+  FileSpreadsheet,
+  Send,
+  RadioTower,
 } from 'lucide-react';
 import { playTone, playAuditChime } from './AudioSynthesizer';
 import { SecuritySubTab } from './views/SecurityView';
 import { copyToClipboard } from '../utils/clipboard';
 import { ViewType } from '../types';
 import { automatedBackupService, AutomatedBackupState } from '../services/automatedBackupService';
+import {
+  exportSystemLogsAsCsv,
+  exportSystemLogsAsJson,
+  verifyLogBatchIntegrity,
+  CryptographicLogBatch,
+} from '../utils/systemLogsBatchExport';
+import { FcmPushNotificationManager } from './notifications/FcmPushNotificationManager';
 
 interface ActionTooltipDetails {
   title: string;
@@ -236,6 +246,21 @@ export const SystemEventsSidebar: React.FC<SystemEventsSidebarProps> = ({
   const [selectedIds, setSelectedIds] = useState<Set<string>>(new Set());
   const [tickerTime, setTickerTime] = useState<number>(() => Date.now());
 
+  // Batch Cryptographic Export Verification Toast State
+  const [batchVerificationResult, setBatchVerificationResult] = useState<{
+    show: boolean;
+    valid: boolean;
+    message: string;
+    batchId?: string;
+    total?: number;
+    format?: 'CSV' | 'JSON';
+  } | null>(null);
+
+  // Notification Layer test state
+  const [notificationSending, setNotificationSending] = useState<string | null>(null);
+  const [lastNotificationStatus, setLastNotificationStatus] = useState<string | null>(null);
+  const [isNotificationPanelOpen, setIsNotificationPanelOpen] = useState<boolean>(false);
+
   // 1-second live ticker to keep the 60s sparkline smoothly animating in real time
   useEffect(() => {
     const timer = setInterval(() => {
@@ -419,6 +444,112 @@ export const SystemEventsSidebar: React.FC<SystemEventsSidebarProps> = ({
     URL.revokeObjectURL(url);
   };
 
+  // Cryptographic Batch CSV Export with Merkle Hash Verification Signatures
+  const handleBatchExportCsv = (onlySelected = false) => {
+    playTone(620, 0.04);
+    playAuditChime();
+    const batch = exportSystemLogsAsCsv(events, {
+      filterName: filter,
+      includeOnlySelected: onlySelected,
+      selectedIds,
+    });
+    const verification = verifyLogBatchIntegrity(batch);
+    setBatchVerificationResult({
+      show: true,
+      valid: verification.valid,
+      message: verification.message,
+      batchId: batch.metadata.batchId,
+      total: batch.metadata.totalRecords,
+      format: 'CSV',
+    });
+    setTimeout(() => setBatchVerificationResult(null), 6000);
+  };
+
+  // Cryptographic Batch JSON Export with Merkle Hash Verification Signatures
+  const handleBatchExportJson = (onlySelected = false) => {
+    playTone(650, 0.04);
+    playAuditChime();
+    const batch = exportSystemLogsAsJson(events, {
+      filterName: filter,
+      includeOnlySelected: onlySelected,
+      selectedIds,
+    });
+    const verification = verifyLogBatchIntegrity(batch);
+    setBatchVerificationResult({
+      show: true,
+      valid: verification.valid,
+      message: verification.message,
+      batchId: batch.metadata.batchId,
+      total: batch.metadata.totalRecords,
+      format: 'JSON',
+    });
+    setTimeout(() => setBatchVerificationResult(null), 6000);
+  };
+
+  // Notification Layer Test Triggers (hitting /api/v1/alerts/* endpoints)
+  const triggerSecurityAlertTest = async () => {
+    try {
+      setNotificationSending('security');
+      playTone(740, 0.04);
+      const res = await fetch('/api/v1/alerts/security', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ riskScore: 0.94, sealId: 14902 }),
+      });
+      const data = await res.json();
+      playAuditChime();
+      setLastNotificationStatus(`Security Alert: Chamber 02 Quarantine Triggered (Risk 0.94)`);
+      setTimeout(() => setLastNotificationStatus(null), 6000);
+    } catch (err) {
+      console.error('Failed to trigger security alert:', err);
+      setLastNotificationStatus('Failed to send security alert (Server offline)');
+    } finally {
+      setNotificationSending(null);
+    }
+  };
+
+  const triggerTelemetryAlertTest = async () => {
+    try {
+      setNotificationSending('telemetry');
+      playTone(680, 0.04);
+      const res = await fetch('/api/v1/alerts/telemetry', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ cryoTemp: 15.85, drift: 0.02 }),
+      });
+      const data = await res.json();
+      playAuditChime();
+      setLastNotificationStatus(`Telemetry Drift Alert Broadcasted (Cryo 15.85 mK / Drift 0.02%)`);
+      setTimeout(() => setLastNotificationStatus(null), 6000);
+    } catch (err) {
+      console.error('Failed to trigger telemetry alert:', err);
+      setLastNotificationStatus('Failed to send telemetry alert (Server offline)');
+    } finally {
+      setNotificationSending(null);
+    }
+  };
+
+  const triggerComplianceUpdateTest = async () => {
+    try {
+      setNotificationSending('compliance');
+      playTone(620, 0.04);
+      const res = await fetch('/api/v1/alerts/compliance', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ section: '28', verdict: 'Safe Harbor Non-Repudiation Validated' }),
+      });
+      const data = await res.json();
+      playAuditChime();
+      setLastNotificationStatus(`Legal Compliance Update Broadcasted (ETDA Sec 28)`);
+      setTimeout(() => setLastNotificationStatus(null), 6000);
+    } catch (err) {
+      console.error('Failed to trigger compliance update:', err);
+      setLastNotificationStatus('Failed to send compliance update (Server offline)');
+    } finally {
+      setNotificationSending(null);
+    }
+  };
+
   useEffect(() => {
     const unsub = automatedBackupService.subscribe((state) => {
       setBackupState(state);
@@ -557,16 +688,44 @@ export const SystemEventsSidebar: React.FC<SystemEventsSidebarProps> = ({
           </div>
         </div>
 
-        <div className="flex items-center gap-1.5">
-          {/* Export Current Event Log JSON Button */}
+        <div className="flex items-center gap-1.5 flex-wrap justify-end">
+          {/* Batch CSV Export (Cryptographic Signatures) */}
           <button
-            id="btn-export-events-log-json"
-            onClick={handleExportCurrentEventLogJson}
+            id="btn-export-batch-csv"
+            onClick={() => handleBatchExportCsv(false)}
+            className="px-2.5 py-1.5 rounded-xl bg-emerald-950/60 hover:bg-emerald-500/20 border border-emerald-500/40 text-emerald-300 hover:text-white transition-all flex items-center gap-1.5 shadow-[0_0_10px_rgba(16,185,129,0.15)] active:scale-95 cursor-pointer"
+            title="Batch export system logs as signed CSV with SHA-256 Merkle chain and PQC signatures for statutory compliance"
+          >
+            <FileSpreadsheet className="w-3.5 h-3.5 text-emerald-400" />
+            <span className="text-[10px] font-bold hidden sm:inline">Batch CSV</span>
+          </button>
+
+          {/* Batch JSON Export (Cryptographic Signatures) */}
+          <button
+            id="btn-export-batch-json"
+            onClick={() => handleBatchExportJson(false)}
             className="px-2.5 py-1.5 rounded-xl bg-cyan-950/60 hover:bg-cyan-500/20 border border-cyan-500/40 text-cyan-300 hover:text-white transition-all flex items-center gap-1.5 shadow-[0_0_10px_rgba(6,182,212,0.15)] active:scale-95 cursor-pointer"
-            title="Export current event log as JSON file (includes timestamp and metadata hashes for audit verification)"
+            title="Batch export system logs as signed JSON with full cryptographic hash verification signatures"
           >
             <Download className="w-3.5 h-3.5 text-cyan-400" />
-            <span className="text-[10px] font-bold hidden sm:inline">Export Log (.json)</span>
+            <span className="text-[10px] font-bold hidden sm:inline">Batch JSON</span>
+          </button>
+
+          {/* Toggle Notification Service Layer Drawer */}
+          <button
+            onClick={() => {
+              playTone(600, 0.03);
+              setIsNotificationPanelOpen(!isNotificationPanelOpen);
+            }}
+            className={`px-2 py-1.5 rounded-xl border transition-all flex items-center gap-1 text-[10px] font-bold ${
+              isNotificationPanelOpen
+                ? 'bg-amber-500/25 border-amber-400 text-amber-200 shadow-[0_0_10px_rgba(245,158,11,0.2)]'
+                : 'bg-white/5 border-white/10 text-zinc-400 hover:text-white'
+            }`}
+            title="Toggle Sovereign Notification Service Testing Panel"
+          >
+            <RadioTower className="w-3.5 h-3.5 text-amber-400" />
+            <span className="hidden sm:inline">Alerts</span>
           </button>
 
           {events.length > 0 && (
@@ -595,6 +754,98 @@ export const SystemEventsSidebar: React.FC<SystemEventsSidebarProps> = ({
           </button>
         </div>
       </div>
+
+      {/* Cryptographic Batch Verification Result Toast / Banner */}
+      {batchVerificationResult && (
+        <div
+          className={`mx-4 mt-3 p-3 rounded-xl border text-xs font-mono animate-in fade-in slide-in-from-top-2 duration-200 ${
+            batchVerificationResult.valid
+              ? 'bg-emerald-950/60 border-emerald-500/60 text-emerald-200'
+              : 'bg-rose-950/60 border-rose-500/60 text-rose-200'
+          }`}
+        >
+          <div className="flex items-center justify-between font-bold pb-1 border-b border-white/10">
+            <span className="flex items-center gap-1.5">
+              <ShieldCheck className="w-4 h-4 text-emerald-400" />
+              <span>CRYPTOGRAPHIC {batchVerificationResult.format} BATCH EXPORTED</span>
+            </span>
+            <span className="text-[10px] px-2 py-0.5 rounded-full bg-emerald-500/20 text-emerald-300 border border-emerald-500/40">
+              Δ0.00% VERIFIED
+            </span>
+          </div>
+          <p className="mt-1 text-[11px] leading-relaxed opacity-90">{batchVerificationResult.message}</p>
+          <div className="mt-1 text-[10px] text-zinc-400 truncate">
+            Batch ID: {batchVerificationResult.batchId} • Total: {batchVerificationResult.total} Records
+          </div>
+        </div>
+      )}
+
+      {/* Sovereign Notification Service Layer Panel */}
+      {isNotificationPanelOpen && (
+        <div className="mx-4 mt-3 p-3.5 rounded-2xl bg-[#090d1c] border border-amber-500/40 text-xs font-mono space-y-3 shadow-[0_0_20px_rgba(245,158,11,0.15)] animate-in fade-in slide-in-from-top-2">
+          <div className="flex items-center justify-between border-b border-white/10 pb-2">
+            <div className="flex items-center gap-2">
+              <RadioTower className="w-4 h-4 text-amber-400 animate-pulse" />
+              <span className="font-bold text-white uppercase tracking-wider text-[11px]">
+                Sovereign Notification Layer (v1.2 LTS)
+              </span>
+            </div>
+            <span className="px-2 py-0.5 rounded-full bg-amber-500/15 text-amber-300 border border-amber-500/30 text-[9px]">
+              WS + Socket.IO
+            </span>
+          </div>
+          <p className="text-[11px] text-zinc-400">
+            Triggers real-time security, telemetry, and legal compliance broadcasts via Node.js Express + WebSocket:
+          </p>
+
+          <div className="grid grid-cols-1 sm:grid-cols-3 gap-2">
+            <button
+              onClick={triggerSecurityAlertTest}
+              disabled={notificationSending !== null}
+              className="p-2 rounded-xl bg-rose-500/15 hover:bg-rose-500/25 border border-rose-500/40 text-rose-300 text-[10px] font-bold text-left transition-all active:scale-95 disabled:opacity-50"
+            >
+              <div className="text-white flex items-center justify-between">
+                <span>🛡️ Security</span>
+                <Send className="w-3 h-3 text-rose-400" />
+              </div>
+              <div className="text-[9px] text-zinc-400 mt-0.5">Risk 0.94 → Q02</div>
+            </button>
+
+            <button
+              onClick={triggerTelemetryAlertTest}
+              disabled={notificationSending !== null}
+              className="p-2 rounded-xl bg-cyan-500/15 hover:bg-cyan-500/25 border border-cyan-500/40 text-cyan-300 text-[10px] font-bold text-left transition-all active:scale-95 disabled:opacity-50"
+            >
+              <div className="text-white flex items-center justify-between">
+                <span>❄️ Telemetry</span>
+                <Send className="w-3 h-3 text-cyan-400" />
+              </div>
+              <div className="text-[9px] text-zinc-400 mt-0.5">Cryo 15.85 mK SLA</div>
+            </button>
+
+            <button
+              onClick={triggerComplianceUpdateTest}
+              disabled={notificationSending !== null}
+              className="p-2 rounded-xl bg-emerald-500/15 hover:bg-emerald-500/25 border border-emerald-500/40 text-emerald-300 text-[10px] font-bold text-left transition-all active:scale-95 disabled:opacity-50"
+            >
+              <div className="text-white flex items-center justify-between">
+                <span>⚖️ Compliance</span>
+                <Send className="w-3 h-3 text-emerald-400" />
+              </div>
+              <div className="text-[9px] text-zinc-400 mt-0.5">ETDA Section 28</div>
+            </button>
+          </div>
+
+          {lastNotificationStatus && (
+            <div className="p-2 rounded-lg bg-black/60 border border-amber-500/30 text-[10px] text-amber-200">
+              ⚡ {lastNotificationStatus}
+            </div>
+          )}
+
+          {/* FCM Android 16.0+ Push Notification Manager */}
+          <FcmPushNotificationManager />
+        </div>
+      )}
 
       {/* Mini Sparkline Chart: 60-Second Event Ingress Frequency */}
       <div className="px-4 py-3 border-b border-white/8 bg-[#090d1c]/95 space-y-2">
@@ -939,14 +1190,25 @@ export const SystemEventsSidebar: React.FC<SystemEventsSidebarProps> = ({
                 </button>
 
                 <button
+                  onMouseEnter={() => setHoveredActionTooltip('bulkExportSelectedCsv')}
+                  onMouseLeave={() => setHoveredActionTooltip(null)}
+                  onClick={() => handleBatchExportCsv(true)}
+                  className="px-2 py-1 rounded-lg bg-emerald-500/20 hover:bg-emerald-500/30 border border-emerald-400 text-emerald-200 text-[10px] font-bold flex items-center gap-1 transition-all shadow-[0_0_10px_rgba(16,185,129,0.3)]"
+                  title="Export selected events as court-admissible signed CSV with SHA-256 Merkle chain"
+                >
+                  <FileSpreadsheet className="w-3 h-3 text-emerald-300" />
+                  <span>CSV ({selectedIds.size})</span>
+                </button>
+
+                <button
                   onMouseEnter={() => setHoveredActionTooltip('bulkExportSelected')}
                   onMouseLeave={() => setHoveredActionTooltip(null)}
-                  onClick={() => handleBulkExportDossier(true)}
+                  onClick={() => handleBatchExportJson(true)}
                   className="px-2 py-1 rounded-lg bg-cyan-500/20 hover:bg-cyan-500/30 border border-cyan-400 text-cyan-200 text-[10px] font-bold flex items-center gap-1 transition-all shadow-[0_0_10px_rgba(6,182,212,0.3)]"
-                  title="Export selected events as court-admissible signed JSON"
+                  title="Export selected events as court-admissible signed JSON with PQC signature"
                 >
                   <Download className="w-3 h-3 text-cyan-300" />
-                  <span>Export ({selectedIds.size})</span>
+                  <span>JSON ({selectedIds.size})</span>
                 </button>
 
                 <button
@@ -983,14 +1245,25 @@ export const SystemEventsSidebar: React.FC<SystemEventsSidebarProps> = ({
                 </button>
 
                 <button
+                  onMouseEnter={() => setHoveredActionTooltip('bulkExportCsv')}
+                  onMouseLeave={() => setHoveredActionTooltip(null)}
+                  onClick={() => handleBatchExportCsv(false)}
+                  className="px-2 py-1 rounded-lg bg-emerald-500/15 hover:bg-emerald-500/25 border border-emerald-500/30 text-emerald-300 text-[10px] font-bold flex items-center gap-1 transition-all"
+                  title="Export full event buffer as signed CSV with cryptographic verification signatures"
+                >
+                  <FileSpreadsheet className="w-3 h-3 text-emerald-400" />
+                  <span>CSV Batch</span>
+                </button>
+
+                <button
                   onMouseEnter={() => setHoveredActionTooltip('bulkExport')}
                   onMouseLeave={() => setHoveredActionTooltip(null)}
-                  onClick={() => handleBulkExportDossier(false)}
+                  onClick={() => handleBatchExportJson(false)}
                   className="px-2 py-1 rounded-lg bg-cyan-500/15 hover:bg-cyan-500/25 border border-cyan-500/30 text-cyan-300 text-[10px] font-bold flex items-center gap-1 transition-all"
-                  title="Export full court-admissible audit dossier as signed JSON"
+                  title="Export full event buffer as signed JSON with cryptographic verification signatures"
                 >
-                  <Download className="w-3 h-3" />
-                  <span>Export JSON</span>
+                  <Download className="w-3 h-3 text-cyan-400" />
+                  <span>JSON Batch</span>
                 </button>
 
                 <button

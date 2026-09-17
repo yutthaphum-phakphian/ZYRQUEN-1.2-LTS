@@ -1,9 +1,12 @@
 node_modules/
 build/
 dist/
+dev-dist/
 coverage/
 .DS_Store
 *.log
 artifact.tar
+rendered-manifests.yaml
+*.tsbuildinfo
 .env*
 !.env.example

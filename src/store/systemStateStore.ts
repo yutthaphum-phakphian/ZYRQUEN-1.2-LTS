@@ -503,6 +503,10 @@ export type SystemState = {
   sealedBlock: number;
   custodianProofs: number;
   custodianRegistry: CustodianRegistrySnapshot;
+  fcmDeviceToken?: string;
+  fcmPlatform?: string;
+  fcmRegisteredAt?: string;
+  fcmActiveChannel?: string;
 };
 
 class SystemStateStore {
@@ -648,6 +652,33 @@ class SystemStateStore {
       this.state = { ...this.state, ssotMutationDrift: drift };
       this.notify();
     }
+  }
+
+  setFcmDeviceToken(
+    token: string,
+    meta?: { platform?: string; registeredAt?: string; activeChannel?: string }
+  ) {
+    this.state = {
+      ...this.state,
+      fcmDeviceToken: token,
+      fcmPlatform: meta?.platform || 'Android 16.0+ (API 36 / Baklava)',
+      fcmRegisteredAt: meta?.registeredAt || new Date().toISOString(),
+      fcmActiveChannel: meta?.activeChannel || 'zyrquen_security_alerts',
+    };
+    this.notify();
+  }
+
+  getFcmDeviceToken(): string | undefined {
+    return this.state.fcmDeviceToken;
+  }
+
+  clearFcmDeviceToken() {
+    this.state = {
+      ...this.state,
+      fcmDeviceToken: undefined,
+      fcmRegisteredAt: undefined,
+    };
+    this.notify();
   }
 
   subscribe(listener: (state: SystemState) => void): () => void {

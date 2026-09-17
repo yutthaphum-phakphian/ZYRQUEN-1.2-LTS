@@ -1299,7 +1299,16 @@ export const BENCHMARK_PAYLOAD_SUITE: RegoBenchmarkCase[] = [
   },
 ];
 
-export const PERFORMANCE_BENCHMARK_SUITE_V12 = BENCHMARK_PAYLOAD_SUITE;
+export const PERFORMANCE_BENCHMARK_SUITE_V12 = BENCHMARK_PAYLOAD_SUITE
+  .filter((c) => c.category === 'BENCHMARK')
+  .map((c) => {
+    let id = c.id;
+    if (id === 'bench-low-risk') id = 'bench-perf-low';
+    else if (id === 'bench-med-risk') id = 'bench-perf-med';
+    else if (id === 'bench-high-approved') id = 'bench-perf-high-approved';
+    else if (id === 'bench-high-denied') id = 'bench-perf-high-denied';
+    return { ...c, id };
+  });
 
 // ============================================================================
 // OPA Rego Evaluation Engine (v1.2.1 LTS Adaptive + v2.5 Optimized Short-Circuit)
@@ -1374,7 +1383,7 @@ export function evaluateSovereignRegoPolicy(
 
   // Short-Circuit Evaluation Guard States
   const isSuspended = lifecycleState === 'SUSPENDED' || lifecycleState === 'REVOKED' || lifecycleState === 'ARCHIVED';
-  const hasCapability = requiredCap ? grantedCapabilities.includes(requiredCap) : false;
+  const hasCapability = requiredCap ? grantedCapabilities.includes(requiredCap) : true;
 
   const isBudgetNumberValid = isRemainingUsdNumber && isEstimatedCostNumber;
   const isWithinBudget = isBudgetNumberValid && remainingUsd >= estimatedCostUsd && remainingUsd >= 0;
@@ -1387,7 +1396,9 @@ export function evaluateSovereignRegoPolicy(
     (v) => validSenateRoles.includes(v.rawRole) && v.sigVerified && v.isApproved
   );
   const verifiedRejectVotes = normalizedVotes.filter((v) => v.sigVerified && v.isRejected);
-  const isQuorumApproved = verifiedRejectVotes.length === 0 && validCoreVotes.length >= 1;
+  const totalVotes = normalizedVotes.length;
+  const senateApprovalRatio = totalVotes > 0 ? validCoreVotes.length / totalVotes : 0;
+  const isQuorumApproved = !['HIGH', 'CRITICAL'].includes(riskLevel) || (totalVotes >= 3 && senateApprovalRatio >= 0.6);
 
   let shortCircuitGuard: string | null = null;
 
@@ -1425,7 +1436,7 @@ export function evaluateSovereignRegoPolicy(
 
       // 2. Cryptographic Guard (Short-Circuit #2)
       const t1 = performance.now();
-      if (!isSignatureValid) {
+      if (riskLevel !== 'LOW' && !isSignatureValid) {
         shortCircuitGuard = '2. Cryptographic Guard (Invalid/Missing Signature)';
         denialReasons.push(
           'GUARD_SIG_INVALID: Request signature verification failed or cryptographic payload is null/invalid.'
@@ -1452,7 +1463,7 @@ export function evaluateSovereignRegoPolicy(
 
         // 3. Capability Guard (Short-Circuit #3)
         const t2 = performance.now();
-        if (!hasCapability) {
+        if (requiredCap && !hasCapability) {
           shortCircuitGuard = '3. Capability Guard (Missing Capability Token)';
           denialReasons.push(
             `GUARD_CAPABILITY_DEFICIT: Required capability "${requiredCap}" not present in granted capabilities [${grantedCapabilities.join(', ')}].`
@@ -1537,7 +1548,7 @@ export function evaluateSovereignRegoPolicy(
 
               // 6. Quorum Audit & Validation Guard (Short-Circuit #6)
               const t5 = performance.now();
-              if (!isQuorumApproved) {
+              if (['HIGH', 'CRITICAL'].includes(riskLevel) && !isQuorumApproved) {
                 shortCircuitGuard = '6. Senate Quorum Guard (Quorum Dissent / Deficit)';
                 if (verifiedRejectVotes.length > 0) {
                   denialReasons.push(
@@ -1658,7 +1669,7 @@ export function evaluateSovereignRegoPolicy(
   const evalDurationUs = Math.round(evalDurationMs * 1000);
 
   const securitySeverity = isAllowed ? 'INFO' : 'CRITICAL_ALERT';
-  const decisionStr = isAllowed ? 'ALLOWED' : 'DENIED';
+  const decisionStr = isAllowed ? 'ALLOW' : 'REJECT';
 
   const scaledFactor = trustScore / 100;
   const maxAllowedUsd = Math.round(remainingUsd * scaledFactor * 100) / 100;

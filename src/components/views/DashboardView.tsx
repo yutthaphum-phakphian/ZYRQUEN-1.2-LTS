@@ -68,9 +68,13 @@ import {
   ChevronRight,
   Eye,
   FileText,
+  Bell,
+  Smartphone,
+  PlayCircle,
 } from 'lucide-react';
 import { playAuditChime, playTone } from '../AudioSynthesizer';
 import { ShieldAlert } from 'lucide-react';
+import { FcmPushNotificationManager } from '../notifications/FcmPushNotificationManager';
 
 const TopHardwareChambersCard: React.FC = () => {
   const chambers = [
@@ -146,8 +150,8 @@ export const DashboardView: React.FC<DashboardViewProps> = ({
   onOpenCertificate,
   isForensicAuditMode = false,
 }) => {
-  // Main executive sections: Overview (clean summary), Sovereign Audit Dashboard, Chambers Explorer, Telemetry, Evidence
-  const [dashboardSection, setDashboardSection] = useState<'OVERVIEW' | 'AUDIT' | 'CHAMBERS' | 'TELEMETRY' | 'EVIDENCE'>('OVERVIEW');
+  // Main executive sections: Overview (clean summary), Sovereign Audit Dashboard, Chambers Explorer, Telemetry, Evidence, Android 16+ FCM Push
+  const [dashboardSection, setDashboardSection] = useState<'OVERVIEW' | 'AUDIT' | 'CHAMBERS' | 'TELEMETRY' | 'EVIDENCE' | 'FCM_PUSH'>('OVERVIEW');
   const [activeCanvasTab, setActiveCanvasTab] = useState<'hologram' | 'atlas' | 'overview' | 'topology'>('hologram');
   const [isHealing, setIsHealing] = useState(false);
   const [healSuccess, setHealSuccess] = useState(false);
@@ -252,6 +256,30 @@ export const DashboardView: React.FC<DashboardViewProps> = ({
 
           {/* Quick Action Buttons */}
           <div className="flex flex-wrap items-center gap-2.5 shrink-0 max-[479px]:w-full max-[479px]:grid max-[479px]:grid-cols-1 max-[479px]:gap-2">
+            <button
+              onClick={() => {
+                playTone(780, 0.05);
+                setDashboardSection('FCM_PUSH');
+              }}
+              className="px-3.5 py-2 rounded-xl bg-cyan-950/70 hover:bg-cyan-900/80 border border-cyan-500/50 text-cyan-300 font-mono text-xs font-semibold flex items-center justify-center gap-2 transition-all max-[479px]:w-full shadow-[0_0_12px_rgba(6,182,212,0.2)]"
+              title="Manage Android 16.0+ Push Alerts & Token Lifecycle"
+            >
+              <Smartphone className="w-3.5 h-3.5 text-cyan-400" />
+              <span>📱 Android 16+ FCM</span>
+            </button>
+
+            <button
+              onClick={() => {
+                playTone(840, 0.05);
+                onNavigate('playback');
+              }}
+              className="px-3.5 py-2 rounded-xl bg-amber-950/70 hover:bg-amber-900/80 border border-amber-500/50 text-amber-300 font-mono text-xs font-semibold flex items-center justify-center gap-2 transition-all max-[479px]:w-full shadow-[0_0_12px_rgba(245,158,11,0.2)]"
+              title="Open 12-Stage Forensic Trace Replay (WebSocket Live Stream)"
+            >
+              <PlayCircle className="w-3.5 h-3.5 text-amber-400" />
+              <span>⚡ 12-Stage Trace</span>
+            </button>
+
             <button
               onClick={() => {
                 playTone(880, 0.05);
@@ -497,6 +525,23 @@ export const DashboardView: React.FC<DashboardViewProps> = ({
           >
             <span>📜 Evidence &amp; Intake</span>
           </button>
+
+          <button
+            onClick={() => {
+              playTone(760, 0.04);
+              setDashboardSection('FCM_PUSH');
+            }}
+            className={`px-3.5 py-2 rounded-xl font-bold flex items-center gap-2 transition-all cursor-pointer max-[479px]:w-full max-[479px]:justify-start ${
+              dashboardSection === 'FCM_PUSH'
+                ? 'bg-cyan-500/20 text-cyan-200 border border-cyan-400/50 shadow-[0_0_12px_rgba(6,182,212,0.25)]'
+                : 'text-zinc-400 hover:text-zinc-200 bg-white/5 border border-transparent'
+            }`}
+          >
+            <span>📱 Android 16+ FCM Push</span>
+            <span className="px-1.5 py-0.2 rounded bg-emerald-950 text-emerald-300 text-[10px] font-mono border border-emerald-500/30">
+              API 36
+            </span>
+          </button>
         </div>
 
         <div className="text-[11px] text-zinc-400 px-3 py-1 font-mono hidden md:inline">
@@ -509,9 +554,6 @@ export const DashboardView: React.FC<DashboardViewProps> = ({
         <div className="space-y-4 sm:space-y-5 animate-in fade-in duration-200 w-full min-w-0 max-w-full">
           {/* GitHub Synchronization Status Utility (Checksum & Merkle Parity Engine) */}
           <GitHubSyncStatusUtility />
-
-          {/* Copilot Autonomy Node: Continuous Sovereign Ledger Surveillance & Real-Time Suggestions */}
-          <CopilotAutonomyNodePanel />
 
           {/* Main Grid: Visual Lattice / Topology & Live Subsystem Rail */}
           <div className="grid grid-cols-1 lg:grid-cols-12 gap-3.5 sm:gap-5 items-start w-full min-w-0 max-w-full">
@@ -830,6 +872,9 @@ export const DashboardView: React.FC<DashboardViewProps> = ({
                   <ArrowRight className="w-3.5 h-3.5 text-zinc-400" />
                 </button>
               </div>
+
+              {/* Copilot Autonomy Node: Sovereign Ledger Surveillance & Real-Time Suggestions (Bottom-Right Anchor) */}
+              <CopilotAutonomyNodePanel />
             </div>
           </div>
 
@@ -986,6 +1031,13 @@ export const DashboardView: React.FC<DashboardViewProps> = ({
           <EvidenceIntakePanel evidenceIds={['TNT-TH-001', 'DS-901-PILOT']} />
           <FiosFactorIntelligence />
           <PinnedWidgetsDashboard onNavigate={onNavigate} />
+        </div>
+      )}
+
+      {/* TAB 5: ANDROID 16.0+ FCM PUSH NOTIFICATIONS */}
+      {dashboardSection === 'FCM_PUSH' && (
+        <div className="space-y-5 animate-in fade-in duration-200 w-full min-w-0 max-w-full">
+          <FcmPushNotificationManager />
         </div>
       )}
 

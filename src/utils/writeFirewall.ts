@@ -214,6 +214,27 @@ export const getWriteFirewallAuditLog = (): readonly WriteFirewallAuditRecord[] 
   return WriteFirewallEngine.getAuditRecords();
 };
 
+export const MERKLE_ROOT_BASELINE = WriteFirewallEngine.CANONICAL_ROOT;
+export const CANONICAL_BLOCK_HEIGHT = WriteFirewallEngine.CANONICAL_BLOCK;
+export const CANONICAL_SEAL_COUNT = WriteFirewallEngine.CANONICAL_SEALS;
+
+export const verifyWriteFirewallFailClosedGate = () => {
+  const targetProperties = ['canonicalSeals', 'canonicalRoot', 'blockHeight', 'ssotMutation', 'isFrozen'];
+  const testResults = targetProperties.map((prop) =>
+    WriteFirewallEngine.writeFirewall({
+      targetProperty: prop,
+      requestedValue: 'fail_closed_test_probe',
+      actor: 'FAIL_CLOSED_GATE_VERIFIER',
+      origin: 'internal://gate-verifier',
+    })
+  );
+
+  return {
+    allPassed: testResults.every((res) => res.rejected && res.mutationDelta === 0),
+    testResults,
+  };
+};
+
 export const enforceFailClosed = (reason: string) => {
   console.warn(`[WRITE FIREWALL] Fail-Closed Triggered: ${reason}`);
   return { status: 'BLOCKED' as const, mutation: 0, reason };
