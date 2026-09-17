@@ -1,0 +1,46 @@
+# .gitattributes configuration for ZYRQUEN Ω∞ Sovereign Kernel
+# Purpose: mark generated/large artifacts so GitHub Linguist collapses diffs
+# and they don't distort repository language statistics.
+
+####################################################
+# Generated HTML bundles (single-file builds / reports)
+# use specific patterns to avoid accidentally matching source HTML
+*.html linguist-generated
+*agentic_artifact*.html linguist-generated
+*ULTIMATE_FINAL*.html linguist-generated
+
+####################################################
+# Large JSON databases, logs, ledger / forensic exports
+# Prefer specific names rather than a blanket *.json unless intentional
+ledger*.json linguist-generated
+*results*.json linguist-generated
+*records*.json linguist-generated
+*manifest*.json linguist-generated
+# If you really want ALL JSON treated as generated, uncomment the next line:
+# *.json linguist-generated
+
+####################################################
+# Large text exports of full codebase / snapshots
+*full-codebase*.txt linguist-generated
+
+####################################################
+# Binary visual assets and reports
+*.png linguist-generated
+*.jpg linguist-generated
+*.jpeg linguist-generated
+*.gif linguist-generated
+*.pdf linguist-generated
+*.svg linguist-generated
+
+####################################################
+# Ensure core source files keep normalized text attributes
+# (prevents accidental CRLF issues and keeps them visible as code)
+*.sol text eol=lf
+*.tsx text eol=lf
+*.ts text eol=lf
+*.py text eol=lf
+
+####################################################
+# Examples for un-marking files (if needed):
+# bootstrap.min.css -linguist-generated
+# path/to/specific-file.json -linguist-generated
