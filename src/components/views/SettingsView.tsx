@@ -62,7 +62,6 @@ import {
 } from '../../utils/textToSpeechService';
 
 import { SystemEvent } from '../SystemEventsSidebar';
-import { hapticTap, hapticSuccess } from '../../utils/haptics';
 
 interface SettingsViewProps {
   onCaptureSnapshot?: () => void;
@@ -261,7 +260,6 @@ export const SettingsView: React.FC<SettingsViewProps> = ({
   const handleThresholdChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const val = Number(e.target.value);
     setBatteryThresholdPct(val);
-    hapticTap();
     try {
       localStorage.setItem('zyrquen_cryo_battery_threshold', String(val));
     } catch {
@@ -301,7 +299,6 @@ export const SettingsView: React.FC<SettingsViewProps> = ({
   const handleSelectProfile = (profileId: AudioProfileId) => {
     setActiveProfile(profileId);
     setAmbientSoundProfile(profileId, isAudioActive);
-    hapticTap();
     playTone(600, 0.05);
     const prof = AUDIO_PROFILES.find((p) => p.id === profileId);
     if (onNotifyEvent && prof) {
@@ -317,7 +314,6 @@ export const SettingsView: React.FC<SettingsViewProps> = ({
     const val = Number(e.target.value);
     setVolumeLevel(val);
     setMasterVolume(val / 1000);
-    hapticTap();
   };
 
   return (
@@ -569,17 +565,17 @@ export const SettingsView: React.FC<SettingsViewProps> = ({
         {/* Master Volume & Live Visualizer */}
         <div className="p-4 rounded-2xl bg-black/40 border border-white/5 flex flex-col sm:flex-row items-center justify-between gap-4 font-mono text-xs">
           <div className="flex items-center gap-3 w-full sm:w-auto">
-            <Sliders className="w-4 h-4 text-zinc-400 shrink-0" />
-            <span className="text-zinc-300 font-bold shrink-0">Master Volume:</span>
+            <Sliders className="w-4 h-4 text-zinc-400" />
+            <span className="text-zinc-300 font-bold">Master Volume:</span>
             <input
               type="range"
               min="5"
               max="100"
               value={volumeLevel}
               onChange={handleVolumeChange}
-              className="flex-1 sm:w-36 h-8 accent-amber-400 cursor-pointer touch-none"
+              className="w-36 accent-amber-400 cursor-pointer"
             />
-            <span className="text-amber-300 font-bold shrink-0">{Math.round((volumeLevel / 100) * 100)}%</span>
+            <span className="text-amber-300 font-bold">{Math.round((volumeLevel / 100) * 100)}%</span>
           </div>
 
           {isAudioActive ? (
@@ -783,21 +779,18 @@ export const SettingsView: React.FC<SettingsViewProps> = ({
               </select>
             </div>
 
-            <div className="flex items-center gap-2 w-full sm:w-auto">
-              <span className="text-zinc-400 shrink-0">Speech Rate:</span>
+            <div className="flex items-center gap-2">
+              <span className="text-zinc-400">Speech Rate:</span>
               <input
                 type="range"
                 min="0.8"
                 max="1.4"
                 step="0.05"
                 value={ttsConfig.rate}
-                onChange={(e) => {
-                  hapticTap();
-                  updateTTSConfig({ rate: parseFloat(e.target.value) });
-                }}
-                className="flex-1 sm:w-24 h-8 accent-cyan-400 cursor-pointer touch-none"
+                onChange={(e) => updateTTSConfig({ rate: parseFloat(e.target.value) })}
+                className="w-20 accent-cyan-400 cursor-pointer"
               />
-              <span className="text-cyan-300 font-bold shrink-0">{ttsConfig.rate}x</span>
+              <span className="text-cyan-300 font-bold">{ttsConfig.rate}x</span>
             </div>
           </div>
 
@@ -990,7 +983,7 @@ export const SettingsView: React.FC<SettingsViewProps> = ({
               max="50"
               value={batteryThresholdPct}
               onChange={handleThresholdChange}
-              className="w-full h-8 accent-amber-400 cursor-pointer touch-none"
+              className="w-full accent-amber-400 cursor-pointer"
             />
             <div className="flex items-center justify-between text-[10px] text-zinc-500 pt-1">
               <span>Min 10%</span>

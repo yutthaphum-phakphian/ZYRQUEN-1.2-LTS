@@ -39,13 +39,11 @@ import {
   PanelLeft,
   ChevronLeft,
   ChevronRight,
-  Clock,
 } from 'lucide-react';
 import { playTone, getHarmonicCarrierSnapshot } from './AudioSynthesizer';
 import { PWAInstallButton } from './PWAInstallButton';
 import { GitHubSyncWarningNav } from './navigation/GitHubSyncWarningNav';
 import { CopilotAssistantDrawer } from './copilot/CopilotAssistantDrawer';
-import { hapticSnapshot } from '../utils/haptics';
 
 interface NavigationProps {
   currentView: ViewType;
@@ -69,9 +67,6 @@ interface NavigationProps {
   onTriggerLoginLoader?: (mode?: 'login' | 'register' | 'switch_tenant') => void;
   isCopilotOpen?: boolean;
   onToggleCopilot?: () => void;
-  epochCountdown?: string;
-  isEmergencyLockdown?: boolean;
-  onToggleEmergencyLockdown?: () => void;
 }
 
 interface NavItem {
@@ -86,7 +81,6 @@ interface NavItem {
 
 export const NAVIGATION_ITEMS: NavItem[] = [
   { id: 'dashboard', labelEn: 'Dashboard', labelTh: 'ศูนย์บัญชาการ', icon: LayoutDashboard, dotColor: '#06B6D4', badge: 'HQ', shortcut: '1' },
-  { id: 'zyrquen_gg', labelEn: 'ZYRQUEN GG', labelTh: 'แผงควบคุม GG v1.2', icon: Boxes, dotColor: '#06B6D4', badge: 'GG API', shortcut: 'G' },
   { id: 'fusion', labelEn: 'Fusion Console', labelTh: 'รวมศูนย์นิติวิทยาศาสตร์', icon: Activity, dotColor: '#D946EF', badge: 'FUSION', shortcut: 'F' },
   { id: 'playback', labelEn: '12-Stage Replay', labelTh: 'จำลองสืบย้อน', icon: ShieldCheck, dotColor: '#F59E0B', badge: 'TRACE', shortcut: 'P' },
   { id: 'chambers', labelEn: '18 Chambers', labelTh: '18 ห้องอธิปไตย SSoT', icon: LayoutGrid, dotColor: '#6366F1', badge: '18 SSoT', shortcut: 'K' },
@@ -135,27 +129,7 @@ export const Navigation: React.FC<NavigationProps> = ({
   onTriggerLoginLoader,
   isCopilotOpen: externalIsCopilotOpen,
   onToggleCopilot,
-  epochCountdown: externalEpochCountdown,
-  isEmergencyLockdown = false,
-  onToggleEmergencyLockdown,
 }) => {
-  const [internalCountdown, setInternalCountdown] = useState<string>('00:00:00');
-
-  useEffect(() => {
-    const updateCountdown = () => {
-      const now = new Date();
-      const hours = String(23 - now.getHours()).padStart(2, '0');
-      const minutes = String(59 - now.getMinutes()).padStart(2, '0');
-      const seconds = String(59 - now.getSeconds()).padStart(2, '0');
-      setInternalCountdown(`${hours}:${minutes}:${seconds}`);
-    };
-    updateCountdown();
-    const interval = setInterval(updateCountdown, 1000);
-    return () => clearInterval(interval);
-  }, []);
-
-  const currentEpochCountdown = externalEpochCountdown || internalCountdown;
-
   const [carrierData, setCarrierData] = useState<{ volume: number; wavePath: string; frequency: number }>({
     volume: 0,
     wavePath: 'M 0 10 Q 25 10, 50 10 T 100 10',
@@ -209,7 +183,6 @@ export const Navigation: React.FC<NavigationProps> = ({
     setIsSealHighlighting(true);
     setHighlightKey((k) => k + 1);
     playTone(740, 0.08);
-    hapticSnapshot();
     if (onCaptureSnapshot) {
       onCaptureSnapshot();
     }
@@ -320,7 +293,7 @@ export const Navigation: React.FC<NavigationProps> = ({
                 className="text-cyan-100/80 hover:text-cyan-300 font-medium hover:underline flex items-center gap-1 cursor-pointer truncate max-w-[140px] sm:max-w-[240px] md:max-w-none"
                 title="Trigger Sovereign Quantum Login & Warp Ingress Loader"
               >
-                <span className="truncate">🇹🇭 นายยุทธภูมิ ภักเพียร (#EP-SOVEREIGN-01)</span>
+                <span className="truncate">🇹🇭 นายยุทธภูมิ พากเพียร (#EP-SOVEREIGN-01)</span>
                 <span className="hidden sm:inline-block px-1.5 py-0.2 rounded bg-cyan-950 border border-cyan-500/40 text-[9px] text-cyan-300 shrink-0">
                   LOGIN/WARP
                 </span>
@@ -408,44 +381,6 @@ export const Navigation: React.FC<NavigationProps> = ({
 
         {/* Right Actions */}
         <div className="flex items-center gap-1.5 sm:gap-2 shrink-0">
-          {/* Epoch Countdown Timer: SYNC_EPOCH_ROTATION */}
-          <div
-            id="nav-epoch-countdown"
-            className="hidden lg:flex items-center gap-1.5 px-2.5 py-1.5 rounded-xl bg-black/60 border border-cyan-500/30 text-xs font-mono shadow-[0_0_12px_rgba(6,182,212,0.15)] shrink-0 select-none"
-            title="Real-time Epoch Countdown Timer (SYNC_EPOCH_ROTATION: counting down to 00:00:00)"
-          >
-            <Clock className="w-3.5 h-3.5 text-cyan-400 animate-pulse" />
-            <span className="text-[10px] text-zinc-400 font-bold uppercase tracking-wider hidden xl:inline">SYNC_EPOCH_ROTATION:</span>
-            <span className="text-[10px] text-zinc-400 font-bold uppercase xl:hidden">EPOCH:</span>
-            <span className="text-amber-400 font-bold tracking-widest">{currentEpochCountdown}</span>
-          </div>
-
-          {/* Emergency Lockdown Toggle Button */}
-          {onToggleEmergencyLockdown && (
-            <button
-              id="btn-nav-emergency-lockdown"
-              type="button"
-              onClick={() => {
-                playTone(isEmergencyLockdown ? 520 : 280, 0.1);
-                onToggleEmergencyLockdown();
-              }}
-              className={`flex items-center gap-1.5 px-2.5 py-1.5 rounded-xl border font-mono text-xs transition-all cursor-pointer select-none active:scale-95 ${
-                isEmergencyLockdown
-                  ? 'bg-red-600 text-white border-red-400 shadow-[0_0_22px_rgba(239,68,68,0.9)] animate-pulse font-bold ring-2 ring-red-400/50'
-                  : 'bg-red-950/40 hover:bg-red-900/60 text-red-300 border-red-500/30 hover:border-red-500/60 shadow-[0_0_10px_rgba(239,68,68,0.15)]'
-              }`}
-              title="Simulate Critical Threat & Emergency Lockdown Border Glow (Quarantine Triggered)"
-            >
-              <span className={`w-2 h-2 rounded-full ${isEmergencyLockdown ? 'bg-white animate-ping' : 'bg-red-500'}`} />
-              <span className="hidden sm:inline font-bold">
-                {isEmergencyLockdown ? 'DISARM LOCKDOWN' : 'EMERGENCY LOCK'}
-              </span>
-              <span className="sm:hidden font-bold">
-                {isEmergencyLockdown ? 'DISARM' : 'ALERT'}
-              </span>
-            </button>
-          )}
-
           {/* GitHub Synchronization Warning & Drift Re-sync System */}
           <PWAInstallButton />
           <GitHubSyncWarningNav />
@@ -535,40 +470,35 @@ export const Navigation: React.FC<NavigationProps> = ({
             </button>
           )}
 
-          {/* Forensic Audit Mode Toggle (Overlays Metadata Hashes & PQC Signatures + CRT Overlay) */}
+          {/* Forensic Audit Mode Toggle (Overlays Metadata Hashes & PQC Signatures) */}
           {onToggleForensicAuditMode && (
             <button
-              id="btn-nav-forensic-crt-toggle"
               onClick={() => {
                 playTone(isForensicAuditMode ? 440 : 760, 0.08);
                 onToggleForensicAuditMode();
               }}
-              className={`flex items-center gap-2 px-3 py-1.5 rounded-xl border font-mono text-xs transition-all shadow-sm cursor-pointer ${
+              className={`flex items-center gap-1.5 px-3 py-1.5 rounded-xl border font-mono text-xs transition-all shadow-sm ${
                 isForensicAuditMode
-                  ? 'bg-amber-950/40 text-amber-200 border-amber-500/60 shadow-[0_0_18px_rgba(245,158,11,0.35)] font-bold ring-1 ring-amber-400/40'
-                  : 'bg-black/30 hover:bg-slate-800 border-white/10 hover:border-slate-600 text-slate-400 hover:text-slate-200'
+                  ? 'bg-purple-500/25 text-purple-200 border-purple-500/60 shadow-[0_0_18px_rgba(168,85,247,0.4)] font-bold ring-1 ring-purple-400/40'
+                  : 'bg-black/30 hover:bg-purple-500/10 border-white/10 hover:border-purple-500/30 text-zinc-400 hover:text-purple-200'
               }`}
               title={
                 isForensicAuditMode
-                  ? 'Forensic CRT Mode: Active (Scanlines, Aperture Grille & Evidentiary Audit)'
-                  : 'Toggle Forensic CRT Mode: Enable high-density scanlines and forensic audit'
+                  ? 'Forensic Audit Mode: Active (Hashes & PQC Signature Statuses Overlaid)'
+                  : 'Toggle Forensic Audit Mode: Overlay metadata hashes and PQC signature statuses on dashboard cards'
               }
             >
-              <Eye
+              <Fingerprint
                 className={`w-3.5 h-3.5 ${
-                  isForensicAuditMode ? 'text-amber-400 animate-pulse' : 'text-slate-400'
+                  isForensicAuditMode ? 'text-purple-300 animate-pulse' : 'text-zinc-400'
                 }`}
               />
               <span className="hidden sm:inline">
-                {isForensicAuditMode ? 'FORENSIC CRT' : 'Forensic CRT'}
+                {isForensicAuditMode ? 'FORENSIC AUDIT' : 'Forensic Mode'}
               </span>
-              <div
-                className={`w-7 h-4 flex items-center rounded-full p-0.5 transition-colors ${
-                  isForensicAuditMode ? 'bg-amber-500 justify-end' : 'bg-slate-700 justify-start'
-                }`}
-              >
-                <div className="w-2.5 h-2.5 bg-slate-950 rounded-full shadow-sm" />
-              </div>
+              {isForensicAuditMode && (
+                <span className="w-1.5 h-1.5 rounded-full bg-purple-400 animate-ping" />
+              )}
             </button>
           )}
 

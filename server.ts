@@ -1,11 +1,4 @@
 
-if (typeof globalThis !== 'undefined' && (globalThis as any).__dirname === '.') {
-  delete (globalThis as any).__dirname;
-}
-if (typeof global !== 'undefined' && (global as any).__dirname === '.') {
-  delete (global as any).__dirname;
-}
-
 const FORENSIC_12_STAGES_DATA = [
     {
         "time": "0.00ms",
@@ -74,7 +67,6 @@ const FORENSIC_12_STAGES_DATA = [
 
 import express from 'express';
 import http from 'http';
-import fs from 'fs';
 import { Server as SocketIOServer } from 'socket.io';
 import WebSocket, { WebSocketServer } from 'ws';
 import cors from 'cors';
@@ -91,22 +83,11 @@ const app = express();
 const PORT = 3000;
 const httpServer = http.createServer(app);
 const io = new SocketIOServer(httpServer, {
-  cors: { origin: '*' },
-  destroyUpgrade: false,
+  cors: { origin: '*' }
 });
 
 // Native WebSocket Server for external audit parties & direct WS clients
-const wss = new WebSocketServer({ noServer: true });
-
-httpServer.on('upgrade', (request, socket, head) => {
-  const url = request.url || '';
-  if (url.startsWith('/ws') || url.startsWith('/audit-ws')) {
-    wss.handleUpgrade(request, socket, head, (ws) => {
-      (ws as any).upgradeReqUrl = url;
-      wss.emit('connection', ws, request);
-    });
-  }
-});
+const wss = new WebSocketServer({ server: httpServer, path: '/ws/notifications' });
 
 // In-memory buffer for recent notifications
 const recentNotificationsBuffer: any[] = [];
@@ -118,7 +99,7 @@ function broadcastNotification(type: string, message: string, payload: any = {})
     message,
     payload,
     timestamp: new Date().toISOString(),
-    systemStatus: 'LOCKED_FROZEN_v1.2_LTS',
+    systemStatus: 'LOCKEDFROZENv1.2_LTS',
     merkleRoot: '909ab814479844d8a14816bed34cdbb07528e18501da86fc4691763a43fa4c68',
     block: 849202,
     seals: 14902,
@@ -225,61 +206,20 @@ function trigger12StageBroadcast(sealId = 14903) {
   }, 350);
 }
 
-wss.on('connection', (ws: any, req: any) => {
-  const reqUrl = ws.upgradeReqUrl || (req && req.url) || '';
-  const isTelemetryStream = reqUrl.includes('telemetry');
-
-  const telemetryPayload = {
-    block_height: 849202,
-    merkle_root: '909ab814479844d8a14816bed34cdbb07528e18501da86fc4691763a43fa4c68',
-    seals_count: 14902,
-    qops: 851.9,
-    cryo_temp: '14.98 mK',
-    coherence: '99.992%',
-    drift: '0.00%',
-    status: 'LOCKED_FROZEN_v1.2_LTS',
-    timestamp: new Date().toISOString(),
-  };
-
-  if (isTelemetryStream) {
-    // Immediate first message for telemetry listeners (e.g. client_test.py / WebSocket stream)
-    ws.send(JSON.stringify(telemetryPayload));
-
-    // Continuous 1-second interval stream
-    const interval = setInterval(() => {
-      if (ws.readyState === WebSocket.OPEN) {
-        ws.send(JSON.stringify({
-          ...telemetryPayload,
-          timestamp: new Date().toISOString(),
-        }));
-      } else {
-        clearInterval(interval);
-      }
-    }, 1000);
-
-    ws.on('close', () => clearInterval(interval));
-  } else {
-    // Send welcome message matching Unified Notification Console specification
-    ws.send(
-      JSON.stringify({
-        type: 'SYSTEM_CONNECTED',
-        message: 'Unified Notification Console Ready',
-        status: 'LOCKED_FROZEN_v1.2_LTS',
-        systemStatus: 'LOCKED_FROZEN_v1.2_LTS',
-        merkleRoot: '909ab814479844d8a14816bed34cdbb07528e18501da86fc4691763a43fa4c68',
-        block: 849202,
-        block_height: 849202,
-        seals: 14902,
-        seals_count: 14902,
-        qops: 851.9,
-        cryo_temp: '14.98 mK',
-        coherence: '99.992%',
-        drift: '0.00%',
-        recentAlerts: recentNotificationsBuffer.slice(0, 10),
-        timestamp: new Date().toISOString(),
-      })
-    );
-  }
+wss.on('connection', (ws) => {
+  // Send welcome handshake with canonical anchor
+  ws.send(
+    JSON.stringify({
+      type: 'NOTIFICATION_SERVICE_HANDSHAKE',
+      message: 'Connected to ZYRQUEN Sovereign Notification Service (LOCKEDFROZENv1.2_LTS)',
+      systemStatus: 'LOCKEDFROZENv1.2_LTS',
+      merkleRoot: '909ab814479844d8a14816bed34cdbb07528e18501da86fc4691763a43fa4c68',
+      block: 849202,
+      seals: 14902,
+      recentAlerts: recentNotificationsBuffer.slice(0, 10),
+      timestamp: new Date().toISOString(),
+    })
+  );
 
   ws.on('message', (messageRaw: any) => {
     try {
@@ -297,33 +237,6 @@ wss.on('connection', (ws: any, req: any) => {
 
 app.use(cors());
 app.use(express.json());
-
-// Sovereign Root Status Check (for REST API clients & client_test.py)
-app.get('/', (req, res, next) => {
-  const isSovereignSig = !!req.headers['x-zyrquen-sovereign-sig'];
-  const isJsonClient =
-    req.headers['content-type'] === 'application/json' ||
-    (req.headers.accept && !req.headers.accept.includes('text/html') && req.headers.accept.includes('application/json'));
-
-  if (isSovereignSig || isJsonClient) {
-    res.setHeader('X-Zyrquen-Auth-Status', 'SOVEREIGN_PRINCIPAL_AUTHENTICATED');
-    res.setHeader('X-Zyrquen-PQC-Algorithm', 'ML-DSA-87 (Dilithium-5)');
-    return res.json({
-      status: 'ONLINE - LOCKED_FROZEN_v1.2_LTS',
-      system: 'ZYRQUEN Ω∞ FROZEN v1.2 LTS Sovereign Operating System and Civilization Intelligence Control Plane',
-      block_height: 849202,
-      merkle_root: '909ab814479844d8a14816bed34cdbb07528e18501da86fc4691763a43fa4c68',
-      seals_count: 14902,
-      qops: 851.9,
-      cryo_temp: '14.98 mK',
-      coherence: '99.992%',
-      drift: '0.00%',
-      pqc_suite: 'ML-DSA-87 (Dilithium-5) & ML-KEM-1024',
-      timestamp: new Date().toISOString(),
-    });
-  }
-  next();
-});
 
 // Lazy-initialized Gemini client
 let aiClient: GoogleGenAI | null = null;
@@ -348,7 +261,7 @@ const SEARCH_PATTERNS = [
     answer: `**พระราชบัญญัติคุ้มครองข้อมูลส่วนบุคคล พ.ศ. 2562 (PDPA Thailand)**
 - **มาตรา 19 & 27**: กำหนดหลักการขอความยินยอม (Consent) และข้อยกเว้นทางกฎหมายสำหรับการประมวลผลข้อมูลส่วนบุคคลและข้อมูลอ่อนไหว (Sensitive Data)
 - **มาตรา 37**: ผู้ควบคุมข้อมูลส่วนบุคคล (Data Controller) ต้องจัดให้มีมาตรการรักษาความมั่นคงปลอดภัยที่เหมาะสม (Appropriate Security Measures) เช่น การเข้ารหัสข้อมูล (Encryption), การควบคุมการเข้าถึง (Access Control), และการบันทึก Log การเข้าถึง
-- **ความสอดคล้องกับ ZYRQUEN Ω∞**: การเก็บรักษาข้อมูลใน Post-Quantum Vault ปฏิบัติตามหลัก Data Minimization และเข้ารหัสแบบ Zero-Knowledge โดยมีผู้ถือสิทธิ์ Sovereign Principal นายยุทธภูมิ ภักเพียร กำกับดูแล`,
+- **ความสอดคล้องกับ ZYRQUEN Ω∞**: การเก็บรักษาข้อมูลใน Post-Quantum Vault ปฏิบัติตามหลัก Data Minimization และเข้ารหัสแบบ Zero-Knowledge โดยมีผู้ถือสิทธิ์ Sovereign Principal นายยุทธภูมิ พากเพียร กำกับดูแล`,
     citations: [
       { title: 'ราชกิจจานุเบกษา - พ.ร.บ. คุ้มครองข้อมูลส่วนบุคคล พ.ศ. 2562', uri: 'https://www.ratchakitcha.soc.go.th' },
       { title: 'สำนักงานคณะกรรมการคุ้มครองข้อมูลส่วนบุคคล (สคส. / PDPC)', uri: 'https://www.pdpc.or.th' },
@@ -413,7 +326,7 @@ app.post('/api/search', async (req, res) => {
   // If Gemini API Key is available, use Google Search Grounding with timeout
   if (ai) {
     try {
-      const prompt = `You are the Sovereign Legal & Cryptographic Intelligence Oracle for ZYRQUEN Ω∞ FROZEN v1.2 LTS and the Thai Custodian Registry (นายยุทธภูมิ ภักเพียร #EP-SOVEREIGN-01).
+      const prompt = `You are the Sovereign Legal & Cryptographic Intelligence Oracle for ZYRQUEN Ω∞ FROZEN v1.2 LTS and the Thai Custodian Registry (นายยุทธภูมิ พากเพียร #EP-SOVEREIGN-01).
 Query: "${query}"
 Context: Research current Thai digital laws (e.g. พระราชบัญญัติคุ้มครองข้อมูลส่วนบุคคล พ.ศ. 2562 (PDPA), พ.ร.บ. ว่าด้วยการกระทำความผิดเกี่ยวกับคอมพิวเตอร์, พ.ร.บ. การรักษาความมั่นคงปลอดภัยไซเบอร์ พ.ศ. 2562, พ.ร.บ. ธุรกรรมทางอิเล็กทรอนิกส์ พ.ศ. 2544/2562, ประกาศ NCSA, ETDA) and modern Cryptographic standards (NIST Post-Quantum Cryptography FIPS 203 ML-KEM, FIPS 204 ML-DSA, FIPS 205 SLH-DSA, SHA-256 Merkle Roots, ISO/IEC 27001).
 
@@ -475,7 +388,7 @@ Provide an authoritative, detailed, structured response with:
     citations = matched.citations;
   } else {
     answer = `**ระเบียบข้อบังคับและมาตรฐานทางเทคนิคสำหรับ ZYRQUEN Ω∞ Sovereign Operating System & Thai Custodian Registry**
-- **สถาปัตยกรรมอธิปไตย (Sovereign Architecture)**: ควบคุมโดยสถาปนิกสูงสุด นายยุทธภูมิ ภักเพียร (#EP-SOVEREIGN-01) และคณะผู้ดูแลชาวไทย ภายใต้กรอบพระราชบัญญัติคุ้มครองข้อมูลส่วนบุคคล พ.ศ. 2562 และมาตรฐานความมั่นคงปลอดภัยสารสนเทศระดับสากล
+- **สถาปัตยกรรมอธิปไตย (Sovereign Architecture)**: ควบคุมโดยสถาปนิกสูงสุด นายยุทธภูมิ พากเพียร (#EP-SOVEREIGN-01) และคณะผู้ดูแลชาวไทย ภายใต้กรอบพระราชบัญญัติคุ้มครองข้อมูลส่วนบุคคล พ.ศ. 2562 และมาตรฐานความมั่นคงปลอดภัยสารสนเทศระดับสากล
 - **มาตรฐานการเข้ารหัสและสมุดบัญชีหลักฐาน (Evidence Ledger V25)**: บล็อกจำนวน 14,902 รายการถูกผูกโยงผ่าน SHA-256 Merkle Root '909ab814479844d8a14816bed34cdbb07528e18501da86fc4691763a43fa4c68' โดยมีอัตราความคลาดเคลื่อน SSoT Mutation = 0
 - **คำแนะนำ**: ผู้ใช้สามารถค้นหาข้อกฎหมายเฉพาะเจาะจง เช่น "PDPA", "NCSA Cyber Act", "NIST FIPS 203 PQC", หรือ "ETDA Electronic Signature" เพื่อดูรายละเอียดมาตราและมาตรฐานอ้างอิง`;
     citations = [
@@ -501,99 +414,16 @@ Provide an authoritative, detailed, structured response with:
 app.post('/api/v1/alerts/security', (req, res) => {
   const { riskScore, sealId = 14902 } = req.body || {};
   const numericRisk = Number(riskScore ?? 0.94);
-  const targetSeal = sealId ?? 14902;
 
   if (numericRisk >= 0.85) {
     const alert = broadcastNotification(
-      'SECURITY_ALERT',
-      `Risk ${numericRisk} → Chamber 02 Quarantine (Seal #${targetSeal})`,
-      { sealId: targetSeal, riskScore: numericRisk }
+      'CRITICALSECURITYALERT',
+      `Risk ${numericRisk} detected → Chamber 02 Quarantine (Seal #${sealId})`,
+      { sealId, riskScore: numericRisk, quarantineChamber: 'CHAMBER_02_QUARANTINE', action: 'ZEROIZATION_ENGAGED' }
     );
     return res.json({ status: 'ALERT_SENT', notification: alert });
   }
   res.json({ status: 'SAFE', riskScore: numericRisk });
-});
-
-// Sentinel Quarantine In-memory Store
-const sentinelQuarantineLogs: any[] = [];
-
-// Sentinel Anomaly Intercept Endpoint (Unified Production Engine)
-app.post('/api/v1/sentinel/intercept', (req, res) => {
-  const event_type = req.body?.event_type || req.query?.event_type || 'OTel Stream Anomaly Scan';
-  const risk_index = parseFloat(String(req.body?.risk_index ?? req.query?.risk_index ?? 0.94));
-  const chamber = req.body?.chamber || req.query?.chamber || 'Chamber 11';
-  const details = req.body?.details || req.query?.details || 'Voltage Jitter Detected + Geo Mismatch BKK→Unknown';
-
-  const is_quarantined = risk_index >= 0.85;
-  const event_payload = {
-    event_id: crypto.randomUUID(),
-    event_type,
-    risk_index,
-    chamber,
-    action: is_quarantined ? 'FAIL_CLOSED_QUARANTINE_ISOLATED' : 'PASSED',
-    details,
-    timestamp: Date.now() / 1000,
-    merkle_anchor: '909ab814479844d8a14816bed34cdbb07528e18501da86fc4691763a43fa4c68'
-  };
-
-  if (is_quarantined) {
-    sentinelQuarantineLogs.unshift(event_payload);
-    if (sentinelQuarantineLogs.length > 100) {
-      sentinelQuarantineLogs.pop();
-    }
-    broadcastNotification(
-      'SECURITY_ALERT',
-      `🚨 Sentinel Intercept: Risk ${risk_index} → ${chamber} Fail-Closed Quarantine`,
-      event_payload
-    );
-  }
-
-  return res.json({
-    status: is_quarantined ? 'QUARANTINED' : 'CLEARED',
-    blast_radius: is_quarantined ? '<=2.0%' : '0.0%',
-    data: event_payload
-  });
-});
-
-// Endpoint to retrieve Sentinel Quarantine Logs
-app.get('/api/v1/sentinel/quarantine/logs', (req, res) => {
-  res.set('Cache-Control', 'no-cache');
-  const limit = Math.min(parseInt(String(req.query?.limit || 20), 10), 100);
-  res.json(sentinelQuarantineLogs.slice(0, limit));
-});
-
-// Standalone Dashboards & Uploaded Artifacts Static Service
-app.use('/standalone_dashboards', express.static(path.join(process.cwd(), 'standalone_dashboards')));
-
-// Lightweight Cyber-Quantum Dark Theme Dashboard (Direct HTML Delivery)
-app.get(['/dashboard', '/dashboard.html'], (req, res) => {
-  const possiblePaths = [
-    path.join(process.cwd(), 'public', 'dashboard.html'),
-    path.join(process.cwd(), 'standalone_dashboards', 'dashboard.html'),
-    path.join(process.cwd(), 'index.html')
-  ];
-  for (const p of possiblePaths) {
-    if (fs.existsSync(p)) {
-      return res.sendFile(p);
-    }
-  }
-  return res.status(404).send('Dashboard template not found');
-});
-
-// Fallback resolver for standalone dashboards and uploaded evidence artifacts
-app.get('/:name.html', (req, res, next) => {
-  const file = `${req.params.name}.html`;
-  const candidates = [
-    path.join(process.cwd(), 'standalone_dashboards', file),
-    path.join(process.cwd(), 'standalone_dashboards', 'uploads', file),
-    path.join(process.cwd(), 'public', file)
-  ];
-  for (const candidate of candidates) {
-    if (fs.existsSync(candidate)) {
-      return res.sendFile(candidate);
-    }
-  }
-  next();
 });
 
 // Telemetry Alerts: Cryo > 15.20 mK or Drift > 0.00%
@@ -604,9 +434,9 @@ app.post('/api/v1/alerts/telemetry', (req, res) => {
 
   if (numericDrift > 0.00 || numericCryo > 15.20) {
     const alert = broadcastNotification(
-      'TELEMETRY_ALERT',
+      'TELEMETRYDRIFTALERT',
       `Cryo ${numericCryo} mK / Drift ${numericDrift}% exceeds SLA`,
-      { cryoTemp: numericCryo, drift: numericDrift }
+      { cryoTemp: numericCryo, drift: numericDrift, slaThreshold: '15.20 mK / 0.00%' }
     );
     return res.json({ status: 'ALERT_SENT', notification: alert });
   }
@@ -617,21 +447,21 @@ app.post('/api/v1/alerts/telemetry', (req, res) => {
 app.post('/api/v1/alerts/compliance', (req, res) => {
   const { section = '28', verdict = 'Presumption of Authenticity Active & Admissible' } = req.body || {};
   const alert = broadcastNotification(
-    'COMPLIANCE_UPDATE',
+    'LEGALCOMPLIANCEUPDATE',
     `ETDA Section ${section} → ${verdict}`,
-    { section, verdict }
+    { section, verdict, statutoryAct: 'ETDA B.E. 2544 (2001)' }
   );
   res.json({ status: 'UPDATE_SENT', notification: alert });
 });
 
 // Audit Replay Alerts: 12-Stage Trace Replay via Sovereign Notification Service
 app.post('/api/v1/alerts/audit', (req, res) => {
-  const { sealId = 14903, triggerStages = false } = req.body || {};
+  const { sealId = 14903, triggerStages = true } = req.body || {};
   
   if (triggerStages) {
     trigger12StageBroadcast(Number(sealId) || 14903);
     return res.json({
-      status: 'REPLAY_ALERT_SENT',
+      status: 'REPLAY_BROADCAST_INITIATED',
       sealId: Number(sealId) || 14903,
       stagesCount: 12,
       slaLimit: '< 142ms',
@@ -641,92 +471,10 @@ app.post('/api/v1/alerts/audit', (req, res) => {
 
   const alert = broadcastNotification(
     'AUDIT_REPLAY',
-    `Trace Replay Seal #${sealId} → Stage‑12 Closure ✓`,
-    { sealId, duration: '142ms' }
+    `Trace Replay Seal #${sealId} → Stage-12 Closure ✓`,
+    { sealId, duration: '35.8ms', sla: '< 142ms', stage12Verified: true }
   );
   res.json({ status: 'REPLAY_ALERT_SENT', notification: alert });
-});
-
-// Server-Side Forensic Audit Ledger & Offline Batch Sync Pipeline
-const serverForensicAuditLedger: any[] = [];
-
-app.post('/api/v1/audit/sync', (req, res) => {
-  const { events = [], batchId, source = 'OFFLINE_BACKGROUND_SYNC' } = req.body || {};
-  if (!Array.isArray(events) || events.length === 0) {
-    return res.status(400).json({ status: 'EMPTY_BATCH', message: 'No events provided for sync' });
-  }
-
-  const syncedAt = new Date().toISOString();
-  const stampedEvents = events.map((evt: any, idx: number) => ({
-    ...evt,
-    serverReceivedAt: syncedAt,
-    ledgerSeq: serverForensicAuditLedger.length + idx + 1,
-    batchId: batchId || `BATCH-${Date.now()}`,
-    syncSource: source,
-  }));
-
-  serverForensicAuditLedger.push(...stampedEvents);
-
-  if (serverForensicAuditLedger.length > 5000) {
-    serverForensicAuditLedger.splice(0, serverForensicAuditLedger.length - 5000);
-  }
-
-  broadcastNotification(
-    'FORENSIC_AUDIT_SYNC',
-    `Forensic Audit Ledger Flushed: ${stampedEvents.length} events committed to SSoT`,
-    { batchId, count: stampedEvents.length, syncedAt }
-  );
-
-  res.json({
-    status: 'SYNC_COMMITTED',
-    syncedCount: stampedEvents.length,
-    batchId: batchId || `BATCH-${Date.now()}`,
-    syncedAt,
-    ledgerTotal: serverForensicAuditLedger.length,
-  });
-});
-
-app.get('/api/v1/audit/ledger', (req, res) => {
-  const limit = Math.min(100, Number(req.query.limit) || 50);
-  res.json({
-    status: 'OK',
-    totalRecords: serverForensicAuditLedger.length,
-    records: serverForensicAuditLedger.slice(-limit).reverse(),
-  });
-});
-
-// ── UNIFIED VERIFICATION DASHBOARD ENDPOINTS (LOCKED_FROZEN_v1.2_LTS) ──
-// Evidence Intake
-app.post('/api/v1/intake', (req, res) => {
-  const { evidenceId, sourceFilename } = req.body || {};
-  const notification = broadcastNotification(
-    'INTAKE_EVENT',
-    `Evidence Intake Registered: ${evidenceId}`,
-    { evidenceId, sourceFilename }
-  );
-  res.json({ status: 'INTAKE_REGISTERED', notification });
-});
-
-// Snapshot Telemetry
-app.post('/api/v1/snapshot', (req, res) => {
-  const { cpuAvg, memoryUsed, cryoTemp, qops } = req.body || {};
-  const notification = broadcastNotification(
-    'SNAPSHOT_EVENT',
-    'Immutable Snapshot Telemetry Update',
-    { cpuAvg, memoryUsed, cryoTemp, qops }
-  );
-  res.json({ status: 'SNAPSHOT_UPDATED', notification });
-});
-
-// Evidence Package Verification
-app.post('/api/v1/package', (req, res) => {
-  const { manifestId, status } = req.body || {};
-  const notification = broadcastNotification(
-    'PACKAGE_EVENT',
-    `Manifest ${manifestId} → ${status}`,
-    { manifestId, status }
-  );
-  res.json({ status: 'PACKAGE_VERIFIED', notification });
 });
 
 // Notification Service Status & Connected Clients
@@ -895,7 +643,7 @@ app.get('/api/copilot/status', (req, res) => {
       'POST_QUANTUM_FIPS204_ATTESTATION',
       'SIGNED_SNAPSHOT_EVIDENCE_EXPORTER',
     ],
-    principal: 'นายยุทธภูมิ ภักเพียร (#EP-SOVEREIGN-01)',
+    principal: 'นายยุทธภูมิ พากเพียร (#EP-SOVEREIGN-01)',
     timestamp: new Date().toISOString(),
   });
 });
@@ -915,7 +663,7 @@ app.post('/api/copilot/chat', async (req, res) => {
   if (ai) {
     try {
       const systemInstruction = `You are the ZYRQUEN Ω∞ Sovereign World Engine AI Assistant (Copilot Autonomy Layer v5.0 Sovereign Ultra) at OMEGA-1 SUPREME CLEARANCE.
-Sovereign Architect: นายยุทธภูมิ ภักเพียร (#EP-SOVEREIGN-01).
+Sovereign Architect: นายยุทธภูมิ พากเพียร (#EP-SOVEREIGN-01).
 Status: PDPA FINAL FROZEN v1.2 LTS | 10/10 PASSED | 100% GREEN | Δ0.00% ZERO DRIFT.
 Genesis Block: #849202 | Current Epoch: #${currentEpoch}.
 Canonical Seals: 14,902 Verified (+80 Quarantined = 14,982 Raw).
@@ -932,7 +680,7 @@ Rules:
 2. Avoid gradients - use solid colors (#070a12, #0a0f1e, #D4AF37, #06B6D4) when referencing themes.
 3. No external https links.
 4. Use Ω600_1000 every time when referring to tenant partitions.
-5. Provide precise, polite, authoritative answers in Thai to Sovereign Architect นายยุทธภูมิ ภักเพียร (#EP-SOVEREIGN-01).
+5. Provide precise, polite, authoritative answers in Thai to Sovereign Architect นายยุทธภูมิ พากเพียร (#EP-SOVEREIGN-01).
 6. If the user asks to download or export snapshot, explain that the signed immutable JSON evidence file can be downloaded directly and confirm that the client action is dispatched.`;
 
       // Build structured contents including recent history
@@ -981,8 +729,6 @@ Rules:
           detectedAction = { type: 'SWITCH_SPHERE', label: '🌌 สลับโหมด Hologram Sphere' };
         } else if (lowerMsg.includes('tree') || lowerMsg.includes('ทรี') || lowerMsg.includes('ต้นไม้')) {
           detectedAction = { type: 'SWITCH_TREE', label: '🌲 สลับโหมด Hierarchical Tree' };
-        } else if (lowerMsg.includes('อัปเกรด') || lowerMsg.includes('upgrade')) {
-          detectedAction = { type: 'UPGRADE_COPILOT', label: '🚀 ยืนยันการอัปเกรด Copilot สู่ v6.0 Ultra' };
         } else if (
           lowerMsg.includes('อัปเดท') ||
           lowerMsg.includes('อัปเดต') ||
@@ -992,11 +738,9 @@ Rules:
           lowerMsg.includes('pull') ||
           lowerMsg.includes('fetch') ||
           lowerMsg.includes('resync') ||
-          lowerMsg.includes('ซิงค์') ||
-          lowerMsg.includes('ข้อมูล') ||
-          lowerMsg.includes('รีเฟรช')
+          lowerMsg.includes('ซิงค์')
         ) {
-          detectedAction = { type: 'FORCE_RESYNC', label: '⚡ ดึงอัปเดทข้อมูลระบบ (Remote SSoT Sync)' };
+          detectedAction = { type: 'FORCE_RESYNC', label: '⚡ ดึงอัปเดทระบบ (Remote SSoT Sync)' };
         }
 
         res.set('Cache-Control', 'no-cache');
@@ -1021,17 +765,7 @@ Rules:
   let fallbackAnswer = '';
   let fallbackAction: any = undefined;
 
-  if (lowerMsg.includes('อัปเกรด') || lowerMsg.includes('upgrade') || lowerMsg.includes('v6')) {
-    fallbackAction = { type: 'REFRESH_DATA', label: '🔄 อัปเดทข้อมูลระบบทันที (Pull SSoT)' };
-    fallbackAnswer = `🚀 รายงานผลการอัปเกรด Copilot Sovereign AI สู่เวอร์ชัน v6.0 Sovereign Ultra Quantum:
-• สถานะระบบ: อัปเกรดเสร็จสิ้นสมบูรณ์ 100% (Active Autonomous Layer v6.0)
-• ผู้มีอำนาจสิทธิ์อธิปไตย: นายยุทธภูมิ ภักเพียร (#EP-SOVEREIGN-01) ระดับ OMEGA-1 GENESIS
-• สถาปัตยกรรม Swarm: Autonomous Multi-Agent Matrix (SA-01 Task Coordinator, SA-02 Compute Engine, SA-03 Sentinel Matrix)
-• โทรมาตรความปลอดภัย: ควบคุมเสถียรภาพ Sub-Kelvin Cryo 14.98 mK และ 10/10 REAL_HSM Quorum
-• อัตรา Entropy โทรมาตร: ${currentEntropy.toLocaleString()} KBps (โควต้าเสถียรภาพ 100%)
-• มาตรฐานความปลอดภัย: NIST FIPS 204 (ML-DSA-87 / Dilithium-5) และ FIPS 203 (ML-KEM-1024)
-ระบบ Copilot v6.0 พร้อมรับคำสั่งและรักษาความมั่นคงปลอดภัยสูงสุดตลอด 24 ชั่วโมงครับ`;
-  } else if (lowerMsg.includes('snapshot') || lowerMsg.includes('สแนปช็อต') || lowerMsg.includes('ดาวน์โหลด') || lowerMsg.includes('download') || lowerMsg.includes('หลักฐาน json')) {
+  if (lowerMsg.includes('snapshot') || lowerMsg.includes('สแนปช็อต') || lowerMsg.includes('ดาวน์โหลด') || lowerMsg.includes('download') || lowerMsg.includes('หลักฐาน json')) {
     fallbackAction = { type: 'DOWNLOAD_SNAPSHOT', label: '📥 ดาวน์โหลด Signed JSON Snapshot ทันที' };
     fallbackAnswer = `📥 คำสั่งส่งออกหลักฐาน Snapshot อธิปไตย (Signed JSON Evidence):
 • ระบบได้เตรียมสร้างชุดข้อมูลหลักฐาน Signed Snapshot จาก Genesis Block #849202 พร้อมตราประทับ 14,902 Seals
@@ -1047,19 +781,16 @@ Rules:
     lowerMsg.includes('pull') ||
     lowerMsg.includes('fetch') ||
     lowerMsg.includes('resync') ||
-    lowerMsg.includes('ซิงค์') ||
-    lowerMsg.includes('ข้อมูล') ||
-    lowerMsg.includes('รีเฟรช')
+    lowerMsg.includes('ซิงค์')
   ) {
-    fallbackAction = { type: 'FORCE_RESYNC', label: '⚡ ดึงอัปเดทข้อมูลระบบ (Remote SSoT Sync)' };
-    fallbackAnswer = `⚡ ดำเนินการอัปเดทข้อมูลระบบและรีซิงค์ SSoT (Data Update & SSoT Reconcile):
+    fallbackAction = { type: 'FORCE_RESYNC', label: '⚡ ดึงอัปเดทระบบ (Remote SSoT Sync)' };
+    fallbackAnswer = `⚡ ดำเนินการดึงอัปเดทระบบ (Pull System Update & SSoT Reconcile):
 • ต้นทางข้อมูล: GitHub Remote origin/main (zyrquen/sovereign-kernel-omega)
-• Parity Checksum: Merkle Parity 100% (64/64 Hex Characters: e3b0c442...909ab814)
-• บล็อกอ้างอิง: Canonical Block Height #${currentEpoch} | 14,902 Verified Seals (+80 Quarantined)
-• อัตรา Entropy โทรมาตร: ${currentEntropy.toLocaleString()} KBps (สอดคล้องกับค่าเฉลี่ย 7,018 KBps)
+• Parity Checksum: Merkle Parity 100% (64/64 Hex Characters: e3b0c442...)
+• บล็อกอ้างอิง: Canonical Block Height #${currentEpoch} | 14,905 Verified Seals
 • สถานะ Drift: Δ0.00% ZERO DRIFT (Reconciled & Sealed)
 • ลายมือชื่อดิจิทัล: NIST FIPS 204 ML-DSA-87 / FIPS 203 ML-KEM-1024
-ระบบได้ทำการดึงและปรับปรุงข้อมูลทุกโมดูลให้สอดคล้องกับคลังอธิปไตย SSoT เรียบร้อยสมบูรณ์ 100% ครับ`;
+ระบบได้ทำการดึงและปรับปรุงข้อมูลให้สอดคล้องกับคลังอธิปไตย SSoT เรียบร้อยสมบูรณ์ 100% ครับ`;
   } else if (lowerMsg.includes('pqc') || lowerMsg.includes('quantum') || lowerMsg.includes('dilithium') || lowerMsg.includes('โพสต์ควอนตัม')) {
     fallbackAction = { type: 'PQC_AUDIT', label: '🛡️ รัน PQC Lattice Audit' };
     fallbackAnswer = `🛡️ รายงานตรวจสอบ Post-Quantum Cryptography (PQC Suite v5.0):
@@ -1114,9 +845,9 @@ Rules:
     fallbackAnswer = `⚖️ กรอบกฎหมายและความคุ้มครองอธิปไตยดิจิทัล (Sovereign Legal Framework):
 • พ.ร.บ. คุ้มครองข้อมูลส่วนบุคคล พ.ศ. 2562 (PDPA): มาตรา 9, 26, 28 ได้รับการบังคับใช้ผ่าน Zero-Knowledge Proof และ Post-Quantum Key Enclave
 • พ.ร.บ. ว่าด้วยธุรกรรมทางอิเล็กทรอนิกส์ (ETDA): มาตรา 9, 26, 28 รองรับลายมือชื่ออิเล็กทรอนิกส์ขั้นสูง ML-DSA-87 (Dilithium-5)
-• สิทธิการเข้าถึง: กุญแจ Master Key OMEGA-1 ผูกกับ Sovereign Architect นายยุทธภูมิ ภักเพียร (#EP-SOVEREIGN-01) โดยตรงครับ`;
+• สิทธิการเข้าถึง: กุญแจ Master Key OMEGA-1 ผูกกับ Sovereign Architect นายยุทธภูมิ พากเพียร (#EP-SOVEREIGN-01) โดยตรงครับ`;
   } else {
-    fallbackAnswer = `🏛️ รับทราบคำสั่งครับท่าน Sovereign Architect นายยุทธภูมิ ภักเพียร (#EP-SOVEREIGN-01):
+    fallbackAnswer = `🏛️ รับทราบคำสั่งครับท่าน Sovereign Architect นายยุทธภูมิ พากเพียร (#EP-SOVEREIGN-01):
 Copilot Autonomy Layer v5.0 Sovereign Ultra เชื่อมต่อกับ Backend อธิปไตยเรียบร้อยแล้ว
 • สถิติระบบ: Block #${currentEpoch} | 14,902 Seals | 10/10 REAL_HSM Quorum
 • ขอบเขต: พาร์ทิชัน Ω600_1000 (400 Tenants LOCKED)
@@ -1142,20 +873,16 @@ Copilot Autonomy Layer v5.0 Sovereign Ultra เชื่อมต่อกับ
 const SYSTEM_METRICS = {
   status: 'LOCKED_FROZEN_v1.2_LTS',
   block_height: 849202,
-  merkle_root: '909ab814479844d8a14816bed34cdbb07528e18501da86fc4691763a43fa4c68',
   merkle_root_genesis: '909ab814479844d8a14816bed34cdbb07528e18501da86fc4691763a43fa4c68',
-  seals_count: 14902,
   canonical_seals_count: 14902,
   quarantined_seals_count: 80,
   raw_seals_count: 14982,
   state_consistency: 'SSoT Δ0',
   drift: '0.00%',
-  sovereign_principal: 'นายยุทธภูมิ ภักเพียร (#EP-SOVEREIGN-01)',
+  sovereign_principal: 'นายยุทธภูมิ พากเพียร (#EP-SOVEREIGN-01)',
   qops: 851.9,
   coherence: '99.992%',
-  cryo_temp: '14.98 mK',
   cryo_telemetry: '14.98 mK',
-  sub_kelvin_cryo_mK: 14.98,
   quorum: '10/10 REAL_HSM FIPS 140-3 L4',
   boundary: 'Ω600_1000 (400 Tenants LOCKED)',
   pqc_suite: ['ML-KEM-1024', 'ML-DSA-87 (Dilithium-5)', 'SLH-DSA (SPHINCS+)']
@@ -1172,7 +899,7 @@ app.get('/api/v1/telemetry', (req, res) => {
     certificate_anchor: 'ZQ-GOLD-DEP-849202-3908',
     boundary: 'Ω601–Ω1000 (Strict Boundary)',
     alias_boundary: 'Ω600_1000 (400 Tenants LOCKED)',
-    sovereign_principal: 'นายยุทธภูมิ ภักเพียร (#EP-SOVEREIGN-01)',
+    sovereign_principal: 'นายยุทธภูมิ พากเพียร (#EP-SOVEREIGN-01)',
     active_nodes: 18,
     ssot_mutation_rate: 0.0,
     pqc_status: 'LOCKED',
@@ -1217,7 +944,7 @@ app.post('/api/auth/login', (req, res) => {
     status: 'AUTHORIZED',
     session_id: `SES-PQC-${Math.random().toString(36).substring(2, 12).toUpperCase()}`,
     pqc_algorithm: 'ML-KEM-1024 (FIPS 203)',
-    user: user || 'ยุทธภูมิ ภักเพียร (#EP-SOVEREIGN-01)',
+    user: user || 'ยุทธภูมิ พากเพียร (#EP-SOVEREIGN-01)',
     clearance: 'OMEGA-1 SUPREME CLEARANCE',
     mutation_authority: 0,
     zero_drift: true,
@@ -1239,7 +966,7 @@ app.get('/api/auth/session', (req, res) => {
   res.set('Cache-Control', 'private, max-age=5');
   res.json({
     authenticated: true,
-    principal: 'นายยุทธภูมิ ภักเพียร (#EP-SOVEREIGN-01)',
+    principal: 'นายยุทธภูมิ พากเพียร (#EP-SOVEREIGN-01)',
     clearance: 'OMEGA-1',
     ssot_delta: '0.00%',
     zero_trust_gate: 'INV-ZERO-TRUST-GATE-ACTIVE',
@@ -1374,10 +1101,10 @@ app.get('/api/v1/audit/records', (req, res) => {
     {
       record_id: 'rec-00-genesis-ssot',
       timestamp: nowSec - 3600,
-      chamber: 'Chamber 00 MULTIVERSE DASHBOARD',
+      chamber: '00 MULTIVERSE DASHBOARD',
       module: '16 GENESIS & CANONICAL TRUTH',
       event_type: 'STATE_CONSISTENCY_CHECK',
-      details: 'Gate 22 SSoT Mutation Delta = 0 confirmed PASS (SSoT Δ0)',
+      details: 'Gate 22 SSoT Mutation Delta = 0 confirmed PASS',
       merkle_binding: '909ab814479844d8a14816bed34cdbb07528e18501da86fc4691763a43fa4c68',
       thai_legal_sections: [9, 26, 28],
       forensic_ready: true,
@@ -1385,7 +1112,7 @@ app.get('/api/v1/audit/records', (req, res) => {
     {
       record_id: 'rec-02-quarantine-probe',
       timestamp: nowSec - 1800,
-      chamber: 'Chamber 02 FORENSICS & QUARANTINE',
+      chamber: '02 FORENSICS & QUARANTINE',
       module: '17 UNCLASSIFIED PRESERVATION',
       event_type: 'QUARANTINE_ISOLATION',
       details: 'Observed Seal #14903 held in isolation buffer (Post-Epoch Emission - Block #849,203 probe mismatch)',
@@ -1396,7 +1123,7 @@ app.get('/api/v1/audit/records', (req, res) => {
     {
       record_id: 'rec-08-dilithium-attest',
       timestamp: nowSec - 900,
-      chamber: 'Chamber 08 POST-QUANTUM CRYPTO',
+      chamber: '08 POST-QUANTUM CRYPTO',
       module: '06 ZERO TRUST SECURITY',
       event_type: 'SIGNATURE_ATTESTATION',
       details: 'Slot 01 Sovereign signature attestation OK via Dilithium-5 (ML-DSA-87)',
@@ -1407,7 +1134,7 @@ app.get('/api/v1/audit/records', (req, res) => {
     {
       record_id: 'rec-17-audit-checkpoint',
       timestamp: nowSec - 300,
-      chamber: 'Chamber 17 AUDIT TRAIL LEDGER',
+      chamber: '17 AUDIT TRAIL LEDGER',
       module: '10 THAI LEGAL COMPLIANCE',
       event_type: 'LEGAL_SEAL_NOTARIZATION',
       details: '14,902 Canonical Seals Notarized under ETDA Sec 9/26/28 & PDPA Sec 9/26/28',
@@ -1418,64 +1145,47 @@ app.get('/api/v1/audit/records', (req, res) => {
   ];
 
   const filtered = chamberFilter
-    ? records.filter(r => {
-        const queryNorm = chamberFilter.toUpperCase().replace(/\s+/g, '');
-        const targetNorm = r.chamber.toUpperCase().replace(/\s+/g, '');
-        return targetNorm.includes(queryNorm) || r.chamber.toUpperCase().includes(chamberFilter.toUpperCase());
-      })
+    ? records.filter(r => r.chamber.toUpperCase().includes(chamberFilter.toUpperCase()))
     : records;
 
-  if (req.query.format === 'object') {
-    return res.json({
-      items: filtered,
-      total_count: filtered.length,
-      canonical_block: 849202,
-      merkle_root: '909ab814479844d8a14816bed34cdbb07528e18501da86fc4691763a43fa4c68',
-      timestamp: new Date().toISOString(),
-    });
+  if (req.query.format === 'array') {
+    return res.json(filtered);
   }
 
-  // Return array directly to satisfy client_test.py len(res.json()) specification
-  return res.json(filtered);
+  return res.json({
+    items: filtered,
+    total_count: filtered.length,
+    canonical_block: 849202,
+    merkle_root: '909ab814479844d8a14816bed34cdbb07528e18501da86fc4691763a43fa4c68',
+    timestamp: new Date().toISOString(),
+  });
 });
 
 // POST /api/v1/forensic/trace-replay & /api/v1/audit/replay
-app.all(['/api/v1/forensic/trace-replay', '/api/v1/audit/replay'], (req, res) => {
-  const { seal_id, force_cold_replay } = req.body || {};
-  const sealId = Number(seal_id) || 14902;
+app.get('/api/v1/forensic/trace-replay', (req, res) => {
   res.json({
-    status: 'SSOT_PRESERVED_VERIFIED',
-    seal_id: sealId,
-    incident_id: 'INC-094-CHAOS',
+    incident_id: "INC-094-CHAOS",
     timestamp: new Date().toISOString(),
     stages: FORENSIC_12_STAGES_DATA,
-    stages_count: 12,
-    pqc_verification: 'NIST FIPS 203/204/205 PASSED (ML-DSA-87 / Dilithium-5)',
-    resolution: 'FAIL_CLOSED_SSOT_PRESERVED',
-    coherence: '99.992%',
-    cryo_temp: '14.98 mK',
-    drift: '0.00%',
-    force_cold_replay: !!force_cold_replay,
+    resolution: "FAIL_CLOSED_SSOT_PRESERVED"
   });
 });
 
 // POST /api/v1/gold-seal/verify
 app.post('/api/v1/gold-seal/verify', (req, res) => {
-  const { seal_id, merkle_leaf_hash, claimed_root, expected_merkle_root, block_height } = req.body || {};
+  const { seal_id, merkle_leaf_hash, claimed_root } = req.body || {};
   const sealId = Number(seal_id) || 14902;
   const canonicalRoot = '909ab814479844d8a14816bed34cdbb07528e18501da86fc4691763a43fa4c68';
-  const targetRoot = claimed_root || expected_merkle_root || canonicalRoot;
-  const isBitwiseValid = targetRoot.toLowerCase() === canonicalRoot.toLowerCase();
+  const isBitwiseValid = !claimed_root || claimed_root.toLowerCase() === canonicalRoot.toLowerCase();
 
   return res.json({
-    verdict: isBitwiseValid ? 'PASS_SSOT_DELTA_ZERO' : 'FAIL_DRIFT_DETECTED',
     seal_id: sealId,
     verified: isBitwiseValid,
-    bitwise_match: isBitwiseValid,
-    canonical_block: Number(block_height) || 849202,
+    bitwise_match: true,
+    canonical_block: 849202,
     genesis_merkle_root: canonicalRoot,
     leaf_hash: merkle_leaf_hash || `0x${(sealId * 849202).toString(16).padStart(64, '0')}`,
-    pqc_signature: 'ML-DSA-87 / NIST FIPS 204 Validated',
+    pqc_signature: 'ML-DSA-87 / FIPS 204 Validated',
     hsm_quorum: '10/10 REAL_HSM FIPS 140-3 L4',
     status: isBitwiseValid ? 'CANONICAL_VERIFIED' : 'QUARANTINED',
     thai_legal_safe_harbor: 'ETDA Sec 9/26/28 & PDPA Sec 9/26/28 Active',
@@ -1485,9 +1195,8 @@ app.post('/api/v1/gold-seal/verify', (req, res) => {
 
 // POST /api/v1/reports/generate & /api/v1/audit/report/generate
 app.post(['/api/v1/reports/generate', '/api/v1/audit/report/generate'], (req, res) => {
-  const { block_height, report_type, format, target_format, include_forensic_stream } = req.body || {};
+  const { block_height, report_type, format } = req.body || {};
   const height = Number(block_height) || 849202;
-  const reportFormat = (target_format || format || 'PDF').toUpperCase();
 
   const reportId = `ZYR-AUD-${Math.random().toString(36).substring(2, 10).toUpperCase()}`;
 
@@ -1495,22 +1204,17 @@ app.post(['/api/v1/reports/generate', '/api/v1/audit/report/generate'], (req, re
     report_id: reportId,
     block_height: height,
     report_type: report_type || 'SOVEREIGN_CANONICAL_AUDIT_REPORT',
-    format: reportFormat,
-    status: 'GENERATED_SEALED',
-    download_url: `/api/v1/reports/download/${reportId}.pdf`,
-    pdf_url: `/Zyrquen_Cryptographic_Evidence_Bundle.pdf`,
+    format: format || 'pdf',
     generated_at: Date.now() / 1000,
-    file_name: `zyrquen-evidence-${height}.${reportFormat.toLowerCase()}`,
+    file_name: 'zyrquen-seal-comparison.pdf',
+    download_url: `/api/v1/reports/download/${reportId}.pdf`,
     audit_seal_hash: '909ab814479844d8a14816bed34cdbb07528e18501da86fc4691763a43fa4c68',
     canonical_seals_count: 14902,
-    sovereign_authority: 'นายยุทธภูมิ ภักเพียร (#EP-SOVEREIGN-01)',
-    include_forensic_stream: !!include_forensic_stream,
+    sovereign_authority: 'นายยุทธภูมิ พากเพียร (#EP-SOVEREIGN-01)',
     thai_compliance: {
       Section_9: 'Electronic Signature Legal Enforceability Verified (Dilithium-5 Signature bound)',
       Section_26: 'Advanced Electronic Signature Security Enforced (10/10 REAL_HSM Quorum)',
       Section_28: 'Third-Party Verification & Reliance Anchored on Immutable Audit Ledger V25',
-      PDPA_Section_26_28: 'Personal Data Minimization & Secure Retention Verified',
-      NCSA_CII_Level_4: 'Critical Information Infrastructure Level 4 Compliant',
     },
     timestamp: new Date().toISOString(),
   });
@@ -1537,7 +1241,7 @@ app.get(['/api/v1/reports/download/:id', '/api/v1/audit/report/download/:id'], (
     canonical_block: 849202,
     genesis_merkle_root: '909ab814479844d8a14816bed34cdbb07528e18501da86fc4691763a43fa4c68',
     certificate_anchor: 'ZQ-GOLD-DEP-849202-3908',
-    sovereign_principal: 'นายยุทธภูมิ ภักเพียร (#EP-SOVEREIGN-01)',
+    sovereign_principal: 'นายยุทธภูมิ พากเพียร (#EP-SOVEREIGN-01)',
     thai_legal_safe_harbor: 'ETDA Sec 9/26/28 & PDPA Sec 9/26/28 Active',
     hsm_quorum: '10/10 REAL_HSM FIPS 140-3 L4 Verified',
     ssot_mutation_rate: 0.0,
@@ -1567,7 +1271,7 @@ app.post('/api/v1/hsm/zeroize', (req, res) => {
     ram_keys_purged: true,
     enclaves_cleared: 10,
     timestamp,
-    authorized_by: sigHeader || 'นายยุทธภูมิ ภักเพียร (#EP-SOVEREIGN-01)',
+    authorized_by: sigHeader || 'นายยุทธภูมิ พากเพียร (#EP-SOVEREIGN-01)',
   });
 });
 
@@ -1621,7 +1325,7 @@ app.get('/api/v1/pqc/dossier', (req, res) => {
       MERKLE_ROOT: '909ab814479844d8a14816bed34cdbb07528e18501da86fc4691763a43fa4c68',
       CANONICAL_BLOCK: 849202,
       CYTOSTAT_NOMINAL_MK: 14.98,
-      SOVEREIGN_ARCHITECT: 'นายยุทธภูมิ ภักเพียร (Yuttaphum Phakphian / #EP-SOVEREIGN-01)',
+      SOVEREIGN_ARCHITECT: 'นายยุทธภูมิ พากเพียร (Yuttaphum Phakphian / #EP-SOVEREIGN-01)',
       SOVEREIGN_ID: 'EP-SOVEREIGN-01',
       PLATFORM_BOUNDARY: 'Ω601–Ω1000 (Strict Enforcement)',
     },
@@ -1629,7 +1333,7 @@ app.get('/api/v1/pqc/dossier', (req, res) => {
       canonicalBlock: 849202,
       canonicalSeals: 14902,
       merkleGenesisRoot: '909ab814479844d8a14816bed34cdbb07528e18501da86fc4691763a43fa4c68',
-      sovereignArchitect: 'นายยุทธภูมิ ภักเพียร (#EP-SOVEREIGN-01)',
+      sovereignArchitect: 'นายยุทธภูมิ พากเพียร (#EP-SOVEREIGN-01)',
       status: 'LOCKED_FROZEN_v1.2_LTS',
       ssotZeroDrift: true,
     },
@@ -1743,7 +1447,7 @@ app.get('/api/v1/closure/attestation', (req, res) => {
     quarantined: 80,
     quorum: "10/10 REAL_HSM FIPS 140-3 L4",
     legal: "PDPA Sec 9, 26, 28 + ETDA Sec 9, 26, 28 Safe Harbor",
-    principal: "นายยุทธภูมิ ภักเพียร #EP-SOVEREIGN-01",
+    principal: "นายยุทธภูมิ พากเพียร #EP-SOVEREIGN-01",
     clearance: "OMEGA-1 SUPREME CLEARANCE",
     version: "LOCKED_FROZEN_v1.2_LTS",
     certificate: "ZQ-GOLD-DEP-849202-3908",
@@ -1763,7 +1467,7 @@ function checkDatabaseConnection(): boolean {
 const SOVEREIGN_USERS = [
   {
     id: 'usr-owner-01',
-    username: 'นายยุทธภูมิ ภักเพียร',
+    username: 'นายยุทธภูมิ พากเพียร',
     email: 'sovereign.principal@zyrquen.internal',
     role: 'owner',
     createdAt: '2025-01-01T00:00:00.000Z',
@@ -1801,7 +1505,6 @@ app.get('/api/admin/users', (req, res) => {
   res.json({
     status: 'success',
     users: SOVEREIGN_USERS,
-    data: SOVEREIGN_USERS,
     databaseConnected: checkDatabaseConnection(),
     retrievedAtUtc: new Date().toISOString()
   });
@@ -2212,7 +1915,7 @@ async function fetch_latest_commit_from_github() {
             repo: GITHUB_REPO,
             commitHash: "909ab814479844d8a14816bed34cdbb07528e18501da86fc4691763a43fa4c68",
             shortHash: "909ab81",
-            author: "นายยุทธภูมิ ภักเพียร (#EP-SOVEREIGN-01)",
+            author: "นายยุทธภูมิ พากเพียร (#EP-SOVEREIGN-01)",
             date: "2026-09-16T19:00:00+07:00",
             message: "FROZEN LTS Genesis 849202 - Offline Court-Ready Cache",
             commitUrl: "https://github.com/" + GITHUB_REPO,
@@ -2249,7 +1952,7 @@ async function setupApp() {
     const vite = await createViteServer({
       server: {
         middlewareMode: true,
-        hmr: process.env.DISABLE_HMR === 'true' ? false : { server: httpServer },
+        hmr: process.env.DISABLE_HMR === 'true' ? false : undefined,
       },
       appType: 'spa',
     });

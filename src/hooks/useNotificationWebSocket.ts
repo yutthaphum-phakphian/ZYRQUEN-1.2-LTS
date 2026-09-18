@@ -212,17 +212,8 @@ export function useNotificationWebSocket(
               }
               showToastRef.current(`✓ ${data.message}`, 'success');
             }
-            // 5. Evidence Intake & Package Verification Events
-            else if (typeLower.includes('INTAKE_EVENT')) {
-              if (playSound) playTone(520, 0.08, 'sine', 0.05);
-              showToastRef.current(`📂 ${data.message}`, 'info');
-            }
-            else if (typeLower.includes('PACKAGE_EVENT')) {
-              if (playSound) playTone(740, 0.1, 'sine', 0.06);
-              showToastRef.current(`📦 ${data.message}`, 'success');
-            }
-            // 6. Handshake Notification (Log without disruptive popups)
-            else if (typeLower.includes('HANDSHAKE') || typeLower.includes('SYSTEM_CONNECTED') || typeLower.includes('SNAPSHOT_EVENT')) {
+            // 5. Handshake Notification (Log without disruptive popups)
+            else if (typeLower.includes('HANDSHAKE')) {
               // Silently recorded in state & history
             }
             // 6. Trace Stage Event (Only milestone stage-12 closure toasts)

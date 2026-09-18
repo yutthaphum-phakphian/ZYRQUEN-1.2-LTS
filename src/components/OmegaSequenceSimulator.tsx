@@ -107,7 +107,7 @@ export const INITIAL_OMEGA_PHASES: OmegaPhase[] = [
     nameEn: 'Executive Passport #EP-SOVEREIGN-01 Veto Seal',
     descriptionTh: 'ลงนาม Executive Passport #EP-SOVEREIGN-01 พร้อม Omega Clearance',
     descriptionEn: 'Executive physical biometric hardware gate signing by Sovereign Principal.',
-    technicalEnforcement: 'Passport #EP-SOVEREIGN-01 (นายยุทธภูมิ ภักเพียร) non-delegable signature applied.',
+    technicalEnforcement: 'Passport #EP-SOVEREIGN-01 (นายยุทธภูมิ พากเพียร) non-delegable signature applied.',
     statuteRef: 'พ.ร.บ. ธุรกรรมฯ ม. 28 (Signatory Custody & Liability)',
     status: 'FINALIZED',
     accentColor: '#f59e0b', // Amber

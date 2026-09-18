@@ -5,15 +5,6 @@ html, body, #root {
   overflow-x: hidden;
   max-width: 100vw;
   width: 100%;
-  -webkit-tap-highlight-color: transparent;
-  padding-bottom: env(safe-area-inset-bottom, 0px);
-}
-
-:root {
-  --sat: env(safe-area-inset-top, 0px);
-  --sar: env(safe-area-inset-right, 0px);
-  --sab: env(safe-area-inset-bottom, 0px);
-  --sal: env(safe-area-inset-left, 0px);
 }
 
 .no-scrollbar::-webkit-scrollbar {
@@ -408,49 +399,6 @@ html, body, #root {
     transparent 3px
   );
   pointer-events: none;
-}
-
-/* Forensic Mode: Global CRT Scanlines & Grain */
-.forensic-mode {
-  position: relative;
-  filter: contrast(112%) brightness(96%) hue-rotate(-3deg);
-  transition: filter 0.3s ease;
-}
-
-.forensic-mode::before {
-  content: "";
-  position: fixed;
-  inset: 0;
-  width: 100vw;
-  height: 100vh;
-  background: 
-    linear-gradient(rgba(18, 16, 16, 0) 50%, rgba(0, 0, 0, 0.35) 50%),
-    linear-gradient(90deg, rgba(255, 0, 0, 0.03), rgba(0, 255, 0, 0.01), rgba(0, 0, 255, 0.03));
-  background-size: 100% 4px, 6px 100%;
-  z-index: 9999;
-  pointer-events: none;
-  opacity: 0.85;
-}
-
-.forensic-mode::after {
-  content: "";
-  position: fixed;
-  inset: -100%;
-  width: 300%;
-  height: 300%;
-  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.8' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)' opacity='0.08'/%3E%3C/svg%3E");
-  animation: forensicGrain 0.5s steps(6) infinite;
-  z-index: 9998;
-  pointer-events: none;
-  opacity: 0.25;
-}
-
-@keyframes forensicGrain {
-  0%, 100% { transform: translate(0, 0); }
-  20% { transform: translate(-5%, -10%); }
-  40% { transform: translate(-15%, 5%); }
-  60% { transform: translate(7%, -25%); }
-  80% { transform: translate(-5%, 25%); }
 }
 
 

@@ -1,5 +1,6 @@
 import React, { useEffect } from 'react';
-import { AlertOctagon, Gauge } from 'lucide-react';
+import { motion } from 'motion/react';
+import { ShieldCheck, Info, Scale, AlertOctagon, Gauge } from 'lucide-react';
 import { useSystemState } from '../../hooks/useSystemState';
 import { systemStateStore } from '../../store/systemStateStore';
 import { playAuditChime, playTone, updateAtmosphericEntropyPitch } from '../AudioSynthesizer';

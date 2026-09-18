@@ -241,7 +241,7 @@ export const ChambersExplorer: React.FC<ChambersExplorerProps> = ({
               ⚙️ Engine
             </button>
             <span className="text-zinc-400">
-              #EP-SOVEREIGN-01 • Sovereign Principal: <strong className="text-zinc-100">นายยุทธภูมิ ภักเพียร</strong>
+              #EP-SOVEREIGN-01 • Sovereign Principal: <strong className="text-zinc-100">นายยุทธภูมิ พากเพียร</strong>
             </span>
           </div>
 
@@ -1011,7 +1011,7 @@ export const ChambersExplorer: React.FC<ChambersExplorerProps> = ({
                           <span>👑</span> LEAD SOVEREIGN ARCHITECT DIGITAL RATIFICATION
                         </div>
                         <div className="text-xs text-zinc-300 mt-0.5">
-                          Signatory: <strong className="text-zinc-100">นายยุทธภูมิ ภักเพียร (#EP-SOVEREIGN-01)</strong> • OMEGA-1 SUPREME CLEARANCE
+                          Signatory: <strong className="text-zinc-100">นายยุทธภูมิ พากเพียร (#EP-SOVEREIGN-01)</strong> • OMEGA-1 SUPREME CLEARANCE
                         </div>
                       </div>
                       <button
@@ -1273,7 +1273,7 @@ export const ChambersExplorer: React.FC<ChambersExplorerProps> = ({
                     Supreme Sovereign Gold Master Seal
                   </h4>
                   <div className="text-xs text-zinc-400">
-                    สถาปนิกอธิปไตยสูงสุด: <strong className="text-zinc-200">นายยุทธภูมิ ภักเพียร (#EP-SOVEREIGN-01)</strong>
+                    สถาปนิกอธิปไตยสูงสุด: <strong className="text-zinc-200">นายยุทธภูมิ พากเพียร (#EP-SOVEREIGN-01)</strong>
                   </div>
                   <div className="text-[10px] text-zinc-500 pt-0.5">
                     Merkle Root: <span className="text-[#06B6D4]">909ab814...43fa4c68</span> • Block <span className="text-zinc-300">#849202</span> • 14,902 Seals (SSoT Δ0)

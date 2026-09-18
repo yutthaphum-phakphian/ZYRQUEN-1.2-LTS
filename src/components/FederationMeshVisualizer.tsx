@@ -344,7 +344,7 @@ export const FederationMeshVisualizer: React.FC = () => {
           </div>
 
           <div className="pt-2 border-t border-slate-800 text-[10px] text-slate-400">
-            Principal: <strong className="text-slate-200">นายยุทธภูมิ ภักเพียร (#EP-SOVEREIGN-01)</strong>
+            Principal: <strong className="text-slate-200">นายยุทธภูมิ พากเพียร (#EP-SOVEREIGN-01)</strong>
           </div>
         </div>
       </div>

@@ -182,7 +182,7 @@ export const ForensicClosureControlPlane: React.FC = () => {
   const [custodians, setCustodians] = useState<CustodianSigner[]>([
     {
       id: 1,
-      name: 'นายยุทธภูมิ ภักเพียร',
+      name: 'นายยุทธภูมิ พากเพียร',
       role: 'Sovereign Primary Custodian (#EP-SOVEREIGN-01)',
       hsmSlot: 'HSM-SLOT-01-ED25519-PQC',
       signed: true,

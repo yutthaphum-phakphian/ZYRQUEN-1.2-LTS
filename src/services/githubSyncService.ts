@@ -242,7 +242,7 @@ let syncState: GitHubSyncState = {
   localMerkleRoot: CANONICAL_MERKLE_ROOT,
   remoteGitTreeSha: CANONICAL_MERKLE_ROOT,
   remoteBranch: 'origin/main',
-  remoteRepo: 'yutthaphum-phakphian/ZYRQUEN-1.2-LTS',
+  remoteRepo: 'zyrquen/sovereign-kernel-omega',
   lastSyncTimestamp: new Date().toISOString(),
   isSyncing: false,
   driftCount: 0,

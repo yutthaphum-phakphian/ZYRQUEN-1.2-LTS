@@ -1,62 +1,12 @@
-# ==============================================================================
-# ZYRQUEN Ω∞ Sovereign SDK & Kernel - .gitignore
-# Version: LOCKED_FROZEN_v1.2_LTS / APEX ULTIMATE v4.16
-# Sovereign Principal: นายยุทธภูมิ ภักเพียร (#EP-SOVEREIGN-01)
-# ==============================================================================
-
-# ── Dependencies ─────────────────────────────────────────────────────────────
 node_modules/
-.pnpm-store/
-.yarn/
-.nx/
-
-# ── Build & Distribution Outputs ─────────────────────────────────────────────
-dist/
-dist-ssr/
 build/
-out/
+dist/
 dev-dist/
-bun.lock
-*.tsbuildinfo
-
-# ── Local Environment & Secret Keys ──────────────────────────────────────────
-.env
-.env.local
-.env.development.local
-.env.test.local
-.env.production.local
-*.pem
-*.key
-*.crt
-*.pfx
-*.p12
-
-# ── ZYRQUEN Artifacts, Logs & Scratch Workspace ─────────────────────────────
-/workspace/scratch/
-/workspace/out/
-zyrquen_artifacts/
-charts/
-docs/
-*.log
-*.log.txt
-*.sqlite
-*.sqlite3
-
-# ── Test & Coverage Caches ───────────────────────────────────────────────────
 coverage/
-.nyc_output/
-.cache/
-.vite/
-
-# ── Editor & System Files ────────────────────────────────────────────────────
-.vscode/*
-!.vscode/extensions.json
-!.vscode/settings.json
-.idea/
-*.suo
-*.ntvs*
-*.njsproj
-*.sln
-*.sw?
 .DS_Store
-Thumbs.db
+*.log
+artifact.tar
+rendered-manifests.yaml
+*.tsbuildinfo
+.env*
+!.env.example

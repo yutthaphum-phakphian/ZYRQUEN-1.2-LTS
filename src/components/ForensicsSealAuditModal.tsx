@@ -1,5 +1,4 @@
 import React, { useState } from 'react';
-import { motion } from 'motion/react';
 import {
   X,
   ShieldCheck,
@@ -91,21 +90,8 @@ export const ForensicsSealAuditModal: React.FC<ForensicsSealAuditModalProps> = (
   ];
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center p-3 sm:p-5 bg-black/80 backdrop-blur-md">
-      <motion.div
-        initial={{ opacity: 0, scale: 0.95, y: 12 }}
-        animate={{ opacity: 1, scale: 1, y: 0 }}
-        exit={{ opacity: 0, scale: 0.95, y: 12 }}
-        transition={{ duration: 0.32, ease: [0.16, 1, 0.3, 1] }}
-        className="relative w-full max-w-3xl bg-[#0a0f1e] border border-cyan-500/40 rounded-3xl p-5 sm:p-6 shadow-2xl space-y-5 font-mono max-h-[90vh] overflow-y-auto overflow-x-hidden"
-      >
-        {/* Subtle Forensic Shimmer Entrance Sweep */}
-        <motion.div
-          initial={{ x: '-120%', opacity: 0 }}
-          animate={{ x: '180%', opacity: [0, 0.4, 0] }}
-          transition={{ duration: 1.2, ease: 'easeInOut' }}
-          className="pointer-events-none absolute inset-0 z-30 bg-gradient-to-r from-transparent via-cyan-400/20 to-transparent skew-x-12"
-        />
+    <div className="fixed inset-0 z-50 flex items-center justify-center p-3 sm:p-5 bg-black/80 backdrop-blur-md animate-in fade-in duration-200">
+      <div className="relative w-full max-w-3xl bg-[#0a0f1e] border border-cyan-500/40 rounded-3xl p-5 sm:p-6 shadow-2xl space-y-5 font-mono max-h-[90vh] overflow-y-auto">
         {/* Header */}
         <div className="flex items-center justify-between border-b border-cyan-500/20 pb-4">
           <div className="flex items-center gap-3">
@@ -262,7 +248,7 @@ export const ForensicsSealAuditModal: React.FC<ForensicsSealAuditModalProps> = (
             </button>
           </div>
         </div>
-      </motion.div>
+      </div>
     </div>
   );
 };

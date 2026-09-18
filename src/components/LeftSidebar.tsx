@@ -185,7 +185,7 @@ export const LeftSidebar: React.FC<LeftSidebarProps> = ({
               </div>
               <div className="font-semibold text-sm text-slate-100 flex items-center space-x-1.5 truncate">
                 <span className="text-cyan-400 font-mono">#EP-01</span>
-                <span className="truncate">นายยุทธภูมิ ภักเพียร</span>
+                <span className="truncate">นายยุทธภูมิ พากเพียร</span>
               </div>
               <div className="flex items-center justify-between text-[11px] text-slate-400 mt-2 pt-2 border-t border-slate-900 font-mono">
                 <span>Boundary: <strong className="text-cyan-300">{CANONICAL_CONSTANTS.PLATFORM_BOUNDARY}</strong></span>

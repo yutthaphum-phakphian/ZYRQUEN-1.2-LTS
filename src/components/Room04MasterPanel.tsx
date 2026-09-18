@@ -28,7 +28,6 @@ import { SYSTEM_INVARIANTS, SYSTEM_METADATA } from '../data/canonicalData';
 import { HardwareSnapshot, ViewType } from '../types';
 import { playAuditChime, playTone } from './AudioSynthesizer';
 import { copyToClipboard } from '../utils/clipboard';
-import { HsmQuorumHeartbeatGauge } from './HsmQuorumHeartbeatGauge';
 
 export const CANONICAL_FROZEN_SEALS = 14902;
 export const CANONICAL_BLOCK = 849202;
@@ -49,7 +48,7 @@ export const Room04MasterPanel: React.FC<Room04MasterPanelProps> = ({
 }) => {
   const [selectedInvId, setSelectedInvId] = useState<string>('inv-01');
   const [copiedId, setCopiedId] = useState<string | null>(null);
-  const [activeTab, setActiveTab] = useState<'invariants' | 'hsm-heartbeat' | 'drift' | 'quarantine-guard'>('hsm-heartbeat');
+  const [activeTab, setActiveTab] = useState<'invariants' | 'drift' | 'quarantine-guard'>('invariants');
   const [isScanning, setIsScanning] = useState<boolean>(false);
   const [searchTerm, setSearchTerm] = useState<string>('');
 
@@ -190,24 +189,9 @@ export const Room04MasterPanel: React.FC<Room04MasterPanelProps> = ({
         <button
           onClick={() => {
             playTone(600, 0.03);
-            setActiveTab('hsm-heartbeat');
-          }}
-          className={`px-4 py-2.5 rounded-xl transition-all flex items-center gap-2 cursor-pointer ${
-            activeTab === 'hsm-heartbeat'
-              ? 'bg-cyan-500/25 text-cyan-200 border border-cyan-400/50 shadow-[0_0_15px_rgba(6,182,212,0.3)]'
-              : 'text-zinc-400 hover:text-zinc-200 bg-white/5 border border-transparent'
-          }`}
-        >
-          <Radio className="w-4 h-4 text-cyan-400 animate-pulse" />
-          <span>HSM Quorum Heartbeat (10 Enclaves)</span>
-        </button>
-
-        <button
-          onClick={() => {
-            playTone(600, 0.03);
             setActiveTab('invariants');
           }}
-          className={`px-4 py-2.5 rounded-xl transition-all flex items-center gap-2 cursor-pointer ${
+          className={`px-4 py-2 rounded-xl transition-all flex items-center gap-2 ${
             activeTab === 'invariants'
               ? 'bg-emerald-500/20 text-emerald-200 border border-emerald-500/40 shadow-[0_0_12px_rgba(16,185,129,0.2)]'
               : 'text-zinc-400 hover:text-zinc-200 bg-white/5 border border-transparent'
@@ -222,7 +206,7 @@ export const Room04MasterPanel: React.FC<Room04MasterPanelProps> = ({
             playTone(630, 0.03);
             setActiveTab('drift');
           }}
-          className={`px-4 py-2.5 rounded-xl transition-all flex items-center gap-2 cursor-pointer ${
+          className={`px-4 py-2 rounded-xl transition-all flex items-center gap-2 ${
             activeTab === 'drift'
               ? 'bg-emerald-500/20 text-emerald-200 border border-emerald-500/40 shadow-[0_0_12px_rgba(16,185,129,0.2)]'
               : 'text-zinc-400 hover:text-zinc-200 bg-white/5 border border-transparent'
@@ -237,7 +221,7 @@ export const Room04MasterPanel: React.FC<Room04MasterPanelProps> = ({
             playTone(660, 0.03);
             setActiveTab('quarantine-guard');
           }}
-          className={`px-4 py-2.5 rounded-xl transition-all flex items-center gap-2 cursor-pointer ${
+          className={`px-4 py-2 rounded-xl transition-all flex items-center gap-2 ${
             activeTab === 'quarantine-guard'
               ? 'bg-emerald-500/20 text-emerald-200 border border-emerald-500/40 shadow-[0_0_12px_rgba(16,185,129,0.2)]'
               : 'text-zinc-400 hover:text-zinc-200 bg-white/5 border border-transparent'
@@ -247,13 +231,6 @@ export const Room04MasterPanel: React.FC<Room04MasterPanelProps> = ({
           <span>ZYR-03 Cardinality Guard</span>
         </button>
       </div>
-
-      {/* TAB 0: HSM Quorum Heartbeat Real-Time Gauge */}
-      {activeTab === 'hsm-heartbeat' && (
-        <div className="space-y-6 animate-in fade-in duration-200">
-          <HsmQuorumHeartbeatGauge />
-        </div>
-      )}
 
       {/* TAB 1: 10 Invariants Grid */}
       {activeTab === 'invariants' && (

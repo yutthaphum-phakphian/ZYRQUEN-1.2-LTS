@@ -1,5 +1,4 @@
 import React, { useState } from 'react';
-import { motion } from 'motion/react';
 import {
   FileCheck,
   Scale,
@@ -229,21 +228,8 @@ export const DigitalEvidenceChecklistModal: React.FC<DigitalEvidenceChecklistMod
   const passPercent = Math.round((passedCount / totalCount) * 100);
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/80 backdrop-blur-md">
-      <motion.div
-        initial={{ opacity: 0, scale: 0.95, y: 12 }}
-        animate={{ opacity: 1, scale: 1, y: 0 }}
-        exit={{ opacity: 0, scale: 0.95, y: 12 }}
-        transition={{ duration: 0.32, ease: [0.16, 1, 0.3, 1] }}
-        className="relative w-full max-w-5xl max-h-[92vh] bg-[#070a12] border-2 border-emerald-500/40 rounded-[28px] shadow-2xl flex flex-col overflow-hidden text-zinc-200 font-mono"
-      >
-        {/* Subtle Forensic Shimmer Entrance Sweep */}
-        <motion.div
-          initial={{ x: '-120%', opacity: 0 }}
-          animate={{ x: '180%', opacity: [0, 0.45, 0] }}
-          transition={{ duration: 1.3, ease: 'easeInOut' }}
-          className="pointer-events-none absolute inset-0 z-30 bg-gradient-to-r from-transparent via-emerald-400/20 to-transparent skew-x-12"
-        />
+    <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/80 backdrop-blur-md animate-in fade-in">
+      <div className="relative w-full max-w-5xl max-h-[92vh] bg-[#070a12] border-2 border-emerald-500/40 rounded-[28px] shadow-2xl flex flex-col overflow-hidden text-zinc-200 font-mono">
         {/* Header */}
         <div className="p-5 sm:p-6 border-b border-emerald-500/20 bg-gradient-to-r from-emerald-950/40 via-black to-slate-950 flex flex-col sm:flex-row sm:items-center justify-between gap-4">
           <div className="flex items-center gap-3.5">
@@ -432,7 +418,7 @@ export const DigitalEvidenceChecklistModal: React.FC<DigitalEvidenceChecklistMod
             </button>
           </div>
         </div>
-      </motion.div>
+      </div>
     </div>
   );
 };

@@ -22,10 +22,8 @@ export type ViewType =
   | 'legal'
   | 'canonical'
   | 'admin'
-  | 'health'
   | 'analytics'
-  | 'chambers'
-  | 'zyrquen_gg';
+  | 'chambers';
 
 export interface AuditStage {
   id: string;

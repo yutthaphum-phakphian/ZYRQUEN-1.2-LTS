@@ -34,7 +34,7 @@ export const CryptographicBindingPanel: React.FC = () => {
       blockHeight: 849202,
       pqcSignature: 'DILITHIUM5:SIG_e8f39a044b76a91c8903c7340026e6ef...9b21ae7c',
       signerPassport: '#EP-SOVEREIGN-01',
-      signerName: 'สมชาย ภักเพียร (Level 25 Sovereign Director)',
+      signerName: 'สมชาย พากเพียร (Level 25 Sovereign Director)',
       status: 'BOUND_VERIFIED',
       verifiedAt: '2026-08-22 01:46:12 ICT',
     },

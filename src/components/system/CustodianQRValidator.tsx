@@ -22,6 +22,7 @@ import {
   Trash2,
   Download,
 } from 'lucide-react';
+import { QrReader } from 'react-qr-reader';
 import jsQR from 'jsqr';
 import { systemStateStore, CustodianRegistrySnapshot } from '../../store/systemStateStore';
 import { COUNCIL_MEMBERS } from '../../data/councilData';
@@ -58,88 +59,6 @@ export interface CustodianQRValidatorProps {
   }) => void;
   onAuditLog?: (title: string, description: string, severity?: 'info' | 'success' | 'warning' | 'error') => void;
 }
-
-interface LiveCameraScannerProps {
-  onScan: (result: string) => void;
-  onError: (error: any) => void;
-}
-
-const LiveCameraScanner: React.FC<LiveCameraScannerProps> = ({ onScan, onError }) => {
-  const videoRef = React.useRef<HTMLVideoElement | null>(null);
-
-  useEffect(() => {
-    let isActive = true;
-    let stream: MediaStream | null = null;
-    let animationFrameId: number;
-
-    const canvas = document.createElement('canvas');
-    const ctx = canvas.getContext('2d', { willReadFrequently: true });
-
-    if (!navigator.mediaDevices || !navigator.mediaDevices.getUserMedia) {
-      onError({ name: 'NotSupportedError', message: 'Camera API not supported in this environment' });
-      return;
-    }
-
-    navigator.mediaDevices
-      .getUserMedia({ video: { facingMode: 'environment' } })
-      .then((s) => {
-        if (!isActive) {
-          s.getTracks().forEach((track) => track.stop());
-          return;
-        }
-        stream = s;
-        if (videoRef.current) {
-          videoRef.current.srcObject = s;
-          videoRef.current.play().catch(() => {});
-        }
-
-        const scanLoop = () => {
-          if (!isActive) return;
-          const video = videoRef.current;
-          if (video && video.readyState >= 2 && ctx) {
-            canvas.width = video.videoWidth || 640;
-            canvas.height = video.videoHeight || 480;
-            ctx.drawImage(video, 0, 0, canvas.width, canvas.height);
-            const imgData = ctx.getImageData(0, 0, canvas.width, canvas.height);
-            const code = jsQR(imgData.data, imgData.width, imgData.height, {
-              inversionAttempts: 'attemptBoth',
-            });
-            if (code && code.data) {
-              onScan(code.data);
-              return;
-            }
-          }
-          animationFrameId = requestAnimationFrame(scanLoop);
-        };
-        animationFrameId = requestAnimationFrame(scanLoop);
-      })
-      .catch((err) => {
-        if (isActive) {
-          onError(err);
-        }
-      });
-
-    return () => {
-      isActive = false;
-      if (animationFrameId) {
-        cancelAnimationFrame(animationFrameId);
-      }
-      if (stream) {
-        stream.getTracks().forEach((track) => track.stop());
-      }
-    };
-  }, [onScan, onError]);
-
-  return (
-    <video
-      ref={videoRef}
-      playsInline
-      muted
-      autoPlay
-      className="w-full h-full object-cover"
-    />
-  );
-};
 
 export const CustodianQRValidator: React.FC<CustodianQRValidatorProps> = ({
   isOpen = true,
@@ -915,9 +834,12 @@ export const CustodianQRValidator: React.FC<CustodianQRValidatorProps> = ({
                   <div className="relative aspect-video w-full rounded-xl overflow-hidden bg-[#030408] border border-cyan-500/20 flex items-center justify-center">
                     {cameraScannerActive ? (
                       <div className="w-full h-full relative">
-                        <LiveCameraScanner
-                          onScan={(text) => handleQrReaderResult(text, null)}
-                          onError={(err) => handleQrReaderResult(null, err)}
+                        <QrReader
+                          onResult={handleQrReaderResult}
+                          constraints={{ facingMode: 'environment' }}
+                          className="w-full h-full object-cover"
+                          containerStyle={{ width: '100%', height: '100%' }}
+                          videoContainerStyle={{ width: '100%', height: '100%' }}
                         />
                         {/* Target Reticle */}
                         <div className="absolute inset-0 pointer-events-none flex items-center justify-center">

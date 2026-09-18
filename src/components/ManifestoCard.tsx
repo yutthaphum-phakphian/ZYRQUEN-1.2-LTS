@@ -47,7 +47,7 @@ export const ManifestoCard: React.FC<ManifestoCardProps> = ({ onOpenCertificate 
     name: systemMetadata.name || 'ZYRQUEN Ω∞ Sovereign Kernel & Truth Matrix',
     description: systemMetadata.description || 'Sovereign Operating System with 6-Stage DAG Automation Plane',
     edition: SYSTEM_METADATA?.version || SSOT.productVersion || 'APEX ULTIMATE FULL EDITION — LOCKED_FROZEN_v1.2_LTS',
-    principal: SSOT.sovereignPrincipal || SYSTEM_METADATA.sovereignPrincipal || 'นายยุทธภูมิ ภักเพียร (ID: #EP-SOVEREIGN-01)',
+    principal: SSOT.sovereignPrincipal || SYSTEM_METADATA.sovereignPrincipal || 'นายยุทธภูมิ พากเพียร (ID: #EP-SOVEREIGN-01)',
     platformBoundary: SYSTEM_METADATA.platformBoundary || 'Ω601–Ω1000 | Strict Enforcement',
     classification: 'Sovereign Immutable Kernel — Single Source of Truth (SSoT)',
     blocks: `#${SSOT.canonicalBlockHeight} / #849203 / #40202`,

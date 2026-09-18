@@ -526,14 +526,6 @@ class AutomatedBackupEngine {
     this.timeRemainingSeconds = this.cycleDurationSeconds;
     this.notify();
   }
-
-  public restart() {
-    this.stop();
-    this.resetCycle();
-    this.isRunning = true;
-    this.start();
-    return this.getState();
-  }
 }
 
 export const automatedBackupService = new AutomatedBackupEngine();

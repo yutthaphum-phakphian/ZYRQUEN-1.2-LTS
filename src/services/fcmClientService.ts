@@ -52,14 +52,9 @@ export class FcmClientService {
   }
 
   private generateMockFcmToken(): string {
-    let rand = '';
-    if (typeof crypto !== 'undefined' && crypto.getRandomValues) {
-      rand = Array.from(crypto.getRandomValues(new Uint8Array(24)))
-        .map((b) => b.toString(16).padStart(2, '0'))
-        .join('');
-    } else {
-      rand = Math.random().toString(36).substring(2) + Math.random().toString(36).substring(2) + Date.now().toString(16);
-    }
+    const rand = Array.from(crypto.getRandomValues(new Uint8Array(32)))
+      .map((b) => b.toString(16).padStart(2, '0'))
+      .join('');
     return `fcm_bk36_${rand.substring(0, 48)}`;
   }
 

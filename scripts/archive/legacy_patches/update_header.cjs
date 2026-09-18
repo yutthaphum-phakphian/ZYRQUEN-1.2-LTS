@@ -51,7 +51,7 @@ const replacement = `      {/* Unified Executive Header & Single Status Bar (Den
               <span className="flex items-center gap-1.5 bg-black/40 px-2 py-0.5 rounded-md border border-white/5">Block: <strong className="text-zinc-200">#849202</strong></span>
               <span className="flex items-center gap-1.5 bg-emerald-950/30 px-2 py-0.5 rounded-md border border-emerald-500/20 text-emerald-400/80">Seals: <strong className="text-emerald-400">14,902 Verified</strong></span>
               <span className="flex items-center gap-1.5 bg-cyan-950/30 px-2 py-0.5 rounded-md border border-cyan-500/20 text-cyan-400/80">SSoT Drift: <strong className="text-cyan-400">Δ0.00%</strong></span>
-              <span className="text-zinc-300 font-medium ml-1">👤 นายยุทธภูมิ ภักเพียร (#EP-SOVEREIGN-01)</span>
+              <span className="text-zinc-300 font-medium ml-1">👤 นายยุทธภูมิ พากเพียร (#EP-SOVEREIGN-01)</span>
             </div>
           </div>
 

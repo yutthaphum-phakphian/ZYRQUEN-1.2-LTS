@@ -24,7 +24,6 @@ import {
 } from 'lucide-react';
 import { playAuditChime, playTone } from '../AudioSynthesizer';
 import { systemStateStore } from '../../store/systemStateStore';
-import { FcmPushNotificationManager } from '../notifications/FcmPushNotificationManager';
 
 export interface TraceStageDefinition {
   id: number;
@@ -54,7 +53,6 @@ export const UnifiedAuditPlaybackConsole: React.FC = () => {
   const [activeStage, setActiveStage] = useState(0);
   const [completedStages, setCompletedStages] = useState<number[]>([]);
   const [targetSealId, setTargetSealId] = useState<number>(14903);
-  const [showFcmPanel, setShowFcmPanel] = useState<boolean>(false);
   const [wsStatus, setWsStatus] = useState<'CONNECTING' | 'CONNECTED' | 'DISCONNECTED'>('CONNECTING');
   const [wsLatencyMs, setWsLatencyMs] = useState<number>(14);
   const [lastNotification, setLastNotification] = useState<any>(null);
@@ -479,37 +477,8 @@ export const UnifiedAuditPlaybackConsole: React.FC = () => {
           >
             ⚖️ Compliance Alert
           </button>
-          <button
-            onClick={() => {
-              setShowFcmPanel((prev) => !prev);
-              playTone(600, 0.04);
-            }}
-            className={`px-2.5 py-1 rounded-lg border text-[11px] font-bold transition-all cursor-pointer flex items-center gap-1.5 ${
-              showFcmPanel
-                ? 'bg-cyan-950/80 border-cyan-400 text-cyan-200 shadow-[0_0_10px_rgba(6,182,212,0.3)]'
-                : 'bg-white/5 hover:bg-white/10 border-white/15 text-zinc-300'
-            }`}
-          >
-            <span>📱 FCM Android 16+</span>
-            <span className="text-[10px] opacity-75">{showFcmPanel ? '▲ Hide' : '▼ Manage'}</span>
-          </button>
         </div>
       </div>
-
-      {/* Expandable Android 16.0+ FCM Push Manager */}
-      <AnimatePresence>
-        {showFcmPanel && (
-          <motion.div
-            initial={{ opacity: 0, height: 0 }}
-            animate={{ opacity: 1, height: 'auto' }}
-            exit={{ opacity: 0, height: 0 }}
-            transition={{ duration: 0.2 }}
-            className="overflow-hidden"
-          >
-            <FcmPushNotificationManager />
-          </motion.div>
-        )}
-      </AnimatePresence>
 
       {/* Main Grid: 12 Stages Visual Grid + Live WS Output Terminal */}
       <div className="grid grid-cols-1 lg:grid-cols-12 gap-5 items-start">

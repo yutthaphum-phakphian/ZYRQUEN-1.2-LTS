@@ -38,24 +38,11 @@ import {
   FileSpreadsheet,
   Send,
   RadioTower,
-  Search,
-  Database,
-  RotateCcw,
-  History,
-  AlertCircle,
-  FileCode2,
 } from 'lucide-react';
 import { playTone, playAuditChime } from './AudioSynthesizer';
 import { SecuritySubTab } from './views/SecurityView';
 import { copyToClipboard } from '../utils/clipboard';
 import { ViewType } from '../types';
-import {
-  ForensicScanRecord,
-  getForensicScanHistory,
-  recordForensicScan,
-  clearForensicScanHistory,
-  exportForensicScanHistoryJson,
-} from '../utils/forensicRegistry';
 import { automatedBackupService, AutomatedBackupState } from '../services/automatedBackupService';
 import {
   exportSystemLogsAsCsv,
@@ -64,7 +51,6 @@ import {
   CryptographicLogBatch,
 } from '../utils/systemLogsBatchExport';
 import { FcmPushNotificationManager } from './notifications/FcmPushNotificationManager';
-import { ForensicHistorySidebarTab } from './ForensicHistorySidebarTab';
 
 interface ActionTooltipDetails {
   title: string;
@@ -146,7 +132,7 @@ const BULK_ACTION_TOOLTIPS: Record<string, ActionTooltipDetails> = {
     statute: 'ETDA มาตรา 26, 28 & PDPA มาตรา 26',
     pdpaSection: 'PDPA B.E. 2562 มาตรา 26 & 37 (Comprehensive Buffer Attestation)',
     etdaSection: 'ETDA B.E. 2544 มาตรา 26(1)-(4) & มาตรา 28 (Statutory Safe Harbor)',
-    legislative: 'Executes statutory affirmative declaration by Sovereign Principal นายยุทธภูมิ ภักเพียร (#EP-SOVEREIGN-01) validating that all buffered telemetry satisfies legal duty of care and safe harbor.',
+    legislative: 'Executes statutory affirmative declaration by Sovereign Principal นายยุทธภูมิ พากเพียร (#EP-SOVEREIGN-01) validating that all buffered telemetry satisfies legal duty of care and safe harbor.',
     protocol: 'Attaches cryptographic timestamp to all active events and anchors them to the canonical Merkle ledger across boundary Ω600_1000.',
   },
   bulkAffirmSelected: {
@@ -217,45 +203,6 @@ export interface SystemEvent {
   severity: 'info' | 'success' | 'warning' | 'critical';
 }
 
-export interface EvidenceManifest {
-  manifestId: string; // e.g. TNT-TH-001
-  originNode: string;
-  timestamp: string;
-  cryptoStatus: 'VERIFIED' | 'FAILED' | 'PENDING';
-  hash: string;
-}
-
-export const DEFAULT_EVIDENCE_MANIFESTS: EvidenceManifest[] = [
-  {
-    manifestId: 'TNT-TH-001',
-    originNode: 'NODE-01 (Bangkok Quorum Gate)',
-    timestamp: '2026-03-31 09:42:18 UTC',
-    cryptoStatus: 'VERIFIED',
-    hash: '0x909ab814479844d8a14816bed34cdbb07528e18501da86fc4691763a43fa4c68',
-  },
-  {
-    manifestId: 'ETDA-SEC26-TH-002',
-    originNode: 'NODE-04 (Chulalongkorn Cyber Enclave)',
-    timestamp: '2026-03-31 09:30:05 UTC',
-    cryptoStatus: 'VERIFIED',
-    hash: '0x7f92a1c849b29e018d4512998a123f49182390ab909c814479844d8a14816bed',
-  },
-  {
-    manifestId: 'PDPA-ENC-003',
-    originNode: 'NODE-13 (Quarantine Ingress Watcher)',
-    timestamp: '2026-03-31 09:15:42 UTC',
-    cryptoStatus: 'VERIFIED',
-    hash: '0x3c99a82b3d810f27c3d4a0815469b82143710ab9812903fe572b9a71092a83bd',
-  },
-  {
-    manifestId: 'NCSA-CII-004',
-    originNode: 'NODE-09 (Sub-Kelvin Cryo Vault)',
-    timestamp: '2026-03-31 08:55:10 UTC',
-    cryptoStatus: 'PENDING',
-    hash: '0x5a1839db08234857c093a8291f0384758b9213840291d9238472910398472819',
-  },
-];
-
 interface SystemEventsSidebarProps {
   isOpen: boolean;
   onClose: () => void;
@@ -266,8 +213,6 @@ interface SystemEventsSidebarProps {
   latestSealCount?: number;
   isForensicAuditMode?: boolean;
   onToggleForensicAuditMode?: () => void;
-  initialTab?: 'events' | 'forensic_history' | 'manifests';
-  manifests?: EvidenceManifest[];
 }
 
 export type SystemEventFilterType =
@@ -291,31 +236,7 @@ export const SystemEventsSidebar: React.FC<SystemEventsSidebarProps> = ({
   latestSealCount = 14902,
   isForensicAuditMode = false,
   onToggleForensicAuditMode,
-  initialTab = 'events',
-  manifests = DEFAULT_EVIDENCE_MANIFESTS,
 }) => {
-  const [activeSidebarTab, setActiveSidebarTab] = useState<'events' | 'forensic_history' | 'manifests'>(initialTab);
-
-  const [forensicScans, setForensicScans] = useState<ForensicScanRecord[]>(() => getForensicScanHistory());
-  const [forensicFilter, setForensicFilter] = useState<string>('ALL');
-  const [forensicSearch, setForensicSearch] = useState<string>('');
-  const [copiedDigest, setCopiedDigest] = useState<string | null>(null);
-  const [isScanningActive, setIsScanningActive] = useState<boolean>(false);
-
-  useEffect(() => {
-    if (initialTab) {
-      setActiveSidebarTab(initialTab);
-    }
-  }, [initialTab]);
-
-  useEffect(() => {
-    const handleUpdate = () => {
-      setForensicScans(getForensicScanHistory());
-    };
-    window.addEventListener('zyrquen:forensic-scan-updated', handleUpdate);
-    return () => window.removeEventListener('zyrquen:forensic-scan-updated', handleUpdate);
-  }, []);
-
   const [filter, setFilter] = useState<SystemEventFilterType>('ALL');
   const [copiedId, setCopiedId] = useState<string | null>(null);
   const [backupState, setBackupState] = useState<AutomatedBackupState>(() => automatedBackupService.getState());
@@ -427,7 +348,7 @@ export const SystemEventsSidebar: React.FC<SystemEventsSidebarProps> = ({
       exportType: 'ZYRQUEN_SYSTEM_EVENTS_LOG_FORENSIC_AUDIT_EXPORT',
       courtAdmissibility: 'ISO/IEC 27037 Safe Harbor Forensic Evidence Standard',
       statutoryMandate: 'ETDA B.E. 2544 Sections 9, 11, 26, 28 & PDPA B.E. 2562 Sections 9, 26, 37, 39',
-      sovereignPrincipal: 'นายยุทธภูมิ ภักเพียร (#EP-SOVEREIGN-01)',
+      sovereignPrincipal: 'นายยุทธภูมิ พากเพียร (#EP-SOVEREIGN-01)',
       canonicalLedgerBlock: 849202,
       genesisMerkleRoot: '909ab814479844d8a14816bed34cdbb07528e18501da86fc4691763a43fa4c68',
       pqcSignature: 'NIST_FIPS_204_ML-DSA-87:7f92a1c849b29e018d4512998a123f49182390ab909c814479844d8a14816bed',
@@ -464,14 +385,6 @@ export const SystemEventsSidebar: React.FC<SystemEventsSidebarProps> = ({
     a.download = `zyrquen-events-log-${filter.toLowerCase()}-${Date.now()}.json`;
     a.click();
     URL.revokeObjectURL(url);
-
-    setBatchVerificationResult({
-      show: true,
-      valid: true,
-      message: `Downloaded ${filteredEvents.length} system events as formatted JSON (${filter} filter)`,
-      total: filteredEvents.length,
-      format: 'JSON',
-    });
   };
 
   const toggleSelectAll = () => {
@@ -512,7 +425,7 @@ export const SystemEventsSidebar: React.FC<SystemEventsSidebarProps> = ({
         ? 'ZYRQUEN_SELECTED_EVENTS_AUDIT_DOSSIER'
         : 'ZYRQUEN_SYSTEM_EVENTS_AUDIT_DOSSIER',
       statutoryBasis: 'ETDA B.E. 2544 มาตรา 9, 11, 26, 28 & PDPA B.E. 2562 มาตรา 9, 26, 37, 39',
-      principal: 'นายยุทธภูมิ ภักเพียร (#EP-SOVEREIGN-01)',
+      principal: 'นายยุทธภูมิ พากเพียร (#EP-SOVEREIGN-01)',
       canonicalBlock: 849202,
       boundary: 'Ω600_1000',
       merkleRoot: '909ab814479844d8a14816bed34cdbb07528e18501da86fc4691763a43fa4c68',
@@ -776,17 +689,6 @@ export const SystemEventsSidebar: React.FC<SystemEventsSidebarProps> = ({
         </div>
 
         <div className="flex items-center gap-1.5 flex-wrap justify-end">
-          {/* Download Current System Event Logs as Formatted JSON */}
-          <button
-            id="btn-download-events-json"
-            onClick={handleExportCurrentEventLogJson}
-            className="px-2.5 py-1.5 rounded-xl bg-blue-950/70 hover:bg-blue-600/30 border border-blue-500/50 text-blue-300 hover:text-white transition-all flex items-center gap-1.5 shadow-[0_0_12px_rgba(59,130,246,0.2)] active:scale-95 cursor-pointer"
-            title="Download current system event logs as a formatted JSON file with audit metadata and hashes"
-          >
-            <Download className="w-3.5 h-3.5 text-blue-400" />
-            <span className="text-[10px] font-bold">Download JSON</span>
-          </button>
-
           {/* Batch CSV Export (Cryptographic Signatures) */}
           <button
             id="btn-export-batch-csv"
@@ -853,149 +755,6 @@ export const SystemEventsSidebar: React.FC<SystemEventsSidebarProps> = ({
         </div>
       </div>
 
-      {/* Primary Mode Tabs: System Events Feed vs Forensic History Registry */}
-      <div className="px-4 py-2 border-b border-white/8 bg-[#080b18] flex items-center gap-2 shrink-0">
-        <button
-          onClick={() => {
-            playTone(550, 0.03);
-            setActiveSidebarTab('events');
-          }}
-          className={`flex-1 py-1.5 px-3 rounded-xl font-mono text-xs font-bold flex items-center justify-center gap-2 transition-all cursor-pointer ${
-            activeSidebarTab === 'events'
-              ? 'bg-cyan-500/20 text-cyan-300 border border-cyan-500/40 shadow-[0_0_12px_rgba(6,182,212,0.2)]'
-              : 'text-zinc-400 hover:text-zinc-200 hover:bg-white/5 border border-transparent'
-          }`}
-        >
-          <Bell className="w-3.5 h-3.5" />
-          <span>Events Feed</span>
-          <span
-            className={`px-1.5 py-0.5 text-[10px] rounded-full font-bold ${
-              activeSidebarTab === 'events' ? 'bg-cyan-400 text-black' : 'bg-white/10 text-zinc-300'
-            }`}
-          >
-            {events.length}
-          </span>
-        </button>
-
-        <button
-          onClick={() => {
-            playTone(750, 0.03);
-            setActiveSidebarTab('forensic_history');
-          }}
-          className={`flex-1 py-1.5 px-3 rounded-xl font-mono text-xs font-bold flex items-center justify-center gap-2 transition-all cursor-pointer ${
-            activeSidebarTab === 'forensic_history'
-              ? 'bg-purple-500/20 text-purple-300 border border-purple-500/40 shadow-[0_0_12px_rgba(168,85,247,0.2)]'
-              : 'text-zinc-400 hover:text-zinc-200 hover:bg-white/5 border border-transparent'
-          }`}
-        >
-          <Fingerprint className="w-3.5 h-3.5 text-purple-400" />
-          <span>Forensic History</span>
-          <span
-            className={`px-1.5 py-0.5 text-[10px] rounded-full font-bold ${
-              activeSidebarTab === 'forensic_history' ? 'bg-purple-400 text-black' : 'bg-white/10 text-zinc-300'
-            }`}
-          >
-            {forensicScans.length}
-          </span>
-        </button>
-
-        <button
-          onClick={() => {
-            playTone(850, 0.03);
-            setActiveSidebarTab('manifests');
-          }}
-          className={`flex-1 py-1.5 px-3 rounded-xl font-mono text-xs font-bold flex items-center justify-center gap-2 transition-all cursor-pointer ${
-            activeSidebarTab === 'manifests'
-              ? 'bg-emerald-500/20 text-emerald-300 border border-emerald-500/40 shadow-[0_0_12px_rgba(16,185,129,0.2)]'
-              : 'text-zinc-400 hover:text-zinc-200 hover:bg-white/5 border border-transparent'
-          }`}
-        >
-          <History className="w-3.5 h-3.5 text-emerald-400" />
-          <span>Ingestion Registry</span>
-          <span
-            className={`px-1.5 py-0.5 text-[10px] rounded-full font-bold ${
-              activeSidebarTab === 'manifests' ? 'bg-emerald-400 text-black' : 'bg-white/10 text-zinc-300'
-            }`}
-          >
-            {manifests.length}
-          </span>
-        </button>
-      </div>
-
-      {activeSidebarTab === 'forensic_history' ? (
-        <ForensicHistorySidebarTab
-          onClose={onClose}
-          onNavigateToView={onNavigateToView}
-        />
-      ) : activeSidebarTab === 'manifests' ? (
-        <div className="flex-1 flex flex-col overflow-hidden">
-          <div className="p-4 border-b border-white/8 bg-slate-900/50 flex items-center justify-between">
-            <div className="flex items-center gap-2">
-              <History className="w-4 h-4 text-cyan-400" />
-              <h3 className="text-xs font-bold uppercase tracking-wider text-slate-100">
-                Evidence Ingestion Registry
-              </h3>
-            </div>
-            <span className="text-[10px] px-2 py-0.5 rounded bg-emerald-950 border border-emerald-500/40 text-emerald-400 font-bold">
-              REAL-TIME CRYPTO AUDIT
-            </span>
-          </div>
-
-          <div className="flex-1 overflow-y-auto p-4 space-y-3 custom-scrollbar">
-            {manifests.length === 0 ? (
-              <div className="text-xs text-slate-500 text-center py-6">No manifests currently tracked</div>
-            ) : (
-              manifests.map((item) => (
-                <div key={item.manifestId} className="bg-slate-900/90 border border-slate-800/80 rounded-lg p-3 text-xs space-y-2.5 shadow-md">
-                  <div className="flex items-center justify-between">
-                    <span className="font-bold text-slate-100 tracking-wider">{item.manifestId}</span>
-                    {item.cryptoStatus === 'VERIFIED' && (
-                      <span className="flex items-center gap-1 text-[10px] text-emerald-400 font-semibold bg-emerald-950/60 border border-emerald-500/40 px-2 py-0.5 rounded">
-                        <FileCheck className="w-3 h-3" /> VERIFIED
-                      </span>
-                    )}
-                    {item.cryptoStatus === 'FAILED' && (
-                      <span className="flex items-center gap-1 text-[10px] text-rose-400 font-semibold bg-rose-950/60 border border-rose-500/40 px-2 py-0.5 rounded">
-                        <AlertCircle className="w-3 h-3" /> FAILED
-                      </span>
-                    )}
-                    {item.cryptoStatus === 'PENDING' && (
-                      <span className="flex items-center gap-1 text-[10px] text-amber-400 font-semibold bg-amber-950/60 border border-amber-500/40 px-2 py-0.5 rounded">
-                        PENDING...
-                      </span>
-                    )}
-                  </div>
-
-                  <div className="text-[11px] text-slate-400 flex flex-col gap-0.5">
-                    <div className="flex justify-between">
-                      <span className="text-slate-500">Origin Node:</span>
-                      <span className="text-slate-300 font-semibold">{item.originNode}</span>
-                    </div>
-                    <div className="flex justify-between">
-                      <span className="text-slate-500">Timestamp:</span>
-                      <span className="text-slate-400">{item.timestamp}</span>
-                    </div>
-                  </div>
-
-                  <div className="bg-black/60 p-2 rounded flex items-center justify-between gap-1.5 border border-slate-800/60 font-mono">
-                    <div className="flex items-center gap-1.5 overflow-hidden">
-                      <FileCode2 className="w-3 h-3 text-slate-500 shrink-0" />
-                      <span className="text-[10px] text-slate-300 truncate" title={item.hash}>{item.hash}</span>
-                    </div>
-                    <button
-                      onClick={() => handleCopy(item.manifestId, item.hash)}
-                      className="text-[10px] text-slate-400 hover:text-cyan-300 transition-colors shrink-0 px-1.5 py-0.5 rounded bg-slate-800/50 cursor-pointer"
-                    >
-                      {copiedId === item.manifestId ? 'Copied' : 'Copy'}
-                    </button>
-                  </div>
-                </div>
-              ))
-            )}
-          </div>
-        </div>
-      ) : (
-        <>
       {/* Cryptographic Batch Verification Result Toast / Banner */}
       {batchVerificationResult && (
         <div
@@ -1497,18 +1256,6 @@ export const SystemEventsSidebar: React.FC<SystemEventsSidebarProps> = ({
                 </button>
 
                 <button
-                  id="btn-download-events-json-bottom"
-                  onMouseEnter={() => setHoveredActionTooltip('bulkExportDossier')}
-                  onMouseLeave={() => setHoveredActionTooltip(null)}
-                  onClick={handleExportCurrentEventLogJson}
-                  className="px-2 py-1 rounded-lg bg-blue-500/20 hover:bg-blue-500/30 border border-blue-500/40 text-blue-300 text-[10px] font-bold flex items-center gap-1 transition-all shadow-[0_0_8px_rgba(59,130,246,0.2)]"
-                  title="Download current system event logs as formatted JSON"
-                >
-                  <Download className="w-3 h-3 text-blue-300" />
-                  <span>Download JSON</span>
-                </button>
-
-                <button
                   onMouseEnter={() => setHoveredActionTooltip('bulkExport')}
                   onMouseLeave={() => setHoveredActionTooltip(null)}
                   onClick={() => handleBatchExportJson(false)}
@@ -1724,8 +1471,6 @@ export const SystemEventsSidebar: React.FC<SystemEventsSidebarProps> = ({
           })
         )}
       </div>
-      </>
-      )}
 
       {/* Footer Info */}
       <div className="p-4 border-t border-white/8 bg-[#07080F]/90 text-[11px] text-zinc-500 flex items-center justify-between">
@@ -1738,54 +1483,3 @@ export const SystemEventsSidebar: React.FC<SystemEventsSidebarProps> = ({
     </div>
   );
 };
-
-export const EvidenceIngestionRegistry: React.FC<{ manifests?: EvidenceManifest[] }> = ({ manifests = DEFAULT_EVIDENCE_MANIFESTS }) => {
-  return (
-    <aside className="w-80 bg-slate-950 border-l border-slate-800 flex flex-col h-full font-mono text-slate-200">
-      <div className="p-4 border-b border-slate-800 flex items-center gap-2">
-        <History className="w-4 h-4 text-cyan-400" />
-        <h3 className="text-xs font-bold uppercase tracking-wider text-slate-100">Evidence Ingestion Registry</h3>
-      </div>
-
-      <div className="flex-1 overflow-y-auto p-4 space-y-3">
-        {manifests.length === 0 ? (
-          <div className="text-xs text-slate-500 text-center py-6">No manifests currently tracked</div>
-        ) : (
-          manifests.map((item) => (
-            <div key={item.manifestId} className="bg-slate-900 border border-slate-800/80 rounded p-3 text-xs space-y-2">
-              <div className="flex items-center justify-between">
-                <span className="font-bold text-slate-100">{item.manifestId}</span>
-                {item.cryptoStatus === 'VERIFIED' && (
-                  <span className="flex items-center gap-1 text-[10px] text-emerald-400 font-semibold">
-                    <FileCheck className="w-3 h-3" /> VERIFIED
-                  </span>
-                )}
-                {item.cryptoStatus === 'FAILED' && (
-                  <span className="flex items-center gap-1 text-[10px] text-rose-400 font-semibold">
-                    <AlertCircle className="w-3 h-3" /> FAILED
-                  </span>
-                )}
-                {item.cryptoStatus === 'PENDING' && (
-                  <span className="flex items-center gap-1 text-[10px] text-amber-400 font-semibold">
-                    PENDING...
-                  </span>
-                )}
-              </div>
-
-              <div className="text-[11px] text-slate-400 flex justify-between">
-                <span>Node: {item.originNode}</span>
-                <span>{item.timestamp}</span>
-              </div>
-
-              <div className="bg-black/50 p-1.5 rounded flex items-center gap-1.5 border border-slate-800/50">
-                <FileCode2 className="w-3 h-3 text-slate-500 shrink-0" />
-                <span className="text-[10px] text-slate-400 truncate">{item.hash}</span>
-              </div>
-            </div>
-          ))
-        )}
-      </div>
-    </aside>
-  );
-};
-

@@ -576,7 +576,7 @@ export const ChamberStatusGrid: React.FC<ChamberStatusGridProps> = ({ onNavigate
                   canonicalGenesisMerkleRoot: '909ab814479844d8a14816bed34cdbb07528e18501da86fc4691763a43fa4c68',
                   canonicalSealsCount: 14902,
                   latestLiveSealIndex: 14915,
-                  principalAuthority: 'นายยุทธภูมิ ภักเพียร (#EP-SOVEREIGN-01)',
+                  principalAuthority: 'นายยุทธภูมิ พากเพียร (#EP-SOVEREIGN-01)',
                   clearanceLevel: 'OMEGA-1 SUPREME CLEARANCE',
                   telemetryData: {
                     matrixDimensions: '6 Columns × 3 Rows (18 Chambers Active)',

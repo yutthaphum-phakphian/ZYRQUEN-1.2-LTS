@@ -95,7 +95,7 @@ export const GenesisDeploymentConsole: React.FC<{ className?: string }> = ({ cla
   canonical_block: ${CANONICAL_GENESIS_BLOCK}
   merkle_root: "${CANONICAL_MERKLE_ROOT}"
   seals_count: 14902
-  sovereign_principal: "#EP-SOVEREIGN-01 (นายยุทธภูมิ ภักเพียร)"
+  sovereign_principal: "#EP-SOVEREIGN-01 (นายยุทธภูมิ พากเพียร)"
   modules:
     - SecurityPatchMatrix:
         ZYR-01: PASSED (Access Control Hardening)

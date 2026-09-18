@@ -370,7 +370,7 @@ export const ChamberDetailPanel: React.FC<ChamberDetailPanelProps> = ({
   // Historical Provenance Data mapping by chamber
   const historicalProvenance = useMemo(() => {
     const CUSTODIANS = [
-      { name: 'นายยุทธภูมิ ภักเพียร', role: 'Sovereign Architect & Supreme Custodian (#EP-SOVEREIGN-01)', cert: 'OMEGA-1 / NIST FIPS 204' },
+      { name: 'นายยุทธภูมิ พากเพียร', role: 'Sovereign Architect & Supreme Custodian (#EP-SOVEREIGN-01)', cert: 'OMEGA-1 / NIST FIPS 204' },
       { name: 'ดร. กิตติพงษ์ วิริยะกุล', role: 'Consensus Quantum Core Lead (#HSM-CUSTODIAN-02)', cert: 'FIPS 140-3 L4 Attested' },
       { name: 'พ.ต.อ. เอกราช นิติธรรม', role: 'Forensic Seal & Legal Safe Harbor Officer (#HSM-CUSTODIAN-03)', cert: 'ETDA & PDPA Statutory' },
       { name: 'ดร. นลินี สัจจวาทิน', role: 'Sub-Kelvin Thermal Physics Specialist (#HSM-CUSTODIAN-04)', cert: 'Cryostat Dilution Tier-1' },
@@ -533,7 +533,7 @@ export const ChamberDetailPanel: React.FC<ChamberDetailPanelProps> = ({
         canonicalBlockHeight: SSOT.canonicalBlockHeight,
         canonicalGenesisMerkleRoot: SSOT.merkleRoot,
         canonicalSealsCount: SSOT.canonicalSealsCount,
-        sovereignPrincipal: 'นายยุทธภูมิ ภักเพียร (#EP-SOVEREIGN-01)',
+        sovereignPrincipal: 'นายยุทธภูมิ พากเพียร (#EP-SOVEREIGN-01)',
         clearance: 'OMEGA-1 SUPREME CLEARANCE',
         telemetry: {
           cryostatDilutionTempMK: subKelvinTemp,
@@ -1915,7 +1915,7 @@ export const ChamberDetailPanel: React.FC<ChamberDetailPanelProps> = ({
                   <div className="grid grid-cols-2 gap-4">
                     <div className="p-3.5 rounded-xl bg-zinc-50 border border-zinc-200 space-y-1.5">
                       <div className="text-[10px] font-bold text-zinc-500 uppercase">Sovereign Principal & Authority:</div>
-                      <div className="font-bold text-zinc-900">นายยุทธภูมิ ภักเพียร (#EP-SOVEREIGN-01)</div>
+                      <div className="font-bold text-zinc-900">นายยุทธภูมิ พากเพียร (#EP-SOVEREIGN-01)</div>
                       <div className="text-[10px] text-zinc-600">Clearance: OMEGA-1 SUPREME CLEARANCE</div>
                       <div className="text-[10px] text-zinc-600">Mutation Authority: 0 (Read-Only Certified)</div>
                     </div>

@@ -15,7 +15,7 @@ contract ZyrquenSovereignCoreV2 {
     // --- SYSTEM Telemetry & Constants ---
     string public constant SYSTEM_STATUS = "LOCKED_FROZEN_v1.2_LTS";
     string public constant SOVEREIGN_ID = "#EP-SOVEREIGN-01";
-    string public constant SOVEREIGN_NAME = "Yuttaphum Phakphian"; // นายยุทธภูมิ ภักเพียร
+    string public constant SOVEREIGN_NAME = "Yuttaphum Phakphian"; // นายยุทธภูมิ พากเพียร
     
     bytes32 public constant MERKLE_ROOT_GENESIS = 0x909ab814479844d8a14816bed34cdbb07528e18501da86fc4691763a43fa4c68;
     uint256 public constant INVARIANTS_COUNT = 10;

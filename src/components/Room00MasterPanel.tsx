@@ -44,9 +44,6 @@ import { copyToClipboard } from '../utils/clipboard';
 import { EvidenceExportService } from '../services/EvidenceExportService';
 import { JsonSealManager } from '../utils/jsonSealManager';
 import { TerminalJobLifecycleManager } from '../services/TerminalJobLifecycleManager';
-import { crossTabSyncService } from '../services/crossTabSyncService';
-import { offlineAuditSyncService } from '../services/offlineAuditSyncService';
-import { hapticSuccess, hapticTap } from '../utils/haptics';
 
 // ============================================================================
 // CANONICAL SSoT FROZEN CONSTANTS (IMMUTABLE)
@@ -570,45 +567,17 @@ export const Room00MasterPanel: React.FC<Room00Props> = ({
         return next;
       });
 
-      // Broadcast audit seal across open tabs and queue for background ledger sync
-      crossTabSyncService.broadcastAuditLog({
-        type: 'SEAL_APPENDED',
-        source: 'AUTO_RUNTIME_COLLECTOR',
-        timestamp: nowStr,
-      });
-
-      offlineAuditSyncService.queueAuditEvent({
-        type: 'SEAL_APPENDED',
-        title: 'Auto Verified Seal Appended',
-        description: 'Auto-verified seal appended to Merkle root • Dilithium-5 Attested',
-        severity: 'info',
-        statuteRef: 'ETDA Sec 26 & NIST PQC FIPS 204',
-        timestamp: nowStr,
-      });
-
       playTelemetryBeep();
     }, autoLoopIntervalSec * 1000);
 
     return () => clearInterval(interval);
   }, [autoLoopActive, collectorStatus, autoLoopIntervalSec]);
 
-  // Cross-tab synchronization of audit seals
-  useEffect(() => {
-    const unsubscribe = crossTabSyncService.subscribe((msg) => {
-      if (msg.type === 'AUDIT_LOG_UPDATE' && msg.payload?.sealId) {
-        setLiveAutoSeals((prev) => Math.max(prev, msg.payload.sealId));
-      }
-    });
-    return unsubscribe;
-  }, []);
-
   // Trigger manual tick
   const handleManualSealTick = () => {
     const eventTimestamp = Date.now();
     const uniqueSuffix = Math.random().toString(36).substring(2, 7);
     const nowStr = new Date().toLocaleTimeString('en-GB') + ' ICT';
-
-    hapticSuccess();
 
     setLiveAutoSeals((prev) => {
       const next = prev + 1;
@@ -634,24 +603,6 @@ export const Room00MasterPanel: React.FC<Room00Props> = ({
         },
         ...logs.slice(0, 19),
       ]);
-
-      // Broadcast and queue for background synchronization
-      crossTabSyncService.broadcastAuditLog({
-        type: 'MANUAL_SEAL_APPENDED',
-        sealId: next,
-        source: 'MANUAL_EVIDENCE_VERIFIER',
-        timestamp: nowStr,
-      });
-
-      offlineAuditSyncService.queueAuditEvent({
-        id: `MANUAL-SEAL-${next}`,
-        type: 'MANUAL_SEAL_APPENDED',
-        title: `Manual Seal Attested: #${next}`,
-        description: 'Manual invariant gate passed and attested to canonical ledger',
-        severity: 'success',
-        statuteRef: 'ETDA Sec 28 & NIST PQC FIPS 204',
-        timestamp: nowStr,
-      });
 
       return next;
     });
@@ -739,7 +690,7 @@ export const Room00MasterPanel: React.FC<Room00Props> = ({
   return (
     <div className="space-y-6 animate-in fade-in duration-300 font-mono">
       {/* ROOM 00 TOP GOLD SEAL HEADER BANNER */}
-      <div className="p-4 sm:p-8 rounded-2xl sm:rounded-[28px] bg-gradient-to-br from-[#121008] via-[#0e0c06] to-[#07080F] border border-amber-500/30 backdrop-blur-xl relative overflow-hidden shadow-[0_0_50px_-15px_rgba(245,158,11,0.2)]">
+      <div className="p-6 sm:p-8 rounded-[28px] bg-gradient-to-br from-[#121008] via-[#0e0c06] to-[#07080F] border border-amber-500/30 backdrop-blur-xl relative overflow-hidden shadow-[0_0_50px_-15px_rgba(245,158,11,0.2)]">
         <div className="absolute top-0 right-0 w-96 h-96 bg-gradient-to-bl from-amber-500/10 via-yellow-500/5 to-transparent rounded-full blur-3xl pointer-events-none" />
 
         <div className="relative z-10 flex flex-col lg:flex-row lg:items-center justify-between gap-6">

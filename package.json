@@ -8,7 +8,7 @@
     "build": "vite build && esbuild server.ts --bundle --platform=node --format=cjs --packages=external --sourcemap --outfile=dist/server.cjs",
     "start": "node dist/server.cjs",
     "preview": "vite preview",
-    "clean": "rm -rf dist",
+    "clean": "rm -rf dist server.js",
     "lint": "tsc --noEmit",
     "test": "npx tsx --test tests/unit/*.test.ts",
     "benchmark": "node scripts/benchmark.js",
@@ -35,11 +35,13 @@
     "react": "^19.0.1",
     "react-dom": "^19.0.1",
     "react-is": "^19.3.0",
+    "react-qr-reader": "^3.0.0-beta-1",
     "react-router-dom": "^7.18.3",
     "recharts": "^3.10.1",
     "socket.io": "^4.8.3",
     "socket.io-client": "^4.8.3",
     "three": "^0.185.1",
+    "vite": "^6.2.3",
     "ws": "^8.21.3"
   },
   "devDependencies": {

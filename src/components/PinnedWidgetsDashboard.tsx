@@ -733,7 +733,7 @@ export const PinnedWidgetsDashboard: React.FC<PinnedWidgetsDashboardProps> = ({ 
             sec: 'มาตรา 28 (Sec 28)',
             title: 'Signatory Legal Accountability',
             layer: 'Responsibility Layer (Executive Passport)',
-            tech: 'Passport #EP-SOVEREIGN-01 (นายยุทธภูมิ ภักเพียร)',
+            tech: 'Passport #EP-SOVEREIGN-01 (นายยุทธภูมิ พากเพียร)',
             color: 'text-amber-400',
             bg: 'bg-amber-500/10 border-amber-500/20',
           },
