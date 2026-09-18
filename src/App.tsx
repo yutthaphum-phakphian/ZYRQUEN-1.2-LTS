@@ -60,6 +60,9 @@ import { systemStateStore } from './store/systemStateStore';
 import { AudioEntropyController, SsotDriftWarning, SsotDriftToggleButton, QuantumAggregateEntropyIndicator } from './components/system/SystemStateComponents';
 import { ToastNotification, ToastMessage } from './components/ToastNotification';
 import { useNotificationWebSocket } from './hooks/useNotificationWebSocket';
+import { broadcastSyncService } from './services/broadcastSyncService';
+import { offlineAuditSyncService } from './services/offlineAuditSyncService';
+import { triggerVibration } from './utils/vibration';
 
 import {
   Sparkles,
@@ -575,6 +578,7 @@ function SovereignAppContent() {
   });
 
   const handleToggleSidebar = useCallback(() => {
+    triggerVibration('sidebarToggle');
     setIsLeftSidebarOpen((prev) => {
       const next = !prev;
       try {
@@ -587,6 +591,7 @@ function SovereignAppContent() {
   }, []);
 
   const handleCloseSidebar = useCallback(() => {
+    triggerVibration('modalDismiss');
     setIsLeftSidebarOpen(false);
     try {
       localStorage.setItem('zyrquen_sidebar_open', 'false');
@@ -690,6 +695,7 @@ function SovereignAppContent() {
   const [loginLoaderMode, setLoginLoaderMode] = useState<'login' | 'register' | 'switch_tenant'>('login');
 
   const handleToggleForensicAuditMode = useCallback(() => {
+    triggerVibration('sidebarToggle');
     setIsForensicAuditMode((prev) => {
       const next = !prev;
       try {
@@ -697,11 +703,13 @@ function SovereignAppContent() {
       } catch (e) {
         console.error(e);
       }
+      broadcastSyncService.broadcastGlobalLockState({ isForensicAuditMode: next });
       return next;
     });
   }, []);
 
   const handleToggleMonochrome = useCallback((enabled?: boolean) => {
+    triggerVibration('sidebarToggle');
     setIsMonochromeMode((prev) => {
       const next = enabled !== undefined ? enabled : !prev;
       try {
@@ -709,6 +717,7 @@ function SovereignAppContent() {
       } catch (e) {
         console.error(e);
       }
+      broadcastSyncService.broadcastGlobalLockState({ isMonochromeMode: next });
       return next;
     });
   }, []);
@@ -752,6 +761,27 @@ function SovereignAppContent() {
       };
 
       setSystemEvents((prev) => [newEvt, ...prev]);
+
+      // Broadcast system event across tabs via BroadcastChannel API
+      try {
+        broadcastSyncService.broadcastSystemEvent(newEvt);
+      } catch (err) {
+        console.warn('Broadcast sync failed:', err);
+      }
+
+      // Queue non-critical or compliance/hardware events for background sync
+      try {
+        offlineAuditSyncService.enqueueEvent({
+          type: newEvt.type,
+          title: newEvt.title,
+          description: newEvt.description,
+          metaHash: newEvt.metaHash,
+          severity: newEvt.severity,
+          statuteRef: newEvt.statuteRef,
+        });
+      } catch (err) {
+        console.warn('Offline audit enqueue failed:', err);
+      }
 
       // Low-Latency Verbal Feedback Loop for Critical and Anomaly Events
       try {
@@ -798,6 +828,60 @@ function SovereignAppContent() {
     );
   }, [addSystemEvent]);
 
+  // Multi-tab BroadcastChannel & Offline Audit Synchronization Listener
+  useEffect(() => {
+    // Initialize BroadcastChannel
+    broadcastSyncService.init();
+
+    // 1. Synchronize cross-tab system events
+    const unsubEvent = broadcastSyncService.onSystemEvent((evt) => {
+      setSystemEvents((prev) => {
+        if (prev.some((e) => e.id === evt.id)) return prev;
+        return [evt, ...prev];
+      });
+    });
+
+    // 2. Synchronize cross-tab audit snapshots
+    const unsubSnap = broadcastSyncService.onAuditSnapshot((snap) => {
+      setSnapshots((prev) => {
+        if (prev.some((s) => s.id === snap.id)) return prev;
+        return [snap, ...prev];
+      });
+    });
+
+    // 3. Synchronize cross-tab global lock states
+    const unsubLock = broadcastSyncService.onLockState((lockState) => {
+      if (typeof lockState.isSystemActivityFrozen === 'boolean') {
+        setIsSystemActivityFrozen(lockState.isSystemActivityFrozen);
+      }
+      if (typeof lockState.isForensicAuditMode === 'boolean') {
+        setIsForensicAuditMode(lockState.isForensicAuditMode);
+      }
+      if (typeof lockState.isMonochromeMode === 'boolean') {
+        setIsMonochromeMode(lockState.isMonochromeMode);
+      }
+    });
+
+    // 4. Background offline audit queue status notification
+    let previousPending = offlineAuditSyncService.getQueueCount();
+    const unsubOffline = offlineAuditSyncService.subscribe((count) => {
+      if (previousPending > 0 && count === 0) {
+        showToast(
+          `Background Sync: ${previousPending} offline audit logs flushed to sovereign ledger.`,
+          'success'
+        );
+      }
+      previousPending = count;
+    });
+
+    return () => {
+      unsubEvent();
+      unsubSnap();
+      unsubLock();
+      unsubOffline();
+    };
+  }, [showToast]);
+
   // Automated background backup service subscription
   useEffect(() => {
     automatedBackupService.start();
@@ -817,6 +901,12 @@ function SovereignAppContent() {
       );
       setSnapshots((prev) => [newSnap, ...prev]);
       setLastSnapshotTime(Date.now());
+      triggerVibration('snapshot');
+      try {
+        broadcastSyncService.broadcastAuditSnapshot(newSnap);
+      } catch (err) {
+        console.warn('Broadcast snapshot failed:', err);
+      }
       
       showToast(`Automated System Backup #${record.snapshotNumber} Sealed Successfully. Integrity Verified.`, 'success');
 
@@ -837,6 +927,7 @@ function SovereignAppContent() {
   }, [addSystemEvent, snapshots, isSystemActivityFrozen]);
 
   const handleToggleFreezeSystemActivity = useCallback(() => {
+    triggerVibration('sidebarToggle');
     setIsSystemActivityFrozen((prev) => {
       const next = !prev;
       try {
@@ -844,6 +935,7 @@ function SovereignAppContent() {
       } catch (e) {
         console.error(e);
       }
+      broadcastSyncService.broadcastGlobalLockState({ isSystemActivityFrozen: next });
       if (next) {
         automatedBackupService.stop();
         if (isAudioActive) {
@@ -929,6 +1021,12 @@ function SovereignAppContent() {
     const newVerifiedSeals = 14902 + Math.max(0, snapshots.length - 2 + 1);
     systemStateStore.setSealCount(newVerifiedSeals);
     systemStateStore.setSealedBlock(849202 + Math.max(0, snapshots.length - 2 + 1));
+    triggerVibration('snapshot');
+    try {
+      broadcastSyncService.broadcastAuditSnapshot(newSnap);
+    } catch (err) {
+      console.warn('Broadcast snapshot failed:', err);
+    }
     showToast('Hardware Telemetry Snapshot Captured Successfully', 'success');
     setVerificationGateStatus({
       status: 'PASSED',
@@ -1846,7 +1944,10 @@ function SovereignAppContent() {
       {/* System Events Activity Feed Sidebar */}
       <SystemEventsSidebar
         isOpen={isEventsSidebarOpen}
-        onClose={() => setIsEventsSidebarOpen(false)}
+        onClose={() => {
+          triggerVibration('sidebarToggle');
+          setIsEventsSidebarOpen(false);
+        }}
         events={systemEvents}
         latestSealCount={verificationGateStatus.sealCount}
         onClearEvents={() => setSystemEvents([])}
@@ -1861,7 +1962,10 @@ function SovereignAppContent() {
       {/* Global Keyboard Shortcuts Modal */}
       <KeyboardShortcutsModal
         isOpen={isShortcutsOpen}
-        onClose={() => setIsShortcutsOpen(false)}
+        onClose={() => {
+          triggerVibration('modalDismiss');
+          setIsShortcutsOpen(false);
+        }}
         onNavigate={(v) => {
           setCurrentView(v);
           setIsShortcutsOpen(false);
@@ -1882,7 +1986,10 @@ function SovereignAppContent() {
       <ToastNotification toasts={toasts} removeToast={removeToast} />
       <AuditCertificateModal
         isOpen={isCertificateOpen}
-        onClose={() => setIsCertificateOpen(false)}
+        onClose={() => {
+          triggerVibration('modalDismiss');
+          setIsCertificateOpen(false);
+        }}
       />
 
       {/* Dynamic Atmospheric Ambient Sound Generator Floating HUD */}
@@ -1987,12 +2094,18 @@ function SovereignAppContent() {
       {/* Sovereign Copilot Assistant Window (Docked at Bottom-Right) */}
       <CopilotAssistantDrawer
         isOpen={isCopilotOpen}
-        onClose={() => setIsCopilotOpen(false)}
+        onClose={() => {
+          triggerVibration('modalDismiss');
+          setIsCopilotOpen(false);
+        }}
         onNavigate={setCurrentView}
       />
       <ThaiLegalSearchModal
         isOpen={isLegalSearchOpen}
-        onClose={() => setIsLegalSearchOpen(false)}
+        onClose={() => {
+          triggerVibration('modalDismiss');
+          setIsLegalSearchOpen(false);
+        }}
         onSearchExecuted={handleLegalSearchExecuted}
       />
       
@@ -2013,7 +2126,10 @@ function SovereignAppContent() {
             'dashboard'
           );
         }}
-        onCancel={() => setShowLoginLoader(false)}
+        onCancel={() => {
+          triggerVibration('modalDismiss');
+          setShowLoginLoader(false);
+        }}
       />
 
       <OfflineIndicator />

@@ -78,6 +78,8 @@ import { Last5SnapshotsSidePanel } from '../Last5SnapshotsSidePanel';
 import { ForensicsSealAuditModal } from '../ForensicsSealAuditModal';
 import { downloadSimplifiedForensicReport } from '../../utils/simplifiedForensicReportExport';
 import { exportSignedLedgerSnapshotJson } from '../../utils/snapshotEvidenceExport';
+import { LedgerHeartbeatD3Chart } from '../LedgerHeartbeatD3Chart';
+import { triggerVibration } from '../../utils/vibration';
 
 interface LedgerViewProps {
   snapshots?: HardwareSnapshot[];
@@ -1411,6 +1413,9 @@ export const LedgerView: React.FC<LedgerViewProps> = ({ snapshots = INITIAL_HARD
       {/* TAB 2: Hardware Telemetry Snapshots List & Deep-Dive */}
       {activeLedgerTab === 'snapshots' && (
         <div className="space-y-4 animate-in fade-in duration-200">
+          {/* Real-time D3.js Line Chart: Heartbeat & Telemetry Pulse */}
+          <LedgerHeartbeatD3Chart snapshots={allSnapshots} />
+
           {/* CPU Usage Sparkline & Trend Chart (Last 10 Telemetry Snapshots) */}
           <div className="p-5 rounded-[24px] bg-[#0b0e1a]/85 border border-cyan-500/20 backdrop-blur-xl shadow-xl space-y-3">
             <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2">

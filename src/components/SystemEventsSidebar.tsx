@@ -51,6 +51,8 @@ import {
   CryptographicLogBatch,
 } from '../utils/systemLogsBatchExport';
 import { FcmPushNotificationManager } from './notifications/FcmPushNotificationManager';
+import { generateAndDownloadFullAuditPdfReport } from '../utils/fullAuditPdfExport';
+import { triggerVibration } from '../utils/vibration';
 
 interface ActionTooltipDetails {
   title: string;
@@ -260,6 +262,7 @@ export const SystemEventsSidebar: React.FC<SystemEventsSidebarProps> = ({
   const [notificationSending, setNotificationSending] = useState<string | null>(null);
   const [lastNotificationStatus, setLastNotificationStatus] = useState<string | null>(null);
   const [isNotificationPanelOpen, setIsNotificationPanelOpen] = useState<boolean>(false);
+  const [auditDownloadedToast, setAuditDownloadedToast] = useState<boolean>(false);
 
   // 1-second live ticker to keep the 60s sparkline smoothly animating in real time
   useEffect(() => {
@@ -744,6 +747,7 @@ export const SystemEventsSidebar: React.FC<SystemEventsSidebarProps> = ({
           )}
           <button
             onClick={() => {
+              triggerVibration('sidebarToggle');
               playTone(450, 0.04);
               onClose();
             }}
@@ -1052,30 +1056,67 @@ export const SystemEventsSidebar: React.FC<SystemEventsSidebarProps> = ({
         </div>
       )}
 
-      {/* Forensic Audit Mode Toggle Row */}
+      {/* Forensic Audit Mode Toggle Row & Control Panel */}
       {onToggleForensicAuditMode && (
-        <div className="px-4 py-2 border-b border-white/5 bg-purple-500/[0.04] flex items-center justify-between gap-2 text-xs">
-          <div className="flex items-center gap-1.5 text-purple-300 text-[11px]">
-            <Fingerprint className="w-3.5 h-3.5" />
-            <span>Forensic Audit Mode</span>
+        <div className="border-b border-white/5 bg-purple-500/[0.04]">
+          <div className="px-4 py-2 flex items-center justify-between gap-2 text-xs">
+            <div className="flex items-center gap-1.5 text-purple-300 text-[11px]">
+              <Fingerprint className="w-3.5 h-3.5" />
+              <span>Forensic Audit Mode</span>
+            </div>
+            <button
+              onMouseEnter={() => setHoveredActionTooltip('forensicMode')}
+              onMouseLeave={() => setHoveredActionTooltip(null)}
+              onClick={() => {
+                triggerVibration('sidebarToggle');
+                playTone(isForensicAuditMode ? 440 : 760, 0.04);
+                onToggleForensicAuditMode();
+              }}
+              className={`px-2.5 py-1 rounded-lg text-[10px] font-bold border transition-all flex items-center gap-1.5 cursor-pointer ${
+                isForensicAuditMode
+                  ? 'bg-purple-500/25 text-purple-200 border-purple-500/50 shadow-[0_0_10px_rgba(168,85,247,0.3)]'
+                  : 'bg-white/5 text-zinc-400 border-white/10 hover:text-white'
+              }`}
+              title="Toggle metadata hash and PQC signature status overlay on dashboard cards"
+            >
+              <span className={`w-1.5 h-1.5 rounded-full ${isForensicAuditMode ? 'bg-purple-400 animate-ping' : 'bg-zinc-500'}`} />
+              <span>{isForensicAuditMode ? 'OVERLAYS ON' : 'ENABLE OVERLAY'}</span>
+            </button>
           </div>
-          <button
-            onMouseEnter={() => setHoveredActionTooltip('forensicMode')}
-            onMouseLeave={() => setHoveredActionTooltip(null)}
-            onClick={() => {
-              playTone(isForensicAuditMode ? 440 : 760, 0.04);
-              onToggleForensicAuditMode();
-            }}
-            className={`px-2.5 py-1 rounded-lg text-[10px] font-bold border transition-all flex items-center gap-1.5 ${
-              isForensicAuditMode
-                ? 'bg-purple-500/25 text-purple-200 border-purple-500/50 shadow-[0_0_10px_rgba(168,85,247,0.3)]'
-                : 'bg-white/5 text-zinc-400 border-white/10 hover:text-white'
-            }`}
-            title="Toggle metadata hash and PQC signature status overlay on dashboard cards"
-          >
-            <span className={`w-1.5 h-1.5 rounded-full ${isForensicAuditMode ? 'bg-purple-400 animate-ping' : 'bg-zinc-500'}`} />
-            <span>{isForensicAuditMode ? 'OVERLAYS ON' : 'ENABLE OVERLAY'}</span>
-          </button>
+
+          {/* Download Full Audit Report button within Forensic Audit Mode panel */}
+          {isForensicAuditMode && (
+            <div className="px-4 pb-2.5 pt-1 space-y-1.5 border-t border-purple-500/20 bg-purple-950/25 animate-in fade-in duration-200">
+              <div className="flex items-center justify-between text-[10px] text-purple-300/90 font-mono">
+                <span className="flex items-center gap-1">
+                  <ShieldCheck className="w-3 h-3 text-emerald-400" />
+                  <span>Court-Admissible Forensic Session</span>
+                </span>
+                <span className="text-zinc-400">{events.length} logs active</span>
+              </div>
+              <button
+                id="btn-download-full-audit-report"
+                onClick={() => {
+                  triggerVibration('auditReport');
+                  playTone(840, 0.05);
+                  generateAndDownloadFullAuditPdfReport({ events, isForensicAuditMode });
+                  setAuditDownloadedToast(true);
+                  setTimeout(() => setAuditDownloadedToast(false), 4000);
+                }}
+                className="w-full py-2 px-3 rounded-xl bg-gradient-to-r from-purple-600 via-indigo-600 to-cyan-600 hover:from-purple-500 hover:to-cyan-500 text-white font-bold text-xs flex items-center justify-center gap-2 shadow-[0_0_15px_rgba(168,85,247,0.35)] active:scale-[0.98] transition-all cursor-pointer"
+                title="Generate signed PDF file of the current session audit logs using jsPDF and auto-download it"
+              >
+                <Download className="w-3.5 h-3.5 text-cyan-200" />
+                <span>Download Full Audit Report (Signed PDF)</span>
+              </button>
+              {auditDownloadedToast && (
+                <div className="p-1.5 rounded-lg bg-emerald-500/15 border border-emerald-500/30 text-[10px] text-emerald-300 text-center font-mono flex items-center justify-center gap-1 animate-in fade-in">
+                  <Check className="w-3 h-3" />
+                  <span>Audit report downloaded & signed via Dilithium-5</span>
+                </div>
+              )}
+            </div>
+          )}
         </div>
       )}
 

@@ -75,6 +75,7 @@ import {
 import { playAuditChime, playTone } from '../AudioSynthesizer';
 import { ShieldAlert } from 'lucide-react';
 import { FcmPushNotificationManager } from '../notifications/FcmPushNotificationManager';
+import { ChamberVisualizer } from '../ChamberVisualizer';
 
 const TopHardwareChambersCard: React.FC = () => {
   const chambers = [
@@ -150,8 +151,8 @@ export const DashboardView: React.FC<DashboardViewProps> = ({
   onOpenCertificate,
   isForensicAuditMode = false,
 }) => {
-  // Main executive sections: Overview (clean summary), Sovereign Audit Dashboard, Chambers Explorer, Telemetry, Evidence, Android 16+ FCM Push
-  const [dashboardSection, setDashboardSection] = useState<'OVERVIEW' | 'AUDIT' | 'CHAMBERS' | 'TELEMETRY' | 'EVIDENCE' | 'FCM_PUSH'>('OVERVIEW');
+  // Main executive sections: Overview (clean summary), Sovereign Audit Dashboard, Chambers Explorer, Telemetry, Evidence, Android 16+ FCM Push, Chamber Visualizer
+  const [dashboardSection, setDashboardSection] = useState<'OVERVIEW' | 'AUDIT' | 'CHAMBERS' | 'TELEMETRY' | 'EVIDENCE' | 'FCM_PUSH' | 'VISUALIZER'>('OVERVIEW');
   const [activeCanvasTab, setActiveCanvasTab] = useState<'hologram' | 'atlas' | 'overview' | 'topology'>('hologram');
   const [isHealing, setIsHealing] = useState(false);
   const [healSuccess, setHealSuccess] = useState(false);
@@ -495,6 +496,23 @@ export const DashboardView: React.FC<DashboardViewProps> = ({
             <span>🏛️ 18 Chambers Explorer</span>
             <span className="px-1.5 py-0.2 rounded bg-cyan-950 text-cyan-300 text-[10px] font-mono border border-cyan-500/30">
               18 ROOMS
+            </span>
+          </button>
+
+          <button
+            onClick={() => {
+              playTone(710, 0.04);
+              setDashboardSection('VISUALIZER');
+            }}
+            className={`px-3.5 py-2 rounded-xl font-bold flex items-center gap-2 transition-all cursor-pointer max-[479px]:w-full max-[479px]:justify-start ${
+              dashboardSection === 'VISUALIZER'
+                ? 'bg-cyan-500/20 text-cyan-200 border border-cyan-400/50 shadow-[0_0_12px_rgba(6,182,212,0.25)]'
+                : 'text-zinc-400 hover:text-zinc-200 bg-white/5 border border-transparent'
+            }`}
+          >
+            <span>🔬 Chamber Visualizer</span>
+            <span className="px-1.5 py-0.2 rounded bg-cyan-950 text-cyan-300 text-[10px] font-mono border border-cyan-500/30">
+              14,902 SEALS
             </span>
           </button>
 
@@ -904,16 +922,29 @@ export const DashboardView: React.FC<DashboardViewProps> = ({
                 </p>
               </div>
             </div>
-            <button
-              onClick={() => {
-                playTone(700, 0.05);
-                onNavigate('chambers');
-              }}
-              className="px-4 py-2.5 bg-indigo-600 hover:bg-indigo-500 text-white font-mono text-xs font-bold rounded-xl transition-all shadow-md flex items-center gap-2 shrink-0 cursor-pointer"
-            >
-              <span>Launch Control Plane</span>
-              <ArrowRight className="w-4 h-4 text-indigo-200" />
-            </button>
+            <div className="flex items-center gap-2">
+              <button
+                onClick={() => {
+                  playTone(710, 0.04);
+                  setDashboardSection('VISUALIZER');
+                }}
+                className="px-3 py-2 bg-cyan-600/20 hover:bg-cyan-600/30 border border-cyan-400/40 text-cyan-200 font-mono text-xs font-bold rounded-xl transition-all shadow-sm flex items-center gap-1.5 shrink-0 cursor-pointer"
+                title="Open 14,902 Hardware Seals Visualizer & Detail Modal"
+              >
+                <Layers className="w-3.5 h-3.5 text-cyan-400" />
+                <span>14,902 Seals Visualizer</span>
+              </button>
+              <button
+                onClick={() => {
+                  playTone(700, 0.05);
+                  onNavigate('chambers');
+                }}
+                className="px-4 py-2.5 bg-indigo-600 hover:bg-indigo-500 text-white font-mono text-xs font-bold rounded-xl transition-all shadow-md flex items-center gap-2 shrink-0 cursor-pointer"
+              >
+                <span>Launch Control Plane</span>
+                <ArrowRight className="w-4 h-4 text-indigo-200" />
+              </button>
+            </div>
           </div>
 
           {/* Chamber Picker Strip */}
@@ -1010,6 +1041,13 @@ export const DashboardView: React.FC<DashboardViewProps> = ({
 
           {/* 18 Chambers Full Compliance Grid */}
           <ChamberStatusGrid onNavigate={onNavigate} />
+        </div>
+      )}
+
+      {/* TAB: CHAMBER VISUALIZER (14,902 HARDWARE SEALS & LIVE CRYOSTAT METRICS) */}
+      {dashboardSection === 'VISUALIZER' && (
+        <div className="space-y-5 animate-in fade-in duration-200">
+          <ChamberVisualizer />
         </div>
       )}
 
