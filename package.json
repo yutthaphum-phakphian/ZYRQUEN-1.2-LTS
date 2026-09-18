@@ -35,7 +35,6 @@
     "react": "^19.0.1",
     "react-dom": "^19.0.1",
     "react-is": "^19.3.0",
-    "react-qr-reader": "^3.0.0-beta-1",
     "react-router-dom": "^7.18.3",
     "recharts": "^3.10.1",
     "socket.io": "^4.8.3",

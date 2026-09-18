@@ -33,6 +33,65 @@ export default defineConfig(() => {
   return {
     base: basePath,
     plugins: [
+      {
+        name: 'suppress-vite-console-noise',
+        transformIndexHtml: {
+          order: 'post',
+          handler(html: string) {
+            const scriptTag = `<script>
+(function() {
+  if (typeof window === 'undefined') return;
+  var isViteNoise = function(arg) {
+    if (!arg) return false;
+    var str = '';
+    try {
+      if (typeof arg === 'string') str = arg;
+      else if (arg instanceof Error) str = (arg.message || '') + ' ' + (arg.stack || '');
+      else if (typeof arg === 'object') str = (arg.message || '') + ' ' + (arg.type || '') + ' ' + (arg.reason || '') + ' ' + String(arg);
+      else str = String(arg);
+    } catch(e) { str = String(arg); }
+    return str.indexOf('[vite]') !== -1 ||
+           str.indexOf('failed to connect to websocket') !== -1 ||
+           str.indexOf('WebSocket closed without opened') !== -1 ||
+           str.indexOf('vite-hmr') !== -1 ||
+           (str.indexOf('WebSocket') !== -1 && (str.indexOf('vite') !== -1 || str.indexOf('closed') !== -1 || str.indexOf('error') !== -1));
+  };
+  var shouldSuppress = function(args) {
+    if (!args || !args.length) return false;
+    for (var i = 0; i < args.length; i++) {
+      if (isViteNoise(args[i])) return true;
+    }
+    return false;
+  };
+  var origErr = console.error, origWarn = console.warn, origLog = console.log, origInfo = console.info, origDebug = console.debug;
+  console.error = function() { if (shouldSuppress(arguments)) return; return origErr.apply(console, arguments); };
+  console.warn = function() { if (shouldSuppress(arguments)) return; return origWarn.apply(console, arguments); };
+  console.info = function() { if (shouldSuppress(arguments)) return; return origInfo.apply(console, arguments); };
+  console.debug = function() { if (shouldSuppress(arguments)) return; return origDebug.apply(console, arguments); };
+  console.log = function() { if (shouldSuppress(arguments)) return; return origLog.apply(console, arguments); };
+  window.addEventListener('error', function(e) {
+    if (isViteNoise(e.message) || isViteNoise(e.error) || isViteNoise(e.target)) {
+      e.stopImmediatePropagation();
+      e.preventDefault();
+      return true;
+    }
+  }, true);
+  window.addEventListener('unhandledrejection', function(e) {
+    if (isViteNoise(e.reason) || isViteNoise(e.target)) {
+      e.stopImmediatePropagation();
+      e.preventDefault();
+      return true;
+    }
+  }, true);
+})();
+</script>`;
+            if (html.includes('/@vite/client')) {
+              return html.replace(/<script[^>]*src="[^"]*\/@vite\/client"[^>]*><\/script>/i, `${scriptTag}\n    $&`);
+            }
+            return html.replace('<head>', `<head>\n    ${scriptTag}`);
+          },
+        },
+      },
       react(),
       tailwindcss(),
       VitePWA({
@@ -137,6 +196,17 @@ export default defineConfig(() => {
       alias: {
         '@': fileURLToPath(new URL('./src', import.meta.url)),
       },
+      dedupe: ['react', 'react-dom'],
+    },
+    optimizeDeps: {
+      include: [
+        'react',
+        'react-dom',
+        'react-dom/client',
+        'react/jsx-runtime',
+        'react/jsx-dev-runtime',
+        'lucide-react',
+      ],
     },
     server: {
       host: '0.0.0.0',

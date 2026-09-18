@@ -24,7 +24,8 @@ import {
   Zap,
   Clock,
   Key,
-  Shield
+  Shield,
+  FileCheck2
 } from 'lucide-react';
 import { playTone, playAuditChime } from './AudioSynthesizer';
 import { copyToClipboard } from '../utils/clipboard';
@@ -389,6 +390,7 @@ interface ThaiComplianceTriggerMatrixProps {
   onOpenCertificate: () => void;
   onExportAuditLogs?: () => void;
   isForensicAuditMode?: boolean;
+  onOpenEvidenceDownloadModal?: () => void;
 }
 
 export const ThaiComplianceTriggerMatrix: React.FC<ThaiComplianceTriggerMatrixProps> = ({
@@ -396,6 +398,7 @@ export const ThaiComplianceTriggerMatrix: React.FC<ThaiComplianceTriggerMatrixPr
   onOpenCertificate,
   onExportAuditLogs,
   isForensicAuditMode = false,
+  onOpenEvidenceDownloadModal,
 }) => {
   // State for expandable trigger cards
   // expandedCardId: string | null (which card is expanded, or null)
@@ -584,6 +587,19 @@ export const ThaiComplianceTriggerMatrix: React.FC<ThaiComplianceTriggerMatrixPr
             >
               <Download className="w-3.5 h-3.5 text-purple-400" />
               <span className="hidden sm:inline">Export Audit Dossier</span>
+            </button>
+          )}
+
+          {onOpenEvidenceDownloadModal && (
+            <button
+              type="button"
+              onClick={onOpenEvidenceDownloadModal}
+              className="px-2.5 py-1.5 rounded-xl bg-emerald-500/15 hover:bg-emerald-500/25 text-emerald-300 border border-emerald-500/35 text-xs font-sans font-semibold flex items-center gap-1.5 transition-colors cursor-pointer"
+              title="เปิดกล่องโต้ตอบยืนยันการดาวน์โหลดแพ็คเกจหลักฐานที่ตรวจสอบแล้ว"
+            >
+              <FileCheck2 className="w-3.5 h-3.5 text-emerald-400" />
+              <span className="hidden sm:inline">ดาวน์โหลดแพ็คเกจหลักฐานที่ตรวจสอบแล้ว</span>
+              <span className="sm:hidden">แพ็คเกจหลักฐาน</span>
             </button>
           )}
         </div>

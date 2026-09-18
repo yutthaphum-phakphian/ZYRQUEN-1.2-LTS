@@ -2,7 +2,7 @@ import { SovereignCopilot } from './components/SovereignCopilot';
 import { MainFooter } from './components/MainFooter';
 import React, { useState, useEffect, useCallback, useRef } from 'react';
 import { AnimatePresence, motion, animate } from 'motion/react';
-import { HashRouter, useLocation, useNavigate } from 'react-router-dom';
+import { HashRouter, useLocation, useNavigate } from './router';
 import { ViewType, HardwareSnapshot } from './types';
 import { Navigation } from './components/Navigation';
 import { LeftSidebar } from './components/LeftSidebar';
@@ -59,7 +59,8 @@ import { OfflineIndicator } from './components/OfflineIndicator';
 import { NexusIntegrationLayer } from './components/NexusIntegrationLayer';
 import { SovereignLoginLoader } from './components/SovereignLoginLoader';
 import { CopilotAssistantDrawer } from './components/copilot/CopilotAssistantDrawer';
-import { ThaiComplianceTriggerMatrix } from './components/ThaiComplianceTriggerMatrix';
+import { ThaiComplianceTriggerMatrix, DETAILED_ETDA_PDPA_TRIGGERS } from './components/ThaiComplianceTriggerMatrix';
+import { VerifiedEvidenceDownloadConfirmModal } from './components/modal/VerifiedEvidenceDownloadConfirmModal';
 import { systemStateStore } from './store/systemStateStore';
 import { AudioEntropyController, SsotDriftWarning, SsotDriftToggleButton, QuantumAggregateEntropyIndicator } from './components/system/SystemStateComponents';
 import { ToastNotification, ToastMessage } from './components/ToastNotification';
@@ -94,6 +95,7 @@ import {
   AlertOctagon,
   Clock,
   Download,
+  FileCheck2,
   X,
   Bot
 } from 'lucide-react';
@@ -756,6 +758,68 @@ function SovereignAppContent() {
       return next;
     });
   }, []);
+
+  // Verified Evidence Download Modal State
+  const [isEvidenceDownloadModalOpen, setIsEvidenceDownloadModalOpen] = useState<boolean>(false);
+
+  // Critical Compliance Threshold: banner alerts if events drop below threshold
+  const CRITICAL_COMPLIANCE_THRESHOLD = 2;
+  const isComplianceCritical = verificationGateStatus.complianceEventCount < CRITICAL_COMPLIANCE_THRESHOLD;
+
+  // Handler to export legal triggers summary as JSON
+  const handleDownloadLegalTriggersSummary = useCallback(() => {
+    playTone(600, 0.04);
+    const reportPayload = {
+      reportTitle: "ZYRQUEN Ω∞ Legal Triggers & Compliance Summary Report",
+      statutoryFrameworks: [
+        "ETDA B.E. 2544 (Electronic Transactions Act 2001/2019) Sections 9, 26, 28",
+        "PDPA B.E. 2562 (Personal Data Protection Act 2019) Sections 19, 27, 37"
+      ],
+      generatedAt: new Date().toISOString(),
+      sovereignPrincipal: SYSTEM_METADATA.sovereignPrincipal,
+      canonicalMerkleRoot: SYSTEM_METADATA.merkleRoot,
+      sealedBlock: SYSTEM_METADATA.sealedBlock,
+      complianceStatus: verificationGateStatus.status,
+      complianceEventCount: verificationGateStatus.complianceEventCount,
+      criticalThreshold: CRITICAL_COMPLIANCE_THRESHOLD,
+      isCriticalWarning: verificationGateStatus.complianceEventCount < CRITICAL_COMPLIANCE_THRESHOLD,
+      activeTriggersCount: DETAILED_ETDA_PDPA_TRIGGERS.length,
+      activeLegalTriggers: DETAILED_ETDA_PDPA_TRIGGERS.map((trigger) => ({
+        id: trigger.id,
+        act: trigger.act,
+        section: trigger.section,
+        title: trigger.title,
+        titleTh: trigger.titleTh,
+        status: trigger.status,
+        statusText: trigger.statusText,
+        pqcScheme: trigger.pqcScheme,
+        anchor: trigger.anchor,
+        merkleLeafHash: trigger.technicalSpec.merkleLeafHash,
+        hardwareTarget: trigger.technicalSpec.hardwareTarget,
+        subComponents: trigger.technicalSpec.subComponents,
+        statuteClause: trigger.statuteClause,
+      })),
+    };
+
+    const dataStr = "data:text/json;charset=utf-8," + encodeURIComponent(JSON.stringify(reportPayload, null, 2));
+    const downloadAnchor = document.createElement('a');
+    const filename = `zyrquen-legal-triggers-summary-${Date.now()}.json`;
+    downloadAnchor.setAttribute("href", dataStr);
+    downloadAnchor.setAttribute("download", filename);
+    document.body.appendChild(downloadAnchor);
+    downloadAnchor.click();
+    downloadAnchor.remove();
+
+    playAuditChime();
+    showToast(`ดาวน์โหลดสรุปทริกเกอร์กฎหมาย (${filename}) สำเร็จ`, 'success');
+    addSystemEvent(
+      'LEGAL',
+      'Legal Triggers Summary Exported',
+      `Exported ${DETAILED_ETDA_PDPA_TRIGGERS.length} active legal triggers summary JSON report.`,
+      'export:legal_triggers',
+      'success'
+    );
+  }, [verificationGateStatus, showToast, addSystemEvent]);
 
   
 
@@ -1593,13 +1657,50 @@ function SovereignAppContent() {
           <SsotDriftWarning />
 
           {/* Verification Gate Active Invariant Banner with Progress Bar & Expandable ETDA/PDPA Triggers */}
-          <div className="rounded-2xl bg-[#0b0e1a]/90 border border-cyan-500/25 backdrop-blur-xl shadow-lg transition-all duration-300 overflow-hidden">
+          <div className={`rounded-2xl backdrop-blur-xl shadow-lg transition-all duration-300 overflow-hidden ${
+            isComplianceCritical
+              ? 'bg-gradient-to-r from-amber-950/90 via-[#201004]/95 to-red-950/90 border-2 border-amber-500 shadow-[0_0_35px_rgba(245,158,11,0.45)] ring-2 ring-amber-500/40'
+              : 'bg-[#0b0e1a]/90 border border-cyan-500/25'
+          }`}>
+            {/* Warning Alert Bar if Compliance Count Drops Below Threshold */}
+            {isComplianceCritical && (
+              <div className="w-full bg-gradient-to-r from-amber-500/25 via-red-500/20 to-amber-500/25 border-b border-amber-500/50 px-4 py-2 flex flex-wrap items-center justify-between gap-2 text-amber-200 text-xs font-mono shadow-inner">
+                <div className="flex items-center gap-2 font-bold">
+                  <AlertTriangle className="w-4 h-4 text-amber-400 shrink-0 animate-bounce" />
+                  <span>คำเตือน: Compliance Event Count ({verificationGateStatus.complianceEventCount}) ต่ำกว่าเกณฑ์ความปลอดภัยขั้นต่ำ (&lt; {CRITICAL_COMPLIANCE_THRESHOLD})!</span>
+                </div>
+                <div className="flex items-center gap-2">
+                  <span className="text-[10px] bg-amber-500/30 text-amber-100 px-2.5 py-0.5 rounded-full border border-amber-400 font-bold uppercase tracking-wider">
+                    CRITICAL_THRESHOLD_ALERT
+                  </span>
+                  <button
+                    type="button"
+                    onClick={() => {
+                      playTone(700, 0.03);
+                      setVerificationGateStatus(prev => ({ ...prev, complianceEventCount: 2 }));
+                    }}
+                    className="px-2 py-0.5 rounded text-[10px] bg-amber-400 text-black font-bold hover:bg-amber-300 transition-colors cursor-pointer"
+                  >
+                    Restore Count
+                  </button>
+                </div>
+              </div>
+            )}
+
             <div className="px-4 py-2.5 flex flex-wrap items-center justify-between gap-3 text-xs font-mono">
               {/* Left: Gate Status & Info with Tooltip Trigger */}
               <div className="flex items-center gap-2.5 relative">
-                <span className={`w-2.5 h-2.5 rounded-full ${verificationGateStatus.status === 'PASSED' ? 'bg-emerald-400 animate-pulse' : verificationGateStatus.status === 'BLOCKED' ? 'bg-rose-400' : 'bg-cyan-400'}`} />
+                <span className={`w-2.5 h-2.5 rounded-full ${
+                  isComplianceCritical
+                    ? 'bg-amber-400 animate-ping'
+                    : verificationGateStatus.status === 'PASSED'
+                    ? 'bg-emerald-400 animate-pulse'
+                    : verificationGateStatus.status === 'BLOCKED'
+                    ? 'bg-rose-400'
+                    : 'bg-cyan-400'
+                }`} />
                 <span className="font-bold text-zinc-200 flex items-center gap-1.5">
-                  <ShieldCheck className="w-4 h-4 text-cyan-400" />
+                  <ShieldCheck className={`w-4 h-4 ${isComplianceCritical ? 'text-amber-400' : 'text-cyan-400'}`} />
                   VERIFICATION GATE:
                 </span>
 
@@ -1613,15 +1714,17 @@ function SovereignAppContent() {
                     type="button"
                     onClick={() => setIsGateDetailsExpanded((prev) => !prev)}
                     className={`px-2 py-0.5 rounded text-[10px] font-bold border flex items-center gap-1 transition-colors cursor-pointer ${
-                      verificationGateStatus.status === 'PASSED' 
+                      isComplianceCritical
+                        ? 'bg-amber-500/20 text-amber-300 border-amber-500/50 hover:bg-amber-500/30'
+                        : verificationGateStatus.status === 'PASSED' 
                         ? 'bg-emerald-500/10 text-emerald-300 border-emerald-500/30 hover:bg-emerald-500/20' 
                         : verificationGateStatus.status === 'BLOCKED' 
-                          ? 'bg-rose-500/10 text-rose-300 border-rose-500/30 hover:bg-rose-500/20' 
-                          : 'bg-cyan-500/10 text-cyan-300 border-cyan-500/30 hover:bg-cyan-500/20'
+                        ? 'bg-rose-500/10 text-rose-300 border-rose-500/30 hover:bg-rose-500/20' 
+                        : 'bg-cyan-500/10 text-cyan-300 border-cyan-500/30 hover:bg-cyan-500/20'
                     }`}
                     title="Hover for tooltip / Click to toggle legal triggers summary"
                   >
-                    {verificationGateStatus.status}
+                    {isComplianceCritical ? 'THRESHOLD_WARN' : verificationGateStatus.status}
                     <Info className="w-2.5 h-2.5 opacity-70" />
                   </button>
 
@@ -1658,6 +1761,12 @@ function SovereignAppContent() {
                             <span>Invariant SSoT Drift:</span>
                             <span className="text-cyan-300">Δ0.0% ZERO DRIFT</span>
                           </div>
+                          <div className="flex justify-between border-t border-white/10 pt-1 mt-1">
+                            <span>Compliance Events:</span>
+                            <span className={isComplianceCritical ? 'text-amber-400 font-bold' : 'text-emerald-300'}>
+                              {verificationGateStatus.complianceEventCount} (Threshold: &gt;={CRITICAL_COMPLIANCE_THRESHOLD})
+                            </span>
+                          </div>
                         </div>
                         <p className="mt-2 text-[10px] text-cyan-400/80 font-mono text-center">
                           Click banner button to expand full trigger matrix ↓
@@ -1672,21 +1781,48 @@ function SovereignAppContent() {
                 </span>
               </div>
 
-              {/* Right: Metrics, Drift Toggle, Trigger Button, Counters */}
-              <div className="flex items-center gap-2.5 sm:gap-3 text-[11px] text-zinc-400 ml-auto flex-wrap sm:flex-nowrap">
+              {/* Right: Metrics, Drift Toggle, Trigger Button, Counters & Downloads */}
+              <div className="flex items-center gap-2 sm:gap-2.5 text-[11px] text-zinc-400 ml-auto flex-wrap">
                 {/* Epoch Countdown Timer: SYNC_EPOCH_ROTATION */}
                 <div
-                  className="hidden lg:flex items-center gap-1.5 px-2 py-0.5 rounded bg-black/50 border border-cyan-500/30 text-[10px] font-mono shadow-inner shrink-0 select-none"
+                  className="hidden xl:flex items-center gap-1.5 px-2 py-0.5 rounded bg-black/50 border border-cyan-500/30 text-[10px] font-mono shadow-inner shrink-0 select-none"
                   title="Real-time Epoch Countdown Timer (SYNC_EPOCH_ROTATION: counting down to 00:00:00)"
                 >
                   <Clock className="w-3 h-3 text-cyan-400 animate-pulse" />
-                  <span className="text-zinc-500 uppercase tracking-wider hidden xl:inline">SYNC_EPOCH_ROTATION:</span>
-                  <span className="text-zinc-500 uppercase xl:hidden">EPOCH:</span>
+                  <span className="text-zinc-500 uppercase tracking-wider">SYNC_EPOCH:</span>
                   <span className="text-amber-400 font-bold tracking-widest">{epochCountdown}</span>
                 </div>
 
                 {/* SSoT Drift Deviation Simulator Toggle Button */}
                 <SsotDriftToggleButton />
+
+                {/* Button: Download summary report of all active legal triggers as JSON */}
+                <button
+                  type="button"
+                  onClick={handleDownloadLegalTriggersSummary}
+                  className="px-2.5 py-1 rounded-lg font-mono text-[10px] font-semibold border flex items-center gap-1.5 transition-all cursor-pointer bg-gradient-to-r from-cyan-950/70 to-blue-950/70 hover:from-cyan-900 hover:to-blue-900 text-cyan-200 border-cyan-400/40 shadow-[0_0_12px_rgba(6,182,212,0.2)] hover:border-cyan-300"
+                  title="ดาวน์โหลดรายงานสรุปทริกเกอร์ทางกฎหมาย ETDA/PDPA ทั้งหมดเป็นไฟล์ JSON สำหรับการตรวจสอบในพื้นที่"
+                >
+                  <Download className="w-3 h-3 text-cyan-300" />
+                  <span className="hidden sm:inline">Legal Triggers Report</span>
+                  <span className="sm:hidden">Triggers</span>
+                  <span className="px-1 py-0.2 rounded text-[8px] bg-cyan-500/20 text-cyan-300">JSON</span>
+                </button>
+
+                {/* Button: Verified Evidence Package Download with Confirmation Modal */}
+                <button
+                  type="button"
+                  onClick={() => {
+                    playTone(620, 0.03);
+                    setIsEvidenceDownloadModalOpen(true);
+                  }}
+                  className="px-2.5 py-1 rounded-lg font-mono text-[10px] font-bold border flex items-center gap-1.5 transition-all cursor-pointer bg-gradient-to-r from-emerald-950/80 via-teal-950/90 to-emerald-950/80 hover:from-emerald-900 hover:to-teal-900 text-emerald-200 border-emerald-400/50 shadow-[0_0_15px_rgba(16,185,129,0.25)] hover:border-emerald-300"
+                  title="คลิกเพื่อเปิดกล่องโต้ตอบยืนยันและตรวจสอบขนาดไฟล์/แฮชเมตาเดตาก่อนดาวน์โหลดแพ็คเกจหลักฐาน"
+                >
+                  <FileCheck2 className="w-3.5 h-3.5 text-emerald-300" />
+                  <span className="hidden md:inline">ดาวน์โหลดแพ็คเกจหลักฐานที่ตรวจสอบแล้ว</span>
+                  <span className="md:hidden">แพ็คเกจหลักฐาน</span>
+                </button>
 
                 {/* Expandable Section Toggle Button */}
                 <button
@@ -1712,10 +1848,26 @@ function SovereignAppContent() {
 
                 <span className="hidden sm:inline text-zinc-600">•</span>
 
-                <span className="flex items-center gap-1">
-                  <CheckCircle2 className="w-3.5 h-3.5 text-emerald-400" />
-                  <span>Anchors: <strong className="text-emerald-300">{verificationGateStatus.complianceEventCount}</strong></span>
-                </span>
+                {/* Compliance Anchors Count with Threshold Toggle Simulation */}
+                <button
+                  type="button"
+                  onClick={() => {
+                    playTone(550, 0.03);
+                    setVerificationGateStatus(prev => ({
+                      ...prev,
+                      complianceEventCount: prev.complianceEventCount < CRITICAL_COMPLIANCE_THRESHOLD ? 2 : 1,
+                    }));
+                  }}
+                  className={`flex items-center gap-1 px-2 py-0.5 rounded cursor-pointer transition-all ${
+                    isComplianceCritical
+                      ? 'bg-amber-500/20 text-amber-300 border border-amber-500/50 animate-pulse'
+                      : 'hover:bg-white/5'
+                  }`}
+                  title="คลิกเพื่อจำลองสลับจำนวน Compliance Event Count (ต่ำกว่าเกณฑ์ < 2 / ปกติ >= 2)"
+                >
+                  <CheckCircle2 className={`w-3.5 h-3.5 ${isComplianceCritical ? 'text-amber-400' : 'text-emerald-400'}`} />
+                  <span>Anchors: <strong className={isComplianceCritical ? 'text-amber-300' : 'text-emerald-300'}>{verificationGateStatus.complianceEventCount}</strong></span>
+                </button>
 
                 <span>•</span>
 
@@ -1750,26 +1902,27 @@ function SovereignAppContent() {
               </div>
             </div>
 
-          {/* Expandable Section: Comprehensive ETDA & PDPA Trigger Matrix with Tabs, Audit Timeline & Force Scan */}
-          <AnimatePresence>
-            {isGateDetailsExpanded && (
-              <motion.div
-                initial={{ height: 0, opacity: 0 }}
-                animate={{ height: 'auto', opacity: 1 }}
-                exit={{ height: 0, opacity: 0 }}
-                transition={{ duration: 0.28, ease: [0.16, 1, 0.3, 1] }}
-                className="border-t border-cyan-500/20 bg-[#060812]/95 px-4 sm:px-6 py-4 space-y-4"
-              >
-                <ThaiComplianceTriggerMatrix
-                  onOpenLegalSearch={() => setIsLegalSearchOpen(true)}
-                  onOpenCertificate={() => setIsCertificateOpen(true)}
-                  onExportAuditLogs={handleExportAuditLogs}
-                  isForensicAuditMode={isForensicAuditMode}
-                />
-              </motion.div>
-            )}
-          </AnimatePresence>
-        </div>
+            {/* Expandable Section: Comprehensive ETDA & PDPA Trigger Matrix with subtle slide-and-fade animation */}
+            <AnimatePresence>
+              {isGateDetailsExpanded && (
+                <motion.div
+                  initial={{ height: 0, opacity: 0, y: -12, scale: 0.995 }}
+                  animate={{ height: 'auto', opacity: 1, y: 0, scale: 1 }}
+                  exit={{ height: 0, opacity: 0, y: -10, scale: 0.995 }}
+                  transition={{ duration: 0.32, ease: [0.16, 1, 0.3, 1] }}
+                  className="border-t border-cyan-500/20 bg-[#060812]/95 px-3 sm:px-6 py-4 space-y-4 overflow-hidden"
+                >
+                  <ThaiComplianceTriggerMatrix
+                    onOpenLegalSearch={() => setIsLegalSearchOpen(true)}
+                    onOpenCertificate={() => setIsCertificateOpen(true)}
+                    onExportAuditLogs={handleExportAuditLogs}
+                    isForensicAuditMode={isForensicAuditMode}
+                    onOpenEvidenceDownloadModal={() => setIsEvidenceDownloadModalOpen(true)}
+                  />
+                </motion.div>
+              )}
+            </AnimatePresence>
+          </div>
 
         {/* Real-time Nexus Integration Layer Bridge */}
         <NexusIntegrationLayer
@@ -1850,6 +2003,22 @@ function SovereignAppContent() {
       <AuditCertificateModal
         isOpen={isCertificateOpen}
         onClose={() => setIsCertificateOpen(false)}
+      />
+
+      {/* Verified Evidence Download Confirmation Modal (ขนาดไฟล์ & แฮชเมตาเดตา) */}
+      <VerifiedEvidenceDownloadConfirmModal
+        isOpen={isEvidenceDownloadModalOpen}
+        onClose={() => setIsEvidenceDownloadModalOpen(false)}
+        onDownloaded={() => {
+          showToast('ดาวน์โหลดแพ็คเกจหลักฐานที่ตรวจสอบแล้วสำเร็จ (ZIP Package)', 'success');
+          addSystemEvent(
+            'EVIDENCE',
+            'Verified Evidence Package Exported',
+            'Sovereign verified evidence package cryptographic archive exported with Genesis SHA3-512 & Merkle attestation.',
+            'export:evidence_package',
+            'success'
+          );
+        }}
       />
 
       {/* Dynamic Atmospheric Ambient Sound Generator Floating HUD */}

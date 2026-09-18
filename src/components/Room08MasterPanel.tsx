@@ -26,6 +26,7 @@ import { SYSTEM_METADATA } from '../data/canonicalData';
 import { HardwareSnapshot, ViewType } from '../types';
 import { playAuditChime, playTone } from './AudioSynthesizer';
 import { copyToClipboard } from '../utils/clipboard';
+import { SealGenerationVelocityLineChart } from './SealGenerationVelocityLineChart';
 
 export const CANONICAL_FROZEN_SEALS = 14902;
 export const CANONICAL_BLOCK = 849202;
@@ -246,6 +247,12 @@ export const Room08MasterPanel: React.FC<Room08MasterPanelProps> = ({
           </ResponsiveContainer>
         </div>
       </div>
+
+      {/* Seal Generation Over Time - Recharts Line Chart */}
+      <SealGenerationVelocityLineChart
+        title="การสร้างตราประทับเมื่อเวลาผ่านไป (Seal Generation Over Time)"
+        subtitle="แสดงอัตราความเร็ว (Velocity) และการเติบโตสะสมของการสร้างตราประทับทองคำ ๑๔,๙๐๒ ชุดในอดีต (NIST FIPS 204 ML-DSA-87)"
+      />
 
       {/* Algorithm Specs Cards */}
       <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
