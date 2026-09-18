@@ -1,3 +1,67 @@
+// --- Hologram Particle Component (วางบนสุดของ App.tsx) ---
+const HologramParticles: React.FC = () => {
+  const canvasRef = React.useRef<HTMLCanvasElement | null>(null);
+
+  React.useEffect(() => {
+    const canvas = canvasRef.current;
+    if (!canvas) return;
+    const ctx = canvas.getContext('2d');
+    if (!ctx) return;
+
+    let animationFrameId: number;
+    let width = (canvas.width = window.innerWidth);
+    let height = (canvas.height = window.innerHeight);
+
+    const handleResize = () => {
+      if (!canvas) return;
+      width = canvas.width = window.innerWidth;
+      height = canvas.height = window.innerHeight;
+    };
+    window.addEventListener('resize', handleResize);
+
+    const particles = Array.from({ length: 45 }, () => ({
+      x: Math.random() * width,
+      y: Math.random() * height,
+      radius: Math.random() * 1.5 + 0.5,
+      color: Math.random() > 0.4 ? 'rgba(6, 182, 212, ' : 'rgba(168, 85, 247, ',
+      alpha: Math.random() * 0.5 + 0.2,
+      speedY: -(Math.random() * 0.3 + 0.1),
+      pulse: Math.random() * 0.02,
+    }));
+
+    const render = () => {
+      ctx.clearRect(0, 0, width, height);
+      particles.forEach((p) => {
+        p.y += p.speedY;
+        if (p.y < 0) p.y = height;
+        p.alpha += Math.sin(Date.now() * p.pulse) * 0.005;
+
+        ctx.beginPath();
+        ctx.arc(p.x, p.y, p.radius, 0, Math.PI * 2);
+        ctx.fillStyle = `${p.color}${Math.max(0.1, Math.min(0.7, p.alpha))})`;
+        ctx.shadowBlur = 6;
+        ctx.shadowColor = p.color.includes('6, 182') ? '#06b6d4' : '#a855f7';
+        ctx.fill();
+      });
+      animationFrameId = requestAnimationFrame(render);
+    };
+
+    render();
+
+    return () => {
+      window.removeEventListener('resize', handleResize);
+      cancelAnimationFrame(animationFrameId);
+    };
+  }, []);
+
+  return (
+    <canvas
+      ref={canvasRef}
+      className="fixed inset-0 pointer-events-none z-0 opacity-60"
+    />
+  );
+};
+
 import { SovereignCopilot } from './components/SovereignCopilot';
 import { MainFooter } from './components/MainFooter';
 import React, { useState, useEffect, useCallback, useRef } from 'react';
@@ -319,8 +383,7 @@ const BannerAnimatedSealCount: React.FC<BannerAnimatedSealCountProps> = ({
       },
     });
 
-    return (
-    ) => controls.stop();
+    return () => controls.stop();
   }, [sealCount]);
 
   const deltaFromBase = Math.max(0, sealCount - baseSealCount);
@@ -569,6 +632,7 @@ function SovereignAppContent() {
       navigate(targetPath);
     }
   }, [navigate, location.pathname]);
+
   const [isLeftSidebarOpen, setIsLeftSidebarOpen] = useState<boolean>(() => {
     try {
       return localStorage.getItem('zyrquen_sidebar_open') === 'true';
@@ -599,6 +663,7 @@ function SovereignAppContent() {
       console.error(e);
     }
   }, []);
+
   const [selectedChamberId, setSelectedChamberId] = useState<string>('00');
   const [isCertificateOpen, setIsCertificateOpen] = useState(false);
   const [isLegalSearchOpen, setIsLegalSearchOpen] = useState(false);
@@ -620,7 +685,6 @@ function SovereignAppContent() {
     setToasts((prev) => prev.filter((t) => t.id !== id));
   }, []);
 
-  // Connect to Node.js WebSocket Notification Service and pipe incoming alerts to toasts
   useNotificationWebSocket(showToast);
   const [carrierPitchHz, setCarrierPitchHz] = useState<number>(882);
   const [snapshots, setSnapshots] = useState<HardwareSnapshot[]>(INITIAL_HARDWARE_SNAPSHOTS);
@@ -650,7 +714,7 @@ function SovereignAppContent() {
 
   const TELEMETRY_AUDIT_INTERVAL_SEC = 30;
   const [auditCountdownSec, setAuditCountdownSec] = useState<number>(TELEMETRY_AUDIT_INTERVAL_SEC);
-  // Scheduled telemetry audit countdown timer (30s cadence)
+
   useEffect(() => {
     if (isSystemActivityFrozen) return;
 
@@ -722,14 +786,9 @@ function SovereignAppContent() {
     });
   }, []);
 
-  
-
-  
-
-  // Heartbeat pulse timer in sync with telemetry
   useEffect(() => {
     const isRecent = Date.now() - lastSnapshotTime < 6000;
-    const intervalTime = isRecent ? 500 : 1000; // Accelerated heartbeat when snapshot is captured!
+    const intervalTime = isRecent ? 500 : 1000;
 
     const interval = setInterval(() => {
       setHeartbeatTick((prev) => !prev);
@@ -762,14 +821,12 @@ function SovereignAppContent() {
 
       setSystemEvents((prev) => [newEvt, ...prev]);
 
-      // Broadcast system event across tabs via BroadcastChannel API
       try {
         broadcastSyncService.broadcastSystemEvent(newEvt);
       } catch (err) {
         console.warn('Broadcast sync failed:', err);
       }
 
-      // Queue non-critical or compliance/hardware events for background sync
       try {
         offlineAuditSyncService.enqueueEvent({
           type: newEvt.type,
@@ -783,7 +840,6 @@ function SovereignAppContent() {
         console.warn('Offline audit enqueue failed:', err);
       }
 
-      // Low-Latency Verbal Feedback Loop for Critical and Anomaly Events
       try {
         announceSystemEventVerbal(type, title, severity);
       } catch (err) {
@@ -793,7 +849,6 @@ function SovereignAppContent() {
     []
   );
 
-  // Register Write Firewall & Automated Backup Diagnostic to dispatch directly to SystemEvents
   useEffect(() => {
     WriteFirewallEngine.registerSystemEventHandler((type, title, desc, meta, sev, statute, view) => {
       addSystemEvent(type, title, desc, meta, sev, statute, view);
@@ -803,9 +858,7 @@ function SovereignAppContent() {
     });
   }, [addSystemEvent]);
 
-  // Trigger 'EVIDENCE_IMPORTED' audit events upon application initialization
   useEffect(() => {
-    // 1. Audit event for TNT-TH-001
     addSystemEvent(
       'EVIDENCE_IMPORTED',
       'Evidence Imported: TNT-TH-001 (Tenant Manifest)',
@@ -816,7 +869,6 @@ function SovereignAppContent() {
       'dashboard'
     );
 
-    // 2. Audit event for DS-901-PILOT
     addSystemEvent(
       'EVIDENCE_IMPORTED',
       'Evidence Imported: DS-901-PILOT (FIOS Pilot Dataset)',
@@ -828,12 +880,9 @@ function SovereignAppContent() {
     );
   }, [addSystemEvent]);
 
-  // Multi-tab BroadcastChannel & Offline Audit Synchronization Listener
   useEffect(() => {
-    // Initialize BroadcastChannel
     broadcastSyncService.init();
 
-    // 1. Synchronize cross-tab system events
     const unsubEvent = broadcastSyncService.onSystemEvent((evt) => {
       setSystemEvents((prev) => {
         if (prev.some((e) => e.id === evt.id)) return prev;
@@ -841,7 +890,6 @@ function SovereignAppContent() {
       });
     });
 
-    // 2. Synchronize cross-tab audit snapshots
     const unsubSnap = broadcastSyncService.onAuditSnapshot((snap) => {
       setSnapshots((prev) => {
         if (prev.some((s) => s.id === snap.id)) return prev;
@@ -849,7 +897,6 @@ function SovereignAppContent() {
       });
     });
 
-    // 3. Synchronize cross-tab global lock states
     const unsubLock = broadcastSyncService.onLockState((lockState) => {
       if (typeof lockState.isSystemActivityFrozen === 'boolean') {
         setIsSystemActivityFrozen(lockState.isSystemActivityFrozen);
@@ -862,7 +909,6 @@ function SovereignAppContent() {
       }
     });
 
-    // 4. Background offline audit queue status notification
     let previousPending = offlineAuditSyncService.getQueueCount();
     const unsubOffline = offlineAuditSyncService.subscribe((count) => {
       if (previousPending > 0 && count === 0) {
@@ -882,7 +928,6 @@ function SovereignAppContent() {
     };
   }, [showToast]);
 
-  // Automated background backup service subscription
   useEffect(() => {
     automatedBackupService.start();
 
@@ -990,8 +1035,6 @@ function SovereignAppContent() {
   }, [isAudioActive, addSystemEvent]);
 
   const handleAddSnapshot = (newSnap: HardwareSnapshot) => {
-    // Verification Gate: Visually validate if systemEvents containing 'COMPLIANCE' type exist and have triggered
-    // corresponding seal updates before allowing a new entry to be appended to the Merkle Ledger.
     const complianceEvents = systemEvents.filter((e) => e.type === 'COMPLIANCE');
     const hasValidCompliance = complianceEvents.length > 0;
 
@@ -1017,7 +1060,6 @@ function SovereignAppContent() {
       return;
     }
 
-    // Update Verification Gate Status to PASSED
     const newVerifiedSeals = 14902 + Math.max(0, snapshots.length - 2 + 1);
     systemStateStore.setSealCount(newVerifiedSeals);
     systemStateStore.setSealedBlock(849202 + Math.max(0, snapshots.length - 2 + 1));
@@ -1038,8 +1080,6 @@ function SovereignAppContent() {
 
     setSnapshots((prev) => {
       const nextSnaps = [newSnap, ...prev];
-
-      // Telemetry Anomaly Observer: Detect statistical outliers against baseline distribution
       const anomalyResult = TelemetryAnomalyObserver.evaluate(newSnap, prev);
       if (anomalyResult.hasAnomaly) {
         anomalyResult.anomalies.forEach((anom) => {
@@ -1058,10 +1098,8 @@ function SovereignAppContent() {
       return nextSnaps;
     });
     setLastSnapshotTime(Date.now());
-    // Computational activity pulse elevates entropy momentarily
     systemStateStore.bumpEntropy(6.8);
     
-    // 1. Primary Hardware Event
     addSystemEvent(
       'HARDWARE',
       `Hardware Snapshot #${newSnap.snapshotNumber} Sealed`,
@@ -1070,7 +1108,6 @@ function SovereignAppContent() {
       'success'
     );
 
-    // 2. Automatic Legal Compliance Alert (Section 26 & 28 Invariant Verification)
     setTimeout(() => {
       addSystemEvent(
         'COMPLIANCE',
@@ -1083,12 +1120,10 @@ function SovereignAppContent() {
       );
     }, 200);
 
-    // Open sidebar subtly to showcase live activity feed
     setIsEventsSidebarOpen(true);
   };
 
   const handleLegalSearchExecuted = (query: string, summary: string) => {
-    // 1. Search Query Event
     addSystemEvent(
       'LEGAL_SEARCH',
       `Thai Legal Search: "${query.slice(0, 36)}..."`,
@@ -1097,7 +1132,6 @@ function SovereignAppContent() {
       'info'
     );
 
-    // 2. Automatic Legal Compliance Citation Alert
     setTimeout(() => {
       addSystemEvent(
         'COMPLIANCE',
@@ -1110,11 +1144,9 @@ function SovereignAppContent() {
       );
     }, 250);
 
-    // Slide in sidebar to surface live grounding event
     setIsEventsSidebarOpen(true);
   };
 
-  // Global Keyboard Shortcuts Listener
   useEffect(() => {
     const handleKeyDown = (e: KeyboardEvent) => {
       const target = e.target as HTMLElement;
@@ -1124,7 +1156,6 @@ function SovereignAppContent() {
           target.tagName === 'TEXTAREA' ||
           target.isContentEditable);
 
-      // 1. Meta / Ctrl shortcuts (work even inside inputs for global commands)
       if (e.metaKey || e.ctrlKey) {
         const key = e.key.toLowerCase();
 
@@ -1185,7 +1216,6 @@ function SovereignAppContent() {
         }
       }
 
-      // 2. Escape to dismiss modals and sidebars
       if (e.key === 'Escape') {
         if (isLeftSidebarOpen && typeof window !== 'undefined' && window.innerWidth < 1024) {
           setIsLeftSidebarOpen(false);
@@ -1209,7 +1239,6 @@ function SovereignAppContent() {
         }
       }
 
-      // 3. Direct single-key shortcuts when NOT focusing an input
       if (!isInput && !e.metaKey && !e.ctrlKey && !e.altKey) {
         if (e.key === '[') {
           e.preventDefault();
@@ -1238,7 +1267,6 @@ function SovereignAppContent() {
           return;
         }
 
-        // Direct number key navigation (1-9, 0, -, =, r, c)
         const viewKeyMap: Record<string, ViewType> = {
           '1': 'dashboard',
           'c': 'council',
@@ -1310,7 +1338,6 @@ function SovereignAppContent() {
     };
     window.addEventListener('storage', handleStorageChange);
 
-    // Custom event to update from same window
     const handleLocalSettingsChange = () => {
         const storedTimer = Number(localStorage.getItem('zyrquen_inactivity_timer') || 30);
         setInactivityTimerMinutes(storedTimer);
@@ -1484,7 +1511,6 @@ function SovereignAppContent() {
     );
     showToast('Initiating Batch Verification...', 'info');
     
-    // Simulate verification delay and success
     setTimeout(() => {
       showToast('14,902 chambers verified successfully', 'success');
       addSystemEvent(
@@ -1508,7 +1534,6 @@ function SovereignAppContent() {
     showToast('Generating signed Audit Log...', 'info');
 
     setTimeout(() => {
-      // Mock generation of a file download
       const dataStr = "data:text/json;charset=utf-8," + encodeURIComponent(JSON.stringify({
         status: "COURT_READY",
         seals_verified: 14902,
@@ -1535,23 +1560,18 @@ function SovereignAppContent() {
 
   return (
     <div className={`min-h-screen w-full max-w-full overflow-x-hidden bg-[#07080F] text-zinc-100 font-sans selection:bg-cyan-500/30 selection:text-cyan-200 antialiased relative ${isMonochromeMode ? 'theme-monochrome' : ''}`}>
-      {/* Background Persona Mesh Ambient Lighting with Smooth Morphing */}
       <div className="fixed inset-0 pointer-events-none z-0 overflow-hidden transition-all duration-1000 ease-in-out">
-        {/* Dynamic Top Orb */}
         <div
           className={`absolute top-[-10%] left-[20%] w-[650px] h-[650px] rounded-full blur-[150px] transition-all duration-1000 ease-in-out ${persona.orb1}`}
         />
-        {/* Dynamic Mid Orb */}
         <div
           className={`absolute top-[40%] right-[10%] w-[550px] h-[550px] rounded-full blur-[150px] transition-all duration-1000 ease-in-out ${persona.orb2}`}
         />
-        {/* Dynamic Bottom Orb */}
         <div
           className={`absolute bottom-[-10%] left-[30%] w-[750px] h-[750px] rounded-full blur-[170px] transition-all duration-1000 ease-in-out ${persona.orb3}`}
         />
       </div>
 
-      {/* Top Fixed Navigation & Status Bar */}
       <Navigation
         currentView={currentView}
         onSelectView={setCurrentView}
@@ -1578,9 +1598,7 @@ function SovereignAppContent() {
         }}
       />
 
-      {/* App Body Layout with Collapsible Left Sidebar */}
       <div className="relative z-10 max-w-[1780px] mx-auto px-2 sm:px-4 flex items-start">
-        {/* Left Sidebar (Open / Close Collapsible) */}
         <LeftSidebar
           isOpen={isLeftSidebarOpen}
           onClose={handleCloseSidebar}
@@ -1592,15 +1610,11 @@ function SovereignAppContent() {
           liveCryo={14.98}
         />
 
-        {/* Main Content Area with Sliding Curtain OS Entrance Transitions */}
-        <main className="flex-1 min-w-0 w-full px-2 sm:px-4 py-4 pb-20 overflow-hidden space-y-4 transition-all duration-300">
-          {/* Visual Notification System: SSoT Mutation Drift Warning (Triggered if deviation >= 0.01%) */}
+        <main className="flex-1 min-w-0 w-full px-2 sm:px-4 py-4 pb-24 sm:pb-20 overflow-hidden space-y-4 transition-all duration-300">
           <SsotDriftWarning />
 
-          {/* Verification Gate Active Invariant Banner with Progress Bar & Expandable ETDA/PDPA Triggers */}
           <div className="rounded-2xl bg-[#0b0e1a]/90 border border-cyan-500/25 backdrop-blur-xl shadow-lg transition-all duration-300 overflow-hidden">
             <div className="px-4 py-2.5 flex flex-wrap items-center justify-between gap-3 text-xs font-mono">
-              {/* Left: Gate Status & Info with Tooltip Trigger */}
               <div className="flex items-center gap-2.5 relative">
                 <span className={`w-2.5 h-2.5 rounded-full ${verificationGateStatus.status === 'PASSED' ? 'bg-emerald-400 animate-pulse' : verificationGateStatus.status === 'BLOCKED' ? 'bg-rose-400' : 'bg-cyan-400'}`} />
                 <span className="font-bold text-zinc-200 flex items-center gap-1.5">
@@ -1608,7 +1622,6 @@ function SovereignAppContent() {
                   VERIFICATION GATE:
                 </span>
 
-                {/* Status Pill with hover tooltip */}
                 <div 
                   className="relative inline-block"
                   onMouseEnter={() => setIsGateTooltipVisible(true)}
@@ -1630,7 +1643,6 @@ function SovereignAppContent() {
                     <Info className="w-2.5 h-2.5 opacity-70" />
                   </button>
 
-                  {/* Floating Tooltip Box */}
                   <AnimatePresence>
                     {isGateTooltipVisible && (
                       <motion.div
@@ -1677,12 +1689,9 @@ function SovereignAppContent() {
                 </span>
               </div>
 
-              {/* Right: Metrics, Drift Toggle, Trigger Button, Counters */}
               <div className="flex items-center gap-2.5 sm:gap-3 text-[11px] text-zinc-400 ml-auto flex-wrap sm:flex-nowrap">
-                {/* SSoT Drift Deviation Simulator Toggle Button */}
                 <SsotDriftToggleButton />
 
-                {/* Expandable Section Toggle Button */}
                 <button
                   type="button"
                   onClick={() => setIsGateDetailsExpanded((prev) => !prev)}
@@ -1723,7 +1732,6 @@ function SovereignAppContent() {
               </div>
             </div>
 
-            {/* Scheduled Telemetry Audit Real-time Progress Bar */}
             <div className="px-4 pb-2.5 pt-0.5 space-y-1 bg-black/20 border-t border-white/5">
               <div className="flex items-center justify-between text-[10px] font-mono text-zinc-400">
                 <span className="flex items-center gap-1.5 text-cyan-300">
@@ -1744,7 +1752,6 @@ function SovereignAppContent() {
               </div>
             </div>
 
-          {/* Expandable Section: Comprehensive ETDA & PDPA Trigger Matrix */}
           <AnimatePresence>
             {isGateDetailsExpanded && (
               <motion.div
@@ -1754,7 +1761,6 @@ function SovereignAppContent() {
                 transition={{ duration: 0.28, ease: [0.16, 1, 0.3, 1] }}
                 className="border-t border-cyan-500/20 bg-[#060812]/95 px-4 sm:px-6 py-4 space-y-4"
               >
-                {/* Header Summary */}
                 <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 pb-3 border-b border-white/8 font-mono">
                   <div className="flex items-center gap-2.5">
                     <div className="w-8 h-8 rounded-xl bg-cyan-500/10 border border-cyan-500/30 flex items-center justify-center text-cyan-400">
@@ -1773,7 +1779,6 @@ function SovereignAppContent() {
                     </div>
                   </div>
 
-                  {/* Actions shortcut */}
                   <div className="flex items-center gap-2 flex-wrap">
                     <button
                       type="button"
@@ -1810,7 +1815,6 @@ function SovereignAppContent() {
                   </div>
                 </div>
 
-                {/* 6 Trigger Cards Grid */}
                 <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-3 font-sans">
                   {ETDA_PDPA_TRIGGERS.map((trigger) => (
                     <div
@@ -1854,7 +1858,6 @@ function SovereignAppContent() {
                           </span>
                         </div>
 
-                        {/* Forensic Audit Mode Overlay Metadata */}
                         {isForensicAuditMode && (
                           <div className="mt-1.5 pt-1.5 border-t border-purple-500/30 bg-purple-950/30 -mx-2 -mb-2 p-2 rounded-b-lg space-y-1 animate-in fade-in duration-200">
                             <div className="flex items-center justify-between text-[9px] text-purple-300 font-bold">
@@ -1883,7 +1886,6 @@ function SovereignAppContent() {
                   ))}
                 </div>
 
-                {/* Bottom Sovereign Invariant Seal Strip */}
                 <div className="p-2.5 rounded-xl bg-black/40 border border-white/5 flex flex-wrap items-center justify-between gap-3 text-[11px] font-mono text-zinc-400">
                   <div className="flex items-center gap-2">
                     <span className="w-2 h-2 rounded-full bg-emerald-400 animate-pulse" />
@@ -1902,7 +1904,6 @@ function SovereignAppContent() {
           </AnimatePresence>
         </div>
 
-        {/* Real-time Nexus Integration Layer Bridge */}
         <NexusIntegrationLayer
           currentView={currentView}
           onNavigate={setCurrentView}
@@ -1917,7 +1918,6 @@ function SovereignAppContent() {
             exit={{ opacity: 0, x: -24, filter: 'blur(5px)' }}
             transition={{ duration: 0.28, ease: [0.16, 1, 0.3, 1] }}
           >
-            {/* Subtle Sliding Curtain Wipe & Shimmer Effect */}
             <motion.div
               initial={{ scaleX: 1, opacity: 0.5 }}
               animate={{ scaleX: 0, opacity: 0 }}
@@ -1938,10 +1938,8 @@ function SovereignAppContent() {
       </main>
     </div>
 
-      {/* Footer Attestation Bar */}
       <MainFooter />
 
-      {/* System Events Activity Feed Sidebar */}
       <SystemEventsSidebar
         isOpen={isEventsSidebarOpen}
         onClose={() => {
@@ -1959,7 +1957,6 @@ function SovereignAppContent() {
         }}
       />
 
-      {/* Global Keyboard Shortcuts Modal */}
       <KeyboardShortcutsModal
         isOpen={isShortcutsOpen}
         onClose={() => {
@@ -1982,7 +1979,6 @@ function SovereignAppContent() {
         onCaptureSnapshot={() => handleAddSnapshot(createTelemetrySnapshot({ core0: 42, core1: 39, core2: 44, core3: 38 }, snapshots.length, snapshots[0]?.sealedHash))}
       />
 
-      {/* Certificate Modal */}
       <ToastNotification toasts={toasts} removeToast={removeToast} />
       <AuditCertificateModal
         isOpen={isCertificateOpen}
@@ -1992,17 +1988,17 @@ function SovereignAppContent() {
         }}
       />
 
-      {/* Dynamic Atmospheric Ambient Sound Generator Floating HUD */}
-      <div className="fixed bottom-6 left-24 sm:left-6 z-40 flex items-center gap-2 pointer-events-none sm:pointer-events-auto">
+      {/* --- Upgraded Atmospheric Audio HUD (Mobile Responsive Layout Elevation) --- */}
+      <div className="fixed bottom-20 left-3 sm:bottom-6 sm:left-6 z-40 flex items-center gap-2 pointer-events-none sm:pointer-events-auto">
         <div className="pointer-events-auto">
         <button
           onClick={handleToggleAudio}
-          className={`px-3.5 min-h-[44px] py-2 rounded-2xl border font-mono text-xs backdrop-blur-xl transition-all shadow-xl flex items-center gap-2.5 ${
+          className={`px-3 sm:px-3.5 min-h-[40px] sm:min-h-[44px] py-1.5 sm:py-2 rounded-2xl border font-mono text-[11px] sm:text-xs backdrop-blur-xl transition-all shadow-2xl flex items-center gap-2 cursor-pointer active:scale-95 ${
             isAudioActive
-              ? 'bg-cyan-950/80 border-cyan-500/40 text-cyan-200 shadow-[0_0_20px_rgba(6,182,212,0.25)]'
-              : 'bg-black/60 border-white/10 text-zinc-400 hover:text-zinc-200 hover:border-white/20'
+              ? 'bg-cyan-950/85 border-cyan-500/50 text-cyan-200 shadow-[0_0_20px_rgba(6,182,212,0.3)]'
+              : 'bg-[#0a0f1e]/90 border-white/10 text-zinc-400 hover:text-zinc-200 hover:border-white/20'
           }`}
-          title="Dynamic Atmospheric Ambient Sound Generator (Modulates Carrier Pitch by Aggregate System Entropy)"
+          title="Dynamic Atmospheric Ambient Sound Generator (Modulates Carrier Pitch by System Entropy)"
         >
           <span className="relative flex h-2 w-2">
             {isAudioActive && (
@@ -2010,44 +2006,43 @@ function SovereignAppContent() {
             )}
             <span
               className={`relative inline-flex rounded-full h-2 w-2 ${
-                isAudioActive ? 'bg-cyan-400' : 'bg-zinc-600'
+                isAudioActive ? 'bg-cyan-400 shadow-[0_0_8px_#22d3ee]' : 'bg-zinc-600'
               }`}
             ></span>
           </span>
           <Waves className={`w-3.5 h-3.5 ${isAudioActive ? 'text-cyan-400 animate-pulse' : 'text-zinc-500'}`} />
           <span className="font-bold">
-            {isAudioActive ? 'ATMOSPHERIC AUDIO' : 'ATMOSPHERIC AUDIO'}
+            <span className="hidden sm:inline">ATMOSPHERIC </span>AUDIO
           </span>
-          <span className="text-[11px] text-zinc-300 border-l border-white/10 pl-2 font-mono">
+          <span className="text-[10px] sm:text-[11px] text-zinc-300 border-l border-white/10 pl-2 font-mono">
             {isAudioActive ? `${carrierPitchHz} Hz` : 'MUTED'}
           </span>
-          <QuantumAggregateEntropyIndicator />
+          <div className="hidden xs:block">
+            <QuantumAggregateEntropyIndicator />
+          </div>
         </button>
         </div>
       </div>
 
-      {/* Thai Legal & Cryptographic Standards Search Modal (Google Search Tool) */}
-      {/* Voice-to-Command Bridge (Shifted to allow bottom-right Copilot) */}
       <VoiceCommandOverlay 
         onNavigate={setCurrentView} 
         onCaptureSnapshot={() => handleAddSnapshot(createTelemetrySnapshot({ core0: 42, core1: 39, core2: 44, core3: 38 }, snapshots.length, snapshots[0]?.sealedHash))} 
         onNotifyEvent={addSystemEvent as any} 
       />
 
-      {/* Sovereign Copilot Floating Launcher Button (Bottom-Right Anchor) */}
-      <div className="fixed bottom-6 right-6 sm:bottom-8 sm:right-8 z-50 flex items-center gap-3 font-mono">
+      {/* --- Upgraded Sovereign Copilot Launcher (Mobile Optimized Anchor) --- */}
+      <div className="fixed bottom-20 right-3 sm:bottom-8 sm:right-8 z-50 flex items-center gap-3 font-mono">
         {!isCopilotOpen && (
           <motion.div
             initial={{ opacity: 0, x: 20 }}
             animate={{ opacity: 1, x: 0 }}
-            className="hidden sm:flex items-center gap-2 bg-indigo-950/80 border border-indigo-500/30 px-3 py-1.5 rounded-xl shadow-lg backdrop-blur-md"
+            className="hidden lg:flex items-center gap-2 bg-indigo-950/80 border border-indigo-500/30 px-3 py-1.5 rounded-xl shadow-lg backdrop-blur-md"
           >
             <div className="w-1.5 h-1.5 rounded-full bg-indigo-400 animate-pulse" />
             <span className="text-[10px] text-indigo-200 font-bold tracking-wide">SYSTEM NOMINAL</span>
           </motion.div>
         )}
         <div className="relative group">
-          {/* Animated Glow Backdrop */}
           <div className={`absolute -inset-0.5 rounded-2xl blur-md opacity-60 group-hover:opacity-100 transition-opacity duration-500 ${isCopilotOpen ? 'bg-gradient-to-r from-cyan-400 to-emerald-400' : 'bg-gradient-to-r from-indigo-500 to-cyan-500'}`} />
           
           <button
@@ -2056,21 +2051,20 @@ function SovereignAppContent() {
               playTone(isCopilotOpen ? 520 : 740, 0.05);
               setIsCopilotOpen((prev) => !prev);
             }}
-            className={`relative px-4 min-h-[48px] py-2.5 rounded-2xl border transition-all duration-300 shadow-2xl flex items-center gap-2.5 cursor-pointer active:scale-95 text-sm overflow-hidden ${
+            className={`relative px-3.5 sm:px-4 min-h-[44px] sm:min-h-[48px] py-2 sm:py-2.5 rounded-2xl border transition-all duration-300 shadow-2xl flex items-center gap-2.5 cursor-pointer active:scale-95 text-xs sm:text-sm overflow-hidden ${
               isCopilotOpen
                 ? 'bg-gradient-to-r from-cyan-500 to-cyan-400 text-black border-cyan-300 shadow-[0_0_30px_rgba(6,182,212,0.6)]'
                 : 'bg-[#0a0f1e]/90 backdrop-blur-xl hover:bg-[#0e162c] text-white border-cyan-500/50 shadow-[0_0_20px_rgba(6,182,212,0.3)]'
             }`}
             title="Sovereign AI Copilot (Right Corner)"
           >
-            {/* Shimmer Effect */}
             {!isCopilotOpen && (
               <div className="absolute inset-0 -translate-x-full bg-gradient-to-r from-transparent via-white/10 to-transparent group-hover:animate-[shimmer_1.5s_infinite]" />
             )}
             
-            <div className="relative flex items-center justify-center w-6 h-6">
+            <div className="relative flex items-center justify-center w-5 h-5 sm:w-6 sm:h-6">
               {isCopilotOpen ? (
-                <X className="w-5 h-5 transition-transform duration-300 rotate-90 group-hover:rotate-180" />
+                <X className="w-4 h-4 sm:w-5 sm:h-5 transition-transform duration-300 rotate-90 group-hover:rotate-180" />
               ) : (
                 <>
                   <div className="absolute inset-0 border border-cyan-400/30 rounded-full animate-[spin_4s_linear_infinite]" />
@@ -2091,7 +2085,6 @@ function SovereignAppContent() {
         </div>
       </div>
 
-      {/* Sovereign Copilot Assistant Window (Docked at Bottom-Right) */}
       <CopilotAssistantDrawer
         isOpen={isCopilotOpen}
         onClose={() => {
@@ -2109,7 +2102,6 @@ function SovereignAppContent() {
         onSearchExecuted={handleLegalSearchExecuted}
       />
       
-      {/* Sovereign Quantum Login & Warp Ingress Loader */}
       <SovereignLoginLoader
         isOpen={showLoginLoader}
         mode={loginLoaderMode}
@@ -2134,7 +2126,6 @@ function SovereignAppContent() {
 
       <OfflineIndicator />
 
-      {/* Global Animated Film-Grain & CRT Scanline Overlay for FROZEN v1.2 LTS */}
       <div className="sovereign-film-grain-overlay" aria-hidden="true" />
       <div className="sovereign-crt-scanline-overlay" aria-hidden="true" />
 
@@ -2171,4 +2162,3 @@ export default function App() {
     </HashRouter>
   );
 }
-
