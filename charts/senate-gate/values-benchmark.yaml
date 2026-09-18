@@ -50,7 +50,7 @@ securityContext:
     drop:
       - ALL
 
-# แก้ไข 1: เพิ่ม Volume Mounts แบบ emptyDir เพื่อรองรับ readOnlyRootFilesystem
+# FIX 1: Mount emptyDir to /tmp to support readOnlyRootFilesystem
 volumeMounts:
   - name: tmp-volume
     mountPath: /tmp
@@ -68,7 +68,7 @@ resources:
     memory: 8Gi
 
 # Zero-Trust Policy Engine Settings
-# แก้ไข 2: ซิงค์ค่า Quorum ให้ตรงกับ SSoT (8/10 เสียง หรือ 80% Supermajority)
+# FIX 2: Sync quorum parameters with SSoT rules (8/10 votes = 0.80 ratio)
 engine:
   mode: "v2.5-OPTIMIZED"
   shortCircuitEnabled: true
@@ -110,7 +110,7 @@ podDisruptionBudget:
   minAvailable: "80%"
 
 # Anti-Affinity & Multi-AZ Distribution
-# แก้ไข 3: ปรับ podAntiAffinity เป็น preferred เพื่อป้องกัน Pod ค้าง Pending หาก Worker Node มีน้อยกว่า Replica Count
+# FIX 3: Change podAntiAffinity to preferred to prevent Pending pods on small clusters
 affinity:
   podAntiAffinity:
     preferredDuringSchedulingIgnoredDuringExecution:
@@ -141,7 +141,7 @@ topologySpreadConstraints:
       matchLabels:
         app.kubernetes.io/name: senate-gate
 
-# แก้ไข 4: เปลี่ยน Service Type เป็น LoadBalancer เพื่อรองรับ AWS Load Balancer Controller
+# FIX 4: Change service type to LoadBalancer to match AWS NLB annotations
 service:
   type: LoadBalancer
   port: 8181
