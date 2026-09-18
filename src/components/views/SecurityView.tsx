@@ -26,6 +26,7 @@ import {
   QrCode,
 } from 'lucide-react';
 import { CustodianQRValidator } from '../system/CustodianQRValidator';
+import { HardwareSealQRScanner } from '../security/HardwareSealQRScanner';
 import { SYSTEM_INVARIANTS, SYSTEM_METADATA } from '../../data/canonicalData';
 import { playAuditChime, playTone } from '../AudioSynthesizer';
 import { GlobalThreatVectorsPanel } from '../GlobalThreatVectorsPanel';
@@ -74,6 +75,7 @@ import { VerificationPassRatesChart } from '../VerificationPassRatesChart';
 import { LiveFlowVisualizerView } from './Security/LiveFlowVisualizerView';
 
 export type SecuritySubTab =
+  | 'hardware-seal-scanner'
   | 'smart-contract'
   | 'sovereign-master-audit'
   | 'utimaco-hsm-v2'
@@ -127,6 +129,7 @@ export const SecurityView: React.FC<SecurityViewProps> = ({
   const [royalGazetteMode, setRoyalGazetteMode] = useState(true);
   const [isPdfPreviewOpen, setIsPdfPreviewOpen] = useState(false);
   const [isQrValidatorOpen, setIsQrValidatorOpen] = useState(false);
+  const [isHardwareSealScannerOpen, setIsHardwareSealScannerOpen] = useState(false);
 
   // Live shared states for G11, G12, and G13
   const [liveCustodianCount, setLiveCustodianCount] = useState<number>(10);
@@ -297,6 +300,18 @@ export const SecurityView: React.FC<SecurityViewProps> = ({
 
           <button
             onClick={() => {
+              playTone(740, 0.08);
+              setActiveTab('hardware-seal-scanner');
+            }}
+            className="px-4 py-2.5 rounded-2xl text-[11px] sm:text-xs font-bold bg-gradient-to-r from-emerald-600 via-teal-600 to-cyan-600 hover:from-emerald-500 hover:to-teal-500 border border-emerald-400/50 text-white flex items-center gap-2 transition-all shadow-[0_0_20px_rgba(16,185,129,0.3)] cursor-pointer"
+            title="Scan physical hardware seals using react-qr-reader to verify against digital ledger"
+          >
+            <QrCode className="w-4 h-4 text-emerald-200" />
+            <span className="tracking-wide">Scan Hardware Seal (QR)</span>
+          </button>
+
+          <button
+            onClick={() => {
               playTone(620, 0.04);
               setIsPdfPreviewOpen(true);
             }}
@@ -346,6 +361,21 @@ export const SecurityView: React.FC<SecurityViewProps> = ({
       {/* Unified Tab Switcher Navigation Bar */}
       <div className="flex items-center bg-[#070914]/90 backdrop-blur-xl border border-cyan-500/20 rounded-2xl p-2 font-mono text-xs shadow-inner flex-wrap gap-2 relative overflow-hidden">
         <div className="absolute inset-0 bg-gradient-to-r from-cyan-500/5 via-violet-500/5 to-transparent pointer-events-none" />
+
+        <button
+          onClick={() => {
+            playTone(740, 0.04);
+            setActiveTab('hardware-seal-scanner');
+          }}
+          className={`relative z-10 px-4 py-2.5 rounded-xl flex items-center gap-2 transition-all font-bold tracking-wide ${
+            activeTab === 'hardware-seal-scanner'
+              ? 'bg-gradient-to-r from-emerald-500/40 via-teal-600/30 to-cyan-500/30 text-emerald-100 border border-emerald-400/60 shadow-[0_0_20px_rgba(16,185,129,0.35)]'
+              : 'text-emerald-300/80 hover:text-emerald-200 hover:bg-emerald-500/10 border border-emerald-500/20'
+          }`}
+        >
+          <QrCode className={`w-4 h-4 ${activeTab === 'hardware-seal-scanner' ? 'text-emerald-300 animate-pulse' : 'text-emerald-400'}`} />
+          <span>Hardware Seal QR Scanner (Ledger SSoT)</span>
+        </button>
 
         <button
           onClick={() => {
@@ -718,6 +748,16 @@ export const SecurityView: React.FC<SecurityViewProps> = ({
         </div>
       )}
 
+      {/* Hardware Seal QR Scanner (react-qr-reader & Digital Ledger SSoT) */}
+      {activeTab === 'hardware-seal-scanner' && (
+        <div className="space-y-6">
+          <HardwareSealQRScanner
+            isEmbedded={true}
+            onAddSystemEvent={onAddSystemEvent}
+          />
+        </div>
+      )}
+
       {/* Official Solidity Smart Contract Core V2 */}
       {activeTab === 'smart-contract' && (
         <div className="space-y-6">
@@ -1013,6 +1053,13 @@ export const SecurityView: React.FC<SecurityViewProps> = ({
             );
           }
         }}
+      />
+
+      {/* Hardware Seal QR Scanner Modal */}
+      <HardwareSealQRScanner
+        isOpen={isHardwareSealScannerOpen}
+        onClose={() => setIsHardwareSealScannerOpen(false)}
+        onAddSystemEvent={onAddSystemEvent}
       />
     </div>
   );
