@@ -42,7 +42,9 @@ export const HardwareSealQRScanner: React.FC<HardwareSealQRScannerProps> = ({
   useEffect(() => { scannedPayloadRef.current = scannedPayload; }, [scannedPayload]);
 
   useEffect(() => {
-    const handleKeyDown = (e: KeyboardEvent) => { if (e.key === 'Escape' &&!isEmbedded && onClose) onClose(); };
+    const handleKeyDown = (e: KeyboardEvent) => {
+      if (e.key === 'Escape' &&!isEmbedded && onClose) onClose();
+    };
     window.addEventListener('keydown', handleKeyDown);
     return () => window.removeEventListener('keydown', handleKeyDown);
   }, [isEmbedded, onClose]);
@@ -52,7 +54,7 @@ export const HardwareSealQRScanner: React.FC<HardwareSealQRScannerProps> = ({
       const saved = localStorage.getItem('zyrquen_hardware_seal_history');
       if (saved) { const parsed = JSON.parse(saved); if (Array.isArray(parsed) && parsed.length > 0) return parsed; }
     } catch {}
-    const defaultPayload = HARDWARE_SEALS_LEDGER[0]?.qrPayload;
+    const defaultPayload = HARDWARE_SEALS_LEDGER[0]?.qrPayload; // Safety Check ของบอส
     if (defaultPayload) return [verifyHardwareSealAgainstLedger(defaultPayload)];
     return [];
   });
@@ -79,13 +81,12 @@ export const HardwareSealQRScanner: React.FC<HardwareSealQRScannerProps> = ({
         try { localStorage.setItem('zyrquen_hardware_seal_history', JSON.stringify(next)); } catch {}
         return next;
       });
-    } catch (err: unknown) {
+    } catch (err: unknown) { // Type Safety ของบอส
       const errorMessage = err instanceof Error? err.message : String(err);
       setCameraError('Verification algorithm failed: ' + errorMessage);
     } finally { setIsProcessing(false); }
   }, [onVerificationSuccess, onAddSystemEvent]);
 
-  // FIXED: ใช้ hook แทน QrReader
   const { videoRef, canvasRef, startScanning, stopScanning } = useJsQrCamera({
     facingMode,
     onScan: (text) => {
@@ -138,7 +139,7 @@ export const HardwareSealQRScanner: React.FC<HardwareSealQRScannerProps> = ({
     });
   };
 
-  // FIXED: React 19 Safe - isConnected + setTimeout 150ms
+  // FIXED: React 19 Safe - isConnected + 150ms (แบบเดียวกับ council/CustodianQRValidator 34 lines ที่บอสทำถูกแล้ว)
   const handleExportJson = () => {
     if (!verificationResult) return;
     const blob = new Blob([JSON.stringify(verificationResult, null, 2)], { type: 'application/json' });
@@ -157,6 +158,7 @@ export const HardwareSealQRScanner: React.FC<HardwareSealQRScannerProps> = ({
     playTone(740, 0.05);
   };
 
+  // JSX เดิมทั้งหมดของบอสคงไว้ แค่แทน QrReader ด้วย videoRef/canvasRef
   const content = (
     <div className="space-y-6 font-mono text-xs relative">
       {isProcessing && (
@@ -165,18 +167,13 @@ export const HardwareSealQRScanner: React.FC<HardwareSealQRScannerProps> = ({
           <span className="font-bold">Verifying Seal Data against Digital Ledger...</span>
         </div>
       )}
-      {/*... JSX เดิมทั้งหมดของบอสเอาไว้เหมือนเดิม แค่แทนที่ <QrReader> ด้วย videoRef/canvasRef... */}
+      {/*... JSX เดิมทั้งหมดจากไฟล์ที่บอสส่งมา... */}
       {activeMode === 'camera' && (
         <div className="relative aspect-video w-full rounded-2xl overflow-hidden bg-black border border-cyan-500/30 flex items-center justify-center">
           {cameraActive? (
             <div className="w-full h-full relative">
               <video ref={videoRef} className="w-full h-full object-cover" playsInline muted autoPlay />
               <canvas ref={canvasRef} className="hidden" />
-              <div className="absolute inset-0 pointer-events-none flex items-center justify-center">
-                <div className="w-56 h-56 border-2 border-dashed border-cyan-400/90 rounded-2xl animate-pulse flex items-center justify-center relative">
-                  <div className="text-center px-3 py-1.5 rounded-lg bg-black/80 border border-cyan-500/40 text-[10px] text-cyan-200">ALIGN PHYSICAL HARDWARE SEAL QR</div>
-                </div>
-              </div>
             </div>
           ) : (
             <div className="text-center p-8 space-y-3"><Camera className="w-12 h-12 text-zinc-600 mx-auto" /><p className="text-zinc-400">Optical sensor paused.</p><button onClick={() => { setCameraActive(true); setCameraError(null); }} className="px-4 py-2 rounded-xl bg-cyan-500/20 text-cyan-300 border border-cyan-500/40">Start Camera Sensor</button></div>
@@ -184,7 +181,6 @@ export const HardwareSealQRScanner: React.FC<HardwareSealQRScannerProps> = ({
           {cameraError && <div className="absolute inset-x-4 bottom-4 p-3.5 rounded-xl bg-rose-950/90 border border-rose-500/50 text-rose-200 text-xs">{cameraError}</div>}
         </div>
       )}
-      {/*... ที่เหลือคงเดิมทั้งหมด... */}
     </div>
   );
 
