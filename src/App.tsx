@@ -1,67 +1,3 @@
-// --- Hologram Particle Component (วางบนสุดของ App.tsx) ---
-const HologramParticles: React.FC = () => {
-  const canvasRef = React.useRef<HTMLCanvasElement | null>(null);
-
-  React.useEffect(() => {
-    const canvas = canvasRef.current;
-    if (!canvas) return;
-    const ctx = canvas.getContext('2d');
-    if (!ctx) return;
-
-    let animationFrameId: number;
-    let width = (canvas.width = window.innerWidth);
-    let height = (canvas.height = window.innerHeight);
-
-    const handleResize = () => {
-      if (!canvas) return;
-      width = canvas.width = window.innerWidth;
-      height = canvas.height = window.innerHeight;
-    };
-    window.addEventListener('resize', handleResize);
-
-    const particles = Array.from({ length: 45 }, () => ({
-      x: Math.random() * width,
-      y: Math.random() * height,
-      radius: Math.random() * 1.5 + 0.5,
-      color: Math.random() > 0.4 ? 'rgba(6, 182, 212, ' : 'rgba(168, 85, 247, ',
-      alpha: Math.random() * 0.5 + 0.2,
-      speedY: -(Math.random() * 0.3 + 0.1),
-      pulse: Math.random() * 0.02,
-    }));
-
-    const render = () => {
-      ctx.clearRect(0, 0, width, height);
-      particles.forEach((p) => {
-        p.y += p.speedY;
-        if (p.y < 0) p.y = height;
-        p.alpha += Math.sin(Date.now() * p.pulse) * 0.005;
-
-        ctx.beginPath();
-        ctx.arc(p.x, p.y, p.radius, 0, Math.PI * 2);
-        ctx.fillStyle = `${p.color}${Math.max(0.1, Math.min(0.7, p.alpha))})`;
-        ctx.shadowBlur = 6;
-        ctx.shadowColor = p.color.includes('6, 182') ? '#06b6d4' : '#a855f7';
-        ctx.fill();
-      });
-      animationFrameId = requestAnimationFrame(render);
-    };
-
-    render();
-
-    return () => {
-      window.removeEventListener('resize', handleResize);
-      cancelAnimationFrame(animationFrameId);
-    };
-  }, []);
-
-  return (
-    <canvas
-      ref={canvasRef}
-      className="fixed inset-0 pointer-events-none z-0 opacity-60"
-    />
-  );
-};
-
 import { SovereignCopilot } from './components/SovereignCopilot';
 import { MainFooter } from './components/MainFooter';
 import React, { useState, useEffect, useCallback, useRef } from 'react';
@@ -160,6 +96,70 @@ import {
   X,
   Bot
 } from 'lucide-react';
+
+// --- Hologram Canvas Particle Background Component ---
+const HologramParticles: React.FC = () => {
+  const canvasRef = useRef<HTMLCanvasElement | null>(null);
+
+  useEffect(() => {
+    const canvas = canvasRef.current;
+    if (!canvas) return;
+    const ctx = canvas.getContext('2d');
+    if (!ctx) return;
+
+    let animationFrameId: number;
+    let width = (canvas.width = window.innerWidth);
+    let height = (canvas.height = window.innerHeight);
+
+    const handleResize = () => {
+      if (!canvas) return;
+      width = canvas.width = window.innerWidth;
+      height = canvas.height = window.innerHeight;
+    };
+    window.addEventListener('resize', handleResize);
+
+    const particles = Array.from({ length: 45 }, () => ({
+      x: Math.random() * width,
+      y: Math.random() * height,
+      radius: Math.random() * 1.5 + 0.5,
+      color: Math.random() > 0.4 ? 'rgba(6, 182, 212, ' : 'rgba(168, 85, 247, ',
+      alpha: Math.random() * 0.5 + 0.2,
+      speedY: -(Math.random() * 0.3 + 0.1),
+      pulse: Math.random() * 0.02,
+    }));
+
+    const render = () => {
+      ctx.clearRect(0, 0, width, height);
+      particles.forEach((p) => {
+        p.y += p.speedY;
+        if (p.y < 0) p.y = height;
+        p.alpha += Math.sin(Date.now() * p.pulse) * 0.005;
+
+        ctx.beginPath();
+        ctx.arc(p.x, p.y, p.radius, 0, Math.PI * 2);
+        ctx.fillStyle = `${p.color}${Math.max(0.1, Math.min(0.7, p.alpha))})`;
+        ctx.shadowBlur = 6;
+        ctx.shadowColor = p.color.includes('6, 182') ? '#06b6d4' : '#a855f7';
+        ctx.fill();
+      });
+      animationFrameId = requestAnimationFrame(render);
+    };
+
+    render();
+
+    return () => {
+      window.removeEventListener('resize', handleResize);
+      cancelAnimationFrame(animationFrameId);
+    };
+  }, []);
+
+  return (
+    <canvas
+      ref={canvasRef}
+      className="fixed inset-0 pointer-events-none z-0 opacity-60"
+    />
+  );
+};
 
 interface ViewPersona {
   name: string;
@@ -1560,6 +1560,11 @@ function SovereignAppContent() {
 
   return (
     <div className={`min-h-screen w-full max-w-full overflow-x-hidden bg-[#07080F] text-zinc-100 font-sans selection:bg-cyan-500/30 selection:text-cyan-200 antialiased relative ${isMonochromeMode ? 'theme-monochrome' : ''}`}>
+      
+      {/* 1. Hologram Particles Canvas Layer */}
+      <HologramParticles />
+
+      {/* 2. Dynamic Background Mesh Ambient Lighting */}
       <div className="fixed inset-0 pointer-events-none z-0 overflow-hidden transition-all duration-1000 ease-in-out">
         <div
           className={`absolute top-[-10%] left-[20%] w-[650px] h-[650px] rounded-full blur-[150px] transition-all duration-1000 ease-in-out ${persona.orb1}`}
@@ -1988,7 +1993,7 @@ function SovereignAppContent() {
         }}
       />
 
-      {/* --- Upgraded Atmospheric Audio HUD (Mobile Responsive Layout Elevation) --- */}
+      {/* --- Upgraded Atmospheric Audio HUD (Mobile Responsive Elevation) --- */}
       <div className="fixed bottom-20 left-3 sm:bottom-6 sm:left-6 z-40 flex items-center gap-2 pointer-events-none sm:pointer-events-auto">
         <div className="pointer-events-auto">
         <button
@@ -1998,7 +2003,7 @@ function SovereignAppContent() {
               ? 'bg-cyan-950/85 border-cyan-500/50 text-cyan-200 shadow-[0_0_20px_rgba(6,182,212,0.3)]'
               : 'bg-[#0a0f1e]/90 border-white/10 text-zinc-400 hover:text-zinc-200 hover:border-white/20'
           }`}
-          title="Dynamic Atmospheric Ambient Sound Generator (Modulates Carrier Pitch by System Entropy)"
+          title="Dynamic Atmospheric Ambient Sound Generator"
         >
           <span className="relative flex h-2 w-2">
             {isAudioActive && (
