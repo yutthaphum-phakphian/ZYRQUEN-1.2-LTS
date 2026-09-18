@@ -401,6 +401,11 @@ export const QuantumCitadelLatticeHologramVisualizer: React.FC<QuantumCitadelLat
   const rendererRef = useRef<THREE.WebGLRenderer | null>(null);
   const chamberMeshesRef = useRef<Map<string, { group: THREE.Group; core: THREE.Mesh; beam: THREE.Mesh; rings: THREE.Mesh[] }>>(new Map());
   const particlesRef = useRef<THREE.Points | null>(null);
+  const streamParticlesRef = useRef<{
+    points: THREE.Points;
+    segments: { p1: THREE.Vector3; p2: THREE.Vector3; speed: number; progress: number }[];
+    count: number;
+  } | null>(null);
   const animFrameIdRef = useRef<number | null>(null);
 
   // Interactive Camera Angle & Rotation
@@ -586,12 +591,20 @@ export const QuantumCitadelLatticeHologramVisualizer: React.FC<QuantumCitadelLat
       blending: THREE.AdditiveBlending
     });
 
+    const streamSegments: { p1: THREE.Vector3; p2: THREE.Vector3; speed: number; progress: number }[] = [];
+
     for (let i = 0; i < LATTICE_CHAMBERS.length - 1; i++) {
       const p1 = new THREE.Vector3(...LATTICE_CHAMBERS[i].gridPos);
       const p2 = new THREE.Vector3(...LATTICE_CHAMBERS[i + 1].gridPos);
       const lineGeo = new THREE.BufferGeometry().setFromPoints([p1, p2]);
       const line = new THREE.Line(lineGeo, lineMaterial);
       scene.add(line);
+      streamSegments.push({
+        p1,
+        p2,
+        speed: 0.3 + (i % 3) * 0.15,
+        progress: (i * 0.17) % 1.0
+      });
     }
 
     // Connect everything back to Genesis Chamber 00
@@ -609,7 +622,33 @@ export const QuantumCitadelLatticeHologramVisualizer: React.FC<QuantumCitadelLat
         })
       );
       scene.add(beamLine);
+      streamSegments.push({
+        p1: genesisPos,
+        p2: targetPos,
+        speed: 0.45,
+        progress: (i * 0.23) % 1.0
+      });
     }
+
+    // Conduit Data Packet Stream Particles
+    const streamCount = streamSegments.length;
+    const streamGeo = new THREE.BufferGeometry();
+    const streamPositions = new Float32Array(streamCount * 3);
+    streamGeo.setAttribute('position', new THREE.BufferAttribute(streamPositions, 3));
+    const streamMat = new THREE.PointsMaterial({
+      size: 0.28,
+      color: 0x34d399,
+      transparent: true,
+      opacity: 0.9,
+      blending: THREE.AdditiveBlending
+    });
+    const streamPoints = new THREE.Points(streamGeo, streamMat);
+    scene.add(streamPoints);
+    streamParticlesRef.current = {
+      points: streamPoints,
+      segments: streamSegments,
+      count: streamCount
+    };
 
     // Animation Loop
     let clock = new THREE.Clock();
@@ -654,6 +693,26 @@ export const QuantumCitadelLatticeHologramVisualizer: React.FC<QuantumCitadelLat
       // Ambient Particles drift
       if (particlesRef.current) {
         particlesRef.current.rotation.y = elapsedTime * 0.03;
+      }
+
+      // Conduit Data Stream Pulses (Packets moving along lattice links)
+      if (streamParticlesRef.current) {
+        const { points, segments, count } = streamParticlesRef.current;
+        const posAttr = points.geometry.getAttribute('position') as THREE.BufferAttribute;
+        if (posAttr) {
+          const arr = posAttr.array as Float32Array;
+          for (let i = 0; i < count; i++) {
+            const seg = segments[i];
+            seg.progress = (seg.progress + delta * seg.speed) % 1.0;
+            const currentX = seg.p1.x + (seg.p2.x - seg.p1.x) * seg.progress;
+            const currentY = seg.p1.y + (seg.p2.y - seg.p1.y) * seg.progress;
+            const currentZ = seg.p1.z + (seg.p2.z - seg.p1.z) * seg.progress;
+            arr[i * 3] = currentX;
+            arr[i * 3 + 1] = currentY;
+            arr[i * 3 + 2] = currentZ;
+          }
+          posAttr.needsUpdate = true;
+        }
       }
 
       renderer.render(scene, camera);

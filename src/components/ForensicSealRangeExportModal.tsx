@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import { motion } from 'motion/react';
 import {
   X,
   Lock,
@@ -109,8 +110,21 @@ export const ForensicSealRangeExportModal: React.FC<ForensicSealRangeExportModal
   };
 
   return (
-    <div className="fixed inset-0 z-[100] flex items-center justify-center bg-black/85 backdrop-blur-md p-4 animate-in fade-in duration-200">
-      <div className="relative w-full max-w-2xl bg-[#080914] border border-cyan-500/40 rounded-3xl shadow-[0_0_60px_rgba(6,182,212,0.25)] overflow-hidden flex flex-col max-h-[92vh]">
+    <div className="fixed inset-0 z-[100] flex items-center justify-center bg-black/85 backdrop-blur-md p-4">
+      <motion.div
+        initial={{ opacity: 0, scale: 0.95, y: 12 }}
+        animate={{ opacity: 1, scale: 1, y: 0 }}
+        exit={{ opacity: 0, scale: 0.95, y: 12 }}
+        transition={{ duration: 0.32, ease: [0.16, 1, 0.3, 1] }}
+        className="relative w-full max-w-2xl bg-[#080914] border border-cyan-500/40 rounded-3xl shadow-[0_0_60px_rgba(6,182,212,0.25)] overflow-hidden flex flex-col max-h-[92vh]"
+      >
+        {/* Subtle Forensic Shimmer Entrance Sweep */}
+        <motion.div
+          initial={{ x: '-120%', opacity: 0 }}
+          animate={{ x: '180%', opacity: [0, 0.4, 0] }}
+          transition={{ duration: 1.2, ease: 'easeInOut' }}
+          className="pointer-events-none absolute inset-0 z-30 bg-gradient-to-r from-transparent via-cyan-400/20 to-transparent skew-x-12"
+        />
         {/* Header */}
         <div className="px-6 py-4 border-b border-cyan-500/20 bg-gradient-to-r from-cyan-950/60 via-indigo-950/40 to-transparent flex items-center justify-between">
           <div className="flex items-center gap-3">
@@ -380,7 +394,7 @@ export const ForensicSealRangeExportModal: React.FC<ForensicSealRangeExportModal
             </button>
           </div>
         </div>
-      </div>
+      </motion.div>
     </div>
   );
 };

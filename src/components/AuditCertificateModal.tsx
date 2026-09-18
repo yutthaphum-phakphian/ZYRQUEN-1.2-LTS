@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import { motion } from 'motion/react';
 import { SYSTEM_METADATA, AUDIT_TRACE_TX, SYSTEM_INVARIANTS, THAI_CUSTODIANS } from '../data/canonicalData';
 import { GOLD_MASTER_FORENSIC_REPORT } from '../data/goldMasterForensicReport';
 import { X, CheckCircle2, ShieldAlert, Award, Copy, Check, Terminal, ExternalLink, Download, FileCheck2, Eye, Scale, Coins, Play, FileText, CheckCircle, QrCode } from 'lucide-react';
@@ -137,8 +138,21 @@ export const AuditCertificateModal: React.FC<AuditCertificateModalProps> = ({ is
   };
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center p-4 sm:p-6 bg-black/80 backdrop-blur-xl animate-in fade-in duration-300">
-      <div className="modal-slide-in relative w-full max-w-4xl max-h-[90vh] flex flex-col bg-[#0b0d18] border border-white/12 rounded-[28px] shadow-[0_0_50px_rgba(0,0,0,0.8)] overflow-hidden">
+    <div className="fixed inset-0 z-50 flex items-center justify-center p-4 sm:p-6 bg-black/80 backdrop-blur-xl">
+      <motion.div
+        initial={{ opacity: 0, scale: 0.95, y: 12 }}
+        animate={{ opacity: 1, scale: 1, y: 0 }}
+        exit={{ opacity: 0, scale: 0.95, y: 12 }}
+        transition={{ duration: 0.32, ease: [0.16, 1, 0.3, 1] }}
+        className="modal-slide-in relative w-full max-w-4xl max-h-[90vh] flex flex-col bg-[#0b0d18] border border-white/12 rounded-[28px] shadow-[0_0_50px_rgba(0,0,0,0.8)] overflow-hidden"
+      >
+        {/* Subtle Forensic Shimmer Entrance Sweep */}
+        <motion.div
+          initial={{ x: '-120%', opacity: 0 }}
+          animate={{ x: '180%', opacity: [0, 0.45, 0] }}
+          transition={{ duration: 1.3, ease: 'easeInOut' }}
+          className="pointer-events-none absolute inset-0 z-30 bg-gradient-to-r from-transparent via-amber-400/20 to-transparent skew-x-12"
+        />
         {/* Modal Header */}
         <div className="stagger-1 p-6 border-b border-white/8 flex items-center justify-between bg-gradient-to-r from-amber-500/10 via-violet-500/10 to-cyan-500/10">
           <div className="flex items-center gap-3">
@@ -842,7 +856,7 @@ export const AuditCertificateModal: React.FC<AuditCertificateModalProps> = ({ is
             <OfflineSealChainQrGenerator />
           )}
         </div>
-      </div>
+      </motion.div>
 
       {/* QR Code Modal */}
       {isQrModalOpen && (

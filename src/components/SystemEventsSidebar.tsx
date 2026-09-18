@@ -38,11 +38,22 @@ import {
   FileSpreadsheet,
   Send,
   RadioTower,
+  Search,
+  Database,
+  RotateCcw,
+  History,
 } from 'lucide-react';
 import { playTone, playAuditChime } from './AudioSynthesizer';
 import { SecuritySubTab } from './views/SecurityView';
 import { copyToClipboard } from '../utils/clipboard';
 import { ViewType } from '../types';
+import {
+  ForensicScanRecord,
+  getForensicScanHistory,
+  recordForensicScan,
+  clearForensicScanHistory,
+  exportForensicScanHistoryJson,
+} from '../utils/forensicRegistry';
 import { automatedBackupService, AutomatedBackupState } from '../services/automatedBackupService';
 import {
   exportSystemLogsAsCsv,
@@ -51,6 +62,7 @@ import {
   CryptographicLogBatch,
 } from '../utils/systemLogsBatchExport';
 import { FcmPushNotificationManager } from './notifications/FcmPushNotificationManager';
+import { ForensicHistorySidebarTab } from './ForensicHistorySidebarTab';
 
 interface ActionTooltipDetails {
   title: string;
@@ -213,6 +225,7 @@ interface SystemEventsSidebarProps {
   latestSealCount?: number;
   isForensicAuditMode?: boolean;
   onToggleForensicAuditMode?: () => void;
+  initialTab?: 'events' | 'forensic_history';
 }
 
 export type SystemEventFilterType =
@@ -236,7 +249,29 @@ export const SystemEventsSidebar: React.FC<SystemEventsSidebarProps> = ({
   latestSealCount = 14902,
   isForensicAuditMode = false,
   onToggleForensicAuditMode,
+  initialTab = 'events',
 }) => {
+  const [activeSidebarTab, setActiveSidebarTab] = useState<'events' | 'forensic_history'>(initialTab);
+  const [forensicScans, setForensicScans] = useState<ForensicScanRecord[]>(() => getForensicScanHistory());
+  const [forensicFilter, setForensicFilter] = useState<string>('ALL');
+  const [forensicSearch, setForensicSearch] = useState<string>('');
+  const [copiedDigest, setCopiedDigest] = useState<string | null>(null);
+  const [isScanningActive, setIsScanningActive] = useState<boolean>(false);
+
+  useEffect(() => {
+    if (initialTab) {
+      setActiveSidebarTab(initialTab);
+    }
+  }, [initialTab]);
+
+  useEffect(() => {
+    const handleUpdate = () => {
+      setForensicScans(getForensicScanHistory());
+    };
+    window.addEventListener('zyrquen:forensic-scan-updated', handleUpdate);
+    return () => window.removeEventListener('zyrquen:forensic-scan-updated', handleUpdate);
+  }, []);
+
   const [filter, setFilter] = useState<SystemEventFilterType>('ALL');
   const [copiedId, setCopiedId] = useState<string | null>(null);
   const [backupState, setBackupState] = useState<AutomatedBackupState>(() => automatedBackupService.getState());
@@ -774,6 +809,60 @@ export const SystemEventsSidebar: React.FC<SystemEventsSidebarProps> = ({
         </div>
       </div>
 
+      {/* Primary Mode Tabs: System Events Feed vs Forensic History Registry */}
+      <div className="px-4 py-2 border-b border-white/8 bg-[#080b18] flex items-center gap-2 shrink-0">
+        <button
+          onClick={() => {
+            playTone(550, 0.03);
+            setActiveSidebarTab('events');
+          }}
+          className={`flex-1 py-1.5 px-3 rounded-xl font-mono text-xs font-bold flex items-center justify-center gap-2 transition-all cursor-pointer ${
+            activeSidebarTab === 'events'
+              ? 'bg-cyan-500/20 text-cyan-300 border border-cyan-500/40 shadow-[0_0_12px_rgba(6,182,212,0.2)]'
+              : 'text-zinc-400 hover:text-zinc-200 hover:bg-white/5 border border-transparent'
+          }`}
+        >
+          <Bell className="w-3.5 h-3.5" />
+          <span>Events Feed</span>
+          <span
+            className={`px-1.5 py-0.5 text-[10px] rounded-full font-bold ${
+              activeSidebarTab === 'events' ? 'bg-cyan-400 text-black' : 'bg-white/10 text-zinc-300'
+            }`}
+          >
+            {events.length}
+          </span>
+        </button>
+
+        <button
+          onClick={() => {
+            playTone(750, 0.03);
+            setActiveSidebarTab('forensic_history');
+          }}
+          className={`flex-1 py-1.5 px-3 rounded-xl font-mono text-xs font-bold flex items-center justify-center gap-2 transition-all cursor-pointer ${
+            activeSidebarTab === 'forensic_history'
+              ? 'bg-purple-500/20 text-purple-300 border border-purple-500/40 shadow-[0_0_12px_rgba(168,85,247,0.2)]'
+              : 'text-zinc-400 hover:text-zinc-200 hover:bg-white/5 border border-transparent'
+          }`}
+        >
+          <Fingerprint className="w-3.5 h-3.5 text-purple-400" />
+          <span>Forensic History</span>
+          <span
+            className={`px-1.5 py-0.5 text-[10px] rounded-full font-bold ${
+              activeSidebarTab === 'forensic_history' ? 'bg-purple-400 text-black' : 'bg-white/10 text-zinc-300'
+            }`}
+          >
+            {forensicScans.length}
+          </span>
+        </button>
+      </div>
+
+      {activeSidebarTab === 'forensic_history' ? (
+        <ForensicHistorySidebarTab
+          onClose={onClose}
+          onNavigateToView={onNavigateToView}
+        />
+      ) : (
+        <>
       {/* Cryptographic Batch Verification Result Toast / Banner */}
       {batchVerificationResult && (
         <div
@@ -1502,6 +1591,8 @@ export const SystemEventsSidebar: React.FC<SystemEventsSidebarProps> = ({
           })
         )}
       </div>
+      </>
+      )}
 
       {/* Footer Info */}
       <div className="p-4 border-t border-white/8 bg-[#07080F]/90 text-[11px] text-zinc-500 flex items-center justify-between">

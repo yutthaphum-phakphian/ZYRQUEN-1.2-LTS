@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import { motion } from 'motion/react';
 import {
   ShieldCheck,
   CheckCircle2,
@@ -93,10 +94,21 @@ export const EvidenceDetailModal: React.FC<EvidenceDetailModalProps> = ({
       className="fixed inset-0 z-50 bg-black/85 backdrop-blur-md flex items-center justify-center p-4 overflow-y-auto"
       onClick={onClose}
     >
-      <div
-        className="w-full max-w-2xl bg-gradient-to-b from-[#0b0f1c] via-[#070a13] to-[#04060b] border-2 border-emerald-500/60 rounded-3xl p-6 space-y-5 shadow-[0_0_60px_rgba(16,185,129,0.2)] text-xs font-mono text-zinc-300 relative my-8 select-none"
+      <motion.div
+        initial={{ opacity: 0, scale: 0.95, y: 12 }}
+        animate={{ opacity: 1, scale: 1, y: 0 }}
+        exit={{ opacity: 0, scale: 0.95, y: 12 }}
+        transition={{ duration: 0.32, ease: [0.16, 1, 0.3, 1] }}
+        className="w-full max-w-2xl bg-gradient-to-b from-[#0b0f1c] via-[#070a13] to-[#04060b] border-2 border-emerald-500/60 rounded-3xl p-6 space-y-5 shadow-[0_0_60px_rgba(16,185,129,0.2)] text-xs font-mono text-zinc-300 relative my-8 select-none overflow-hidden"
         onClick={(e) => e.stopPropagation()}
       >
+        {/* Subtle Forensic Shimmer Entrance Sweep */}
+        <motion.div
+          initial={{ x: '-120%', opacity: 0 }}
+          animate={{ x: '180%', opacity: [0, 0.4, 0] }}
+          transition={{ duration: 1.3, ease: 'easeInOut' }}
+          className="pointer-events-none absolute inset-0 z-30 bg-gradient-to-r from-transparent via-emerald-400/20 to-transparent skew-x-12"
+        />
         {/* Header with Title & Read-Only Badge */}
         <div className="flex items-center justify-between border-b border-emerald-500/20 pb-4">
           <div className="flex items-center gap-3">
@@ -352,7 +364,7 @@ export const EvidenceDetailModal: React.FC<EvidenceDetailModalProps> = ({
             CLOSE EVIDENCE VIEW
           </button>
         </div>
-      </div>
+      </motion.div>
     </div>
   );
 };
