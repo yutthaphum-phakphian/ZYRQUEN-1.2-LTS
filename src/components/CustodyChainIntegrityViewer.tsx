@@ -28,7 +28,7 @@ interface GoldMasterPassport {
 const GOLD_MASTER_PASSPORTS: GoldMasterPassport[] = [
   {
     id: '#EP-SOVEREIGN-01',
-    name: 'นายยุทธภูมิ พากเพียร',
+    name: 'นายยุทธภูมิ ภักเพียร',
     role: 'Sovereign Principal Architect & Genesis Custodian',
     clearance: 'OMEGA-1 SUPREME',
     signature: '5a13396c129c611f15232fdaf54bfad00c4147abdbc3424c71e4ec103dcc8cc3',
@@ -36,7 +36,7 @@ const GOLD_MASTER_PASSPORTS: GoldMasterPassport[] = [
   },
   {
     id: '#EP-001',
-    name: 'พล. สมชาย พากเพียร',
+    name: 'พล. สมชาย ภักเพียร',
     role: 'Civilization Control Governor',
     clearance: 'LEVEL 25',
     signature: '909ab814479844d8a14816bed34cdbb07528e18501da86fc4691763a43fa4c68',
@@ -276,7 +276,7 @@ export const CustodyChainIntegrityViewer: React.FC<CustodyChainIntegrityViewerPr
       product: 'ZYRQUEN Ω∞ v4.16 PDPA FINAL (Frozen v1.2 LTS) | Engine v4.16 | NPM v4.16.0',
       canonical_boundary: 'Ω600_1000',
       boundary_scope: 'Ω601-Ω1000 Strict (400 Tenants LOCKED)',
-      sovereign_principal: 'นายยุทธภูมิ พากเพียร (#EP-SOVEREIGN-01)',
+      sovereign_principal: 'นายยุทธภูมิ ภักเพียร (#EP-SOVEREIGN-01)',
       mutation_authority: '0 Read Only',
       clearance: 'OMEGA-1 SUPREME CLEARANCE',
       export_timestamp_iso: new Date().toISOString(),
@@ -486,7 +486,7 @@ export const CustodyChainIntegrityViewer: React.FC<CustodyChainIntegrityViewerPr
       engine: 'v1.2 LTS (LOCKEDFROZENv1.2_LTS)',
       credential_id: 'urn:zyrquen:audit:849202:1789169498750',
       timestamp: '2026-09-12T17:47:05.000Z',
-      sovereign_principal: 'นายยุทธภูมิ พากเพียร (#EP-SOVEREIGN-01)',
+      sovereign_principal: 'นายยุทธภูมิ ภักเพียร (#EP-SOVEREIGN-01)',
       statutory_clearance: 'OMEGA-1 SUPREME CLEARANCE',
       canonical_block_height: blockHeight,
       genesis_block_height: 849202,
@@ -573,7 +573,7 @@ export const CustodyChainIntegrityViewer: React.FC<CustodyChainIntegrityViewerPr
               <span>•</span>
               <span>Boundary: <strong className="text-white">Ω600_1000</strong> (400 Tenants LOCKED)</span>
               <span>•</span>
-              <span className="text-zinc-300">Principal: นายยุทธภูมิ พากเพียร (#EP-SOVEREIGN-01)</span>
+              <span className="text-zinc-300">Principal: นายยุทธภูมิ ภักเพียร (#EP-SOVEREIGN-01)</span>
             </div>
           </div>
 
@@ -1145,7 +1145,7 @@ export const CustodyChainIntegrityViewer: React.FC<CustodyChainIntegrityViewerPr
             </div>
             <div className="md:col-span-2 pt-2 border-t border-zinc-800">
               <span className="text-zinc-500">Sovereign Principal Architect:</span>{' '}
-              <span className="text-[#D4AF37] font-bold">นายยุทธภูมิ พากเพียร (#EP-SOVEREIGN-01)</span>
+              <span className="text-[#D4AF37] font-bold">นายยุทธภูมิ ภักเพียร (#EP-SOVEREIGN-01)</span>
               <span className="ml-2 text-zinc-400 font-bold">[OMEGA-1 SUPREME CLEARANCE]</span>
             </div>
           </div>

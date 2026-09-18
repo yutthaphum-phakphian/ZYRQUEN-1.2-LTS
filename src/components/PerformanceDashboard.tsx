@@ -249,7 +249,7 @@ export const PerformanceDashboard: React.FC = () => {
           merkleRoot: '909ab814479844d8a14816bed34cdbb07528e18501da86fc4691763a43fa4c68',
           sealsCount: 14902,
           quorum: '10/10 REAL_HSM FIPS 140-3 L4',
-          principal: 'นายยุทธภูมิ พากเพียร (#EP-SOVEREIGN-01)',
+          principal: 'นายยุทธภูมิ ภักเพียร (#EP-SOVEREIGN-01)',
           generatedAt: new Date().toISOString(),
         },
         null,
@@ -734,7 +734,7 @@ export const PerformanceDashboard: React.FC = () => {
               <div className="p-3 bg-[#070a12] border border-[#D4AF37]/30 rounded space-y-1">
                 <div className="text-xs font-bold text-[#D4AF37]">💎 Celestial Sovereign Crown</div>
                 <div className="text-[11px] text-slate-300">Crown Jewels: Custody Quorum</div>
-                <div className="text-[11px] text-slate-300">Principal: นายยุทธภูมิ พากเพียร</div>
+                <div className="text-[11px] text-slate-300">Principal: นายยุทธภูมิ ภักเพียร</div>
                 <div className="text-[11px] text-slate-300">ID: #EP-SOVEREIGN-01</div>
                 <div className="text-[10px] text-emerald-400 font-bold mt-2">OMEGA-1 SUPREME CLEARANCE</div>
               </div>

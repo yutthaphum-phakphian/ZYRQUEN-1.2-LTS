@@ -49,7 +49,7 @@ style: |
     </span>
   </div>
   <p style="color: #9ca3af; font-size: 0.9em;">
-    Sovereign Principal: <strong>นายยุทธภูมิ พากเพียร (#EP-SOVEREIGN-01)</strong><br>
+    Sovereign Principal: <strong>นายยุทธภูมิ ภักเพียร (#EP-SOVEREIGN-01)</strong><br>
     Anchor Block Height: #849202 | Security Level: APEX ULTIMATE v4.16
   </p>
 </div>

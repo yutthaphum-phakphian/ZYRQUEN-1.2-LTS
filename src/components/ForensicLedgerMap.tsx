@@ -42,7 +42,7 @@ const CANONICAL_EVIDENCE: EvidenceItem[] = [
     confidence: 100,
     digest: '909ab814479844d8a14816bed34cdbb07528e18501da86fc4691763a43fa4c68',
     signatureScheme: 'CRYSTALS-Dilithium-5 (ML-DSA-87)',
-    details: 'ประทับตราปฐมบทโดย สถาปนิกสูงสุด นายยุทธภูมิ พากเพียร (#EP-SOVEREIGN-01)',
+    details: 'ประทับตราปฐมบทโดย สถาปนิกสูงสุด นายยุทธภูมิ ภักเพียร (#EP-SOVEREIGN-01)',
   },
   {
     id: 'EVID-02-DECA-QUORUM',

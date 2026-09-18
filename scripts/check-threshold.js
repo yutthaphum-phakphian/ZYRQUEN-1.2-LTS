@@ -1,7 +1,7 @@
 /**
  * ZYRQUEN Ω∞ Continuous Benchmark Gatekeeper
  * Canonical Block: #849205 | SSoT Δ0.00% ZERO DRIFT
- * Principal: นายยุทธภูมิ พากเพียร (#EP-SOVEREIGN-01)
+ * Principal: นายยุทธภูมิ ภักเพียร (#EP-SOVEREIGN-01)
  */
 
 const THRESHOLDS = {

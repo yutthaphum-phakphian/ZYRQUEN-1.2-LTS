@@ -43,6 +43,7 @@ import { CivilizationEngineView } from './components/views/CivilizationEngineVie
 import { CanonicalIntegrityDashboardView } from './components/views/CanonicalIntegrityDashboardView';
 import { QuantumAuditFusionView } from './components/views/QuantumAuditFusionView';
 import { AdminConsole } from './components/AdminConsole';
+import { SystemHealthDashboard } from './components/SystemHealthDashboard';
 import { AuditAnalyticsDashboard } from './components/AuditAnalyticsDashboard';
 import { SovereignChambersControlPlane } from './components/SovereignChambersControlPlane';
 import { ZyrquenGGDashboard } from './components/views/ZyrquenGGDashboard';
@@ -267,6 +268,13 @@ const VIEW_PERSONAS: Record<ViewType, ViewPersona> = {
     orb3: 'bg-emerald-600/10',
     accentGlow: 'rgba(6,182,212,0.1)',
   },
+  health: {
+    name: 'Sovereign System Health & Node Diagnostics',
+    orb1: 'bg-emerald-600/18',
+    orb2: 'bg-teal-600/14',
+    orb3: 'bg-cyan-600/10',
+    accentGlow: 'rgba(16,185,129,0.1)',
+  },
   analytics: {
     name: 'Audit Analytics & UTC Telemetry Volatility Dashboard',
     orb1: 'bg-emerald-600/18',
@@ -438,7 +446,7 @@ const ETDA_PDPA_TRIGGERS: LegalTriggerItem[] = [
     status: 'PASS',
     statusText: 'SSoT Δ0.0% ZERO DRIFT',
     pqcScheme: 'Zero-Knowledge Policy Engine',
-    anchor: 'Authority: นายยุทธภูมิ พากเพียร',
+    anchor: 'Authority: นายยุทธภูมิ ภักเพียร',
     description: 'Restricts personal data operations strictly to predefined lawful purposes and platform boundaries Ω601–Ω1000 with zero drift.',
     descriptionTh: 'ควบคุมการประมวลผลข้อมูลให้อยู่ในขอบเขตอธิปไตยดิจิทัลที่กำหนด ปราศจากการดัดแปลงโครงสร้าง (Mutation Authority = 0)',
     statuteClause: 'พ.ร.บ. คุ้มครองข้อมูลส่วนบุคคล พ.ศ. ๒๕๖๒ มาตรา ๙'
@@ -559,6 +567,8 @@ const VALID_VIEWS: ViewType[] = [
   'settings',
   'legal',
   'canonical',
+  'admin',
+  'health',
 ];
 
 function SovereignAppContent() {
@@ -725,6 +735,15 @@ function SovereignAppContent() {
       return next;
     });
   }, []);
+
+  useEffect(() => {
+    const rootClassList = document.documentElement.classList;
+    if (isForensicAuditMode) {
+      rootClassList.add('forensic-mode');
+    } else {
+      rootClassList.remove('forensic-mode');
+    }
+  }, [isForensicAuditMode]);
 
   const handleToggleMonochrome = useCallback((enabled?: boolean) => {
     setIsMonochromeMode((prev) => {
@@ -1390,7 +1409,19 @@ function SovereignAppContent() {
           </div>
         );
       case 'admin':
-        return <AdminConsole />;
+        return (
+          <AdminConsole
+            onNavigateToHealth={() => setCurrentView('health')}
+            onShowToast={showToast}
+          />
+        );
+      case 'health':
+        return (
+          <SystemHealthDashboard
+            onNavigateToAdmin={() => setCurrentView('admin')}
+            onShowToast={showToast}
+          />
+        );
       case 'fusion':
         return <QuantumAuditFusionView />;
       case 'playback':

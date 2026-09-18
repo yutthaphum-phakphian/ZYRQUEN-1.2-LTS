@@ -1,7 +1,7 @@
 # ==============================================================================
 # ZYRQUEN Ω∞ Sovereign SDK & Kernel - .gitignore
 # Version: LOCKED_FROZEN_v1.2_LTS / APEX ULTIMATE v4.16
-# Sovereign Principal: นายยุทธภูมิ พากเพียร (#EP-SOVEREIGN-01)
+# Sovereign Principal: นายยุทธภูมิ ภักเพียร (#EP-SOVEREIGN-01)
 # ==============================================================================
 
 # ── Dependencies ─────────────────────────────────────────────────────────────
@@ -15,6 +15,8 @@ dist/
 dist-ssr/
 build/
 out/
+dev-dist/
+bun.lock
 *.tsbuildinfo
 
 # ── Local Environment & Secret Keys ──────────────────────────────────────────

@@ -97,7 +97,7 @@ style: |
 # ZYRQUEN Ω∞ SOVEREIGN KERNEL
 ## Executive Presentation & Engineering Audit Deck
 STATUS: LOCKED_FROZEN_v1.2_LTS | SSoT Δ0 Baseline Drift 0.00%
-Sovereign Principal: นายยุทธภูมิ พากเพียร (#EP-SOVEREIGN-01)
+Sovereign Principal: นายยุทธภูมิ ภักเพียร (#EP-SOVEREIGN-01)
 Anchor Block Height: #849202 | Security Level: APEX ULTIMATE v4.16
 `;
 
@@ -128,7 +128,7 @@ Anchor Block Height: #849202 | Security Level: APEX ULTIMATE v4.16
   };
 
   const speakerNotes: Record<number, string> = {
-    0: 'เรียนคณะกรรมการและ Auditor ทุกท่าน ยินดีต้อนรับสู่การนำเสนอ ZYRQUEN Ω∞ Sovereign Kernel ในสถานะ LOCKED_FROZEN_v1.2_LTS ซึ่งกำกับดูแลโดย Sovereign Principal คุณยุทธภูมิ พากเพียร (#EP-SOVEREIGN-01)',
+    0: 'เรียนคณะกรรมการและ Auditor ทุกท่าน ยินดีต้อนรับสู่การนำเสนอ ZYRQUEN Ω∞ Sovereign Kernel ในสถานะ LOCKED_FROZEN_v1.2_LTS ซึ่งกำกับดูแลโดย Sovereign Principal คุณยุทธภูมิ ภักเพียร (#EP-SOVEREIGN-01)',
     1: 'เรียนคณะกรรมการและ Auditor ทุกท่าน ระบบถูกตรึงไว้ที่ LOCKED_FROZEN_v1.2_LTS บนบล็อก #849202 ข้อมูลทุกชุดยืนยันด้วย Merkle Tree ที่ปราศจาก System Drift โดยสิ้นเชิง',
     2: 'เราไม่ได้คุ้มครองข้อมูลด้วยมาตรฐานเดิม แต่ใช้อัลกอริทึม PQC ที่ได้รับการรับรองจาก NIST การันตีความปลอดภัยของโครงสร้างพื้นฐานยาวนานข้ามทศวรรษ',
     3: 'คีย์ลับปฏิบัติตามฉันทามติ 10/10 โหนดบนฮาร์ดแวร์ระดับทหาร หากเกิดภัยคุกคามทางกายภาพ กลไก Active Zeroization จะล้างคีย์ใน RAM ทิ้งทันทีในไม่กี่มิลลิวินาที',
@@ -275,7 +275,7 @@ Anchor Block Height: #849202 | Security Level: APEX ULTIMATE v4.16
 
                   <div className="text-zinc-400 text-sm space-y-1">
                     <p>
-                      Sovereign Principal: <strong className="text-zinc-200">นายยุทธภูมิ พากเพียร (#EP-SOVEREIGN-01)</strong>
+                      Sovereign Principal: <strong className="text-zinc-200">นายยุทธภูมิ ภักเพียร (#EP-SOVEREIGN-01)</strong>
                     </p>
                     <p className="font-mono text-xs text-zinc-500">
                       Anchor Block Height: #849202 | Security Level: APEX ULTIMATE v4.16

@@ -2,7 +2,7 @@
 ### ==============================================================================
 ### ZYRQUEN Ω∞ Sovereign Kernel - Performance & Invariant Benchmark Suite
 ### Executable Benchmark Script for LOCKED_FROZEN_v1.2_LTS (v4.16 GOLD MASTER)
-### Sovereign Principal: นายยุทธภูมิ พากเพียร (#EP-SOVEREIGN-01)
+### Sovereign Principal: นายยุทธภูมิ ภักเพียร (#EP-SOVEREIGN-01)
 ### Block #849202 | Genesis Merkle Root: 909ab814479844d8a14816bed34cdbb07528e18501da86fc4691763a43fa4c68
 ### ==============================================================================
 

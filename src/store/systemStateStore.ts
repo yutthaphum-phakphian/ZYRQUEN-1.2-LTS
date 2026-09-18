@@ -503,6 +503,7 @@ export type SystemState = {
   sealedBlock: number;
   custodianProofs: number;
   custodianRegistry: CustodianRegistrySnapshot;
+  isVerboseLoggingEnabled: boolean;
   fcmDeviceToken?: string;
   fcmPlatform?: string;
   fcmRegisteredAt?: string;
@@ -519,12 +520,21 @@ class SystemStateStore {
     sealedBlock: SYSTEM_METADATA.sealedBlock,
     custodianProofs: 10, // 10/10 Verified Super-Majority Attained (Super-Majority Invariant ≥8/10)
     custodianRegistry: this.custodianRegistry.getSnapshot(),
+    isVerboseLoggingEnabled: false,
   };
 
   private listeners = new Set<(state: SystemState) => void>();
   private driftTimer: any = null;
 
   constructor() {
+    try {
+      if (typeof window !== 'undefined' && window.localStorage) {
+        const stored = window.localStorage.getItem('zyrquen_verbose_system_logging');
+        if (stored === 'true') {
+          this.state.isVerboseLoggingEnabled = true;
+        }
+      }
+    } catch {}
     this.syncRegistryState();
     this.startDrift();
   }
@@ -679,6 +689,31 @@ class SystemStateStore {
       fcmRegisteredAt: undefined,
     };
     this.notify();
+  }
+
+  get isVerboseLoggingEnabled(): boolean {
+    return this.state.isVerboseLoggingEnabled;
+  }
+
+  setVerboseLoggingEnabled(enabled: boolean) {
+    if (this.state.isVerboseLoggingEnabled !== enabled) {
+      this.state = {
+        ...this.state,
+        isVerboseLoggingEnabled: enabled,
+      };
+      try {
+        if (typeof window !== 'undefined' && window.localStorage) {
+          window.localStorage.setItem('zyrquen_verbose_system_logging', String(enabled));
+        }
+      } catch {}
+      this.notify();
+    }
+  }
+
+  toggleVerboseLoggingEnabled(): boolean {
+    const next = !this.state.isVerboseLoggingEnabled;
+    this.setVerboseLoggingEnabled(next);
+    return next;
   }
 
   subscribe(listener: (state: SystemState) => void): () => void {

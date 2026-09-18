@@ -45,8 +45,8 @@ export interface ChamberEntropyNode {
 }
 
 const INITIAL_CHAMBERS_ENTROPY: ChamberEntropyNode[] = [
-  { id: 'ch-00', name: 'Chamber 00: Boot Enclave Microcode', chamberNum: 0, x: 0, y: 0, entropy: 0.18, temperatureK: 14.2, status: 'SYNCHRONIZED', handshakeSlot: 1, custodian: 'นายยุทธภูมิ พากเพียร (#EP-SOVEREIGN-01)', pqcAlgorithm: 'ML-DSA-87 Dilithium-5' },
-  { id: 'ch-01', name: 'Chamber 01: Genesis Merkle Shard', chamberNum: 1, x: -35, y: 28, entropy: 0.22, temperatureK: 14.5, status: 'SYNCHRONIZED', handshakeSlot: 2, custodian: 'พล. สมชาย พากเพียร (#EP-001)', pqcAlgorithm: 'FALCON-1024' },
+  { id: 'ch-00', name: 'Chamber 00: Boot Enclave Microcode', chamberNum: 0, x: 0, y: 0, entropy: 0.18, temperatureK: 14.2, status: 'SYNCHRONIZED', handshakeSlot: 1, custodian: 'นายยุทธภูมิ ภักเพียร (#EP-SOVEREIGN-01)', pqcAlgorithm: 'ML-DSA-87 Dilithium-5' },
+  { id: 'ch-01', name: 'Chamber 01: Genesis Merkle Shard', chamberNum: 1, x: -35, y: 28, entropy: 0.22, temperatureK: 14.5, status: 'SYNCHRONIZED', handshakeSlot: 2, custodian: 'พล. สมชาย ภักเพียร (#EP-001)', pqcAlgorithm: 'FALCON-1024' },
   { id: 'ch-02', name: 'Chamber 02: PQC Dilithium Quarantine Enclave', chamberNum: 2, x: 42, y: 32, entropy: 0.28, temperatureK: 14.8, status: 'SYNCHRONIZED', handshakeSlot: 3, custodian: 'ดร. กัญญารัตน์ เวชสิทธิ์ (#EP-007)', pqcAlgorithm: 'ML-DSA-87 Dilithium-5' },
   { id: 'ch-03', name: 'Chamber 03: SPHINCS+ Fallback Signer', chamberNum: 3, x: 72, y: -22, entropy: 0.25, temperatureK: 15.0, status: 'SYNCHRONIZED', handshakeSlot: 4, custodian: 'วศ. ธนพล เกียรติไพศาล (#EP-014)', pqcAlgorithm: 'SLH-DSA SPHINCS+' },
   { id: 'ch-04', name: 'Chamber 04: Sub-Kelvin Dilution Matrix', chamberNum: 4, x: -22, y: -52, entropy: 0.12, temperatureK: 12.4, status: 'SYNCHRONIZED', handshakeSlot: 5, custodian: 'ศ.ดร. นครินทร์ สุวรรณเมฆา (EP-022)', pqcAlgorithm: 'ML-KEM-1024 Kyber' },
@@ -195,7 +195,7 @@ export const Chamber15SpatialEntropySimulator: React.FC = () => {
           canonicalBlock: 849202,
           canonicalGenesisMerkleRoot: '909ab814479844d8a14816bed34cdbb07528e18501da86fc4691763a43fa4c68',
           canonicalSealsCount: 14902,
-          principalAuthority: 'นายยุทธภูมิ พากเพียร (#EP-SOVEREIGN-01)',
+          principalAuthority: 'นายยุทธภูมิ ภักเพียร (#EP-SOVEREIGN-01)',
           clearanceLevel: 'OMEGA-1 SUPREME CLEARANCE',
           telemetryData: {
             currentQOpsRateMQOPS: currentQOpsRate,

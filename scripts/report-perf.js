@@ -2,12 +2,12 @@
 /**
  * ZYRQUEN Ω∞ Sovereign Kernel Performance Reporter
  * Version: LOCKED_FROZEN_v1.2_LTS (v4.16 GOLD MASTER)
- * Sovereign Principal: นายยุทธภูมิ พากเพียร (#EP-SOVEREIGN-01)
+ * Sovereign Principal: นายยุทธภูมิ ภักเพียร (#EP-SOVEREIGN-01)
  * Block Height: #849202 | Merkle Root: 909ab814479844d8a14816bed34cdbb07528e18501da86fc4691763a43fa4c68
  */
 
-const fs = require('fs');
-const path = require('path');
+import fs from 'fs';
+import path from 'path';
 
 // ANSI Color Codes
 const colors = {
@@ -108,7 +108,7 @@ const reportOutput = {
   timestamp: new Date().toISOString(),
   system: "ZYRQUEN Ω∞ Sovereign Kernel",
   engine_version: "LOCKED_FROZEN_v1.2_LTS (v4.16 GOLD MASTER)",
-  sovereign_principal: "นายยุทธภูมิ พากเพียร (#EP-SOVEREIGN-01)",
+  sovereign_principal: "นายยุทธภูมิ ภักเพียร (#EP-SOVEREIGN-01)",
   telemetry: telemetryMetrics,
   forensic_replay_12_stages: {
     total_ms: totalReplayTimeMs,
@@ -126,7 +126,7 @@ const reportOutput = {
   }
 };
 
-const outDir = "/workspace/out";
+const outDir = path.join(process.cwd(), "reports");
 if (!fs.existsSync(outDir)) {
   fs.mkdirSync(outDir, { recursive: true });
 }

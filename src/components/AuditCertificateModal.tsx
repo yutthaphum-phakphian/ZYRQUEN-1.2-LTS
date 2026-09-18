@@ -407,8 +407,8 @@ export const AuditCertificateModal: React.FC<AuditCertificateModalProps> = ({ is
                   <span className="text-xs text-emerald-400 font-bold">100% Attested</span>
                 </div>
 
-                <div className="overflow-x-auto">
-                  <table className="w-full text-left text-xs">
+                <div className="overflow-x-auto -mx-2 sm:mx-0 px-2 sm:px-0">
+                  <table className="w-full min-w-[720px] text-left text-xs">
                     <thead>
                       <tr className="border-b border-white/10 text-[#D4AF37] text-[11px]">
                         <th className="py-2.5 px-3">PASSPORT ID</th>
@@ -654,8 +654,8 @@ export const AuditCertificateModal: React.FC<AuditCertificateModalProps> = ({ is
                   <span className="text-[11px] text-emerald-400 font-bold">100.00% Fully Distributed</span>
                 </div>
 
-                <div className="overflow-x-auto">
-                  <table className="w-full text-left text-xs">
+                <div className="overflow-x-auto -mx-2 sm:mx-0 px-2 sm:px-0">
+                  <table className="w-full min-w-[700px] text-left text-xs">
                     <thead>
                       <tr className="border-b border-white/10 text-zinc-500 text-[10px]">
                         <th className="py-2 px-3">SEGMENT</th>

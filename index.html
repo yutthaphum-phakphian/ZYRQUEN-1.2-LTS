@@ -12,19 +12,31 @@
         if (typeof window === 'undefined') return;
         var isViteMsg = function(arg) {
           if (!arg) return false;
+          if (typeof WebSocket !== 'undefined' && arg instanceof WebSocket) return true;
+          if (arg && (arg.target instanceof WebSocket || arg.srcElement instanceof WebSocket)) return true;
           var str = '';
           try {
-            str = typeof arg === 'string' ? arg : (arg.message || arg.stack || String(arg));
+            if (typeof arg === 'string') {
+              str = arg;
+            } else if (arg instanceof Error) {
+              str = (arg.message || '') + ' ' + (arg.stack || '');
+            } else if (typeof arg === 'object') {
+              str = (arg.message || '') + ' ' + (arg.type || '') + ' ' + (arg.reason || '') + ' ' + (arg.target ? String(arg.target) : '');
+            } else {
+              str = String(arg);
+            }
           } catch(e) {
             str = String(arg);
           }
           return str.indexOf('[vite]') !== -1 ||
                  str.indexOf('failed to connect to websocket') !== -1 ||
                  str.indexOf('WebSocket closed without opened') !== -1 ||
-                 (str.indexOf('WebSocket') !== -1 && str.indexOf('vite') !== -1);
+                 str.indexOf('vite-hmr') !== -1 ||
+                 (str.indexOf('WebSocket') !== -1 && (str.indexOf('vite') !== -1 || str.indexOf('closed') !== -1 || str.indexOf('error') !== -1));
         };
 
         var shouldSuppress = function(args) {
+          if (!args) return false;
           for (var i = 0; i < args.length; i++) {
             if (isViteMsg(args[i])) return true;
           }
@@ -59,7 +71,7 @@
         };
 
         window.addEventListener('error', function(e) {
-          if (isViteMsg(e.message) || isViteMsg(e.error)) {
+          if (isViteMsg(e.message) || isViteMsg(e.error) || isViteMsg(e.target)) {
             e.stopImmediatePropagation();
             e.preventDefault();
             return true;
@@ -67,7 +79,7 @@
         }, true);
 
         window.addEventListener('unhandledrejection', function(e) {
-          if (isViteMsg(e.reason)) {
+          if (isViteMsg(e.reason) || isViteMsg(e.target)) {
             e.stopImmediatePropagation();
             e.preventDefault();
             return true;

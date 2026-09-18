@@ -147,7 +147,7 @@ export const CANONICAL_EPOCH_MILESTONES: SealEpochMilestone[] = [
     timestamp: '2026-09-08 00:00:01 ICT',
     merkleLeafRoot: '909ab814479844d8a14816bed34cdbb07528e18501da86fc4691763a43fa4c68',
     pqcAlgorithm: 'FIPS 204 ML-DSA-87 (Dilithium-5) + Kyber-1024',
-    custodianLeader: 'Supreme Architect นายยุทธภูมิ พากเพียร (#EP-SOVEREIGN-01)',
+    custodianLeader: 'Supreme Architect นายยุทธภูมิ ภักเพียร (#EP-SOVEREIGN-01)',
     status: 'CANONICAL_VERIFIED',
     description: 'Genesis block initialization, zero-entropy cold boot, cryptographic anchor creation, and baseline registry binding.',
     keyEvents: [

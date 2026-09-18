@@ -1,7 +1,7 @@
 # ==========================================ค​===========================
 #  ZYRQUEN Ω∞ APEX ULTIMATE v4.16 FINAL CONSOLIDATED - PURE GREEN ALL GREEN - USE
 #  LOCKEDFROZENv1.2_LTS GOLD MASTER ULTIMATE FINAL MERGED - COURT-ADMISSIBLE READY
-#  Principal: นายยุทธภูมิ พากเพียร #EP-SOVEREIGN-01 | Genesis: #849202
+#  Principal: นายยุทธภูมิ ภักเพียร #EP-SOVEREIGN-01 | Genesis: #849202
 #  Merkle: 909ab814479844d8a14816bed34cdbb07528e18501da86fc4691763a43fa4c68
 #  Cert: ZQ-GREEN-DEP-849202-3908 | Status: ค PASSED MAINNET LIVE 100% GREEN
 # ======================================================================
@@ -21,7 +21,7 @@
 # ZYRQUEN Ω∞ APEX ULTIMATE v4.16 FINAL CONSOLIDATED - PURE GREEN ALL GREEN - USE
 ## LOCKEDFROZENv1.2_LTS GOLD MASTER ULTIMATE FINAL MERGED - COURT-ADMISSIBLE READY
 
-**Sovereign Principal:** นายยุทธภูมิ พากเพียร #EP-SOVEREIGN-01 | **Genesis:** #849202 | **Merkle:** `909ab814479844d8a14816bed34cdbb07528e18501da86fc4691763a43fa4c68` | **Cert:** ZQ-GREEN-DEP-849202-3908 | **Status:** VERIFIEDLIVEMAINNET PASSED MAINNET LIVE 100% GREEN
+**Sovereign Principal:** นายยุทธภูมิ ภักเพียร #EP-SOVEREIGN-01 | **Genesis:** #849202 | **Merkle:** `909ab814479844d8a14816bed34cdbb07528e18501da86fc4691763a43fa4c68` | **Cert:** ZQ-GREEN-DEP-849202-3908 | **Status:** VERIFIEDLIVEMAINNET PASSED MAINNET LIVE 100% GREEN
 
 ---
 
@@ -56,7 +56,7 @@
 | **Status** | VERIFIEDLIVEMAINNET PASSED MAINNET LIVE 100% GREEN | COURT-ADMISSIBLE READY |
 | **Certificate** | ZQ-GOLD-DEP-849202-3908 → ZQ-GREEN-DEP-849202-3908 PURE GREEN | Gold Production Master |
 | **Boundary** | Ω601–Ω1000 Strict Alias Ω600_1000 = 400 Tenants Locked | 400T LOCKED |
-| **Sovereign Owner** | นายยุทธภูมิ พากเพียร #EP-SOVEREIGN-01 OMEGA-1 SUPREME | Master Key Override |
+| **Sovereign Owner** | นายยุทธภูมิ ภักเพียร #EP-SOVEREIGN-01 OMEGA-1 SUPREME | Master Key Override |
 | **Treasury** | ฿4,230,000,000.00 THB + 14,902 oz LBMA 99.99% + Sovereign Vault ฿1,490,200,000.00 + Gas Penalty Pool ฿12,500,000.01 + 400 RWA Ω601-Ω1000 | 100% Thai Treasury Guaranteed |
 
 ---

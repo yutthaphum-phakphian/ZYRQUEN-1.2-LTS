@@ -54,7 +54,7 @@ SYSTEM_METRICS = {
     "coherence": "99.992%",
     "cryo_telemetry": "14.98 mK",
     "cryo_temp": "14.98 mK",
-    "sovereign_principal": "นายยุทธภูมิ พากเพียร (#EP-SOVEREIGN-01)",
+    "sovereign_principal": "นายยุทธภูมิ ภักเพียร (#EP-SOVEREIGN-01)",
     "quorum": "10/10 REAL_HSM FIPS 140-3 L4",
     "boundary": "Ω600_1000 (400 Tenants LOCKED)",
     "pqc_suite": ["ML-KEM-1024", "ML-DSA-87 (Dilithium-5)", "SLH-DSA (SPHINCS+)"]
@@ -334,7 +334,7 @@ async def generate_report(req: ReportGenerateRequest):
         "download_url": f"/api/v1/reports/download/{report_id}.pdf",
         "audit_seal_hash": CANONICAL_MERKLE_ROOT,
         "canonical_seals_count": CANONICAL_SEALS_COUNT,
-        "sovereign_authority": "นายยุทธภูมิ พากเพียร (#EP-SOVEREIGN-01)",
+        "sovereign_authority": "นายยุทธภูมิ ภักเพียร (#EP-SOVEREIGN-01)",
         "include_forensic_stream": req.include_forensic_stream,
         "thai_compliance": {
             "ETDA_Section_9_26_28": "Enforceable Electronic Signatures with 10/10 HSM Quorum",

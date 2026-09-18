@@ -91,7 +91,8 @@ const app = express();
 const PORT = 3000;
 const httpServer = http.createServer(app);
 const io = new SocketIOServer(httpServer, {
-  cors: { origin: '*' }
+  cors: { origin: '*' },
+  destroyUpgrade: false,
 });
 
 // Native WebSocket Server for external audit parties & direct WS clients
@@ -347,7 +348,7 @@ const SEARCH_PATTERNS = [
     answer: `**พระราชบัญญัติคุ้มครองข้อมูลส่วนบุคคล พ.ศ. 2562 (PDPA Thailand)**
 - **มาตรา 19 & 27**: กำหนดหลักการขอความยินยอม (Consent) และข้อยกเว้นทางกฎหมายสำหรับการประมวลผลข้อมูลส่วนบุคคลและข้อมูลอ่อนไหว (Sensitive Data)
 - **มาตรา 37**: ผู้ควบคุมข้อมูลส่วนบุคคล (Data Controller) ต้องจัดให้มีมาตรการรักษาความมั่นคงปลอดภัยที่เหมาะสม (Appropriate Security Measures) เช่น การเข้ารหัสข้อมูล (Encryption), การควบคุมการเข้าถึง (Access Control), และการบันทึก Log การเข้าถึง
-- **ความสอดคล้องกับ ZYRQUEN Ω∞**: การเก็บรักษาข้อมูลใน Post-Quantum Vault ปฏิบัติตามหลัก Data Minimization และเข้ารหัสแบบ Zero-Knowledge โดยมีผู้ถือสิทธิ์ Sovereign Principal นายยุทธภูมิ พากเพียร กำกับดูแล`,
+- **ความสอดคล้องกับ ZYRQUEN Ω∞**: การเก็บรักษาข้อมูลใน Post-Quantum Vault ปฏิบัติตามหลัก Data Minimization และเข้ารหัสแบบ Zero-Knowledge โดยมีผู้ถือสิทธิ์ Sovereign Principal นายยุทธภูมิ ภักเพียร กำกับดูแล`,
     citations: [
       { title: 'ราชกิจจานุเบกษา - พ.ร.บ. คุ้มครองข้อมูลส่วนบุคคล พ.ศ. 2562', uri: 'https://www.ratchakitcha.soc.go.th' },
       { title: 'สำนักงานคณะกรรมการคุ้มครองข้อมูลส่วนบุคคล (สคส. / PDPC)', uri: 'https://www.pdpc.or.th' },
@@ -412,7 +413,7 @@ app.post('/api/search', async (req, res) => {
   // If Gemini API Key is available, use Google Search Grounding with timeout
   if (ai) {
     try {
-      const prompt = `You are the Sovereign Legal & Cryptographic Intelligence Oracle for ZYRQUEN Ω∞ FROZEN v1.2 LTS and the Thai Custodian Registry (นายยุทธภูมิ พากเพียร #EP-SOVEREIGN-01).
+      const prompt = `You are the Sovereign Legal & Cryptographic Intelligence Oracle for ZYRQUEN Ω∞ FROZEN v1.2 LTS and the Thai Custodian Registry (นายยุทธภูมิ ภักเพียร #EP-SOVEREIGN-01).
 Query: "${query}"
 Context: Research current Thai digital laws (e.g. พระราชบัญญัติคุ้มครองข้อมูลส่วนบุคคล พ.ศ. 2562 (PDPA), พ.ร.บ. ว่าด้วยการกระทำความผิดเกี่ยวกับคอมพิวเตอร์, พ.ร.บ. การรักษาความมั่นคงปลอดภัยไซเบอร์ พ.ศ. 2562, พ.ร.บ. ธุรกรรมทางอิเล็กทรอนิกส์ พ.ศ. 2544/2562, ประกาศ NCSA, ETDA) and modern Cryptographic standards (NIST Post-Quantum Cryptography FIPS 203 ML-KEM, FIPS 204 ML-DSA, FIPS 205 SLH-DSA, SHA-256 Merkle Roots, ISO/IEC 27001).
 
@@ -474,7 +475,7 @@ Provide an authoritative, detailed, structured response with:
     citations = matched.citations;
   } else {
     answer = `**ระเบียบข้อบังคับและมาตรฐานทางเทคนิคสำหรับ ZYRQUEN Ω∞ Sovereign Operating System & Thai Custodian Registry**
-- **สถาปัตยกรรมอธิปไตย (Sovereign Architecture)**: ควบคุมโดยสถาปนิกสูงสุด นายยุทธภูมิ พากเพียร (#EP-SOVEREIGN-01) และคณะผู้ดูแลชาวไทย ภายใต้กรอบพระราชบัญญัติคุ้มครองข้อมูลส่วนบุคคล พ.ศ. 2562 และมาตรฐานความมั่นคงปลอดภัยสารสนเทศระดับสากล
+- **สถาปัตยกรรมอธิปไตย (Sovereign Architecture)**: ควบคุมโดยสถาปนิกสูงสุด นายยุทธภูมิ ภักเพียร (#EP-SOVEREIGN-01) และคณะผู้ดูแลชาวไทย ภายใต้กรอบพระราชบัญญัติคุ้มครองข้อมูลส่วนบุคคล พ.ศ. 2562 และมาตรฐานความมั่นคงปลอดภัยสารสนเทศระดับสากล
 - **มาตรฐานการเข้ารหัสและสมุดบัญชีหลักฐาน (Evidence Ledger V25)**: บล็อกจำนวน 14,902 รายการถูกผูกโยงผ่าน SHA-256 Merkle Root '909ab814479844d8a14816bed34cdbb07528e18501da86fc4691763a43fa4c68' โดยมีอัตราความคลาดเคลื่อน SSoT Mutation = 0
 - **คำแนะนำ**: ผู้ใช้สามารถค้นหาข้อกฎหมายเฉพาะเจาะจง เช่น "PDPA", "NCSA Cyber Act", "NIST FIPS 203 PQC", หรือ "ETDA Electronic Signature" เพื่อดูรายละเอียดมาตราและมาตรฐานอ้างอิง`;
     citations = [
@@ -561,11 +562,14 @@ app.get('/api/v1/sentinel/quarantine/logs', (req, res) => {
   res.json(sentinelQuarantineLogs.slice(0, limit));
 });
 
+// Standalone Dashboards & Uploaded Artifacts Static Service
+app.use('/standalone_dashboards', express.static(path.join(process.cwd(), 'standalone_dashboards')));
+
 // Lightweight Cyber-Quantum Dark Theme Dashboard (Direct HTML Delivery)
 app.get(['/dashboard', '/dashboard.html'], (req, res) => {
   const possiblePaths = [
     path.join(process.cwd(), 'public', 'dashboard.html'),
-    path.join(process.cwd(), 'dashboard.html'),
+    path.join(process.cwd(), 'standalone_dashboards', 'dashboard.html'),
     path.join(process.cwd(), 'index.html')
   ];
   for (const p of possiblePaths) {
@@ -574,6 +578,22 @@ app.get(['/dashboard', '/dashboard.html'], (req, res) => {
     }
   }
   return res.status(404).send('Dashboard template not found');
+});
+
+// Fallback resolver for standalone dashboards and uploaded evidence artifacts
+app.get('/:name.html', (req, res, next) => {
+  const file = `${req.params.name}.html`;
+  const candidates = [
+    path.join(process.cwd(), 'standalone_dashboards', file),
+    path.join(process.cwd(), 'standalone_dashboards', 'uploads', file),
+    path.join(process.cwd(), 'public', file)
+  ];
+  for (const candidate of candidates) {
+    if (fs.existsSync(candidate)) {
+      return res.sendFile(candidate);
+    }
+  }
+  next();
 });
 
 // Telemetry Alerts: Cryo > 15.20 mK or Drift > 0.00%
@@ -827,7 +847,7 @@ app.get('/api/copilot/status', (req, res) => {
       'POST_QUANTUM_FIPS204_ATTESTATION',
       'SIGNED_SNAPSHOT_EVIDENCE_EXPORTER',
     ],
-    principal: 'นายยุทธภูมิ พากเพียร (#EP-SOVEREIGN-01)',
+    principal: 'นายยุทธภูมิ ภักเพียร (#EP-SOVEREIGN-01)',
     timestamp: new Date().toISOString(),
   });
 });
@@ -847,7 +867,7 @@ app.post('/api/copilot/chat', async (req, res) => {
   if (ai) {
     try {
       const systemInstruction = `You are the ZYRQUEN Ω∞ Sovereign World Engine AI Assistant (Copilot Autonomy Layer v5.0 Sovereign Ultra) at OMEGA-1 SUPREME CLEARANCE.
-Sovereign Architect: นายยุทธภูมิ พากเพียร (#EP-SOVEREIGN-01).
+Sovereign Architect: นายยุทธภูมิ ภักเพียร (#EP-SOVEREIGN-01).
 Status: PDPA FINAL FROZEN v1.2 LTS | 10/10 PASSED | 100% GREEN | Δ0.00% ZERO DRIFT.
 Genesis Block: #849202 | Current Epoch: #${currentEpoch}.
 Canonical Seals: 14,902 Verified (+80 Quarantined = 14,982 Raw).
@@ -864,7 +884,7 @@ Rules:
 2. Avoid gradients - use solid colors (#070a12, #0a0f1e, #D4AF37, #06B6D4) when referencing themes.
 3. No external https links.
 4. Use Ω600_1000 every time when referring to tenant partitions.
-5. Provide precise, polite, authoritative answers in Thai to Sovereign Architect นายยุทธภูมิ พากเพียร (#EP-SOVEREIGN-01).
+5. Provide precise, polite, authoritative answers in Thai to Sovereign Architect นายยุทธภูมิ ภักเพียร (#EP-SOVEREIGN-01).
 6. If the user asks to download or export snapshot, explain that the signed immutable JSON evidence file can be downloaded directly and confirm that the client action is dispatched.`;
 
       // Build structured contents including recent history
@@ -957,7 +977,7 @@ Rules:
     fallbackAction = { type: 'REFRESH_DATA', label: '🔄 อัปเดทข้อมูลระบบทันที (Pull SSoT)' };
     fallbackAnswer = `🚀 รายงานผลการอัปเกรด Copilot Sovereign AI สู่เวอร์ชัน v6.0 Sovereign Ultra Quantum:
 • สถานะระบบ: อัปเกรดเสร็จสิ้นสมบูรณ์ 100% (Active Autonomous Layer v6.0)
-• ผู้มีอำนาจสิทธิ์อธิปไตย: นายยุทธภูมิ พากเพียร (#EP-SOVEREIGN-01) ระดับ OMEGA-1 GENESIS
+• ผู้มีอำนาจสิทธิ์อธิปไตย: นายยุทธภูมิ ภักเพียร (#EP-SOVEREIGN-01) ระดับ OMEGA-1 GENESIS
 • สถาปัตยกรรม Swarm: Autonomous Multi-Agent Matrix (SA-01 Task Coordinator, SA-02 Compute Engine, SA-03 Sentinel Matrix)
 • โทรมาตรความปลอดภัย: ควบคุมเสถียรภาพ Sub-Kelvin Cryo 14.98 mK และ 10/10 REAL_HSM Quorum
 • อัตรา Entropy โทรมาตร: ${currentEntropy.toLocaleString()} KBps (โควต้าเสถียรภาพ 100%)
@@ -1046,9 +1066,9 @@ Rules:
     fallbackAnswer = `⚖️ กรอบกฎหมายและความคุ้มครองอธิปไตยดิจิทัล (Sovereign Legal Framework):
 • พ.ร.บ. คุ้มครองข้อมูลส่วนบุคคล พ.ศ. 2562 (PDPA): มาตรา 9, 26, 28 ได้รับการบังคับใช้ผ่าน Zero-Knowledge Proof และ Post-Quantum Key Enclave
 • พ.ร.บ. ว่าด้วยธุรกรรมทางอิเล็กทรอนิกส์ (ETDA): มาตรา 9, 26, 28 รองรับลายมือชื่ออิเล็กทรอนิกส์ขั้นสูง ML-DSA-87 (Dilithium-5)
-• สิทธิการเข้าถึง: กุญแจ Master Key OMEGA-1 ผูกกับ Sovereign Architect นายยุทธภูมิ พากเพียร (#EP-SOVEREIGN-01) โดยตรงครับ`;
+• สิทธิการเข้าถึง: กุญแจ Master Key OMEGA-1 ผูกกับ Sovereign Architect นายยุทธภูมิ ภักเพียร (#EP-SOVEREIGN-01) โดยตรงครับ`;
   } else {
-    fallbackAnswer = `🏛️ รับทราบคำสั่งครับท่าน Sovereign Architect นายยุทธภูมิ พากเพียร (#EP-SOVEREIGN-01):
+    fallbackAnswer = `🏛️ รับทราบคำสั่งครับท่าน Sovereign Architect นายยุทธภูมิ ภักเพียร (#EP-SOVEREIGN-01):
 Copilot Autonomy Layer v5.0 Sovereign Ultra เชื่อมต่อกับ Backend อธิปไตยเรียบร้อยแล้ว
 • สถิติระบบ: Block #${currentEpoch} | 14,902 Seals | 10/10 REAL_HSM Quorum
 • ขอบเขต: พาร์ทิชัน Ω600_1000 (400 Tenants LOCKED)
@@ -1082,7 +1102,7 @@ const SYSTEM_METRICS = {
   raw_seals_count: 14982,
   state_consistency: 'SSoT Δ0',
   drift: '0.00%',
-  sovereign_principal: 'นายยุทธภูมิ พากเพียร (#EP-SOVEREIGN-01)',
+  sovereign_principal: 'นายยุทธภูมิ ภักเพียร (#EP-SOVEREIGN-01)',
   qops: 851.9,
   coherence: '99.992%',
   cryo_temp: '14.98 mK',
@@ -1104,7 +1124,7 @@ app.get('/api/v1/telemetry', (req, res) => {
     certificate_anchor: 'ZQ-GOLD-DEP-849202-3908',
     boundary: 'Ω601–Ω1000 (Strict Boundary)',
     alias_boundary: 'Ω600_1000 (400 Tenants LOCKED)',
-    sovereign_principal: 'นายยุทธภูมิ พากเพียร (#EP-SOVEREIGN-01)',
+    sovereign_principal: 'นายยุทธภูมิ ภักเพียร (#EP-SOVEREIGN-01)',
     active_nodes: 18,
     ssot_mutation_rate: 0.0,
     pqc_status: 'LOCKED',
@@ -1149,7 +1169,7 @@ app.post('/api/auth/login', (req, res) => {
     status: 'AUTHORIZED',
     session_id: `SES-PQC-${Math.random().toString(36).substring(2, 12).toUpperCase()}`,
     pqc_algorithm: 'ML-KEM-1024 (FIPS 203)',
-    user: user || 'ยุทธภูมิ พากเพียร (#EP-SOVEREIGN-01)',
+    user: user || 'ยุทธภูมิ ภักเพียร (#EP-SOVEREIGN-01)',
     clearance: 'OMEGA-1 SUPREME CLEARANCE',
     mutation_authority: 0,
     zero_drift: true,
@@ -1171,7 +1191,7 @@ app.get('/api/auth/session', (req, res) => {
   res.set('Cache-Control', 'private, max-age=5');
   res.json({
     authenticated: true,
-    principal: 'นายยุทธภูมิ พากเพียร (#EP-SOVEREIGN-01)',
+    principal: 'นายยุทธภูมิ ภักเพียร (#EP-SOVEREIGN-01)',
     clearance: 'OMEGA-1',
     ssot_delta: '0.00%',
     zero_trust_gate: 'INV-ZERO-TRUST-GATE-ACTIVE',
@@ -1435,7 +1455,7 @@ app.post(['/api/v1/reports/generate', '/api/v1/audit/report/generate'], (req, re
     file_name: `zyrquen-evidence-${height}.${reportFormat.toLowerCase()}`,
     audit_seal_hash: '909ab814479844d8a14816bed34cdbb07528e18501da86fc4691763a43fa4c68',
     canonical_seals_count: 14902,
-    sovereign_authority: 'นายยุทธภูมิ พากเพียร (#EP-SOVEREIGN-01)',
+    sovereign_authority: 'นายยุทธภูมิ ภักเพียร (#EP-SOVEREIGN-01)',
     include_forensic_stream: !!include_forensic_stream,
     thai_compliance: {
       Section_9: 'Electronic Signature Legal Enforceability Verified (Dilithium-5 Signature bound)',
@@ -1469,7 +1489,7 @@ app.get(['/api/v1/reports/download/:id', '/api/v1/audit/report/download/:id'], (
     canonical_block: 849202,
     genesis_merkle_root: '909ab814479844d8a14816bed34cdbb07528e18501da86fc4691763a43fa4c68',
     certificate_anchor: 'ZQ-GOLD-DEP-849202-3908',
-    sovereign_principal: 'นายยุทธภูมิ พากเพียร (#EP-SOVEREIGN-01)',
+    sovereign_principal: 'นายยุทธภูมิ ภักเพียร (#EP-SOVEREIGN-01)',
     thai_legal_safe_harbor: 'ETDA Sec 9/26/28 & PDPA Sec 9/26/28 Active',
     hsm_quorum: '10/10 REAL_HSM FIPS 140-3 L4 Verified',
     ssot_mutation_rate: 0.0,
@@ -1499,7 +1519,7 @@ app.post('/api/v1/hsm/zeroize', (req, res) => {
     ram_keys_purged: true,
     enclaves_cleared: 10,
     timestamp,
-    authorized_by: sigHeader || 'นายยุทธภูมิ พากเพียร (#EP-SOVEREIGN-01)',
+    authorized_by: sigHeader || 'นายยุทธภูมิ ภักเพียร (#EP-SOVEREIGN-01)',
   });
 });
 
@@ -1553,7 +1573,7 @@ app.get('/api/v1/pqc/dossier', (req, res) => {
       MERKLE_ROOT: '909ab814479844d8a14816bed34cdbb07528e18501da86fc4691763a43fa4c68',
       CANONICAL_BLOCK: 849202,
       CYTOSTAT_NOMINAL_MK: 14.98,
-      SOVEREIGN_ARCHITECT: 'นายยุทธภูมิ พากเพียร (Yuttaphum Phakphian / #EP-SOVEREIGN-01)',
+      SOVEREIGN_ARCHITECT: 'นายยุทธภูมิ ภักเพียร (Yuttaphum Phakphian / #EP-SOVEREIGN-01)',
       SOVEREIGN_ID: 'EP-SOVEREIGN-01',
       PLATFORM_BOUNDARY: 'Ω601–Ω1000 (Strict Enforcement)',
     },
@@ -1561,7 +1581,7 @@ app.get('/api/v1/pqc/dossier', (req, res) => {
       canonicalBlock: 849202,
       canonicalSeals: 14902,
       merkleGenesisRoot: '909ab814479844d8a14816bed34cdbb07528e18501da86fc4691763a43fa4c68',
-      sovereignArchitect: 'นายยุทธภูมิ พากเพียร (#EP-SOVEREIGN-01)',
+      sovereignArchitect: 'นายยุทธภูมิ ภักเพียร (#EP-SOVEREIGN-01)',
       status: 'LOCKED_FROZEN_v1.2_LTS',
       ssotZeroDrift: true,
     },
@@ -1675,7 +1695,7 @@ app.get('/api/v1/closure/attestation', (req, res) => {
     quarantined: 80,
     quorum: "10/10 REAL_HSM FIPS 140-3 L4",
     legal: "PDPA Sec 9, 26, 28 + ETDA Sec 9, 26, 28 Safe Harbor",
-    principal: "นายยุทธภูมิ พากเพียร #EP-SOVEREIGN-01",
+    principal: "นายยุทธภูมิ ภักเพียร #EP-SOVEREIGN-01",
     clearance: "OMEGA-1 SUPREME CLEARANCE",
     version: "LOCKED_FROZEN_v1.2_LTS",
     certificate: "ZQ-GOLD-DEP-849202-3908",
@@ -1695,7 +1715,7 @@ function checkDatabaseConnection(): boolean {
 const SOVEREIGN_USERS = [
   {
     id: 'usr-owner-01',
-    username: 'นายยุทธภูมิ พากเพียร',
+    username: 'นายยุทธภูมิ ภักเพียร',
     email: 'sovereign.principal@zyrquen.internal',
     role: 'owner',
     createdAt: '2025-01-01T00:00:00.000Z',
@@ -2144,7 +2164,7 @@ async function fetch_latest_commit_from_github() {
             repo: GITHUB_REPO,
             commitHash: "909ab814479844d8a14816bed34cdbb07528e18501da86fc4691763a43fa4c68",
             shortHash: "909ab81",
-            author: "นายยุทธภูมิ พากเพียร (#EP-SOVEREIGN-01)",
+            author: "นายยุทธภูมิ ภักเพียร (#EP-SOVEREIGN-01)",
             date: "2026-09-16T19:00:00+07:00",
             message: "FROZEN LTS Genesis 849202 - Offline Court-Ready Cache",
             commitUrl: "https://github.com/" + GITHUB_REPO,

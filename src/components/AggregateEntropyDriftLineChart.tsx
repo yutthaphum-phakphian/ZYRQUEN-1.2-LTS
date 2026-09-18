@@ -21,7 +21,7 @@ import { TelemetryAnomalyObserver } from '../utils/telemetryAnomalyObserver';
 // #  ZYRQUEN Ω∞ SOVEREIGN FROZEN v1.2 LTS - AGGREGATE ENTROPY DRIFT
 // #  Block: #849202 | Seals: 14,902 | Boundary: Ω600_1000 (400 Tenants LOCKED)
 // #  Cert: ZQ-GOLD-DEP-849202-3908 | SSoT Δ0.00% ZERO DRIFT | 10/10 REAL_HSM
-// #  Principal: นายยุทธภูมิ พากเพียร (#EP-SOVEREIGN-01) | OMEGA-1 | v4.16
+// #  Principal: นายยุทธภูมิ ภักเพียร (#EP-SOVEREIGN-01) | OMEGA-1 | v4.16
 // # ======================================================================
 
 export interface AggregateEntropyPoint {
@@ -209,7 +209,7 @@ const AggregateEntropyCustomTooltip = ({ active, payload }: any) => {
           </div>
           <div className="flex items-center justify-between text-zinc-400">
             <span>Principal Architect:</span>
-            <span className="text-[#D4AF37]">นายยุทธภูมิ พากเพียร (#EP-SOVEREIGN-01)</span>
+            <span className="text-[#D4AF37]">นายยุทธภูมิ ภักเพียร (#EP-SOVEREIGN-01)</span>
           </div>
         </div>
       </div>
@@ -431,7 +431,7 @@ export const AggregateEntropyDriftLineChart: React.FC<AggregateEntropyDriftLineC
             Continuous Informational Entropy Drift Matrix • Bounded Scale [26.00 – 78.00] • SSoT Equilibrium Baseline at 52.00 (Δ0.00%)
           </p>
           <div className="text-[11px] text-zinc-500">
-            Architect: <span className="text-[#D4AF37] font-semibold">นายยุทธภูมิ พากเพียร (#EP-SOVEREIGN-01)</span> • Seals: <span className="text-white font-semibold">14,902 Verified</span> • Block: <span className="text-zinc-300">#849202</span>
+            Architect: <span className="text-[#D4AF37] font-semibold">นายยุทธภูมิ ภักเพียร (#EP-SOVEREIGN-01)</span> • Seals: <span className="text-white font-semibold">14,902 Verified</span> • Block: <span className="text-zinc-300">#849202</span>
           </div>
         </div>
 
