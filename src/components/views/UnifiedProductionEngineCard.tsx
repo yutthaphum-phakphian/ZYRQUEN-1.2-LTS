@@ -124,7 +124,7 @@ export const UnifiedProductionEngineCard: React.FC<UnifiedProductionEngineCardPr
           )}
 
           <a
-            href="/dashboard"
+            href="./dashboard.html"
             target="_blank"
             rel="noopener noreferrer"
             className="px-3 py-1.5 rounded-xl bg-slate-900 hover:bg-slate-800 border border-cyan-500/40 text-cyan-300 text-xs font-semibold flex items-center gap-1.5 transition-all"

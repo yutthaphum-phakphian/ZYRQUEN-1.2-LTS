@@ -63,8 +63,21 @@ import { ThaiComplianceTriggerMatrix, DETAILED_ETDA_PDPA_TRIGGERS } from './comp
 import { VerifiedEvidenceDownloadConfirmModal } from './components/modal/VerifiedEvidenceDownloadConfirmModal';
 import { systemStateStore } from './store/systemStateStore';
 import { AudioEntropyController, SsotDriftWarning, SsotDriftToggleButton, QuantumAggregateEntropyIndicator } from './components/system/SystemStateComponents';
+import { useSwipeNavigation } from './hooks/useSwipeNavigation';
+import { MobileSwipeIndicator } from './components/mobile/MobileSwipeIndicator';
 import { ToastNotification, ToastMessage } from './components/ToastNotification';
 import { useNotificationWebSocket } from './hooks/useNotificationWebSocket';
+import { crossTabSyncService } from './services/crossTabSyncService';
+import { offlineAuditSyncService } from './services/offlineAuditSyncService';
+import {
+  hapticSnapshot,
+  hapticSidebarToggle,
+  hapticModalDismiss,
+  hapticModalOpen,
+  hapticLockToggle,
+  hapticWarning,
+  hapticSuccess,
+} from './utils/haptics';
 
 import {
   Sparkles,
@@ -584,38 +597,135 @@ function SovereignAppContent() {
 
   const setCurrentView = useCallback((view: ViewType) => {
     const targetPath = view === 'dashboard' ? '/' : `/${view}`;
+    systemStateStore.setLastActiveView(view);
     if (location.pathname !== targetPath) {
       navigate(targetPath);
     }
   }, [navigate, location.pathname]);
-  const [isLeftSidebarOpen, setIsLeftSidebarOpen] = useState<boolean>(() => {
-    try {
-      return localStorage.getItem('zyrquen_sidebar_open') === 'true';
-    } catch {
-      return false;
+
+  // Resilient Mobile Navigation: restore last active view on cold reload if at root
+  useEffect(() => {
+    const isAtRoot = !location.pathname || location.pathname === '/' || location.pathname === '';
+    const lastSaved = systemStateStore.getLastActiveView() as ViewType;
+    if (isAtRoot && lastSaved && lastSaved !== 'dashboard' && VALID_VIEWS.includes(lastSaved)) {
+      navigate(`/${lastSaved}`);
     }
+  }, [navigate, location.pathname]);
+
+  const [systemEvents, setSystemEvents] = useState<SystemEvent[]>(INITIAL_SYSTEM_EVENTS);
+  const addSystemEventRef = useRef<((
+    type: SystemEvent['type'],
+    title: string,
+    description: string,
+    metaHash?: string,
+    severity?: SystemEvent['severity'],
+    statuteRef?: string,
+    targetView?: SystemEvent['targetView']
+  ) => void) | null>(null);
+
+  const addSystemEvent = useCallback(
+    (
+      type: SystemEvent['type'],
+      title: string,
+      description: string,
+      metaHash?: string,
+      severity: SystemEvent['severity'] = 'info',
+      statuteRef?: string,
+      targetView?: SystemEvent['targetView']
+    ) => {
+      const newEvt: SystemEvent = {
+        id: `evt-${Date.now()}-${Math.floor(Math.random() * 1000)}`,
+        type,
+        title,
+        description,
+        timestamp: new Date().toLocaleTimeString('en-GB', { hour12: false }) + ' ICT',
+        metaHash,
+        statuteRef,
+        targetView,
+        severity,
+      };
+
+      setSystemEvents((prev) => [newEvt, ...prev]);
+
+      // Broadcast to all open tabs via Broadcast Channel API to prevent state fragmentation
+      crossTabSyncService.broadcastSystemEvent(newEvt);
+
+      // Queue non-critical audit events into background sync service to ensure zero forensic data loss
+      offlineAuditSyncService.queueAuditEvent({
+        id: newEvt.id,
+        type: newEvt.type,
+        title: newEvt.title,
+        description: newEvt.description,
+        metaHash: newEvt.metaHash,
+        severity: newEvt.severity,
+        statuteRef: newEvt.statuteRef,
+        timestamp: newEvt.timestamp,
+        isoTime: new Date().toISOString(),
+      });
+
+      // Low-Latency Verbal Feedback Loop for Critical and Anomaly Events
+      try {
+        announceSystemEventVerbal(type, title, severity);
+      } catch (err) {
+        console.warn('Verbal announcer failed:', err);
+      }
+    },
+    []
+  );
+
+  // Synchronize System Events, Audit Logs, and Global Lock States across all open tabs
+  useEffect(() => {
+    const unsubscribe = crossTabSyncService.subscribe((msg) => {
+      if (msg.type === 'SYSTEM_EVENT' && msg.payload) {
+        setSystemEvents((prev) => {
+          if (prev.some((e) => e.id === msg.payload.id)) return prev;
+          return [msg.payload, ...prev];
+        });
+      } else if (msg.type === 'GLOBAL_LOCK_STATE' && msg.payload) {
+        if (typeof msg.payload.isSystemFrozen === 'boolean') {
+          setIsSystemActivityFrozen(msg.payload.isSystemFrozen);
+        }
+        if (typeof msg.payload.isForensicAuditMode === 'boolean') {
+          setIsForensicAuditMode(msg.payload.isForensicAuditMode);
+        }
+        if (typeof msg.payload.isEmergencyLockdown === 'boolean') {
+          setIsEmergencyLockdown(msg.payload.isEmergencyLockdown);
+        }
+      }
+    });
+
+    return unsubscribe;
+  }, []);
+
+  addSystemEventRef.current = addSystemEvent;
+  const [isLeftSidebarOpen, setIsLeftSidebarOpen] = useState<boolean>(() => {
+    return systemStateStore.isSidebarOpenState(false);
   });
 
   const handleToggleSidebar = useCallback(() => {
     setIsLeftSidebarOpen((prev) => {
       const next = !prev;
-      try {
-        localStorage.setItem('zyrquen_sidebar_open', String(next));
-      } catch (e) {
-        console.error(e);
-      }
+      systemStateStore.setSidebarOpen(next);
+      hapticSidebarToggle(next);
       return next;
     });
   }, []);
 
   const handleCloseSidebar = useCallback(() => {
     setIsLeftSidebarOpen(false);
-    try {
-      localStorage.setItem('zyrquen_sidebar_open', 'false');
-    } catch (e) {
-      console.error(e);
-    }
+    systemStateStore.setSidebarOpen(false);
+    hapticSidebarToggle(false);
   }, []);
+
+  // Touch gesture swiping between views (Dashboard, Quantum, Ledger, Pulse, Matrix, etc.)
+  const { touchHandlers, nextView, prevView, swipeFeedback } = useSwipeNavigation({
+    currentView,
+    onNavigate: setCurrentView,
+    onToggleSidebar: handleToggleSidebar,
+    onCloseSidebar: handleCloseSidebar,
+    isSidebarOpen: isLeftSidebarOpen,
+    enabled: true,
+  });
   const [selectedChamberId, setSelectedChamberId] = useState<string>('00');
   const [isCertificateOpen, setIsCertificateOpen] = useState(false);
   const [isLegalSearchOpen, setIsLegalSearchOpen] = useState(false);
@@ -643,7 +753,6 @@ function SovereignAppContent() {
   const [snapshots, setSnapshots] = useState<HardwareSnapshot[]>(INITIAL_HARDWARE_SNAPSHOTS);
   const [lastSnapshotTime, setLastSnapshotTime] = useState<number>(0);
   const [heartbeatTick, setHeartbeatTick] = useState<boolean>(false);
-  const [systemEvents, setSystemEvents] = useState<SystemEvent[]>(INITIAL_SYSTEM_EVENTS);
   const [isSystemActivityFrozen, setIsSystemActivityFrozen] = useState<boolean>(() => {
     try {
       return localStorage.getItem('zyrquen_system_frozen') === 'true';
@@ -734,6 +843,8 @@ function SovereignAppContent() {
       } catch (e) {
         console.error(e);
       }
+      hapticLockToggle(next);
+      crossTabSyncService.broadcastGlobalLockState({ isForensicAuditMode: next });
       return next;
     });
   }, []);
@@ -813,7 +924,7 @@ function SovereignAppContent() {
     playAuditChime();
     showToast(`ดาวน์โหลดสรุปทริกเกอร์กฎหมาย (${filename}) สำเร็จ`, 'success');
     addSystemEvent(
-      'LEGAL',
+      'COMPLIANCE',
       'Legal Triggers Summary Exported',
       `Exported ${DETAILED_ETDA_PDPA_TRIGGERS.length} active legal triggers summary JSON report.`,
       'export:legal_triggers',
@@ -837,49 +948,20 @@ function SovereignAppContent() {
     return () => clearInterval(interval);
   }, [lastSnapshotTime]);
 
-  const addSystemEvent = useCallback(
-    (
-      type: SystemEvent['type'],
-      title: string,
-      description: string,
-      metaHash?: string,
-      severity: SystemEvent['severity'] = 'info',
-      statuteRef?: string,
-      targetView?: SystemEvent['targetView']
-    ) => {
-      const newEvt: SystemEvent = {
-        id: `evt-${Date.now()}-${Math.floor(Math.random() * 1000)}`,
-        type,
-        title,
-        description,
-        timestamp: new Date().toLocaleTimeString('en-GB', { hour12: false }) + ' ICT',
-        metaHash,
-        statuteRef,
-        targetView,
-        severity,
-      };
-
-      setSystemEvents((prev) => [newEvt, ...prev]);
-
-      // Low-Latency Verbal Feedback Loop for Critical and Anomaly Events
-      try {
-        announceSystemEventVerbal(type, title, severity);
-      } catch (err) {
-        console.warn('Verbal announcer failed:', err);
-      }
-    },
-    []
-  );
-
   // Register Write Firewall & Automated Backup Diagnostic to dispatch directly to SystemEvents
   useEffect(() => {
     WriteFirewallEngine.registerSystemEventHandler((type, title, desc, meta, sev, statute, view) => {
-      addSystemEvent(type, title, desc, meta, sev, statute, view);
+      addSystemEventRef.current?.(type, title, desc, meta, sev, statute, view);
     });
     automatedBackupService.registerSystemActivityLogger((type, title, desc, meta, sev, statute, view) => {
-      addSystemEvent(type, title, desc, meta, sev, statute, view);
+      addSystemEventRef.current?.(type, title, desc, meta, sev, statute, view);
     });
-  }, [addSystemEvent]);
+
+    return () => {
+      WriteFirewallEngine.registerSystemEventHandler(() => {});
+      automatedBackupService.registerSystemActivityLogger(() => {});
+    };
+  }, []);
 
   // Trigger 'EVIDENCE_IMPORTED' audit events upon application initialization
   useEffect(() => {
@@ -952,6 +1034,8 @@ function SovereignAppContent() {
       } catch (e) {
         console.error(e);
       }
+      hapticLockToggle(next);
+      crossTabSyncService.broadcastGlobalLockState({ isSystemFrozen: next });
       if (next) {
         automatedBackupService.stop();
         if (isAudioActive) {
@@ -1029,11 +1113,13 @@ function SovereignAppContent() {
         'security'
       );
       showToast('Hardware Telemetry Snapshot REJECTED: Gate Blocked', 'error');
+      hapticWarning();
       setIsEventsSidebarOpen(true);
       return;
     }
 
     // Update Verification Gate Status to PASSED
+    hapticSnapshot();
     const newVerifiedSeals = 14902 + Math.max(0, snapshots.length - 2 + 1);
     systemStateStore.setSealCount(newVerifiedSeals);
     systemStateStore.setSealedBlock(849202 + Math.max(0, snapshots.length - 2 + 1));
@@ -1630,7 +1716,14 @@ function SovereignAppContent() {
         onToggleCopilot={() => setIsCopilotOpen((prev) => !prev)}
         epochCountdown={epochCountdown}
         isEmergencyLockdown={isEmergencyLockdown}
-        onToggleEmergencyLockdown={() => setIsEmergencyLockdown((prev) => !prev)}
+        onToggleEmergencyLockdown={() => {
+          setIsEmergencyLockdown((prev) => {
+            const next = !prev;
+            hapticLockToggle(next);
+            crossTabSyncService.broadcastGlobalLockState({ isEmergencyLockdown: next });
+            return next;
+          });
+        }}
         onTriggerLoginLoader={(mode = 'login') => {
           setLoginLoaderMode(mode);
           setShowLoginLoader(true);
@@ -1651,8 +1744,21 @@ function SovereignAppContent() {
           liveCryo={14.98}
         />
 
-        {/* Main Content Area with Sliding Curtain OS Entrance Transitions */}
-        <main className="flex-1 min-w-0 w-full px-2 sm:px-4 py-4 pb-20 overflow-hidden space-y-4 transition-all duration-300">
+        {/* Main Content Area with Touch Gesture Swiping and Sliding Curtain OS Entrance Transitions */}
+        <main
+          id="main-content"
+          {...touchHandlers}
+          className="flex-1 min-w-0 w-full px-2 sm:px-4 py-4 pb-20 overflow-hidden space-y-4 transition-all duration-300"
+        >
+          {/* Mobile Swipe Quick Action & Feedback Strip */}
+          <MobileSwipeIndicator
+            currentView={currentView}
+            nextView={nextView}
+            prevView={prevView}
+            swipeFeedback={swipeFeedback}
+            onNavigate={setCurrentView}
+          />
+
           {/* Visual Notification System: SSoT Mutation Drift Warning (Triggered if deviation >= 0.01%) */}
           <SsotDriftWarning />
 
@@ -1966,7 +2072,10 @@ function SovereignAppContent() {
       {/* System Events Activity Feed Sidebar */}
       <SystemEventsSidebar
         isOpen={isEventsSidebarOpen}
-        onClose={() => setIsEventsSidebarOpen(false)}
+        onClose={() => {
+          hapticModalDismiss();
+          setIsEventsSidebarOpen(false);
+        }}
         events={systemEvents}
         latestSealCount={verificationGateStatus.sealCount}
         onClearEvents={() => setSystemEvents([])}
@@ -1974,6 +2083,7 @@ function SovereignAppContent() {
         onToggleForensicAuditMode={handleToggleForensicAuditMode}
         onNavigateToView={(v) => {
           setCurrentView(v);
+          hapticModalDismiss();
           setIsEventsSidebarOpen(false);
         }}
       />
@@ -1981,17 +2091,23 @@ function SovereignAppContent() {
       {/* Global Keyboard Shortcuts Modal */}
       <KeyboardShortcutsModal
         isOpen={isShortcutsOpen}
-        onClose={() => setIsShortcutsOpen(false)}
+        onClose={() => {
+          hapticModalDismiss();
+          setIsShortcutsOpen(false);
+        }}
         onNavigate={(v) => {
           setCurrentView(v);
+          hapticModalDismiss();
           setIsShortcutsOpen(false);
         }}
         onOpenSearch={() => {
           setIsLegalSearchOpen(true);
+          hapticModalDismiss();
           setIsShortcutsOpen(false);
         }}
         onOpenCert={() => {
           setIsCertificateOpen(true);
+          hapticModalDismiss();
           setIsShortcutsOpen(false);
         }}
         onToggleAudio={handleToggleAudio}
@@ -2002,17 +2118,23 @@ function SovereignAppContent() {
       <ToastNotification toasts={toasts} removeToast={removeToast} />
       <AuditCertificateModal
         isOpen={isCertificateOpen}
-        onClose={() => setIsCertificateOpen(false)}
+        onClose={() => {
+          hapticModalDismiss();
+          setIsCertificateOpen(false);
+        }}
       />
 
       {/* Verified Evidence Download Confirmation Modal (ขนาดไฟล์ & แฮชเมตาเดตา) */}
       <VerifiedEvidenceDownloadConfirmModal
         isOpen={isEvidenceDownloadModalOpen}
-        onClose={() => setIsEvidenceDownloadModalOpen(false)}
+        onClose={() => {
+          hapticModalDismiss();
+          setIsEvidenceDownloadModalOpen(false);
+        }}
         onDownloaded={() => {
           showToast('ดาวน์โหลดแพ็คเกจหลักฐานที่ตรวจสอบแล้วสำเร็จ (ZIP Package)', 'success');
           addSystemEvent(
-            'EVIDENCE',
+            'EVIDENCE_IMPORTED',
             'Verified Evidence Package Exported',
             'Sovereign verified evidence package cryptographic archive exported with Genesis SHA3-512 & Merkle attestation.',
             'export:evidence_package',
@@ -2123,12 +2245,18 @@ function SovereignAppContent() {
       {/* Sovereign Copilot Assistant Window (Docked at Bottom-Right) */}
       <CopilotAssistantDrawer
         isOpen={isCopilotOpen}
-        onClose={() => setIsCopilotOpen(false)}
+        onClose={() => {
+          hapticModalDismiss();
+          setIsCopilotOpen(false);
+        }}
         onNavigate={setCurrentView}
       />
       <ThaiLegalSearchModal
         isOpen={isLegalSearchOpen}
-        onClose={() => setIsLegalSearchOpen(false)}
+        onClose={() => {
+          hapticModalDismiss();
+          setIsLegalSearchOpen(false);
+        }}
         onSearchExecuted={handleLegalSearchExecuted}
       />
       
@@ -2149,7 +2277,10 @@ function SovereignAppContent() {
             'dashboard'
           );
         }}
-        onCancel={() => setShowLoginLoader(false)}
+        onCancel={() => {
+          hapticModalDismiss();
+          setShowLoginLoader(false);
+        }}
       />
 
       <OfflineIndicator />

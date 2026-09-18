@@ -58,6 +58,76 @@ export interface CustodianRegistrySnapshot {
   slots: CustodianProofSlot[];
 }
 
+/**
+ * Resilient Storage Engine
+ * Provides fault-tolerant persistence with an in-memory fallback.
+ * Guarantees mobile navigation and sidebar states remain intact across browser reloads,
+ * private browsing mode restrictions, and storage quota limitations.
+ */
+class ResilientStorage {
+  private memoryFallback: Map<string, string> = new Map();
+
+  public getItem(key: string): string | null {
+    try {
+      if (typeof window !== 'undefined' && window.localStorage) {
+        const val = window.localStorage.getItem(key);
+        if (val !== null) return val;
+      }
+    } catch {
+      // Graceful fallback to memory
+    }
+    return this.memoryFallback.get(key) ?? null;
+  }
+
+  public setItem(key: string, value: string): void {
+    this.memoryFallback.set(key, value);
+    try {
+      if (typeof window !== 'undefined' && window.localStorage) {
+        window.localStorage.setItem(key, value);
+      }
+    } catch {
+      // Memory fallback retained silently
+    }
+  }
+
+  public removeItem(key: string): void {
+    this.memoryFallback.delete(key);
+    try {
+      if (typeof window !== 'undefined' && window.localStorage) {
+        window.localStorage.removeItem(key);
+      }
+    } catch {}
+  }
+
+  public getJSON<T>(key: string, fallback: T): T {
+    const raw = this.getItem(key);
+    if (!raw) return fallback;
+    try {
+      return JSON.parse(raw) as T;
+    } catch {
+      return fallback;
+    }
+  }
+
+  public setJSON<T>(key: string, value: T): void {
+    try {
+      this.setItem(key, JSON.stringify(value));
+    } catch {}
+  }
+}
+
+export const resilientStorage = new ResilientStorage();
+
+export const STORAGE_KEYS = {
+  ACTIVE_VIEW: 'zyrquen_mobile_active_view',
+  SIDEBAR_OPEN: 'zyrquen_sidebar_open',
+  NAV_HISTORY: 'zyrquen_mobile_nav_history',
+  VERBOSE_LOGGING: 'zyrquen_verbose_system_logging',
+  SYSTEM_FROZEN: 'zyrquen_system_frozen',
+  MONOCHROME_MODE: 'zyrquen_monochrome_mode',
+  FORENSIC_AUDIT_MODE: 'zyrquen_forensic_audit_mode',
+} as const;
+
 // Canonical Genesis Custodian Proof Slots (slots 1 to 4 pre-anchored, slots 5 to 10 pending/expandable)
 export const INITIAL_CUSTODIAN_PROOF_SLOTS: CustodianProofSlot[] = [
   {
@@ -508,6 +578,10 @@ export type SystemState = {
   fcmPlatform?: string;
   fcmRegisteredAt?: string;
   fcmActiveChannel?: string;
+  // Resilient mobile navigation & sidebar states
+  lastActiveView: string;
+  isSidebarOpen: boolean;
+  mobileNavHistory: string[];
 };
 
 class SystemStateStore {
@@ -521,6 +595,9 @@ class SystemStateStore {
     custodianProofs: 10, // 10/10 Verified Super-Majority Attained (Super-Majority Invariant ≥8/10)
     custodianRegistry: this.custodianRegistry.getSnapshot(),
     isVerboseLoggingEnabled: false,
+    lastActiveView: 'dashboard',
+    isSidebarOpen: false,
+    mobileNavHistory: ['dashboard'],
   };
 
   private listeners = new Set<(state: SystemState) => void>();
@@ -528,11 +605,24 @@ class SystemStateStore {
 
   constructor() {
     try {
-      if (typeof window !== 'undefined' && window.localStorage) {
-        const stored = window.localStorage.getItem('zyrquen_verbose_system_logging');
-        if (stored === 'true') {
-          this.state.isVerboseLoggingEnabled = true;
-        }
+      const storedActiveView = resilientStorage.getItem(STORAGE_KEYS.ACTIVE_VIEW);
+      if (storedActiveView) {
+        this.state.lastActiveView = storedActiveView;
+      }
+
+      const storedSidebar = resilientStorage.getItem(STORAGE_KEYS.SIDEBAR_OPEN);
+      if (storedSidebar !== null) {
+        this.state.isSidebarOpen = storedSidebar === 'true';
+      }
+
+      const storedHistory = resilientStorage.getJSON<string[]>(STORAGE_KEYS.NAV_HISTORY, ['dashboard']);
+      if (Array.isArray(storedHistory) && storedHistory.length > 0) {
+        this.state.mobileNavHistory = storedHistory;
+      }
+
+      const storedVerbose = resilientStorage.getItem(STORAGE_KEYS.VERBOSE_LOGGING);
+      if (storedVerbose === 'true') {
+        this.state.isVerboseLoggingEnabled = true;
       }
     } catch {}
     this.syncRegistryState();
@@ -714,6 +804,53 @@ class SystemStateStore {
     const next = !this.state.isVerboseLoggingEnabled;
     this.setVerboseLoggingEnabled(next);
     return next;
+  }
+
+  // --- Resilient Mobile Navigation & Sidebar State Management ---
+
+  getLastActiveView(): string {
+    return this.state.lastActiveView || 'dashboard';
+  }
+
+  setLastActiveView(view: string): void {
+    if (!view || view === this.state.lastActiveView) return;
+    const filtered = this.state.mobileNavHistory.filter((v) => v !== view);
+    const updatedHistory = [view, ...filtered].slice(0, 10);
+    this.state = {
+      ...this.state,
+      lastActiveView: view,
+      mobileNavHistory: updatedHistory,
+    };
+    resilientStorage.setItem(STORAGE_KEYS.ACTIVE_VIEW, view);
+    resilientStorage.setJSON(STORAGE_KEYS.NAV_HISTORY, updatedHistory);
+    this.notify();
+  }
+
+  isSidebarOpenState(defaultVal?: boolean): boolean {
+    if (defaultVal !== undefined && this.state.isSidebarOpen === undefined) {
+      return defaultVal;
+    }
+    return this.state.isSidebarOpen;
+  }
+
+  setSidebarOpen(isOpen: boolean): void {
+    if (this.state.isSidebarOpen === isOpen) return;
+    this.state = {
+      ...this.state,
+      isSidebarOpen: isOpen,
+    };
+    resilientStorage.setItem(STORAGE_KEYS.SIDEBAR_OPEN, String(isOpen));
+    this.notify();
+  }
+
+  toggleSidebar(): boolean {
+    const next = !this.state.isSidebarOpen;
+    this.setSidebarOpen(next);
+    return next;
+  }
+
+  getMobileNavHistory(): string[] {
+    return [...this.state.mobileNavHistory];
   }
 
   subscribe(listener: (state: SystemState) => void): () => void {

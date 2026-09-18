@@ -45,6 +45,7 @@ import { playTone, getHarmonicCarrierSnapshot } from './AudioSynthesizer';
 import { PWAInstallButton } from './PWAInstallButton';
 import { GitHubSyncWarningNav } from './navigation/GitHubSyncWarningNav';
 import { CopilotAssistantDrawer } from './copilot/CopilotAssistantDrawer';
+import { hapticSnapshot } from '../utils/haptics';
 
 interface NavigationProps {
   currentView: ViewType;
@@ -208,6 +209,7 @@ export const Navigation: React.FC<NavigationProps> = ({
     setIsSealHighlighting(true);
     setHighlightKey((k) => k + 1);
     playTone(740, 0.08);
+    hapticSnapshot();
     if (onCaptureSnapshot) {
       onCaptureSnapshot();
     }

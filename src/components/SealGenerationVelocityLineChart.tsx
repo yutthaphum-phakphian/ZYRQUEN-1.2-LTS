@@ -19,7 +19,7 @@ import {
   Sparkles,
   Info
 } from 'lucide-react';
-import { CANONICAL_FROZEN_SEALS } from '../data/canonicalData';
+import { CANONICAL_SEALS } from '../data/canonicalData';
 
 export interface SealGenerationEpochData {
   epoch: string;

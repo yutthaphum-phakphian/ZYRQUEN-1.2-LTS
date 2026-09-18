@@ -265,18 +265,18 @@ export const DashboardView: React.FC<DashboardViewProps> = ({
             </div>
           </div>
 
-          {/* Quick Action Buttons */}
-          <div className="flex flex-wrap items-center gap-2.5 shrink-0 max-[479px]:w-full max-[479px]:grid max-[479px]:grid-cols-1 max-[479px]:gap-2">
+          {/* Quick Action Buttons - Mobile Responsive 2-Column Grid */}
+          <div className="grid grid-cols-2 sm:flex sm:flex-wrap items-center gap-2 sm:gap-2.5 w-full sm:w-auto shrink-0">
             <button
               onClick={() => {
                 playTone(780, 0.05);
                 setDashboardSection('FCM_PUSH');
               }}
-              className="px-3.5 py-2 rounded-xl bg-cyan-950/70 hover:bg-cyan-900/80 border border-cyan-500/50 text-cyan-300 font-mono text-xs font-semibold flex items-center justify-center gap-2 transition-all max-[479px]:w-full shadow-[0_0_12px_rgba(6,182,212,0.2)]"
+              className="px-3 py-2 rounded-xl bg-cyan-950/70 hover:bg-cyan-900/80 border border-cyan-500/50 text-cyan-300 font-mono text-xs font-semibold flex items-center justify-center gap-2 transition-all shadow-[0_0_12px_rgba(6,182,212,0.2)] min-h-[42px]"
               title="Manage Android 16.0+ Push Alerts & Token Lifecycle"
             >
-              <Smartphone className="w-3.5 h-3.5 text-cyan-400" />
-              <span>📱 Android 16+ FCM</span>
+              <Smartphone className="w-3.5 h-3.5 text-cyan-400 shrink-0" />
+              <span className="truncate">📱 Android 16+ FCM</span>
             </button>
 
             <button
@@ -284,21 +284,21 @@ export const DashboardView: React.FC<DashboardViewProps> = ({
                 playTone(950, 0.05);
                 setDashboardSection('ZYRQUEN_GG');
               }}
-              className="px-3.5 py-2 rounded-xl bg-gradient-to-r from-cyan-950 via-indigo-950 to-purple-950 hover:from-cyan-900 hover:to-purple-900 border border-cyan-400/80 text-cyan-200 font-mono text-xs font-bold flex items-center justify-center gap-2 transition-all max-[479px]:w-full shadow-[0_0_15px_rgba(6,182,212,0.35)] cursor-pointer"
+              className="px-3 py-2 rounded-xl bg-gradient-to-r from-cyan-950 via-indigo-950 to-purple-950 hover:from-cyan-900 hover:to-purple-900 border border-cyan-400/80 text-cyan-200 font-mono text-xs font-bold flex items-center justify-center gap-2 transition-all shadow-[0_0_15px_rgba(6,182,212,0.35)] cursor-pointer min-h-[42px]"
               title="Open ZYRQUEN GG Dashboard (Audit Trail API v1.2.0 & Cryptographic Evidence #849202)"
             >
-              <Boxes className="w-3.5 h-3.5 text-cyan-300 animate-pulse" />
-              <span>🎮 ZYRQUEN GG Dashboard</span>
+              <Boxes className="w-3.5 h-3.5 text-cyan-300 animate-pulse shrink-0" />
+              <span className="truncate">🎮 ZYRQUEN GG</span>
             </button>
 
             <a
-              href="/dashboard"
+              href="./dashboard.html"
               target="_blank"
               rel="noopener noreferrer"
-              className="px-3.5 py-2 rounded-xl bg-slate-900/90 hover:bg-slate-800 border border-cyan-500/50 text-cyan-300 font-mono text-xs font-semibold flex items-center justify-center gap-1.5 transition-all max-[479px]:w-full shadow-[0_0_12px_rgba(6,182,212,0.2)]"
+              className="px-3 py-2 rounded-xl bg-slate-900/90 hover:bg-slate-800 border border-cyan-500/50 text-cyan-300 font-mono text-xs font-semibold flex items-center justify-center gap-1.5 transition-all shadow-[0_0_12px_rgba(6,182,212,0.2)] min-h-[42px]"
               title="Launch Cyber-Quantum Live Dashboard"
             >
-              <ExternalLink className="w-3.5 h-3.5 text-cyan-400" />
+              <ExternalLink className="w-3.5 h-3.5 text-cyan-400 shrink-0" />
               <span>Cyber UI</span>
             </a>
 
@@ -307,11 +307,11 @@ export const DashboardView: React.FC<DashboardViewProps> = ({
                 playTone(920, 0.05);
                 setDashboardSection('VERIFICATION');
               }}
-              className="px-3.5 py-2 rounded-xl bg-cyan-950/70 hover:bg-cyan-900/80 border border-cyan-400/60 text-cyan-200 font-mono text-xs font-bold flex items-center justify-center gap-2 transition-all max-[479px]:w-full shadow-[0_0_15px_rgba(6,182,212,0.3)]"
+              className="px-3 py-2 rounded-xl bg-cyan-950/70 hover:bg-cyan-900/80 border border-cyan-400/60 text-cyan-200 font-mono text-xs font-bold flex items-center justify-center gap-2 transition-all shadow-[0_0_15px_rgba(6,182,212,0.3)] min-h-[42px]"
               title="Open Core Verification & Live Telemetry Stream"
             >
-              <ShieldCheck className="w-3.5 h-3.5 text-cyan-400" />
-              <span>🔐 Core Verification Panel</span>
+              <ShieldCheck className="w-3.5 h-3.5 text-cyan-400 shrink-0" />
+              <span className="truncate">🔐 Core Verification</span>
             </button>
 
             <button
@@ -319,11 +319,11 @@ export const DashboardView: React.FC<DashboardViewProps> = ({
                 playTone(840, 0.05);
                 onNavigate('playback');
               }}
-              className="px-3.5 py-2 rounded-xl bg-amber-950/70 hover:bg-amber-900/80 border border-amber-500/50 text-amber-300 font-mono text-xs font-semibold flex items-center justify-center gap-2 transition-all max-[479px]:w-full shadow-[0_0_12px_rgba(245,158,11,0.2)]"
+              className="px-3 py-2 rounded-xl bg-amber-950/70 hover:bg-amber-900/80 border border-amber-500/50 text-amber-300 font-mono text-xs font-semibold flex items-center justify-center gap-2 transition-all shadow-[0_0_12px_rgba(245,158,11,0.2)] min-h-[42px]"
               title="Open 12-Stage Forensic Trace Replay (WebSocket Live Stream)"
             >
-              <PlayCircle className="w-3.5 h-3.5 text-amber-400" />
-              <span>⚡ 12-Stage Trace</span>
+              <PlayCircle className="w-3.5 h-3.5 text-amber-400 shrink-0" />
+              <span className="truncate">⚡ 12-Stage Trace</span>
             </button>
 
             <button
@@ -331,24 +331,24 @@ export const DashboardView: React.FC<DashboardViewProps> = ({
                 playTone(880, 0.05);
                 setDashboardSection('AUDIT');
               }}
-              className="px-3.5 py-2 rounded-xl bg-cyan-950/60 hover:bg-cyan-900/60 border border-cyan-500/50 text-cyan-300 font-mono text-xs font-semibold flex items-center justify-center gap-2 transition-all max-[479px]:w-full"
+              className="px-3 py-2 rounded-xl bg-cyan-950/60 hover:bg-cyan-900/60 border border-cyan-500/50 text-cyan-300 font-mono text-xs font-semibold flex items-center justify-center gap-2 transition-all min-h-[42px]"
               title="Open Sovereign Audit Dashboard"
             >
-              <span>🏛️ Sovereign Audit Dashboard</span>
+              <span className="truncate">🏛️ Sovereign Audit</span>
             </button>
 
             <button
               onClick={triggerSelfHealing}
               disabled={isHealing}
-              className={`px-3.5 py-2 rounded-xl font-mono text-xs font-semibold flex items-center justify-center gap-2 transition-all border max-[479px]:w-full ${
+              className={`px-3 py-2 rounded-xl font-mono text-xs font-semibold flex items-center justify-center gap-2 transition-all border min-h-[42px] ${
                 isHealing
                   ? 'bg-cyan-500/20 border-cyan-500/40 text-cyan-200 animate-pulse'
                   : 'bg-white/5 hover:bg-white/10 border-white/10 text-zinc-100 hover:border-cyan-500/40'
               }`}
               title="Autonomous Phoenix Self-Healing (142ms recovery verification)"
             >
-              <RotateCw className={`w-3.5 h-3.5 text-cyan-400 ${isHealing ? 'animate-spin' : ''}`} />
-              <span>{isHealing ? 'Healing...' : 'Phoenix Healing'}</span>
+              <RotateCw className={`w-3.5 h-3.5 text-cyan-400 shrink-0 ${isHealing ? 'animate-spin' : ''}`} />
+              <span className="truncate">{isHealing ? 'Healing...' : 'Phoenix Healing'}</span>
             </button>
 
             <button
@@ -356,10 +356,10 @@ export const DashboardView: React.FC<DashboardViewProps> = ({
                 playTone(740, 0.08);
                 onNavigate('council');
               }}
-              className="px-3.5 py-2 rounded-xl bg-amber-950/60 hover:bg-amber-900/60 border border-amber-500/40 text-amber-300 font-mono text-xs font-semibold flex items-center justify-center gap-2 transition-all max-[479px]:w-full"
+              className="px-3 py-2 rounded-xl bg-amber-950/60 hover:bg-amber-900/60 border border-amber-500/40 text-amber-300 font-mono text-xs font-semibold flex items-center justify-center gap-2 transition-all min-h-[42px]"
             >
-              <Crown className="w-3.5 h-3.5 text-amber-400" />
-              <span>สภาผู้พิทักษ์ 10/10</span>
+              <Crown className="w-3.5 h-3.5 text-amber-400 shrink-0" />
+              <span className="truncate">สภา 10/10</span>
             </button>
 
             <button
@@ -367,9 +367,9 @@ export const DashboardView: React.FC<DashboardViewProps> = ({
                 playTone(680, 0.08);
                 onOpenCertificate();
               }}
-              className="px-3.5 py-2 rounded-xl bg-yellow-950/60 hover:bg-yellow-900/60 border border-amber-500/40 text-amber-300 font-mono text-xs font-semibold flex items-center justify-center gap-2 transition-all max-[479px]:w-full"
+              className="col-span-2 sm:col-span-1 px-3 py-2 rounded-xl bg-yellow-950/60 hover:bg-yellow-900/60 border border-amber-500/40 text-amber-300 font-mono text-xs font-semibold flex items-center justify-center gap-2 transition-all min-h-[42px]"
             >
-              <Award className="w-3.5 h-3.5 text-amber-400" />
+              <Award className="w-3.5 h-3.5 text-amber-400 shrink-0" />
               <span>Gold Master Seal</span>
             </button>
           </div>
@@ -493,21 +493,21 @@ export const DashboardView: React.FC<DashboardViewProps> = ({
         </div>
       </div>
 
-      {/* Progressive Disclosure Section Navigation Bar */}
-      <div className="p-1.5 rounded-2xl bg-[#070a12] border border-cyan-500/30 flex flex-wrap items-center justify-between gap-2 font-mono text-xs max-[479px]:p-[12px] max-[479px]:grid max-[479px]:grid-cols-1 max-[479px]:gap-2">
-        <div className="flex flex-wrap items-center gap-1 max-[479px]:grid max-[479px]:grid-cols-1 max-[479px]:w-full max-[479px]:gap-2">
+      {/* Progressive Disclosure Section Navigation Bar - Mobile Responsive Grid */}
+      <div className="p-2 sm:p-1.5 rounded-2xl bg-[#070a12] border border-cyan-500/30 flex flex-wrap items-center justify-between gap-2 font-mono text-xs">
+        <div className="grid grid-cols-2 sm:flex sm:flex-wrap items-center gap-1.5 w-full sm:w-auto">
           <button
             onClick={() => {
               playTone(620, 0.04);
               setDashboardSection('OVERVIEW');
             }}
-            className={`px-3.5 py-2 rounded-xl font-bold flex items-center gap-2 transition-all cursor-pointer max-[479px]:w-full max-[479px]:justify-start ${
+            className={`px-3 py-2 rounded-xl font-bold flex items-center justify-center sm:justify-start gap-1.5 sm:gap-2 transition-all cursor-pointer min-h-[40px] ${
               dashboardSection === 'OVERVIEW'
                 ? 'bg-cyan-500/20 text-cyan-200 border border-cyan-400/50 shadow-[0_0_12px_rgba(6,182,212,0.25)]'
                 : 'text-zinc-400 hover:text-zinc-200 bg-white/5 border border-transparent'
             }`}
           >
-            <span>🌟 Executive Overview</span>
+            <span className="truncate">🌟 Overview</span>
           </button>
 
           <button
@@ -515,17 +515,14 @@ export const DashboardView: React.FC<DashboardViewProps> = ({
               playTone(950, 0.04);
               setDashboardSection('ZYRQUEN_GG');
             }}
-            className={`px-3.5 py-2 rounded-xl font-bold flex items-center gap-2 transition-all cursor-pointer max-[479px]:w-full max-[479px]:justify-start ${
+            className={`px-3 py-2 rounded-xl font-bold flex items-center justify-center sm:justify-start gap-1.5 sm:gap-2 transition-all cursor-pointer min-h-[40px] ${
               dashboardSection === 'ZYRQUEN_GG'
                 ? 'bg-gradient-to-r from-cyan-500/20 via-indigo-500/20 to-purple-500/20 text-cyan-200 border border-cyan-400/80 shadow-[0_0_15px_rgba(6,182,212,0.35)]'
                 : 'text-zinc-400 hover:text-zinc-200 bg-white/5 border border-transparent'
             }`}
           >
-            <Boxes className="w-3.5 h-3.5 text-cyan-400" />
-            <span>🎮 ZYRQUEN GG Dashboard</span>
-            <span className="px-1.5 py-0.2 rounded bg-cyan-950 text-cyan-300 text-[10px] font-mono border border-cyan-500/30">
-              v1.2 API
-            </span>
+            <Boxes className="w-3.5 h-3.5 text-cyan-400 shrink-0" />
+            <span className="truncate">🎮 ZYRQUEN GG</span>
           </button>
 
           <button
@@ -533,17 +530,14 @@ export const DashboardView: React.FC<DashboardViewProps> = ({
               playTone(720, 0.04);
               setDashboardSection('VERIFICATION');
             }}
-            className={`px-3.5 py-2 rounded-xl font-bold flex items-center gap-2 transition-all cursor-pointer max-[479px]:w-full max-[479px]:justify-start ${
+            className={`px-3 py-2 rounded-xl font-bold flex items-center justify-center sm:justify-start gap-1.5 sm:gap-2 transition-all cursor-pointer min-h-[40px] ${
               dashboardSection === 'VERIFICATION'
                 ? 'bg-cyan-500/20 text-cyan-200 border border-cyan-400/50 shadow-[0_0_12px_rgba(6,182,212,0.25)]'
                 : 'text-zinc-400 hover:text-zinc-200 bg-white/5 border border-transparent'
             }`}
           >
-            <ShieldCheck className="w-3.5 h-3.5 text-cyan-400" />
-            <span>🔐 Core Verification &amp; Telemetry</span>
-            <span className="px-1.5 py-0.2 rounded bg-cyan-950 text-cyan-300 text-[10px] font-mono border border-cyan-500/30">
-              LIVE
-            </span>
+            <ShieldCheck className="w-3.5 h-3.5 text-cyan-400 shrink-0" />
+            <span className="truncate">🔐 Verification</span>
           </button>
 
           <button
@@ -551,16 +545,13 @@ export const DashboardView: React.FC<DashboardViewProps> = ({
               playTone(880, 0.04);
               setDashboardSection('AUDIT');
             }}
-            className={`px-3.5 py-2 rounded-xl font-bold flex items-center gap-2 transition-all cursor-pointer max-[479px]:w-full max-[479px]:justify-start ${
+            className={`px-3 py-2 rounded-xl font-bold flex items-center justify-center sm:justify-start gap-1.5 sm:gap-2 transition-all cursor-pointer min-h-[40px] ${
               dashboardSection === 'AUDIT'
                 ? 'bg-cyan-500/20 text-cyan-200 border border-cyan-400/50 shadow-[0_0_12px_rgba(6,182,212,0.25)]'
                 : 'text-zinc-400 hover:text-zinc-200 bg-white/5 border border-transparent'
             }`}
           >
-            <span>🏛️ Sovereign Audit Dashboard</span>
-            <span className="px-1.5 py-0.2 rounded bg-cyan-950 text-cyan-300 text-[10px] font-mono border border-cyan-500/30">
-              ENTROPY HEATMAP
-            </span>
+            <span className="truncate">🏛️ Sovereign Audit</span>
           </button>
 
           <button
@@ -568,16 +559,13 @@ export const DashboardView: React.FC<DashboardViewProps> = ({
               playTone(660, 0.04);
               setDashboardSection('CHAMBERS');
             }}
-            className={`px-3.5 py-2 rounded-xl font-bold flex items-center gap-2 transition-all cursor-pointer max-[479px]:w-full max-[479px]:justify-start ${
+            className={`px-3 py-2 rounded-xl font-bold flex items-center justify-center sm:justify-start gap-1.5 sm:gap-2 transition-all cursor-pointer min-h-[40px] ${
               dashboardSection === 'CHAMBERS'
                 ? 'bg-cyan-500/20 text-cyan-200 border border-cyan-400/50 shadow-[0_0_12px_rgba(6,182,212,0.25)]'
                 : 'text-zinc-400 hover:text-zinc-200 bg-white/5 border border-transparent'
             }`}
           >
-            <span>🏛️ 18 Chambers Explorer</span>
-            <span className="px-1.5 py-0.2 rounded bg-cyan-950 text-cyan-300 text-[10px] font-mono border border-cyan-500/30">
-              18 ROOMS
-            </span>
+            <span className="truncate">🏛️ 18 Chambers</span>
           </button>
 
           <button
@@ -585,13 +573,13 @@ export const DashboardView: React.FC<DashboardViewProps> = ({
               playTone(700, 0.04);
               setDashboardSection('TELEMETRY');
             }}
-            className={`px-3.5 py-2 rounded-xl font-bold flex items-center gap-2 transition-all cursor-pointer max-[479px]:w-full max-[479px]:justify-start ${
+            className={`px-3 py-2 rounded-xl font-bold flex items-center justify-center sm:justify-start gap-1.5 sm:gap-2 transition-all cursor-pointer min-h-[40px] ${
               dashboardSection === 'TELEMETRY'
                 ? 'bg-cyan-500/20 text-cyan-200 border border-cyan-400/50 shadow-[0_0_12px_rgba(6,182,212,0.25)]'
                 : 'text-zinc-400 hover:text-zinc-200 bg-white/5 border border-transparent'
             }`}
           >
-            <span>📊 Telemetry &amp; Health</span>
+            <span className="truncate">📊 Telemetry</span>
           </button>
 
           <button
@@ -599,13 +587,13 @@ export const DashboardView: React.FC<DashboardViewProps> = ({
               playTone(740, 0.04);
               setDashboardSection('EVIDENCE');
             }}
-            className={`px-3.5 py-2 rounded-xl font-bold flex items-center gap-2 transition-all cursor-pointer max-[479px]:w-full max-[479px]:justify-start ${
+            className={`px-3 py-2 rounded-xl font-bold flex items-center justify-center sm:justify-start gap-1.5 sm:gap-2 transition-all cursor-pointer min-h-[40px] ${
               dashboardSection === 'EVIDENCE'
                 ? 'bg-cyan-500/20 text-cyan-200 border border-cyan-400/50 shadow-[0_0_12px_rgba(6,182,212,0.25)]'
                 : 'text-zinc-400 hover:text-zinc-200 bg-white/5 border border-transparent'
             }`}
           >
-            <span>📜 Evidence &amp; Intake</span>
+            <span className="truncate">📜 Evidence</span>
           </button>
 
           <button
@@ -613,16 +601,13 @@ export const DashboardView: React.FC<DashboardViewProps> = ({
               playTone(760, 0.04);
               setDashboardSection('FCM_PUSH');
             }}
-            className={`px-3.5 py-2 rounded-xl font-bold flex items-center gap-2 transition-all cursor-pointer max-[479px]:w-full max-[479px]:justify-start ${
+            className={`px-3 py-2 rounded-xl font-bold flex items-center justify-center sm:justify-start gap-1.5 sm:gap-2 transition-all cursor-pointer min-h-[40px] ${
               dashboardSection === 'FCM_PUSH'
                 ? 'bg-cyan-500/20 text-cyan-200 border border-cyan-400/50 shadow-[0_0_12px_rgba(6,182,212,0.25)]'
                 : 'text-zinc-400 hover:text-zinc-200 bg-white/5 border border-transparent'
             }`}
           >
-            <span>📱 Android 16+ FCM Push</span>
-            <span className="px-1.5 py-0.2 rounded bg-emerald-950 text-emerald-300 text-[10px] font-mono border border-emerald-500/30">
-              API 36
-            </span>
+            <span className="truncate">📱 Android FCM</span>
           </button>
         </div>
 

@@ -647,6 +647,54 @@ app.post('/api/v1/alerts/audit', (req, res) => {
   res.json({ status: 'REPLAY_ALERT_SENT', notification: alert });
 });
 
+// Server-Side Forensic Audit Ledger & Offline Batch Sync Pipeline
+const serverForensicAuditLedger: any[] = [];
+
+app.post('/api/v1/audit/sync', (req, res) => {
+  const { events = [], batchId, source = 'OFFLINE_BACKGROUND_SYNC' } = req.body || {};
+  if (!Array.isArray(events) || events.length === 0) {
+    return res.status(400).json({ status: 'EMPTY_BATCH', message: 'No events provided for sync' });
+  }
+
+  const syncedAt = new Date().toISOString();
+  const stampedEvents = events.map((evt: any, idx: number) => ({
+    ...evt,
+    serverReceivedAt: syncedAt,
+    ledgerSeq: serverForensicAuditLedger.length + idx + 1,
+    batchId: batchId || `BATCH-${Date.now()}`,
+    syncSource: source,
+  }));
+
+  serverForensicAuditLedger.push(...stampedEvents);
+
+  if (serverForensicAuditLedger.length > 5000) {
+    serverForensicAuditLedger.splice(0, serverForensicAuditLedger.length - 5000);
+  }
+
+  broadcastNotification(
+    'FORENSIC_AUDIT_SYNC',
+    `Forensic Audit Ledger Flushed: ${stampedEvents.length} events committed to SSoT`,
+    { batchId, count: stampedEvents.length, syncedAt }
+  );
+
+  res.json({
+    status: 'SYNC_COMMITTED',
+    syncedCount: stampedEvents.length,
+    batchId: batchId || `BATCH-${Date.now()}`,
+    syncedAt,
+    ledgerTotal: serverForensicAuditLedger.length,
+  });
+});
+
+app.get('/api/v1/audit/ledger', (req, res) => {
+  const limit = Math.min(100, Number(req.query.limit) || 50);
+  res.json({
+    status: 'OK',
+    totalRecords: serverForensicAuditLedger.length,
+    records: serverForensicAuditLedger.slice(-limit).reverse(),
+  });
+});
+
 // ── UNIFIED VERIFICATION DASHBOARD ENDPOINTS (LOCKED_FROZEN_v1.2_LTS) ──
 // Evidence Intake
 app.post('/api/v1/intake', (req, res) => {
