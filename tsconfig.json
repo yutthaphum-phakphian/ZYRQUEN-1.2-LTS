@@ -1,7 +1,11 @@
 {
   "compilerOptions": {
     "target": "ES2022",
-    "lib": ["ES2023", "DOM", "DOM.Iterable"],
+    "lib": [
+      "ES2023",
+      "DOM",
+      "DOM.Iterable"
+    ],
     "module": "ESNext",
     "moduleResolution": "Bundler",
     "jsx": "react-jsx",
@@ -15,8 +19,20 @@
     "isolatedModules": true,
     "allowJs": false,
     "allowImportingTsExtensions": true,
-    "types": ["node"]
+    "types": [
+      "node"
+    ]
   },
-  "include": ["src", "server.ts", "scripts"],
-  "exclude": ["node_modules", "dist", "zyrquen_artifacts", "charts", "docs"]
+  "include": [
+    "src",
+    "server.ts",
+    "scripts"
+  ],
+  "exclude": [
+    "node_modules",
+    "dist",
+    "zyrquen_artifacts",
+    "charts",
+    "docs"
+  ]
 }
