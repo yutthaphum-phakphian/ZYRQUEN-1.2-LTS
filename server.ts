@@ -80,7 +80,7 @@ import { fcmNotificationService } from './src/services/fcmNotificationService';
 dotenv.config();
 
 const app = express();
-const PORT = 3000;
+const PORT = Number.parseInt(process.env.PORT || '3000', 10) || 3000;
 const httpServer = http.createServer(app);
 const io = new SocketIOServer(httpServer, {
   cors: { origin: '*' }
@@ -91,6 +91,10 @@ const wss = new WebSocketServer({ server: httpServer, path: '/ws/notifications' 
 
 // In-memory buffer for recent notifications
 const recentNotificationsBuffer: any[] = [];
+
+// Reconciled offline audit events are retained for the lifetime of the server.
+// The event id is the idempotency key so retries and duplicate tabs cannot fork the ledger.
+const reconciledAuditEvents = new Map<string, any>();
 
 // Broadcast Notification Function (Supporting Native WebSocket, Socket.IO, and FCM Push Notifications)
 function broadcastNotification(type: string, message: string, payload: any = {}) {
@@ -1094,13 +1098,27 @@ app.get('/api/v1/performance/benchmark', (req, res) => {
 // POST /api/v1/audit/sync & /api/audit/sync
 // Receives queued offline audit events and appends them to the server ledger
 app.post(['/api/v1/audit/sync', '/api/audit/sync'], (req, res) => {
-  const events = req.body?.events || [];
+  const events = Array.isArray(req.body?.events) ? req.body.events : [];
   const clientSyncProtocol = req.body?.clientSyncProtocol || 'DEFAULT';
-  console.log(`[AuditSync] Reconciled ${events.length} offline audit events via ${clientSyncProtocol}`);
+  const acceptedIds: string[] = [];
+  for (const event of events) {
+    if (!event || typeof event.id !== 'string' || !event.id || typeof event.title !== 'string') continue;
+    if (!reconciledAuditEvents.has(event.id)) {
+      reconciledAuditEvents.set(event.id, {
+        ...event,
+        reconciledAt: new Date().toISOString(),
+        source: 'offline-client',
+        clientSyncProtocol,
+      });
+    }
+    acceptedIds.push(event.id);
+  }
+  console.log(`[AuditSync] Reconciled ${acceptedIds.length}/${events.length} offline audit events via ${clientSyncProtocol}`);
   return res.json({
     status: 'ok',
     success: true,
-    reconciledCount: events.length,
+    reconciledCount: acceptedIds.length,
+    acceptedIds,
     syncedAt: new Date().toISOString(),
     ledgerRoot: '909ab814479844d8a14816bed34cdbb07528e18501da86fc4691763a43fa4c68',
     quorum: '10/10 REAL_HSM Verified',
