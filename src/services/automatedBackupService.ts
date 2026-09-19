@@ -165,24 +165,6 @@ class AutomatedBackupEngine {
     }
   }
 
-  public pause() {
-    this.isRunning = false;
-    if (this.timerId !== null) {
-      clearInterval(this.timerId);
-      this.timerId = null;
-    }
-    this.notify();
-  }
-
-  public restart(): AutomatedBackupState {
-    this.pause();
-    this.timeRemainingSeconds = this.cycleDurationSeconds;
-    this.integrityCountdownSeconds = this.integrityIntervalSeconds;
-    this.driftDiagnosticCountdownSeconds = this.driftDiagnosticIntervalSeconds;
-    this.start();
-    return this.getState();
-  }
-
   public onSnapshot(
     callback: (record: BackupHistoryItem & { merkleRoot: string; statesCaptured: number; logsCount: number }) => void
   ): () => void {

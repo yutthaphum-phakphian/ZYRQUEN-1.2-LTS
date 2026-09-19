@@ -14,6 +14,7 @@ import {
   Archive,
   Terminal,
   ShieldCheck,
+  ShieldAlert,
   Settings,
   Crown,
   Volume2,
@@ -39,10 +40,11 @@ import {
   PanelLeft,
   ChevronLeft,
   ChevronRight,
+  History,
 } from 'lucide-react';
 import { playTone, getHarmonicCarrierSnapshot } from './AudioSynthesizer';
 import { PWAInstallButton } from './PWAInstallButton';
-import { GitHubSyncWarningNav } from './GitHubSyncWarningNav';
+import { GitHubSyncWarningNav } from './navigation/GitHubSyncWarningNav';
 import { CopilotAssistantDrawer } from './copilot/CopilotAssistantDrawer';
 
 interface NavigationProps {
@@ -94,12 +96,14 @@ export const NAVIGATION_ITEMS: NavItem[] = [
   { id: 'nexus', labelEn: 'Nexus', labelTh: 'เครือข่ายข้อมูล', icon: Share2, dotColor: '#3B82F6', shortcut: '3' },
   { id: 'vault', labelEn: 'Vault', labelTh: 'คลังรหัสผ่าน', icon: Lock, dotColor: '#F59E0B', badge: 'OMEGA', shortcut: '4' },
   { id: 'ledger', labelEn: 'Ledger', labelTh: 'สมุดบัญชีหลักฐาน', icon: FileCheck2, dotColor: '#10B981', badge: '14.9K', shortcut: '5' },
+  { id: 'audithistory', labelEn: 'Audit History', labelTh: 'ประวัติสแนปช็อต', icon: History, dotColor: '#10B981', badge: 'SNAPSHOTS', shortcut: 'J' },
   { id: 'pulse', labelEn: 'Pulse', labelTh: 'โทรมาตรเรียลไทม์', icon: Activity, dotColor: '#06B6D4', shortcut: '6' },
   { id: 'forge', labelEn: 'Forge', labelTh: 'โรงหลอมอัตโนมัติ', icon: Workflow, dotColor: '#F59E0B', shortcut: '7' },
   { id: 'matrix', labelEn: 'Matrix', labelTh: 'มัลติเวิร์สจำลอง', icon: Orbit, dotColor: '#8B5CF6', shortcut: '8' },
   { id: 'archive', labelEn: 'Archive', labelTh: 'คลังแมนิเฟสต์ 17', icon: Archive, dotColor: '#3B82F6', badge: '17 MOD', shortcut: '9' },
   { id: 'console', labelEn: 'Console', labelTh: 'เทอร์มินัล CLI', icon: Terminal, dotColor: '#10B981', badge: 'CLI', shortcut: '0' },
   { id: 'security', labelEn: 'Security', labelTh: 'โล่ซีโร่ทรัสต์', icon: ShieldCheck, dotColor: '#10B981', badge: 'ZERO', shortcut: '-' },
+  { id: 'securitypipeline', labelEn: 'Security Pipeline', labelTh: 'ท่อส่งความปลอดภัย 3 ด่าน', icon: ShieldAlert, dotColor: '#06B6D4', badge: 'HOLO FLOW', shortcut: 'X' },
   { id: 'legal', labelEn: 'Legal & PDPA', labelTh: 'กฎหมายอธิปไตย', icon: Scale, dotColor: '#3B82F6', badge: 'PDPA', shortcut: 'L' },
   { id: 'canonical', labelEn: 'Canonical Integrity', labelTh: 'ความสมบูรณ์แคนอนิคัล', icon: ShieldCheck, dotColor: '#10B981', badge: 'STABLE LOCK', shortcut: 'I' },
   { id: 'admin', labelEn: 'Admin RBAC', labelTh: 'จัดการสิทธิ์ผู้ใช้', icon: Users, dotColor: '#06B6D4', badge: 'RBAC', shortcut: 'A' },

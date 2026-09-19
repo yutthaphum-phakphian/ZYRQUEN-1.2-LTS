@@ -9,8 +9,6 @@
 
 # Mark all JSON databases, logs, and ledger exports as generated
 *.json linguist-generated
-package.json linguist-generated=false
-package-lock.json linguist-generated=false
 *ledger*.json linguist-generated
 *results*.json linguist-generated
 *records*.json linguist-generated
@@ -29,5 +27,3 @@ package-lock.json linguist-generated=false
 *.tsx text eol=lf
 *.ts text eol=lf
 *.py text eol=lf
-*.yml text eol=lf
-*.yaml text eol=lf

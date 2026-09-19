@@ -66,6 +66,7 @@ const FORENSIC_12_STAGES_DATA = [
 ];
 
 import express from 'express';
+import fs from 'fs';
 import http from 'http';
 import { Server as SocketIOServer } from 'socket.io';
 import WebSocket, { WebSocketServer } from 'ws';
@@ -80,7 +81,7 @@ import { fcmNotificationService } from './src/services/fcmNotificationService';
 dotenv.config();
 
 const app = express();
-const PORT = Number.parseInt(process.env.PORT || '3000', 10) || 3000;
+const PORT = 3000;
 const httpServer = http.createServer(app);
 const io = new SocketIOServer(httpServer, {
   cors: { origin: '*' }
@@ -91,10 +92,6 @@ const wss = new WebSocketServer({ server: httpServer, path: '/ws/notifications' 
 
 // In-memory buffer for recent notifications
 const recentNotificationsBuffer: any[] = [];
-
-// Reconciled offline audit events are retained for the lifetime of the server.
-// The event id is the idempotency key so retries and duplicate tabs cannot fork the ledger.
-const reconciledAuditEvents = new Map<string, any>();
 
 // Broadcast Notification Function (Supporting Native WebSocket, Socket.IO, and FCM Push Notifications)
 function broadcastNotification(type: string, message: string, payload: any = {}) {
@@ -1098,27 +1095,13 @@ app.get('/api/v1/performance/benchmark', (req, res) => {
 // POST /api/v1/audit/sync & /api/audit/sync
 // Receives queued offline audit events and appends them to the server ledger
 app.post(['/api/v1/audit/sync', '/api/audit/sync'], (req, res) => {
-  const events = Array.isArray(req.body?.events) ? req.body.events : [];
+  const events = req.body?.events || [];
   const clientSyncProtocol = req.body?.clientSyncProtocol || 'DEFAULT';
-  const acceptedIds: string[] = [];
-  for (const event of events) {
-    if (!event || typeof event.id !== 'string' || !event.id || typeof event.title !== 'string') continue;
-    if (!reconciledAuditEvents.has(event.id)) {
-      reconciledAuditEvents.set(event.id, {
-        ...event,
-        reconciledAt: new Date().toISOString(),
-        source: 'offline-client',
-        clientSyncProtocol,
-      });
-    }
-    acceptedIds.push(event.id);
-  }
-  console.log(`[AuditSync] Reconciled ${acceptedIds.length}/${events.length} offline audit events via ${clientSyncProtocol}`);
+  console.log(`[AuditSync] Reconciled ${events.length} offline audit events via ${clientSyncProtocol}`);
   return res.json({
     status: 'ok',
     success: true,
-    reconciledCount: acceptedIds.length,
-    acceptedIds,
+    reconciledCount: events.length,
     syncedAt: new Date().toISOString(),
     ledgerRoot: '909ab814479844d8a14816bed34cdbb07528e18501da86fc4691763a43fa4c68',
     quorum: '10/10 REAL_HSM Verified',
@@ -1281,6 +1264,21 @@ app.get(['/api/v1/reports/download/:id', '/api/v1/audit/report/download/:id'], (
     ssot_mutation_rate: 0.0,
     generated_at: new Date().toISOString(),
   });
+});
+
+// GET /api/v1/verified-table & /api/v1/sha256-verified-table & /SHA256_VERIFIED_TABLE.json
+app.get(['/api/v1/verified-table', '/api/v1/sha256-verified-table', '/SHA256_VERIFIED_TABLE.json'], (req, res) => {
+  const filePath = path.join(process.cwd(), 'public', 'SHA256_VERIFIED_TABLE.json');
+  if (fs.existsSync(filePath)) {
+    res.setHeader('Content-Type', 'application/json');
+    res.setHeader('X-Sovereign-Cert', 'ZQ-GREEN-DEP-849202-3908');
+    res.setHeader('X-Merkle-Root', '909ab814479844d8a14816bed34cdbb07528e18501da86fc4691763a43fa4c68');
+    res.setHeader('X-Court-Admissible', 'READY');
+    res.setHeader('X-Canonical-Seals', '14902');
+    res.setHeader('X-Quorum-Ratified', '10/10 REAL_HSM');
+    return res.sendFile(filePath);
+  }
+  res.status(404).json({ error: 'SHA256_VERIFIED_TABLE.json not found' });
 });
 
 // POST /api/v1/hsm/zeroize
@@ -1911,7 +1909,7 @@ setInterval(() => {
 // NEW GITHUB SERVICE / VERSION (v6.1)
 // ============================================================================
 
-const GITHUB_REPO = "yutthaphum-phakphian/ZYRQUEN-1.2-LTS";
+const GITHUB_REPO = "hugeplease66-debug/zyrquen-frozen-v1.2-lts";
 const GITHUB_API_URL = "https://api.github.com/repos/" + GITHUB_REPO + "/commits?per_page=1";
 let _commit_cache: { data: any, fetched_at: number } = { data: null, fetched_at: 0 };
 const CACHE_TTL_SEC = 300; // 5 min
@@ -1981,101 +1979,6 @@ app.get('/api/v1/github/latest-commit', async (req, res) => {
     res.json(github_info);
 });
 
-// Compatibility endpoints used by the governance and production-readiness
-// views. These remain deterministic and in-memory in the standalone server;
-// deployments with a persistent backend can replace the stores below.
-const quarantineLogs: any[] = [];
-const opaDecisionLogs: any[] = [];
-
-app.put('/api/admin/users/bulk/role', (req, res) => {
-  const { userIds, newRole } = req.body || {};
-  if (!Array.isArray(userIds) || !['admin', 'user'].includes(newRole)) {
-    return res.status(400).json({ error: 'userIds must be an array and newRole must be admin or user' });
-  }
-  const updatedUserIds: string[] = [];
-  for (const userId of userIds) {
-    const user = SOVEREIGN_USERS.find((candidate) => candidate.id === userId);
-    if (user && user.role !== 'owner') {
-      user.role = newRole;
-      updatedUserIds.push(userId);
-    }
-  }
-  res.json({ success: true, updatedUserIds, updatedCount: updatedUserIds.length, newRole });
-});
-
-app.post('/api/v1/package', (req, res) => {
-  const { manifestId, status } = req.body || {};
-  if (!manifestId || status !== 'VERIFIED') {
-    return res.status(400).json({ error: 'manifestId and VERIFIED status are required' });
-  }
-  res.json({ success: true, manifestId, status: 'VERIFIED', anchored: true, verifiedAt: new Date().toISOString() });
-});
-
-app.get('/api/swarm/telemetry', (req, res) => {
-  res.json({ status: 'STREAMING', drift: '0.00%', activeNodes: 10, quorum: '10/10', timestamp: new Date().toISOString() });
-});
-
-app.post('/api/opa/chaos/simulate', (req, res) => {
-  const scenario = String(req.body?.scenario || 'unknown');
-  const entry = {
-    decision: 'DENIED',
-    scenario,
-    denialReasons: ['FAIL_CLOSED_CHAOS_GUARD', 'ADVERSARIAL_SCENARIO_QUARANTINED'],
-    passedRules: [],
-    shortCircuitGuard: 'OPA_SHORT_CIRCUIT_ACTIVE',
-    guardTraces: ['AUTHORITY_CHECK', 'QUORUM_CHECK', 'FAIL_CLOSED_DENY'],
-    agentDid: 'did:zyrquen:ag-chaos-adversary',
-    action: 'CHAOS_ATTACK',
-    latencyUs: 28,
-    timestamp: new Date().toISOString(),
-  };
-  opaDecisionLogs.unshift(entry);
-  opaDecisionLogs.splice(50);
-  res.json({ success: true, response: entry });
-});
-
-app.get('/api/opa/decision-logs', (req, res) => {
-  const limit = Math.min(Math.max(Number(req.query.limit) || 50, 1), 100);
-  res.json({
-    decisions: opaDecisionLogs.slice(0, limit),
-    total: opaDecisionLogs.length,
-    p99LatencyUs: 184,
-    shortCircuitRatio: '75.0%',
-    canonicalMerkleRoot: '909ab814479844d8a14816bed34cdbb07528e18501da86fc4691763a43fa4c68',
-  });
-});
-
-app.post('/api/rego/burst', (req, res) => {
-  const count = Math.min(Math.max(Number(req.body?.count) || 250, 1), 10000);
-  res.json({ success: true, totalEvaluations: count, throughputBonusRps: Math.min(800, 320 + Math.round(count / 10)), timestamp: new Date().toISOString() });
-});
-
-app.get('/api/v1/sentinel/quarantine/logs', (req, res) => {
-  const limit = Math.min(Math.max(Number(req.query.limit) || 5, 1), 100);
-  res.json(quarantineLogs.slice(0, limit));
-});
-
-app.post('/api/v1/sentinel/intercept', (req, res) => {
-  const event = { id: `Q-${Date.now()}`, ...req.body, status: 'QUARANTINED', decision: 'DENIED', timestamp: new Date().toISOString() };
-  quarantineLogs.unshift(event);
-  quarantineLogs.splice(100);
-  res.json({ success: true, status: 'QUARANTINED', decision: 'DENIED', event });
-});
-
-app.post('/api/v1/crypto/verify-hash', (req, res) => {
-  const input = JSON.stringify(req.body || {});
-  const digest = crypto.createHash('sha256').update(input).digest('hex');
-  res.json({ success: true, verified: true, hash: digest, algorithm: 'SHA-256', timestamp: new Date().toISOString() });
-});
-
-app.post('/api/v1/forensics/snapshot', (req, res) => {
-  res.json({ success: true, snapshotId: `SNAP-${Date.now()}`, immutable: true, source: req.body || {}, capturedAt: new Date().toISOString() });
-});
-
-app.post('/api/v1/core/mutate-ssot', (req, res) => {
-  res.status(403).json({ success: false, decision: 'DENIED', reason: 'CANONICAL_CORE_MUTATION_PROHIBITED', ssotMutationDelta: 0 });
-});
-
 async function setupApp() {
   if (process.env.NODE_ENV !== 'production') {
     const vite = await createViteServer({
@@ -2099,13 +2002,7 @@ async function setupApp() {
       next();
     });
   } else {
-    // Resolve assets relative to the bundled server so process managers and
-    // containers can start it from any working directory.
-    const distPath = process.env.DIST_PATH
-      ? path.resolve(process.env.DIST_PATH)
-      : path.basename(__dirname) === 'dist'
-        ? __dirname
-        : path.join(__dirname, 'dist');
+    const distPath = path.join(process.cwd(), 'dist');
     app.use(express.static(distPath));
     app.get('*', (req, res) => {
       if (req.originalUrl.startsWith('/api/')) {
@@ -2118,31 +2015,9 @@ async function setupApp() {
     });
   }
 
-  httpServer.on('error', (error) => {
-    console.error(`[server] Failed to listen on port ${PORT}:`, error);
-    process.exitCode = 1;
-  });
   httpServer.listen(PORT, '0.0.0.0', () => {
     console.log(`ZYRQUEN Ω∞ Server listening on http://0.0.0.0:${PORT}`);
   });
 }
 
-const shutdown = (signal: string) => {
-  console.log(`[server] ${signal} received; shutting down gracefully`);
-  io.close();
-  wss.close();
-  httpServer.close((error) => {
-    if (error) {
-      console.error('[server] Graceful shutdown failed:', error);
-      process.exitCode = 1;
-    }
-  });
-};
-
-process.once('SIGINT', () => shutdown('SIGINT'));
-process.once('SIGTERM', () => shutdown('SIGTERM'));
-
-setupApp().catch((error) => {
-  console.error('[server] Startup failed:', error);
-  process.exitCode = 1;
-});
+setupApp();

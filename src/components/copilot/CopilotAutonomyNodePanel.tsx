@@ -251,7 +251,7 @@ export const CopilotAutonomyNodePanel: React.FC<CopilotAutonomyNodePanelProps> =
           </div>
 
           <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
-            {copilotState.suggestions.map((sugg: CopilotSuggestion) => {
+            {copilotState.suggestions.map((sugg: CopilotSuggestion, idx: number) => {
               const isCritical = sugg.priority === 'CRITICAL';
               const isHigh = sugg.priority === 'HIGH';
               const isMedium = sugg.priority === 'MEDIUM';
@@ -274,7 +274,7 @@ export const CopilotAutonomyNodePanel: React.FC<CopilotAutonomyNodePanelProps> =
 
               return (
                 <div
-                  key={sugg.id}
+                  key={`${sugg.id}-${idx}`}
                   className={`p-3.5 rounded-xl border ${borderClass} space-y-2.5 transition-all relative overflow-hidden`}
                 >
                   <div className="flex items-start justify-between gap-2">

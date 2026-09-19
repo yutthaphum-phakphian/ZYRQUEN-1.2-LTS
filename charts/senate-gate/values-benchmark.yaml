@@ -1,5 +1,5 @@
 # =============================================================================
-# ZYRQUEN Ω∞ Senate Gate — Enterprise Benchmark Values v5.0 LTS (FIXED)
+# ZYRQUEN Ω∞ Senate Gate — Enterprise Benchmark Values v5.0 LTS
 # High-Throughput, Sub-Millisecond Zero-Trust Quorum Governance Engine
 # =============================================================================
 
@@ -50,15 +50,6 @@ securityContext:
     drop:
       - ALL
 
-# FIX 1: Mount emptyDir to /tmp to support readOnlyRootFilesystem
-volumeMounts:
-  - name: tmp-volume
-    mountPath: /tmp
-
-volumes:
-  - name: tmp-volume
-    emptyDir: {}
-
 resources:
   requests:
     cpu: 2000m
@@ -68,7 +59,6 @@ resources:
     memory: 8Gi
 
 # Zero-Trust Policy Engine Settings
-# FIX 2: Sync quorum parameters with SSoT rules (8/10 votes = 0.80 ratio)
 engine:
   mode: "v2.5-OPTIMIZED"
   shortCircuitEnabled: true
@@ -76,8 +66,8 @@ engine:
   maxP99LatencyTargetMs: 1.0
   pqcAlgorithm: "ML-DSA-87"
   hsmFipsLevelRequired: 4
-  minSenateVotesRequired: 8
-  quorumSupermajorityRatio: 0.80
+  minSenateVotesRequired: 3
+  quorumSupermajorityRatio: 0.60
   maxTokenBudget: 100000
 
 # High-Availability Horizontal Pod Autoscaler
@@ -110,20 +100,18 @@ podDisruptionBudget:
   minAvailable: "80%"
 
 # Anti-Affinity & Multi-AZ Distribution
-# FIX 3: Change podAntiAffinity to preferred to prevent Pending pods on small clusters
 affinity:
   podAntiAffinity:
+    requiredDuringSchedulingIgnoredDuringExecution:
+      - labelSelector:
+          matchExpressions:
+            - key: app.kubernetes.io/name
+              operator: In
+              values:
+                - senate-gate
+        topologyKey: "kubernetes.io/hostname"
     preferredDuringSchedulingIgnoredDuringExecution:
       - weight: 100
-        podAffinityTerm:
-          labelSelector:
-            matchExpressions:
-              - key: app.kubernetes.io/name
-                operator: In
-                values:
-                  - senate-gate
-          topologyKey: "kubernetes.io/hostname"
-      - weight: 50
         podAffinityTerm:
           labelSelector:
             matchExpressions:
@@ -136,14 +124,13 @@ affinity:
 topologySpreadConstraints:
   - maxSkew: 1
     topologyKey: "topology.kubernetes.io/zone"
-    whenUnsatisfiable: ScheduleAnyway
+    whenUnsatisfiable: DoNotSchedule
     labelSelector:
       matchLabels:
         app.kubernetes.io/name: senate-gate
 
-# FIX 4: Change service type to LoadBalancer to match AWS NLB annotations
 service:
-  type: LoadBalancer
+  type: ClusterIP
   port: 8181
   targetPort: 8181
   annotations:

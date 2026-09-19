@@ -40,7 +40,7 @@ export const MerkleRootQrCodeModal: React.FC<MerkleRootQrCodeModalProps> = ({
   const canvasRef = useRef<HTMLCanvasElement | null>(null);
 
   // Construct URLs and Payloads
-  const baseUrl = typeof window !== 'undefined' ? window.location.origin : 'https://yutthaphum-phakphian.github.io/ZYRQUEN-1.2-LTS';
+  const baseUrl = typeof window !== 'undefined' ? window.location.origin : 'https://hugeplease66-debug.github.io';
   const liveAuditUrl = `${baseUrl}/?audit=live&merkle_root=${merkleRootHash}&block=${currentBlockHeight}&seals=${CANONICAL_SEALS}&pqc=ML-DSA-87`;
   
   const cryptographicManifestPayload = JSON.stringify({

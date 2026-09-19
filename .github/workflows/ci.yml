@@ -1,88 +1,39 @@
-name: ZYRQUEN Ω∞ Sovereign CI/CD Pipeline
+name: 🛡️ ZYRQUEN Ω∞ CI — Core Invariants, Tests & Build Gate
 
 on:
   push:
-    branches: [ main, master ]
+    branches: [main]
   pull_request:
-    branches: [ main, master ]
+    branches: [main]
+  workflow_dispatch:
 
 permissions:
   contents: read
-  checks: write
 
 jobs:
-  typecheck-and-build:
-    name: 🛡️ TypeScript Typecheck & Vite Production Build
+  validate-and-test:
+    name: Lint, Test & Sovereign Build Gate v1.2 LTS
     runs-on: ubuntu-latest
+    timeout-minutes: 15
+
     steps:
-      - name: 📥 Checkout Repository
+      - name: Checkout Codebase
         uses: actions/checkout@v4
 
-      - name: ⚙️ Setup Node.js Environment
+      - name: Setup Node.js Runtime
         uses: actions/setup-node@v4
         with:
-          node-version: '20'
+          node-version: 20
           cache: 'npm'
 
-      - name: 📦 Install Dependencies
-        run: npm ci || npm install
+      - name: Install Dependencies
+        run: npm install --legacy-peer-deps
 
-      - name: 🔬 Execute TypeScript Compiler Check (tsc)
-        run: npx tsc --noEmit
+      - name: TypeScript & Static Lint Verification
+        run: npm run lint
 
-      - name: ⚡ Execute Vite Production Build
-        run: npm run build
+      - name: Execute Sovereign Unit Tests & Invariants Suite
+        run: npm test
 
-  sovereign-benchmark-and-invariants:
-    name: 🌌 SSoT Δ0 Invariant & Cryo Telemetry Benchmark
-    runs-on: ubuntu-latest
-    steps:
-      - name: 📥 Checkout Repository
-        uses: actions/checkout@v4
-
-      - name: ⚙️ Setup Python 3.12 Environment
-        uses: actions/setup-python@v5
-        with:
-          python-version: '3.12'
-
-      - name: ⚙️ Setup Node.js Environment
-        uses: actions/setup-node@v4
-        with:
-          node-version: '20'
-
-      - name: 📦 Install Node Dependencies
-        run: npm ci || npm install
-
-      - name: 🧪 Run ZYRQUEN Benchmark Suite (scripts/run_benchmark.sh)
-        run: |
-          chmod +x scripts/run_benchmark.sh
-          bash scripts/run_benchmark.sh
-
-      - name: 📊 Run Node.js Performance Telemetry Report (scripts/report-perf.js)
-        run: node scripts/report-perf.js
-
-      - name: 🔒 Verify Genesis Merkle Root & SSoT Zero-Drift Invariant
-        run: |
-          echo "Verifying Genesis Merkle Root #849202..."
-          EXPECTED_ROOT="909ab814479844d8a14816bed34cdbb07528e18501da86fc4691763a43fa4c68"
-          echo "✔ SSoT Delta: Δ0 (0.00% Drift Verified)"
-
-  security-and-legal-compliance:
-    name: ⚖️ Thai Legal Compliance (ETA Sec 9/26/28 + PDPA) & PQC Audit
-    runs-on: ubuntu-latest
-    steps:
-      - name: 📥 Checkout Repository
-        uses: actions/checkout@v4
-
-      - name: 🛡️ Audit Dilithium-5 (ML-DSA-87) & 10/10 REAL_HSM Quorum Schema
-        run: |
-          echo "Verifying NIST FIPS 204 Dilithium-5 PQC Schema..."
-          echo "Verifying Utimaco FIPS 140-3 Level 4 Hardware Attestation..."
-          echo "[✓] 10/10 REAL_HSM Deca-Key Quorum Verified."
-
-      - name: 📜 Thai Statutory Legal Alignment Check
-        run: |
-          echo "[✓] ETDA Sec 9: Intent & Identity Binding Verified"
-          echo "[✓] ETDA Sec 26: Advanced Digital Signature Non-Repudiation Verified"
-          echo "[✓] ETDA Sec 28: Immutable Audit Ledger V25 Safe Harbor Verified"
-          echo "[✓] PDPA Sec 37: Zero-Knowledge Privacy Isolation Verified"
+      - name: Build Vite Client Assets
+        run: npx vite build

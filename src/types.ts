@@ -23,7 +23,9 @@ export type ViewType =
   | 'canonical'
   | 'admin'
   | 'analytics'
-  | 'chambers';
+  | 'chambers'
+  | 'audithistory'
+  | 'securitypipeline';
 
 export interface AuditStage {
   id: string;

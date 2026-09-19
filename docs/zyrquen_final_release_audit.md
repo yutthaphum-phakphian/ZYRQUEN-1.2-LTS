@@ -2,7 +2,7 @@
 
 **Status:** APPROVED FOR PRODUCTION  
 **Audit Timestamp:** 2026-03-29T23:59:59Z (UTC)  
-**Lead Auditor / Sovereign Principal:** Yuttaphum Phakphian (#EP-SOVEREIGN-01)  
+**Lead Auditor / Sovereign Principal:** Yuttaphum Phakphean (#EP-SOVEREIGN-01)  
 **Co-Auditor / Security Engineer:** Dr. Apichaya V. (Cryptographic Enforcement & PQC)  
 **Checkpoint ID:** `ZYRQUEN-SOV-4-FINAL-2026-03`  
 

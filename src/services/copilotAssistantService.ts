@@ -563,9 +563,20 @@ githubSyncService.subscribe((syncState: GitHubSyncState) => {
     updatedSuggestions = updatedSuggestions.filter((s) => s.type !== 'DRIFT_DETECTED');
     const hasZeroDrift = updatedSuggestions.some((s) => s.type === 'ZERO_DRIFT_LOCKED');
     if (!hasZeroDrift) {
-      updatedSuggestions = [INITIAL_SUGGESTIONS[0], ...updatedSuggestions];
+      const zeroDriftSugg = INITIAL_SUGGESTIONS.find((s) => s.type === 'ZERO_DRIFT_LOCKED') || INITIAL_SUGGESTIONS[1];
+      if (zeroDriftSugg && !updatedSuggestions.some((s) => s.id === zeroDriftSugg.id)) {
+        updatedSuggestions = [zeroDriftSugg, ...updatedSuggestions];
+      }
     }
   }
+
+  // Deduplicate suggestions by ID to guarantee unique keys across all React renders
+  const seenIds = new Set<string>();
+  updatedSuggestions = updatedSuggestions.filter((s) => {
+    if (!s.id || seenIds.has(s.id)) return false;
+    seenIds.add(s.id);
+    return true;
+  });
 
   state = {
     ...state,

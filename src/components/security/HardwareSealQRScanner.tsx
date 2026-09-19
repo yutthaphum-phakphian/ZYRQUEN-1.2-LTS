@@ -23,7 +23,6 @@ import {
   History,
   FileText,
   ExternalLink,
-  Loader2,
 } from 'lucide-react';
 import { QrReader } from 'react-qr-reader';
 import jsQR from 'jsqr';
@@ -89,27 +88,6 @@ export const HardwareSealQRScanner: React.FC<HardwareSealQRScannerProps> = ({
   });
 
   const fileInputRef = useRef<HTMLInputElement>(null);
-  const scannedPayloadRef = useRef<string>('');
-
-  // Synchronize scannedPayloadRef
-  useEffect(() => {
-    scannedPayloadRef.current = scannedPayload;
-  }, [scannedPayload]);
-
-  // Escape key handler for closing modal
-  useEffect(() => {
-    const handleKeyDown = (e: KeyboardEvent) => {
-      if (e.key === 'Escape' && onClose) {
-        onClose();
-      }
-    };
-    if (isOpen) {
-      window.addEventListener('keydown', handleKeyDown);
-    }
-    return () => {
-      window.removeEventListener('keydown', handleKeyDown);
-    };
-  }, [isOpen, onClose]);
 
   // Reset or initialize scanner when opened
   useEffect(() => {
@@ -183,8 +161,7 @@ export const HardwareSealQRScanner: React.FC<HardwareSealQRScannerProps> = ({
   const handleQrResult = (result: any | null | undefined, error: any | null | undefined) => {
     if (result) {
       const text = typeof result === 'string' ? result : result?.getText?.() || result?.text;
-      if (text && text !== scannedPayloadRef.current) {
-        scannedPayloadRef.current = text;
+      if (text && text !== scannedPayload) {
         playTone(880, 0.06);
         setCameraActive(false);
         handleProcessPayload(text);

@@ -290,21 +290,20 @@ FINAL DETERMINATION: PASSED 100% GREEN GOV 10/10 PHY 10/10 Δ0.00% T_cryo NOMINA
 **Single-File Go-Live (GitHub Pages):**
 ```bash
 # 1. Open index.html -> Save As index.html
-# 2. Push to yutthaphum-phakphian/ZYRQUEN-1.2-LTS main branch
+# 2. Push to hugeplease66-debug.github.io main branch
 git add index.html
 git commit -m "APEX ULTIMATE v4.16 PURE GREEN FINAL - 14,902 Seals Δ0.00% MAINNET LIVE 100% GREEN"
 git push origin main
-# 3. Open https://yutthaphum-phakphian.github.io/ZYRQUEN-1.2-LTS/
+# 3. Open https://hugeplease66-debug.github.io/
 # Expected: ALL GREEN 14,902/14,902 PURE GREEN
 ```
 
 **Vite Project:**
 ```bash
-cd zyrquen-frozen-v1.2-lts
-npm ci --legacy-peer-deps
-npm run dev        # Local dev with server.ts and Vite middleware
-npm run build      # Builds the client and server.ts -> dist/server.cjs
-npm start          # Runs dist/server.cjs in production
+cd vite-project
+npm install
+npm run dev        # Local dev http://localhost:3000 (or http://localhost:5173 for Vite standalone)
+npm run build && npm run deploy  # Build & Deploy to GitHub Pages
 ```
 
 **Court/ETDA Submission:**
