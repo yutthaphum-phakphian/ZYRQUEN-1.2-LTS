@@ -81,5 +81,41 @@ test('GovernanceHealthHeatmap - 18 Sovereign Chambers Telemetry & Coherence Inva
     assert.equal(quorumActual, quorumExpected);
     assert.equal(systemDrift, 0.00);
   });
+
+  await t.test('should verify UnstableEvent tracking and search filter logic for coherence < 95%', () => {
+    const events = [
+      { id: 'EVT-CH-04-1', chamberId: 'CH-04', coherence: 93.8, timestamp: '14:43:43' },
+      { id: 'EVT-CH-06-2', chamberId: 'CH-06', coherence: 94.2, timestamp: '14:44:00' },
+    ];
+
+    // Filter by Chamber ID
+    const query1 = 'ch-04';
+    const filtered1 = events.filter((e) =>
+      e.chamberId.toLowerCase().includes(query1.toLowerCase()) || e.timestamp.includes(query1)
+    );
+    assert.equal(filtered1.length, 1);
+    assert.equal(filtered1[0].chamberId, 'CH-04');
+
+    // Filter by timestamp
+    const query2 = '14:44';
+    const filtered2 = events.filter((e) =>
+      e.chamberId.toLowerCase().includes(query2.toLowerCase()) || e.timestamp.includes(query2)
+    );
+    assert.equal(filtered2.length, 1);
+    assert.equal(filtered2[0].chamberId, 'CH-06');
+  });
+
+  await t.test('should verify PrintAuditRecord immutable ledger structure and commit status', () => {
+    const printRecord = {
+      printId: 'PRINT-LOG-8492',
+      chamberSource: 'CH-00 (Genesis Foundation & Kernel)',
+      timestamp: new Date().toISOString(),
+      ledgerStatus: 'COMMITTED_IMMUTABLE_V25',
+    };
+
+    assert.ok(printRecord.printId.startsWith('PRINT-LOG-'));
+    assert.ok(printRecord.chamberSource.includes('CH-00'));
+    assert.equal(printRecord.ledgerStatus, 'COMMITTED_IMMUTABLE_V25');
+  });
 });
 

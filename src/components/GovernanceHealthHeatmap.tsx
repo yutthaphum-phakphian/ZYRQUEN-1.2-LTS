@@ -1,4 +1,5 @@
 import React, { useState, useEffect, useMemo, useCallback, useRef } from 'react';
+import { motion, AnimatePresence } from 'motion/react';
 import {
   ResponsiveContainer,
   ComposedChart,
@@ -35,6 +36,7 @@ import {
   Lock,
   ChevronRight,
   ExternalLink,
+  Printer,
 } from 'lucide-react';
 import { SOVEREIGN_CHAMBERS } from '../data/sovereignData';
 import { Chamber } from '../types';
@@ -49,6 +51,20 @@ import { playTelemetryBeep, playAuditChime } from './AudioSynthesizer';
 
 export type HeatmapMetricType = 'coherence' | 'stability' | 'cryoTemp' | 'drift';
 export type HeatmapViewMode = 'grid' | 'epoch_matrix' | 'telemetry_trend';
+
+export interface UnstableEvent {
+  id: string;
+  chamberId: string;
+  coherence: number;
+  timestamp: string;
+}
+
+export interface PrintAuditRecord {
+  printId: string;
+  chamberSource: string;
+  timestamp: string;
+  ledgerStatus: string;
+}
 
 export interface ChamberHeartbeatSnapshot {
   epochIndex: number;
@@ -112,6 +128,15 @@ export const GovernanceHealthHeatmap: React.FC<GovernanceHealthHeatmapProps> = (
   const [heartbeatCycle, setHeartbeatCycle] = useState<number>(849202);
   const [heartbeatPulse, setHeartbeatPulse] = useState<boolean>(false);
   const [lastHeartbeatUtc, setLastHeartbeatUtc] = useState<string>(new Date().toISOString());
+
+  // Requirement 1: Notification Overlay & Searchable List of Unstable Events (<95% Coherence)
+  const [unstableEvents, setUnstableEvents] = useState<UnstableEvent[]>([]);
+  const [overlaySearchQuery, setOverlaySearchQuery] = useState<string>('');
+  const [showOverlay, setShowOverlay] = useState<boolean>(false);
+
+  // Requirement 3: Print Event Tracker & Immutable Ledger Logs
+  const [printLedgerLogs, setPrintLedgerLogs] = useState<PrintAuditRecord[]>([]);
+  const [printToast, setPrintToast] = useState<string | null>(null);
 
   // Generate initial historical heartbeat profiles for each of the 18 Sovereign Chambers
   const [chamberProfiles, setChamberProfiles] = useState<ChamberHealthProfile[]>(() => {
@@ -194,6 +219,24 @@ export const GovernanceHealthHeatmap: React.FC<GovernanceHealthHeatmapProps> = (
           const newCryo = +(14.98 + Math.sin(Date.now() / 1200 + idx) * 0.06).toFixed(2);
 
           // Alert trigger if drops below 95%
+          if (newCoherence < 95) {
+            setUnstableEvents((currentEvents) => {
+              const exists = currentEvents.some((e) => e.chamberId === prof.chamber.code);
+              if (!exists) {
+                return [
+                  {
+                    id: `EVT-${prof.chamber.code}-${Date.now()}`,
+                    chamberId: prof.chamber.code,
+                    coherence: newCoherence,
+                    timestamp: timeStr,
+                  },
+                  ...currentEvents,
+                ];
+              }
+              return currentEvents;
+            });
+          }
+
           if (newCoherence < 95 && prof.currentCoherence >= 95) {
             if (onSystemEvent) {
               onSystemEvent(`[ALERT] Chamber ${prof.chamber.code} coherence dropped to ${newCoherence}% (<95%) - Instability detected!`);
@@ -320,6 +363,23 @@ export const GovernanceHealthHeatmap: React.FC<GovernanceHealthHeatmapProps> = (
       // Simulate Chamber 5 (CH-04) dropping below 95%
       const targetChamberCode = 'CH-04';
       setSimulatedUnstableChamberId(targetChamberCode);
+
+      setUnstableEvents((prev) => {
+        const exists = prev.some((e) => e.chamberId === targetChamberCode);
+        if (!exists) {
+          return [
+            {
+              id: `EVT-${targetChamberCode}-${Date.now()}`,
+              chamberId: targetChamberCode,
+              coherence: 93.8,
+              timestamp: new Date().toLocaleTimeString('en-GB', { hour12: false }),
+            },
+            ...prev,
+          ];
+        }
+        return prev;
+      });
+
       if (onSystemEvent) {
         onSystemEvent(`[ALERT] Chamber ${targetChamberCode} coherence dropped to 93.80% (<95%) - Instability detected!`);
       }
@@ -335,6 +395,54 @@ export const GovernanceHealthHeatmap: React.FC<GovernanceHealthHeatmapProps> = (
       }
     }
   }, [simulatedUnstableChamberId, onSystemEvent, onAddSystemEvent]);
+
+  // Requirement 3: Print QR handler committing to Immutable Ledger
+  const handlePrintQR = useCallback(
+    (profile: ChamberHealthProfile) => {
+      const timestamp = new Date().toISOString();
+      const newRecord: PrintAuditRecord = {
+        printId: `PRINT-LOG-${Date.now().toString().slice(-4)}`,
+        chamberSource: `${profile.chamber.code} (${profile.chamber.name})`,
+        timestamp,
+        ledgerStatus: 'COMMITTED_IMMUTABLE_V25',
+      };
+      setPrintLedgerLogs((prev) => [newRecord, ...prev]);
+
+      if (isAudioEnabled) {
+        playAuditChime();
+      }
+
+      const msg = `[Print Event Tracker] QR Evidence for ${profile.chamber.code} logged to Immutable Ledger successfully!`;
+      setPrintToast(msg);
+      setTimeout(() => {
+        setPrintToast((curr) => (curr === msg ? null : curr));
+      }, 4000);
+
+      if (onSystemEvent) {
+        onSystemEvent(msg);
+      }
+      if (onAddSystemEvent) {
+        onAddSystemEvent(
+          'PRINT_QR',
+          `QR Evidence Sealed • ${profile.chamber.code}`,
+          `QR Evidence for ${profile.chamber.code} (${profile.chamber.name}) committed to Immutable Ledger (COMMITTED_IMMUTABLE_V25)`,
+          `PRINT-${profile.chamber.code}-${Date.now()}`,
+          'success',
+          'ETDA Sec 28'
+        );
+      }
+    },
+    [isAudioEnabled, onSystemEvent, onAddSystemEvent]
+  );
+
+  // Requirement 1: Filtered Unstable Events for Notification Overlay
+  const filteredUnstableEvents = useMemo(() => {
+    return unstableEvents.filter(
+      (e) =>
+        e.chamberId.toLowerCase().includes(overlaySearchQuery.toLowerCase()) ||
+        e.timestamp.includes(overlaySearchQuery)
+    );
+  }, [unstableEvents, overlaySearchQuery]);
 
   // Color mapper based on metric and value
   const getCellHeatStyle = useCallback(
@@ -811,8 +919,18 @@ export const GovernanceHealthHeatmap: React.FC<GovernanceHealthHeatmapProps> = (
               </div>
             </div>
 
-            {/* Test Simulation Alert Button */}
+            {/* Unstable Alerts Overlay & Test Simulation Alert Button */}
             <div className="flex items-center gap-2">
+              <button
+                id="btn-unstable-alerts-overlay"
+                onClick={() => setShowOverlay(true)}
+                className="px-3 py-1.5 bg-red-500/20 border border-red-500/60 text-red-300 text-xs rounded-xl font-mono font-bold hover:bg-red-500/30 transition-all flex items-center gap-1.5 cursor-pointer shadow-[0_0_10px_rgba(239,68,68,0.2)]"
+                title="Dedicated Notification Overlay: Searchable Unstable Events (<95% Coherence)"
+              >
+                <AlertTriangle className="w-3.5 h-3.5 text-red-400" />
+                <span>🚨 Unstable Alerts ({unstableEvents.length})</span>
+              </button>
+
               <button
                 id="btn-test-simulation-alert"
                 onClick={handleToggleSimulation}
@@ -862,23 +980,27 @@ export const GovernanceHealthHeatmap: React.FC<GovernanceHealthHeatmapProps> = (
             </div>
           )}
 
-          {/* 18-Cell Sovereign Chambers Matrix (6-Column Grid) */}
+          {/* 18-Cell Sovereign Chambers Matrix (6-Column Grid) with Framer Motion Entrance */}
           {gridSubView === '6col' ? (
             <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-3">
-              {filteredProfiles.map((chamber) => {
+              {filteredProfiles.map((chamber, index) => {
                 const isUnstable = chamber.currentCoherence < 95;
                 const cellStyle = getCellColorStyle(chamber.currentCoherence);
                 const isSelected = selectedChamberId === chamber.chamber.id;
 
                 return (
-                  <div
+                  <motion.div
                     key={chamber.chamber.id}
                     id={`chamber-cell-${chamber.chamber.code.toLowerCase()}`}
+                    initial={{ opacity: 0, scale: 0.9 }}
+                    animate={{ opacity: 1, scale: 1 }}
+                    transition={{ duration: 0.3, delay: index * 0.03 }}
+                    whileHover={{ scale: 1.03 }}
                     onMouseEnter={() => setHoveredChamber(chamber)}
                     onMouseLeave={() => setHoveredChamber(null)}
                     onClick={() => setSelectedChamberId(chamber.chamber.id)}
                     className={`relative p-3.5 rounded-xl border transition-all cursor-pointer shadow-inner ${cellStyle} ${
-                      isUnstable ? 'ring-2 ring-red-500 animate-pulse' : 'hover:scale-[1.02]'
+                      isUnstable ? 'ring-2 ring-red-500 animate-pulse' : ''
                     } ${isSelected ? 'ring-2 ring-white scale-[1.02] shadow-2xl' : ''}`}
                   >
                     <div className="text-[10px] text-gray-400 uppercase tracking-wider flex justify-between items-center">
@@ -892,7 +1014,18 @@ export const GovernanceHealthHeatmap: React.FC<GovernanceHealthHeatmapProps> = (
 
                     <div className="text-[10px] font-mono opacity-80 flex items-center justify-between">
                       <span>{chamber.currentCryoTemp.toFixed(2)} mK</span>
-                      <span className="text-[9px] text-gray-400">{chamber.currentStability.toFixed(1)}%</span>
+                      <button
+                        id={`btn-print-qr-${chamber.chamber.code.toLowerCase()}`}
+                        onClick={(e) => {
+                          e.stopPropagation();
+                          handlePrintQR(chamber);
+                        }}
+                        className="px-1.5 py-0.5 bg-cyan-500/30 hover:bg-cyan-500 text-white text-[9px] rounded font-mono transition-colors flex items-center gap-1 cursor-pointer"
+                        title="Print QR Evidence & Log to Immutable Ledger"
+                      >
+                        <Printer className="w-2.5 h-2.5" />
+                        <span>Print QR</span>
+                      </button>
                     </div>
 
                     <div className="mt-2 text-[9px] px-1.5 py-0.5 rounded text-center truncate font-mono bg-black/60 border border-white/5">
@@ -902,7 +1035,7 @@ export const GovernanceHealthHeatmap: React.FC<GovernanceHealthHeatmapProps> = (
                         <span className="text-green-300">PURE GREEN</span>
                       )}
                     </div>
-                  </div>
+                  </motion.div>
                 );
               })}
             </div>
@@ -1008,20 +1141,64 @@ export const GovernanceHealthHeatmap: React.FC<GovernanceHealthHeatmapProps> = (
                       </div>
                     </div>
 
-                    {/* Invariant Footer */}
+                    {/* Invariant Footer & Print QR Action */}
                     <div className="mt-3 pt-2.5 border-t border-white/5 flex items-center justify-between text-[10px] font-mono text-zinc-400">
                       <div className="flex items-center gap-1">
                         <Lock className="w-3 h-3 text-purple-400" />
                         <span>{prof.invariantsPassing} Invariants Sealed</span>
                       </div>
-                      <span className="text-zinc-500 flex items-center gap-0.5">
-                        <span>Inspect</span>
-                        <ChevronRight className="w-3 h-3" />
-                      </span>
+                      <div className="flex items-center gap-2">
+                        <button
+                          id={`btn-card-print-qr-${prof.chamber.code.toLowerCase()}`}
+                          onClick={(e) => {
+                            e.stopPropagation();
+                            handlePrintQR(prof);
+                          }}
+                          className="px-2 py-0.5 bg-cyan-500/20 hover:bg-cyan-500/30 border border-cyan-500/40 text-cyan-300 text-[10px] rounded-lg font-mono transition flex items-center gap-1 cursor-pointer"
+                          title="Print QR Evidence & Log to Immutable Ledger"
+                        >
+                          <Printer className="w-3 h-3 text-cyan-400" />
+                          <span>Print QR</span>
+                        </button>
+                        <span className="text-zinc-500 flex items-center gap-0.5">
+                          <span>Inspect</span>
+                          <ChevronRight className="w-3 h-3" />
+                        </span>
+                      </div>
                     </div>
                   </div>
                 );
               })}
+            </div>
+          )}
+
+          {/* Real-time Print Event Tracker & Immutable Ledger */}
+          {printLedgerLogs.length > 0 && (
+            <div className="mt-6 pt-4 border-t border-gray-800">
+              <div className="flex items-center justify-between mb-2">
+                <h4 className="text-xs font-bold text-cyan-400 uppercase tracking-wider flex items-center gap-2">
+                  <FileText className="w-3.5 h-3.5 text-cyan-400" />
+                  <span>Immutable Audit Ledger — Print QR Event Log ({printLedgerLogs.length} Records)</span>
+                </h4>
+                <span className="text-[10px] font-mono text-emerald-400">WORM Audit V25 &bull; Non-Repudiation ETDA Sec 28</span>
+              </div>
+              <div className="max-h-36 overflow-y-auto space-y-1.5 font-mono text-[10px] text-gray-300 pr-1">
+                {printLedgerLogs.map((log) => (
+                  <div
+                    key={log.printId}
+                    className="flex flex-wrap items-center justify-between bg-black/40 px-3 py-1.5 rounded-lg border border-cyan-900/40 gap-2 hover:border-cyan-500/40 transition"
+                  >
+                    <div className="flex items-center gap-2">
+                      <span className="text-cyan-400 font-bold">[{log.printId}]</span>
+                      <span className="text-zinc-200">Source: {log.chamberSource}</span>
+                    </div>
+                    <div className="flex items-center gap-2">
+                      <span className="text-emerald-400 font-bold">{log.ledgerStatus}</span>
+                      <span className="text-zinc-500">({log.timestamp})</span>
+                    </div>
+                  </div>
+                ))}
+              </div>
             </div>
           )}
 
@@ -1302,6 +1479,114 @@ export const GovernanceHealthHeatmap: React.FC<GovernanceHealthHeatmapProps> = (
           </div>
         </div>
       )}
+
+      {/* 🚨 Requirement 1: Dedicated Notification Overlay (Searchable Unstable Events) */}
+      <AnimatePresence>
+        {showOverlay && (
+          <motion.div
+            id="modal-unstable-events-overlay"
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            className="fixed inset-0 z-50 bg-black/80 backdrop-blur-sm flex items-center justify-center p-4"
+            onClick={() => setShowOverlay(false)}
+          >
+            <motion.div
+              id="modal-unstable-events-content"
+              initial={{ scale: 0.92, y: 20 }}
+              animate={{ scale: 1, y: 0 }}
+              exit={{ scale: 0.92, y: 20 }}
+              onClick={(e) => e.stopPropagation()}
+              className="bg-[#0b101b] border border-red-500/50 rounded-2xl w-full max-w-2xl p-6 shadow-2xl text-white space-y-4"
+            >
+              <div className="flex justify-between items-center pb-3 border-b border-red-500/30">
+                <div className="flex items-center gap-2.5">
+                  <span className="p-2 rounded-xl bg-red-500/20 text-red-400 border border-red-500/40">
+                    <AlertTriangle className="w-5 h-5 text-red-400" />
+                  </span>
+                  <div>
+                    <h3 className="text-base font-mono font-bold text-red-300">
+                      Executive Review: Unstable Chamber Events (&lt;95% Coherence)
+                    </h3>
+                    <p className="text-[11px] text-zinc-400 font-sans">
+                      Isolated telemetry records where quantum coherence dropped below the statutory 95.00% SLA.
+                    </p>
+                  </div>
+                </div>
+                <button
+                  id="btn-close-unstable-overlay"
+                  onClick={() => setShowOverlay(false)}
+                  className="text-gray-400 hover:text-white text-xs font-mono font-bold px-3 py-1.5 bg-gray-800 hover:bg-gray-700 rounded-xl cursor-pointer border border-white/10"
+                >
+                  ✕ Close
+                </button>
+              </div>
+
+              {/* Search Bar for Unstable Events */}
+              <div className="relative">
+                <Search className="w-4 h-4 text-zinc-500 absolute left-3 top-1/2 -translate-y-1/2" />
+                <input
+                  id="input-search-unstable-events"
+                  type="text"
+                  placeholder="Search by Chamber ID (e.g., CH-04) or Timestamp..."
+                  value={overlaySearchQuery}
+                  onChange={(e) => setOverlaySearchQuery(e.target.value)}
+                  className="w-full pl-9 pr-4 py-2 bg-black/60 border border-gray-700 rounded-xl text-xs text-white placeholder-zinc-500 focus:border-red-400 focus:outline-none font-mono"
+                />
+              </div>
+
+              {/* Event List */}
+              <div className="max-h-72 overflow-y-auto space-y-2 pr-1">
+                {filteredUnstableEvents.length > 0 ? (
+                  filteredUnstableEvents.map((evt) => (
+                    <div
+                      key={evt.id}
+                      className="p-3 bg-red-950/30 border border-red-900/60 rounded-xl flex flex-wrap justify-between items-center text-xs gap-2"
+                    >
+                      <div className="flex items-center gap-2.5">
+                        <span className="px-2 py-0.5 bg-red-500/20 border border-red-500/40 text-red-300 font-mono font-bold rounded">
+                          {evt.chamberId}
+                        </span>
+                        <span className="text-zinc-300">
+                          Coherence dropped to:{' '}
+                          <strong className="text-red-400 font-mono">{evt.coherence.toFixed(2)}%</strong>
+                        </span>
+                      </div>
+                      <span className="text-zinc-400 font-mono text-[11px]">{evt.timestamp}</span>
+                    </div>
+                  ))
+                ) : (
+                  <div className="text-center py-10 text-zinc-500 text-xs font-mono">
+                    {unstableEvents.length === 0
+                      ? 'All 18 Sovereign Chambers operating at 100% PURE GREEN (No unstable events recorded).'
+                      : 'No unstable events match your search query.'}
+                  </div>
+                )}
+              </div>
+
+              <div className="pt-3 border-t border-white/10 flex items-center justify-between text-[11px] font-mono text-zinc-400">
+                <span>Total Recorded Anomalies: {unstableEvents.length}</span>
+                <span className="text-red-400">Strict SLA Limit: 95.000% Coherence</span>
+              </div>
+            </motion.div>
+          </motion.div>
+        )}
+      </AnimatePresence>
+
+      {/* Real-time In-App Notification Toast for Print QR & Audit Ledger */}
+      <AnimatePresence>
+        {printToast && (
+          <motion.div
+            initial={{ opacity: 0, y: -20, scale: 0.95 }}
+            animate={{ opacity: 1, y: 0, scale: 1 }}
+            exit={{ opacity: 0, y: -20, scale: 0.95 }}
+            className="fixed top-6 right-6 z-50 px-4 py-3 rounded-2xl bg-[#081524] border border-cyan-400/80 text-cyan-100 shadow-2xl backdrop-blur-md flex items-center gap-3 text-xs font-mono"
+          >
+            <CheckCircle2 className="w-4 h-4 text-emerald-400 shrink-0" />
+            <span>{printToast}</span>
+          </motion.div>
+        )}
+      </AnimatePresence>
     </div>
   );
 };
