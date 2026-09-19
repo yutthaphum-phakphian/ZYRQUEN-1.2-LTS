@@ -2,6 +2,7 @@ import { FirmwareLifecycleManager } from "../FirmwareLifecycleManager";
 import { GlobalRedTeamChallenge } from '../GlobalRedTeamChallenge';
 import { SovereignMasterForensicReportCard } from '../SovereignMasterForensicReportCard';
 import { SovereignSelfAuditEngine } from '../audit/SovereignSelfAuditEngine';
+import { DataPersistenceSettingsTab } from '../settings/DataPersistenceSettingsTab';
 import React, { useState, useEffect } from 'react';
 import {
   Settings,
@@ -34,6 +35,8 @@ import {
   Lock,
   GitCommit,
   ShieldCheck,
+  HardDrive,
+  Database,
 } from 'lucide-react';
 import { THAI_CUSTODIANS, SYSTEM_METADATA } from '../../data/canonicalData';
 import { ThaiLegalSovereignMapping } from '../ThaiLegalSovereignMapping';
@@ -170,6 +173,14 @@ export const GitHubDeploymentWidget: React.FC = () => {
   );
 };
 
+export type SettingsTabId =
+  | 'DATA_PERSISTENCE'
+  | 'GENERAL'
+  | 'AUDIT_REDTEAM'
+  | 'ACOUSTICS'
+  | 'HARDWARE'
+  | 'ALL';
+
 export const SettingsView: React.FC<SettingsViewProps> = ({
   onCaptureSnapshot,
   isAudioActive,
@@ -185,6 +196,24 @@ export const SettingsView: React.FC<SettingsViewProps> = ({
   const [soundFeedback, setSoundFeedback] = useState(true);
   const [activeProfile, setActiveProfile] = useState<AudioProfileId>(getActiveProfileId());
   const [volumeLevel, setVolumeLevel] = useState<number>(Math.round(getMasterVolume() * 1000));
+  const [activeSettingsTab, setActiveSettingsTab] = useState<SettingsTabId>(() => {
+    try {
+      const saved = localStorage.getItem('zyrquen_active_settings_tab');
+      return (saved as SettingsTabId) || 'DATA_PERSISTENCE';
+    } catch {
+      return 'DATA_PERSISTENCE';
+    }
+  });
+
+  const handleTabSelect = (tab: SettingsTabId) => {
+    setActiveSettingsTab(tab);
+    playTone(650, 0.03);
+    try {
+      localStorage.setItem('zyrquen_active_settings_tab', tab);
+    } catch {
+      // ignore
+    }
+  };
 
   // Quantum Cooling Unit Battery & Thermal Threshold Alert States
   const [batteryAlertEnabled, setBatteryAlertEnabled] = useState<boolean>(() => {
@@ -392,53 +421,155 @@ export const SettingsView: React.FC<SettingsViewProps> = ({
         </div>
       </div>
 
-      {/* Quantum Login & Warp Ingress */}
-      <section className="p-5 rounded-[28px] bg-black/40 border border-[#D4AF37]/30 backdrop-blur-xl">
-        <h2 className="flex items-center gap-2 text-[#D4AF37] font-bold mb-2 font-mono text-sm">
-          <User className="w-4 h-4" /> AUTH &amp; WARP INGRESS
-        </h2>
-        <p className="text-xs text-zinc-400 font-mono mb-3">Execute quantum login and trigger holographic warp loader across sovereign tenants</p>
-        <div className="flex items-center gap-2 flex-wrap">
+      {/* Sovereign Settings Tabs Bar */}
+      <div className="flex flex-wrap items-center gap-2 p-2 rounded-2xl bg-[#0b0e1a]/85 border border-white/10 backdrop-blur-xl font-mono text-xs shadow-lg">
+        <button
+          onClick={() => handleTabSelect('DATA_PERSISTENCE')}
+          className={`flex items-center gap-2 px-3.5 py-2 rounded-xl transition-all font-bold cursor-pointer ${
+            activeSettingsTab === 'DATA_PERSISTENCE'
+              ? 'bg-cyan-500 text-black shadow-[0_0_15px_rgba(6,182,212,0.4)]'
+              : 'text-zinc-300 hover:text-white hover:bg-white/5'
+          }`}
+        >
+          <HardDrive className="w-4 h-4" />
+          <span>Data Persistence</span>
+          <span className={`text-[10px] px-1.5 py-0.5 rounded-full font-bold ${
+            activeSettingsTab === 'DATA_PERSISTENCE'
+              ? 'bg-black text-cyan-300'
+              : 'bg-cyan-500/20 text-cyan-300 border border-cyan-500/30'
+          }`}>
+            Storage Quota &amp; Cache
+          </span>
+        </button>
+
+        <button
+          onClick={() => handleTabSelect('GENERAL')}
+          className={`flex items-center gap-2 px-3.5 py-2 rounded-xl transition-all font-bold cursor-pointer ${
+            activeSettingsTab === 'GENERAL'
+              ? 'bg-cyan-500 text-black shadow-[0_0_15px_rgba(6,182,212,0.4)]'
+              : 'text-zinc-300 hover:text-white hover:bg-white/5'
+          }`}
+        >
+          <Settings className="w-4 h-4" />
+          <span>General &amp; Passports</span>
+        </button>
+
+        <button
+          onClick={() => handleTabSelect('AUDIT_REDTEAM')}
+          className={`flex items-center gap-2 px-3.5 py-2 rounded-xl transition-all font-bold cursor-pointer ${
+            activeSettingsTab === 'AUDIT_REDTEAM'
+              ? 'bg-cyan-500 text-black shadow-[0_0_15px_rgba(6,182,212,0.4)]'
+              : 'text-zinc-300 hover:text-white hover:bg-white/5'
+          }`}
+        >
+          <Shield className="w-4 h-4" />
+          <span>Self-Audit &amp; Red Team</span>
+        </button>
+
+        <button
+          onClick={() => handleTabSelect('ACOUSTICS')}
+          className={`flex items-center gap-2 px-3.5 py-2 rounded-xl transition-all font-bold cursor-pointer ${
+            activeSettingsTab === 'ACOUSTICS'
+              ? 'bg-cyan-500 text-black shadow-[0_0_15px_rgba(6,182,212,0.4)]'
+              : 'text-zinc-300 hover:text-white hover:bg-white/5'
+          }`}
+        >
+          <Radio className="w-4 h-4" />
+          <span>Acoustics &amp; Verbal TTS</span>
+        </button>
+
+        <button
+          onClick={() => handleTabSelect('HARDWARE')}
+          className={`flex items-center gap-2 px-3.5 py-2 rounded-xl transition-all font-bold cursor-pointer ${
+            activeSettingsTab === 'HARDWARE'
+              ? 'bg-cyan-500 text-black shadow-[0_0_15px_rgba(6,182,212,0.4)]'
+              : 'text-zinc-300 hover:text-white hover:bg-white/5'
+          }`}
+        >
+          <Thermometer className="w-4 h-4" />
+          <span>Cryo-Cooling &amp; Thermal</span>
+        </button>
+
+        <div className="ml-auto flex items-center">
           <button
-            onClick={() => {
-              playTone(780, 0.05);
-              onTriggerLoginLoader?.('login');
-            }}
-            className="flex items-center gap-2 px-3.5 py-1.5 rounded-2xl bg-[#D4AF37]/20 hover:bg-[#D4AF37]/30 border border-[#D4AF37]/50 text-[#D4AF37] font-mono text-xs font-bold transition-all shadow-[0_0_15px_rgba(212,175,55,0.2)] cursor-pointer"
-            title="Execute Quantum Login & Holographic Warp Ingress"
+            onClick={() => handleTabSelect('ALL')}
+            className={`px-3 py-2 rounded-xl text-xs transition-all font-mono ${
+              activeSettingsTab === 'ALL'
+                ? 'bg-white/20 text-white font-bold'
+                : 'text-zinc-500 hover:text-zinc-300'
+            }`}
           >
-            <span>🌌</span>
-            <span>Quantum Login / Warp</span>
-          </button>
-          <button
-            onClick={() => {
-              playTone(720, 0.05);
-              onTriggerLoginLoader?.('register');
-            }}
-            className="flex items-center gap-2 px-3.5 py-1.5 rounded-2xl bg-white/5 hover:bg-white/10 border border-white/10 text-xs font-mono text-zinc-300 cursor-pointer"
-          >
-            Register
-          </button>
-          <button
-            onClick={() => {
-              playTone(680, 0.05);
-              onTriggerLoginLoader?.('switch_tenant');
-            }}
-            className="flex items-center gap-2 px-3.5 py-1.5 rounded-2xl bg-white/5 hover:bg-white/10 border border-white/10 text-xs font-mono text-zinc-300 cursor-pointer"
-          >
-            Switch Tenant
+            📑 View All Sections
           </button>
         </div>
-      </section>
+      </div>
 
-      {/* ZYRQUEN Ω∞ Sovereign Self-Audit & Evidence-Bound Verification Engine */}
-      <SovereignSelfAuditEngine />
+      {/* Tab: Data Persistence (Offline Cache Purge, Storage Usage Indicator, Artifact Inspector) */}
+      {(activeSettingsTab === 'DATA_PERSISTENCE' || activeSettingsTab === 'ALL') && (
+        <DataPersistenceSettingsTab
+          onNotifyEvent={onNotifyEvent}
+          onAddSystemEvent={onAddSystemEvent}
+        />
+      )}
 
-      {/* Global Red Team Challenge */}
-      <GlobalRedTeamChallenge />
+      {/* Quantum Login & Warp Ingress */}
+      {(activeSettingsTab === 'GENERAL' || activeSettingsTab === 'ALL') && (
+        <section className="p-5 rounded-[28px] bg-black/40 border border-[#D4AF37]/30 backdrop-blur-xl">
+          <h2 className="flex items-center gap-2 text-[#D4AF37] font-bold mb-2 font-mono text-sm">
+            <User className="w-4 h-4" /> AUTH &amp; WARP INGRESS
+          </h2>
+          <p className="text-xs text-zinc-400 font-mono mb-3">Execute quantum login and trigger holographic warp loader across sovereign tenants</p>
+          <div className="flex items-center gap-2 flex-wrap">
+            <button
+              onClick={() => {
+                playTone(780, 0.05);
+                onTriggerLoginLoader?.('login');
+              }}
+              className="flex items-center gap-2 px-3.5 py-1.5 rounded-2xl bg-[#D4AF37]/20 hover:bg-[#D4AF37]/30 border border-[#D4AF37]/50 text-[#D4AF37] font-mono text-xs font-bold transition-all shadow-[0_0_15px_rgba(212,175,55,0.2)] cursor-pointer"
+              title="Execute Quantum Login & Holographic Warp Ingress"
+            >
+              <span>🌌</span>
+              <span>Quantum Login / Warp</span>
+            </button>
+            <button
+              onClick={() => {
+                playTone(720, 0.05);
+                onTriggerLoginLoader?.('register');
+              }}
+              className="flex items-center gap-2 px-3.5 py-1.5 rounded-2xl bg-white/5 hover:bg-white/10 border border-white/10 text-xs font-mono text-zinc-300 cursor-pointer"
+            >
+              Register
+            </button>
+            <button
+              onClick={() => {
+                playTone(680, 0.05);
+                onTriggerLoginLoader?.('switch_tenant');
+              }}
+              className="flex items-center gap-2 px-3.5 py-1.5 rounded-2xl bg-white/5 hover:bg-white/10 border border-white/10 text-xs font-mono text-zinc-300 cursor-pointer"
+            >
+              Switch Tenant
+            </button>
+          </div>
+        </section>
+      )}
 
-      {/* Sovereign Master Forensic Audit Report */}
-      <SovereignMasterForensicReportCard />
+      {/* Sovereign Audit & Red Team Modules */}
+      {(activeSettingsTab === 'AUDIT_REDTEAM' || activeSettingsTab === 'ALL') && (
+        <>
+          {/* ZYRQUEN Ω∞ Sovereign Self-Audit & Evidence-Bound Verification Engine */}
+          <SovereignSelfAuditEngine />
+
+          {/* Global Red Team Challenge */}
+          <GlobalRedTeamChallenge />
+
+          {/* Sovereign Master Forensic Audit Report */}
+          <SovereignMasterForensicReportCard />
+        </>
+      )}
+
+      {/* Acoustics, Terminal & Verbal Loop */}
+      {(activeSettingsTab === 'ACOUSTICS' || activeSettingsTab === 'ALL') && (
+        <>
 
       {/* High-Contrast Monochrome Terminal Mode Setting */}
       <div className="p-6 rounded-[28px] bg-[#0b0e1a]/85 border border-white/10 backdrop-blur-xl space-y-5 font-mono">
@@ -816,309 +947,334 @@ export const SettingsView: React.FC<SettingsViewProps> = ({
           </div>
         </div>
       </div>
-
-      {/* Custodian Quorum Registry & HSM Attestation Authority (10/10 Statutory Quorum) */}
-      <div className="space-y-4">
-        <CustodianQuorumRegistry onSelectEvidence={handleSelectEvidence} />
-      </div>
-
-      {/* Physical Attestation Sub-Component: Strict Claimed vs Verified Validation for Slots #06-#08 */}
-      <div className="space-y-4">
-        <PhysicalAttestation />
-      </div>
+        </>
+      )}
 
       {/* Persistent System Health Audit Report (Read-Only SSoT Mutation = 0 Verification) */}
-      <div className="space-y-4">
-        <SystemAuditReport />
-      </div>
-
-      {/* Thai Sovereign Custodian Passports */}
-      <div className="space-y-4">
-        <div className="flex items-center justify-between">
-          <span className="text-xs font-mono font-bold text-zinc-200 uppercase tracking-wider">
-            Registered Thai Sovereign Custodians
-          </span>
-          <span className="text-xs font-mono text-emerald-400">4 Active Executive Passports</span>
+      {(activeSettingsTab === 'AUDIT_REDTEAM' || activeSettingsTab === 'ALL') && (
+        <div className="space-y-4">
+          <SystemAuditReport />
         </div>
+      )}
 
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-          {THAI_CUSTODIANS.map((cust) => (
-            <div
-              key={cust.id}
-              className="p-6 rounded-[28px] bg-[#0b0e1a]/70 border border-white/8 backdrop-blur-xl space-y-4 hover:border-cyan-500/30 transition-all"
-            >
-              <div className="flex items-center justify-between">
-                <div className="flex items-center gap-3">
-                  <div className="w-10 h-10 rounded-2xl bg-white/5 border border-white/10 flex items-center justify-center text-lg">
-                    🇹🇭
-                  </div>
-                  <div>
-                    <h3 className="text-sm font-mono font-bold text-white">{cust.nameTh}</h3>
-                    <div className="text-xs text-zinc-400 font-mono">{cust.nameEn}</div>
-                  </div>
-                </div>
+      {/* Sovereign Custodians & Statutory Legal Framework */}
+      {(activeSettingsTab === 'GENERAL' || activeSettingsTab === 'ALL') && (
+        <>
+          {/* Custodian Quorum Registry & HSM Attestation Authority (10/10 Statutory Quorum) */}
+          <div className="space-y-4">
+            <CustodianQuorumRegistry onSelectEvidence={handleSelectEvidence} />
+          </div>
 
-                <span className="px-2.5 py-1 rounded-full bg-amber-500/15 text-amber-300 border border-amber-500/25 text-[10px] font-mono font-bold">
-                  {cust.passportNumber}
-                </span>
-              </div>
-
-              <div className="p-3 bg-black/40 rounded-xl border border-white/5 text-xs text-zinc-300 font-mono">
-                <div className="text-cyan-300 font-medium">{cust.roleTh}</div>
-                <div className="text-[11px] text-zinc-400 mt-0.5">{cust.roleEn}</div>
-              </div>
-
-              <div className="space-y-1.5 text-xs font-mono text-zinc-400">
-                <div className="flex justify-between">
-                  <span className="text-zinc-500">CLEARANCE:</span>
-                  <span className="text-zinc-200 font-bold">{cust.clearanceLevel}</span>
-                </div>
-                <div className="flex justify-between">
-                  <span className="text-zinc-500">SIGNED DATE:</span>
-                  <span className="text-zinc-300">{cust.signedDate}</span>
-                </div>
-                <div className="flex flex-col pt-1">
-                  <span className="text-zinc-500 text-[10px]">KEY FINGERPRINT:</span>
-                  <span className="text-cyan-400/90 text-[11px] truncate select-all">{cust.keyFingerprint}</span>
-                </div>
-              </div>
+          {/* Thai Sovereign Custodian Passports */}
+          <div className="space-y-4">
+            <div className="flex items-center justify-between">
+              <span className="text-xs font-mono font-bold text-zinc-200 uppercase tracking-wider">
+                Registered Thai Sovereign Custodians
+              </span>
+              <span className="text-xs font-mono text-emerald-400">4 Active Executive Passports</span>
             </div>
-          ))}
-        </div>
-      </div>
 
-      {/* Thai Electronic Transactions Act ↔ Sovereign Seal Chain Flow Diagram & Mapping */}
-      <ThaiLegalSovereignMapping />
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+              {THAI_CUSTODIANS.map((cust) => (
+                <div
+                  key={cust.id}
+                  className="p-6 rounded-[28px] bg-[#0b0e1a]/70 border border-white/8 backdrop-blur-xl space-y-4 hover:border-cyan-500/30 transition-all"
+                >
+                  <div className="flex items-center justify-between">
+                    <div className="flex items-center gap-3">
+                      <div className="w-10 h-10 rounded-2xl bg-white/5 border border-white/10 flex items-center justify-center text-lg">
+                        🇹🇭
+                      </div>
+                      <div>
+                        <h3 className="text-sm font-mono font-bold text-white">{cust.nameTh}</h3>
+                        <div className="text-xs text-zinc-400 font-mono">{cust.nameEn}</div>
+                      </div>
+                    </div>
 
-      {/* Quantum Cooling Unit Battery & Thermal Threshold Alert Monitor */}
-      <div className="p-6 rounded-[28px] bg-[#0b0e1a]/75 border border-white/8 backdrop-blur-xl space-y-6">
-        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 border-b border-white/8 pb-4">
-          <div className="flex items-center gap-3">
-            <div className={`w-10 h-10 rounded-2xl flex items-center justify-center border transition-all ${
-              simulatedBattery <= batteryThresholdPct
-                ? 'bg-rose-500/20 text-rose-300 border-rose-500/40 shadow-[0_0_20px_rgba(244,63,94,0.3)] animate-pulse'
-                : 'bg-cyan-500/15 text-cyan-300 border-cyan-500/30 shadow-[0_0_15px_rgba(6,182,212,0.15)]'
-            }`}>
-              {simulatedBattery <= batteryThresholdPct ? (
-                <BatteryWarning className="w-5 h-5 text-rose-400" />
-              ) : (
-                <BatteryCharging className="w-5 h-5 text-cyan-400" />
-              )}
-            </div>
-            <div>
-              <div className="flex items-center gap-2">
-                <span className="font-bold font-mono text-white text-sm uppercase tracking-wide">
-                  Quantum Cryo-Cooling Battery & Sub-Kelvin Thermal Monitor
-                </span>
-                <span className={`text-[10px] px-2 py-0.5 rounded-full font-mono font-semibold border ${
-                  batteryAlertEnabled
-                    ? 'bg-emerald-500/15 text-emerald-300 border-emerald-500/30'
-                    : 'bg-zinc-500/15 text-zinc-400 border-zinc-500/30'
-                }`}>
-                  {batteryAlertEnabled ? 'SIDEBAR NOTIFICATIONS ARMED' : 'ALERTS MUTED'}
-                </span>
-              </div>
-              <p className="text-xs text-zinc-400 font-sans mt-0.5">
-                Automated background watcher triggers real-time alerts in system sidebar when dilution refrigerator backup power drops below safety threshold.
-              </p>
+                    <span className="px-2.5 py-1 rounded-full bg-amber-500/15 text-amber-300 border border-amber-500/25 text-[10px] font-mono font-bold">
+                      {cust.passportNumber}
+                    </span>
+                  </div>
+
+                  <div className="p-3 bg-black/40 rounded-xl border border-white/5 text-xs text-zinc-300 font-mono">
+                    <div className="text-cyan-300 font-medium">{cust.roleTh}</div>
+                    <div className="text-[11px] text-zinc-400 mt-0.5">{cust.roleEn}</div>
+                  </div>
+
+                  <div className="space-y-1.5 text-xs font-mono text-zinc-400">
+                    <div className="flex justify-between">
+                      <span className="text-zinc-500">CLEARANCE:</span>
+                      <span className="text-zinc-200 font-bold">{cust.clearanceLevel}</span>
+                    </div>
+                    <div className="flex justify-between">
+                      <span className="text-zinc-500">SIGNED DATE:</span>
+                      <span className="text-zinc-300">{cust.signedDate}</span>
+                    </div>
+                    <div className="flex flex-col pt-1">
+                      <span className="text-zinc-500 text-[10px]">KEY FINGERPRINT:</span>
+                      <span className="text-cyan-400/90 text-[11px] truncate select-all">{cust.keyFingerprint}</span>
+                    </div>
+                  </div>
+                </div>
+              ))}
             </div>
           </div>
 
-          <div className="flex items-center gap-2">
-            <button
-              onClick={handleToggleBatteryAlert}
-              className={`px-4 py-2 rounded-2xl border font-mono font-bold text-xs flex items-center gap-2 transition-all ${
-                batteryAlertEnabled
-                  ? 'bg-emerald-500/20 text-emerald-200 border-emerald-500/40 shadow-[0_0_15px_rgba(16,185,129,0.2)]'
-                  : 'bg-white/5 hover:bg-white/10 text-zinc-400 border-white/10'
-              }`}
-            >
-              <Bell className={`w-4 h-4 ${batteryAlertEnabled ? 'text-emerald-400 animate-bounce' : 'text-zinc-500'}`} />
-              <span>{batteryAlertEnabled ? 'ALERT DAEMON ENABLED' : 'ENABLE SIDEBAR ALERTS'}</span>
-            </button>
-          </div>
-        </div>
+          {/* Thai Electronic Transactions Act ↔ Sovereign Seal Chain Flow Diagram & Mapping */}
+          <ThaiLegalSovereignMapping />
+        </>
+      )}
 
-        {/* Battery Health & Threshold Controls */}
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-4 font-mono text-xs">
-          {/* Card 1: Live Battery Level & Status */}
-          <div className="p-4 rounded-2xl bg-black/40 border border-white/5 space-y-2">
-            <div className="flex items-center justify-between text-zinc-400 text-[11px]">
-              <span className="flex items-center gap-1.5">
-                <Battery className="w-4 h-4 text-cyan-400" />
-                CRYO BACKUP BATTERY
-              </span>
-              <span className={`font-bold ${simulatedBattery <= batteryThresholdPct ? 'text-rose-400 animate-pulse' : 'text-emerald-400'}`}>
-                {simulatedBattery}% HEALTH
-              </span>
-            </div>
-            <div className="w-full bg-white/10 h-2 rounded-full overflow-hidden">
-              <div
-                className={`h-full transition-all duration-500 rounded-full ${
+      {/* Cryo-Cooling, HSM Quorum & Attestation Authority */}
+      {(activeSettingsTab === 'HARDWARE' || activeSettingsTab === 'ALL') && (
+        <>
+          {/* Physical Attestation Sub-Component: Strict Claimed vs Verified Validation for Slots #06-#08 */}
+          <div className="space-y-4">
+            <PhysicalAttestation />
+          </div>
+
+          {/* Firmware Lifecycle Manager */}
+          <div className="space-y-4">
+            <FirmwareLifecycleManager />
+          </div>
+
+          {/* Quantum Cooling Unit Battery & Thermal Threshold Alert Monitor */}
+          <div className="p-6 rounded-[28px] bg-[#0b0e1a]/75 border border-white/8 backdrop-blur-xl space-y-6">
+            <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 border-b border-white/8 pb-4">
+              <div className="flex items-center gap-3">
+                <div className={`w-10 h-10 rounded-2xl flex items-center justify-center border transition-all ${
                   simulatedBattery <= batteryThresholdPct
-                    ? 'bg-rose-500 shadow-[0_0_10px_rgba(244,63,94,0.5)]'
-                    : 'bg-gradient-to-r from-cyan-400 to-emerald-400'
-                }`}
-                style={{ width: `${simulatedBattery}%` }}
-              />
+                    ? 'bg-rose-500/20 text-rose-300 border-rose-500/40 shadow-[0_0_20px_rgba(244,63,94,0.3)] animate-pulse'
+                    : 'bg-cyan-500/15 text-cyan-300 border-cyan-500/30 shadow-[0_0_15px_rgba(6,182,212,0.15)]'
+                }`}>
+                  {simulatedBattery <= batteryThresholdPct ? (
+                    <BatteryWarning className="w-5 h-5 text-rose-400" />
+                  ) : (
+                    <BatteryCharging className="w-5 h-5 text-cyan-400" />
+                  )}
+                </div>
+                <div>
+                  <div className="flex items-center gap-2">
+                    <span className="font-bold font-mono text-white text-sm uppercase tracking-wide">
+                      Quantum Cryo-Cooling Battery & Sub-Kelvin Thermal Monitor
+                    </span>
+                    <span className={`text-[10px] px-2 py-0.5 rounded-full font-mono font-semibold border ${
+                      batteryAlertEnabled
+                        ? 'bg-emerald-500/15 text-emerald-300 border-emerald-500/30'
+                        : 'bg-zinc-500/15 text-zinc-400 border-zinc-500/30'
+                    }`}>
+                      {batteryAlertEnabled ? 'SIDEBAR NOTIFICATIONS ARMED' : 'ALERTS MUTED'}
+                    </span>
+                  </div>
+                  <p className="text-xs text-zinc-400 font-sans mt-0.5">
+                    Automated background watcher triggers real-time alerts in system sidebar when dilution refrigerator backup power drops below safety threshold.
+                  </p>
+                </div>
+              </div>
+
+              <div className="flex items-center gap-2">
+                <button
+                  onClick={handleToggleBatteryAlert}
+                  className={`px-4 py-2 rounded-2xl border font-mono font-bold text-xs flex items-center gap-2 transition-all ${
+                    batteryAlertEnabled
+                      ? 'bg-emerald-500/20 text-emerald-200 border-emerald-500/40 shadow-[0_0_15px_rgba(16,185,129,0.2)]'
+                      : 'bg-white/5 hover:bg-white/10 text-zinc-400 border-white/10'
+                  }`}
+                >
+                  <Bell className={`w-4 h-4 ${batteryAlertEnabled ? 'text-emerald-400 animate-bounce' : 'text-zinc-500'}`} />
+                  <span>{batteryAlertEnabled ? 'ALERT DAEMON ENABLED' : 'ENABLE SIDEBAR ALERTS'}</span>
+                </button>
+              </div>
             </div>
-            <div className="flex items-center justify-between text-[10px] text-zinc-500 pt-1">
-              <span>Bus: 48.2 VDC • 1.8 A</span>
-              <span>Cell: LiFePO4 Solid-State</span>
+
+            {/* Battery Health & Threshold Controls */}
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-4 font-mono text-xs">
+              {/* Card 1: Live Battery Level & Status */}
+              <div className="p-4 rounded-2xl bg-black/40 border border-white/5 space-y-2">
+                <div className="flex items-center justify-between text-zinc-400 text-[11px]">
+                  <span className="flex items-center gap-1.5">
+                    <Battery className="w-4 h-4 text-cyan-400" />
+                    CRYO BACKUP BATTERY
+                  </span>
+                  <span className={`font-bold ${simulatedBattery <= batteryThresholdPct ? 'text-rose-400 animate-pulse' : 'text-emerald-400'}`}>
+                    {simulatedBattery}% HEALTH
+                  </span>
+                </div>
+                <div className="w-full bg-white/10 h-2 rounded-full overflow-hidden">
+                  <div
+                    className={`h-full transition-all duration-500 rounded-full ${
+                      simulatedBattery <= batteryThresholdPct
+                        ? 'bg-rose-500 shadow-[0_0_10px_rgba(244,63,94,0.5)]'
+                        : 'bg-gradient-to-r from-cyan-400 to-emerald-400'
+                    }`}
+                    style={{ width: `${simulatedBattery}%` }}
+                  />
+                </div>
+                <div className="flex items-center justify-between text-[10px] text-zinc-500 pt-1">
+                  <span>Bus: 48.2 VDC • 1.8 A</span>
+                  <span>Cell: LiFePO4 Solid-State</span>
+                </div>
+              </div>
+
+              {/* Card 2: User-Defined Alert Threshold Slider */}
+              <div className="p-4 rounded-2xl bg-black/40 border border-white/5 space-y-2">
+                <div className="flex items-center justify-between text-zinc-400 text-[11px]">
+                  <span className="flex items-center gap-1.5">
+                    <AlertTriangle className="w-4 h-4 text-amber-400" />
+                    ALERT TRIGGER THRESHOLD
+                  </span>
+                  <span className="text-amber-300 font-bold">{batteryThresholdPct}%</span>
+                </div>
+                <input
+                  type="range"
+                  min="10"
+                  max="50"
+                  value={batteryThresholdPct}
+                  onChange={handleThresholdChange}
+                  className="w-full accent-amber-400 cursor-pointer"
+                />
+                <div className="flex items-center justify-between text-[10px] text-zinc-500 pt-1">
+                  <span>Min 10%</span>
+                  <span className="text-zinc-400">Trigger Alert at &lt; {batteryThresholdPct}%</span>
+                  <span>Max 50%</span>
+                </div>
+              </div>
+
+              {/* Card 3: Dilution Refrigerator Thermal State */}
+              <div className="p-4 rounded-2xl bg-black/40 border border-white/5 space-y-2">
+                <div className="flex items-center justify-between text-zinc-400 text-[11px]">
+                  <span className="flex items-center gap-1.5">
+                    <Thermometer className="w-4 h-4 text-violet-400" />
+                    DILUTION CRYO TEMP
+                  </span>
+                  <span className={`font-bold ${simulatedCryoTemp > 20 ? 'text-amber-400' : 'text-violet-300'}`}>
+                    {simulatedCryoTemp} mK
+                  </span>
+                </div>
+                <div className="text-[11px] text-zinc-300">
+                  Helium-3/Helium-4 Phase Mixing Loop: <span className="text-emerald-400 font-semibold">100% INTACT</span>
+                </div>
+                <div className="flex items-center justify-between text-[10px] text-zinc-500 pt-1">
+                  <span>Cooling Unit Load: 34W</span>
+                  <span>Turbopump: 72,000 RPM</span>
+                </div>
+              </div>
+            </div>
+
+            {/* Action / Simulation Test Bar */}
+            <div className="p-4 rounded-2xl bg-black/30 border border-white/5 flex flex-col sm:flex-row items-center justify-between gap-3 text-xs font-mono">
+              <div className="flex items-center gap-2 text-zinc-400 text-[11px]">
+                <Sparkles className="w-4 h-4 text-cyan-400" />
+                <span>Forensic Simulation: Test automated sidebar alert dispatch when battery drops below {batteryThresholdPct}%</span>
+              </div>
+
+              <div className="flex items-center gap-2">
+                <button
+                  onClick={triggerSimulatedLowBattery}
+                  className="px-3 py-1.5 rounded-xl bg-rose-500/15 hover:bg-rose-500/25 border border-rose-500/30 text-rose-300 font-bold transition-all text-xs flex items-center gap-1.5"
+                >
+                  <AlertTriangle className="w-3.5 h-3.5 text-rose-400" />
+                  <span>Simulate Low Battery (18%)</span>
+                </button>
+
+                <button
+                  onClick={restoreBatteryToNominal}
+                  className="px-3 py-1.5 rounded-xl bg-emerald-500/15 hover:bg-emerald-500/25 border border-emerald-500/30 text-emerald-300 font-bold transition-all text-xs flex items-center gap-1.5"
+                >
+                  <RefreshCw className="w-3.5 h-3.5 text-emerald-400" />
+                  <span>Restore Nominal (92%)</span>
+                </button>
+              </div>
             </div>
           </div>
-
-          {/* Card 2: User-Defined Alert Threshold Slider */}
-          <div className="p-4 rounded-2xl bg-black/40 border border-white/5 space-y-2">
-            <div className="flex items-center justify-between text-zinc-400 text-[11px]">
-              <span className="flex items-center gap-1.5">
-                <AlertTriangle className="w-4 h-4 text-amber-400" />
-                ALERT TRIGGER THRESHOLD
-              </span>
-              <span className="text-amber-300 font-bold">{batteryThresholdPct}%</span>
-            </div>
-            <input
-              type="range"
-              min="10"
-              max="50"
-              value={batteryThresholdPct}
-              onChange={handleThresholdChange}
-              className="w-full accent-amber-400 cursor-pointer"
-            />
-            <div className="flex items-center justify-between text-[10px] text-zinc-500 pt-1">
-              <span>Min 10%</span>
-              <span className="text-zinc-400">Trigger Alert at &lt; {batteryThresholdPct}%</span>
-              <span>Max 50%</span>
-            </div>
-          </div>
-
-          {/* Card 3: Dilution Refrigerator Thermal State */}
-          <div className="p-4 rounded-2xl bg-black/40 border border-white/5 space-y-2">
-            <div className="flex items-center justify-between text-zinc-400 text-[11px]">
-              <span className="flex items-center gap-1.5">
-                <Thermometer className="w-4 h-4 text-violet-400" />
-                DILUTION CRYO TEMP
-              </span>
-              <span className={`font-bold ${simulatedCryoTemp > 20 ? 'text-amber-400' : 'text-violet-300'}`}>
-                {simulatedCryoTemp} mK
-              </span>
-            </div>
-            <div className="text-[11px] text-zinc-300">
-              Helium-3/Helium-4 Phase Mixing Loop: <span className="text-emerald-400 font-semibold">100% INTACT</span>
-            </div>
-            <div className="flex items-center justify-between text-[10px] text-zinc-500 pt-1">
-              <span>Cooling Unit Load: 34W</span>
-              <span>Turbopump: 72,000 RPM</span>
-            </div>
-          </div>
-        </div>
-
-        {/* Action / Simulation Test Bar */}
-        <div className="p-4 rounded-2xl bg-black/30 border border-white/5 flex flex-col sm:flex-row items-center justify-between gap-3 text-xs font-mono">
-          <div className="flex items-center gap-2 text-zinc-400 text-[11px]">
-            <Sparkles className="w-4 h-4 text-cyan-400" />
-            <span>Forensic Simulation: Test automated sidebar alert dispatch when battery drops below {batteryThresholdPct}%</span>
-          </div>
-
-          <div className="flex items-center gap-2">
-            <button
-              onClick={triggerSimulatedLowBattery}
-              className="px-3 py-1.5 rounded-xl bg-rose-500/15 hover:bg-rose-500/25 border border-rose-500/30 text-rose-300 font-bold transition-all text-xs flex items-center gap-1.5"
-            >
-              <AlertTriangle className="w-3.5 h-3.5 text-rose-400" />
-              <span>Simulate Low Battery (18%)</span>
-            </button>
-
-            <button
-              onClick={restoreBatteryToNominal}
-              className="px-3 py-1.5 rounded-xl bg-emerald-500/15 hover:bg-emerald-500/25 border border-emerald-500/30 text-emerald-300 font-bold transition-all text-xs flex items-center gap-1.5"
-            >
-              <RefreshCw className="w-3.5 h-3.5 text-emerald-400" />
-              <span>Restore Nominal (92%)</span>
-            </button>
-          </div>
-        </div>
-      </div>
+        </>
+      )}
 
       {/* Security & System Preferences */}
-      <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-        <div className="p-6 rounded-[28px] bg-[#0b0e1a]/70 border border-white/8 backdrop-blur-xl space-y-4">
-          <span className="text-xs font-mono font-bold text-zinc-200 uppercase tracking-wider">
-            Security & UI Preferences
-          </span>
-          <div className="space-y-3 text-xs font-mono">
-            <div className="p-3.5 rounded-2xl bg-black/40 border border-white/5 flex flex-col sm:flex-row sm:items-center justify-between gap-3">
-              <div>
-                <div className="font-bold text-zinc-200 flex items-center gap-1.5">
-                  <Lock className="w-3.5 h-3.5 text-cyan-400" /> Auto-Lock Inactivity Timer
+      {(activeSettingsTab === 'GENERAL' || activeSettingsTab === 'ALL') && (
+        <>
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+            <div className="p-6 rounded-[28px] bg-[#0b0e1a]/70 border border-white/8 backdrop-blur-xl space-y-4">
+              <span className="text-xs font-mono font-bold text-zinc-200 uppercase tracking-wider">
+                Security & UI Preferences
+              </span>
+              <div className="space-y-3 text-xs font-mono">
+                <div className="p-3.5 rounded-2xl bg-black/40 border border-white/5 flex flex-col sm:flex-row sm:items-center justify-between gap-3">
+                  <div>
+                    <div className="font-bold text-zinc-200 flex items-center gap-1.5">
+                      <Lock className="w-3.5 h-3.5 text-cyan-400" /> Auto-Lock Inactivity Timer
+                    </div>
+                    <div className="text-[11px] text-zinc-500 mt-0.5">Require re-authentication after idle duration</div>
+                  </div>
+                  <select
+                    value={Number(localStorage.getItem('zyrquen_inactivity_timer') || 30)}
+                    onChange={(e) => {
+                      const val = e.target.value;
+                      localStorage.setItem('zyrquen_inactivity_timer', val);
+                      window.dispatchEvent(new Event('zyrquen_inactivity_timer_updated'));
+                      playAuditChime();
+                    }}
+                    className="bg-black/60 border border-white/10 rounded-lg px-2.5 py-1.5 text-xs text-cyan-300 focus:outline-none"
+                  >
+                    <option value="5">5 Minutes</option>
+                    <option value="15">15 Minutes</option>
+                    <option value="30">30 Minutes</option>
+                    <option value="60">1 Hour</option>
+                    <option value="0">Disabled</option>
+                  </select>
                 </div>
-                <div className="text-[11px] text-zinc-500 mt-0.5">Require re-authentication after idle duration</div>
+
+                <div className="p-3.5 rounded-2xl bg-black/40 border border-white/5 flex items-center justify-between">
+                  <div>
+                    <div className="font-bold text-zinc-200">UI Acoustic Chimes & Feedback</div>
+                    <div className="text-[11px] text-zinc-500">Auditory cues for state transitions and audit seals</div>
+                  </div>
+                  <button
+                    onClick={() => {
+                      setSoundFeedback(!soundFeedback);
+                      playAuditChime();
+                    }}
+                    className={`px-3 py-1.5 rounded-xl border font-bold text-xs ${
+                      soundFeedback
+                        ? 'bg-emerald-500/20 text-emerald-300 border-emerald-500/40'
+                        : 'bg-white/5 text-zinc-400 border-white/10'
+                    }`}
+                  >
+                    {soundFeedback ? 'ENABLED' : 'DISABLED'}
+                  </button>
+                </div>
               </div>
-              <select
-                value={Number(localStorage.getItem('zyrquen_inactivity_timer') || 30)}
-                onChange={(e) => {
-                  const val = e.target.value;
-                  localStorage.setItem('zyrquen_inactivity_timer', val);
-                  window.dispatchEvent(new Event('zyrquen_inactivity_timer_updated'));
-                  playAuditChime();
-                }}
-                className="bg-black/60 border border-white/10 rounded-lg px-2.5 py-1.5 text-xs text-cyan-300 focus:outline-none"
-              >
-                <option value="5">5 Minutes</option>
-                <option value="15">15 Minutes</option>
-                <option value="30">30 Minutes</option>
-                <option value="60">1 Hour</option>
-                <option value="0">Disabled</option>
-              </select>
             </div>
 
-            <div className="p-3.5 rounded-2xl bg-black/40 border border-white/5 flex items-center justify-between">
-              <div>
-                <div className="font-bold text-zinc-200">UI Acoustic Chimes & Feedback</div>
-                <div className="text-[11px] text-zinc-500">Auditory cues for state transitions and audit seals</div>
+            <div className="p-6 rounded-[28px] bg-[#0b0e1a]/70 border border-white/8 backdrop-blur-xl space-y-4">
+              <span className="text-xs font-mono font-bold text-zinc-200 uppercase tracking-wider">
+                Deployment & License Baseline
+              </span>
+
+              <div className="p-4 rounded-2xl bg-black/40 border border-white/5 space-y-2 text-xs font-mono">
+                <div className="flex justify-between">
+                  <span className="text-zinc-500">SYSTEM CODENAME:</span>
+                  <span className="text-white font-bold">{SYSTEM_METADATA.codename}</span>
+                </div>
+                <div className="flex justify-between">
+                  <span className="text-zinc-500">LTS VERSION:</span>
+                  <span className="text-cyan-300 font-bold">{SYSTEM_METADATA.version}</span>
+                </div>
+                <div className="flex justify-between">
+                  <span className="text-zinc-500">LICENSE:</span>
+                  <span className="text-emerald-400 font-bold">SOVEREIGN PERPETUAL FROZEN</span>
+                </div>
+                <div className="flex justify-between">
+                  <span className="text-zinc-500">PLATFORM BOUNDARY:</span>
+                  <span className="text-amber-300 font-bold">{SYSTEM_METADATA.platformBoundary}</span>
+                </div>
               </div>
-              <button
-                onClick={() => {
-                  setSoundFeedback(!soundFeedback);
-                  playAuditChime();
-                }}
-                className={`px-3 py-1.5 rounded-xl border font-bold text-xs ${
-                  soundFeedback
-                    ? 'bg-emerald-500/20 text-emerald-300 border-emerald-500/40'
-                    : 'bg-white/5 text-zinc-400 border-white/10'
-                }`}
-              >
-                {soundFeedback ? 'ENABLED' : 'DISABLED'}
-              </button>
             </div>
           </div>
-        </div>
 
-        <div className="p-6 rounded-[28px] bg-[#0b0e1a]/70 border border-white/8 backdrop-blur-xl space-y-4">
-          <span className="text-xs font-mono font-bold text-zinc-200 uppercase tracking-wider">
-            Deployment & License Baseline
-          </span>
-
-          <div className="p-4 rounded-2xl bg-black/40 border border-white/5 space-y-2 text-xs font-mono">
-            <div className="flex justify-between">
-              <span className="text-zinc-500">SYSTEM CODENAME:</span>
-              <span className="text-white font-bold">{SYSTEM_METADATA.codename}</span>
-            </div>
-            <div className="flex justify-between">
-              <span className="text-zinc-500">LTS VERSION:</span>
-              <span className="text-cyan-300 font-bold">{SYSTEM_METADATA.version}</span>
-            </div>
-            <div className="flex justify-between">
-              <span className="text-zinc-500">LICENSE:</span>
-              <span className="text-emerald-400 font-bold">SOVEREIGN PERPETUAL FROZEN</span>
-            </div>
-            <div className="flex justify-between">
-              <span className="text-zinc-500">PLATFORM BOUNDARY:</span>
-              <span className="text-amber-300 font-bold">{SYSTEM_METADATA.platformBoundary}</span>
-            </div>
-          </div>
-        </div>
-      </div>
+          <GitHubDeploymentWidget />
+        </>
+      )}
 
       {/* Read-Only Evidence Detail Modal for REAL_HSM_SIGNED Proof Packets */}
       <EvidenceDetailModal
@@ -1126,9 +1282,7 @@ export const SettingsView: React.FC<SettingsViewProps> = ({
         onClose={handleCloseEvidenceModal}
         evidenceData={selectedEvidence}
       />
-    
-<GitHubDeploymentWidget />
-</div>
+    </div>
   );
 };
 

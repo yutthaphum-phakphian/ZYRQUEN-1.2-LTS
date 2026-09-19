@@ -297,7 +297,7 @@ export interface CopilotAssistantState {
   monitoringActive: boolean;
   lastLedgerCheckTimestamp: string;
   memoryMeshStatus: 'INDEXED_14905_SEALS' | 'INDEXING' | 'READY';
-  uiRendererMode: 'SPHERE' | 'TREE';
+  uiRendererMode: 'CLUSTERED_3D' | 'SPHERE' | 'TREE';
   uiSpinActive: boolean;
   uiSpinSpeed: number; // 0.5, 1, 2
   sentinelReflexStatus: 'ACTIVE_GUARD' | 'ANOMALY_RESOLVED' | 'DEFENDING';
@@ -320,7 +320,7 @@ export interface CopilotAssistantState {
     timestamp: string;
     actionMetadata?: string;
     actionPayload?: {
-      type: 'DOWNLOAD_SNAPSHOT' | 'PQC_AUDIT' | 'DISPATCH_SWARM' | 'SWITCH_SPHERE' | 'SWITCH_TREE' | 'TOGGLE_SPIN' | 'FORCE_RESYNC';
+      type: 'DOWNLOAD_SNAPSHOT' | 'PQC_AUDIT' | 'DISPATCH_SWARM' | 'SWITCH_CLUSTERED' | 'SWITCH_SPHERE' | 'SWITCH_TREE' | 'TOGGLE_SPIN' | 'FORCE_RESYNC';
       label: string;
     };
   }>;
@@ -438,7 +438,7 @@ let state: CopilotAssistantState = {
   monitoringActive: true,
   lastLedgerCheckTimestamp: new Date().toISOString(),
   memoryMeshStatus: 'INDEXED_14905_SEALS',
-  uiRendererMode: 'SPHERE',
+  uiRendererMode: 'CLUSTERED_3D',
   uiSpinActive: true,
   uiSpinSpeed: 1,
   sentinelReflexStatus: 'ACTIVE_GUARD',
@@ -863,9 +863,15 @@ export const copilotAssistantService = {
   },
 
   /**
-   * UI Renderer Control: Toggle Sphere ↔ Tree mode
+   * UI Renderer Control: Toggle Clustered 3D ↔ Sphere ↔ Tree mode
    */
-  setUIRendererMode(mode: 'SPHERE' | 'TREE') {
+  setUIRendererMode(mode: 'CLUSTERED_3D' | 'SPHERE' | 'TREE') {
+    const labelTh =
+      mode === 'CLUSTERED_3D'
+        ? '🌐 14,902 Seals Clustered 3D Topology'
+        : mode === 'SPHERE'
+        ? '🌌 Holographic Sphere'
+        : '🌲 Hierarchical Tree';
     state = {
       ...state,
       uiRendererMode: mode,
@@ -875,8 +881,8 @@ export const copilotAssistantService = {
           id: `REFLEX-${Date.now().toString().slice(-4)}`,
           timestamp: new Date().toISOString(),
           level: 'UI_RENDER',
-          messageTh: `Copilot UI Renderer สลับการแสดงผล 3D Hologram เป็นโหมด ${mode === 'SPHERE' ? '🌌 Holographic Sphere' : '🌲 Hierarchical Tree'}`,
-          messageEn: `Copilot UI Renderer switched 3D Hologram display to ${mode} mode`,
+          messageTh: `Copilot UI Renderer สลับการแสดงผล 3D Topology เป็นโหมด ${labelTh}`,
+          messageEn: `Copilot UI Renderer switched 3D display to ${mode} mode`,
           actionTaken: `SWITCH_MODE_${mode}`,
         },
         ...state.reflexLogs.slice(0, 24),

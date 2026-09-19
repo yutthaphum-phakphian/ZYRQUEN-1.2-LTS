@@ -42,6 +42,7 @@ import { GitHubSyncStatusUtility } from '../dashboard/GitHubSyncStatusUtility';
 import { QuickActionsMenu } from '../QuickActionsMenu';
 import { CopilotAutonomyNodePanel } from '../copilot/CopilotAutonomyNodePanel';
 import { SealValidationAnimation } from '../SealValidationAnimation';
+import { LiveQuantumEntropyTicker } from '../LiveQuantumEntropyTicker';
 import {
   Activity,
   Cpu,
@@ -214,6 +215,11 @@ export const DashboardView: React.FC<DashboardViewProps> = ({
         )}
       </AnimatePresence>
 
+      {/* Real-time Quantum Stream Entropy, Block Height & Compliance Status Ticker */}
+      <div className="rounded-xl overflow-hidden border border-cyan-500/30 shadow-lg shadow-cyan-950/40">
+        <LiveQuantumEntropyTicker />
+      </div>
+
       {/* Unified Executive Header & Single Status Bar (Density Reduction) */}
       <div className="p-3.5 sm:p-5 md:p-6 rounded-2xl bg-[#0a0f1e] border border-cyan-500/20 relative overflow-hidden shadow-xl max-[479px]:p-[12px]">
         <div className="relative z-10 flex flex-col lg:flex-row lg:items-center justify-between gap-5">
@@ -365,7 +371,7 @@ export const DashboardView: React.FC<DashboardViewProps> = ({
       </div>
 
       {/* Primary 4 Metric Gauges (Essential Decision View) */}
-      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3">
+      <div className="main-dashboard-stats-grid grid grid-cols-2 sm:grid-cols-2 lg:grid-cols-4 gap-2 sm:gap-3">
         <div className={`p-4 rounded-2xl bg-[#0a0f1e] border space-y-1.5 transition-all relative overflow-hidden ${
           isForensicAuditMode ? 'border-purple-500/50 shadow-[0_0_15px_rgba(168,85,247,0.2)]' : 'border-white/10 hover:border-cyan-500/40'
         }`}>

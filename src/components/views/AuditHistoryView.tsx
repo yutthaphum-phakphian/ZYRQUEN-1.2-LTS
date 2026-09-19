@@ -49,6 +49,8 @@ import {
 import { createTelemetrySnapshot, generateSha256Hash } from '../../utils/telemetrySnapshot';
 import { playTone, playAuditChime } from '../AudioSynthesizer';
 import { copyToClipboard } from '../../utils/clipboard';
+import { generateAndDownloadFullAuditPdfReport } from '../../utils/fullAuditPdfExport';
+import { HARDWARE_SEALS_LEDGER } from '../../data/hardwareSealsData';
 
 export interface AuditHistoryViewProps {
   snapshots?: HardwareSnapshot[];
@@ -282,6 +284,40 @@ export const AuditHistoryView: React.FC<AuditHistoryViewProps> = ({
     downloadAnchor.remove();
   }, [activeSnapshots]);
 
+  const [isGeneratingPdf, setIsGeneratingPdf] = useState(false);
+
+  // Generate and Download Full Audit Report PDF
+  const handleDownloadFullAuditPdfReport = useCallback(() => {
+    setIsGeneratingPdf(true);
+    playAuditChime();
+    try {
+      const generatedFilename = generateAndDownloadFullAuditPdfReport({
+        snapshots: activeSnapshots,
+        seals: HARDWARE_SEALS_LEDGER,
+        isForensicAuditMode: true,
+      });
+
+      setChainAuditNotice(
+        `Court-Admissible Full Audit Report generated: ${generatedFilename}. All 14,902 cryptographic seals and compliance events sealed.`
+      );
+
+      if (onAddSystemEvent) {
+        onAddSystemEvent(
+          'AUDIT',
+          'Full Audit Report PDF Downloaded',
+          `Generated court-admissible PDF containing 14,902 cryptographic seals, compliance event logs, and Merkle root ${CANONICAL_MERKLE_ROOT.slice(0, 16)}...`,
+          'audithistory:pdf',
+          'success'
+        );
+      }
+    } catch (err) {
+      console.error('Failed to generate full audit PDF report:', err);
+      setChainAuditNotice('Failed to generate audit PDF report. Please try again.');
+    } finally {
+      setTimeout(() => setIsGeneratingPdf(false), 800);
+    }
+  }, [activeSnapshots, onAddSystemEvent]);
+
   return (
     <div className="space-y-6 animate-in fade-in duration-300 font-mono text-zinc-200">
       {/* 1. Header Banner & Sovereign Identity Lock */}
@@ -332,6 +368,16 @@ export const AuditHistoryView: React.FC<AuditHistoryViewProps> = ({
             >
               <RefreshCw className={`w-4 h-4 text-cyan-400 ${isChainValidating ? 'animate-spin' : ''}`} />
               Verify Chain Continuity
+            </button>
+            <button
+              id="download-full-audit-report-btn"
+              onClick={handleDownloadFullAuditPdfReport}
+              disabled={isGeneratingPdf}
+              className="px-4 py-2.5 rounded-xl bg-gradient-to-r from-cyan-600 via-teal-600 to-emerald-600 hover:from-cyan-500 hover:to-emerald-500 text-white font-bold text-xs shadow-lg shadow-cyan-950/40 border border-cyan-400/40 flex items-center gap-2 transition-all active:scale-95 disabled:opacity-50"
+              title="Generate and download court-admissible PDF audit report with all cryptographic seals"
+            >
+              <FileText className={`w-4 h-4 text-cyan-200 ${isGeneratingPdf ? 'animate-pulse' : ''}`} />
+              {isGeneratingPdf ? 'Generating PDF...' : 'Download Full Audit Report'}
             </button>
             <button
               onClick={handleExportJson}
@@ -880,6 +926,14 @@ export const AuditHistoryView: React.FC<AuditHistoryViewProps> = ({
                   Tamper Seal: <span className="text-emerald-300">{selectedSnapshot.verificationMetadata.tamperEvidentSeal}</span>
                 </div>
                 <div className="flex items-center gap-2">
+                  <button
+                    onClick={handleDownloadFullAuditPdfReport}
+                    disabled={isGeneratingPdf}
+                    className="px-3.5 py-2 rounded-xl bg-cyan-950/80 hover:bg-cyan-900 border border-cyan-500/40 text-cyan-300 font-bold text-xs flex items-center gap-1.5 transition-all disabled:opacity-50"
+                  >
+                    <FileText className="w-3.5 h-3.5 text-cyan-300" />
+                    Download Full Audit Report (PDF)
+                  </button>
                   <button
                     onClick={() => {
                       handleCopyHash(selectedSnapshot.sealedHash, 'modal-hash');

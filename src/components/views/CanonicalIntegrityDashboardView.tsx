@@ -25,7 +25,9 @@ export interface CanonicalIntegrityDashboardViewProps {
   onNavigateToLedger?: () => void;
 }
 
-interface Merkle3DNode {
+export type VizMode = 'CLUSTERED_3D' | 'SPHERE' | 'TREE';
+
+export interface Merkle3DNode {
   id: string;
   name: string;
   level: number;
@@ -36,14 +38,21 @@ interface Merkle3DNode {
   seals: number;
   validity: number; // 0-100%
   strength: number; // connection strength 0.0 - 1.0
-  type: 'ROOT' | 'BRANCH' | 'LEAF';
-  status: 'VERIFIED' | 'ANCHORED_P0';
+  type: 'ROOT' | 'BRANCH' | 'LEAF' | 'CLUSTER_CORE' | 'MICRO_SEAL' | 'FAILING_NODE';
+  status: 'VERIFIED' | 'ANCHORED_P0' | 'FAIL_CHECK' | 'QUARANTINED';
+  failingCheck?: boolean;
+  failReason?: string;
+  clusterCategory?: string;
+  hardwareUnit?: string;
+  location?: string;
+  fipsLevel?: string;
 }
 
-interface MerkleLink {
+export interface MerkleLink {
   source: string;
   target: string;
   strength: number;
+  isFailingLink?: boolean;
 }
 
 export const CanonicalIntegrityDashboardView: React.FC<CanonicalIntegrityDashboardViewProps> = ({
@@ -56,7 +65,9 @@ export const CanonicalIntegrityDashboardView: React.FC<CanonicalIntegrityDashboa
   const [rotationAngle, setRotationAngle] = useState<number>(25);
   const [pitchAngle, setPitchAngle] = useState<number>(20);
   const [autoRotate, setAutoRotate] = useState<boolean>(true);
-  const [vizMode, setVizMode] = useState<'SPHERE' | 'TREE'>('SPHERE');
+  const [vizMode, setVizMode] = useState<VizMode>('CLUSTERED_3D');
+  const [sealStatusFilter, setSealStatusFilter] = useState<'ALL' | 'PASSING' | 'FAILING'>('ALL');
+  const [hoveredNode, setHoveredNode] = useState<Merkle3DNode | null>(null);
   const [selectedAuditSeal, setSelectedAuditSeal] = useState<{ id: string | number; hash: string } | null>(null);
   const [isUpgradeModalOpen, setIsUpgradeModalOpen] = useState<boolean>(false);
   const [promotionStatus, setPromotionStatus] = useState<'SOVEREIGNLOCKEDACTIVE' | 'FAIL-CLOSED'>('SOVEREIGNLOCKEDACTIVE');
@@ -165,7 +176,282 @@ export const CanonicalIntegrityDashboardView: React.FC<CanonicalIntegrityDashboa
     let rawNodes: Merkle3DNode[] = [];
     let rawLinks: MerkleLink[] = [];
 
-    if (vizMode === 'SPHERE') {
+    if (vizMode === 'CLUSTERED_3D') {
+      // 14,902 Hardware Seals Clustered 3D Topology + Failing Status Checks
+      const clusterCores = [
+        {
+          id: 'cluster-hsm10',
+          name: 'HSM Cryo Enclaves [TC-01..10]',
+          category: 'HSM Enclaves (FIPS 140-3 L4)',
+          seals: 1490,
+          cx: -130,
+          cy: -55,
+          cz: 35,
+          color: '#06B6D4',
+          fips: 'FIPS 140-3 Level 4 / CC EAL6+',
+          location: 'Global Deca-Key Distributed Vaults',
+          hardware: 'NitroKey HSM-PQC / YubiKey 5C FIPS / Trezor Safe 5',
+          microCount: 16,
+        },
+        {
+          id: 'cluster-cryo',
+          name: 'Sub-Kelvin Cryo Bus [14.98 mK]',
+          category: 'Chamber 14 Thermal Stabilizer',
+          seals: 2140,
+          cx: -150,
+          cy: 65,
+          cz: -40,
+          color: '#10B981',
+          fips: 'Sub-Kelvin Bus SLA ≤18.00 mK',
+          location: 'Helium-3/Helium-4 Dilution Refrigeration Core',
+          hardware: 'Oxford Cryofree Dilution Refrigeration Enclave',
+          microCount: 16,
+        },
+        {
+          id: 'cluster-qkd',
+          name: 'QKD Photonic Mesh [BB84 Fiber]',
+          category: 'Quantum Entangled Optical Link',
+          seals: 1820,
+          cx: 0,
+          cy: -130,
+          cz: -50,
+          color: '#38BDF8',
+          fips: 'NIST PQC Category 5 / QKD 256-bit',
+          location: 'High-Coherence BB84 Photonic Channel',
+          hardware: 'ID Quantique Clavis 3 QKD Station',
+          microCount: 16,
+        },
+        {
+          id: 'cluster-tpm',
+          name: 'TPM 2.0 Silicon Grid [Slot J19]',
+          category: 'Hardware Root of Trust Grid',
+          seals: 1650,
+          cx: 135,
+          cy: -60,
+          cz: -25,
+          color: '#A78BFA',
+          fips: 'FIPS 140-3 L3 / CC EAL6+ Certified',
+          location: 'Server Enclosure Slot J19 Active Grid',
+          hardware: 'Infineon OPTIGA TPM SLB 9672',
+          microCount: 16,
+        },
+        {
+          id: 'cluster-tenant',
+          name: 'RWA Tenant Partition [Ω601-Ω1000]',
+          category: '400 Enterprise Tenants (Locked)',
+          seals: 3252,
+          cx: 165,
+          cy: 55,
+          cz: 35,
+          color: '#34D399',
+          fips: 'Zero-Knowledge Isolation PDPA Sec 37',
+          location: 'National Fiber & Satellite Infrastructure Partition',
+          hardware: 'Confidential Computing AMD SEV-SNP Enclaves',
+          microCount: 20,
+        },
+        {
+          id: 'cluster-bft',
+          name: 'Global Satellite Mesh [6 Nodes]',
+          category: 'BK01/SG02/TY03/ZH04/SV05/LD06',
+          seals: 2850,
+          cx: 25,
+          cy: 120,
+          cz: 20,
+          color: '#06B6D4',
+          fips: 'BFT Mesh / Delay-Tolerant Satellite Protocol',
+          location: 'Bangkok, Singapore, Tokyo, Zurich, SV, London',
+          hardware: 'Starlink & Ground Station Quantum Transceivers',
+          microCount: 18,
+        },
+        {
+          id: 'cluster-genesis',
+          name: 'Genesis Core Safe #849202',
+          category: 'Sovereign Principal Custodian Safe',
+          seals: 1700,
+          cx: -40,
+          cy: 20,
+          cz: 90,
+          color: '#D4AF37',
+          fips: 'ETDA Sec 9/26 Sovereign Non-Repudiation',
+          location: 'Bangkok Sovereign Hub (th-bangkok)',
+          hardware: 'NitroKey HSM-PQC-01 Master Key Override',
+          microCount: 14,
+        },
+      ];
+
+      // Canonical Merkle Root P0 Anchor
+      rawNodes.push({
+        id: 'root-849205',
+        name: 'P0 Merkle Root #849205 (14,905 Active)',
+        level: 0,
+        x: 0,
+        y: -10,
+        z: 0,
+        hash: '0xe3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855',
+        seals: 14905,
+        validity: 100,
+        strength: 1.0,
+        type: 'ROOT',
+        status: 'ANCHORED_P0',
+        clusterCategory: 'CANONICAL_ROOT',
+        hardwareUnit: 'Genesis Core Key HSM FIPS 140-3 L4',
+        location: 'Bangkok Sovereign Hub (th-bangkok)',
+        fipsLevel: 'FIPS 140-3 Level 4',
+      });
+
+      // Assemble cluster cores and micro-seal satellites
+      clusterCores.forEach((c) => {
+        rawNodes.push({
+          id: c.id,
+          name: c.name,
+          level: 1,
+          x: c.cx,
+          y: c.cy,
+          z: c.cz,
+          hash: `0x${c.id.slice(-6)}909ab814479844d8a14816bed34cdbb07528e18501da86fc4691763a43fa4c68`.slice(0, 66),
+          seals: c.seals,
+          validity: 100,
+          strength: 0.99,
+          type: 'CLUSTER_CORE',
+          status: 'VERIFIED',
+          clusterCategory: c.category,
+          hardwareUnit: c.hardware,
+          location: c.location,
+          fipsLevel: c.fips,
+        });
+
+        // Link from Root to Cluster Core
+        rawLinks.push({
+          source: 'root-849205',
+          target: c.id,
+          strength: 0.98,
+        });
+
+        // Generate satellite micro-seals clustering in 3D around core
+        for (let i = 0; i < c.microCount; i++) {
+          const theta = (i / c.microCount) * Math.PI * 2;
+          const phi = ((i % 5) - 2) * 0.35;
+          const r = 24 + (i % 3) * 6;
+          const mx = c.cx + r * Math.cos(theta) * Math.cos(phi);
+          const my = c.cy + r * Math.sin(theta) * Math.cos(phi);
+          const mz = c.cz + r * Math.sin(phi);
+
+          const microId = `micro-${c.id}-${i}`;
+          rawNodes.push({
+            id: microId,
+            name: `${c.name} Seal #${(c.seals - c.microCount + i + 1).toLocaleString()}`,
+            level: 2,
+            x: mx,
+            y: my,
+            z: mz,
+            hash: `0x${i}909ab814479844d8a14816bed34cdbb07528e18501da86fc4691763a43fa4c68`.slice(0, 66),
+            seals: Math.round(c.seals / c.microCount),
+            validity: 100,
+            strength: 0.95,
+            type: 'MICRO_SEAL',
+            status: 'VERIFIED',
+            clusterCategory: c.category,
+            hardwareUnit: `${c.hardware} (Port #${i + 1})`,
+            location: c.location,
+            fipsLevel: c.fips,
+          });
+
+          rawLinks.push({
+            source: c.id,
+            target: microId,
+            strength: 0.85,
+          });
+        }
+      });
+
+      // Inter-cluster backbone links
+      rawLinks.push(
+        { source: 'cluster-hsm10', target: 'cluster-cryo', strength: 0.95 },
+        { source: 'cluster-cryo', target: 'cluster-qkd', strength: 0.94 },
+        { source: 'cluster-qkd', target: 'cluster-tpm', strength: 0.96 },
+        { source: 'cluster-tpm', target: 'cluster-tenant', strength: 0.97 },
+        { source: 'cluster-tenant', target: 'cluster-bft', strength: 0.95 },
+        { source: 'cluster-bft', target: 'cluster-genesis', strength: 0.98 },
+        { source: 'cluster-genesis', target: 'cluster-hsm10', strength: 0.99 }
+      );
+
+      // Failing Status Check Nodes (Prompt requirement: "highlighting any nodes currently failing status checks")
+      const failingNodes: Merkle3DNode[] = [
+        {
+          id: 'fail-tc03',
+          name: '⚠️ TC-03 Foil Tamper Anomaly (Seal #14903)',
+          level: 2,
+          x: -210,
+          y: -105,
+          z: 75,
+          hash: '0x7528e18501da86fc4691763a43fa4c68909ab814479844d8a14816bed34cdbb0',
+          seals: 1,
+          validity: 0,
+          strength: 0.15,
+          type: 'FAILING_NODE',
+          status: 'FAIL_CHECK',
+          failingCheck: true,
+          failReason:
+            'STATUS CHECK FAILED: Physical tamper foil breach detected on module TC-03. Active Zeroization executed. Restored in 35.8ms via Phoenix.',
+          clusterCategory: 'HSM Enclave Incident (Fail-Closed Quarantine)',
+          hardwareUnit: 'Utimaco CryptoServer Se500 (TC-03 Enclave)',
+          location: 'EU-Central FRA Vault (Sandbox Isolated)',
+          fipsLevel: 'FIPS 140-3 L4 [Zeroized / Quarantined]',
+        },
+        {
+          id: 'fail-quarantine-80',
+          name: '⚠️ 80 Quarantined Legacy Seals (Shard #Q80)',
+          level: 2,
+          x: 230,
+          y: -100,
+          z: -65,
+          hash: '0x8080808080808080808080808080808080808080808080808080808080808080',
+          seals: 80,
+          validity: 0,
+          strength: 0.1,
+          type: 'FAILING_NODE',
+          status: 'QUARANTINED',
+          failingCheck: true,
+          failReason:
+            'STATUS CHECK FAILED: 80 Legacy hardware seals quarantined pending Deca-Key Council re-attestation. Excluded from canonical 14,902 active set.',
+          clusterCategory: 'Cold Storage Airgap Quarantine',
+          hardwareUnit: '80 Quarantined Seal Shards (Foil-Tag-3908-Q01..Q80)',
+          location: 'Airgapped Cold Quarantine Vault',
+          fipsLevel: 'Non-Ratified / Awaiting Re-Audit',
+        },
+        {
+          id: 'fail-ch07',
+          name: '⚠️ Chamber 07 Transient Decoupler Bus',
+          level: 2,
+          x: 180,
+          y: 130,
+          z: 60,
+          hash: '0x43a4c58916bed34c86fc4691a1891a3cb242b1e8c37a109ed41d0f425a13396c',
+          seals: 1,
+          validity: 45,
+          strength: 0.35,
+          type: 'FAILING_NODE',
+          status: 'FAIL_CHECK',
+          failingCheck: true,
+          failReason:
+            'STATUS CHECK FAILED: Transient thermal jitter spike (18.4 mK > 18.0 mK SLA threshold). Fail-Closed circuit armed in Chamber 07 sandbox.',
+          clusterCategory: 'Chamber 07 Transient Decoupler Monitoring',
+          hardwareUnit: 'Dilution Refrigeration Transient Sensor Bus',
+          location: 'Cryo Dilution Core Chamber 07',
+          fipsLevel: 'CC EAL6+ Sensor Fail-Safe',
+        },
+      ];
+
+      failingNodes.forEach((fn) => {
+        rawNodes.push(fn);
+        rawLinks.push({
+          source: fn.id === 'fail-tc03' ? 'cluster-hsm10' : fn.id === 'fail-ch07' ? 'cluster-cryo' : 'cluster-tenant',
+          target: fn.id,
+          strength: 0.3,
+          isFailingLink: true,
+        });
+      });
+    } else if (vizMode === 'SPHERE') {
       // Holographic Epoch Sphere (3D Continuum Orbit)
       const R = 135;
       rawNodes = [
@@ -491,6 +777,15 @@ export const CanonicalIntegrityDashboardView: React.FC<CanonicalIntegrityDashboa
       ];
     }
 
+    // Filter nodes and links by seal status check
+    if (sealStatusFilter === 'PASSING') {
+      rawNodes = rawNodes.filter((n) => !n.failingCheck);
+      rawLinks = rawLinks.filter((l) => !l.isFailingLink);
+    } else if (sealStatusFilter === 'FAILING') {
+      rawNodes = rawNodes.filter((n) => n.failingCheck || n.type === 'ROOT');
+      rawLinks = rawLinks.filter((l) => l.isFailingLink || l.target === 'root-849205');
+    }
+
     const projectedNodes = rawNodes.map((node) => {
       const p = projectPoint(node.x, node.y, node.z);
       return {
@@ -553,29 +848,71 @@ export const CanonicalIntegrityDashboardView: React.FC<CanonicalIntegrityDashboa
       });
     }
 
-    // Draw Connection Links with pulse animation
+    // In CLUSTERED_3D mode, draw subtle constellation orbit rings around clusters
+    if (vizMode === 'CLUSTERED_3D') {
+      const clusterCenters = [
+        { x: -130, y: -55, z: 35, r: 28 },
+        { x: -150, y: 65, z: -40, r: 28 },
+        { x: 0, y: -130, z: -50, r: 28 },
+        { x: 135, y: -60, z: -25, r: 28 },
+        { x: 165, y: 55, z: 35, r: 32 },
+        { x: 25, y: 120, z: 20, r: 30 },
+        { x: -40, y: 20, z: 90, r: 26 },
+      ];
+
+      clusterCenters.forEach((c, idx) => {
+        const ringSegments = 24;
+        const ringPoints = Array.from({ length: ringSegments + 1 }, (_, i) => {
+          const theta = (i * 2 * Math.PI) / ringSegments;
+          return {
+            x: c.x + c.r * Math.cos(theta),
+            y: c.y + c.r * Math.sin(theta),
+            z: c.z,
+          };
+        });
+        const projectedPoints = ringPoints.map((pt) => projectPoint(pt.x, pt.y, pt.z));
+        const lineGen = d3
+          .line<{ projX: number; projY: number }>()
+          .x((d) => d.projX)
+          .y((d) => d.projY);
+
+        g.append('path')
+          .datum(projectedPoints)
+          .attr('d', lineGen)
+          .attr('fill', 'none')
+          .attr('stroke', idx % 2 === 0 ? '#06B6D4' : '#10B981')
+          .attr('stroke-width', 0.75)
+          .attr('stroke-opacity', 0.2)
+          .attr('stroke-dasharray', '2,4');
+      });
+    }
+
+    // Draw Connection Links with pulse animation and failure highlighting
     rawLinks.forEach((link) => {
       const s = nodeMap.get(link.source);
       const t = nodeMap.get(link.target);
       if (!s || !t) return;
 
-      // Base link
+      const isFailing = link.isFailingLink || s.failingCheck || t.failingCheck;
+
+      // Base link line
       g.append('line')
         .attr('x1', s.projX)
         .attr('y1', s.projY)
         .attr('x2', t.projX)
         .attr('y2', t.projY)
-        .attr('stroke', '#06B6D4')
-        .attr('stroke-width', 1.5 * ((s.scale + t.scale) / 2))
-        .attr('stroke-opacity', 0.5 * link.strength);
+        .attr('stroke', isFailing ? '#F43F5E' : '#06B6D4')
+        .attr('stroke-width', (isFailing ? 2.2 : 1.2) * ((s.scale + t.scale) / 2))
+        .attr('stroke-opacity', isFailing ? 0.85 : 0.45 * link.strength)
+        .attr('stroke-dasharray', isFailing ? '4,4' : 'none');
 
       // Pulse particle
       g.append('circle')
         .attr('cx', (s.projX + t.projX) / 2)
         .attr('cy', (s.projY + t.projY) / 2)
-        .attr('r', 2.5)
-        .attr('fill', '#10B981')
-        .attr('opacity', 0.8);
+        .attr('r', isFailing ? 3.5 : 2.0)
+        .attr('fill', isFailing ? '#EF4444' : '#10B981')
+        .attr('opacity', isFailing ? 0.95 : 0.75);
     });
 
     // Draw Nodes
@@ -588,54 +925,106 @@ export const CanonicalIntegrityDashboardView: React.FC<CanonicalIntegrityDashboa
       .attr('transform', (d) => `translate(${d.projX},${d.projY})`)
       .style('cursor', 'pointer');
 
-    // Outer aura ring for root and master seal
+    // Outer warning pulsating strobe rings for failing nodes
     nodeGroups
-      .filter((d) => d.type === 'ROOT' || d.id === 'leaf-master' || d.id === 'parent-849204')
+      .filter((d) => !!d.failingCheck)
       .append('circle')
-      .attr('r', (d) => (d.type === 'ROOT' ? 18 : 14) * d.scale)
+      .attr('r', (d) => 24 * d.scale)
+      .attr('fill', 'none')
+      .attr('stroke', '#F43F5E')
+      .attr('stroke-width', 2)
+      .attr('stroke-opacity', 0.9)
+      .attr('stroke-dasharray', '3,3');
+
+    nodeGroups
+      .filter((d) => !!d.failingCheck)
+      .append('circle')
+      .attr('r', (d) => 32 * d.scale)
+      .attr('fill', '#EF4444')
+      .attr('fill-opacity', 0.18)
+      .attr('stroke', '#FB7185')
+      .attr('stroke-width', 1)
+      .attr('stroke-opacity', 0.5);
+
+    // Outer aura ring for root, cluster cores, and master seal
+    nodeGroups
+      .filter(
+        (d) =>
+          !d.failingCheck &&
+          (d.type === 'ROOT' || d.type === 'CLUSTER_CORE' || d.id === 'leaf-master' || d.id === 'parent-849204')
+      )
+      .append('circle')
+      .attr('r', (d) => (d.type === 'ROOT' ? 19 : d.type === 'CLUSTER_CORE' ? 16 : 14) * d.scale)
       .attr('fill', 'none')
       .attr('stroke', (d) => (d.type === 'ROOT' ? '#D4AF37' : '#06B6D4'))
       .attr('stroke-width', 1.5)
-      .attr('stroke-opacity', 0.7)
+      .attr('stroke-opacity', 0.65)
       .attr('stroke-dasharray', '3,3');
 
     // Main Node Circle
     nodeGroups
       .append('circle')
-      .attr('r', (d) => (d.type === 'ROOT' ? 13 : d.type === 'BRANCH' ? 9 : 7) * d.scale)
-      .attr('fill', (d) =>
-        d.type === 'ROOT' ? '#D4AF37' : d.status === 'ANCHORED_P0' ? '#10B981' : '#06B6D4'
-      )
-      .attr('stroke', '#070a12')
-      .attr('stroke-width', 2);
+      .attr('r', (d) => {
+        if (d.failingCheck) return 13 * d.scale;
+        if (d.type === 'ROOT') return 14 * d.scale;
+        if (d.type === 'CLUSTER_CORE') return 10 * d.scale;
+        if (d.type === 'MICRO_SEAL') return 2.6 * d.scale;
+        return (d.type === 'BRANCH' ? 9 : 7) * d.scale;
+      })
+      .attr('fill', (d) => {
+        if (d.failingCheck) return '#E11D48';
+        if (d.type === 'ROOT') return '#D4AF37';
+        if (d.type === 'CLUSTER_CORE') return '#06B6D4';
+        if (d.type === 'MICRO_SEAL') return '#10B981';
+        return d.status === 'ANCHORED_P0' ? '#10B981' : '#06B6D4';
+      })
+      .attr('stroke', (d) => (d.failingCheck ? '#FFFFFF' : '#070a12'))
+      .attr('stroke-width', (d) => (d.failingCheck ? 2 : 1.5))
+      .attr('opacity', (d) => (d.type === 'MICRO_SEAL' ? 0.75 : 1));
 
-    // Node Labels
+    // Node Labels (Only for core, root, and failing nodes to keep visualization clean)
     nodeGroups
+      .filter((d) => d.type !== 'MICRO_SEAL')
       .append('text')
-      .attr('y', (d) => (d.type === 'ROOT' ? -22 : 20) * d.scale)
+      .attr('y', (d) => (d.type === 'ROOT' ? -22 : d.failingCheck ? -20 : 20) * d.scale)
       .attr('text-anchor', 'middle')
-      .attr('fill', (d) => (d.type === 'ROOT' ? '#D4AF37' : '#e2e8f0'))
-      .attr('font-size', (d) => `${Math.max(9, Math.round(10 * d.scale))}px`)
+      .attr('fill', (d) => (d.failingCheck ? '#FCA5A5' : d.type === 'ROOT' ? '#D4AF37' : '#e2e8f0'))
+      .attr('font-size', (d) => `${Math.max(9, Math.round((d.failingCheck ? 11 : 10) * d.scale))}px`)
       .attr('font-family', 'monospace')
       .attr('font-weight', 'bold')
       .text((d) => d.name);
 
-    // Connection Strength / Validity Sub-label
+    // Connection Strength / Status Check Sub-label
     nodeGroups
+      .filter((d) => d.type !== 'MICRO_SEAL')
       .append('text')
-      .attr('y', (d) => (d.type === 'ROOT' ? -11 : 31) * d.scale)
+      .attr('y', (d) => (d.type === 'ROOT' ? -11 : d.failingCheck ? 28 : 31) * d.scale)
       .attr('text-anchor', 'middle')
-      .attr('fill', '#10B981')
-      .attr('font-size', '8px')
+      .attr('fill', (d) => (d.failingCheck ? '#F43F5E' : '#10B981'))
+      .attr('font-size', '8.5px')
       .attr('font-family', 'monospace')
-      .text((d) => `Conn: ${(d.strength * 100).toFixed(0)}% • Valid 100%`);
+      .attr('font-weight', (d) => (d.failingCheck ? 'bold' : 'normal'))
+      .text((d) =>
+        d.failingCheck
+          ? '❌ STATUS CHECK FAILED (QUARANTINED)'
+          : d.type === 'CLUSTER_CORE'
+          ? `${d.seals.toLocaleString()} Seals • Status: VERIFIED`
+          : `Conn: ${(d.strength * 100).toFixed(0)}% • Valid 100%`
+      );
 
-    // Interactive Click to open Forensics Seal Audit Modal
-    nodeGroups.on('click', (event, d) => {
-      playTone(920, 0.05);
-      setSelectedAuditSeal({ id: d.name, hash: d.hash });
-    });
-  }, [rotationAngle, pitchAngle, vizMode]);
+    // Interactive Hover and Click for Forensics Seal Audit Modal
+    nodeGroups
+      .on('mouseenter', (event, d) => {
+        setHoveredNode(d);
+      })
+      .on('mouseleave', () => {
+        setHoveredNode(null);
+      })
+      .on('click', (event, d) => {
+        playTone(d.failingCheck ? 350 : 920, 0.05);
+        setSelectedAuditSeal({ id: d.name, hash: d.hash });
+      });
+  }, [rotationAngle, pitchAngle, vizMode, sealStatusFilter]);
 
   return (
     <div className="space-y-4 font-mono">
@@ -762,8 +1151,21 @@ export const CanonicalIntegrityDashboardView: React.FC<CanonicalIntegrityDashboa
               <span className="text-white font-bold">{vizMode}</span>
             </div>
 
-            {/* View Mode Toggle: Sphere vs Tree */}
+            {/* View Mode Toggle: Clustered 3D vs Sphere vs Tree */}
             <div className="flex items-center bg-[#070a12] p-1 rounded-xl border border-cyan-500/30">
+              <button
+                onClick={() => {
+                  playTone(700, 0.03);
+                  copilotAssistantService.setUIRendererMode('CLUSTERED_3D');
+                }}
+                className={`px-2.5 py-1 rounded-lg text-xs font-bold transition-all ${
+                  vizMode === 'CLUSTERED_3D'
+                    ? 'bg-cyan-500 text-black shadow-[0_0_10px_rgba(6,182,212,0.4)]'
+                    : 'text-zinc-400 hover:text-white'
+                }`}
+              >
+                🌐 Clustered 3D (14,902 Seals)
+              </button>
               <button
                 onClick={() => {
                   playTone(700, 0.03);
@@ -775,7 +1177,7 @@ export const CanonicalIntegrityDashboardView: React.FC<CanonicalIntegrityDashboa
                     : 'text-zinc-400 hover:text-white'
                 }`}
               >
-                🌌 Holographic Epoch Sphere
+                🌌 Holographic Sphere
               </button>
               <button
                 onClick={() => {
@@ -788,7 +1190,7 @@ export const CanonicalIntegrityDashboardView: React.FC<CanonicalIntegrityDashboa
                     : 'text-zinc-400 hover:text-white'
                 }`}
               >
-                🌲 Hierarchical Merkle Tree
+                🌲 Merkle Tree
               </button>
             </div>
 
@@ -823,14 +1225,153 @@ export const CanonicalIntegrityDashboardView: React.FC<CanonicalIntegrityDashboa
           </div>
         </div>
 
+        {/* Seal Status Check Filter Bar */}
+        <div className="flex flex-wrap items-center justify-between gap-2 p-2.5 rounded-xl bg-[#070a12] border border-white/10 text-xs">
+          <div className="flex items-center gap-2">
+            <span className="text-zinc-400 text-[11px] font-bold uppercase tracking-wider">
+              Status Check Filter:
+            </span>
+            <div className="flex items-center gap-1.5 bg-black/40 p-1 rounded-lg border border-white/5">
+              <button
+                onClick={() => {
+                  playTone(600, 0.02);
+                  setSealStatusFilter('ALL');
+                }}
+                className={`px-2.5 py-1 rounded text-xs font-semibold transition-all ${
+                  sealStatusFilter === 'ALL'
+                    ? 'bg-white/15 text-white shadow-sm'
+                    : 'text-zinc-400 hover:text-zinc-200'
+                }`}
+              >
+                All Seals (14,982 Raw)
+              </button>
+              <button
+                onClick={() => {
+                  playTone(600, 0.02);
+                  setSealStatusFilter('PASSING');
+                }}
+                className={`px-2.5 py-1 rounded text-xs font-semibold flex items-center gap-1.5 transition-all ${
+                  sealStatusFilter === 'PASSING'
+                    ? 'bg-emerald-950 text-emerald-300 border border-emerald-500/40 shadow-sm'
+                    : 'text-zinc-400 hover:text-emerald-300'
+                }`}
+              >
+                <span className="w-2 h-2 rounded-full bg-emerald-400" />
+                Passing Status (14,902 Frozen)
+              </button>
+              <button
+                onClick={() => {
+                  playTone(400, 0.03);
+                  setSealStatusFilter('FAILING');
+                }}
+                className={`px-2.5 py-1 rounded text-xs font-semibold flex items-center gap-1.5 transition-all ${
+                  sealStatusFilter === 'FAILING'
+                    ? 'bg-rose-950 text-rose-300 border border-rose-500/50 shadow-sm shadow-rose-950'
+                    : 'text-rose-400/80 hover:text-rose-300'
+                }`}
+              >
+                <span className="w-2 h-2 rounded-full bg-rose-500 animate-ping" />
+                ⚠️ Failing Status Checks (Highlighted Alerts)
+              </button>
+            </div>
+          </div>
+
+          {/* Topology Quick Status Legend */}
+          <div className="flex flex-wrap items-center gap-3 text-[11px] text-zinc-400">
+            <span className="flex items-center gap-1">
+              <span className="w-2.5 h-2.5 rounded-full bg-[#D4AF37]" />
+              P0 Root Anchor
+            </span>
+            <span className="flex items-center gap-1">
+              <span className="w-2.5 h-2.5 rounded-full bg-[#06B6D4]" />
+              7 Sovereign Clusters
+            </span>
+            <span className="flex items-center gap-1">
+              <span className="w-2 h-2 rounded-full bg-[#10B981]" />
+              Passing Hardware Seals
+            </span>
+            <span className="flex items-center gap-1 text-rose-400 font-bold">
+              <span className="w-2.5 h-2.5 rounded-full bg-[#E11D48] ring-2 ring-rose-500 animate-pulse" />
+              Failing Check Anomaly
+            </span>
+          </div>
+        </div>
+
         {/* 3D D3 Holographic Canvas */}
         <div
           ref={containerRef}
           className="w-full relative overflow-hidden bg-[#070a12] rounded-xl border border-white/5 p-2"
         >
           <svg ref={svgRef} className="w-full block" />
+
+          {/* Interactive Hover Diagnostics Overlay */}
+          {hoveredNode && (
+            <div
+              className={`absolute top-4 left-4 max-w-md p-3.5 rounded-xl backdrop-blur-md border shadow-2xl transition-all z-20 pointer-events-none ${
+                hoveredNode.failingCheck
+                  ? 'bg-rose-950/90 border-rose-500/80 text-rose-100 shadow-rose-950/50'
+                  : 'bg-[#0a0f1e]/90 border-cyan-500/40 text-cyan-100'
+              }`}
+            >
+              <div className="flex items-center justify-between gap-2 border-b border-white/10 pb-2 mb-2">
+                <div className="font-bold text-xs flex items-center gap-1.5">
+                  {hoveredNode.failingCheck ? (
+                    <span className="px-1.5 py-0.5 rounded bg-rose-600 text-white text-[10px] animate-pulse">
+                      STATUS CHECK ALERT
+                    </span>
+                  ) : (
+                    <span className="px-1.5 py-0.5 rounded bg-emerald-950 text-emerald-300 border border-emerald-500/40 text-[10px]">
+                      STATUS VERIFIED
+                    </span>
+                  )}
+                  <span className="truncate">{hoveredNode.name}</span>
+                </div>
+                <span className="text-[10px] text-zinc-400 font-mono shrink-0">
+                  {hoveredNode.seals.toLocaleString()} Seals
+                </span>
+              </div>
+
+              {hoveredNode.failingCheck && hoveredNode.failReason && (
+                <div className="p-2 mb-2 rounded bg-black/50 border border-rose-500/50 text-[11px] text-rose-200 font-sans">
+                  {hoveredNode.failReason}
+                </div>
+              )}
+
+              <div className="grid grid-cols-2 gap-2 text-[10px] font-mono">
+                <div>
+                  <span className="text-zinc-400">HARDWARE UNIT:</span>
+                  <div className="text-zinc-200 truncate">{hoveredNode.hardwareUnit || 'Cryptographic SE'}</div>
+                </div>
+                <div>
+                  <span className="text-zinc-400">PHYSICAL VAULT:</span>
+                  <div className="text-zinc-200 truncate">{hoveredNode.location || 'Distributed HSM Enclave'}</div>
+                </div>
+                <div>
+                  <span className="text-zinc-400">FIPS STANDARD:</span>
+                  <div className="text-zinc-200 truncate">{hoveredNode.fipsLevel || 'FIPS 140-3 Level 4'}</div>
+                </div>
+                <div>
+                  <span className="text-zinc-400">NODE VALIDITY:</span>
+                  <div className={hoveredNode.failingCheck ? 'text-rose-400 font-bold' : 'text-emerald-400'}>
+                    {hoveredNode.validity}% • Conn: {(hoveredNode.strength * 100).toFixed(0)}%
+                  </div>
+                </div>
+              </div>
+
+              <div className="mt-2 pt-1.5 border-t border-white/10 text-[9px] text-zinc-400 truncate">
+                DIGEST: {hoveredNode.hash}
+              </div>
+            </div>
+          )}
+
           <div className="absolute bottom-3 right-3 text-[10px] text-zinc-500 bg-black/60 px-2.5 py-1 rounded border border-white/5 pointer-events-none">
-            Mode: {vizMode === 'SPHERE' ? '🌌 Holographic Sphere (3D Continuum)' : '🌲 Hierarchical Merkle Tree'} • Yaw: {rotationAngle.toFixed(0)}° • Pitch: {pitchAngle}°
+            Mode:{' '}
+            {vizMode === 'CLUSTERED_3D'
+              ? '🌐 14,902 Clustered Topology (3D)'
+              : vizMode === 'SPHERE'
+              ? '🌌 Holographic Sphere (3D Continuum)'
+              : '🌲 Hierarchical Merkle Tree'}{' '}
+            • Filter: {sealStatusFilter} • Yaw: {rotationAngle.toFixed(0)}° • Pitch: {pitchAngle}°
           </div>
         </div>
       </div>

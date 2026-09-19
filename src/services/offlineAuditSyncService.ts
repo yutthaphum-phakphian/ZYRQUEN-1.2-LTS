@@ -153,6 +153,16 @@ class OfflineAuditSyncService {
     }
   }
 
+  /**
+   * Manually clears the offline audit queue (e.g. from Data Persistence management)
+   */
+  public clearQueue(): number {
+    const prevCount = this.getQueueCount();
+    this.saveQueue([]);
+    this.notifyListeners([]);
+    return prevCount;
+  }
+
   private saveQueue(queue: QueuedAuditEvent[]) {
     if (typeof window === 'undefined') return;
     try {

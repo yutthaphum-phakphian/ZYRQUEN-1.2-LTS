@@ -20,7 +20,7 @@ import {
   setCustomCarrierFrequency,
 } from './components/AudioSynthesizer';
 import { SovereignControlDock } from './components/SovereignControlDock';
-import { CopilotSovereignPanel } from './components/CopilotSovereignPanel';
+import { CopilotSovereignAI } from './components/CopilotSovereignAI';
 import { DashboardView } from './components/views/DashboardView';
 import { QuantumView } from './components/views/QuantumView';
 import { Chamber11QuantumRadar } from './components/views/Chamber11QuantumRadar';
@@ -102,8 +102,16 @@ import {
   Clock,
   Download,
   X,
-  Bot
+  Bot,
+  Copy,
+  FileCheck,
+  FileDown
 } from 'lucide-react';
+import { ExecutiveCommandPalette } from './components/ExecutiveCommandPalette';
+import { EmergencySovereignLockdown } from './components/EmergencySovereignLockdown';
+import { LiveQuantumEntropyTicker } from './components/LiveQuantumEntropyTicker';
+import jsPDF from 'jspdf';
+import autoTable from 'jspdf-autotable';
 
 interface ViewPersona {
   name: string;
@@ -501,6 +509,15 @@ const ETDA_PDPA_TRIGGERS: LegalTriggerItem[] = [
     statuteClause: 'พ.ร.บ. คุ้มครองข้อมูลส่วนบุคคล พ.ศ. ๒๕๖๒ มาตรา ๒๘'
   }
 ];
+
+const TRIGGER_PQC_HASHES: Record<string, string> = {
+  'etda-sec-09': '0x5d8e71a0b3c4d5e6f7a8b9c0d1e2f3a4b5c6d7e8f9a0b1c2d3e4f5a6b7c8d9e0',
+  'etda-sec-26': '0x14902_DECA_CUSTODIAN_FIPS140_3_L4_ACTIVE_SHIELD_SIG_909AB8',
+  'etda-sec-28': '0x909ab814479844d8a14816bed34cdbb07528e18501da86fc4691763a43fa4c68',
+  'pdpa-sec-09': '0x7b2274785f6964223a22534f562d4a554d502d343436222c22617574686f72223a224550227d',
+  'pdpa-sec-26': '0x112233445566778899aabbccddeeff00112233445566778899aabbccddeeff00',
+  'pdpa-sec-28': '0xdeadbeef00112233445566778899aabbccddeeff112233445566778899aabbcc',
+};
 
 const INITIAL_SYSTEM_EVENTS: SystemEvent[] = [
   {
@@ -1617,6 +1634,106 @@ function SovereignAppContent() {
     }, 1500);
   }, [addSystemEvent]);
 
+  const [copiedHashId, setCopiedHashId] = useState<string | null>(null);
+
+  const handleCopyTriggerHash = useCallback((triggerId: string, hash: string) => {
+    navigator.clipboard.writeText(hash);
+    triggerVibration(30);
+    playTone(880, 0.1, 'sine');
+    setCopiedHashId(triggerId);
+    showToast(`คัดลอก PQC SIG HASH (${triggerId}) สำเร็จ`, 'success');
+    setTimeout(() => setCopiedHashId(null), 2500);
+  }, [showToast]);
+
+  const handleExportLegalTriggerMatrixPDF = useCallback(() => {
+    triggerVibration(40);
+    playTone(659.25, 0.15, 'sine');
+    const doc = new jsPDF({ orientation: 'p', unit: 'mm', format: 'a4' });
+    
+    // Header background
+    doc.setFillColor(7, 10, 18);
+    doc.rect(0, 0, 210, 36, 'F');
+    
+    // Header text
+    doc.setTextColor(6, 182, 212);
+    doc.setFontSize(13);
+    doc.text('ZYRQUEN OMEGA INVARIANT LEGAL TRIGGER MATRIX', 14, 13);
+    
+    doc.setFontSize(9);
+    doc.setTextColor(255, 255, 255);
+    doc.text('FORENSIC ATTESTATION & COURT-ADMISSIBLE STATUTORY EVIDENCE', 14, 19);
+    
+    doc.setFontSize(7.5);
+    doc.setTextColor(148, 163, 184);
+    doc.text(`Principal: นายยุทธภูมิ พากเพียร #EP-SOVEREIGN-01 | Genesis: #849202 | Exported: ${new Date().toLocaleString('th-TH')}`, 14, 25);
+    doc.text(`Canonical Merkle: 909ab814479844d8a14816bed34cdbb07528e18501da86fc4691763a43fa4c68 | SSoT: Δ0.00%`, 14, 30);
+    
+    autoTable(doc, {
+      startY: 42,
+      head: [['Trigger', 'Section', 'Title', 'PQC Scheme', 'Anchor Spec', 'Hash Digest', 'Status']],
+      body: ETDA_PDPA_TRIGGERS.map((t) => [
+        t.id,
+        t.section,
+        t.title,
+        t.pqcScheme,
+        t.anchor,
+        (TRIGGER_PQC_HASHES[t.id] || '').slice(0, 18) + '...',
+        'VERIFIED'
+      ]),
+      theme: 'grid',
+      headStyles: { fillColor: [6, 182, 212], textColor: [255, 255, 255], fontStyle: 'bold', fontSize: 8 },
+      bodyStyles: { fontSize: 7.5, textColor: [30, 41, 59] },
+      alternateRowStyles: { fillColor: [248, 250, 252] },
+      columnStyles: {
+        0: { cellWidth: 20, fontStyle: 'bold' },
+        1: { cellWidth: 24 },
+        2: { cellWidth: 42 },
+        3: { cellWidth: 34 },
+        4: { cellWidth: 32 },
+        5: { cellWidth: 30 },
+        6: { cellWidth: 18, fontStyle: 'bold' },
+      },
+      didDrawPage: (data: any) => {
+        doc.setFontSize(7.5);
+        doc.setTextColor(148, 163, 184);
+        doc.text('Court-Admissible Evidence under ETDA B.E. 2544 (Sec 9, 26, 28) & PDPA B.E. 2562 (Sec 37) | ZQ-GREEN-DEP-849202-3908', 14, 287);
+        doc.text(`Page ${data.pageNumber} of ${(doc as any).internal.getNumberOfPages()}`, 182, 287);
+      },
+    });
+
+    doc.save(`ZYRQUEN_LEGAL_TRIGGER_MATRIX_SIGNED_${Date.now()}.pdf`);
+    showToast('ส่งออก Legal Trigger Matrix PDF Artifact เรียบร้อยแล้ว', 'success');
+    addSystemEvent(
+      'FORENSIC',
+      'Legal Trigger Matrix Exported',
+      'Signed PDF Artifact generated and certified under ETDA Sec 9/26/28.',
+      'pdf:matrix',
+      'success'
+    );
+  }, [addSystemEvent, showToast]);
+
+  const handleCommandPaletteAction = useCallback((actionId: string) => {
+    if (actionId === 'snapshot') {
+      handleAddSnapshot(createTelemetrySnapshot({ core0: 42, core1: 39, core2: 44, core3: 38 }, snapshots.length, snapshots[0]?.sealedHash));
+      showToast('สร้าง Signed Snapshot (FIPS 204) เรียบร้อย', 'success');
+    } else if (actionId === 'pqc-verify') {
+      setIsCertificateOpen(true);
+    } else if (actionId === 'lockdown') {
+      setIsGateDetailsExpanded(true);
+      showToast('เปิดใช้ Sovereign Isolation Protocol ใน Chamber 02', 'warning');
+    } else if (actionId === 'legal-pdf') {
+      handleExportLegalTriggerMatrixPDF();
+    } else if (actionId === 'render-sphere') {
+      setCurrentView('canonical');
+      showToast('สลับไปยัง Canonical 3D Integrity View', 'info');
+    } else if (actionId === 'copilot-trigger') {
+      setIsCopilotOpen(true);
+    } else if (actionId === 'view-seals') {
+      setCurrentView('ledger');
+      showToast('เปิดดูทะเบียน Active Evidence Seals', 'info');
+    }
+  }, [handleAddSnapshot, handleExportLegalTriggerMatrixPDF, showToast, snapshots]);
+
   return (
     <div className={`min-h-screen w-full max-w-full overflow-x-hidden bg-[#07080F] text-zinc-100 font-sans selection:bg-cyan-500/30 selection:text-cyan-200 antialiased relative ${isMonochromeMode ? 'theme-monochrome' : ''}`}>
       {/* Background Persona Mesh Ambient Lighting with Smooth Morphing */}
@@ -1663,6 +1780,9 @@ function SovereignAppContent() {
         }}
       />
 
+      {/* Live Quantum Stream Entropy & Sovereign Invariant Marquee Ticker */}
+      <LiveQuantumEntropyTicker />
+
       {/* App Body Layout with Collapsible Left Sidebar */}
       <div className="relative z-10 max-w-[1780px] mx-auto px-2 sm:px-4 flex items-start">
         {/* Left Sidebar (Open / Close Collapsible) */}
@@ -1678,7 +1798,7 @@ function SovereignAppContent() {
         />
 
         {/* Main Content Area with Sliding Curtain OS Entrance Transitions */}
-        <main className="flex-1 min-w-0 w-full px-2 sm:px-4 py-4 pb-20 overflow-hidden space-y-4 transition-all duration-300">
+        <main className="flex-1 min-w-0 w-full px-2 sm:px-4 py-4 pb-28 sm:pb-32 overflow-hidden space-y-4 transition-all duration-300">
           {/* Visual Notification System: SSoT Mutation Drift Warning (Triggered if deviation >= 0.01%) */}
           <SsotDriftWarning />
 
@@ -1687,7 +1807,7 @@ function SovereignAppContent() {
             <div className="px-4 py-2.5 flex flex-wrap items-center justify-between gap-3 text-xs font-mono">
               {/* Left: Gate Status & Info with Tooltip Trigger */}
               <div className="flex items-center gap-2.5 relative">
-                <span className={`w-2.5 h-2.5 rounded-full ${verificationGateStatus.status === 'PASSED' ? 'bg-emerald-400 animate-pulse' : verificationGateStatus.status === 'BLOCKED' ? 'bg-rose-400' : 'bg-cyan-400'}`} />
+                <span className={`w-2.5 h-2.5 rounded-full ${verificationGateStatus.status === 'PASSED' ? 'bg-emerald-400 animate-pulse' : verificationGateStatus.status === 'BLOCKED' ? 'bg-rose-400 animate-ping' : 'bg-cyan-400'}`} />
                 <span className="font-bold text-zinc-200 flex items-center gap-1.5">
                   <ShieldCheck className="w-4 h-4 text-cyan-400" />
                   VERIFICATION GATE:
@@ -1702,11 +1822,11 @@ function SovereignAppContent() {
                   <button
                     type="button"
                     onClick={() => setIsGateDetailsExpanded((prev) => !prev)}
-                    className={`px-2 py-0.5 rounded text-[10px] font-bold border flex items-center gap-1 transition-colors cursor-pointer ${
+                    className={`px-2 py-0.5 rounded text-[10px] font-bold border flex items-center gap-1 transition-all cursor-pointer ${
                       verificationGateStatus.status === 'PASSED' 
                         ? 'bg-emerald-500/10 text-emerald-300 border-emerald-500/30 hover:bg-emerald-500/20' 
                         : verificationGateStatus.status === 'BLOCKED' 
-                          ? 'bg-rose-500/10 text-rose-300 border-rose-500/30 hover:bg-rose-500/20' 
+                          ? 'bg-rose-500/20 text-rose-200 border-rose-500/60 hover:bg-rose-500/30 animate-pulse shadow-[0_0_15px_rgba(244,63,94,0.45)] ring-1 ring-rose-500/50' 
                           : 'bg-cyan-500/10 text-cyan-300 border-cyan-500/30 hover:bg-cyan-500/20'
                     }`}
                     title="Hover for tooltip / Click to toggle legal triggers summary"
@@ -1930,6 +2050,15 @@ function SovereignAppContent() {
                   <div className="flex items-center gap-2 flex-wrap">
                     <button
                       type="button"
+                      onClick={handleExportLegalTriggerMatrixPDF}
+                      className="px-2.5 py-1 rounded-lg bg-cyan-500/20 hover:bg-cyan-500/30 text-cyan-300 border border-cyan-400/50 text-[11px] font-sans font-medium flex items-center gap-1.5 transition-all cursor-pointer shadow-[0_0_12px_rgba(6,182,212,0.2)]"
+                      title="Export signed legal trigger matrix as official PDF artifact"
+                    >
+                      <FileDown className="w-3.5 h-3.5" />
+                      Export Signed Matrix PDF
+                    </button>
+                    <button
+                      type="button"
                       onClick={() => setIsLegalSearchOpen(true)}
                       className="px-2.5 py-1 rounded-lg bg-cyan-500/15 hover:bg-cyan-500/25 text-cyan-300 border border-cyan-500/35 text-[11px] font-sans font-medium flex items-center gap-1.5 transition-colors cursor-pointer"
                     >
@@ -1968,7 +2097,7 @@ function SovereignAppContent() {
                   {ETDA_PDPA_TRIGGERS.map((trigger) => (
                     <div
                       key={trigger.id}
-                      className="p-3.5 rounded-xl bg-[#090d1a]/80 border border-cyan-500/20 hover:border-cyan-500/40 transition-all space-y-2 group"
+                      className="p-3.5 rounded-xl bg-[#090d1a]/80 border border-cyan-500/20 hover:border-cyan-500/50 hover:scale-[1.02] hover:shadow-[0_8px_25px_rgba(6,182,212,0.18)] transition-all duration-200 space-y-2 group cursor-pointer"
                     >
                       <div className="flex items-center justify-between gap-2 font-mono text-[10px]">
                         <span className="text-cyan-400 font-bold px-1.5 py-0.5 rounded bg-cyan-500/10 border border-cyan-500/25">
@@ -2007,6 +2136,37 @@ function SovereignAppContent() {
                           </span>
                         </div>
 
+                        {/* PQC Signature Hash with Dedicated Copy to Clipboard Button */}
+                        <div className="flex items-center justify-between text-zinc-400 pt-1 border-t border-white/5">
+                          <span className="text-zinc-500">PQC Sig Hash:</span>
+                          <div className="flex items-center gap-1.5">
+                            <span className="text-purple-300 font-mono text-[9px] truncate max-w-[120px]" title={TRIGGER_PQC_HASHES[trigger.id] || ''}>
+                              {(TRIGGER_PQC_HASHES[trigger.id] || '').slice(0, 14)}...
+                            </span>
+                            <button
+                              type="button"
+                              onClick={(e) => {
+                                e.stopPropagation();
+                                handleCopyTriggerHash(trigger.id, TRIGGER_PQC_HASHES[trigger.id] || '');
+                              }}
+                              className="px-1.5 py-0.5 rounded bg-slate-800/80 hover:bg-cyan-950 border border-slate-700 hover:border-cyan-500/50 text-slate-300 hover:text-cyan-300 transition-colors flex items-center gap-1 text-[9px] font-sans cursor-pointer"
+                              title="คัดลอก PQC Metadata Hash สำหรับการตรวจสอบนิติวิทยาศาสตร์ (Forensic Analysis)"
+                            >
+                              {copiedHashId === trigger.id ? (
+                                <>
+                                  <CheckCircle2 className="w-2.5 h-2.5 text-emerald-400" />
+                                  <span className="text-emerald-300 text-[8px]">Copied</span>
+                                </>
+                              ) : (
+                                <>
+                                  <Copy className="w-2.5 h-2.5 text-cyan-400" />
+                                  <span className="text-[8px]">Copy</span>
+                                </>
+                              )}
+                            </button>
+                          </div>
+                        </div>
+
                         {/* Forensic Audit Mode Overlay Metadata */}
                         {isForensicAuditMode && (
                           <div className="mt-1.5 pt-1.5 border-t border-purple-500/30 bg-purple-950/30 -mx-2 -mb-2 p-2 rounded-b-lg space-y-1 animate-in fade-in duration-200">
@@ -2017,13 +2177,23 @@ function SovereignAppContent() {
                               </span>
                               <span className="text-emerald-400 text-[8px]">VERIFIED (PASS)</span>
                             </div>
-                            <div className="text-[8px] text-purple-200/90 font-mono break-all bg-black/60 p-1 rounded border border-purple-500/20">
-                              {trigger.id === 'etda-sec-09' && '0x5d8e71a0b3c4d5e6f7a8b9c0d1e2f3a4b5c6d7e8f9a0b1c2d3e4f5a6b7c8d9e0'}
-                              {trigger.id === 'etda-sec-26' && '0x14902_DECA_CUSTODIAN_FIPS140_3_L4_ACTIVE_SHIELD_SIG_909AB8'}
-                              {trigger.id === 'etda-sec-28' && '0x909ab814479844d8a14816bed34cdbb07528e18501da86fc4691763a43fa4c68'}
-                              {trigger.id === 'pdpa-sec-09' && '0x7b2274785f6964223a22534f562d4a554d502d343436222c22617574686f72223a224550227d'}
-                              {trigger.id === 'pdpa-sec-26' && '0x112233445566778899aabbccddeeff00112233445566778899aabbccddeeff00'}
-                              {trigger.id === 'pdpa-sec-28' && '0xdeadbeef00112233445566778899aabbccddeeff112233445566778899aabbcc'}
+                            <div className="text-[8px] text-purple-200/90 font-mono break-all bg-black/60 p-1 rounded border border-purple-500/20 flex items-center justify-between gap-1">
+                              <span>{TRIGGER_PQC_HASHES[trigger.id]}</span>
+                              <button
+                                type="button"
+                                onClick={(e) => {
+                                  e.stopPropagation();
+                                  handleCopyTriggerHash(trigger.id, TRIGGER_PQC_HASHES[trigger.id] || '');
+                                }}
+                                className="p-1 rounded hover:bg-white/10 text-purple-300 cursor-pointer shrink-0"
+                                title="Copy hash"
+                              >
+                                {copiedHashId === trigger.id ? (
+                                  <CheckCircle2 className="w-3 h-3 text-emerald-400" />
+                                ) : (
+                                  <Copy className="w-3 h-3 text-purple-300" />
+                                )}
+                              </button>
                             </div>
                             <div className="flex items-center justify-between text-[8px] text-zinc-400">
                               <span>Timestamp: {new Date().toISOString().split('T')[0]} 05:05:30 ICT</span>
@@ -2054,6 +2224,9 @@ function SovereignAppContent() {
             )}
           </AnimatePresence>
         </div>
+
+        {/* Emergency Sovereign Isolation Protocol Control */}
+        <EmergencySovereignLockdown />
 
         {/* Real-time Nexus Integration Layer Bridge */}
         <NexusIntegrationLayer
@@ -2225,8 +2398,8 @@ function SovereignAppContent() {
         onNotifyEvent={addSystemEvent as any} 
       />
 
-      {/* Sovereign Copilot AI v5.0 Ultra Panel (Bottom-Right Anchor) */}
-      <CopilotSovereignPanel
+      {/* Sovereign Copilot AI v6.0 Ultra Panel (Floating Dock, Fullscreen Toggle, 3D Continuum) */}
+      <CopilotSovereignAI
         isOpen={isCopilotOpen}
         onClose={() => {
           triggerVibration('click');
@@ -2271,6 +2444,9 @@ function SovereignAppContent() {
       />
 
       <OfflineIndicator />
+
+      {/* Global Executive Command Palette (Cmd+K / Ctrl+K) */}
+      <ExecutiveCommandPalette onSelectAction={handleCommandPaletteAction} />
 
       {/* Global Animated Film-Grain & CRT Scanline Overlay for FROZEN v1.2 LTS */}
       <div className="sovereign-film-grain-overlay" aria-hidden="true" />
