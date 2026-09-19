@@ -41,6 +41,7 @@ import { playAuditChime, playTone, playWarningTone } from '../AudioSynthesizer';
 import { speakSystemAlert } from '../../utils/textToSpeechService';
 import { LedgerExportService } from '../../services/ledgerExportService';
 import { ViewType } from '../../types';
+import { GovernanceHealthHeatmap as ChambersHealthHeatmap } from '../GovernanceHealthHeatmap';
 
 export type SealSeverity = 'NOMINAL' | 'LOW_JITTER' | 'CRITICAL_ANOMALY' | 'RECONCILED';
 
@@ -283,7 +284,7 @@ export const GovernanceHealthHeatmap: React.FC<GovernanceHealthHeatmapProps> = (
   const [selectedSeal, setSelectedSeal] = useState<HardwareSealRecord | null>(null);
   const [isSweeping, setIsSweeping] = useState<boolean>(false);
   const [sweepProgress, setSweepProgress] = useState<number>(100);
-  const [activeTab, setActiveTab] = useState<'heatmap' | 'chambers' | 'forensics'>('heatmap');
+  const [activeTab, setActiveTab] = useState<'chambers' | 'seals'>('chambers');
   const [viewMode, setViewMode] = useState<'QUORUM_NODES_SPARKLINE' | 'SEALS_MATRIX'>('QUORUM_NODES_SPARKLINE');
   const [currentPage, setCurrentPage] = useState<number>(1);
   const itemsPerPage = 800; // Efficient block rendering for high responsiveness
@@ -476,8 +477,57 @@ export const GovernanceHealthHeatmap: React.FC<GovernanceHealthHeatmapProps> = (
 
   return (
     <div className="space-y-6 animate-in fade-in duration-300">
-      {/* Top Banner */}
-      <div className="p-6 sm:p-8 rounded-[28px] bg-gradient-to-br from-[#0a121e]/90 via-[#070e17]/80 to-[#07080F] border border-cyan-500/20 backdrop-blur-xl relative overflow-hidden shadow-2xl">
+      {/* Primary View Switcher Tabs */}
+      <div className="flex flex-wrap items-center justify-between gap-3 p-2 rounded-2xl bg-black/50 border border-white/10 backdrop-blur-xl">
+        <div className="flex items-center gap-1.5 text-xs font-mono">
+          <button
+            id="tab-btn-18-chambers"
+            onClick={() => {
+              setActiveTab('chambers');
+              playTone(600, 0.03);
+            }}
+            className={`px-4 py-2 rounded-xl transition-all flex items-center gap-2 cursor-pointer ${
+              activeTab === 'chambers'
+                ? 'bg-emerald-500/20 text-emerald-300 border border-emerald-500/40 font-bold shadow-[0_0_15px_rgba(16,185,129,0.3)]'
+                : 'text-zinc-400 hover:text-white'
+            }`}
+          >
+            <Cpu className="w-4 h-4 text-emerald-400" />
+            <span>18 SOVEREIGN CHAMBERS (TELEMETRY HEARTBEAT)</span>
+          </button>
+
+          <button
+            id="tab-btn-14902-seals"
+            onClick={() => {
+              setActiveTab('seals');
+              playTone(600, 0.03);
+            }}
+            className={`px-4 py-2 rounded-xl transition-all flex items-center gap-2 cursor-pointer ${
+              activeTab === 'seals'
+                ? 'bg-cyan-500/20 text-cyan-300 border border-cyan-500/40 font-bold shadow-[0_0_15px_rgba(6,182,212,0.3)]'
+                : 'text-zinc-400 hover:text-white'
+            }`}
+          >
+            <ShieldCheck className="w-4 h-4 text-cyan-400" />
+            <span>14,902 HARDWARE SEALS SSoT</span>
+          </button>
+        </div>
+
+        <div className="text-[11px] font-mono text-zinc-400 flex items-center gap-2 px-3 py-1">
+          <span className="w-2 h-2 rounded-full bg-emerald-400 animate-ping" />
+          <span>FROZEN v1.2 LTS &bull; BLOCK #849202 &bull; Δ0.00% SSoT</span>
+        </div>
+      </div>
+
+      {activeTab === 'chambers' ? (
+        <ChambersHealthHeatmap
+          onNavigateToView={onNavigateToView}
+          onAddSystemEvent={onAddSystemEvent}
+        />
+      ) : (
+        <>
+          {/* Top Banner */}
+          <div className="p-6 sm:p-8 rounded-[28px] bg-gradient-to-br from-[#0a121e]/90 via-[#070e17]/80 to-[#07080F] border border-cyan-500/20 backdrop-blur-xl relative overflow-hidden shadow-2xl">
         <div className="absolute top-0 right-0 w-96 h-96 bg-gradient-to-bl from-cyan-500/15 via-emerald-500/10 to-transparent rounded-full blur-3xl pointer-events-none" />
 
         <div className="relative z-10 flex flex-col lg:flex-row lg:items-center justify-between gap-6">
@@ -1173,6 +1223,8 @@ export const GovernanceHealthHeatmap: React.FC<GovernanceHealthHeatmapProps> = (
             </div>
           )}
         </div>
+      )}
+        </>
       )}
     </div>
   );

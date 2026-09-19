@@ -497,9 +497,23 @@ html, body, #root {
 
   .printable-evidence-card svg { filter: none !important; }
 
+  /* Legal Evidence Landscape Orientation Mapping */
   @page {
-    size: A4 portrait;
-    margin: 10mm;
+    size: landscape;
+    margin: 8mm;
+  }
+
+  .print-landscape {
+    page: landscape;
+    width: 100% !important;
+    max-width: 100% !important;
+    border: 2pt solid #000 !important;
+    border-radius: 8pt !important;
+    padding: 12pt !important;
+    background-color: #fff !important;
+    color: #000 !important;
+    page-break-inside: avoid !important;
+    break-inside: avoid !important;
   }
 
   .evidence-qr-grid {
@@ -528,3 +542,15 @@ html, body, #root {
 
   .CourtEvidenceQR span, .CourtEvidenceQR div { color: #000 !important; }
 }
+
+/* Explicit Legal Document Print Landscape Rules */
+@media print {
+  @page {
+    size: landscape;
+  }
+
+  .print-landscape {
+    page: landscape;
+  }
+}
+

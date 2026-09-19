@@ -10,9 +10,11 @@
     text-shadow: none !important;
   }
 
-  /* 2. แสดงเฉพาะคอนเทนเนอร์การ์ดตาราง QR */
+  /* 2. แสดงเฉพาะคอนเทนเนอร์การ์ดตาราง QR หรือการ์ด CourtEvidenceQR เดี่ยว */
   .evidence-qr-grid, 
-  .evidence-qr-grid * {
+  .evidence-qr-grid *,
+  .CourtEvidenceQR,
+  .CourtEvidenceQR * {
     visibility: visible;
   }
 
@@ -35,8 +37,66 @@
     border-radius: 8pt !important;
     padding: 12pt !important;
     page-break-inside: avoid;
+    break-inside: avoid;
     background-color: #fff !important;
     color: #000 !important;
+  }
+
+  /* 5. โหมดพิมพ์แนวนอนสำหรับเอกสารพยานศาล (Landscape Legal Evidence Format) */
+  body.court-landscape-print,
+  body.print-landscape,
+  body.print-legal-landscape {
+    background: #fff !important;
+  }
+
+  body.court-landscape-print *,
+  body.print-landscape *,
+  body.print-legal-landscape * {
+    visibility: hidden;
+  }
+
+  body.court-landscape-print .CourtEvidenceQR,
+  body.court-landscape-print .CourtEvidenceQR *,
+  body.print-landscape .CourtEvidenceQR.print-landscape,
+  body.print-landscape .CourtEvidenceQR.print-landscape *,
+  body.print-legal-landscape .CourtEvidenceQR,
+  body.print-legal-landscape .CourtEvidenceQR *,
+  .CourtEvidenceQR.print-landscape,
+  .CourtEvidenceQR.print-landscape * {
+    visibility: visible !important;
+  }
+
+  body.court-landscape-print .CourtEvidenceQR,
+  body.print-landscape .CourtEvidenceQR,
+  body.print-legal-landscape .CourtEvidenceQR,
+  .CourtEvidenceQR.print-landscape,
+  .CourtEvidenceQR.court-landscape-print,
+  .CourtEvidenceQR.print-legal-landscape {
+    position: fixed !important;
+    left: 0 !important;
+    top: 0 !important;
+    width: 100% !important;
+    max-width: 100% !important;
+    margin: 0 !important;
+    border: 2pt solid #000 !important;
+    background: #fff !important;
+    color: #000 !important;
+    page-break-inside: avoid !important;
+    break-inside: avoid !important;
+  }
+
+  .CourtEvidenceQR.print-landscape .print-landscape-container,
+  .CourtEvidenceQR.court-landscape-print .print-landscape-container,
+  body.print-landscape .print-landscape-container,
+  body.court-landscape-print .print-landscape-container {
+    display: block !important;
+  }
+
+  .CourtEvidenceQR.print-landscape .screen-only-container,
+  .CourtEvidenceQR.court-landscape-print .screen-only-container,
+  body.print-landscape .screen-only-container,
+  body.court-landscape-print .screen-only-container {
+    display: none !important;
   }
 
   .CourtEvidenceQR svg {
@@ -44,12 +104,30 @@
   }
 
   .CourtEvidenceQR span, 
-  .CourtEvidenceQR div {
+  .CourtEvidenceQR div,
+  .CourtEvidenceQR p,
+  .CourtEvidenceQR h3,
+  .CourtEvidenceQR h4 {
     color: #000 !important;
   }
 
-  /* 5. ซ่อนปุ่มซ่อนลบ / Checkbox ขณะพิมพ์ */
-  .print\:hidden {
+  /* 6. ซ่อนปุ่มซ่อนลบ / Checkbox ขณะพิมพ์ */
+  .print\:hidden,
+  .no-print {
     display: none !important;
   }
+}
+
+@page landscape-legal {
+  size: A4 landscape;
+  margin: 8mm;
+}
+
+body.court-landscape-print,
+body.print-landscape,
+body.print-legal-landscape,
+.CourtEvidenceQR.print-landscape,
+.CourtEvidenceQR.court-landscape-print,
+.CourtEvidenceQR.print-legal-landscape {
+  page: landscape-legal;
 }

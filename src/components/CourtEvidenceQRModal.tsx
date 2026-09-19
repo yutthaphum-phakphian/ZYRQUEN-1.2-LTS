@@ -12,6 +12,12 @@ export interface EvidencePayload {
   principal: string;
   ssot_delta: string;
   court_admissible: boolean;
+  evidence_code?: string;
+  stage_name?: string;
+  council_quorum?: string;
+  forensic_pipeline?: string;
+  statute_refs?: string;
+  hash_alg?: string;
 }
 
 interface CourtEvidenceQRModalProps {
@@ -144,6 +150,24 @@ export const CourtEvidenceQRModal: React.FC<CourtEvidenceQRModalProps> = ({
                 <span>Court Admissible:</span>
                 <span className="text-amber-400 font-bold">{payload.court_admissible ? "YES (ISO/IEC 27037)" : "NO"}</span>
               </div>
+              {payload.council_quorum && (
+                <div className="flex justify-between">
+                  <span>Council Quorum:</span>
+                  <span className="text-cyan-400 font-bold">{payload.council_quorum}</span>
+                </div>
+              )}
+              {payload.forensic_pipeline && (
+                <div className="flex justify-between">
+                  <span>Forensic Pipeline:</span>
+                  <span className="text-purple-400 font-bold">{payload.forensic_pipeline}</span>
+                </div>
+              )}
+              {payload.statute_refs && (
+                <div className="flex justify-between">
+                  <span>Statute:</span>
+                  <span className="text-slate-300 font-bold truncate max-w-[200px]">{payload.statute_refs}</span>
+                </div>
+              )}
             </div>
           </div>
         </div>
