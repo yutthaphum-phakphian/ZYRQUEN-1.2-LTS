@@ -29,36 +29,34 @@ jobs:
         with:
           node-version: 20
 
-      # 1. ติดตั้ง Dependencies (ข้าม peer-deps เพื่อป้องกันการชนกันของไลบรารี)
+      # ติดตั้ง Dependencies โดยข้ามปัญหา Version Mismatch
       - name: Install Dependencies
         run: npm install --legacy-peer-deps
 
-      # 2. ปรับการรัน Lint ให้เป็นแบบ Non-blocking (เตือนได้แต่จะไม่สั่งยกเลิกการบิวด์)
-      - name: Run Linting Check (Non-blocking)
+      # ตรวจสอบ Lint โดยไม่สั่งยกเลิกการ Build หากพบ Warning
+      - name: Type Check and Lint (Non-blocking)
         run: npm run lint || true
 
       - name: Setup GitHub Pages
         id: pages
         uses: actions/configure-pages@v4
 
-      # 3. บิวด์แอปพลิเคชัน Vite SPA
-      - name: Build Vite Client Application
+      # บิวด์แอปพลิเคชัน Vite พร้อมตั้งค่า Base Path ให้ถูกต้อง
+      - name: Build Vite Client Application for GitHub Pages
         env:
           VITE_BASE_PATH: ${{ steps.pages.outputs.base_path }}/
           BASE_PATH: ${{ steps.pages.outputs.base_path }}/
         run: npx vite build --base=${{ steps.pages.outputs.base_path }}/
 
-      # 4. สร้าง 404.html Fallback สำหรับ SPA Routing
-      - name: Create 404.html fallback
+      # สร้าง 404.html สำหรับทำ SPA Client-Side Routing
+      - name: Create 404.html fallback for SPA routing
         run: cp ./dist/index.html ./dist/404.html
 
-      # 5. อัปโหลดไฟล์ Dist ไปยัง GitHub Pages
       - name: Upload Pages Artifact
         uses: actions/upload-pages-artifact@v3
         with:
           path: ./dist
 
-      # 6. เดพลอยต์ขึ้นเซิร์ฟเวอร์
       - name: Deploy to GitHub Pages
         id: deployment
         uses: actions/deploy-pages@v4
