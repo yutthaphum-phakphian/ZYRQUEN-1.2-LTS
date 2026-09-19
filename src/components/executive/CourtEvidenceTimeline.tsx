@@ -38,6 +38,7 @@ import { playAuditChime, playTone } from '../AudioSynthesizer';
 import { safeCopyToClipboard } from '../../utils/clipboard';
 import { ViewType } from '../../types';
 import { SystemEvent } from '../SystemEventsSidebar';
+import { CourtEvidenceQR } from '../CourtEvidenceQR';
 
 export type EvidenceCategory =
   | 'ALL'
@@ -1094,6 +1095,20 @@ export const CourtEvidenceTimeline: React.FC<CourtEvidenceTimelineProps> = ({
         </div>
       )}
 
+      {/* 📌 จุดเชื่อมต่อ CountEvidenceQR / CourtEvidenceQR Component สำหรับศาลไทย */}
+      <div className="pt-2">
+        <CourtEvidenceQR
+          merkleRoot={CANONICAL_MERKLE_ROOT}
+          anchorSignature="0x892a...f92b_DILITHIUM5_ML_DSA_87"
+          sealIndex={14902}
+          blockNumber={849202}
+          timestamp={new Date().toISOString()}
+          principalId={SYSTEM_METADATA.sovereignPrincipal}
+          manifestUrl="/zyrquen-court-manifest.json"
+          evidenceCode="MASTER-SEAL-14902"
+        />
+      </div>
+
       {/* ============================================================ */}
       {/* 4. DETAILED EVIDENCE INSPECTOR MODAL                          */}
       {/* ============================================================ */}
@@ -1165,6 +1180,18 @@ export const CourtEvidenceTimeline: React.FC<CourtEvidenceTimelineProps> = ({
                     {verifiedProofResult}
                   </div>
                 )}
+
+                {/* Individual Court Evidence QR Verification */}
+                <CourtEvidenceQR
+                  merkleRoot={selectedItem.hash.length === 64 ? selectedItem.hash : CANONICAL_MERKLE_ROOT}
+                  anchorSignature={`0x${selectedItem.hash.slice(0, 16)}..._DILITHIUM5_ML_DSA_87`}
+                  sealIndex={14902}
+                  blockNumber={849202}
+                  timestamp={selectedItem.timestamp}
+                  principalId={SYSTEM_METADATA.sovereignPrincipal}
+                  manifestUrl="/zyrquen-court-manifest.json"
+                  evidenceCode={selectedItem.evidenceCode}
+                />
               </div>
 
               {/* Modal Actions */}

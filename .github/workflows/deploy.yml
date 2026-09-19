@@ -1,27 +1,15 @@
-name: Deploy to GitHub Pages
+name: Deploy ZYRQUEN PWA to Vercel
 
 on:
   push:
-    branches: [main]
-  workflow_dispatch:
-
-permissions:
-  contents: read
-  pages: write
-  id-token: write
-
-concurrency:
-  group: "pages"
-  cancel-in-progress: true
+    branches:
+      - main
 
 jobs:
   build-and-deploy:
-    environment:
-      name: github-pages
-      url: ${{ steps.deployment.outputs.page_url }}
     runs-on: ubuntu-latest
     steps:
-      - name: Checkout Repository
+      - name: Checkout Code
         uses: actions/checkout@v4
 
       - name: Setup Node.js
@@ -31,30 +19,15 @@ jobs:
           cache: 'npm'
 
       - name: Install Dependencies
-        run: npm install --legacy-peer-deps
+        run: npm ci
 
-      - name: Type Check and Lint
-        run: npm run lint
+      - name: Build PWA Bundle
+        run: npm run build
 
-      - name: Setup GitHub Pages
-        id: pages
-        uses: actions/configure-pages@v4
-
-      - name: Build Vite Client Application for GitHub Pages
-        # Build client assets into dist directory using base path derived from configure-pages
-        env:
-          VITE_BASE_PATH: ${{ steps.pages.outputs.base_path }}/
-          BASE_PATH: ${{ steps.pages.outputs.base_path }}/
-        run: npx vite build
-
-      - name: Create 404.html fallback for SPA routing
-        run: cp ./dist/index.html ./dist/404.html
-
-      - name: Upload Pages Artifact
-        uses: actions/upload-pages-artifact@v3
+      - name: Deploy to Vercel
+        uses: amondnet/vercel-action@v25
         with:
-          path: ./dist
-
-      - name: Deploy to GitHub Pages
-        id: deployment
-        uses: actions/deploy-pages@v4
+          vercel-token: ${{ secrets.VERCEL_TOKEN }}
+          vercel-org-id: ${{ secrets.VERCEL_ORG_ID }}
+          vercel-project-id: ${{ secrets.VERCEL_PROJECT_ID }}
+          vercel-args: '--prod'

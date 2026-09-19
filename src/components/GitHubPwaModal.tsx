@@ -174,6 +174,36 @@ git push origin main`;
                 </ol>
               </div>
 
+              {/* Vercel CI/CD Auto-Deploy (.github/workflows/deploy.yml) */}
+              <div className="rounded-xl bg-black/50 border border-emerald-500/30 p-4 space-y-3">
+                <div className="flex items-center justify-between">
+                  <span className="text-xs font-mono font-bold text-white flex items-center gap-2">
+                    <CheckCircle2 className="w-4 h-4 text-emerald-400" />
+                    Vercel Auto-Deploy CI/CD (.github/workflows/deploy.yml)
+                  </span>
+                  <button
+                    onClick={() =>
+                      copyToClipboard(
+                        `name: Deploy ZYRQUEN PWA to Vercel\n\non:\n  push:\n    branches:\n      - main\n\njobs:\n  build-and-deploy:\n    runs-on: ubuntu-latest\n    steps:\n      - name: Checkout Code\n        uses: actions/checkout@v4\n\n      - name: Setup Node.js\n        uses: actions/setup-node@v4\n        with:\n          node-version: 20\n          cache: 'npm'\n\n      - name: Install Dependencies\n        run: npm ci\n\n      - name: Build PWA Bundle\n        run: npm run build\n\n      - name: Deploy to Vercel\n        uses: amondnet/vercel-action@v25\n        with:\n          vercel-token: \${{ secrets.VERCEL_TOKEN }}\n          vercel-org-id: \${{ secrets.VERCEL_ORG_ID }}\n          vercel-project-id: \${{ secrets.VERCEL_PROJECT_ID }}\n          vercel-args: '--prod'`,
+                        'vercelYml'
+                      )
+                    }
+                    className="flex items-center gap-1.5 px-2.5 py-1 rounded bg-emerald-500/10 hover:bg-emerald-500/20 text-emerald-300 text-xs font-mono border border-emerald-500/30 transition"
+                  >
+                    {copiedKey === 'vercelYml' ? <Check className="w-3.5 h-3.5 text-emerald-400" /> : <Copy className="w-3.5 h-3.5" />}
+                    {copiedKey === 'vercelYml' ? 'Copied!' : 'Copy deploy.yml'}
+                  </button>
+                </div>
+                <p className="text-[11px] text-zinc-300">
+                  ไฟล์ <code className="text-emerald-300 font-mono">.github/workflows/deploy.yml</code> ถูกสร้างไว้ในโปรเจกต์แล้ว พร้อมระบบ Auto-Deploy ขึ้น Vercel ทันทีเมื่อ Push บรันช์ main
+                </p>
+                <div className="p-3 rounded-lg bg-zinc-950/80 border border-white/5 space-y-1 text-[11px] text-zinc-400 font-mono">
+                  <div>1. ล็อกอิน Vercel.com ด้วย GitHub &gt; "Add New..." &gt; "Project"</div>
+                  <div>2. เลือก Repository &gt; Framework Preset: <strong>Vite</strong></div>
+                  <div>3. ตั้งค่า Secrets: <span className="text-cyan-300">VERCEL_TOKEN</span>, <span className="text-cyan-300">VERCEL_ORG_ID</span>, <span className="text-cyan-300">VERCEL_PROJECT_ID</span> ใน GitHub Settings &gt; Secrets and variables &gt; Actions</div>
+                </div>
+              </div>
+
               {/* Deployment Targets */}
               <div className="p-4 rounded-xl bg-slate-900/60 border border-white/10 flex flex-wrap items-center justify-between gap-3 text-xs">
                 <div>
