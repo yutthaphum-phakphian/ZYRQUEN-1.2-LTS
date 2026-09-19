@@ -1,0 +1,12 @@
+{
+  "dossierId": "DOS-SOV-849202-370885",
+  "blockHeight": 849202,
+  "merkleRoot": "909ab814479844d8a14816bed34cdbb07528e18501da86fc4691763a43fa4c68",
+  "timestamp": "2026-09-19T19:32:50.885Z",
+  "quorumStatus": "10/10 REAL_HSM RATIFIED",
+  "pqcAlgorithm": "CRYSTALS-Dilithium-5 (ML-DSA-87 / FIPS 204)",
+  "complianceRef": "พ.ร.บ. ว่าด้วยธุรกรรมทางอิเล็กทรอนิกส์ พ.ศ. 2544 มาตรา 9, 26, 28",
+  "sealsVerified": 14902,
+  "zeroDrift": "SSoT Δ0 (Zero Drift 0.00%)",
+  "sovereignArchitect": "นายยุทธภูมิ พากเพียร (#EP-SOVEREIGN-01 • OMEGA-1 SUPREME)"
+}
