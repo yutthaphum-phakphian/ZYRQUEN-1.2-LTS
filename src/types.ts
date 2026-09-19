@@ -26,7 +26,8 @@ export type ViewType =
   | 'chambers'
   | 'audithistory'
   | 'securitypipeline'
-  | 'briefing';
+  | 'briefing'
+  | 'sovereign-wallet';
 
 export interface AuditStage {
   id: string;

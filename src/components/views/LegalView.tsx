@@ -40,6 +40,7 @@ import { Section28ResponsibilityLayer } from '../Section28ResponsibilityLayer';
 import { PdpaEnclaveSuite } from '../PdpaEnclaveSuite';
 import { NcsaCiiComplianceCard } from '../NcsaCiiComplianceCard';
 import { ExpertWitnessCourtSuite } from '../ExpertWitnessCourtSuite';
+import { CourtEvidenceManifestPanel } from '../executive/CourtEvidenceManifestPanel';
 import { DigitalEvidenceChecklistModal } from '../DigitalEvidenceChecklistModal';
 import { CryptographicEvidenceSandbox } from '../CryptographicEvidenceSandbox';
 import { UnifiedQrEvidenceDossierModal } from '../UnifiedQrEvidenceDossierModal';
@@ -54,6 +55,7 @@ export type LegalSubTab =
   | 'etda-statutes'
   | 'pdpa-enclave'
   | 'ncsa-cii'
+  | 'court-manifest'
   | 'expert-witness'
   | 'architecture-topology'
   | 'custodian-passport'
@@ -393,6 +395,14 @@ export const LegalView: React.FC<LegalViewProps> = ({
             accent: 'text-amber-400',
           },
           {
+            id: 'court-manifest',
+            labelTh: 'แฟ้มสำนวนพยาน จพ.01–จพ.07 & Manifest',
+            labelEn: 'Court-Admissible Evidence Dossier',
+            icon: FileCheck,
+            badge: '7 EXHIBITS',
+            accent: 'text-emerald-400',
+          },
+          {
             id: 'expert-witness',
             labelTh: 'คำเบิกความพยานผู้เชี่ยวชาญ (Expert Witness)',
             labelEn: 'Courtroom Forensic Affidavit & Stress Suite',
@@ -499,6 +509,15 @@ export const LegalView: React.FC<LegalViewProps> = ({
           </motion.div>
           <motion.div variants={itemVariants}>
             <SovereignLegalConvergence />
+          </motion.div>
+        </motion.div>
+      )}
+
+      {/* Tab 3.5: Court-Admissible Exhibits & Manifest (จพ.01–จพ.07) */}
+      {activeTab === 'court-manifest' && (
+        <motion.div variants={containerVariants} initial="hidden" animate="visible" className="space-y-6">
+          <motion.div variants={itemVariants}>
+            <CourtEvidenceManifestPanel />
           </motion.div>
         </motion.div>
       )}

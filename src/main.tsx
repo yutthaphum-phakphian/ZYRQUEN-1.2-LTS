@@ -18,6 +18,12 @@ if ('serviceWorker' in navigator) {
       console.error('ZYRQUEN Ω∞ Service Worker registration failed:', error);
     }
   });
+
+  window.addEventListener('load', () => {
+    navigator.serviceWorker.register('/sw.js').catch((err) => {
+      console.log('Direct /sw.js registration notice:', err?.message || err);
+    });
+  });
 }
 
 // Guard against unhandled clipboard rejection errors and benign ResizeObserver notifications

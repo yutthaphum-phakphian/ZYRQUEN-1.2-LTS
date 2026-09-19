@@ -1,6 +1,8 @@
 import React, { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'motion/react';
 import { playTone, playAuditChime } from './AudioSynthesizer';
+import { Fingerprint, Key, ShieldCheck, CheckCircle2, AlertTriangle, Cpu } from 'lucide-react';
+import { webAuthnService, WebAuthnAuthenticationResult } from '../services/webAuthnService';
 
 interface SovereignLoginLoaderProps {
   isOpen: boolean;
@@ -48,6 +50,9 @@ export const SovereignLoginLoader: React.FC<SovereignLoginLoaderProps> = ({
   // Biometric challenge state
   const [showBiometricChallenge, setShowBiometricChallenge] = useState<boolean>(false);
   const [biometricVerified, setBiometricVerified] = useState<boolean>(false);
+  const [isVerifyingWebAuthn, setIsVerifyingWebAuthn] = useState<boolean>(false);
+  const [webAuthnFeedback, setWebAuthnFeedback] = useState<string>('');
+  const [webAuthnResult, setWebAuthnResult] = useState<WebAuthnAuthenticationResult | null>(null);
 
   useEffect(() => {
     if (!isOpen) {
@@ -56,6 +61,9 @@ export const SovereignLoginLoader: React.FC<SovereignLoginLoaderProps> = ({
       setIsWarpFlash(false);
       setShowBiometricChallenge(false);
       setBiometricVerified(false);
+      setIsVerifyingWebAuthn(false);
+      setWebAuthnFeedback('');
+      setWebAuthnResult(null);
       return;
     }
 
@@ -112,10 +120,38 @@ export const SovereignLoginLoader: React.FC<SovereignLoginLoaderProps> = ({
     return () => clearInterval(interval);
   }, [isOpen, showBiometricChallenge, biometricVerified, onComplete]);
 
+  const handleWebAuthnBiometric = async (forceSimulated = false) => {
+    setIsVerifyingWebAuthn(true);
+    setWebAuthnFeedback('Prompting WebAuthn API for biometric sensor touch / security key...');
+    playTone(600, 0.05);
+
+    try {
+      const result = await webAuthnService.authenticateWithPasskey({
+        customChallenge: 'SOVEREIGN_QUANTUM_WARP_INGRESS_CHALLENGE',
+        forceSimulated,
+      });
+
+      if (result.success) {
+        setWebAuthnResult(result);
+        setWebAuthnFeedback('WebAuthn assertion ratified. Biometric signature valid (ETDA Sec 9/26).');
+        playAuditChime();
+        setTimeout(() => {
+          setBiometricVerified(true);
+          setShowBiometricChallenge(false);
+          setIsVerifyingWebAuthn(false);
+        }, 1200);
+      } else {
+        setWebAuthnFeedback(result.error || 'Biometric verification failed.');
+        setIsVerifyingWebAuthn(false);
+      }
+    } catch (err: any) {
+      setWebAuthnFeedback(err?.message || 'Biometric ceremony cancelled.');
+      setIsVerifyingWebAuthn(false);
+    }
+  };
+
   const handleBiometricAccept = () => {
-      setBiometricVerified(true);
-      setShowBiometricChallenge(false);
-      playAuditChime();
+    handleWebAuthnBiometric(true);
   };
 
   if (!isOpen) return null;
@@ -179,22 +215,61 @@ export const SovereignLoginLoader: React.FC<SovereignLoginLoaderProps> = ({
                 initial={{ opacity: 0, scale: 0.95 }}
                 animate={{ opacity: 1, scale: 1 }}
                 exit={{ opacity: 0, scale: 1.05 }}
-                className="absolute inset-0 z-20 flex flex-col items-center justify-center bg-[#0a0f1e]/95 backdrop-blur-xl border border-rose-500/30 rounded-3xl p-8"
+                className="absolute inset-0 z-20 flex flex-col items-center justify-center bg-[#0a0f1e]/98 backdrop-blur-2xl border-2 border-cyan-500/50 rounded-3xl p-8"
               >
-                <div className="w-24 h-24 rounded-full border-4 border-rose-500/30 border-t-rose-500 animate-spin mb-6 flex items-center justify-center relative">
-                    <div className="absolute inset-2 border-2 border-rose-400/20 border-b-rose-400 rounded-full animate-spin-reverse" />
-                    <span className="text-rose-400 text-3xl font-sans relative z-10 animate-pulse">👁️</span>
+                <div className="w-20 h-20 rounded-full border-4 border-cyan-500/30 border-t-cyan-400 animate-spin mb-4 flex items-center justify-center relative">
+                  <div className="absolute inset-2 border-2 border-emerald-400/20 border-b-emerald-400 rounded-full animate-spin-reverse" />
+                  <Fingerprint className="w-9 h-9 text-cyan-400 animate-pulse relative z-10" />
                 </div>
-                <h2 className="text-rose-400 font-bold text-xl tracking-widest mb-2 uppercase text-center shadow-rose-500/50">Sovereign Biometric Presence Challenge</h2>
-                <p className="text-zinc-400 text-sm mb-8 text-center max-w-sm">
-                  Quantum entropy spike detected. To resume warp stream and arm Thai Legal Safe Harbor enclaves, physical biometric presence of Sovereign Custodian must be verified.
+
+                <h2 className="text-cyan-400 font-bold text-lg tracking-widest mb-1 uppercase text-center flex items-center gap-2">
+                  <span>WebAuthn Biometric Presence Challenge</span>
+                </h2>
+                <div className="text-[11px] text-emerald-400 font-semibold mb-3">
+                  FIPS 140-3 L4 • ETDA B.E. 2544 Sec 9/26 Non-Repudiation
+                </div>
+
+                <p className="text-zinc-400 text-xs mb-4 text-center max-w-md">
+                  A cryptographic identity ceremony is required. Touch your device biometric scanner (Touch ID / Face ID / Windows Hello) or authenticate via FIPS 140-3 hardware security key.
                 </p>
-                <button
-                  onClick={handleBiometricAccept}
-                  className="px-8 py-3 bg-rose-500/20 hover:bg-rose-500/40 border border-rose-500 text-rose-300 font-bold tracking-widest uppercase rounded-xl transition-all shadow-[0_0_20px_rgba(244,63,94,0.3)] hover:shadow-[0_0_30px_rgba(244,63,94,0.5)] active:scale-95"
-                >
-                  Confirm Physical Presence
-                </button>
+
+                {webAuthnFeedback && (
+                  <div className="w-full max-w-md p-2.5 mb-4 rounded-xl bg-cyan-950/50 border border-cyan-500/40 text-xs text-cyan-200 text-center font-mono">
+                    {webAuthnFeedback}
+                  </div>
+                )}
+
+                {webAuthnResult && (
+                  <div className="w-full max-w-md p-2.5 mb-4 rounded-xl bg-emerald-950/60 border border-emerald-500/50 text-[11px] text-emerald-300 font-mono space-y-1">
+                    <div className="flex justify-between font-bold">
+                      <span>✓ WebAuthn Verified</span>
+                      <span>{webAuthnResult.fipsLevel}</span>
+                    </div>
+                    <div className="text-[10px] text-zinc-400 truncate">
+                      Sig: {webAuthnResult.signatureHex}
+                    </div>
+                  </div>
+                )}
+
+                <div className="flex flex-col sm:flex-row items-center gap-3 w-full max-w-md">
+                  <button
+                    onClick={() => handleWebAuthnBiometric(false)}
+                    disabled={isVerifyingWebAuthn}
+                    className="flex-1 w-full py-3 px-4 bg-gradient-to-r from-cyan-500 to-emerald-500 hover:from-cyan-400 hover:to-emerald-400 text-black font-bold text-xs tracking-wider uppercase rounded-xl transition-all shadow-[0_0_20px_rgba(6,182,212,0.3)] active:scale-95 flex items-center justify-center gap-2 cursor-pointer disabled:opacity-50"
+                  >
+                    <Fingerprint className="w-4 h-4" />
+                    <span>{isVerifyingWebAuthn ? 'Awaiting Sensor...' : 'Touch Biometric Sensor'}</span>
+                  </button>
+
+                  <button
+                    onClick={handleBiometricAccept}
+                    disabled={isVerifyingWebAuthn}
+                    className="py-3 px-4 bg-white/5 hover:bg-white/10 border border-white/20 text-zinc-300 hover:text-white font-semibold text-xs tracking-wider uppercase rounded-xl transition-all active:scale-95 flex items-center justify-center gap-2 cursor-pointer"
+                  >
+                    <Cpu className="w-4 h-4 text-[#D4AF37]" />
+                    <span>Enclave Fallback</span>
+                  </button>
+                </div>
               </motion.div>
             )}
           </AnimatePresence>

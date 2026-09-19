@@ -72,6 +72,7 @@ import {
   Smartphone,
   PlayCircle,
   Landmark,
+  Wallet,
 } from 'lucide-react';
 import { playAuditChime, playTone } from '../AudioSynthesizer';
 import { ShieldAlert } from 'lucide-react';
@@ -263,11 +264,23 @@ export const DashboardView: React.FC<DashboardViewProps> = ({
                 playTone(920, 0.06);
                 onNavigate('briefing');
               }}
-              className="px-3.5 py-2 rounded-xl bg-gradient-to-r from-amber-500/20 via-[#D4AF37]/20 to-emerald-500/20 hover:from-amber-500/30 hover:to-emerald-500/30 border border-[#D4AF37]/50 text-[#D4AF37] font-mono text-xs font-semibold flex items-center justify-center gap-2 transition-all max-[479px]:w-full shadow-[0_0_15px_rgba(212,175,55,0.25)]"
+              className="px-3.5 py-2 rounded-xl bg-gradient-to-r from-amber-500/20 via-[#D4AF37]/20 to-emerald-500/20 hover:from-amber-500/30 hover:to-emerald-500/30 border border-[#D4AF37]/50 text-[#D4AF37] font-mono text-xs font-semibold flex items-center justify-center gap-2 transition-all max-[479px]:w-full shadow-[0_0_15px_rgba(212,175,55,0.25)] cursor-pointer"
               title="Open Executive Infographic & Court Admissible Evidence Timeline"
             >
               <Landmark className="w-3.5 h-3.5 text-[#D4AF37]" />
               <span>📊 สรุปผู้บริหาร & ศาล</span>
+            </button>
+
+            <button
+              onClick={() => {
+                playTone(890, 0.06);
+                onNavigate('sovereign-wallet');
+              }}
+              className="px-3.5 py-2 rounded-xl bg-gradient-to-r from-amber-950/70 via-black to-[#0a0f1e] hover:bg-amber-900/60 border border-[#D4AF37]/60 text-[#D4AF37] font-mono text-xs font-semibold flex items-center justify-center gap-2 transition-all max-[479px]:w-full shadow-[0_0_12px_rgba(212,175,55,0.2)] cursor-pointer"
+              title="Open Sovereign Cryptographic Wallet & WebAuthn Key Dispatcher"
+            >
+              <Wallet className="w-3.5 h-3.5 text-[#D4AF37]" />
+              <span>🔑 Sovereign Wallet (QR)</span>
             </button>
 
             <button

@@ -7,6 +7,7 @@ import { ViewType, HardwareSnapshot } from './types';
 import { Navigation } from './components/Navigation';
 import { LeftSidebar } from './components/LeftSidebar';
 import { AuditCertificateModal } from './components/AuditCertificateModal';
+import { GitHubPwaModal } from './components/GitHubPwaModal';
 import { ThaiLegalSearchModal } from './components/ThaiLegalSearchModal';
 import { KeyboardShortcutsModal } from './components/KeyboardShortcutsModal';
 import { SystemEventsSidebar, SystemEvent } from './components/SystemEventsSidebar';
@@ -47,6 +48,7 @@ import { SovereignChambersControlPlane } from './components/SovereignChambersCon
 import { AuditHistoryView } from './components/views/AuditHistoryView';
 import { SecurityPipelineView } from './components/views/SecurityPipelineView';
 import { ExecutiveCourtBriefing } from './components/executive/ExecutiveCourtBriefing';
+import { SovereignWalletView } from './components/views/SovereignWalletView';
 import { SYSTEM_METADATA } from './data/canonicalData';
 import { INITIAL_HARDWARE_SNAPSHOTS, createTelemetrySnapshot } from './utils/telemetrySnapshot';
 import { TelemetryAnomalyObserver } from './utils/telemetryAnomalyObserver';
@@ -302,6 +304,13 @@ const VIEW_PERSONAS: Record<ViewType, ViewPersona> = {
     name: 'Executive & Court Admissible Briefing',
     orb1: 'bg-amber-600/18',
     orb2: 'bg-cyan-600/14',
+    orb3: 'bg-emerald-600/12',
+    accentGlow: 'rgba(212,175,55,0.12)',
+  },
+  'sovereign-wallet': {
+    name: 'Sovereign Wallet & WebAuthn Key Dispatcher',
+    orb1: 'bg-amber-600/18',
+    orb2: 'bg-yellow-600/14',
     orb3: 'bg-emerald-600/12',
     accentGlow: 'rgba(212,175,55,0.12)',
   },
@@ -633,6 +642,7 @@ function SovereignAppContent() {
   }, []);
   const [selectedChamberId, setSelectedChamberId] = useState<string>('00');
   const [isCertificateOpen, setIsCertificateOpen] = useState(false);
+  const [isGitHubPwaOpen, setIsGitHubPwaOpen] = useState(false);
   const [isLegalSearchOpen, setIsLegalSearchOpen] = useState(false);
   const [isShortcutsOpen, setIsShortcutsOpen] = useState(false);
   const [isEventsSidebarOpen, setIsEventsSidebarOpen] = useState(false);
@@ -1532,6 +1542,13 @@ function SovereignAppContent() {
             onAddSystemEvent={addSystemEvent as any}
           />
         );
+      case 'sovereign-wallet':
+        return (
+          <SovereignWalletView
+            onNavigate={setCurrentView}
+            onAddSystemEvent={addSystemEvent as any}
+          />
+        );
       default:
         return <DashboardView onNavigate={setCurrentView} onOpenCertificate={() => setIsCertificateOpen(true)} />;
     }
@@ -1620,6 +1637,7 @@ function SovereignAppContent() {
         currentView={currentView}
         onSelectView={setCurrentView}
         onOpenCertificate={() => setIsCertificateOpen(true)}
+        onOpenGitHubPwa={() => setIsGitHubPwaOpen(true)}
         onOpenLegalSearch={() => setIsLegalSearchOpen(true)}
         onOpenShortcuts={() => setIsShortcutsOpen(true)}
         onOpenEventsSidebar={() => setIsEventsSidebarOpen((prev) => !prev)}
@@ -2053,6 +2071,13 @@ function SovereignAppContent() {
         onClose={() => {
           triggerVibration('modalDismiss');
           setIsCertificateOpen(false);
+        }}
+      />
+      <GitHubPwaModal
+        isOpen={isGitHubPwaOpen}
+        onClose={() => {
+          triggerVibration('modalDismiss');
+          setIsGitHubPwaOpen(false);
         }}
       />
 

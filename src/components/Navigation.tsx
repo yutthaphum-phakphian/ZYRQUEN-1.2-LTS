@@ -42,6 +42,9 @@ import {
   ChevronRight,
   History,
   Landmark,
+  Wallet,
+  Github,
+  Smartphone,
 } from 'lucide-react';
 import { playTone, getHarmonicCarrierSnapshot } from './AudioSynthesizer';
 import { PWAInstallButton } from './PWAInstallButton';
@@ -54,6 +57,7 @@ interface NavigationProps {
   onOpenCertificate: () => void;
   onOpenLegalSearch: () => void;
   onOpenShortcuts: () => void;
+  onOpenGitHubPwa?: () => void;
   onOpenEventsSidebar?: () => void;
   eventsCount?: number;
   onCaptureSnapshot?: () => void;
@@ -85,6 +89,7 @@ interface NavItem {
 export const NAVIGATION_ITEMS: NavItem[] = [
   { id: 'dashboard', labelEn: 'Dashboard', labelTh: 'ศูนย์บัญชาการ', icon: LayoutDashboard, dotColor: '#06B6D4', badge: 'HQ', shortcut: '1' },
   { id: 'briefing', labelEn: 'Executive & Court', labelTh: 'สรุปผู้บริหาร & ศาล', icon: Landmark, dotColor: '#D4AF37', badge: 'EXECUTIVE', shortcut: 'E' },
+  { id: 'sovereign-wallet', labelEn: 'Sovereign Wallet', labelTh: 'กระเป๋าอธิปไตย & คีย์ QR', icon: Wallet, dotColor: '#D4AF37', badge: 'WEBAUTHN', shortcut: 'Q' },
   { id: 'fusion', labelEn: 'Fusion Console', labelTh: 'รวมศูนย์นิติวิทยาศาสตร์', icon: Activity, dotColor: '#D946EF', badge: 'FUSION', shortcut: 'F' },
   { id: 'playback', labelEn: '12-Stage Replay', labelTh: 'จำลองสืบย้อน', icon: ShieldCheck, dotColor: '#F59E0B', badge: 'TRACE', shortcut: 'P' },
   { id: 'chambers', labelEn: '18 Chambers', labelTh: '18 ห้องอธิปไตย SSoT', icon: LayoutGrid, dotColor: '#6366F1', badge: '18 SSoT', shortcut: 'K' },
@@ -119,6 +124,7 @@ export const Navigation: React.FC<NavigationProps> = ({
   onOpenCertificate,
   onOpenLegalSearch,
   onOpenShortcuts,
+  onOpenGitHubPwa,
   onOpenEventsSidebar,
   eventsCount = 0,
   isAudioActive,
@@ -389,6 +395,20 @@ export const Navigation: React.FC<NavigationProps> = ({
         <div className="flex items-center gap-1.5 sm:gap-2 shrink-0">
           {/* GitHub Synchronization Warning & Drift Re-sync System */}
           <PWAInstallButton />
+          {onOpenGitHubPwa && (
+            <button
+              id="btn-nav-github-pwa-setup"
+              onClick={() => {
+                playTone(640, 0.06);
+                onOpenGitHubPwa();
+              }}
+              className="flex items-center gap-1.5 px-2.5 py-1.5 rounded-xl bg-slate-900/90 hover:bg-slate-800 text-zinc-300 hover:text-white border border-slate-700/60 hover:border-cyan-500/40 transition-all font-mono text-xs cursor-pointer active:scale-95 shadow-sm"
+              title="GitHub Push & PWA Setup Guide"
+            >
+              <Github className="w-3.5 h-3.5 text-cyan-400" />
+              <span className="hidden xl:inline text-[11px] font-bold">GitHub &amp; PWA</span>
+            </button>
+          )}
           <GitHubSyncWarningNav />
 
           {/* Copilot Assistant Layer (Sovereign Epoch #849202) Trigger Button */}

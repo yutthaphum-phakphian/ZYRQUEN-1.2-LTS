@@ -44,8 +44,9 @@ import { ViewType } from '../../types';
 import { SystemEvent } from '../SystemEventsSidebar';
 import { ExecutiveSummaryInfographic } from './ExecutiveSummaryInfographic';
 import { CourtEvidenceTimeline } from './CourtEvidenceTimeline';
+import { CourtEvidenceManifestPanel } from './CourtEvidenceManifestPanel';
 
-export type BriefingSubTab = 'infographic' | 'timeline' | 'dashboard';
+export type BriefingSubTab = 'infographic' | 'timeline' | 'dashboard' | 'manifest';
 
 interface ExecutiveCourtBriefingProps {
   onNavigate?: (view: ViewType) => void;
@@ -605,6 +606,21 @@ export const ExecutiveCourtBriefing: React.FC<ExecutiveCourtBriefingProps> = ({
           <Activity className="w-4 h-4" />
           <span>3. แดชบอร์ดสด & 10/10 REAL_HSM Quorum</span>
         </button>
+
+        <button
+          onClick={() => {
+            setActiveTab('manifest');
+            playTone(600, 0.05);
+          }}
+          className={`px-4 py-2.5 rounded-lg text-xs font-medium transition-all flex items-center gap-2 shrink-0 ${
+            activeTab === 'manifest'
+              ? 'bg-amber-500/20 text-amber-300 border border-amber-500/50 shadow-md font-semibold'
+              : 'text-zinc-400 hover:text-zinc-200 hover:bg-zinc-900/50'
+          }`}
+        >
+          <Award className="w-4 h-4" />
+          <span>4. แฟ้มสำนวนพยาน จพ.01–จพ.07 & Manifest</span>
+        </button>
       </div>
 
       {/* ============================================================ */}
@@ -758,6 +774,13 @@ export const ExecutiveCourtBriefing: React.FC<ExecutiveCourtBriefingProps> = ({
             </div>
           </div>
         </div>
+      )}
+
+      {/* ============================================================ */}
+      {/* SUBTAB 4: COURT EVIDENCE EXHIBITS & MANIFEST (จพ.01–จพ.07)    */}
+      {/* ============================================================ */}
+      {activeTab === 'manifest' && (
+        <CourtEvidenceManifestPanel />
       )}
 
       {/* ============================================================ */}
