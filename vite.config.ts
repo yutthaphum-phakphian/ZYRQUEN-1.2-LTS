@@ -1,8 +1,13 @@
 import tailwindcss from '@tailwindcss/vite';
 import react from '@vitejs/plugin-react';
 import path from 'path';
+import { fileURLToPath } from 'url';
 import { defineConfig } from 'vite';
 import { VitePWA } from 'vite-plugin-pwa';
+
+// รองรับ ESM Path Resolution บน Node 20+ และ GitHub Actions
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
 
 export default defineConfig(() => {
   // Determine Base Path for GitHub Pages, Cloud Run, or local dev
@@ -142,7 +147,7 @@ export default defineConfig(() => {
     server: {
       host: '0.0.0.0',
       port: 3000,
-      allowedHosts: true as any as true,
+      allowedHosts: true,
       hmr: false,
       watch: null,
     },
