@@ -41,6 +41,7 @@ import {
   ChevronLeft,
   ChevronRight,
   History,
+  Landmark,
 } from 'lucide-react';
 import { playTone, getHarmonicCarrierSnapshot } from './AudioSynthesizer';
 import { PWAInstallButton } from './PWAInstallButton';
@@ -83,6 +84,7 @@ interface NavItem {
 
 export const NAVIGATION_ITEMS: NavItem[] = [
   { id: 'dashboard', labelEn: 'Dashboard', labelTh: 'ศูนย์บัญชาการ', icon: LayoutDashboard, dotColor: '#06B6D4', badge: 'HQ', shortcut: '1' },
+  { id: 'briefing', labelEn: 'Executive & Court', labelTh: 'สรุปผู้บริหาร & ศาล', icon: Landmark, dotColor: '#D4AF37', badge: 'EXECUTIVE', shortcut: 'E' },
   { id: 'fusion', labelEn: 'Fusion Console', labelTh: 'รวมศูนย์นิติวิทยาศาสตร์', icon: Activity, dotColor: '#D946EF', badge: 'FUSION', shortcut: 'F' },
   { id: 'playback', labelEn: '12-Stage Replay', labelTh: 'จำลองสืบย้อน', icon: ShieldCheck, dotColor: '#F59E0B', badge: 'TRACE', shortcut: 'P' },
   { id: 'chambers', labelEn: '18 Chambers', labelTh: '18 ห้องอธิปไตย SSoT', icon: LayoutGrid, dotColor: '#6366F1', badge: '18 SSoT', shortcut: 'K' },

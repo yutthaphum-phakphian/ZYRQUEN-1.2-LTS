@@ -7,18 +7,32 @@
     <title>ZYRQUEN Ω∞ Sovereign World Engine</title>
     <meta name="description" content="Sovereign Operating System & Civilization Intelligence Control Plane - Block #849202 (Frozen v1.2 LTS)" />
     <script>
-      // Filter benign Vite websocket disconnection messages in sandboxed iframe environment
+      // Suppress benign Vite websocket notices in sandboxed iframe environment
       (function() {
+        const isBenignVite = function(arg) {
+          if (!arg) return false;
+          try {
+            const str = (arg instanceof Error ? (arg.message + ' ' + arg.stack) : String(arg)).toLowerCase();
+            return str.includes('[vite]') || str.includes('websocket') || str.includes('failed to connect');
+          } catch (e) {
+            return false;
+          }
+        };
         const originalWarn = console.warn;
         const originalError = console.error;
         console.warn = function(...args) {
-          if (typeof args[0] === 'string' && (args[0].includes('[vite]') || args[0].includes('websocket') || args[0].includes('WebSocket'))) return;
+          if (args.some(isBenignVite)) return;
           originalWarn.apply(console, args);
         };
         console.error = function(...args) {
-          if (typeof args[0] === 'string' && (args[0].includes('[vite]') || args[0].includes('failed to connect to websocket'))) return;
+          if (args.some(isBenignVite)) return;
           originalError.apply(console, args);
         };
+        window.addEventListener('unhandledrejection', function(event) {
+          if (isBenignVite(event.reason)) {
+            event.preventDefault();
+          }
+        });
       })();
     </script>
   </head>

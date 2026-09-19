@@ -28,6 +28,7 @@ import {
   Check,
   Copy,
   QrCode,
+  Landmark,
 } from 'lucide-react';
 import { SYSTEM_METADATA, THAI_CUSTODIANS, CANONICAL_MERKLE_ROOT } from '../../data/canonicalData';
 import { playAuditChime, playTone } from '../AudioSynthesizer';
@@ -289,6 +290,20 @@ export const LegalView: React.FC<LegalViewProps> = ({
               <Cpu className="w-4 h-4 text-cyan-200" />
               <span>Cryptographic Evidence Engine</span>
             </button>
+
+            {onNavigate && (
+              <button
+                onClick={() => {
+                  playTone(900, 0.05);
+                  onNavigate('briefing');
+                }}
+                className="px-4 py-2.5 rounded-xl font-mono text-xs font-bold bg-[#D4AF37]/20 hover:bg-[#D4AF37]/30 text-[#D4AF37] border border-[#D4AF37]/50 shadow-[0_0_15px_rgba(212,175,55,0.25)] transition-all flex items-center justify-center gap-2"
+                title="Open Executive Infographic & Court Admissible Evidence Timeline"
+              >
+                <Landmark className="w-4 h-4 text-[#D4AF37]" />
+                <span>Executive & Court Dossier</span>
+              </button>
+            )}
 
             {onOpenSearch && (
               <button

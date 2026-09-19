@@ -71,6 +71,7 @@ import {
   Bell,
   Smartphone,
   PlayCircle,
+  Landmark,
 } from 'lucide-react';
 import { playAuditChime, playTone } from '../AudioSynthesizer';
 import { ShieldAlert } from 'lucide-react';
@@ -257,6 +258,18 @@ export const DashboardView: React.FC<DashboardViewProps> = ({
 
           {/* Quick Action Buttons */}
           <div className="flex flex-wrap items-center gap-2.5 shrink-0 max-[479px]:w-full max-[479px]:grid max-[479px]:grid-cols-1 max-[479px]:gap-2">
+            <button
+              onClick={() => {
+                playTone(920, 0.06);
+                onNavigate('briefing');
+              }}
+              className="px-3.5 py-2 rounded-xl bg-gradient-to-r from-amber-500/20 via-[#D4AF37]/20 to-emerald-500/20 hover:from-amber-500/30 hover:to-emerald-500/30 border border-[#D4AF37]/50 text-[#D4AF37] font-mono text-xs font-semibold flex items-center justify-center gap-2 transition-all max-[479px]:w-full shadow-[0_0_15px_rgba(212,175,55,0.25)]"
+              title="Open Executive Infographic & Court Admissible Evidence Timeline"
+            >
+              <Landmark className="w-3.5 h-3.5 text-[#D4AF37]" />
+              <span>📊 สรุปผู้บริหาร & ศาล</span>
+            </button>
+
             <button
               onClick={() => {
                 playTone(780, 0.05);

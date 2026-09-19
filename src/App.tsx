@@ -46,6 +46,7 @@ import { AuditAnalyticsDashboard } from './components/AuditAnalyticsDashboard';
 import { SovereignChambersControlPlane } from './components/SovereignChambersControlPlane';
 import { AuditHistoryView } from './components/views/AuditHistoryView';
 import { SecurityPipelineView } from './components/views/SecurityPipelineView';
+import { ExecutiveCourtBriefing } from './components/executive/ExecutiveCourtBriefing';
 import { SYSTEM_METADATA } from './data/canonicalData';
 import { INITIAL_HARDWARE_SNAPSHOTS, createTelemetrySnapshot } from './utils/telemetrySnapshot';
 import { TelemetryAnomalyObserver } from './utils/telemetryAnomalyObserver';
@@ -296,6 +297,13 @@ const VIEW_PERSONAS: Record<ViewType, ViewPersona> = {
     orb2: 'bg-cyan-600/16',
     orb3: 'bg-teal-600/12',
     accentGlow: 'rgba(16,185,129,0.15)',
+  },
+  briefing: {
+    name: 'Executive & Court Admissible Briefing',
+    orb1: 'bg-amber-600/18',
+    orb2: 'bg-cyan-600/14',
+    orb3: 'bg-emerald-600/12',
+    accentGlow: 'rgba(212,175,55,0.12)',
   },
 };
 
@@ -575,6 +583,7 @@ const VALID_VIEWS: ViewType[] = [
   'playback',
   'audithistory',
   'securitypipeline',
+  'briefing',
 ];
 
 function SovereignAppContent() {
@@ -1289,6 +1298,8 @@ function SovereignAppContent() {
           'J': 'audithistory',
           'x': 'securitypipeline',
           'X': 'securitypipeline',
+          'e': 'briefing',
+          'E': 'briefing',
         };
 
         if (viewKeyMap[e.key]) {
@@ -1508,6 +1519,14 @@ function SovereignAppContent() {
       case 'securitypipeline':
         return (
           <SecurityPipelineView
+            onNavigate={setCurrentView}
+            onOpenCertificate={() => setIsCertificateOpen(true)}
+            onAddSystemEvent={addSystemEvent as any}
+          />
+        );
+      case 'briefing':
+        return (
+          <ExecutiveCourtBriefing
             onNavigate={setCurrentView}
             onOpenCertificate={() => setIsCertificateOpen(true)}
             onAddSystemEvent={addSystemEvent as any}
