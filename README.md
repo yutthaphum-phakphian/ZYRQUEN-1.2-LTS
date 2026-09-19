@@ -68,7 +68,8 @@ A TypeScript-led project exploring a **Sovereign Kernel & Truth Matrix** with an
 - Clear interfaces between people, policy, and technology
 
 ## 📈 GitHub Activity
-![GitHub contribution graph](https://github-readme-activity-graph.vercel.app/graph?username=yutthaphum-phakphian&theme=github-compact&hide_border=true)
+
+![Yutthaphum's GitHub Stats](https://github-readme-stats.vercel.app/api?username=yutthaphum-phakphian&show_icons=true&theme=dark)
 
 ## 🤝 Let's Connect
 The best way to reach me is through GitHub:
