@@ -185,7 +185,7 @@ export const MerkleTreeInteractiveGraph: React.FC<MerkleTreeInteractiveGraphProp
       depth: 2,
       hash: '9a4e01928374a819b02847c019283746a8192837465019283746591827364501',
       parentHash: 'branch-deca-key',
-      signatureScheme: 'ML-DSA-87 / HSM-Slot-01 (Yutthaphum Pakphian)',
+      signatureScheme: 'ML-DSA-87 / HSM-Slot-01 (Yuttaphum Phakphian)',
       timestamp: '2026-03-31 08:28:12 ICT',
       status: 'VERIFIED',
       metadata: {

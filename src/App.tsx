@@ -60,6 +60,8 @@ import { systemStateStore } from './store/systemStateStore';
 import { AudioEntropyController, SsotDriftWarning, SsotDriftToggleButton, QuantumAggregateEntropyIndicator } from './components/system/SystemStateComponents';
 import { ToastNotification, ToastMessage } from './components/ToastNotification';
 import { useNotificationWebSocket } from './hooks/useNotificationWebSocket';
+import { useSwipeNavigation } from './hooks/useSwipeNavigation';
+import { MobileSwipeIndicator } from './components/mobile/MobileSwipeIndicator';
 import { broadcastSyncService } from './services/broadcastSyncService';
 import { offlineAuditSyncService } from './services/offlineAuditSyncService';
 import { triggerVibration } from './utils/vibration';
@@ -663,6 +665,22 @@ function SovereignAppContent() {
       console.error(e);
     }
   }, []);
+
+  // Sovereign Mobile Touch & Swipe Gesture Navigation Engine
+  const {
+    handleTouchStart,
+    handleTouchEnd,
+    swipeFeedback,
+    nextView,
+    prevView,
+  } = useSwipeNavigation({
+    currentView,
+    onNavigate: setCurrentView,
+    onToggleSidebar: handleToggleSidebar,
+    onCloseSidebar: handleCloseSidebar,
+    isSidebarOpen: isLeftSidebarOpen,
+    enabled: true,
+  });
 
   const [selectedChamberId, setSelectedChamberId] = useState<string>('00');
   const [isCertificateOpen, setIsCertificateOpen] = useState(false);
@@ -1559,7 +1577,11 @@ function SovereignAppContent() {
   }, [addSystemEvent]);
 
   return (
-    <div className={`min-h-screen w-full max-w-full overflow-x-hidden bg-[#07080F] text-zinc-100 font-sans selection:bg-cyan-500/30 selection:text-cyan-200 antialiased relative ${isMonochromeMode ? 'theme-monochrome' : ''}`}>
+    <div
+      onTouchStart={handleTouchStart}
+      onTouchEnd={handleTouchEnd}
+      className={`min-h-screen w-full max-w-full overflow-x-hidden bg-[#07080F] text-zinc-100 font-sans selection:bg-cyan-500/30 selection:text-cyan-200 antialiased relative ${isMonochromeMode ? 'theme-monochrome' : ''}`}
+    >
       
       {/* 1. Hologram Particles Canvas Layer */}
       <HologramParticles />
@@ -1617,6 +1639,15 @@ function SovereignAppContent() {
 
         <main className="flex-1 min-w-0 w-full px-2 sm:px-4 py-4 pb-24 sm:pb-20 overflow-hidden space-y-4 transition-all duration-300">
           <SsotDriftWarning />
+
+          {/* Sovereign Mobile Touch & Swipe Navigation Indicator */}
+          <MobileSwipeIndicator
+            currentView={currentView}
+            nextView={nextView}
+            prevView={prevView}
+            swipeFeedback={swipeFeedback}
+            onNavigate={setCurrentView}
+          />
 
           <div className="rounded-2xl bg-[#0b0e1a]/90 border border-cyan-500/25 backdrop-blur-xl shadow-lg transition-all duration-300 overflow-hidden">
             <div className="px-4 py-2.5 flex flex-wrap items-center justify-between gap-3 text-xs font-mono">

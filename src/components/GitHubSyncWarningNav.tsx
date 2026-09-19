@@ -1,8 +1,8 @@
 import React, { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'motion/react';
 import { ExternalLink, Github } from 'lucide-react';
-import { githubSyncService, GitHubSyncState } from '../../services/githubSyncService';
-import { playTone, playAuditChime } from '../AudioSynthesizer';
+import { githubSyncService, GitHubSyncState } from '../services/githubSyncService';
+import { playTone, playAuditChime } from './AudioSynthesizer';
 
 export const GitHubSyncWarningNav: React.FC = () => {
   const [syncState, setSyncState] = useState<GitHubSyncState>(githubSyncService.getState());

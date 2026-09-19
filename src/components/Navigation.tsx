@@ -42,7 +42,7 @@ import {
 } from 'lucide-react';
 import { playTone, getHarmonicCarrierSnapshot } from './AudioSynthesizer';
 import { PWAInstallButton } from './PWAInstallButton';
-import { GitHubSyncWarningNav } from './navigation/GitHubSyncWarningNav';
+import { GitHubSyncWarningNav } from './GitHubSyncWarningNav';
 import { CopilotAssistantDrawer } from './copilot/CopilotAssistantDrawer';
 
 interface NavigationProps {

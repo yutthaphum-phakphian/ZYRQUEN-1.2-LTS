@@ -495,4 +495,41 @@ export const isCryoHumActive = (): boolean => {
   return cryoHumGain !== null;
 };
 
+export interface AudioSynthesizerStatus {
+  state: AudioContextState | 'uninitialized';
+  frequency: number;
+  sampleRate: number;
+  profileId: string;
+  isCarrierActive: boolean;
+}
+
+export function getAudioSynthesizerStatus(): AudioSynthesizerStatus {
+  const isRunning = audioCtx !== null && audioCtx.state === 'running';
+  const profile = AUDIO_PROFILES.find((p) => p.id === activeProfileId) || AUDIO_PROFILES[1];
+  return {
+    state: audioCtx ? audioCtx.state : 'uninitialized',
+    frequency: profile ? profile.baseFreq : 882,
+    sampleRate: audioCtx ? audioCtx.sampleRate : 48000,
+    profileId: activeProfileId || 'circuitry',
+    isCarrierActive: sovereignOscillator !== null || isRunning,
+  };
+}
+
+export async function restartAudioSynthesizer(): Promise<boolean> {
+  try {
+    if (audioCtx) {
+      if (audioCtx.state === 'suspended') {
+        await audioCtx.resume();
+      }
+    } else {
+      getAudioContext();
+    }
+    playTone(882, 0.05, 'sine', 0.05);
+    return true;
+  } catch (e) {
+    console.warn('Failed to restart Audio Synthesizer:', e);
+    return false;
+  }
+}
+
 

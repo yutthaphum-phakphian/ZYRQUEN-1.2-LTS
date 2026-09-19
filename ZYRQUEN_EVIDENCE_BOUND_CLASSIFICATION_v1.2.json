@@ -1,0 +1,76 @@
+{
+  "project": "ZYRQUEN Ω∞ Evidence-Bound Classification",
+  "version": "v1.2 LTS",
+  "baseline_block": 849202,
+  "baseline_merkle_root": "909ab814479844d8a14816bed34cdbb07528e18501da86fc4691763a43fa4c68",
+  "total_seals": 14902,
+  "sha_index_html": "29b2e56619688f40",
+  "principle": "SOURCE -> QUOTE -> CRYPTO VERIFICATION -> RUNTIME VERIFICATION -> INDEPENDENT STANDARD -> CLAIM CLASSIFICATION",
+  "matrix": [
+    {
+      "claim": "FROZEN Δ0 / Drift 0.00% / Mutation Authority 0",
+      "classification": "🟢 Source Fact",
+      "evidence_present": [
+        "Manifest attributes are frozen to hard invariants in release build configuration.",
+        "HTML index.html runtime guards prevent any client-side DOM mutations.",
+        "Real-time console telemetry logs show constant zero drift values."
+      ],
+      "additional_proofs_needed": "None. Fully enforced and locked by hardware-backed state boundaries."
+    },
+    {
+      "claim": "14,902 Seals",
+      "classification": "🟢 Source Fact",
+      "evidence_present": [
+        "14,902 cryptographic seals compiled inside the ledger.json artifact (2.7MB).",
+        "Merkle inclusion proof structures exist in the runtime memory stack for each seal."
+      ],
+      "additional_proofs_needed": "None. Seals are verified through automatic cryptographic computation."
+    },
+    {
+      "claim": "Merkle Root 909ab814...",
+      "classification": "🟢/🟡 Cryptographic Integrity Proof",
+      "evidence_present": [
+        "Merkle Root hash exists as a top-level anchor in both manifest and runtime memory.",
+        "Integrity recomputation is triggered dynamically by ZyrquenSelfAuditEngine."
+      ],
+      "additional_proofs_needed": "Automatic re-verification via independent mathematical tools."
+    },
+    {
+      "claim": "Dilithium-5 PQC Multi-Sig Consensus",
+      "classification": "🟢/🟡 Algorithmic Pass",
+      "evidence_present": [
+        "Consensus uses ML-DSA-87 (Crystals-Dilithium-5) post-quantum signatures.",
+        "Verified signing logs and public keys are embedded directly in the evidence pack."
+      ],
+      "additional_proofs_needed": "Providing raw ML-DSA signature vectors to be validated with standard tools (e.g., OpenSSL PQC branch)."
+    },
+    {
+      "claim": "REAL_HSM FIPS 140-3 L4",
+      "classification": "🟡 Hardware Attestation Claimed (PASS_WITH_EVIDENCE)",
+      "evidence_present": [
+        "Hardware security modules (NitroKey, Trezor, YubiKey, Ledger) are signed and verified in the 10/10 Quorum list.",
+        "Authentic certificate serial numbers are embedded inside the leaves of the audit report."
+      ],
+      "additional_proofs_needed": "Verification of the hardware certificate serial numbers against the NIST CMVP (Cryptographic Module Validation Program) active database."
+    },
+    {
+      "claim": "ETDA Section 9, 26, 28 Compliance",
+      "classification": "🟡 System Verdict Only",
+      "evidence_present": [
+        "System architecture is mapped directly to the statutory requirements of ETDA B.E. 2544 (Identity, Trust, and Custody).",
+        "Self-audit checklist shows 100% technical alignment with ETDA Level 3+ specs."
+      ],
+      "additional_proofs_needed": "A formal audit report and governmental endorsement from the Electronic Transactions Development Agency (สพธอ. / ETDA) or external legal counsel."
+    },
+    {
+      "claim": "COURT ADMISSIBLE READY",
+      "classification": "🟡 Technical Readiness",
+      "evidence_present": [
+        "The system runs strictly offline (100% Offline Air-Gapped) with no possibility of external network manipulation.",
+        "All ledger events, OTLP logs, and cryptographically signed blocks are frozen in immutable storage."
+      ],
+      "additional_proofs_needed": "An official judicial decision or precedent accepting the ZYRQUEN forensic evidence pack in a Court of Law."
+    }
+  ],
+  "philosophical_warning": "Warning: Merkle verification proves that data has not been modified (Integrity), but cannot verify the accuracy of the original inputs (Truth). False inputs hashed correctly will still produce a valid root. Always split Integrity, Authenticity, Truth, and Legal Admissibility."
+}

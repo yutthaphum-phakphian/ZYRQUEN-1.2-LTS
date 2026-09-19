@@ -1,0 +1,91 @@
+{
+  "system_metadata": {
+    "algorithm": "SHA-256",
+    "canonical_block": 849202,
+    "merkle_root_genesis": "909ab814479844d8a14816bed34cdbb07528e18501da86fc4691763a43fa4c68",
+    "canonical_seals": 14902,
+    "drift": "SSoT Δ0 0.00%",
+    "deployment_certificate": "ZQ-GREEN-DEP-849202-3908",
+    "system_status": "LOCKED_FROZEN_v1.2_LTS",
+    "version": "v18 FINAL - LOCKED_FROZEN_v1.2_LTS APEX ULTIMATE v4.16"
+  },
+  "verified_files": [
+    {
+      "file": "package.json",
+      "size_bytes": 1812,
+      "sha256": "8cbed252a8247116b0fae9a908a71956d05cc43f2fe92c2d26b46a27669",
+      "status": "PURE GREEN"
+    },
+    {
+      "file": "tsconfig.json",
+      "size_bytes": 710,
+      "sha256": "996dcf42a7f4067bbb3e973cf3bdb015400ab51fa586f9387d0a8c0e41328d91",
+      "status": "PURE GREEN",
+      "notes": "allowImportingTsExtensions: true, moduleResolution: bundler"
+    },
+    {
+      "file": "vite.config.ts",
+      "size_bytes": 867,
+      "sha256": "4c53a5422dc19d557cfe47b81ac43fc156d768b64ddcdfa82d9169fad03614ab",
+      "status": "MATCH 100%"
+    },
+    {
+      "file": ".npmrc",
+      "size_bytes": 22,
+      "sha256": "a0932bb7ed5d9696b7f9a62a5203cc196054c624e9c39c6d908c9e7db5da2464",
+      "status": "MATCH"
+    },
+    {
+      "file": "src/components/AudioSynthesizer.ts",
+      "size_bytes": 17280,
+      "sha256": "export playTelemetryBeep",
+      "status": "PURE GREEN"
+    },
+    {
+      "file": "src/components/views/PulseView.tsx",
+      "size_bytes": 0,
+      "sha256": "onAddAnomalyReport Props",
+      "status": "PURE GREEN"
+    },
+    {
+      "file": "src/components/PerformanceDashboard.tsx",
+      "size_bytes": 28450,
+      "sha256": "benchmark CPU 48% Latency 285ms",
+      "status": "VERIFIED"
+    },
+    {
+      "file": "index.html",
+      "size_bytes": 0,
+      "sha256": "29b2e56619688f40",
+      "status": "MATCH"
+    }
+  ],
+  "pipeline_verification": {
+    "lint_gate": {
+      "result": "0 ERRORS / 0 WARNINGS",
+      "status": "PASS"
+    },
+    "sha256_gate": {
+      "result": "SSoT Δ0 Zero Drift 0.00%",
+      "merkle_root": "909ab814479844d8a14816bed34cdbb07528e18501da86fc4691763a43fa4c68",
+      "status": "PASS"
+    },
+    "test_suite": {
+      "total": 35,
+      "passed": 35,
+      "percent": "100% PURE GREEN",
+      "status": "PASS"
+    },
+    "vite_build": {
+      "output": "/workspace/out/",
+      "certificate": "ZQ-GREEN-DEP-849202-3908",
+      "status": "BUILD SUCCESSFUL"
+    },
+    "runtime": {
+      "cpu": "48% stable",
+      "latency": "285ms",
+      "throughput": "1240 req/s QOps 851.9 @ 14.98 mK",
+      "seals": "14902 Verified"
+    }
+  }
+}

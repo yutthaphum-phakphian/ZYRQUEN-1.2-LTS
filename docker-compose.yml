@@ -1,0 +1,28 @@
+version: '3.8'
+
+services:
+  zyrquen-audit-api:
+    build: .
+    container_name: zyrquen_sovereign_api
+    ports:
+      - "8000:8000"
+    environment:
+      - SYSTEM_ENV=production
+      - BLOCK_HEIGHT=849202
+      - REDIS_URL=redis://zyrquen_redis_cache:6379
+    depends_on:
+      - redis-cache
+    restart: always
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8000/"]
+      interval: 10s
+      timeout: 5s
+      retries: 3
+
+  redis-cache:
+    image: redis:7-alpine
+    container_name: zyrquen_redis_cache
+    ports:
+      - "6379:6379"
+    restart: always
+    command: redis-server --save 60 1 --loglevel notice

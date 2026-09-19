@@ -510,6 +510,7 @@ export type SystemState = {
 };
 
 class SystemStateStore {
+  public isVerboseLoggingEnabled: boolean = false;
   private custodianRegistry = new CustodianRegistry();
 
   private state: SystemState = {
@@ -686,6 +687,15 @@ class SystemStateStore {
     return () => {
       this.listeners.delete(listener);
     };
+  }
+
+  public setVerboseLoggingEnabled(enabled: boolean): void {
+    this.isVerboseLoggingEnabled = enabled;
+  }
+
+  public toggleVerboseLoggingEnabled(): boolean {
+    this.isVerboseLoggingEnabled = !this.isVerboseLoggingEnabled;
+    return this.isVerboseLoggingEnabled;
   }
 
   private notify() {

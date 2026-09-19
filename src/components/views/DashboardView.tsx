@@ -15,6 +15,8 @@ import { ChamberStatusGrid } from '../ChamberStatusGrid';
 import { ManifestoCard } from '../ManifestoCard';
 import ZyrquenCard from '../ZyrquenCard';
 import { PerformanceDashboard } from '../PerformanceDashboard';
+import { SystemHealthPulse } from '../SystemHealthPulse';
+import ZyrquenSovereignDashboardIntegrated from '../zyrquen-sovereign-dashboard-integrated-v3';
 import { Room00MasterPanel } from '../Room00MasterPanel';
 import { Room01MasterPanel } from '../Room01MasterPanel';
 import { Room02MasterPanel } from '../Room02MasterPanel';
@@ -151,8 +153,8 @@ export const DashboardView: React.FC<DashboardViewProps> = ({
   onOpenCertificate,
   isForensicAuditMode = false,
 }) => {
-  // Main executive sections: Overview (clean summary), Sovereign Audit Dashboard, Chambers Explorer, Telemetry, Evidence, Android 16+ FCM Push, Chamber Visualizer
-  const [dashboardSection, setDashboardSection] = useState<'OVERVIEW' | 'AUDIT' | 'CHAMBERS' | 'TELEMETRY' | 'EVIDENCE' | 'FCM_PUSH' | 'VISUALIZER'>('OVERVIEW');
+  // Main executive sections: Overview (clean summary), Sovereign Audit Dashboard, Chambers Explorer, Telemetry, Evidence, Android 16+ FCM Push, Chamber Visualizer, Sovereign v3
+  const [dashboardSection, setDashboardSection] = useState<'OVERVIEW' | 'AUDIT' | 'CHAMBERS' | 'TELEMETRY' | 'EVIDENCE' | 'FCM_PUSH' | 'VISUALIZER' | 'SOVEREIGN_V3'>('OVERVIEW');
   const [activeCanvasTab, setActiveCanvasTab] = useState<'hologram' | 'atlas' | 'overview' | 'topology'>('hologram');
   const [isHealing, setIsHealing] = useState(false);
   const [healSuccess, setHealSuccess] = useState(false);
@@ -330,6 +332,11 @@ export const DashboardView: React.FC<DashboardViewProps> = ({
           </div>
         </div>
 
+        {/* Real-time SystemHealthPulse (d3 sparkline metrics for CPU, RAM, Network Latency) */}
+        <div className="mt-4 pt-4 border-t border-cyan-500/20">
+          <SystemHealthPulse snapshots={snapshots} />
+        </div>
+
         {healSuccess && (
           <div className="mt-3 p-2.5 rounded-xl bg-emerald-950/70 border border-emerald-500/30 text-emerald-300 text-xs font-mono flex items-center gap-2 animate-in fade-in">
             <ShieldCheck className="w-4 h-4 shrink-0" />
@@ -463,6 +470,23 @@ export const DashboardView: React.FC<DashboardViewProps> = ({
             }`}
           >
             <span>🌟 Executive Overview</span>
+          </button>
+
+          <button
+            onClick={() => {
+              playTone(900, 0.04);
+              setDashboardSection('SOVEREIGN_V3');
+            }}
+            className={`px-3.5 py-2 rounded-xl font-bold flex items-center gap-2 transition-all cursor-pointer max-[479px]:w-full max-[479px]:justify-start ${
+              dashboardSection === 'SOVEREIGN_V3'
+                ? 'bg-[#D4AF37]/20 text-amber-200 border border-amber-400/50 shadow-[0_0_12px_rgba(212,175,55,0.25)]'
+                : 'text-zinc-400 hover:text-zinc-200 bg-white/5 border border-transparent'
+            }`}
+          >
+            <span>👑 Sovereign Integrated Deck (v3)</span>
+            <span className="px-1.5 py-0.2 rounded bg-amber-950 text-amber-300 text-[10px] font-mono border border-amber-500/30">
+              UTIMACO FIPS L4
+            </span>
           </button>
 
           <button
@@ -1076,6 +1100,13 @@ export const DashboardView: React.FC<DashboardViewProps> = ({
       {dashboardSection === 'FCM_PUSH' && (
         <div className="space-y-5 animate-in fade-in duration-200 w-full min-w-0 max-w-full">
           <FcmPushNotificationManager />
+        </div>
+      )}
+
+      {/* TAB: SOVEREIGN INTEGRATED DECK V3 */}
+      {dashboardSection === 'SOVEREIGN_V3' && (
+        <div className="space-y-5 animate-in fade-in duration-200 w-full min-w-0 max-w-full">
+          <ZyrquenSovereignDashboardIntegrated />
         </div>
       )}
 

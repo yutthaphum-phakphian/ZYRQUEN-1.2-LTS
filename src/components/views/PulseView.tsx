@@ -32,6 +32,7 @@ import {
   ReferenceLine,
 } from 'recharts';
 import { SYSTEM_METADATA } from '../../data/canonicalData';
+import { ZYRQUEN_ENTROPY_CONFIG } from '../../utils/circuitBreakerSafety';
 import { playTone } from '../AudioSynthesizer';
 import { CryptographyStream } from '../CryptographyStream';
 import { SearchInsightsPanel } from '../SearchInsightsPanel';
@@ -228,6 +229,7 @@ interface PulseViewProps {
   snapshots?: HardwareSnapshot[];
   onOpenEventsSidebar?: () => void;
   onAddHardwareSnapshot?: (snap: HardwareSnapshot) => void;
+  onAddAnomalyReport?: (report: any) => void;
   onAddSystemEvent?: (
     type: any,
     title: string,
@@ -245,6 +247,7 @@ export const PulseView: React.FC<PulseViewProps> = ({
   snapshots = INITIAL_HARDWARE_SNAPSHOTS,
   onOpenEventsSidebar,
   onAddHardwareSnapshot,
+  onAddAnomalyReport,
   onAddSystemEvent,
   isSystemActivityFrozen = false,
 }) => {
@@ -1377,10 +1380,10 @@ export const PulseView: React.FC<PulseViewProps> = ({
         </div>
       </div>
 
-      {/* Critical Entropy Alert Visual Notification Banner (Triggers sidebar when > 85 KBps) */}
+      {/* Critical Entropy Alert Visual Notification Banner (Triggers sidebar when > 15,000 KBps) */}
       <CriticalEntropyAlertNotification
         currentRateKBps={currentEntropyRateKBps}
-        thresholdKBps={85}
+        thresholdKBps={ZYRQUEN_ENTROPY_CONFIG.criticalThresholdKBps}
         onOpenSidebar={onOpenEventsSidebar}
         onTriggerSidebarAlert={handleTriggerSidebarEntropyAlert}
         isSimulatedLow={isSimulatedLowEntropy}

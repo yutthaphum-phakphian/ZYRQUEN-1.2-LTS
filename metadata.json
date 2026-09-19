@@ -1,4 +1,8 @@
 {
+  "name": "ZYRQUEN Ω∞ Sovereign World Engine",
+  "description": "Sovereign Operating System & Civilization Intelligence Control Plane - Block #849202 (Frozen v1.2 LTS)",
+  "requestFramePermissions": ["camera"],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"],
   "manifesto": "ZYRQUEN_OMEGA_INFINITY_SOVEREIGN_METADATA_V4_16",
   "title": "ZYRQUEN Ω∞ Sovereign Engine Canonical Metadata & System Manifest",
   "engineVersion": "LOCKED_FROZEN_v1.2_LTS",
