@@ -1,0 +1,55 @@
+/* src/styles/print.css */
+
+@media print {
+  /* 1. ซ่อน UI ส่วนเกินทั้งหมด เช่น Header, Navigation, Sidebars, และปุ่มกด */
+  body * {
+    visibility: hidden;
+    background: transparent !important;
+    color: #000 !important;
+    box-shadow: none !important;
+    text-shadow: none !important;
+  }
+
+  /* 2. แสดงเฉพาะคอนเทนเนอร์การ์ดตาราง QR */
+  .evidence-qr-grid, 
+  .evidence-qr-grid * {
+    visibility: visible;
+  }
+
+  /* 3. จัดการ Layout ให้พิมพ์พอดีหน้ากระดาษ A4 */
+  .evidence-qr-grid {
+    position: absolute;
+    left: 0;
+    top: 0;
+    width: 100%;
+    display: grid !important;
+    grid-template-columns: repeat(2, 1fr) !important; /* จัด 2 คอลัมน์สำหรับแปะแฟ้ม */
+    gap: 12pt !important;
+    padding: 0 !important;
+    margin: 0 !important;
+  }
+
+  /* 4. สไตล์การ์ด CourtEvidenceQR สำหรับงานพิมพ์พยานหลักฐาน */
+  .CourtEvidenceQR {
+    border: 2pt solid #000 !important;
+    border-radius: 8pt !important;
+    padding: 12pt !important;
+    page-break-inside: avoid;
+    background-color: #fff !important;
+    color: #000 !important;
+  }
+
+  .CourtEvidenceQR svg {
+    fill: #000 !important;
+  }
+
+  .CourtEvidenceQR span, 
+  .CourtEvidenceQR div {
+    color: #000 !important;
+  }
+
+  /* 5. ซ่อนปุ่มซ่อนลบ / Checkbox ขณะพิมพ์ */
+  .print\:hidden {
+    display: none !important;
+  }
+}

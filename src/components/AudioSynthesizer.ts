@@ -432,6 +432,17 @@ export const updateAtmosphericEntropyPitch = (entropyPercent: number, isEnabled 
   }
 };
 
+export const setCustomCarrierFrequency = (freq: number): void => {
+  try {
+    const ctx = getAudioContext();
+    if (sovereignOscillator && ctx.state === 'running') {
+      sovereignOscillator.frequency.setTargetAtTime(freq, ctx.currentTime, 0.05);
+    }
+  } catch (e) {
+    console.warn('Could not set custom carrier frequency:', e);
+  }
+};
+
 export const getAtmosphericCarrierState = () => {
   const profile = AUDIO_PROFILES.find((p) => p.id === activeProfileId) || AUDIO_PROFILES[1];
   const pitchRatio = 1 + (currentAtmosphericEntropy - 50) / 160;

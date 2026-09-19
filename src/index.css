@@ -401,4 +401,106 @@ html, body, #root {
   pointer-events: none;
 }
 
+/* ======================================================================
+   PRINT MEDIA RULES: COURT EVIDENCE FOLDER FORMATTING
+   ====================================================================== */
+@media print {
+  html, body {
+    background: #ffffff !important;
+    color: #0f172a !important;
+    font-size: 10pt !important;
+    margin: 0 !important;
+    padding: 0 !important;
+  }
+
+  /* Hide interactive elements and noise on print */
+  nav, 
+  aside, 
+  button, 
+  .no-print,
+  #app-sidebar,
+  .print-hide {
+    display: none !important;
+  }
+
+  /* Show dedicated print container */
+  .print-only {
+    display: block !important;
+  }
+
+  /* Clean full-width container on paper */
+  .printable-evidence-area {
+    width: 100% !important;
+    max-width: 100% !important;
+    margin: 0 !important;
+    padding: 8mm !important;
+    background: #ffffff !important;
+    color: #0f172a !important;
+  }
+
+  .printable-evidence-grid {
+    display: grid !important;
+    grid-template-columns: repeat(2, 1fr) !important;
+    gap: 16px !important;
+  }
+
+  .printable-evidence-card {
+    border: 1.5px solid #334155 !important;
+    background-color: #ffffff !important;
+    color: #0f172a !important;
+    border-radius: 8px !important;
+    padding: 14px !important;
+    page-break-inside: avoid !important;
+    break-inside: avoid !important;
+    box-shadow: none !important;
+  }
+
+  .printable-evidence-card * {
+    color: #0f172a !important;
+    text-shadow: none !important;
+    box-shadow: none !important;
+  }
+
+  .printable-evidence-card svg {
+    filter: none !important;
+  }
+
+  @page {
+    size: A4 portrait;
+    margin: 10mm;
+  }
+
+  /* Court Evidence QR Print Sheet */
+  .evidence-qr-grid {
+    position: absolute;
+    left: 0;
+    top: 0;
+    width: 100% !important;
+    display: grid !important;
+    grid-template-columns: repeat(2, 1fr) !important;
+    gap: 12pt !important;
+    padding: 0 !important;
+    margin: 0 !important;
+  }
+
+  .CourtEvidenceQR {
+    border: 2pt solid #000 !important;
+    border-radius: 8pt !important;
+    padding: 12pt !important;
+    page-break-inside: avoid !important;
+    break-inside: avoid !important;
+    background-color: #fff !important;
+    color: #000 !important;
+  }
+
+  .CourtEvidenceQR svg {
+    fill: #000 !important;
+  }
+
+  .CourtEvidenceQR span, 
+  .CourtEvidenceQR div {
+    color: #000 !important;
+  }
+}
+
 

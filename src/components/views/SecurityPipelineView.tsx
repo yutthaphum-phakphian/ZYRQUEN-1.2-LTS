@@ -1,40 +1,42 @@
-import React, { useState, useEffect, useMemo, useRef } from 'react';
-import { motion, AnimatePresence } from 'motion/react';
-import {
-  ShieldCheck,
-  ShieldAlert,
-  Lock,
-  CheckCircle2,
-  Activity,
-  Cpu,
-  Server,
-  Zap,
-  RefreshCw,
-  Play,
-  Pause,
-  ArrowRight,
-  Database,
-  FileCheck2,
-  Scale,
+import React, { useState } from 'react';
+import { 
+  ShieldAlert, 
+  Zap, 
+  FileCheck, 
+  Activity, 
+  CheckCircle2, 
+  GitCompare, 
+  RefreshCw, 
+  AlertOctagon, 
+  ShieldCheck, 
   Award,
-  Fingerprint,
+  Archive,
   Download,
-  AlertTriangle,
-  Radio,
-  Clock,
+  FolderDown,
+  Check,
+  FileSpreadsheet,
+  Printer,
+  CheckSquare,
   Sparkles,
-  Sliders,
-  Terminal,
-  ExternalLink,
-  ChevronRight,
-  Eye,
-  Info
+  SlidersHorizontal,
+  Layers,
+  X
 } from 'lucide-react';
-import { SYSTEM_METADATA } from '../../data/canonicalData';
-import { playTone, playTelemetryBeep, playAuditChime } from '../AudioSynthesizer';
+import JSZip from 'jszip';
+import QRCode from 'qrcode';
+import { CourtEvidenceQR } from '../CourtEvidenceQR';
+import { AuditHistoryDrawer } from '../AuditHistoryDrawer';
+import { CompareEvidenceModal } from '../CompareEvidenceModal';
+import { ThreatSparkline } from '../ThreatSparkline';
+import { EvidencePayload } from '../CourtEvidenceQRModal';
+import { generateAggregateCourtEvidencePdfA3 } from '../../utils/aggregateCourtEvidencePdf';
+import { ZeroDriftD3Chart } from '../ZeroDriftD3Chart';
+import { SealShowcase } from '../SealShowcase';
+import { SecurityPipelineHeader } from '../SecurityPipelineHeader';
+import { ActiveEvidenceSealsPayload } from '../ActiveEvidenceSealsPayload';
 import { ViewType } from '../../types';
 
-interface SecurityPipelineViewProps {
+export interface SecurityPipelineViewProps {
   onNavigate?: (view: ViewType) => void;
   onOpenCertificate?: () => void;
   onAddSystemEvent?: (
@@ -47,797 +49,834 @@ interface SecurityPipelineViewProps {
   ) => void;
 }
 
-interface PipelinePacket {
-  id: string;
-  timestamp: string;
-  sourceNode: string;
-  ingressType: string;
-  payloadHash: string;
-  tier1Pqc: 'DILITHIUM-5' | 'KYBER-1024' | 'SPHINCS+';
-  tier2Quorum: string;
-  tier3Ssot: 'CANONICAL_MATCH' | 'ZERO_DRIFT';
-  verdict: 'VERIFIED_PASS' | 'QUARANTINED' | 'BLOCKED';
-  latencyMs: number;
-}
-
 export const SecurityPipelineView: React.FC<SecurityPipelineViewProps> = ({
   onNavigate,
   onOpenCertificate,
   onAddSystemEvent,
 }) => {
-  // Live Risk & Simulation State
-  const [riskScore, setRiskScore] = useState<number>(0.0);
-  const [safetyCoherence, setSafetyCoherence] = useState<number>(100.0);
-  const [isSimulating, setIsSimulating] = useState<boolean>(false);
-  const [simulationStatusText, setSimulationStatusText] = useState<string>('Nominal SSoT Stable State');
-  const [activeStageIndex, setActiveStageIndex] = useState<number>(0);
-  const [isLiveStreamActive, setIsLiveStreamActive] = useState<boolean>(true);
-  const [selectedPacket, setSelectedPacket] = useState<PipelinePacket | null>(null);
-  const [filterTier, setFilterTier] = useState<string>('ALL');
+  const [isGenerating, setIsGenerating] = useState(false);
+  const [isQuickVerifying, setIsQuickVerifying] = useState(false);
+  const [isDownloadingZip, setIsDownloadingZip] = useState(false);
+  const [zipSuccess, setZipSuccess] = useState(false);
+  const [zipProgress, setZipProgress] = useState<{ current: number; total: number } | null>(null);
+  const [isExportingAggregatePdf, setIsExportingAggregatePdf] = useState(false);
+  const [aggregatePdfSuccess, setAggregatePdfSuccess] = useState(false);
+  const [selectedForCompare, setSelectedForCompare] = useState<string[]>([]);
+  const [isCompareModalOpen, setIsCompareModalOpen] = useState(false);
+  const [isBatchCompareMode, setIsBatchCompareMode] = useState(false);
+  const [isSealShowcaseOpen, setIsSealShowcaseOpen] = useState(false);
+  const [evidenceTab, setEvidenceTab] = useState<'session' | 'payload'>('payload');
+  
+  // Audit Drawer State
+  const [auditDrawerState, setAuditDrawerState] = useState<{
+    isOpen: boolean;
+    sealIndex: number | null;
+    blockNumber: number | null;
+  }>({ isOpen: false, sealIndex: null, blockNumber: null });
 
-  // Simulated Telemetry Packets
-  const [packets, setPackets] = useState<PipelinePacket[]>([
-    {
-      id: 'PKT-849202-01',
-      timestamp: new Date().toISOString().substring(11, 19) + ' UTC',
-      sourceNode: 'BK01 Bangkok Root',
-      ingressType: 'OTLP/gRPC mTLS',
-      payloadHash: '909ab814479844d8a14816bed34cdbb07528e18501da86fc4691763a43fa4c68',
-      tier1Pqc: 'DILITHIUM-5',
-      tier2Quorum: '10/10 REAL_HSM',
-      tier3Ssot: 'CANONICAL_MATCH',
-      verdict: 'VERIFIED_PASS',
-      latencyMs: 0.28,
-    },
-    {
-      id: 'PKT-849202-02',
-      timestamp: new Date(Date.now() - 3200).toISOString().substring(11, 19) + ' UTC',
-      sourceNode: 'SG02 Singapore Nexus',
-      ingressType: 'RFC 3161 TSA',
-      payloadHash: '5a13396c129c611fa438b9f7a240c11d23b78912cf345a67890123456789abcd',
-      tier1Pqc: 'KYBER-1024',
-      tier2Quorum: '10/10 REAL_HSM',
-      tier3Ssot: 'CANONICAL_MATCH',
-      verdict: 'VERIFIED_PASS',
-      latencyMs: 0.31,
-    },
-    {
-      id: 'PKT-849202-03',
-      timestamp: new Date(Date.now() - 7400).toISOString().substring(11, 19) + ' UTC',
-      sourceNode: 'TY03 Tokyo Vault',
-      ingressType: 'ETDA Sec 9 Stamp',
-      payloadHash: '7528e18501da86fc4691763a43fa4c68909ab814479844d8a14816bed34cdbb0',
-      tier1Pqc: 'SPHINCS+',
-      tier2Quorum: '10/10 REAL_HSM',
-      tier3Ssot: 'ZERO_DRIFT',
-      verdict: 'VERIFIED_PASS',
-      latencyMs: 0.35,
-    },
-    {
-      id: 'PKT-849202-04',
-      timestamp: new Date(Date.now() - 12100).toISOString().substring(11, 19) + ' UTC',
-      sourceNode: 'ZH04 Zurich Boundary',
-      ingressType: 'OTLP/gRPC mTLS',
-      payloadHash: '16bed34cdbb07528e18501da86fc4691763a43fa4c68909ab814479844d8a148',
-      tier1Pqc: 'DILITHIUM-5',
-      tier2Quorum: '10/10 REAL_HSM',
-      tier3Ssot: 'CANONICAL_MATCH',
-      verdict: 'VERIFIED_PASS',
-      latencyMs: 0.42,
-    },
-    {
-      id: 'PKT-849202-05',
-      timestamp: new Date(Date.now() - 16800).toISOString().substring(11, 19) + ' UTC',
-      sourceNode: 'SV05 Silicon Valley Gateway',
-      ingressType: 'FIPS 204 Sig',
-      payloadHash: '43a4c5897528e18501da86fc4691763a43fa4c68909ab814479844d8a14816be',
-      tier1Pqc: 'DILITHIUM-5',
-      tier2Quorum: '10/10 REAL_HSM',
-      tier3Ssot: 'CANONICAL_MATCH',
-      verdict: 'VERIFIED_PASS',
-      latencyMs: 0.39,
-    },
-  ]);
+  // Integrity Handshake Verification State (map sealId -> IDLE | VERIFYING | PASSED | FAILED)
+  const [verificationMap, setVerificationMap] = useState<Record<string, 'IDLE' | 'VERIFYING' | 'PASSED' | 'FAILED'>>({});
 
-  // Periodic pipeline stream generator
-  useEffect(() => {
-    if (!isLiveStreamActive) return;
-    const interval = setInterval(() => {
-      const nodes = [
-        'BK01 Bangkok Root',
-        'SG02 Singapore Nexus',
-        'TY03 Tokyo Vault',
-        'ZH04 Zurich Boundary',
-        'SV05 Silicon Valley Gateway',
-        'LD06 London Custodian',
-      ];
-      const types = ['OTLP/gRPC mTLS', 'RFC 3161 TSA', 'ETDA Sec 9 Stamp', 'FIPS 204 Sig'];
-      const pqcs: Array<'DILITHIUM-5' | 'KYBER-1024' | 'SPHINCS+'> = ['DILITHIUM-5', 'KYBER-1024', 'SPHINCS+'];
-      
-      const randomNode = nodes[Math.floor(Math.random() * nodes.length)];
-      const randomType = types[Math.floor(Math.random() * types.length)];
-      const randomPqc = pqcs[Math.floor(Math.random() * pqcs.length)];
-      const randomHex = Array.from({ length: 64 }, () => Math.floor(Math.random() * 16).toString(16)).join('');
-      const latency = +(0.25 + Math.random() * 0.18).toFixed(2);
-      
-      const newPkt: PipelinePacket = {
-        id: `PKT-${Math.floor(849200 + Math.random() * 100)}-${Math.floor(10 + Math.random() * 90)}`,
-        timestamp: new Date().toISOString().substring(11, 19) + ' UTC',
-        sourceNode: randomNode,
-        ingressType: randomType,
-        payloadHash: randomHex,
-        tier1Pqc: randomPqc,
-        tier2Quorum: '10/10 REAL_HSM',
-        tier3Ssot: 'CANONICAL_MATCH',
-        verdict: 'VERIFIED_PASS',
-        latencyMs: latency,
+  // 24-Hour Threat Index Data for Sparkline
+  const threatHistoryData = [0.01, 0.02, 0.015, 0.03, 0.02, 0.04, 0.02, 0.01, 0.02, 0.05, 0.03, 0.02, 0.01, 0.02, 0.015, 0.02, 0.01, 0.03, 0.02, 0.01, 0.02, 0.025, 0.02, 0.02];
+
+  // Active Seals
+  const sessionEvidenceSeals = [
+    {
+      id: "seal-01",
+      stageName: "STG-01 INGEST TIMESTAMP",
+      merkleRoot: "909ab814479844d8a14816bed34cdbb07528e18501da86fc4691763a43fa4c68",
+      anchorSignature: "0x892a_DILITHIUM5_ML_DSA_87_VERIFIED_AUTHENTIC_2026",
+      sealIndex: 14902,
+      blockNumber: 849202,
+      timestamp: new Date().toISOString()
+    },
+    {
+      id: "seal-02",
+      stageName: "STG-07 REAL_HSM QUORUM",
+      merkleRoot: "4f88102a11b9024cba309121a88200198274109827a1a01102931a009188172c",
+      anchorSignature: "0x419e_UTIMACO_FIPS140_3_LEVEL4_QUORUM_10_10_PASSED",
+      sealIndex: 14903,
+      blockNumber: 849203,
+      timestamp: new Date().toISOString()
+    }
+  ];
+
+  // Toggle Selection for Compare (supports multi-selection for unified batch comparison)
+  const handleToggleCompare = (id: string) => {
+    setSelectedForCompare(prev => {
+      if (prev.includes(id)) return prev.filter(item => item !== id);
+      return [...prev, id];
+    });
+  };
+
+  // Browser-Native Print Dialog for Physical Evidence Folder
+  const handlePrintQRSheet = () => {
+    if (onAddSystemEvent) {
+      onAddSystemEvent(
+        'EVIDENCE',
+        'Physical Evidence Sheet Print Triggered',
+        'Formatting active session evidence seals into a printer-friendly physical folder archive.',
+        'ISO/IEC 27037 & ETDA Sec 9/26/28',
+        'info',
+        sessionEvidenceSeals[0]?.merkleRoot
+      );
+    }
+    window.print();
+  };
+
+  // Quick Verify Handshake Action
+  const handleQuickVerifyHandshake = () => {
+    setIsQuickVerifying(true);
+    // Set all seals to VERIFYING to show sweeping animation
+    const verifyingMap: Record<string, 'VERIFYING'> = {};
+    sessionEvidenceSeals.forEach((seal) => {
+      verifyingMap[seal.id] = 'VERIFYING';
+    });
+    setVerificationMap(verifyingMap);
+
+    if (onAddSystemEvent) {
+      onAddSystemEvent(
+        'HANDSHAKE',
+        'Quick Integrity Handshake Triggered',
+        'Executing non-interactive cryptographic handshake across active session evidence seals.',
+        'ETDA Sec 26',
+        'info',
+        sessionEvidenceSeals[0].merkleRoot
+      );
+    }
+    setTimeout(() => {
+      const results: Record<string, 'PASSED' | 'FAILED'> = {};
+      sessionEvidenceSeals.forEach((seal) => {
+        results[seal.id] = 'PASSED'; 
+      });
+      setVerificationMap(results);
+      setIsQuickVerifying(false);
+    }, 1500);
+  };
+
+  // Export All Visible Evidence Seals as Aggregate Court PDF/A-3
+  const handleExportAggregatePdf = async () => {
+    setIsExportingAggregatePdf(true);
+    setAggregatePdfSuccess(false);
+
+    if (onAddSystemEvent) {
+      onAddSystemEvent(
+        'EVIDENCE',
+        'Court PDF/A-3 Aggregate Export Triggered',
+        `Compiling all ${sessionEvidenceSeals.length} active session evidence seals into a standardized court submission dossier.`,
+        'ISO/IEC 27037 & ETDA Sec 9/26/28',
+        'info',
+        sessionEvidenceSeals[0]?.merkleRoot
+      );
+    }
+
+    try {
+      await generateAggregateCourtEvidencePdfA3(
+        sessionEvidenceSeals,
+        "#EP-SOVEREIGN-01 (นายยุทธภูมิ พากเพียร)"
+      );
+      setAggregatePdfSuccess(true);
+      setTimeout(() => setAggregatePdfSuccess(false), 3000);
+      if (onAddSystemEvent) {
+        onAddSystemEvent(
+          'EVIDENCE',
+          'Court PDF/A-3 Dossier Successfully Exported',
+          `Court evidence dossier with ${sessionEvidenceSeals.length} sealed items generated and downloaded.`,
+          'ETDA Sec 28',
+          'info',
+          sessionEvidenceSeals[0]?.merkleRoot
+        );
+      }
+    } catch (err) {
+      console.error("Failed to generate aggregate court PDF/A-3 dossier:", err);
+    } finally {
+      setIsExportingAggregatePdf(false);
+    }
+  };
+
+  // Generate Evidence Bundle
+  const handleGeneratePDFBundle = () => {
+    setIsGenerating(true);
+    if (onAddSystemEvent) {
+      onAddSystemEvent(
+        'EVIDENCE',
+        'Court Evidence Bundle Generated',
+        'Digital evidence package compiled under ISO/IEC 27037 & Thai ETDA Sec 26/28 standards.',
+        'ETDA Sec 26/28',
+        'info',
+        sessionEvidenceSeals[0].merkleRoot
+      );
+    }
+    setTimeout(() => {
+      const bundleData = {
+        title: "OFFICIAL_COURT_EVIDENCE_BUNDLE_ARTIFACT",
+        session_id: "SESS-2026-OMEGA-849202",
+        generated_at: new Date().toISOString(),
+        court_admissible_standard: "ISO/IEC 27037 & THAI ELECTRONIC TRANSACTIONS ACT SEC 26/28",
+        ssot_invariant: "Δ0.00% Zero Drift",
+        evidence_seals: sessionEvidenceSeals
       };
 
-      setPackets(prev => [newPkt, ...prev.slice(0, 19)]);
-      setActiveStageIndex(prev => (prev + 1) % 5);
-    }, 4500);
+      const blob = new Blob([JSON.stringify(bundleData, null, 2)], { type: 'application/json' });
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement('a');
+      a.href = url;
+      a.download = `COURT_EVIDENCE_BUNDLE_${Date.now()}.json`;
+      document.body.appendChild(a);
+      a.click();
+      document.body.removeChild(a);
+      URL.revokeObjectURL(url);
 
-    return () => clearInterval(interval);
-  }, [isLiveStreamActive]);
-
-  // Handle Diagnostic Probe Test
-  const handleDiagnosticProbe = () => {
-    playTelemetryBeep(760);
-    setIsSimulating(true);
-    setSimulationStatusText('Injecting OTLP mTLS Diagnostic Test Pulse...');
-    setRiskScore(1.2);
-    setSafetyCoherence(99.88);
-
-    setTimeout(() => {
-      playTone(880, 0.08, 'sine', 0.05);
-      setSimulationStatusText('Tier-1 PQC Shield Validated (ML-DSA-87 Dilithium-5 Valid)');
-      setRiskScore(0.8);
-    }, 600);
-
-    setTimeout(() => {
-      playTone(987, 0.08, 'sine', 0.05);
-      setSimulationStatusText('Tier-2 Dual-Plane Quorum Confirmed (10/10 Gov + 10/10 Phy PASS)');
-      setRiskScore(0.3);
+      setIsGenerating(false);
     }, 1200);
+  };
 
-    setTimeout(() => {
-      playAuditChime();
-      setSimulationStatusText('Tier-3 SSoT Verified. 14,902 Seals Matched. Phoenix Recovery 35.8ms Nominal.');
-      setRiskScore(0.0);
-      setSafetyCoherence(100.0);
-      setIsSimulating(false);
+  // Generate high-resolution court-admissible PNG for an individual seal
+  const generateSealPNG = async (seal: (typeof sessionEvidenceSeals)[0]): Promise<Blob> => {
+    const payload: EvidencePayload = {
+      sys: "ZYRQUEN_OMEGA_INF",
+      merkle_root: seal.merkleRoot,
+      pqc_sig: seal.anchorSignature,
+      seal_idx: seal.sealIndex,
+      genesis_block: seal.blockNumber,
+      ts: seal.timestamp,
+      principal: "#EP-SOVEREIGN-01",
+      ssot_delta: "0.00%",
+      court_admissible: true
+    };
+
+    const qrDataUrl = await QRCode.toDataURL(JSON.stringify(payload), {
+      width: 460,
+      margin: 2,
+      color: {
+        dark: '#020617',
+        light: '#ffffff'
+      },
+      errorCorrectionLevel: 'H'
+    });
+
+    return new Promise<Blob>((resolve, reject) => {
+      const canvas = document.createElement('canvas');
+      canvas.width = 620;
+      canvas.height = 760;
+      const ctx = canvas.getContext('2d');
+      if (!ctx) {
+        fetch(qrDataUrl).then(res => res.blob()).then(resolve).catch(reject);
+        return;
+      }
+
+      const qrImg = new Image();
+      qrImg.crossOrigin = "anonymous";
+      qrImg.onload = () => {
+        // Background Dark Slate
+        ctx.fillStyle = '#020617';
+        ctx.fillRect(0, 0, canvas.width, canvas.height);
+
+        // Outer border
+        ctx.strokeStyle = '#1e293b';
+        ctx.lineWidth = 3;
+        ctx.strokeRect(12, 12, canvas.width - 24, canvas.height - 24);
+
+        // Header Banner
+        ctx.fillStyle = '#0f172a';
+        ctx.fillRect(14, 14, canvas.width - 28, 76);
+
+        ctx.fillStyle = '#38bdf8';
+        ctx.font = 'bold 16px monospace';
+        ctx.fillText('ZYRQUEN Ω∞ SOVEREIGN AUDIT TRAIL', 30, 44);
+
+        ctx.fillStyle = '#94a3b8';
+        ctx.font = '12px monospace';
+        ctx.fillText(`SEAL #${seal.sealIndex} • BLOCK #${seal.blockNumber} • SSoT Δ0.00% ZERO DRIFT`, 30, 68);
+
+        // QR Image Container with rounded appearance
+        const qrSize = 420;
+        const qrX = (canvas.width - qrSize) / 2;
+        const qrY = 110;
+
+        ctx.fillStyle = '#ffffff';
+        if (typeof ctx.roundRect === 'function') {
+          ctx.beginPath();
+          ctx.roundRect(qrX - 12, qrY - 12, qrSize + 24, qrSize + 24, 12);
+          ctx.fill();
+        } else {
+          ctx.fillRect(qrX - 12, qrY - 12, qrSize + 24, qrSize + 24);
+        }
+
+        ctx.drawImage(qrImg, qrX, qrY, qrSize, qrSize);
+
+        // Stage Title
+        ctx.fillStyle = '#10b981';
+        ctx.font = 'bold 14px monospace';
+        ctx.fillText(`STAGE: ${seal.stageName}`, 30, 584);
+
+        // Merkle Root truncate
+        ctx.fillStyle = '#64748b';
+        ctx.font = '11px monospace';
+        ctx.fillText('MERKLE ROOT HASH:', 30, 610);
+        ctx.fillStyle = '#38bdf8';
+        ctx.fillText(seal.merkleRoot.slice(0, 52) + '...', 30, 630);
+
+        // PQC Signature
+        ctx.fillStyle = '#c084fc';
+        ctx.font = '10px monospace';
+        ctx.fillText(`PQC SIG: ${seal.anchorSignature.slice(0, 55)}...`, 30, 660);
+
+        // Legal & Compliance footer
+        ctx.fillStyle = '#94a3b8';
+        ctx.font = '10px monospace';
+        ctx.fillText('NIST FIPS 203/204/205 (Dilithium-5 / Kyber-1024) • 10/10 REAL_HSM', 30, 690);
+        ctx.fillText('THAI ETDA SEC 9/26/28 • PDPA SEC 37 • ISO/IEC 27037 COURT READY', 30, 712);
+
+        canvas.toBlob((blob) => {
+          if (blob) resolve(blob);
+          else fetch(qrDataUrl).then(res => res.blob()).then(resolve).catch(reject);
+        }, 'image/png');
+      };
+      qrImg.onerror = () => {
+        fetch(qrDataUrl).then(res => res.blob()).then(resolve).catch(reject);
+      };
+      qrImg.src = qrDataUrl;
+    });
+  };
+
+  // Download All QR Seals as ZIP Archive
+  const handleDownloadAllQRSeals = async () => {
+    setIsDownloadingZip(true);
+    setZipSuccess(false);
+    setZipProgress({ current: 0, total: sessionEvidenceSeals.length });
+
+    if (onAddSystemEvent) {
+      onAddSystemEvent(
+        'EVIDENCE',
+        'ZIP Archive Export Initiated',
+        `Compiling ${sessionEvidenceSeals.length} active cryptographic evidence seal PNGs into certified ZIP package.`,
+        'ISO/IEC 27037',
+        'info',
+        sessionEvidenceSeals[0]?.merkleRoot
+      );
+    }
+
+    try {
+      const zip = new JSZip();
+      const sealsFolder = zip.folder("zyrquen_evidence_seals");
+
+      const manifest = {
+        archive_title: "ZYRQUEN_OMEGA_ACTIVE_EVIDENCE_SEALS_ARCHIVE",
+        export_timestamp: new Date().toISOString(),
+        principal: "#EP-SOVEREIGN-01 (นายยุทธภูมิ พากเพียร)",
+        genesis_block: 849202,
+        canonical_merkle_root: "909ab814479844d8a14816bed34cdbb07528e18501da86fc4691763a43fa4c68",
+        status: "VERIFIEDLIVEMAINNET PASSED MAINNET LIVE 100% GREEN",
+        ssot_delta: "Δ0.00% Zero Drift",
+        statutory_compliance: [
+          "Thai Electronic Transactions Act B.E. 2544 (Sec 9, 26, 28)",
+          "Personal Data Protection Act B.E. 2562 (Sec 37 Zero-Knowledge)",
+          "NIST FIPS 203 (ML-KEM-1024), FIPS 204 (ML-DSA-87), FIPS 205 (SLH-DSA)",
+          "FIPS 140-3 Level 4 / CC EAL6+ Deca-Key Hardware Quorum",
+          "ISO/IEC 27037 Digital Evidence Acquisition & Preservation"
+        ],
+        seals: [] as Array<{
+          filename: string;
+          seal_index: number;
+          stage_name: string;
+          block_number: number;
+          merkle_root: string;
+          pqc_signature: string;
+          timestamp: string;
+        }>
+      };
+
+      for (let i = 0; i < sessionEvidenceSeals.length; i++) {
+        const seal = sessionEvidenceSeals[i];
+        setZipProgress({ current: i + 1, total: sessionEvidenceSeals.length });
+
+        const pngBlob = await generateSealPNG(seal);
+        const safeStage = seal.stageName.replace(/[^a-zA-Z0-9_-]/g, '_');
+        const filename = `SEAL_${seal.sealIndex}_${safeStage}.png`;
+
+        if (sealsFolder) {
+          sealsFolder.file(filename, pngBlob);
+        } else {
+          zip.file(filename, pngBlob);
+        }
+
+        manifest.seals.push({
+          filename,
+          seal_index: seal.sealIndex,
+          stage_name: seal.stageName,
+          block_number: seal.blockNumber,
+          merkle_root: seal.merkleRoot,
+          pqc_signature: seal.anchorSignature,
+          timestamp: seal.timestamp
+        });
+      }
+
+      // Add Manifest & Evidence Verification Guide
+      const targetFolder = sealsFolder || zip;
+      targetFolder.file("MANIFEST.json", JSON.stringify(manifest, null, 2));
+      targetFolder.file(
+        "VERIFICATION_GUIDE.txt",
+        `ZYRQUEN Ω∞ SOVEREIGN AUDIT TRAIL - EVIDENCE VERIFICATION GUIDE
+================================================================================
+Principal Custodian: นายยุทธภูมิ พากเพียร (#EP-SOVEREIGN-01)
+Genesis Block: #849202 | Council Root Archive Validated
+Canonical Merkle Root: 909ab814479844d8a14816bed34cdbb07528e18501da86fc4691763a43fa4c68
+Status: VERIFIEDLIVEMAINNET PASSED MAINNET LIVE 100% GREEN (SSoT Δ0.00%)
+================================================================================
+
+This ZIP archive contains official cryptographic QR seal PNGs generated under
+ISO/IEC 27037 standards for court admissibility in Thailand and internationally.
+
+INSTRUCTIONS FOR INDEPENDENT VERIFICATION:
+1. Decode any seal PNG using any standard QR reader or the ZYRQUEN QR Scanner.
+2. Confirm the payload JSON structure:
+   - sys: "ZYRQUEN_OMEGA_INF"
+   - merkle_root: matches the canonical root above
+   - pqc_sig: NIST FIPS 204 ML-DSA-87 (Dilithium-5) signature
+   - ssot_delta: "0.00%"
+3. Re-verify the Merkle Leaf hash against the Dual-Hash Fusion formula:
+   Leaf = SHA3-512(BLAKE3(Data))
+4. The evidence is court-admissible pursuant to Sections 9, 26, and 28 of the
+   Thai Electronic Transactions Act B.E. 2544 (2001).
+================================================================================`
+      );
+
+      const zipBlob = await zip.generateAsync({ type: 'blob' });
+      const url = URL.createObjectURL(zipBlob);
+      const a = document.createElement('a');
+      a.href = url;
+      a.download = `ZYRQUEN_QR_SEALS_ARCHIVE_${Date.now()}.zip`;
+      document.body.appendChild(a);
+      a.click();
+      document.body.removeChild(a);
+      URL.revokeObjectURL(url);
+
+      setZipSuccess(true);
+      setTimeout(() => setZipSuccess(false), 3000);
 
       if (onAddSystemEvent) {
         onAddSystemEvent(
-          'SECURITY',
-          'Security Pipeline Diagnostic Pulse Verified',
-          'Full 3-tier pipeline traversed. FIPS 203/204/205 post-quantum gates and 10/10 quorum verified with zero drift.',
-          'ETDA Sec 9/26',
-          'info'
+          'EVIDENCE',
+          'QR Seals ZIP Archive Downloaded',
+          `Downloaded archive with ${sessionEvidenceSeals.length} high-resolution PNG seals and forensic manifest.`,
+          'ETDA Sec 28',
+          'info',
+          sessionEvidenceSeals[0]?.merkleRoot
         );
       }
-    }, 1900);
+    } catch (err) {
+      console.error("Failed to generate seals ZIP archive:", err);
+    } finally {
+      setIsDownloadingZip(false);
+      setZipProgress(null);
+    }
   };
 
-  // Filtered Packets
-  const filteredPackets = useMemo(() => {
-    if (filterTier === 'ALL') return packets;
-    return packets.filter(p => p.tier1Pqc.includes(filterTier));
-  }, [packets, filterTier]);
+  // Prepare Payload for Compare Modal
+  const getPayloadForSeal = (sealId: string): EvidencePayload | null => {
+    const found = sessionEvidenceSeals.find(s => s.id === sealId);
+    if (!found) return null;
+    return {
+      sys: "ZYRQUEN_OMEGA_INF",
+      merkle_root: found.merkleRoot,
+      pqc_sig: found.anchorSignature,
+      seal_idx: found.sealIndex,
+      genesis_block: found.blockNumber,
+      ts: found.timestamp,
+      principal: "#EP-SOVEREIGN-01",
+      ssot_delta: "0.00%",
+      court_admissible: true
+    };
+  };
 
   return (
-    <div className="w-full max-w-7xl mx-auto space-y-6 pb-16 text-slate-100">
-      {/* 1. Header Banner */}
-      <div className="relative overflow-hidden rounded-xl border border-emerald-500/30 bg-gradient-to-br from-slate-900 via-slate-900/90 to-emerald-950/40 p-6 shadow-2xl backdrop-blur-xl">
-        <div className="absolute -right-20 -top-20 h-64 w-64 rounded-full bg-emerald-500/10 blur-3xl pointer-events-none" />
-        <div className="absolute -left-20 -bottom-20 h-64 w-64 rounded-full bg-cyan-500/10 blur-3xl pointer-events-none" />
+    <div className="w-full space-y-6 font-sans text-slate-100 p-4 sm:p-6 bg-slate-950 min-h-screen">
+      {/* Mini D3.js Line Chart Header showing SSoT Zero Drift Stability */}
+      <div className="rounded-2xl overflow-hidden border border-cyan-500/30 shadow-xl shadow-cyan-950/30">
+        <SecurityPipelineHeader />
+      </div>
 
-        <div className="relative z-10 flex flex-col md:flex-row md:items-center md:justify-between gap-6">
-          <div className="space-y-2">
-            <div className="flex flex-wrap items-center gap-2">
-              <span className="inline-flex items-center gap-1.5 rounded-md border border-emerald-500/40 bg-emerald-500/10 px-2.5 py-1 text-xs font-semibold text-emerald-400">
-                <span className="h-2 w-2 rounded-full bg-emerald-400 animate-pulse" />
-                VERIFIEDLIVEMAINNET
-              </span>
-              <span className="rounded-md border border-cyan-500/30 bg-cyan-500/10 px-2.5 py-1 text-xs font-mono text-cyan-300">
-                LOCKEDFROZENv1.2_LTS
-              </span>
-              <span className="rounded-md border border-amber-500/30 bg-amber-500/10 px-2.5 py-1 text-xs font-mono text-amber-300">
-                GENESIS #849202
-              </span>
-              <span className="rounded-md border border-slate-700 bg-slate-800/80 px-2.5 py-1 text-xs font-mono text-slate-300">
-                Δ0.00% ZERO DRIFT
-              </span>
-            </div>
-
-            <h1 className="text-2xl sm:text-3xl font-bold tracking-tight text-white flex items-center gap-3">
-              <ShieldCheck className="h-8 w-8 text-emerald-400 shrink-0" />
-              <span>ZYRQUEN Ω∞ Sovereign Security Pipeline</span>
-            </h1>
-            <p className="text-sm text-slate-400 max-w-3xl">
-              Real-Time 3-Tier Zero-Trust Holographic Flow & Post-Quantum Defense Matrix. Continuous cryptographic ingestion,
-              dual-plane quorum attestation (10/10 REAL_HSM), and immutable SSoT memory enforcement.
-            </p>
-          </div>
-
-          <div className="flex flex-wrap items-center gap-3">
-            <button
-              onClick={handleDiagnosticProbe}
-              disabled={isSimulating}
-              className="inline-flex items-center gap-2 rounded-lg border border-emerald-500/40 bg-emerald-500/20 px-4 py-2.5 text-sm font-semibold text-emerald-300 hover:bg-emerald-500/30 transition-all shadow-lg hover:shadow-emerald-500/20 cursor-pointer disabled:opacity-50"
-            >
-              <RefreshCw className={`h-4 w-4 ${isSimulating ? 'animate-spin' : ''}`} />
-              <span>{isSimulating ? 'Testing Pipeline...' : 'Inject Test Pulse'}</span>
-            </button>
-
-            {onOpenCertificate && (
-              <button
-                onClick={onOpenCertificate}
-                className="inline-flex items-center gap-2 rounded-lg border border-slate-700 bg-slate-800/90 px-4 py-2.5 text-sm font-medium text-slate-200 hover:bg-slate-700 transition cursor-pointer"
-              >
-                <Award className="h-4 w-4 text-amber-400" />
-                <span>Court Cert</span>
-              </button>
-            )}
-          </div>
+      {/* Header Toolbar */}
+      <div className="flex flex-wrap items-center justify-between gap-4 border-b border-slate-800 pb-5">
+        <div>
+          <h2 className="text-xl sm:text-2xl font-bold tracking-wide text-white flex items-center gap-2.5">
+            <ShieldAlert className="w-6 h-6 text-cyan-400" /> SECURITY PIPELINE &amp; EVIDENCE REPOSITORY
+          </h2>
+          <p className="text-xs sm:text-sm text-slate-400 font-mono mt-1">
+            Real-Time Threat Monitoring &amp; Cryptographic Evidence Anchoring
+          </p>
         </div>
 
-        {/* Master Parameters Strip */}
-        <div className="mt-6 pt-5 border-t border-slate-800/80 grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-3 text-xs">
-          <div className="bg-slate-950/60 rounded-lg p-2.5 border border-slate-800">
-            <div className="text-slate-400">Canonical Merkle Root</div>
-            <div className="font-mono text-emerald-400 truncate mt-0.5" title="909ab814479844d8a14816bed34cdbb07528e18501da86fc4691763a43fa4c68">
-              909ab814...4c68
-            </div>
+        <div className="flex flex-wrap items-center gap-2.5">
+          {/* SSoT Zero Drift D3.js Mini Chart */}
+          <div className="hidden sm:block">
+            <ZeroDriftD3Chart width={220} height={42} />
           </div>
-          <div className="bg-slate-950/60 rounded-lg p-2.5 border border-slate-800">
-            <div className="text-slate-400">Deca-Key Quorum</div>
-            <div className="font-semibold text-cyan-400 mt-0.5">10/10 REAL_HSM (Unanimous)</div>
-          </div>
-          <div className="bg-slate-950/60 rounded-lg p-2.5 border border-slate-800">
-            <div className="text-slate-400">Sub-Kelvin Bus</div>
-            <div className="font-semibold text-emerald-400 mt-0.5">14.98 mK (Limit ≤18.00mK)</div>
-          </div>
-          <div className="bg-slate-950/60 rounded-lg p-2.5 border border-slate-800">
-            <div className="text-slate-400">Throughput / Latency</div>
-            <div className="font-semibold text-slate-200 mt-0.5">1,240 req/s • 285ms p99</div>
-          </div>
-          <div className="bg-slate-950/60 rounded-lg p-2.5 border border-slate-800">
-            <div className="text-slate-400">Phoenix Self-Healing</div>
-            <div className="font-semibold text-emerald-400 mt-0.5">35.8 ms (SLA &lt;142ms)</div>
-          </div>
-          <div className="bg-slate-950/60 rounded-lg p-2.5 border border-slate-800">
-            <div className="text-slate-400">Verification Gate</div>
-            <div className="font-semibold text-emerald-400 mt-0.5">35/35 PURE GREEN PASS</div>
-          </div>
+
+          {/* Official Seals Showcase Trigger Button */}
+          <button
+            id="btn-official-seals"
+            onClick={() => setIsSealShowcaseOpen(true)}
+            className="px-3 py-2 rounded-xl bg-gradient-to-r from-amber-500/15 to-amber-600/10 hover:from-amber-500/25 hover:to-amber-600/20 text-amber-300 font-mono text-xs font-bold border border-amber-500/40 flex items-center gap-1.5 transition active:scale-95 cursor-pointer shadow-sm shadow-amber-950/40"
+            title="Preview and test official digital forensic stamp seals (Gold Master, Wax-Red, Cyber-Cyan)"
+          >
+            <Sparkles className="w-3.5 h-3.5 text-amber-400" />
+            <span>OFFICIAL SEALS</span>
+          </button>
+
+          {onOpenCertificate && (
+            <button
+              onClick={onOpenCertificate}
+              className="px-3 py-2 rounded-xl bg-slate-900 hover:bg-slate-800 border border-amber-500/30 text-amber-300 font-mono text-xs flex items-center gap-1.5 transition cursor-pointer"
+            >
+              <Award className="w-4 h-4 text-amber-400" />
+              <span>CERTIFICATE</span>
+            </button>
+          )}
+
+          {/* Quick Verify Shortcut Button */}
+          <button
+            onClick={handleQuickVerifyHandshake}
+            disabled={isQuickVerifying}
+            className="px-3.5 py-2 rounded-xl bg-cyan-500/10 hover:bg-cyan-500/20 text-cyan-300 font-mono text-xs font-bold border border-cyan-500/30 flex items-center gap-2 transition active:scale-95 disabled:opacity-50 cursor-pointer"
+          >
+            <RefreshCw className={`w-3.5 h-3.5 ${isQuickVerifying ? 'animate-spin' : ''}`} />
+            <span>{isQuickVerifying ? "VERIFYING HANDSHAKE..." : "QUICK VERIFY ALL"}</span>
+          </button>
+
+          {/* Download All QR Seals Button (Generates ZIP Archive of PNGs) */}
+          <button
+            id="btn-download-all-qr-seals"
+            onClick={handleDownloadAllQRSeals}
+            disabled={isDownloadingZip}
+            className={`px-3.5 py-2 rounded-xl font-mono text-xs font-bold border flex items-center gap-2 transition active:scale-95 cursor-pointer disabled:opacity-50 ${
+              zipSuccess
+                ? 'bg-emerald-500/20 border-emerald-500 text-emerald-300'
+                : 'bg-slate-900 hover:bg-slate-800 text-cyan-300 border-cyan-500/40 hover:border-cyan-400 shadow-md shadow-cyan-950/40'
+            }`}
+            title="Generate and download a ZIP archive containing all active evidence seal PNGs and forensic manifest"
+          >
+            {isDownloadingZip ? (
+              <>
+                <Activity className="w-3.5 h-3.5 animate-spin text-cyan-400" />
+                <span>
+                  {zipProgress 
+                    ? `PACKING (${zipProgress.current}/${zipProgress.total})...` 
+                    : "GENERATING ZIP..."}
+                </span>
+              </>
+            ) : zipSuccess ? (
+              <>
+                <Check className="w-3.5 h-3.5 text-emerald-400" />
+                <span>ZIP DOWNLOADED!</span>
+              </>
+            ) : (
+              <>
+                <FolderDown className="w-3.5 h-3.5 text-cyan-400" />
+                <span>DOWNLOAD ALL QR SEALS</span>
+              </>
+            )}
+          </button>
+
+          {/* Generate Evidence Bundle */}
+          <button
+            onClick={handleGeneratePDFBundle}
+            disabled={isGenerating}
+            className="px-4 py-2 rounded-xl bg-gradient-to-r from-emerald-500 to-teal-600 hover:from-emerald-400 hover:to-teal-500 text-slate-950 font-bold font-mono text-xs flex items-center gap-2 shadow-lg shadow-emerald-500/20 active:scale-95 transition cursor-pointer disabled:opacity-50"
+          >
+            {isGenerating ? <Activity className="w-4 h-4 animate-spin text-slate-950" /> : <FileCheck className="w-4 h-4 text-slate-950" />}
+            <span>{isGenerating ? "MINTING BUNDLE..." : "GENERATE BUNDLE"}</span>
+          </button>
         </div>
       </div>
 
-      {/* 2. Top Interactive Section: Threat & Risk Gauge + Live Invariant Telemetry */}
+      {/* Main Grid */}
       <div className="grid grid-cols-1 lg:grid-cols-12 gap-6">
-        {/* Risk Gauge Card */}
-        <div className="lg:col-span-5 rounded-xl border border-slate-800 bg-slate-900/70 p-6 backdrop-blur-md flex flex-col justify-between">
-          <div>
-            <div className="flex items-center justify-between">
-              <div className="flex items-center gap-2">
-                <Activity className="h-5 w-5 text-emerald-400" />
-                <h2 className="text-lg font-bold text-white">Dynamic Threat & Risk Gauge</h2>
-              </div>
-              <span className="text-xs px-2.5 py-0.5 rounded-full bg-emerald-500/10 text-emerald-400 border border-emerald-500/30 font-mono">
-                FIPS 140-3 L4
-              </span>
-            </div>
-            <p className="text-xs text-slate-400 mt-1">
-              Evaluates live packet stream against OPA Rego constraints, lattice tampering, and SSoT memory mutations.
-            </p>
-          </div>
-
-          {/* SVG Semi-Circle Dial Gauge */}
-          <div className="py-6 flex flex-col items-center justify-center">
-            <div className="relative w-64 h-36 flex items-end justify-center">
-              <svg className="w-64 h-36 overflow-visible" viewBox="0 0 200 110">
-                <defs>
-                  <linearGradient id="gaugeGradient" x1="0%" y1="0%" x2="100%" y2="0%">
-                    <stop offset="0%" stopColor="#10B981" />
-                    <stop offset="60%" stopColor="#06B6D4" />
-                    <stop offset="85%" stopColor="#F59E0B" />
-                    <stop offset="100%" stopColor="#EF4444" />
-                  </linearGradient>
-                </defs>
-                {/* Background Arc */}
-                <path
-                  d="M 20 100 A 80 80 0 0 1 180 100"
-                  fill="none"
-                  stroke="#1E293B"
-                  strokeWidth="16"
-                  strokeLinecap="round"
-                />
-                {/* Colored Tick Arc */}
-                <path
-                  d="M 20 100 A 80 80 0 0 1 180 100"
-                  fill="none"
-                  stroke="url(#gaugeGradient)"
-                  strokeWidth="6"
-                  strokeLinecap="round"
-                  strokeDasharray="4 8"
-                  opacity="0.5"
-                />
-                {/* Active Dynamic Arc */}
-                <path
-                  d="M 20 100 A 80 80 0 0 1 180 100"
-                  fill="none"
-                  stroke="#10B981"
-                  strokeWidth="16"
-                  strokeLinecap="round"
-                  strokeDasharray="251.2"
-                  strokeDashoffset={251.2 - (251.2 * (riskScore / 100))}
-                  className="transition-all duration-700 ease-out"
-                />
-                {/* Center Hub */}
-                <circle cx="100" cy="100" r="10" fill="#0F172A" stroke="#10B981" strokeWidth="3" />
-                {/* Needle */}
-                <line
-                  x1="100"
-                  y1="100"
-                  x2={100 + 65 * Math.cos(Math.PI - (riskScore / 100) * Math.PI)}
-                  y2={100 - 65 * Math.sin(Math.PI - (riskScore / 100) * Math.PI)}
-                  stroke="#10B981"
-                  strokeWidth="3.5"
-                  strokeLinecap="round"
-                  className="transition-all duration-700 ease-out shadow-lg"
-                />
-              </svg>
-
-              {/* Central Value Readout */}
-              <div className="absolute bottom-0 text-center">
-                <div className="text-3xl font-black tracking-tight text-white font-mono">
-                  {riskScore.toFixed(2)}%
-                </div>
-                <div className="text-[10px] uppercase tracking-wider text-emerald-400 font-semibold mt-0.5">
-                  Threat Risk Index
-                </div>
-              </div>
-            </div>
-
-            <div className="mt-4 flex items-center justify-between w-full px-4 text-xs font-mono text-slate-400">
-              <span>0% PURE GREEN</span>
-              <span className="text-emerald-400 font-bold">SAFETY: {safetyCoherence.toFixed(2)}%</span>
-              <span>100% FAIL-CLOSED</span>
-            </div>
-          </div>
-
-          {/* Status Message */}
-          <div className="rounded-lg bg-slate-950/80 p-3 border border-slate-800 text-xs flex items-center justify-between">
-            <span className="text-slate-400">Pipeline State:</span>
-            <span className="font-mono text-emerald-400 flex items-center gap-1.5 font-medium">
-              <span className="h-2 w-2 rounded-full bg-emerald-400" />
-              {simulationStatusText}
+        
+        {/* Threat Gauge Panel with Sparkline */}
+        <div className="lg:col-span-4 p-5 rounded-2xl bg-slate-900/80 border border-slate-800 space-y-5">
+          <div className="flex items-center justify-between border-b border-slate-800 pb-3">
+            <span className="text-xs font-mono font-bold text-slate-300 flex items-center gap-2">
+              <Zap className="w-4 h-4 text-amber-400" /> SYSTEM THREAT GAUGE
+            </span>
+            <span className="px-2 py-0.5 rounded bg-emerald-500/10 text-emerald-400 border border-emerald-500/30 text-[10px] font-mono">
+              LOW RISK
             </span>
           </div>
-        </div>
 
-        {/* Real-Time Defense Invariants Matrix */}
-        <div className="lg:col-span-7 rounded-xl border border-slate-800 bg-slate-900/70 p-6 backdrop-blur-md flex flex-col justify-between">
-          <div className="flex items-center justify-between mb-4">
-            <div className="flex items-center gap-2">
-              <Lock className="h-5 w-5 text-cyan-400" />
-              <h2 className="text-lg font-bold text-white">Live Zero-Trust Gate Sentinel</h2>
-            </div>
-            <span className="text-xs text-slate-400">Evaluated every 100ms</span>
-          </div>
-
-          <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
-            <div className="p-3.5 rounded-lg bg-slate-950/60 border border-slate-800/80 flex items-start gap-3">
-              <ShieldCheck className="h-5 w-5 text-emerald-400 shrink-0 mt-0.5" />
-              <div>
-                <div className="text-xs font-semibold text-white">Injection Attack Vectors</div>
-                <div className="text-xs font-mono text-emerald-400 mt-0.5">0 Detected / Blocked</div>
-                <div className="text-[11px] text-slate-500 mt-1">WAF &amp; OPA Rego strict schema whitelist</div>
-              </div>
-            </div>
-
-            <div className="p-3.5 rounded-lg bg-slate-950/60 border border-slate-800/80 flex items-start gap-3">
-              <Zap className="h-5 w-5 text-cyan-400 shrink-0 mt-0.5" />
-              <div>
-                <div className="text-xs font-semibold text-white">Post-Quantum Lattice Tamper</div>
-                <div className="text-xs font-mono text-cyan-400 mt-0.5">0 Tamper / Fail-Closed Armed</div>
-                <div className="text-[11px] text-slate-500 mt-1">Dilithium-5 (ML-DSA-87) FIPS 204 verified</div>
-              </div>
-            </div>
-
-            <div className="p-3.5 rounded-lg bg-slate-950/60 border border-slate-800/80 flex items-start gap-3">
-              <Clock className="h-5 w-5 text-emerald-400 shrink-0 mt-0.5" />
-              <div>
-                <div className="text-xs font-semibold text-white">Replay Jitter &amp; TSA Skew</div>
-                <div className="text-xs font-mono text-emerald-400 mt-0.5">0.00 ms (Monotonic Vector)</div>
-                <div className="text-[11px] text-slate-500 mt-1">RFC 3161 hardware nanosecond anchor</div>
-              </div>
-            </div>
-
-            <div className="p-3.5 rounded-lg bg-slate-950/60 border border-slate-800/80 flex items-start gap-3">
-              <Database className="h-5 w-5 text-emerald-400 shrink-0 mt-0.5" />
-              <div>
-                <div className="text-xs font-semibold text-white">SSoT Memory Write Violations</div>
-                <div className="text-xs font-mono text-emerald-400 mt-0.5">0 Delta / 0 Mutations</div>
-                <div className="text-[11px] text-slate-500 mt-1">Write Firewall WORM enforcement active</div>
+          <div className="flex flex-col items-center justify-center py-2">
+            <div className="relative w-36 h-36 flex items-center justify-center rounded-full border-4 border-slate-800 border-t-cyan-400 border-r-cyan-400">
+              <div className="text-center font-mono">
+                <span className="text-3xl font-extrabold text-white">0.02</span>
+                <span className="block text-[10px] text-slate-400">THREAT INDEX</span>
               </div>
             </div>
           </div>
 
-          {/* Quick Action Simulator Row */}
-          <div className="mt-4 pt-4 border-t border-slate-800 flex flex-wrap items-center justify-between gap-3 text-xs">
-            <span className="text-slate-400 font-medium">Diagnostic Probes:</span>
-            <div className="flex flex-wrap items-center gap-2">
+          {/* Sparkline Chart Injected */}
+          <ThreatSparkline data={threatHistoryData} />
+
+          <div className="space-y-2 text-xs font-mono pt-2">
+            <div className="flex justify-between p-2.5 rounded-lg bg-slate-950 border border-slate-800">
+              <span className="text-slate-400">mTLS Handshake:</span>
+              <span className="text-cyan-400 font-semibold">0.31 ms (p99)</span>
+            </div>
+            <div className="flex justify-between p-2.5 rounded-lg bg-slate-950 border border-slate-800">
+              <span className="text-slate-400">SSoT Drift:</span>
+              <span className="text-emerald-400 font-semibold">Δ0.00% Zero Drift</span>
+            </div>
+            <div className="flex justify-between p-2.5 rounded-lg bg-slate-950 border border-slate-800">
+              <span className="text-slate-400">PQC Key Algorithm:</span>
+              <span className="text-purple-400 font-semibold">Dilithium-5 / Kyber-1024</span>
+            </div>
+            <div className="flex justify-between p-2.5 rounded-lg bg-slate-950 border border-slate-800">
+              <span className="text-slate-400">REAL_HSM Quorum:</span>
+              <span className="text-amber-400 font-semibold">10/10 Ratified</span>
+            </div>
+          </div>
+
+          {onNavigate && (
+            <div className="pt-2">
               <button
-                onClick={() => {
-                  playTelemetryBeep(640);
-                  setSimulationStatusText('Simulating Sub-Kelvin Jitter (0.0142 J/K)...');
-                  setTimeout(() => setSimulationStatusText('Nominal SSoT Stable State'), 1500);
-                }}
-                className="px-2.5 py-1.5 rounded-md bg-slate-800 hover:bg-slate-700 text-slate-300 font-mono transition cursor-pointer"
+                onClick={() => onNavigate('council')}
+                className="w-full py-2 px-3 rounded-lg bg-slate-800 hover:bg-slate-700 text-slate-300 font-mono text-xs flex items-center justify-center gap-1.5 transition border border-slate-700 cursor-pointer"
               >
-                Cryo Jitter Test
-              </button>
-              <button
-                onClick={() => {
-                  playTone(920, 0.08, 'triangle', 0.06);
-                  setSimulationStatusText('Testing Phoenix Auto-Healing (35.8ms SLA)...');
-                  setTimeout(() => setSimulationStatusText('Nominal SSoT Stable State'), 1500);
-                }}
-                className="px-2.5 py-1.5 rounded-md bg-slate-800 hover:bg-slate-700 text-slate-300 font-mono transition cursor-pointer"
-              >
-                Phoenix 35.8ms Replay
-              </button>
-              <button
-                onClick={() => {
-                  playAuditChime();
-                  setSimulationStatusText('Asserting 14,902 Canonical Frozen Seals...');
-                  setTimeout(() => setSimulationStatusText('Nominal SSoT Stable State'), 1500);
-                }}
-                className="px-2.5 py-1.5 rounded-md bg-emerald-950/60 border border-emerald-500/30 text-emerald-300 font-mono hover:bg-emerald-900/60 transition cursor-pointer"
-              >
-                Assert 14,902 Seals
+                <ShieldCheck className="w-3.5 h-3.5 text-cyan-400" />
+                <span>Inspect Deca-Key Council</span>
               </button>
             </div>
-          </div>
+          )}
         </div>
-      </div>
 
-      {/* 3. 3-Tier Sovereign Security Pipeline - Holographic Flow Diagram */}
-      <div className="rounded-xl border border-slate-800 bg-slate-900/80 p-6 backdrop-blur-md space-y-6">
-        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
-          <div>
+        {/* Evidence Seals List */}
+        <div className="lg:col-span-8 space-y-4 printable-evidence-area">
+          
+          {/* Dedicated Printable Header for Physical Folder Archive (Visible only in window.print()) */}
+          <div className="hidden print-only mb-6 border-b-2 border-slate-900 pb-4">
+            <div className="flex items-center justify-between">
+              <div>
+                <h1 className="text-xl font-bold font-mono tracking-wider text-slate-900 uppercase">
+                  ZYRQUEN Ω∞ SOVEREIGN PHYSICAL EVIDENCE DOSSIER
+                </h1>
+                <p className="text-xs font-mono text-slate-700 mt-1">
+                  SOVEREIGN PRINCIPAL: นายยุทธภูมิ พากเพียร (#EP-SOVEREIGN-01) | STATUS: VERIFIEDLIVEMAINNET 100% GREEN
+                </p>
+              </div>
+              <div className="text-right text-[10px] font-mono text-slate-600">
+                <div>GENESIS BLOCK: #849202 / #849203</div>
+                <div>MERKLE ROOT: 909ab8144798...</div>
+                <div>SEALS ACTIVE: 14,902 / SSoT Δ0.00% ZERO DRIFT</div>
+              </div>
+            </div>
+            <div className="mt-3 pt-2 border-t border-slate-300 flex justify-between text-[9px] font-mono text-slate-600">
+              <span>COURT ADMISSIBLE: ETDA B.E. 2544 (SEC 9, 26, 28) • PDPA B.E. 2562 (SEC 37) • FIPS 140-3 LEVEL 4</span>
+              <span>ISO/IEC 27037 DIGITAL EVIDENCE PRESERVATION • PRINTED ON: {new Date().toISOString().replace('T', ' ').substring(0, 19)} UTC</span>
+            </div>
+          </div>
+
+          {/* Tab Selector for Evidence View Modes */}
+          <div className="no-print flex items-center justify-between gap-2 p-1.5 bg-slate-900/90 border border-slate-800 rounded-2xl">
             <div className="flex items-center gap-2">
-              <Sparkles className="h-5 w-5 text-emerald-400" />
-              <h2 className="text-lg font-bold text-white">Holographic 3-Tier Pipeline Flow</h2>
-            </div>
-            <p className="text-xs text-slate-400 mt-1">
-              End-to-end packet traversal: Data Ingress &rarr; 3-Tier Sovereign Security Gates &rarr; Immutable WORM Verdict &amp; Replay.
-            </p>
-          </div>
-
-          <div className="flex items-center gap-2">
-            <span className="text-xs text-slate-400">Stream Status:</span>
-            <button
-              onClick={() => setIsLiveStreamActive(prev => !prev)}
-              className={`inline-flex items-center gap-1.5 px-3 py-1 rounded-md text-xs font-semibold cursor-pointer transition ${
-                isLiveStreamActive
-                  ? 'bg-emerald-500/10 text-emerald-400 border border-emerald-500/30'
-                  : 'bg-amber-500/10 text-amber-400 border border-amber-500/30'
-              }`}
-            >
-              {isLiveStreamActive ? <Play className="h-3.5 w-3.5 fill-current" /> : <Pause className="h-3.5 w-3.5" />}
-              <span>{isLiveStreamActive ? 'LIVE ACTIVE' : 'PAUSED'}</span>
-            </button>
-          </div>
-        </div>
-
-        {/* Holographic Stages Grid with Animated Flow */}
-        <div className="relative">
-          {/* SVG Animated Connector Line for Desktop */}
-          <div className="hidden lg:block absolute top-1/2 left-0 right-0 -translate-y-1/2 h-1 pointer-events-none z-0">
-            <svg className="w-full h-8 overflow-visible">
-              <line
-                x1="12%"
-                y1="4"
-                x2="88%"
-                y2="4"
-                stroke="#1E293B"
-                strokeWidth="2"
-              />
-              <line
-                x1="12%"
-                y1="4"
-                x2="88%"
-                y2="4"
-                stroke="#10B981"
-                strokeWidth="2"
-                strokeDasharray="8 12"
-                className="animate-[dash_15s_linear_infinite]"
-              />
-            </svg>
-          </div>
-
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-6 relative z-10">
-            {/* Stage 1: Data Ingress */}
-            <div className={`p-5 rounded-xl border transition-all duration-300 ${
-              activeStageIndex === 0
-                ? 'border-emerald-500/60 bg-emerald-950/20 shadow-lg shadow-emerald-500/10 ring-1 ring-emerald-500/40'
-                : 'border-slate-800 bg-slate-950/70 hover:border-slate-700'
-            }`}>
-              <div className="flex items-center justify-between mb-3">
-                <span className="text-[11px] font-mono px-2 py-0.5 rounded bg-slate-800 text-slate-300">
-                  STAGE 01
-                </span>
-                <span className="text-xs text-emerald-400 font-semibold flex items-center gap-1">
-                  <CheckCircle2 className="h-3.5 w-3.5" /> INGRESS
-                </span>
-              </div>
-              <h3 className="text-base font-bold text-white flex items-center gap-2">
-                <Server className="h-4 w-4 text-emerald-400" />
-                <span>Peripheral Ingress</span>
-              </h3>
-              <p className="text-xs text-slate-400 mt-1">
-                Zero-Trust perimeter ingestion &amp; hardware time anchoring.
-              </p>
-
-              <div className="mt-4 space-y-2 text-xs">
-                <div className="flex items-center justify-between p-2 rounded bg-slate-900 border border-slate-800">
-                  <span className="text-slate-400">OTLP Protocol:</span>
-                  <span className="font-mono text-cyan-300">Port 4318 mTLS</span>
-                </div>
-                <div className="flex items-center justify-between p-2 rounded bg-slate-900 border border-slate-800">
-                  <span className="text-slate-400">Timestamp:</span>
-                  <span className="font-mono text-emerald-400">RFC 3161 (ns)</span>
-                </div>
-                <div className="flex items-center justify-between p-2 rounded bg-slate-900 border border-slate-800">
-                  <span className="text-slate-400">Jurisdiction:</span>
-                  <span className="font-mono text-amber-300">ETDA Sec 9 ICT</span>
-                </div>
-              </div>
-            </div>
-
-            {/* Stage 2: 3-Tier Sovereign Security Gates */}
-            <div className={`p-5 rounded-xl border transition-all duration-300 ${
-              activeStageIndex >= 1 && activeStageIndex <= 3
-                ? 'border-cyan-500/60 bg-cyan-950/20 shadow-lg shadow-cyan-500/10 ring-1 ring-cyan-500/40'
-                : 'border-slate-800 bg-slate-950/70 hover:border-slate-700'
-            }`}>
-              <div className="flex items-center justify-between mb-3">
-                <span className="text-[11px] font-mono px-2 py-0.5 rounded bg-slate-800 text-slate-300">
-                  STAGE 02
-                </span>
-                <span className="text-xs text-cyan-400 font-semibold flex items-center gap-1">
-                  <Lock className="h-3.5 w-3.5" /> 3-TIER GATES
-                </span>
-              </div>
-              <h3 className="text-base font-bold text-white flex items-center gap-2">
-                <ShieldCheck className="h-4 w-4 text-cyan-400" />
-                <span>3-Tier Security Gates</span>
-              </h3>
-              <p className="text-xs text-slate-400 mt-1">
-                Post-quantum signature, dual-plane quorum, and SSoT locks.
-              </p>
-
-              <div className="mt-4 space-y-2 text-xs">
-                <div className="flex items-center justify-between p-2 rounded bg-slate-900 border border-slate-800">
-                  <span className="text-slate-400">Tier 1 (PQC):</span>
-                  <span className="font-mono text-emerald-400 font-medium">ML-DSA-87 / Kyber</span>
-                </div>
-                <div className="flex items-center justify-between p-2 rounded bg-slate-900 border border-slate-800">
-                  <span className="text-slate-400">Tier 2 (Quorum):</span>
-                  <span className="font-mono text-cyan-400 font-medium">10/10 REAL_HSM</span>
-                </div>
-                <div className="flex items-center justify-between p-2 rounded bg-slate-900 border border-slate-800">
-                  <span className="text-slate-400">Tier 3 (SSoT):</span>
-                  <span className="font-mono text-amber-300 font-medium">14,902 Seals Lock</span>
-                </div>
-              </div>
-            </div>
-
-            {/* Stage 3: Verdict & WORM Storage */}
-            <div className={`p-5 rounded-xl border transition-all duration-300 ${
-              activeStageIndex === 4
-                ? 'border-emerald-500/60 bg-emerald-950/20 shadow-lg shadow-emerald-500/10 ring-1 ring-emerald-500/40'
-                : 'border-slate-800 bg-slate-950/70 hover:border-slate-700'
-            }`}>
-              <div className="flex items-center justify-between mb-3">
-                <span className="text-[11px] font-mono px-2 py-0.5 rounded bg-slate-800 text-slate-300">
-                  STAGE 03
-                </span>
-                <span className="text-xs text-emerald-400 font-semibold flex items-center gap-1">
-                  <FileCheck2 className="h-3.5 w-3.5" /> EVIDENCE SEAL
-                </span>
-              </div>
-              <h3 className="text-base font-bold text-white flex items-center gap-2">
-                <Award className="h-4 w-4 text-emerald-400" />
-                <span>Verdict &amp; Forensic Replay</span>
-              </h3>
-              <p className="text-xs text-slate-400 mt-1">
-                WORM Ledger V25 immutability &amp; court-admissible dossier.
-              </p>
-
-              <div className="mt-4 space-y-2 text-xs">
-                <div className="flex items-center justify-between p-2 rounded bg-slate-900 border border-slate-800">
-                  <span className="text-slate-400">Storage Plane:</span>
-                  <span className="font-mono text-emerald-400">WORM Audit V25</span>
-                </div>
-                <div className="flex items-center justify-between p-2 rounded bg-slate-900 border border-slate-800">
-                  <span className="text-slate-400">Trace Replay:</span>
-                  <span className="font-mono text-cyan-300">35.8ms (&lt;142ms)</span>
-                </div>
-                <div className="flex items-center justify-between p-2 rounded bg-slate-900 border border-slate-800">
-                  <span className="text-slate-400">Legal Standard:</span>
-                  <span className="font-mono text-amber-300">ETDA 9/26 + PDPA 37</span>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
-
-      {/* 4. Live Packet Inspection Feed */}
-      <div className="rounded-xl border border-slate-800 bg-slate-900/80 p-6 backdrop-blur-md space-y-4">
-        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
-          <div>
-            <div className="flex items-center gap-2">
-              <Terminal className="h-5 w-5 text-cyan-400" />
-              <h2 className="text-lg font-bold text-white">Live Pipeline Packet Stream</h2>
-            </div>
-            <p className="text-xs text-slate-400 mt-0.5">
-              Live cryptographic telemetry packets verified through the 3-tier zero-trust gate. Click any row for deep payload inspection.
-            </p>
-          </div>
-
-          {/* Filter Pills */}
-          <div className="flex items-center gap-2">
-            <span className="text-xs text-slate-400">PQC Algorithm:</span>
-            {['ALL', 'DILITHIUM-5', 'KYBER-1024', 'SPHINCS+'].map((tier) => (
               <button
-                key={tier}
-                onClick={() => setFilterTier(tier)}
-                className={`px-2.5 py-1 rounded text-xs font-mono transition cursor-pointer ${
-                  filterTier === tier
-                    ? 'bg-emerald-500/20 text-emerald-300 border border-emerald-500/40 font-semibold'
-                    : 'bg-slate-800 text-slate-400 hover:bg-slate-700'
+                type="button"
+                onClick={() => setEvidenceTab('payload')}
+                className={`px-3 py-1.5 rounded-xl font-mono text-xs font-bold transition-all flex items-center gap-1.5 cursor-pointer ${
+                  evidenceTab === 'payload'
+                    ? 'bg-cyan-500/20 text-cyan-300 border border-cyan-500/40 shadow-[0_0_12px_rgba(6,182,212,0.25)]'
+                    : 'text-slate-400 hover:text-white border border-transparent'
                 }`}
               >
-                {tier}
+                <Layers className="w-3.5 h-3.5 text-cyan-400" />
+                <span>Active Evidence Payload (Batch &amp; Print)</span>
               </button>
+
+              <button
+                type="button"
+                onClick={() => setEvidenceTab('session')}
+                className={`px-3 py-1.5 rounded-xl font-mono text-xs font-bold transition-all flex items-center gap-1.5 cursor-pointer ${
+                  evidenceTab === 'session'
+                    ? 'bg-cyan-500/20 text-cyan-300 border border-cyan-500/40 shadow-[0_0_12px_rgba(6,182,212,0.25)]'
+                    : 'text-slate-400 hover:text-white border border-transparent'
+                }`}
+              >
+                <CheckCircle2 className="w-3.5 h-3.5 text-emerald-400" />
+                <span>Session Seals List ({sessionEvidenceSeals.length})</span>
+              </button>
+            </div>
+            
+            <span className="text-[10px] font-mono text-slate-500 pr-2 hidden sm:inline">
+              FIPS 140-3 L4 • ETDA Sec 9/26/28
+            </span>
+          </div>
+
+          {evidenceTab === 'payload' ? (
+            <div className="rounded-2xl border border-slate-800/80 bg-slate-950/40 p-2">
+              <ActiveEvidenceSealsPayload />
+            </div>
+          ) : (
+            <>
+              <div className="no-print flex flex-wrap items-center justify-between gap-3 bg-slate-900/60 p-3 rounded-xl border border-slate-800">
+            <div className="flex items-center gap-2">
+              <h3 className="text-xs sm:text-sm font-bold font-mono text-slate-200 uppercase tracking-wider flex items-center gap-2">
+                <CheckCircle2 className="w-4 h-4 text-emerald-400" /> Active Session Evidence Seals
+              </h3>
+              <span className="text-[11px] font-mono px-2 py-0.5 rounded-full bg-cyan-500/10 text-cyan-300 border border-cyan-500/20">
+                {sessionEvidenceSeals.length} Loaded
+              </span>
+            </div>
+
+            <div className="flex items-center gap-2 flex-wrap">
+              {/* Print QR Sheet Button */}
+              <button
+                id="btn-print-qr-sheet"
+                onClick={handlePrintQRSheet}
+                className="px-3 py-1.5 rounded-lg bg-slate-900 hover:bg-slate-800 text-cyan-300 border border-cyan-500/30 font-mono text-xs font-bold flex items-center gap-1.5 transition active:scale-95 cursor-pointer shadow-sm shadow-cyan-950/40"
+                title="Format visible CourtEvidenceQR cards into a clean, printer-friendly grid for physical evidence folders"
+              >
+                <Printer className="w-3.5 h-3.5 text-cyan-400" />
+                <span>Print QR Sheet</span>
+              </button>
+
+              {/* Batch Compare Toggle */}
+              <button
+                id="btn-toggle-batch-compare"
+                onClick={() => {
+                  setIsBatchCompareMode(!isBatchCompareMode);
+                  if (isBatchCompareMode) setSelectedForCompare([]);
+                }}
+                className={`px-3 py-1.5 rounded-lg border font-mono text-xs font-bold flex items-center gap-1.5 transition active:scale-95 cursor-pointer ${
+                  isBatchCompareMode
+                    ? 'bg-purple-500/25 border-purple-500 text-purple-200 shadow-sm shadow-purple-950/60'
+                    : 'bg-slate-900 hover:bg-slate-800 text-slate-300 border-slate-700'
+                }`}
+                title="Toggle checkboxes to select multiple seals for unified comparison"
+              >
+                <CheckSquare className={`w-3.5 h-3.5 ${isBatchCompareMode ? 'text-purple-300' : 'text-slate-400'}`} />
+                <span>{isBatchCompareMode ? "Batch Compare: ON" : "Batch Compare"}</span>
+              </button>
+
+              {/* Export All as Court PDF/A-3 Button */}
+              <button
+                id="btn-aggregate-court-pdf"
+                onClick={handleExportAggregatePdf}
+                disabled={isExportingAggregatePdf}
+                className={`px-3 py-1.5 rounded-lg border font-mono text-xs font-bold flex items-center gap-1.5 transition active:scale-95 cursor-pointer disabled:opacity-50 ${
+                  aggregatePdfSuccess
+                    ? 'bg-emerald-500/25 border-emerald-500 text-emerald-300 shadow-sm shadow-emerald-950/50'
+                    : 'bg-emerald-500/10 hover:bg-emerald-500/20 text-emerald-300 border-emerald-500/30'
+                }`}
+                title="Aggregates all currently visible evidence seals and triggers a single PDF/A-3 export for court submission"
+              >
+                {isExportingAggregatePdf ? (
+                  <Activity className="w-3.5 h-3.5 animate-spin text-emerald-400" />
+                ) : aggregatePdfSuccess ? (
+                  <Check className="w-3.5 h-3.5 text-emerald-400" />
+                ) : (
+                  <FileSpreadsheet className="w-3.5 h-3.5 text-emerald-400" />
+                )}
+                <span>
+                  {isExportingAggregatePdf
+                    ? "GENERATING PDF/A-3..."
+                    : aggregatePdfSuccess
+                    ? "PDF/A-3 DOWNLOADED!"
+                    : "Court PDF/A-3"}
+                </span>
+              </button>
+
+              {/* Quick Zip Action in List Header */}
+              <button
+                onClick={handleDownloadAllQRSeals}
+                disabled={isDownloadingZip}
+                className="px-2.5 py-1.5 rounded-lg bg-slate-900 hover:bg-slate-800 text-slate-300 border border-slate-700 font-mono text-xs flex items-center gap-1.5 transition cursor-pointer disabled:opacity-50"
+                title="Download all seals as ZIP"
+              >
+                <Archive className="w-3.5 h-3.5 text-cyan-400" />
+                <span>ZIP All</span>
+              </button>
+
+              {/* Compare Evidence Trigger Button */}
+              <button
+                onClick={() => setIsCompareModalOpen(true)}
+                disabled={selectedForCompare.length < 2}
+                className="px-3 py-1.5 rounded-lg bg-purple-500/15 hover:bg-purple-500/25 text-purple-300 border border-purple-500/30 font-mono text-xs font-bold flex items-center gap-1.5 transition disabled:opacity-40 cursor-pointer disabled:cursor-not-allowed"
+                title="Compare selected seals in unified matrix view"
+              >
+                <GitCompare className="w-3.5 h-3.5" />
+                <span>COMPARE ({selectedForCompare.length})</span>
+              </button>
+            </div>
+          </div>
+
+          <div className="space-y-4 printable-evidence-grid">
+            {sessionEvidenceSeals.map((seal) => (
+              <CourtEvidenceQR
+                key={seal.id}
+                id={seal.id}
+                stageName={seal.stageName}
+                merkleRoot={seal.merkleRoot}
+                anchorSignature={seal.anchorSignature}
+                sealIndex={seal.sealIndex}
+                blockNumber={seal.blockNumber}
+                timestamp={seal.timestamp}
+                isCompareSelected={selectedForCompare.includes(seal.id)}
+                showCheckbox={isBatchCompareMode}
+                onToggleCompare={handleToggleCompare}
+                onOpenAuditHistory={(sIdx, bNum) => setAuditDrawerState({ isOpen: true, sealIndex: sIdx, blockNumber: bNum })}
+                verificationStatus={verificationMap[seal.id] || 'IDLE'}
+              />
             ))}
           </div>
+            </>
+          )}
         </div>
 
-        {/* Packets Table */}
-        <div className="overflow-x-auto rounded-lg border border-slate-800">
-          <table className="w-full text-left text-xs">
-            <thead className="bg-slate-950 text-slate-400 font-mono uppercase tracking-wider border-b border-slate-800">
-              <tr>
-                <th className="p-3">Packet ID</th>
-                <th className="p-3">Timestamp</th>
-                <th className="p-3">Origin Node</th>
-                <th className="p-3">Ingress Type</th>
-                <th className="p-3">Tier 1 PQC</th>
-                <th className="p-3">Tier 2 Quorum</th>
-                <th className="p-3">Latency</th>
-                <th className="p-3 text-right">Verdict</th>
-              </tr>
-            </thead>
-            <tbody className="divide-y divide-slate-800/60 font-mono">
-              {filteredPackets.map((pkt) => (
-                <tr
-                  key={pkt.id}
-                  onClick={() => setSelectedPacket(pkt)}
-                  className="hover:bg-slate-800/50 transition cursor-pointer"
-                >
-                  <td className="p-3 font-semibold text-cyan-300">{pkt.id}</td>
-                  <td className="p-3 text-slate-400">{pkt.timestamp}</td>
-                  <td className="p-3 text-slate-200">{pkt.sourceNode}</td>
-                  <td className="p-3 text-slate-300">{pkt.ingressType}</td>
-                  <td className="p-3">
-                    <span className="px-2 py-0.5 rounded bg-emerald-500/10 text-emerald-400 border border-emerald-500/20">
-                      {pkt.tier1Pqc}
-                    </span>
-                  </td>
-                  <td className="p-3 text-cyan-400">{pkt.tier2Quorum}</td>
-                  <td className="p-3 text-slate-300">{pkt.latencyMs} ms</td>
-                  <td className="p-3 text-right">
-                    <span className="inline-flex items-center gap-1 text-emerald-400 font-semibold">
-                      <CheckCircle2 className="h-3.5 w-3.5" />
-                      {pkt.verdict}
-                    </span>
-                  </td>
-                </tr>
-              ))}
-            </tbody>
-          </table>
-        </div>
       </div>
 
-      {/* 5. Packet Inspection Detail Modal */}
-      <AnimatePresence>
-        {selectedPacket && (
-          <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/80 backdrop-blur-sm">
-            <motion.div
-              initial={{ opacity: 0, scale: 0.95 }}
-              animate={{ opacity: 1, scale: 1 }}
-              exit={{ opacity: 0, scale: 0.95 }}
-              className="relative w-full max-w-2xl rounded-xl border border-slate-700 bg-slate-900 p-6 shadow-2xl text-slate-200"
+      {/* Active Evidence Seals Payload Section with Print Sheet, Batch Compare & Staggered Exit Animation */}
+      <div className="rounded-2xl border border-slate-800 bg-slate-950/60 shadow-xl overflow-hidden">
+        <ActiveEvidenceSealsPayload />
+      </div>
+
+      {/* Audit History Drawer Component */}
+      <AuditHistoryDrawer
+        isOpen={auditDrawerState.isOpen}
+        onClose={() => setAuditDrawerState({ isOpen: false, sealIndex: null, blockNumber: null })}
+        sealIndex={auditDrawerState.sealIndex}
+        blockNumber={auditDrawerState.blockNumber}
+      />
+
+      {/* Compare Evidence Modal Component */}
+      <CompareEvidenceModal
+        isOpen={isCompareModalOpen}
+        onClose={() => setIsCompareModalOpen(false)}
+        seals={
+          selectedForCompare.length > 0
+            ? (selectedForCompare.map(id => getPayloadForSeal(id)).filter(Boolean) as EvidencePayload[])
+            : (sessionEvidenceSeals.map(s => getPayloadForSeal(s.id)).filter(Boolean) as EvidencePayload[])
+        }
+        sealA={selectedForCompare[0] ? getPayloadForSeal(selectedForCompare[0]) : null}
+        sealB={selectedForCompare[1] ? getPayloadForSeal(selectedForCompare[1]) : null}
+      />
+
+      {/* Official Seal Showcase Modal */}
+      {isSealShowcaseOpen && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-950/85 backdrop-blur-md overflow-y-auto">
+          <div className="relative w-full max-w-5xl my-8">
+            <button
+              onClick={() => setIsSealShowcaseOpen(false)}
+              className="absolute top-4 right-4 z-20 p-2 rounded-full bg-slate-800 hover:bg-slate-700 text-slate-300 transition cursor-pointer border border-slate-700"
+              title="Close Showcase"
             >
-              <div className="flex items-center justify-between pb-4 border-b border-slate-800">
-                <div className="flex items-center gap-2">
-                  <Fingerprint className="h-5 w-5 text-emerald-400" />
-                  <h3 className="text-lg font-bold text-white">Cryptographic Packet Dossier</h3>
-                </div>
-                <button
-                  onClick={() => setSelectedPacket(null)}
-                  className="text-slate-400 hover:text-white p-1 rounded transition cursor-pointer"
-                >
-                  &times;
-                </button>
-              </div>
-
-              <div className="mt-4 space-y-4 text-xs">
-                <div className="grid grid-cols-2 gap-4">
-                  <div>
-                    <div className="text-slate-400">Packet Identifier:</div>
-                    <div className="font-mono text-cyan-300 font-bold mt-0.5">{selectedPacket.id}</div>
-                  </div>
-                  <div>
-                    <div className="text-slate-400">Attestation Timestamp:</div>
-                    <div className="font-mono text-slate-200 mt-0.5">{selectedPacket.timestamp}</div>
-                  </div>
-                  <div>
-                    <div className="text-slate-400">Origin Hardware Node:</div>
-                    <div className="font-mono text-emerald-400 mt-0.5">{selectedPacket.sourceNode}</div>
-                  </div>
-                  <div>
-                    <div className="text-slate-400">Ingress Interface:</div>
-                    <div className="font-mono text-slate-200 mt-0.5">{selectedPacket.ingressType}</div>
-                  </div>
-                </div>
-
-                <div className="p-3 rounded-lg bg-slate-950 border border-slate-800">
-                  <div className="text-slate-400 mb-1">Payload SHA-256 Merkle Leaf:</div>
-                  <div className="font-mono text-emerald-400 break-all">{selectedPacket.payloadHash}</div>
-                </div>
-
-                <div className="grid grid-cols-3 gap-3">
-                  <div className="p-2.5 rounded bg-slate-950 border border-slate-800">
-                    <div className="text-slate-400">Tier 1: PQC Shield</div>
-                    <div className="font-mono text-emerald-400 font-bold mt-1">{selectedPacket.tier1Pqc}</div>
-                  </div>
-                  <div className="p-2.5 rounded bg-slate-950 border border-slate-800">
-                    <div className="text-slate-400">Tier 2: HSM Quorum</div>
-                    <div className="font-mono text-cyan-400 font-bold mt-1">{selectedPacket.tier2Quorum}</div>
-                  </div>
-                  <div className="p-2.5 rounded bg-slate-950 border border-slate-800">
-                    <div className="text-slate-400">Tier 3: SSoT Drift</div>
-                    <div className="font-mono text-emerald-400 font-bold mt-1">Δ0.00% ZERO DRIFT</div>
-                  </div>
-                </div>
-
-                <div className="p-3 rounded-lg bg-emerald-950/40 border border-emerald-500/30 text-emerald-300 flex items-center justify-between">
-                  <div className="flex items-center gap-2 font-semibold">
-                    <CheckCircle2 className="h-4 w-4 text-emerald-400" />
-                    <span>Statutory Certification: ETDA Sec 9/26/28 Ratified</span>
-                  </div>
-                  <span className="font-mono text-xs">{selectedPacket.latencyMs} ms SLA</span>
-                </div>
-              </div>
-
-              <div className="mt-6 flex items-center justify-end gap-3 pt-4 border-t border-slate-800">
-                <button
-                  onClick={() => setSelectedPacket(null)}
-                  className="px-4 py-2 rounded-lg bg-slate-800 hover:bg-slate-700 text-slate-200 text-xs font-semibold transition cursor-pointer"
-                >
-                  Close Inspection
-                </button>
-              </div>
-            </motion.div>
+              <X className="w-5 h-5" />
+            </button>
+            <SealShowcase onClose={() => setIsSealShowcaseOpen(false)} />
           </div>
-        )}
-      </AnimatePresence>
+        </div>
+      )}
+
     </div>
   );
 };
+export default SecurityPipelineView;

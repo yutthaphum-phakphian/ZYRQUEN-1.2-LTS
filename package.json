@@ -27,6 +27,7 @@
     "dotenv": "^17.2.3",
     "express": "^4.21.2",
     "jspdf": "^4.2.1",
+    "jspdf-autotable": "^5.0.8",
     "jsqr": "^1.4.0",
     "jszip": "^3.10.2",
     "lucide-react": "^0.546.0",

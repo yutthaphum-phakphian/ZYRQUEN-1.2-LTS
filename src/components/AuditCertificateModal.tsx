@@ -139,94 +139,94 @@ export const AuditCertificateModal: React.FC<AuditCertificateModalProps> = ({ is
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center p-4 sm:p-6 bg-black/80 backdrop-blur-xl animate-in fade-in duration-300">
       <div className="modal-slide-in relative w-full max-w-4xl max-h-[90vh] flex flex-col bg-[#0b0d18] border border-white/12 rounded-[28px] shadow-[0_0_50px_rgba(0,0,0,0.8)] overflow-hidden">
-        {/* Modal Header */}
-        <div className="stagger-1 p-6 border-b border-white/8 flex items-center justify-between bg-gradient-to-r from-amber-500/10 via-violet-500/10 to-cyan-500/10">
-          <div className="flex items-center gap-3">
-            <div className="p-3 rounded-2xl bg-amber-500/20 border border-amber-500/30 text-amber-300">
-              <Award className="w-6 h-6" />
+        {/* Modal Header - Compact Design */}
+        <div className="stagger-1 px-4 py-3 sm:px-5 sm:py-3.5 border-b border-white/8 flex flex-wrap items-center justify-between gap-3 bg-gradient-to-r from-amber-500/10 via-violet-500/10 to-cyan-500/10">
+          <div className="flex items-center gap-2.5 min-w-0">
+            <div className="p-2 rounded-xl bg-amber-500/20 border border-amber-500/30 text-amber-300 shrink-0">
+              <Award className="w-5 h-5" />
             </div>
-            <div>
-              <div className="flex items-center gap-2">
-                <h2 className="text-lg font-mono font-bold text-white tracking-wide">
-                  GOLD MASTER CERTIFICATE & DEPLOYMENT GATE
+            <div className="min-w-0">
+              <div className="flex items-center gap-2 flex-wrap">
+                <h2 className="text-sm sm:text-base font-mono font-bold text-white tracking-wide truncate">
+                  GOLD MASTER CERTIFICATE &amp; DEPLOYMENT GATE
                 </h2>
-                <span className="px-2 py-0.5 rounded-full bg-emerald-500/20 text-emerald-300 border border-emerald-500/30 text-[10px] font-mono">
+                <span className="px-2 py-0.5 rounded-full bg-emerald-500/20 text-emerald-300 border border-emerald-500/30 text-[10px] font-mono font-semibold shrink-0">
                   100% VERIFIED
                 </span>
               </div>
-              <p className="text-xs text-zinc-400 font-mono mt-0.5">
-                ZYRQUEN Ω∞ FROZEN v1.2 LTS • Merkle Root Attestation
+              <p className="text-[11px] text-zinc-400 font-mono truncate">
+                ZYRQUEN Ω∞ FROZEN v1.2 LTS • Merkle Root Attestation • SSoT Δ0.00%
               </p>
             </div>
           </div>
 
-          <div className="flex items-center gap-2">
+          <div className="flex items-center gap-1.5 sm:gap-2 flex-wrap sm:flex-nowrap overflow-x-auto max-w-full py-0.5 scrollbar-none">
             <button
               onClick={() => {
                 playTone(600, 0.04);
                 setActiveTab('qrGenerator');
               }}
-              className={`p-2 rounded-xl border font-mono text-xs flex items-center gap-1.5 transition-all shadow-[0_0_10px_rgba(6,182,212,0.2)] ${
+              className={`px-2.5 py-1.5 rounded-lg border font-mono text-[11px] flex items-center gap-1.5 transition-all shrink-0 cursor-pointer shadow-sm ${
                 activeTab === 'qrGenerator'
-                  ? 'bg-cyan-500 text-black border-cyan-400 font-bold'
+                  ? 'bg-cyan-500 text-black border-cyan-400 font-bold shadow-[0_0_10px_rgba(6,182,212,0.3)]'
                   : 'bg-cyan-500/20 hover:bg-cyan-500/30 text-cyan-200 border-cyan-500/30'
               }`}
               title="Generate Offline Seal Chain Verification QR Code for External Auditors"
             >
-              <QrCode className="w-4 h-4 text-cyan-400" />
-              <span className="hidden sm:inline">Offline QR</span>
+              <QrCode className="w-3.5 h-3.5 text-cyan-400" />
+              <span>Offline QR</span>
             </button>
             <button
               onClick={() => {
                 playTone(620, 0.04);
                 setIsDossierPreviewOpen(true);
               }}
-              className="p-2 rounded-xl bg-cyan-500/20 hover:bg-cyan-500/30 text-cyan-200 border border-cyan-500/30 font-mono text-xs flex items-center gap-1.5 transition-all shadow-[0_0_10px_rgba(6,182,212,0.2)]"
+              className="px-2.5 py-1.5 rounded-lg bg-cyan-500/20 hover:bg-cyan-500/30 text-cyan-200 border border-cyan-500/30 font-mono text-[11px] flex items-center gap-1.5 transition-all shrink-0 cursor-pointer shadow-sm"
               title="Open Interactive Sovereign Dossier & PDF Preview"
             >
-              <Eye className="w-4 h-4 text-cyan-400" />
-              <span className="hidden sm:inline">Preview Dossier</span>
+              <Eye className="w-3.5 h-3.5 text-cyan-400" />
+              <span>Preview Dossier</span>
             </button>
             <button
               onClick={downloadCourtAttestationPdf}
-              className="p-2 rounded-xl bg-emerald-500/20 hover:bg-emerald-500/30 text-emerald-200 border border-emerald-500/30 font-mono text-xs flex items-center gap-1.5 transition-all shadow-[0_0_10px_rgba(16,185,129,0.2)]"
+              className="px-2.5 py-1.5 rounded-lg bg-emerald-500/20 hover:bg-emerald-500/30 text-emerald-200 border border-emerald-500/30 font-mono text-[11px] flex items-center gap-1.5 transition-all shrink-0 cursor-pointer shadow-sm"
               title="Download Court-Admissible Sovereign Forensic Attestation PDF"
             >
-              <FileText className="w-4 h-4 text-emerald-400" />
-              <span className="hidden sm:inline">Court Attestation PDF</span>
+              <FileText className="w-3.5 h-3.5 text-emerald-400" />
+              <span>Court Attestation PDF</span>
             </button>
             <button
               onClick={downloadMasterPdf}
-              className="p-2 rounded-xl bg-amber-500/20 hover:bg-amber-500/30 text-amber-200 border border-amber-500/30 font-mono text-xs flex items-center gap-1.5 transition-all shadow-[0_0_10px_rgba(245,158,11,0.2)]"
+              className="px-2.5 py-1.5 rounded-lg bg-amber-500/20 hover:bg-amber-500/30 text-amber-200 border border-amber-500/30 font-mono text-[11px] flex items-center gap-1.5 transition-all shrink-0 cursor-pointer shadow-sm"
               title="Download Master Forensic Audit PDF"
             >
-              <FileCheck2 className="w-4 h-4 text-amber-400" />
-              <span className="hidden sm:inline">Master PDF</span>
+              <FileCheck2 className="w-3.5 h-3.5 text-amber-400" />
+              <span>Master PDF</span>
             </button>
             <button
               onClick={downloadCertificateCsv}
-              className="p-2 rounded-xl bg-white/5 hover:bg-white/10 text-emerald-300 border border-white/10 font-mono text-xs flex items-center gap-1.5 transition-all"
+              className="px-2.5 py-1.5 rounded-lg bg-white/5 hover:bg-white/10 text-emerald-300 border border-white/10 font-mono text-[11px] flex items-center gap-1.5 transition-all shrink-0 cursor-pointer"
               title="Export to CSV"
             >
-              <Download className="w-4 h-4 text-emerald-400" />
-              <span className="hidden sm:inline">Export CSV</span>
+              <Download className="w-3.5 h-3.5 text-emerald-400" />
+              <span>Export CSV</span>
             </button>
             <button
               onClick={downloadJson}
-              className="p-2 rounded-xl bg-white/5 hover:bg-white/10 text-zinc-300 border border-white/10 font-mono text-xs flex items-center gap-1.5 transition-all"
+              className="px-2.5 py-1.5 rounded-lg bg-white/5 hover:bg-white/10 text-zinc-300 border border-white/10 font-mono text-[11px] flex items-center gap-1.5 transition-all shrink-0 cursor-pointer"
               title="Download Certificate JSON-LD"
             >
-              <Download className="w-4 h-4 text-cyan-400" />
-              <span className="hidden sm:inline">Export JSON-LD</span>
+              <Download className="w-3.5 h-3.5 text-cyan-400" />
+              <span>Export JSON-LD</span>
             </button>
             <button
               onClick={() => {
                 playTone(450, 0.04);
                 onClose();
               }}
-              className="p-2 rounded-xl bg-white/5 hover:bg-white/10 text-zinc-400 hover:text-white border border-white/10 transition-all"
+              className="p-1.5 rounded-lg bg-white/5 hover:bg-white/10 text-zinc-400 hover:text-white border border-white/10 transition-all shrink-0 cursor-pointer"
             >
-              <X className="w-5 h-5" />
+              <X className="w-4 h-4" />
             </button>
           </div>
         </div>
