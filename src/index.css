@@ -316,6 +316,13 @@ html, body, #root {
   pointer-events: none;
 }
 
+/* Mobile Floating UI Overlap Fix */
+@media (max-width: 768px) {
+  body, main, #root {
+    padding-bottom: 7rem !important;
+  }
+}
+
 /* Print Formatting Rules */
 @media print {
   html, body {
