@@ -50,6 +50,7 @@ import { playTone, getHarmonicCarrierSnapshot } from './AudioSynthesizer';
 import { PWAInstallButton } from './PWAInstallButton';
 import { GitHubSyncWarningNav } from './navigation/GitHubSyncWarningNav';
 import { CopilotAssistantDrawer } from './copilot/CopilotAssistantDrawer';
+import { ThemeSwitcher } from './ThemeSwitcher';
 
 interface NavigationProps {
   currentView: ViewType;
@@ -57,6 +58,7 @@ interface NavigationProps {
   onOpenCertificate: () => void;
   onOpenChecklist?: () => void;
   onOpenLegalSearch: () => void;
+  onOpenCommandSearch?: () => void;
   onOpenShortcuts: () => void;
   onOpenGitHubPwa?: () => void;
   onOpenEventsSidebar?: () => void;
@@ -125,6 +127,7 @@ export const Navigation: React.FC<NavigationProps> = ({
   onOpenCertificate,
   onOpenChecklist,
   onOpenLegalSearch,
+  onOpenCommandSearch,
   onOpenShortcuts,
   onOpenGitHubPwa,
   onOpenEventsSidebar,
@@ -438,19 +441,42 @@ export const Navigation: React.FC<NavigationProps> = ({
             }`}>Ω1</span>
           </button>
 
+          {/* Global Theme Switcher (Terminal Green / Deep Space Violet / Sovereign Cyan) */}
+          <div id="theme-switcher-nav">
+            <ThemeSwitcher compact />
+          </div>
+
+          {/* Dedicated Global Command Search Trigger (System Events, Legal, Navigation) */}
+          <button
+            id="btn-nav-command-search"
+            onClick={() => {
+              playTone(680, 0.08);
+              if (onOpenCommandSearch) {
+                onOpenCommandSearch();
+              } else {
+                onOpenLegalSearch();
+              }
+            }}
+            className="group flex items-center gap-1.5 px-2.5 py-1.5 rounded-xl bg-cyan-950/50 hover:bg-cyan-500/20 border border-cyan-500/40 hover:border-cyan-400/60 text-cyan-300 hover:text-cyan-100 font-mono text-xs transition-all shadow-sm cursor-pointer active:scale-95"
+            title="Global Command Search (System Events, Legal Triggers, Views) [⌘K / Ctrl+K]"
+          >
+            <Terminal className="w-3.5 h-3.5 text-cyan-400 group-hover:scale-110 transition-transform" />
+            <span className="hidden xl:inline font-bold">Commands</span>
+            <kbd className="hidden sm:inline px-1.5 py-0.2 text-[9px] rounded bg-cyan-500/20 text-cyan-300 font-mono border border-cyan-500/30">⌘K</kbd>
+          </button>
+
           {/* Dedicated Legal & PQC Search Trigger Button with Search Icon */}
           <button
+            id="btn-nav-legal-search"
             onClick={() => {
               playTone(680, 0.08);
               onOpenLegalSearch();
             }}
-            className="group flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-cyan-950/40 hover:bg-cyan-500/20 border border-cyan-500/30 hover:border-cyan-400/50 text-cyan-300 hover:text-cyan-100 font-mono text-xs transition-all shadow-[0_0_15px_rgba(6,182,212,0.15)] hover:shadow-[0_0_20px_rgba(6,182,212,0.25)]"
-            title="Search Thai Laws & Cryptographic Standards (Ctrl+K / ⌘K)"
+            className="group flex items-center gap-1.5 px-2.5 py-1.5 rounded-xl bg-slate-900/90 hover:bg-slate-800 border border-slate-700/60 hover:border-cyan-500/40 text-zinc-300 hover:text-white font-mono text-xs transition-all shadow-sm cursor-pointer active:scale-95"
+            title="Search Thai Laws & Cryptographic Standards"
           >
-            <Search className="w-4 h-4 text-cyan-400 group-hover:scale-110 transition-transform" />
-            <span className="hidden sm:inline font-bold tracking-wide">Thai Laws & PQC Search</span>
-            <span className="sm:hidden font-bold">Search</span>
-            <kbd className="hidden md:inline px-1.5 py-0.5 text-[10px] rounded bg-cyan-500/20 text-cyan-300 font-mono border border-cyan-500/30">⌘K</kbd>
+            <Search className="w-3.5 h-3.5 text-zinc-400 group-hover:text-cyan-400 group-hover:scale-110 transition-transform" />
+            <span className="hidden 2xl:inline font-bold">Laws</span>
           </button>
 
           {/* Keyboard Shortcuts Trigger Button */}

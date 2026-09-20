@@ -77,6 +77,9 @@ import { OfflineIndicator } from '@/components/OfflineIndicator';
 import { NexusIntegrationLayer } from '@/components/NexusIntegrationLayer';
 import { SovereignLoginLoader } from '@/components/SovereignLoginLoader';
 import { ExecutiveCommandPalette } from '@/components/ExecutiveCommandPalette';
+import { GlobalCommandSearch } from '@/components/GlobalCommandSearch';
+import { ForensicAuditMasterDossierModal } from '@/components/forensics/ForensicAuditMasterDossierModal';
+import { ThemeSwitcher, useTheme } from '@/components/ThemeSwitcher';
 import { EmergencySovereignLockdown } from '@/components/EmergencySovereignLockdown';
 import { LiveQuantumEntropyTicker } from '@/components/LiveQuantumEntropyTicker';
 import { ToastNotification, ToastMessage } from '@/components/ToastNotification';
@@ -860,6 +863,8 @@ function SovereignAppContent() {
   const [isCertificateOpen, setIsCertificateOpen] = useState(false);
   const [isGitHubPwaOpen, setIsGitHubPwaOpen] = useState(false);
   const [isLegalSearchOpen, setIsLegalSearchOpen] = useState(false);
+  const [isCommandSearchOpen, setIsCommandSearchOpen] = useState(false);
+  const [isForensicMasterDossierOpen, setIsForensicMasterDossierOpen] = useState(false);
   const [isShortcutsOpen, setIsShortcutsOpen] = useState(false);
   const [isEventsSidebarOpen, setIsEventsSidebarOpen] = useState(false);
   const [isCopilotOpen, setIsCopilotOpen] = useState(false);
@@ -892,6 +897,18 @@ function SovereignAppContent() {
 
   // Connect to Node.js WebSocket Notification Service and pipe incoming alerts to toasts
   useNotificationWebSocket(showToast);
+
+  // Auto-open Forensic Master Dossier Modal on dedicated legal routes
+  useEffect(() => {
+    if (
+      location.pathname === '/legal/dossier-export' ||
+      location.pathname === '/dossier' ||
+      location.pathname === '/forensic-dossier' ||
+      location.pathname === '/legal/forensic-dossier'
+    ) {
+      setIsForensicMasterDossierOpen(true);
+    }
+  }, [location.pathname]);
   const [carrierPitchHz, setCarrierPitchHz] = useState<number>(882);
   const [snapshots, setSnapshots] = useState<HardwareSnapshot[]>(INITIAL_HARDWARE_SNAPSHOTS);
   const [lastSnapshotTime, setLastSnapshotTime] = useState<number>(0);
@@ -2139,11 +2156,21 @@ function SovereignAppContent() {
       const el = document.getElementById('forensic-audit-stepper');
       if (el) el.scrollIntoView({ behavior: 'smooth' });
       showToast('นำทางไปยัง 16-Step Forensic Audit Stepper', 'info');
+    } else if (
+      actionId === 'export-dossier-pdf' ||
+      actionId === 'open-forensic-master-dossier' ||
+      actionId === 'forensic-master-dossier-v9' ||
+      actionId === 'forensic-dossier'
+    ) {
+      setIsForensicMasterDossierOpen(true);
+      showToast('เปิดสำนวนพยานหลักฐานดิจิทัล DOC-SOV-HSM-1010-2026-V9', 'success');
     }
   }, [handleAddSnapshot, handleExportLegalTriggerMatrixPDF, showToast, snapshots]);
 
+  const { theme } = useTheme();
+
   return (
-    <div className={`min-h-screen w-full max-w-full overflow-x-hidden bg-[#07080F] text-zinc-100 font-sans selection:bg-cyan-500/30 selection:text-cyan-200 antialiased relative ${isMonochromeMode ? 'theme-monochrome' : ''}`}>
+    <div className={`min-h-screen w-full max-w-full overflow-x-hidden bg-[#07080F] text-zinc-100 font-sans selection:bg-cyan-500/30 selection:text-cyan-200 antialiased relative ${isMonochromeMode ? 'theme-monochrome' : ''} ${theme === 'terminal-green' ? 'theme-terminal-green' : theme === 'deep-space-violet' ? 'theme-deep-space-violet' : ''}`}>
       {/* Background Persona Mesh Ambient Lighting with Smooth Morphing */}
       <div className="fixed inset-0 pointer-events-none z-0 overflow-hidden transition-all duration-1000 ease-in-out">
         {/* Dynamic Top Orb */}
@@ -2167,6 +2194,7 @@ function SovereignAppContent() {
         onOpenCertificate={() => setIsCertificateOpen(true)}
         onOpenGitHubPwa={() => setIsGitHubPwaOpen(true)}
         onOpenLegalSearch={() => setIsLegalSearchOpen(true)}
+        onOpenCommandSearch={() => setIsCommandSearchOpen(true)}
         onOpenShortcuts={() => setIsShortcutsOpen(true)}
         onOpenEventsSidebar={() => setIsEventsSidebarOpen((prev) => !prev)}
         eventsCount={systemEvents.length}
@@ -2868,6 +2896,21 @@ function SovereignAppContent() {
       />
 
       <OfflineIndicator />
+
+      {/* Global Command Search (System Events, Legal Triggers, Navigation Views) */}
+      <GlobalCommandSearch
+        isOpen={isCommandSearchOpen}
+        onClose={() => setIsCommandSearchOpen(false)}
+        onSelectView={setCurrentView}
+        onExecuteLegalAction={handleCommandPaletteAction}
+        onExportPDF={handleExportLegalTriggerMatrixPDF}
+      />
+
+      {/* Forensic Audit Master Dossier Modal (DOC-SOV-HSM-1010-2026-V9) */}
+      <ForensicAuditMasterDossierModal
+        isOpen={isForensicMasterDossierOpen}
+        onClose={() => setIsForensicMasterDossierOpen(false)}
+      />
 
       {/* Global Executive Command Palette (Cmd+K / Ctrl+K) */}
       <ExecutiveCommandPalette onSelectAction={handleCommandPaletteAction} />

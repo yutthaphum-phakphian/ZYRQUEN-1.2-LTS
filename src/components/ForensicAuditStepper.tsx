@@ -36,6 +36,7 @@ import { playAuditChime, playTone } from './AudioSynthesizer';
 import { speakSystemAlert } from '../utils/textToSpeechService';
 import { safeCopyToClipboard } from '../utils/clipboard';
 import { CANONICAL_MERKLE_ROOT, SYSTEM_METADATA } from '../data/canonicalData';
+import { downloadMasterForensicDossierV9Pdf } from '../utils/forensicDossierPdfExport';
 import { SystemEvent } from './SystemEventsSidebar';
 
 // ============================================================================
@@ -779,6 +780,20 @@ export const ForensicAuditStepper: React.FC<ForensicAuditStepperProps> = ({
           >
             <Download className="w-3.5 h-3.5" />
             <span className="hidden sm:inline">Export Master PDF</span>
+          </button>
+
+          {/* Export Official V9 Master Dossier PDF */}
+          <button
+            type="button"
+            onClick={() => {
+              playAuditChime();
+              downloadMasterForensicDossierV9Pdf();
+            }}
+            className="px-2.5 py-1.5 rounded-lg bg-emerald-500/20 hover:bg-emerald-500/30 text-emerald-300 border border-emerald-500/50 text-xs font-mono font-bold flex items-center gap-1.5 transition-colors cursor-pointer shadow-[0_0_10px_rgba(16,185,129,0.2)]"
+            title="Download Court-Admissible Dossier DOC-SOV-HSM-1010-2026-V9"
+          >
+            <ShieldCheck className="w-3.5 h-3.5 text-emerald-400" />
+            <span className="hidden sm:inline">Dossier V9 PDF</span>
           </button>
 
           {/* Collapse/Expand Toggle */}

@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { Search, Shield, Bot, Terminal, Download, Lock, RefreshCw, X, FileText, Database } from 'lucide-react';
+import { Search, Shield, Bot, Terminal, Download, Lock, RefreshCw, X, FileText, Database, ShieldCheck } from 'lucide-react';
 
 interface CommandPaletteProps {
   onSelectAction?: (actionId: string) => void;
@@ -24,6 +24,7 @@ export const ExecutiveCommandPalette: React.FC<CommandPaletteProps> = ({ onSelec
   }, [isOpen]);
 
   const commands = [
+    { id: 'forensic-dossier', label: 'เปิดสำนวนพยานหลักฐานดิจิทัล DOC-SOV-HSM-1010-2026-V9 (Court Master)', icon: ShieldCheck, category: 'Audit & Legal' },
     { id: 'snapshot', label: 'ดาวน์โหลด Signed Snapshot (FIPS 204)', icon: Download, category: 'Audit & Legal' },
     { id: 'pqc-verify', label: 'ตรวจสอบ PQC Dilithium-5 / Kyber Key Spec', icon: Shield, category: 'Security' },
     { id: 'lockdown', label: 'เปิดใช้งาน Emergency Air-Gap Isolation Protocol', icon: Lock, category: 'Emergency' },
