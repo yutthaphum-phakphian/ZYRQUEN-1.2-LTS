@@ -1,6 +1,29 @@
 /* src/index.css */
 @import "tailwindcss";
 
+/* Compact Button Utility Classes */
+@layer components {
+  /* ปุ่มมาตรฐานขนาดกระชับ */
+  .btn-compact {
+    @apply px-2.5 py-1 text-[11px] font-medium tracking-wide rounded border transition-all duration-150 flex items-center gap-1.5 whitespace-nowrap active:scale-95;
+  }
+
+  /* ปุ่มเน้นสีทอง (Master PDF) */
+  .btn-compact-gold {
+    @apply px-2.5 py-1 text-[11px] font-medium tracking-wide rounded border transition-all duration-150 flex items-center gap-1.5 whitespace-nowrap active:scale-95 bg-amber-500/20 text-amber-300 border-amber-500/40 hover:bg-amber-500/30 hover:border-amber-400;
+  }
+
+  /* ปุ่มโทนสีฟ้า/เขียว (Primary Actions) */
+  .btn-compact-cyan {
+    @apply px-2.5 py-1 text-[11px] font-medium tracking-wide rounded border transition-all duration-150 flex items-center gap-1.5 whitespace-nowrap active:scale-95 bg-cyan-950/60 text-cyan-300 border-cyan-700/60 hover:bg-cyan-900/80 hover:border-cyan-500;
+  }
+
+  /* ปุ่มโทนสีเทา (Secondary/Export) */
+  .btn-compact-secondary {
+    @apply px-2.5 py-1 text-[11px] font-medium tracking-wide rounded border transition-all duration-150 flex items-center gap-1.5 whitespace-nowrap active:scale-95 bg-gray-800/80 text-gray-300 border-gray-700 hover:bg-gray-700 hover:text-white;
+  }
+}
+
 /* Custom Root Theme Variables */
 :root,
 .theme-terminal-green {

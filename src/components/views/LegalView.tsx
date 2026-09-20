@@ -44,6 +44,7 @@ import { CourtEvidenceManifestPanel } from '../executive/CourtEvidenceManifestPa
 import { DigitalEvidenceChecklistModal } from '../DigitalEvidenceChecklistModal';
 import { CryptographicEvidenceSandbox } from '../CryptographicEvidenceSandbox';
 import { UnifiedQrEvidenceDossierModal } from '../UnifiedQrEvidenceDossierModal';
+import { CourtEvidenceInfographic } from '../CourtEvidenceInfographic';
 import { generateSovereignReportPdf } from '../../utils/sovereignReportPdfExport';
 import { exportCanonicalSealArtifactJson } from '../../utils/canonicalSealArtifactExport';
 import { safeCopyToClipboard } from '../../utils/clipboard';
@@ -538,6 +539,9 @@ export const LegalView: React.FC<LegalViewProps> = ({
       {/* Tab 3.5: Court-Admissible Exhibits & Manifest (จพ.01–จพ.07) */}
       {activeTab === 'court-manifest' && (
         <motion.div variants={containerVariants} initial="hidden" animate="visible" className="space-y-6">
+          <motion.div variants={itemVariants}>
+            <CourtEvidenceInfographic />
+          </motion.div>
           <motion.div variants={itemVariants}>
             <CourtEvidenceManifestPanel />
           </motion.div>

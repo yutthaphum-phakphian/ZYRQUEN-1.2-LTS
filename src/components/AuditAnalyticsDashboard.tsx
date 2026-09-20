@@ -28,6 +28,7 @@ import { exportAuditLogsAsCsv, exportAuditLogsAsJson, ExportableAuditEvent } fro
 import { SovereignAuditEvent, isAnomalyEvent } from '../services/anomalyDetector';
 import { AnomalyDetailModal } from './AnomalyDetailModal';
 import { playTone, playAuditChime } from './AudioSynthesizer';
+import { HardwareHeartbeatStabilityTrend } from './HardwareHeartbeatStabilityTrend';
 
 export type TimeframeOption = '24h' | '7d' | '30d';
 
@@ -319,6 +320,9 @@ export const AuditAnalyticsDashboard: React.FC = () => {
           </div>
         )}
       </div>
+
+      {/* Hardware Heartbeat Stability 60-Minute Trend Line Component */}
+      <HardwareHeartbeatStabilityTrend />
 
       {/* Anomalies Inspection List */}
       <div className="rounded-2xl bg-[#0a0f1e] border border-cyan-500/20 overflow-hidden shadow-xl">

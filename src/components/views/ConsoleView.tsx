@@ -30,11 +30,13 @@ import {
   GitMerge,
   Scale,
   Lock,
+  QrCode,
 } from 'lucide-react';
 import { SYSTEM_METADATA, AUDIT_TRACE_TX, THAI_CUSTODIANS, SYSTEM_INVARIANTS } from '../../data/canonicalData';
 import { playAuditChime, playTone, playWarningTone } from '../AudioSynthesizer';
 import { ConsoleHardwareTelemetryGrid } from '../ConsoleHardwareTelemetryGrid';
 import { MacroConsole } from '../MacroConsole';
+import { EvidentiaryManifestQRScanner, EvidentiaryManifestPayload } from '../EvidentiaryManifestQRScanner';
 import { HardwareSnapshot, ViewType } from '../../types';
 import { createTelemetrySnapshot, generateSha256Hash } from '../../utils/telemetrySnapshot';
 import { exportCanonicalSealArtifactJson } from '../../utils/canonicalSealArtifactExport';
@@ -59,11 +61,12 @@ export const ConsoleView: React.FC<ConsoleViewProps> = ({
   snapshots = [],
   snapshotsCount = 2,
 }) => {
-  const [activeTab, setActiveTab] = useState<'both' | 'cli' | 'grid' | 'macros'>('both');
+  const [activeTab, setActiveTab] = useState<'both' | 'cli' | 'grid' | 'macros' | 'qr-scan'>('both');
   const [viewMode, setViewMode] = useState<'grid' | 'list'>('grid');
   const [input, setInput] = useState('');
   const [isExportingLog, setIsExportingLog] = useState(false);
   const [lastCapturedSnapshot, setLastCapturedSnapshot] = useState<HardwareSnapshot | null>(null);
+  const [lastIngestedManifest, setLastIngestedManifest] = useState<EvidentiaryManifestPayload | null>(null);
   const [latestCpuLoad, setLatestCpuLoad] = useState<number>(41.2);
   const [latestTelemetry, setLatestTelemetry] = useState<any>(null);
 
@@ -154,6 +157,41 @@ export const ConsoleView: React.FC<ConsoleViewProps> = ({
       ]);
     },
     [latestTelemetry, snapshotsCount, onCaptureSnapshot]
+  );
+
+  // Quick Ingestion of Evidentiary Manifest Codes via QR Scanner or Manual Entry
+  const handleManifestIngested = useCallback(
+    (manifest: EvidentiaryManifestPayload) => {
+      playAuditChime();
+      setLastIngestedManifest(manifest);
+
+      setHistory((prev) => [
+        ...prev,
+        {
+          type: manifest.status === 'VERIFIED_INTACT' ? 'success' : 'error',
+          text: `[EVIDENTIARY MANIFEST INGESTION REPORT]:
+  Manifest ID:  ${manifest.manifestId} (${manifest.title})
+  Type:         ${manifest.manifestType}
+  Block Height: #${manifest.blockHeight} (Genesis Canonical Anchor)
+  Merkle Root:  ${manifest.merkleRoot}
+  Drift Delta:  ${manifest.driftDelta}
+  Seals Count:  ${manifest.sealsCount.toLocaleString()} Frozen Seals (Ω601–Ω1000 Locked)
+  Quorum:       ${manifest.custodyAttestation}
+  Legal Basis:  ${manifest.legalBinding}
+  Timestamp:    ${manifest.timestampIct}
+  Status:       ${
+    manifest.status === 'VERIFIED_INTACT'
+      ? 'PASSED 100% GREEN (COURT-ADMISSIBLE)'
+      : 'ALERT - TAMPER DETECTED / INTEGRITY VIOLATION'
+  }`,
+        },
+      ]);
+
+      if (onCaptureSnapshot) {
+        handleCaptureSnapshot();
+      }
+    },
+    [handleCaptureSnapshot, onCaptureSnapshot]
   );
 
   const latestCpuLoadRef = useRef(latestCpuLoad);
@@ -389,6 +427,21 @@ export const ConsoleView: React.FC<ConsoleViewProps> = ({
       return;
     }
 
+    if (command === 'scan-qr' || command === 'qr' || command === 'manifest' || command === 'ingest-qr' || command === 'scan') {
+      playTone(600, 0.05);
+      setActiveTab('qr-scan');
+      setHistory((prev) => [
+        ...prev,
+        {
+          type: 'success',
+          text: `[EVIDENTIARY MANIFEST QR SCANNER ENGAGED]:
+  Camera, image upload, and direct code ingestion active.
+  Ready to scan tamper-evident hardware foils or court dossier manifest envelopes.`,
+        },
+      ]);
+      return;
+    }
+
     if (command === 'export-json' || command === 'dump' || command === 'export') {
       handleExportSnapshotsJson();
       return;
@@ -426,6 +479,7 @@ export const ConsoleView: React.FC<ConsoleViewProps> = ({
   • fed-drift      - Inspect Multi-Node Statistical Knowledge Drift Matrix
   • snapshot       - Capture Instant Hardware Telemetry State into Ledger
   • autosnap       - Toggle 30s Auto-Snapshot on High-Load Activity
+  • scan-qr        - Open Evidentiary Manifest QR Scanner (Ingest Hardware & Court Codes)
   • dossier        - Inspect Unified QR Evidence Dossier & Attestation Status
   • export-seal-artifact - Export Signed Canonical Seal Manifest & Block Metadata (JSON)
   • export-json    - Export Complete Session Hardware Telemetry as JSON Forensic Dump
@@ -959,11 +1013,28 @@ ${THAI_CUSTODIANS.map((c) => `  • ${c.passportNumber}: ${c.nameTh} (${c.nameEn
           {/* Export JSON Forensic Dump Button */}
           <button
             onClick={handleExportSnapshotsJson}
-            className="px-3 py-2 rounded-xl bg-cyan-500/20 hover:bg-cyan-500/30 text-cyan-300 hover:text-cyan-200 border border-cyan-500/40 font-mono text-xs font-bold flex items-center gap-2 transition-all shadow-[0_0_16px_rgba(6,182,212,0.2)] hover:scale-[1.02]"
+            className="px-3 py-2 rounded-xl bg-cyan-500/20 hover:bg-cyan-500/30 text-cyan-300 hover:text-cyan-200 border border-cyan-500/40 font-mono text-xs font-bold flex items-center gap-2 transition-all shadow-[0_0_16px_rgba(6,182,212,0.2)] hover:scale-[1.02] cursor-pointer"
             title="Export session hardware telemetry snapshots as a detailed JSON forensic file"
           >
             <Download className="w-4 h-4 text-cyan-400" />
             <span>EXPORT JSON</span>
+          </button>
+
+          {/* Quick Evidentiary Manifest QR Scanner Button */}
+          <button
+            onClick={() => {
+              playTone(600, 0.04);
+              setActiveTab('qr-scan');
+            }}
+            className={`px-3 py-2 rounded-xl font-mono text-xs font-bold flex items-center gap-2 transition-all hover:scale-[1.02] cursor-pointer ${
+              activeTab === 'qr-scan'
+                ? 'bg-cyan-500 text-black shadow-[0_0_16px_rgba(6,182,212,0.4)]'
+                : 'bg-cyan-500/20 hover:bg-cyan-500/30 text-cyan-300 border border-cyan-500/40'
+            }`}
+            title="Open QR scanner for rapid ingestion of evidentiary manifest codes"
+          >
+            <QrCode className="w-4 h-4" />
+            <span>SCAN MANIFEST QR</span>
           </button>
 
           <div className="flex items-center bg-black/40 border border-white/10 p-1 rounded-2xl">
@@ -972,7 +1043,7 @@ ${THAI_CUSTODIANS.map((c) => `  • ${c.passportNumber}: ${c.nameTh} (${c.nameEn
                 playTone(550, 0.04);
                 setActiveTab('both');
               }}
-              className={`px-3 py-1 rounded-xl text-xs font-mono transition-all ${
+              className={`px-3 py-1 rounded-xl text-xs font-mono transition-all cursor-pointer ${
                 activeTab === 'both' ? 'bg-cyan-500/20 text-cyan-300 font-bold border border-cyan-500/30' : 'text-zinc-400'
               }`}
             >
@@ -983,7 +1054,7 @@ ${THAI_CUSTODIANS.map((c) => `  • ${c.passportNumber}: ${c.nameTh} (${c.nameEn
                 playTone(550, 0.04);
                 setActiveTab('grid');
               }}
-              className={`px-3 py-1 rounded-xl text-xs font-mono transition-all ${
+              className={`px-3 py-1 rounded-xl text-xs font-mono transition-all cursor-pointer ${
                 activeTab === 'grid' ? 'bg-cyan-500/20 text-cyan-300 font-bold border border-cyan-500/30' : 'text-zinc-400'
               }`}
             >
@@ -994,7 +1065,7 @@ ${THAI_CUSTODIANS.map((c) => `  • ${c.passportNumber}: ${c.nameTh} (${c.nameEn
                 playTone(550, 0.04);
                 setActiveTab('cli');
               }}
-              className={`px-3 py-1 rounded-xl text-xs font-mono transition-all ${
+              className={`px-3 py-1 rounded-xl text-xs font-mono transition-all cursor-pointer ${
                 activeTab === 'cli' ? 'bg-cyan-500/20 text-cyan-300 font-bold border border-cyan-500/30' : 'text-zinc-400'
               }`}
             >
@@ -1005,12 +1076,24 @@ ${THAI_CUSTODIANS.map((c) => `  • ${c.passportNumber}: ${c.nameTh} (${c.nameEn
                 playTone(600, 0.04);
                 setActiveTab('macros');
               }}
-              className={`px-3 py-1 rounded-xl text-xs font-mono transition-all flex items-center gap-1 ${
+              className={`px-3 py-1 rounded-xl text-xs font-mono transition-all flex items-center gap-1 cursor-pointer ${
                 activeTab === 'macros' ? 'bg-violet-500/20 text-violet-300 font-bold border border-violet-500/30 shadow-[0_0_12px_rgba(139,92,246,0.2)]' : 'text-zinc-400'
               }`}
             >
               <Sparkles className="w-3 h-3 text-violet-400" />
               <span>Macro Scripts</span>
+            </button>
+            <button
+              onClick={() => {
+                playTone(600, 0.04);
+                setActiveTab('qr-scan');
+              }}
+              className={`px-3 py-1 rounded-xl text-xs font-mono transition-all flex items-center gap-1 cursor-pointer ${
+                activeTab === 'qr-scan' ? 'bg-cyan-500/20 text-cyan-300 font-bold border border-cyan-500/30 shadow-[0_0_12px_rgba(6,182,212,0.2)]' : 'text-zinc-400'
+              }`}
+            >
+              <QrCode className="w-3 h-3 text-cyan-400" />
+              <span>Manifest Scanner</span>
             </button>
           </div>
         </div>
@@ -1360,6 +1443,49 @@ ${THAI_CUSTODIANS.map((c) => `  • ${c.passportNumber}: ${c.nameTh} (${c.nameEn
         </div>
       )}
 
+      {/* Evidentiary Manifest Ingestion Notification Banner */}
+      {lastIngestedManifest && (
+        <div className="p-4 rounded-2xl bg-gradient-to-r from-cyan-950/70 via-[#0b1324]/80 to-[#07080F] border border-cyan-500/40 backdrop-blur-xl flex flex-col sm:flex-row sm:items-center justify-between gap-3 animate-in fade-in duration-200 font-mono text-xs">
+          <div className="flex items-center gap-3">
+            <div className="w-8 h-8 rounded-xl bg-cyan-500/20 border border-cyan-500/40 flex items-center justify-center text-cyan-400 shrink-0">
+              <ShieldCheck className="w-4 h-4" />
+            </div>
+            <div>
+              <div className="flex items-center gap-2">
+                <span className="font-bold text-white">
+                  Manifest Ingested: {lastIngestedManifest.manifestId}
+                </span>
+                <span className="text-[10px] px-2 py-0.5 rounded bg-emerald-500/20 text-emerald-300 border border-emerald-500/30">
+                  {lastIngestedManifest.status}
+                </span>
+              </div>
+              <p className="text-[11px] text-zinc-400 mt-0.5 truncate">
+                Type: {lastIngestedManifest.manifestType} • Block #{lastIngestedManifest.blockHeight} • Root: {lastIngestedManifest.merkleRoot.slice(0, 20)}... • Drift: {lastIngestedManifest.driftDelta}
+              </p>
+            </div>
+          </div>
+
+          <div className="flex items-center gap-2 shrink-0">
+            <button
+              onClick={() => {
+                playTone(600, 0.04);
+                setActiveTab('qr-scan');
+              }}
+              className="px-3 py-1.5 rounded-xl bg-cyan-500/20 hover:bg-cyan-500/30 text-cyan-300 border border-cyan-500/40 font-bold flex items-center gap-1.5 transition-all text-[11px] cursor-pointer"
+            >
+              <QrCode className="w-3.5 h-3.5" />
+              <span>Inspect Manifest</span>
+            </button>
+            <button
+              onClick={() => setLastIngestedManifest(null)}
+              className="px-2.5 py-1.5 rounded-xl bg-white/5 hover:bg-white/10 text-zinc-400 hover:text-white transition-all text-[11px] cursor-pointer"
+            >
+              Dismiss
+            </button>
+          </div>
+        </div>
+      )}
+
       {/* Sub-component: Real-time Hardware Telemetry Grid in Monospaced Layout with Zoom & Pan */}
       {(activeTab === 'both' || activeTab === 'grid') && (
         <div className="animate-in fade-in duration-300">
@@ -1378,6 +1504,15 @@ ${THAI_CUSTODIANS.map((c) => `  • ${c.passportNumber}: ${c.nameTh} (${c.nameEn
       {activeTab === 'macros' && (
         <div className="animate-in fade-in duration-300">
           <MacroConsole onExecuteCommand={executeCommand} />
+        </div>
+      )}
+
+      {/* Evidentiary Manifest QR Scanner View */}
+      {activeTab === 'qr-scan' && (
+        <div className="animate-in fade-in duration-300">
+          <EvidentiaryManifestQRScanner
+            onManifestIngested={handleManifestIngested}
+          />
         </div>
       )}
 

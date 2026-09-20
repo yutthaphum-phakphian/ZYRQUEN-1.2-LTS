@@ -87,6 +87,7 @@ export const SovereignChambersControlPlane: React.FC = () => {
   // Search & Filter State
   const [searchQuery, setSearchQuery] = useState('');
   const [statusFilter, setStatusFilter] = useState<'ALL' | 'OPERATIONAL' | 'NON_OPERATIONAL'>('ALL');
+  const [sortBy, setSortBy] = useState<'stability_desc' | 'id_asc' | 'id_desc' | 'name_asc'>('stability_desc');
 
   // Quorum State
   const [quorum, setQuorum] = useState<QuorumData>({
@@ -270,6 +271,26 @@ export const SovereignChambersControlPlane: React.FC = () => {
       return true;
     });
   }, [chambers, searchQuery, statusFilter]);
+
+  // Sorted and Filtered Chambers based on stability and user choice
+  const sortedAndFilteredChambers = useMemo(() => {
+    return [...filteredChambers].sort((a, b) => {
+      if (sortBy === 'stability_desc') {
+        const isAOp = a.status.toLowerCase().includes('operational');
+        const isBOp = b.status.toLowerCase().includes('operational');
+        if (isAOp !== isBOp) return isAOp ? -1 : 1;
+        // Parse drift (lower drift is more stable)
+        const driftA = parseFloat(a.drift) || 0;
+        const driftB = parseFloat(b.drift) || 0;
+        if (driftA !== driftB) return driftA - driftB;
+        return a.id - b.id;
+      }
+      if (sortBy === 'id_asc') return a.id - b.id;
+      if (sortBy === 'id_desc') return b.id - a.id;
+      if (sortBy === 'name_asc') return a.name.localeCompare(b.name);
+      return 0;
+    });
+  }, [filteredChambers, sortBy]);
 
   const handleSync = async () => {
     setSyncing(true);
@@ -799,12 +820,29 @@ export const SovereignChambersControlPlane: React.FC = () => {
                 Non-Operational ({nonOperationalCount})
               </button>
             </div>
+
+            {/* Sorting Dropdown */}
+            <div className="flex items-center gap-1.5 shrink-0 bg-slate-950 px-3 py-1.5 rounded-xl border border-slate-800 text-xs font-mono">
+              <SlidersHorizontal className="w-3.5 h-3.5 text-cyan-400" />
+              <label htmlFor="controlplane-chamber-sort" className="text-slate-400 font-medium">Sort:</label>
+              <select
+                id="controlplane-chamber-sort"
+                value={sortBy}
+                onChange={(e) => setSortBy(e.target.value as any)}
+                className="bg-slate-900 border border-slate-750 text-cyan-300 rounded-lg px-2 py-1 focus:outline-none focus:border-cyan-400 cursor-pointer text-xs font-mono"
+              >
+                <option value="stability_desc">★ Stability: Most Stable First</option>
+                <option value="id_asc">Chamber ID: 1 → 18</option>
+                <option value="id_desc">Chamber ID: 18 → 1</option>
+                <option value="name_asc">Name (A-Z)</option>
+              </select>
+            </div>
           </div>
 
           {/* Search/Filter feedback info */}
           <div className="flex items-center justify-between text-xs text-slate-400 px-1 pt-1">
             <span className="font-mono">
-              Showing <strong className="text-slate-200">{filteredChambers.length}</strong> of{' '}
+              Showing <strong className="text-slate-200">{sortedAndFilteredChambers.length}</strong> of{' '}
               <strong className="text-slate-200">{chambers.length}</strong> Sovereign Chambers
               {searchQuery && (
                 <span className="ml-1 text-indigo-400 font-normal">
@@ -817,6 +855,7 @@ export const SovereignChambersControlPlane: React.FC = () => {
                 onClick={() => {
                   setSearchQuery('');
                   setStatusFilter('ALL');
+                  setSortBy('stability_desc');
                 }}
                 className="text-indigo-400 hover:text-indigo-300 underline font-mono text-[11px] cursor-pointer"
               >
@@ -843,7 +882,7 @@ export const SovereignChambersControlPlane: React.FC = () => {
               <RefreshCw className="w-6 h-6 animate-spin text-indigo-400" />
               <span>Loading telemetry data...</span>
             </div>
-          ) : filteredChambers.length === 0 ? (
+          ) : sortedAndFilteredChambers.length === 0 ? (
             <div className="text-center py-12 px-4 rounded-2xl bg-slate-900/40 border border-dashed border-slate-800 text-slate-400 flex flex-col items-center gap-3">
               <Search className="w-8 h-8 text-slate-500" />
               <div className="text-sm font-semibold text-slate-300">No Chambers match your filter</div>
@@ -855,6 +894,7 @@ export const SovereignChambersControlPlane: React.FC = () => {
                 onClick={() => {
                   setSearchQuery('');
                   setStatusFilter('ALL');
+                  setSortBy('stability_desc');
                 }}
                 className="px-4 py-2 bg-indigo-600 hover:bg-indigo-500 text-white text-xs font-bold rounded-lg transition-colors cursor-pointer mt-1"
               >
@@ -863,7 +903,7 @@ export const SovereignChambersControlPlane: React.FC = () => {
             </div>
           ) : (
             <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-4">
-              {filteredChambers.map((chamber) => {
+              {sortedAndFilteredChambers.map((chamber) => {
                 const isOp = chamber.status.toLowerCase().includes('operational');
                 const emoji = chamber.emoji || CANONICAL_SOVEREIGN_CHAMBERS.find(c => c.id === chamber.id)?.emoji || '🏛️';
                 return (

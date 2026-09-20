@@ -24,6 +24,7 @@ import {
 } from 'lucide-react';
 import { playAuditChime, playTone } from '../AudioSynthesizer';
 import { systemStateStore } from '../../store/systemStateStore';
+import { LiveReplayVerificationDashboard } from '../LiveReplayVerificationDashboard';
 
 export interface TraceStageDefinition {
   id: number;
@@ -479,6 +480,9 @@ export const UnifiedAuditPlaybackConsole: React.FC = () => {
           </button>
         </div>
       </div>
+
+      {/* Live Replay Verification Dashboard (Option B) */}
+      <LiveReplayVerificationDashboard />
 
       {/* Main Grid: 12 Stages Visual Grid + Live WS Output Terminal */}
       <div className="grid grid-cols-1 lg:grid-cols-12 gap-5 items-start">

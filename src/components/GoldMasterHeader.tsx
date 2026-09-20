@@ -56,14 +56,15 @@ export const GoldMasterHeader: React.FC<GoldMasterHeaderProps> = ({
       </div>
 
       {/* Compact Action Buttons Row */}
-      <div className="flex items-center gap-1.5 sm:gap-2 flex-wrap sm:flex-nowrap overflow-x-auto max-w-full py-0.5 scrollbar-none">
+      <div className="flex items-center gap-1.5 flex-wrap sm:flex-nowrap overflow-x-auto max-w-full py-0.5 no-scrollbar">
         {onOpenOfflineQR && (
           <button
+            type="button"
             onClick={onOpenOfflineQR}
-            className={`px-2.5 py-1.5 rounded-lg border font-mono text-[11px] flex items-center gap-1.5 transition-all shrink-0 cursor-pointer ${
+            className={`px-2.5 py-1 text-[11px] font-mono font-medium rounded border transition flex items-center gap-1 shrink-0 cursor-pointer ${
               activeTab === 'qrGenerator'
-                ? 'bg-cyan-500 text-black border-cyan-400 font-bold shadow-[0_0_10px_rgba(6,182,212,0.3)]'
-                : 'bg-cyan-500/15 hover:bg-cyan-500/25 text-cyan-200 border-cyan-500/30'
+                ? 'bg-cyan-500 text-black border-cyan-400 font-bold shadow-[0_0_8px_rgba(6,182,212,0.3)]'
+                : 'bg-cyan-950/80 text-cyan-300 border-cyan-800 hover:border-cyan-500'
             }`}
             title="Generate Offline Seal Chain Verification QR Code for External Auditors"
           >
@@ -74,8 +75,9 @@ export const GoldMasterHeader: React.FC<GoldMasterHeaderProps> = ({
 
         {onPreviewDossier && (
           <button
+            type="button"
             onClick={onPreviewDossier}
-            className="px-2.5 py-1.5 rounded-lg bg-cyan-500/15 hover:bg-cyan-500/25 text-cyan-200 border border-cyan-500/30 font-mono text-[11px] flex items-center gap-1.5 transition-all shrink-0 cursor-pointer shadow-sm"
+            className="px-2.5 py-1 text-[11px] font-mono font-medium bg-cyan-950/80 text-cyan-300 border border-cyan-800 hover:border-cyan-500 rounded transition flex items-center gap-1 shrink-0 cursor-pointer"
             title="Open Interactive Sovereign Dossier & PDF Preview"
           >
             <Eye className="w-3.5 h-3.5 text-cyan-400" />
@@ -85,19 +87,21 @@ export const GoldMasterHeader: React.FC<GoldMasterHeaderProps> = ({
 
         {onDownloadCourtAttestationPdf && (
           <button
+            type="button"
             onClick={onDownloadCourtAttestationPdf}
-            className="px-2.5 py-1.5 rounded-lg bg-emerald-500/15 hover:bg-emerald-500/25 text-emerald-200 border border-emerald-500/30 font-mono text-[11px] flex items-center gap-1.5 transition-all shrink-0 cursor-pointer shadow-sm"
+            className="px-2.5 py-1 text-[11px] font-mono font-medium bg-cyan-950/80 text-cyan-300 border border-cyan-800 hover:border-cyan-500 rounded transition flex items-center gap-1 shrink-0 cursor-pointer"
             title="Download Court-Admissible Sovereign Forensic Attestation PDF"
           >
-            <FileText className="w-3.5 h-3.5 text-emerald-400" />
+            <FileText className="w-3.5 h-3.5 text-cyan-400" />
             <span>Attestation PDF</span>
           </button>
         )}
 
         {onDownloadMasterPdf && (
           <button
+            type="button"
             onClick={onDownloadMasterPdf}
-            className="px-2.5 py-1.5 rounded-lg bg-amber-500/15 hover:bg-amber-500/25 text-amber-200 border border-amber-500/30 font-mono text-[11px] flex items-center gap-1.5 transition-all shrink-0 cursor-pointer shadow-sm"
+            className="px-2.5 py-1 text-[11px] font-mono font-semibold bg-amber-500/20 text-amber-300 border border-amber-500/50 hover:bg-amber-500/30 rounded transition flex items-center gap-1 shadow-[0_0_8px_rgba(245,158,11,0.15)] shrink-0 cursor-pointer"
             title="Download Master Forensic Audit PDF"
           >
             <FileCheck2 className="w-3.5 h-3.5 text-amber-400" />
@@ -107,8 +111,9 @@ export const GoldMasterHeader: React.FC<GoldMasterHeaderProps> = ({
 
         {onExportCsv && (
           <button
+            type="button"
             onClick={onExportCsv}
-            className="px-2.5 py-1.5 rounded-lg bg-white/5 hover:bg-white/10 text-emerald-300 border border-white/10 font-mono text-[11px] flex items-center gap-1.5 transition-all shrink-0 cursor-pointer"
+            className="px-2.5 py-1 text-[11px] font-mono font-medium bg-gray-800 text-gray-300 border border-gray-700 hover:bg-gray-700 rounded transition flex items-center gap-1 shrink-0 cursor-pointer"
             title="Export CSV"
           >
             <FileSpreadsheet className="w-3.5 h-3.5 text-emerald-400" />
@@ -118,8 +123,9 @@ export const GoldMasterHeader: React.FC<GoldMasterHeaderProps> = ({
 
         {onExportJson && (
           <button
+            type="button"
             onClick={onExportJson}
-            className="px-2.5 py-1.5 rounded-lg bg-white/5 hover:bg-white/10 text-zinc-300 border border-white/10 font-mono text-[11px] flex items-center gap-1.5 transition-all shrink-0 cursor-pointer"
+            className="px-2.5 py-1 text-[11px] font-mono font-medium bg-gray-800 text-gray-300 border border-gray-700 hover:bg-gray-700 rounded transition flex items-center gap-1 shrink-0 cursor-pointer"
             title="Download Certificate JSON-LD"
           >
             <Download className="w-3.5 h-3.5 text-cyan-400" />
