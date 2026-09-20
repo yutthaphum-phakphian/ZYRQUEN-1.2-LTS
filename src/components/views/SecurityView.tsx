@@ -27,6 +27,7 @@ import {
 } from 'lucide-react';
 import { CustodianQRValidator } from '../system/CustodianQRValidator';
 import { HardwareSealQRScanner } from '../security/HardwareSealQRScanner';
+import { CourtEvidenceQR } from '../CourtEvidenceQR';
 import { SYSTEM_INVARIANTS, SYSTEM_METADATA } from '../../data/canonicalData';
 import { playAuditChime, playTone } from '../AudioSynthesizer';
 import { GlobalThreatVectorsPanel } from '../GlobalThreatVectorsPanel';
@@ -75,6 +76,7 @@ import { VerificationPassRatesChart } from '../VerificationPassRatesChart';
 import { LiveFlowVisualizerView } from './Security/LiveFlowVisualizerView';
 
 export type SecuritySubTab =
+  | 'court-evidence-qr'
   | 'hardware-seal-scanner'
   | 'smart-contract'
   | 'sovereign-master-audit'
@@ -300,6 +302,18 @@ export const SecurityView: React.FC<SecurityViewProps> = ({
 
           <button
             onClick={() => {
+              playTone(760, 0.08);
+              setActiveTab('court-evidence-qr');
+            }}
+            className="px-4 py-2.5 rounded-2xl text-[11px] sm:text-xs font-bold bg-gradient-to-r from-amber-600 via-orange-600 to-amber-700 hover:from-amber-500 hover:to-orange-500 border border-amber-400/60 text-white flex items-center gap-2 transition-all shadow-[0_0_20px_rgba(245,158,11,0.3)] cursor-pointer"
+            title="Court Admissible Evidence QR Verification with direct links to immutable manifest and telemetry audit trail"
+          >
+            <Scale className="w-4 h-4 text-amber-200" />
+            <span className="tracking-wide">Court Evidence QR</span>
+          </button>
+
+          <button
+            onClick={() => {
               playTone(740, 0.08);
               setActiveTab('hardware-seal-scanner');
             }}
@@ -361,6 +375,21 @@ export const SecurityView: React.FC<SecurityViewProps> = ({
       {/* Unified Tab Switcher Navigation Bar */}
       <div className="flex items-center bg-[#070914]/90 backdrop-blur-xl border border-cyan-500/20 rounded-2xl p-2 font-mono text-xs shadow-inner flex-wrap gap-2 relative overflow-hidden">
         <div className="absolute inset-0 bg-gradient-to-r from-cyan-500/5 via-violet-500/5 to-transparent pointer-events-none" />
+
+        <button
+          onClick={() => {
+            playTone(760, 0.04);
+            setActiveTab('court-evidence-qr');
+          }}
+          className={`relative z-10 px-4 py-2.5 rounded-xl flex items-center gap-2 transition-all font-bold tracking-wide ${
+            activeTab === 'court-evidence-qr'
+              ? 'bg-gradient-to-r from-amber-500/40 via-yellow-600/30 to-amber-500/30 text-amber-100 border border-amber-400/60 shadow-[0_0_20px_rgba(245,158,11,0.35)]'
+              : 'text-amber-300/80 hover:text-amber-200 hover:bg-amber-500/10 border border-amber-500/20'
+          }`}
+        >
+          <Scale className={`w-4 h-4 ${activeTab === 'court-evidence-qr' ? 'text-amber-300 animate-pulse' : 'text-amber-400'}`} />
+          <span>Court Evidence QR (Judicial SSoT)</span>
+        </button>
 
         <button
           onClick={() => {
@@ -748,6 +777,36 @@ export const SecurityView: React.FC<SecurityViewProps> = ({
         </div>
       )}
 
+      {/* Judicial Court Evidence QR Component (ETDA Sec 9/26/28, PDPA Sec 37) */}
+      {activeTab === 'court-evidence-qr' && (
+        <div className="space-y-6 animate-in fade-in duration-300">
+          <div className="p-4 rounded-2xl bg-amber-500/10 border border-amber-500/30 text-amber-200 text-xs font-mono flex flex-wrap items-center justify-between gap-4">
+            <div className="flex items-center gap-2.5">
+              <Scale className="w-5 h-5 text-amber-400 shrink-0" />
+              <span>
+                <strong>ระบบตรวจสอบพยานหลักฐานดิจิทัลตามคำสั่งศาล (Judicial Evidence Verification Portal):</strong>{' '}
+                สอดคล้องตามพระราชบัญญัติว่าด้วยธุรกรรมทางอิเล็กทรอนิกส์ พ.ศ. ๒๕๔๔ (มาตรา ๙, ๒๖, ๒๘) และ PDPA พ.ศ. ๒๕๖๒ พร้อมลายมือชื่ออิเล็กทรอนิกส์ขั้นสูง Dilithium-5 (ML-DSA-87)
+              </span>
+            </div>
+            <span className="px-3 py-1 rounded-full bg-emerald-500/20 text-emerald-300 border border-emerald-500/40 text-[11px] font-bold shrink-0">
+              Δ0.00% SSoT Verified
+            </span>
+          </div>
+
+          <CourtEvidenceQR
+            merkleRoot={SYSTEM_METADATA.merkleRoot}
+            anchorSignature="0x892af92bf89104ca_DILITHIUM5_ML_DSA_87"
+            sealIndex={14902}
+            blockNumber={849202}
+            timestamp={SYSTEM_METADATA.timestamp || '2026-09-14T14:04:43Z'}
+            principalId={SYSTEM_METADATA.sovereignPrincipal}
+            manifestUrl="/zyrquen-court-manifest.json"
+            auditTrailUrl="/zyrquen-mtls13-otel-telemetry-audit.json"
+            evidenceCode="MASTER-JUDICIAL-SEAL-14902"
+          />
+        </div>
+      )}
+
       {/* Hardware Seal QR Scanner (react-qr-reader & Digital Ledger SSoT) */}
       {activeTab === 'hardware-seal-scanner' && (
         <div className="space-y-6">
@@ -797,6 +856,17 @@ export const SecurityView: React.FC<SecurityViewProps> = ({
       {/* Primary Unified Tab: Sovereign Legal Convergence (3-Column Matrix + Governance Center) */}
       {(activeTab === 'legal-convergence' || activeTab === 'legal-dashboard' || activeTab === 'section28-layer') && (
         <div className="space-y-6">
+          <CourtEvidenceQR
+            merkleRoot={SYSTEM_METADATA.merkleRoot}
+            anchorSignature="0x892af92bf89104ca_DILITHIUM5_ML_DSA_87"
+            sealIndex={14902}
+            blockNumber={849202}
+            timestamp={SYSTEM_METADATA.timestamp || '2026-09-14T14:04:43Z'}
+            principalId={SYSTEM_METADATA.sovereignPrincipal}
+            manifestUrl="/zyrquen-court-manifest.json"
+            auditTrailUrl="/zyrquen-mtls13-otel-telemetry-audit.json"
+            evidenceCode="LEGAL-CONVERGENCE-14902"
+          />
           <SovereignLegalConvergence />
           <ThaiLegalSovereignMapping />
         </div>
@@ -815,13 +885,24 @@ export const SecurityView: React.FC<SecurityViewProps> = ({
       )}
 
       {/* Tab: Evidence Truth Layer & Telemetry Truth Guard */}
-            {activeTab === 'level3-threat-injection' && (
+      {activeTab === 'level3-threat-injection' && (
         <div className="space-y-6">
           <SecurityGateLevel3Simulator />
         </div>
       )}
-{activeTab === 'evidence-truth' && (
+      {activeTab === 'evidence-truth' && (
         <div className="space-y-6">
+          <CourtEvidenceQR
+            merkleRoot={SYSTEM_METADATA.merkleRoot}
+            anchorSignature="0x892af92bf89104ca_DILITHIUM5_ML_DSA_87"
+            sealIndex={14902}
+            blockNumber={849202}
+            timestamp={SYSTEM_METADATA.timestamp || '2026-09-14T14:04:43Z'}
+            principalId={SYSTEM_METADATA.sovereignPrincipal}
+            manifestUrl="/zyrquen-court-manifest.json"
+            auditTrailUrl="/zyrquen-mtls13-otel-telemetry-audit.json"
+            evidenceCode="EVIDENCE-TRUTH-MATRIX-14902"
+          />
           <EvidenceTruthMatrix />
         </div>
       )}

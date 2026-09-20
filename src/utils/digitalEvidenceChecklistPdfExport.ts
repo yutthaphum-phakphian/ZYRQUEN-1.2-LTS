@@ -9,6 +9,10 @@ export interface ChecklistItem {
   description: string;
   passed: boolean;
   notes?: string;
+  technicalProof?: string;
+  legalImplication?: string;
+  hashDigest?: string;
+  pqcStandard?: string;
 }
 
 export interface InspectorProfile {

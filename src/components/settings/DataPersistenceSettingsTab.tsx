@@ -14,9 +14,10 @@ import {
   Clock,
   Sparkles,
   ExternalLink,
+  Plus,
 } from 'lucide-react';
 import { playAuditChime, playTone } from '../AudioSynthesizer';
-import { offlineAuditSyncService } from '../../services/offlineAuditSyncService';
+import { offlineAuditSyncService, QueuedAuditEvent } from '../../services/offlineAuditSyncService';
 
 interface StorageStats {
   usedBytes: number;
@@ -67,6 +68,21 @@ export const DataPersistenceSettingsTab: React.FC<DataPersistenceSettingsTabProp
   const [showConfirmModal, setShowConfirmModal] = useState<boolean>(false);
   const [confirmActionType, setConfirmActionType] = useState<'EVIDENCE_ONLY' | 'ALL_TRANSIENT'>('EVIDENCE_ONLY');
   const [lastActionMessage, setLastActionMessage] = useState<string | null>(null);
+
+  // Offline Audit Sync Queue State
+  const [queueCount, setQueueCount] = useState<number>(() => offlineAuditSyncService.getQueueCount());
+  const [queuedEvents, setQueuedEvents] = useState<QueuedAuditEvent[]>(() => offlineAuditSyncService.getQueue());
+  const [isSyncingQueue, setIsSyncingQueue] = useState<boolean>(false);
+  const [lastSyncTimestamp, setLastSyncTimestamp] = useState<string | null>(() => offlineAuditSyncService.getLastSyncTime());
+
+  useEffect(() => {
+    const unsub = offlineAuditSyncService.subscribe((count, items) => {
+      setQueueCount(count);
+      setQueuedEvents(items);
+      setLastSyncTimestamp(offlineAuditSyncService.getLastSyncTime());
+    });
+    return unsub;
+  }, []);
 
   // Compute live storage details from browser CacheStorage and navigator.storage
   const calculateStorageUsage = useCallback(async () => {
@@ -558,47 +574,156 @@ export const DataPersistenceSettingsTab: React.FC<DataPersistenceSettingsTabProp
               Offline Audit Event Synchronization Queue
             </h3>
           </div>
-          <span className="text-xs text-zinc-400 font-mono">
-            Pending Queue Depth: <strong className="text-cyan-300">{offlineAuditSyncService.getQueueCount()}</strong> events
-          </span>
+          <div className="flex items-center gap-3">
+            <span className="text-xs text-zinc-400 font-mono">
+              Pending Queue Depth:{' '}
+              <strong className={`font-bold ${queueCount > 0 ? 'text-amber-300 animate-pulse' : 'text-emerald-400'}`}>
+                {queueCount}
+              </strong>{' '}
+              events
+            </span>
+            {lastSyncTimestamp && (
+              <span className="text-[11px] text-zinc-500 font-mono hidden md:inline">
+                Last Sync: {new Date(lastSyncTimestamp).toLocaleTimeString()}
+              </span>
+            )}
+          </div>
         </div>
 
-        <p className="text-xs text-zinc-400">
+        <p className="text-xs text-zinc-400 leading-relaxed">
           When the system operates disconnected from sovereign satellite relays, audit events are queued in client-side persistence
-          and flushed upon reconnection under Thai ETDA Section 26. You may manually flush or clear this buffer below.
+          and flushed upon reconnection under Thai ETDA Section 26. Use the <strong className="text-cyan-300">Force Sync</strong> button below to manually flush all pending audit logs directly to the primary ledger.
         </p>
 
         <div className="flex flex-wrap items-center gap-3 pt-1">
+          {/* Main Force Sync Button */}
           <button
+            id="btn-force-sync"
+            data-testid="force-sync-button"
             onClick={async () => {
+              setIsSyncingQueue(true);
               playTone(740, 0.04);
-              const res = await offlineAuditSyncService.flushQueue();
-              if (res.success) {
-                setLastActionMessage(`Flushed ${res.flushedCount} pending audit events to server ledger.`);
-              } else {
-                setLastActionMessage(`Flush result: ${res.error || 'Offline or empty queue'}`);
+              try {
+                const res = await offlineAuditSyncService.forceSync();
+                if (res.success) {
+                  playAuditChime();
+                  const msg = res.flushedCount > 0
+                    ? `Force Sync: Flushed ${res.flushedCount} pending audit event${res.flushedCount > 1 ? 's' : ''} to primary ledger.`
+                    : (res.message || 'Force Sync: Primary ledger verified in sync (0 pending offline events).');
+                  setLastActionMessage(msg);
+                  setLastSyncTimestamp(offlineAuditSyncService.getLastSyncTime());
+                  if (onNotifyEvent) {
+                    onNotifyEvent('Manual Force Sync Completed', msg, 'CRYPTO');
+                  }
+                  if (onAddSystemEvent) {
+                    onAddSystemEvent(
+                      'COMPLIANCE',
+                      'Manual Force Sync Succeeded',
+                      msg,
+                      '0x909ab814',
+                      'success',
+                      'Thai ETDA Sec 26 / Merkle SSoT'
+                    );
+                  }
+                } else {
+                  playTone(400, 0.1);
+                  const errMsg = `Force Sync failed: ${res.error || 'Primary ledger unreachable'}`;
+                  setLastActionMessage(errMsg);
+                  if (onNotifyEvent) {
+                    onNotifyEvent('Manual Force Sync Failed', errMsg, 'HARDWARE');
+                  }
+                }
+              } catch (err: any) {
+                playTone(400, 0.1);
+                const errMsg = `Force Sync error: ${err.message || 'Unknown network error'}`;
+                setLastActionMessage(errMsg);
+              } finally {
+                setIsSyncingQueue(false);
+                calculateStorageUsage();
               }
-              calculateStorageUsage();
             }}
-            className="flex items-center gap-2 px-3.5 py-1.5 rounded-xl bg-white/5 hover:bg-white/10 border border-white/10 text-xs text-cyan-300 font-mono transition-all cursor-pointer"
+            disabled={isSyncingQueue}
+            className={`flex items-center gap-2 px-4 py-2 rounded-xl text-xs font-mono font-bold transition-all cursor-pointer shadow-lg disabled:opacity-50 ${
+              queueCount > 0
+                ? 'bg-amber-500/20 hover:bg-amber-500/30 text-amber-200 border border-amber-500/50 shadow-[0_0_15px_rgba(245,158,11,0.25)]'
+                : 'bg-cyan-500/20 hover:bg-cyan-500/30 text-cyan-300 border border-cyan-500/40 shadow-[0_0_15px_rgba(6,182,212,0.2)]'
+            }`}
+            title="Manually trigger offlineAuditSyncService to flush pending audit logs to the primary ledger"
           >
-            <RefreshCw className="w-3.5 h-3.5" />
-            <span>Flush Queue to Server Ledger</span>
+            <RefreshCw className={`w-4 h-4 ${isSyncingQueue ? 'animate-spin text-cyan-400' : 'text-cyan-400'}`} />
+            <span>Force Sync</span>
+            <span className={`text-[10px] px-1.5 py-0.5 rounded-full ${
+              queueCount > 0
+                ? 'bg-amber-500/30 text-amber-100 border border-amber-500/50 font-bold'
+                : 'bg-emerald-500/20 text-emerald-300 border border-emerald-500/30'
+            }`}>
+              {queueCount > 0 ? `${queueCount} pending` : 'Ledger In Sync'}
+            </span>
           </button>
 
+          {/* Test Enqueue Button */}
           <button
+            id="btn-enqueue-test-audit"
+            onClick={() => {
+              playTone(620, 0.04);
+              const testItem = offlineAuditSyncService.enqueueEvent({
+                type: 'MANUAL_OFFLINE_VERIFICATION',
+                title: `Manual Audit Checkpoint #${Math.floor(Math.random() * 9000 + 1000)}`,
+                description: 'Buffered in offline queue for manual synchronization drill under Thai ETDA Sec 26.',
+                severity: 'info',
+                statuteRef: 'Thai ETDA Sec 26 / SSoT Buffer',
+              });
+              setLastActionMessage(`Enqueued test audit event "${testItem.title}". Ready for Force Sync.`);
+              calculateStorageUsage();
+            }}
+            className="flex items-center gap-1.5 px-3 py-2 rounded-xl bg-white/5 hover:bg-white/10 border border-white/10 text-xs text-zinc-300 font-mono transition-all cursor-pointer"
+            title="Enqueue a simulated offline audit log to test manual synchronization"
+          >
+            <Plus className="w-3.5 h-3.5 text-zinc-400" />
+            <span>Enqueue Test Audit Log</span>
+          </button>
+
+          {/* Clear Queue Button */}
+          <button
+            id="btn-clear-offline-queue"
             onClick={() => {
               playTone(550, 0.04);
               const cleared = offlineAuditSyncService.clearQueue();
               setLastActionMessage(`Cleared ${cleared} offline queued events from client storage.`);
               calculateStorageUsage();
             }}
-            className="flex items-center gap-2 px-3.5 py-1.5 rounded-xl bg-white/5 hover:bg-white/10 border border-white/10 text-xs text-zinc-300 font-mono transition-all cursor-pointer"
+            disabled={queueCount === 0}
+            className="flex items-center gap-1.5 px-3 py-2 rounded-xl bg-white/5 hover:bg-white/10 border border-white/10 text-xs text-zinc-400 hover:text-zinc-200 font-mono transition-all cursor-pointer disabled:opacity-40"
+            title="Purge queued events without transmitting to ledger"
           >
             <Trash2 className="w-3.5 h-3.5" />
             <span>Clear Queue Only</span>
           </button>
         </div>
+
+        {/* Queued Items Preview */}
+        {queuedEvents.length > 0 && (
+          <div className="mt-3 p-3 rounded-xl bg-black/40 border border-white/5 space-y-2">
+            <div className="flex items-center justify-between text-[11px] font-mono text-zinc-400">
+              <span>Pending Offline Queue ({queuedEvents.length} log{queuedEvents.length > 1 ? 's' : ''})</span>
+              <span className="text-amber-400">Awaiting Primary Ledger Flush</span>
+            </div>
+            <div className="max-h-36 overflow-y-auto space-y-1.5 pr-1">
+              {queuedEvents.map((evt) => (
+                <div key={evt.id} className="flex items-center justify-between text-xs font-mono p-2 rounded-lg bg-white/5 border border-white/5">
+                  <div className="flex items-center gap-2 truncate">
+                    <span className="w-1.5 h-1.5 rounded-full bg-amber-400 shrink-0" />
+                    <span className="text-zinc-200 truncate">{evt.title}</span>
+                    <span className="text-[10px] text-zinc-500 truncate hidden sm:inline">{evt.statuteRef}</span>
+                  </div>
+                  <span className="text-[10px] text-zinc-400 shrink-0 ml-2">
+                    {new Date(evt.queuedAt).toLocaleTimeString()}
+                  </span>
+                </div>
+              ))}
+            </div>
+          </div>
+        )}
       </div>
 
       {/* Confirmation Modal */}

@@ -5,6 +5,7 @@ export const SYSTEM_METADATA = {
   name: 'ZYRQUEN Ω∞ FROZEN v1.2 LTS Sovereign Operating System and Civilization Intelligence Control Plane',
   codename: 'ZYRQUEN Ω∞ FROZEN v1.2 LTS',
   version: 'ZYRQUEN Ω∞ v4.16 PDPA FINAL (Frozen v1.2 LTS)',
+  timestamp: '2026-09-14 14:04:43 UTC',
   merkleRoot: '909ab814479844d8a14816bed34cdbb07528e18501da86fc4691763a43fa4c68',
   parentMasterHash: '909ab814479844d8a14816bed34cdbb07528e18501da86fc4691763a43fa4c68',
   sealedBlock: 849202,

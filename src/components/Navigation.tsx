@@ -55,6 +55,7 @@ interface NavigationProps {
   currentView: ViewType;
   onSelectView: (view: ViewType) => void;
   onOpenCertificate: () => void;
+  onOpenChecklist?: () => void;
   onOpenLegalSearch: () => void;
   onOpenShortcuts: () => void;
   onOpenGitHubPwa?: () => void;
@@ -122,6 +123,7 @@ export const Navigation: React.FC<NavigationProps> = ({
   currentView,
   onSelectView,
   onOpenCertificate,
+  onOpenChecklist,
   onOpenLegalSearch,
   onOpenShortcuts,
   onOpenGitHubPwa,
@@ -621,6 +623,21 @@ export const Navigation: React.FC<NavigationProps> = ({
           </div>
 
           <PWAInstallButton />
+
+          {onOpenChecklist && (
+            <button
+              onClick={() => {
+                playTone(760, 0.08);
+                onOpenChecklist();
+              }}
+              className="group flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-gradient-to-r from-emerald-500/20 via-teal-500/15 to-cyan-500/20 border border-emerald-500/40 text-emerald-300 hover:text-emerald-100 font-mono text-xs hover:border-emerald-400/60 transition-all shadow-[0_0_15px_rgba(16,185,129,0.2)] hover:shadow-[0_0_20px_rgba(16,185,129,0.35)] active:scale-95 cursor-pointer ml-1"
+              title="เปิดระบบตรวจเช็คระบบและพยานหลักฐานดิจิทัลทีละขั้นตอน (System Check-Up & Step-by-Step Stepper)"
+            >
+              <FileCheck2 className="w-4 h-4 text-emerald-400 group-hover:scale-110 transition-transform" />
+              <span className="font-bold tracking-wide">Check-Up</span>
+              <span className="hidden sm:inline-block px-1.5 py-0.2 rounded-full bg-emerald-500/25 text-[9px] text-emerald-300 border border-emerald-500/30">16 ขั้น</span>
+            </button>
+          )}
 
           <button
             onClick={() => {

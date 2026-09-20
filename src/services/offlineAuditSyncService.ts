@@ -20,6 +20,7 @@ export interface QueuedAuditEvent {
 }
 
 const STORAGE_KEY = 'zyrquen_offline_audit_queue_v1';
+const LAST_SYNC_KEY = 'zyrquen_last_audit_sync_time_v1';
 type QueueListener = (count: number, items: QueuedAuditEvent[]) => void;
 
 class OfflineAuditSyncService {
@@ -32,6 +33,25 @@ class OfflineAuditSyncService {
         console.log('[OfflineAuditSync] Connectivity restored. Initiating automatic flush...');
         this.flushQueue();
       });
+    }
+  }
+
+  /**
+   * Returns whether a synchronization flush is actively occurring
+   */
+  public isSyncInProgress(): boolean {
+    return this.isFlushing;
+  }
+
+  /**
+   * Returns the ISO timestamp of the last successful sync
+   */
+  public getLastSyncTime(): string | null {
+    if (typeof window === 'undefined') return null;
+    try {
+      return localStorage.getItem(LAST_SYNC_KEY);
+    } catch {
+      return null;
     }
   }
 
@@ -99,20 +119,60 @@ class OfflineAuditSyncService {
   }
 
   /**
-   * Flushes all queued audit events to the server endpoint
+   * Flushes queued audit events to the server endpoint.
+   * If force is true, actively validates and reconciles with the primary ledger even if queue is empty.
    */
-  public async flushQueue(): Promise<{ flushedCount: number; success: boolean; error?: string }> {
+  public async flushQueue(force: boolean = false): Promise<{ flushedCount: number; success: boolean; error?: string; message?: string }> {
     if (this.isFlushing || typeof window === 'undefined') {
-      return { flushedCount: 0, success: false };
+      return { flushedCount: 0, success: false, error: 'Synchronization already in progress' };
     }
 
     if (!navigator.onLine) {
-      return { flushedCount: 0, success: false, error: 'Offline' };
+      return { flushedCount: 0, success: false, error: 'System is currently offline. Pending logs safely retained.' };
     }
 
     const queue = this.getQueue();
     if (queue.length === 0) {
-      return { flushedCount: 0, success: true };
+      if (force) {
+        this.isFlushing = true;
+        try {
+          const response = await fetch('/api/v1/audit/sync', {
+            method: 'POST',
+            headers: {
+              'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({
+              events: [],
+              flushedAt: new Date().toISOString(),
+              clientSyncProtocol: 'ZYRQUEN-OFFLINE-FORCE-SYNC-v1.2',
+              manualTrigger: true,
+            }),
+          });
+
+          if (!response.ok) {
+            throw new Error(`Server ledger ping returned HTTP ${response.status}`);
+          }
+
+          const now = new Date().toISOString();
+          try {
+            localStorage.setItem(LAST_SYNC_KEY, now);
+          } catch {
+            // ignore
+          }
+          triggerVibration('snapshot');
+          return {
+            flushedCount: 0,
+            success: true,
+            message: 'Primary ledger verified in sync. Zero pending offline audit logs.',
+          };
+        } catch (err: any) {
+          console.warn('[OfflineAuditSync] Force sync verification failed:', err.message);
+          return { flushedCount: 0, success: false, error: err.message };
+        } finally {
+          this.isFlushing = false;
+        }
+      }
+      return { flushedCount: 0, success: true, message: 'Queue is empty. No pending audit logs to flush.' };
     }
 
     this.isFlushing = true;
@@ -126,7 +186,8 @@ class OfflineAuditSyncService {
         body: JSON.stringify({
           events: queue,
           flushedAt: new Date().toISOString(),
-          clientSyncProtocol: 'ZYRQUEN-OFFLINE-RECONCILIATION-v1.2',
+          clientSyncProtocol: force ? 'ZYRQUEN-OFFLINE-FORCE-SYNC-v1.2' : 'ZYRQUEN-OFFLINE-RECONCILIATION-v1.2',
+          manualTrigger: force,
         }),
       });
 
@@ -137,11 +198,18 @@ class OfflineAuditSyncService {
       const flushedCount = queue.length;
       // Clear queue upon successful server confirmation
       this.saveQueue([]);
+      const now = new Date().toISOString();
+      try {
+        localStorage.setItem(LAST_SYNC_KEY, now);
+      } catch {
+        // ignore
+      }
       this.notifyListeners([]);
       triggerVibration('snapshot');
 
-      console.log(`[OfflineAuditSync] Successfully flushed ${flushedCount} audit events to server ledger.`);
-      return { flushedCount, success: true };
+      const msg = `Successfully flushed ${flushedCount} pending audit event${flushedCount > 1 ? 's' : ''} to primary ledger.`;
+      console.log(`[OfflineAuditSync] ${msg}`);
+      return { flushedCount, success: true, message: msg };
     } catch (err: any) {
       console.warn('[OfflineAuditSync] Sync flush attempt failed, keeping queue:', err.message);
       // Increment retry counts
@@ -151,6 +219,13 @@ class OfflineAuditSyncService {
     } finally {
       this.isFlushing = false;
     }
+  }
+
+  /**
+   * Manually triggers immediate synchronization of pending offline audit logs to the primary ledger
+   */
+  public async forceSync(): Promise<{ flushedCount: number; success: boolean; error?: string; message?: string }> {
+    return this.flushQueue(true);
   }
 
   /**

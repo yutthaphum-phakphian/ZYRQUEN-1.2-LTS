@@ -3,6 +3,7 @@ import { GlobalRedTeamChallenge } from '../GlobalRedTeamChallenge';
 import { SovereignMasterForensicReportCard } from '../SovereignMasterForensicReportCard';
 import { SovereignSelfAuditEngine } from '../audit/SovereignSelfAuditEngine';
 import { DataPersistenceSettingsTab } from '../settings/DataPersistenceSettingsTab';
+import { offlineAuditSyncService } from '../../services/offlineAuditSyncService';
 import React, { useState, useEffect } from 'react';
 import {
   Settings,
@@ -241,12 +242,73 @@ export const SettingsView: React.FC<SettingsViewProps> = ({
   // Text-to-Speech (TTS) Sovereign Verbal Audio Warnings Configuration
   const [ttsConfig, setTtsConfig] = useState<TTSConfig>(() => getTTSConfig());
 
+  // Offline Audit Log Synchronization State
+  const [syncPendingCount, setSyncPendingCount] = useState<number>(() => offlineAuditSyncService.getQueueCount());
+  const [isForceSyncing, setIsForceSyncing] = useState<boolean>(false);
+  const [syncFeedbackMessage, setSyncFeedbackMessage] = useState<{ text: string; isError?: boolean } | null>(null);
+
   useEffect(() => {
     const unsub = subscribeTTSConfig((cfg) => {
       setTtsConfig(cfg);
     });
-    return unsub;
+    const unsubSync = offlineAuditSyncService.subscribe((count) => {
+      setSyncPendingCount(count);
+    });
+    return () => {
+      unsub();
+      unsubSync();
+    };
   }, []);
+
+  const handleForceSync = async () => {
+    if (isForceSyncing) return;
+    setIsForceSyncing(true);
+    setSyncFeedbackMessage(null);
+    playTone(720, 0.05);
+
+    try {
+      const res = await offlineAuditSyncService.forceSync();
+      if (res.success) {
+        playAuditChime();
+        const msg = res.flushedCount > 0
+          ? `Force Sync: Flushed ${res.flushedCount} pending audit log${res.flushedCount > 1 ? 's' : ''} to primary ledger.`
+          : (res.message || 'Force Sync: Primary ledger verified in sync.');
+        setSyncFeedbackMessage({ text: msg, isError: false });
+
+        if (onNotifyEvent) {
+          onNotifyEvent(
+            'Manual Audit Sync Completed',
+            msg,
+            'CRYPTO'
+          );
+        }
+        if (onAddSystemEvent) {
+          onAddSystemEvent(
+            'COMPLIANCE',
+            'Manual Force Sync Succeeded',
+            msg,
+            '0x909ab814',
+            'success',
+            'Thai ETDA Sec 26 / SSoT Merkle'
+          );
+        }
+      } else {
+        playTone(400, 0.1);
+        const errMsg = `Force Sync failed: ${res.error || 'Ledger unreachable'}`;
+        setSyncFeedbackMessage({ text: errMsg, isError: true });
+        if (onNotifyEvent) {
+          onNotifyEvent('Manual Audit Sync Failed', errMsg, 'HARDWARE');
+        }
+      }
+    } catch (err: any) {
+      playTone(400, 0.1);
+      const errMsg = `Force Sync error: ${err.message || 'Internal failure'}`;
+      setSyncFeedbackMessage({ text: errMsg, isError: true });
+    } finally {
+      setIsForceSyncing(false);
+      setTimeout(() => setSyncFeedbackMessage(null), 6000);
+    }
+  };
 
   // Evidence Detail Modal State (Strict Read-Only Enforcement)
   const [selectedEvidence, setSelectedEvidence] = useState<CustodianEvidenceRecord | null>(null);
@@ -394,6 +456,31 @@ export const SettingsView: React.FC<SettingsViewProps> = ({
             </button>
           )}
 
+          {/* Manual Force Sync Button */}
+          <button
+            id="btn-settings-force-sync"
+            onClick={handleForceSync}
+            disabled={isForceSyncing}
+            className={`flex items-center gap-2 px-3.5 py-1.5 rounded-2xl border font-mono text-xs transition-all cursor-pointer ${
+              syncPendingCount > 0
+                ? 'bg-amber-500/20 hover:bg-amber-500/30 border-amber-500/50 text-amber-200 shadow-[0_0_15px_rgba(245,158,11,0.25)]'
+                : 'bg-white/10 hover:bg-white/15 border-white/15 text-zinc-200 hover:text-white'
+            } disabled:opacity-50`}
+            title="Manually trigger offlineAuditSyncService to flush pending audit logs to the primary ledger"
+          >
+            <RefreshCw className={`w-3.5 h-3.5 ${isForceSyncing ? 'animate-spin text-cyan-400' : 'text-cyan-400'}`} />
+            <span className="font-semibold">Force Sync</span>
+            {syncPendingCount > 0 ? (
+              <span className="px-1.5 py-0.5 rounded-full bg-amber-500/30 text-amber-200 text-[10px] font-bold border border-amber-500/50 animate-pulse">
+                {syncPendingCount} pending
+              </span>
+            ) : (
+              <span className="px-1.5 py-0.5 rounded-full bg-emerald-500/20 text-emerald-300 text-[10px] font-mono border border-emerald-500/30">
+                Synced
+              </span>
+            )}
+          </button>
+
           <div className="flex items-center p-1 bg-black/40 rounded-2xl border border-white/8 text-xs font-mono">
             <button
               onClick={() => {
@@ -420,6 +507,30 @@ export const SettingsView: React.FC<SettingsViewProps> = ({
           </div>
         </div>
       </div>
+
+      {/* Force Sync Feedback Banner */}
+      {syncFeedbackMessage && (
+        <div
+          id="banner-force-sync-feedback"
+          className={`flex items-center justify-between p-3.5 rounded-2xl border font-mono text-xs animate-in fade-in slide-in-from-top-1 duration-200 ${
+            syncFeedbackMessage.isError
+              ? 'bg-rose-950/60 border-rose-500/40 text-rose-200'
+              : 'bg-emerald-950/60 border-emerald-500/40 text-emerald-200'
+          }`}
+        >
+          <div className="flex items-center gap-2.5">
+            <RefreshCw className={`w-4 h-4 ${isForceSyncing ? 'animate-spin text-cyan-400' : syncFeedbackMessage.isError ? 'text-rose-400' : 'text-emerald-400'}`} />
+            <span className="font-semibold">{syncFeedbackMessage.text}</span>
+          </div>
+          <button
+            onClick={() => setSyncFeedbackMessage(null)}
+            className="text-zinc-400 hover:text-white px-2 py-0.5 rounded cursor-pointer font-bold"
+            title="Dismiss notification"
+          >
+            ✕
+          </button>
+        </div>
+      )}
 
       {/* Sovereign Settings Tabs Bar */}
       <div className="flex flex-wrap items-center gap-2 p-2 rounded-2xl bg-[#0b0e1a]/85 border border-white/10 backdrop-blur-xl font-mono text-xs shadow-lg">

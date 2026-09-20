@@ -13,6 +13,7 @@ interface KeyboardShortcutsModalProps {
   onOpenLegalSearch?: () => void;
   onOpenCert?: () => void;
   onOpenCertificate?: () => void;
+  onOpenChecklist?: () => void;
   onToggleAudio?: () => void;
 }
 
@@ -25,6 +26,7 @@ export const KeyboardShortcutsModal: React.FC<KeyboardShortcutsModalProps> = ({
   onOpenLegalSearch,
   onOpenCert,
   onOpenCertificate,
+  onOpenChecklist,
   onToggleAudio,
 }) => {
   if (!isOpen) return null;
@@ -44,7 +46,12 @@ export const KeyboardShortcutsModal: React.FC<KeyboardShortcutsModalProps> = ({
     else if (onOpenCertificate) onOpenCertificate();
   };
 
+  const handleChecklist = () => {
+    if (onOpenChecklist) onOpenChecklist();
+  };
+
   const coreShortcuts = [
+    { keyCombo: 'Key K', label: 'Open System Check-Up Stepper (ดึงระบบตรวจเช็คระบบทีละขั้นตอน)', action: () => { onClose(); handleChecklist(); }, tag: 'CHECKUP' },
     { keyCombo: 'Ctrl + B / [', label: 'Toggle Sidebar Menu (Open / Close)', action: () => { onClose(); }, tag: 'SIDEBAR' },
     { keyCombo: 'Ctrl + K / ⌘K', label: 'Thai Laws & Cryptographic Search', action: () => { onClose(); handleSearch(); }, tag: 'SEARCH' },
     { keyCombo: 'Ctrl + E / ⇧E', label: 'System Events Notification Feed', action: () => { onClose(); }, tag: 'EVENTS' },
