@@ -11,7 +11,6 @@
     "test": "vitest run"
   },
   "dependencies": {
-    "express": "^4.19.2",
     "framer-motion": "^11.5.4",
     "jsqr": "^1.4.0",
     "lucide-react": "^0.439.0",
@@ -20,7 +19,6 @@
     "three": "^0.168.0"
   },
   "devDependencies": {
-    "@types/express": "^4.17.21",
     "@types/node": "^22.5.4",
     "@types/react": "^18.3.5",
     "@types/react-dom": "^18.3.0",
