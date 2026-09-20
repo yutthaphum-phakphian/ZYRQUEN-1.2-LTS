@@ -520,6 +520,16 @@ export type SystemState = {
 
 class SystemStateStore {
   private custodianRegistry = new CustodianRegistry();
+  public isVerboseLoggingEnabled: boolean = false;
+
+  public setVerboseLoggingEnabled(enabled: boolean) {
+    this.isVerboseLoggingEnabled = enabled;
+  }
+
+  public toggleVerboseLoggingEnabled(): boolean {
+    this.isVerboseLoggingEnabled = !this.isVerboseLoggingEnabled;
+    return this.isVerboseLoggingEnabled;
+  }
 
   private state: SystemState = {
     aggregateEntropy: 48.2,
