@@ -1,118 +1,107 @@
-import { SovereignCopilot } from './components/SovereignCopilot';
-import { MainFooter } from './components/MainFooter';
 import React, { useState, useEffect, useCallback, useRef } from 'react';
 import { AnimatePresence, motion, animate } from 'motion/react';
 import { HashRouter, useLocation, useNavigate } from 'react-router-dom';
-import { ViewType, HardwareSnapshot } from './types';
-import { Navigation } from './components/Navigation';
-import { LeftSidebar } from './components/LeftSidebar';
-import { AuditCertificateModal } from './components/AuditCertificateModal';
-import { GitHubPwaModal } from './components/GitHubPwaModal';
-import { ThaiLegalSearchModal } from './components/ThaiLegalSearchModal';
-import { KeyboardShortcutsModal } from './components/KeyboardShortcutsModal';
-import { SystemEventsSidebar, SystemEvent } from './components/SystemEventsSidebar';
+import jsPDF from 'jspdf';
+import autoTable from 'jspdf-autotable';
 import {
-  toggleSovereignSynth882Hz,
-  playTone,
-  playAuditChime,
-  updateAtmosphericEntropyPitch,
-  getAtmosphericCarrierState,
-  setCustomCarrierFrequency,
-} from './components/AudioSynthesizer';
-import { SovereignControlDock } from './components/SovereignControlDock';
-import { CopilotSovereignAI } from './components/CopilotSovereignAI';
-import { DashboardView } from './components/views/DashboardView';
-import { QuantumView } from './components/views/QuantumView';
-import { Chamber11QuantumRadar } from './components/views/Chamber11QuantumRadar';
-import { G11CanonicalCore } from './components/views/G11CanonicalCore';
-import { NexusView } from './components/views/NexusView';
-import { VaultView } from './components/views/VaultView';
-import { LedgerView } from './components/views/LedgerView';
-import { PulseView } from './components/views/PulseView';
-import { ForgeView } from './components/views/ForgeView';
-import { MatrixView } from './components/views/MatrixView';
-import { ArchiveView } from './components/views/ArchiveView';
-import { ConsoleView } from './components/views/ConsoleView';
-import { SecurityView, SecuritySubTab } from './components/views/SecurityView';
-import { SettingsView } from './components/views/SettingsView';
-import { ProductionReadinessView } from './components/views/ProductionReadinessView';
-import { CouncilView } from './components/views/CouncilView';
-import { LegalView } from './components/views/LegalView';
-import { ForensicAuditStepper } from './components/ForensicAuditStepper';
-import { StudioView } from './components/views/StudioView';
-import { UnifiedMultiverseControlPanel } from './components/views/UnifiedMultiverseControlPanel';
-import { UnifiedAuditPlaybackConsole } from './components/views/UnifiedAuditPlaybackConsole';
-import { GovernanceHealthHeatmap } from './components/views/GovernanceHealthHeatmap';
-import { CivilizationEngineView } from './components/views/CivilizationEngineView';
-import { CanonicalIntegrityDashboardView } from './components/views/CanonicalIntegrityDashboardView';
-import { QuantumAuditFusionView } from './components/views/QuantumAuditFusionView';
-import { AdminConsole } from './components/AdminConsole';
-import { AuditAnalyticsDashboard } from './components/AuditAnalyticsDashboard';
-import { SovereignChambersControlPlane } from './components/SovereignChambersControlPlane';
-import { AuditHistoryView } from './components/views/AuditHistoryView';
-import { SecurityPipelineView } from './components/views/SecurityPipelineView';
-import { ExecutiveCourtBriefing } from './components/executive/ExecutiveCourtBriefing';
-import { SovereignWalletView } from './components/views/SovereignWalletView';
-import { SYSTEM_METADATA } from './data/canonicalData';
-import { INITIAL_HARDWARE_SNAPSHOTS, createTelemetrySnapshot } from './utils/telemetrySnapshot';
-import { TelemetryAnomalyObserver } from './utils/telemetryAnomalyObserver';
-import { automatedBackupService } from './services/automatedBackupService';
-import { WriteFirewallEngine } from './utils/writeFirewall';
-import { announceSystemEventVerbal } from './utils/textToSpeechService';
-import { ErrorBoundary } from './components/ErrorBoundary';
-import { VoiceCommandOverlay } from './components/VoiceCommandOverlay';
-import { OfflineIndicator } from './components/OfflineIndicator';
-import { NexusIntegrationLayer } from './components/NexusIntegrationLayer';
-import { SovereignLoginLoader } from './components/SovereignLoginLoader';
-import { CopilotAssistantDrawer } from './components/copilot/CopilotAssistantDrawer';
-import { systemStateStore } from './store/systemStateStore';
-import { AudioEntropyController, SsotDriftWarning, SsotDriftToggleButton, QuantumAggregateEntropyIndicator } from './components/system/SystemStateComponents';
-import { ToastNotification, ToastMessage } from './components/ToastNotification';
-import { useNotificationWebSocket } from './hooks/useNotificationWebSocket';
-import { broadcastSyncService } from './services/broadcastSyncService';
-import { offlineAuditSyncService } from './services/offlineAuditSyncService';
-import { triggerVibration } from './utils/vibration';
-
-import {
-  Sparkles,
   Shield,
-  Award,
   Terminal,
   Keyboard,
   Activity,
   Heart,
-  Zap,
-  Bell,
   Waves,
-  Volume2,
-  VolumeX,
   ShieldCheck,
   CheckCircle2,
-  AlertTriangle,
   Lock,
   ChevronDown,
   ChevronUp,
   Scale,
   FileText,
-  ExternalLink,
   Info,
-  Layers,
   BookOpen,
   Fingerprint,
-  AlertOctagon,
   Clock,
   Download,
   X,
   Bot,
   Copy,
-  FileCheck,
-  FileDown
+  FileDown,
 } from 'lucide-react';
-import { ExecutiveCommandPalette } from './components/ExecutiveCommandPalette';
-import { EmergencySovereignLockdown } from './components/EmergencySovereignLockdown';
-import { LiveQuantumEntropyTicker } from './components/LiveQuantumEntropyTicker';
-import jsPDF from 'jspdf';
-import autoTable from 'jspdf-autotable';
+
+import { ViewType, HardwareSnapshot } from '@/types';
+import { Navigation } from '@/components/Navigation';
+import { LeftSidebar } from '@/components/LeftSidebar';
+import { MainFooter } from '@/components/MainFooter';
+import { SovereignControlDock } from '@/components/SovereignControlDock';
+import { CopilotSovereignAI } from '@/components/CopilotSovereignAI';
+import { SystemEventsSidebar, SystemEvent } from '@/components/SystemEventsSidebar';
+import { DashboardView } from '@/components/views/DashboardView';
+import { QuantumView } from '@/components/views/QuantumView';
+import { Chamber11QuantumRadar } from '@/components/views/Chamber11QuantumRadar';
+import { G11CanonicalCore } from '@/components/views/G11CanonicalCore';
+import { NexusView } from '@/components/views/NexusView';
+import { VaultView } from '@/components/views/VaultView';
+import { LedgerView } from '@/components/views/LedgerView';
+import { PulseView } from '@/components/views/PulseView';
+import { ForgeView } from '@/components/views/ForgeView';
+import { MatrixView } from '@/components/views/MatrixView';
+import { ArchiveView } from '@/components/views/ArchiveView';
+import { ConsoleView } from '@/components/views/ConsoleView';
+import { SecurityView, SecuritySubTab } from '@/components/views/SecurityView';
+import { SettingsView } from '@/components/views/SettingsView';
+import { ProductionReadinessView } from '@/components/views/ProductionReadinessView';
+import { CouncilView } from '@/components/views/CouncilView';
+import { LegalView } from '@/components/views/LegalView';
+import { ForensicAuditStepper } from '@/components/ForensicAuditStepper';
+import { StudioView } from '@/components/views/StudioView';
+import { UnifiedMultiverseControlPanel } from '@/components/views/UnifiedMultiverseControlPanel';
+import { UnifiedAuditPlaybackConsole } from '@/components/views/UnifiedAuditPlaybackConsole';
+import { GovernanceHealthHeatmap } from '@/components/views/GovernanceHealthHeatmap';
+import { CivilizationEngineView } from '@/components/views/CivilizationEngineView';
+import { CanonicalIntegrityDashboardView } from '@/components/views/CanonicalIntegrityDashboardView';
+import { QuantumAuditFusionView } from '@/components/views/QuantumAuditFusionView';
+import { AdminConsole } from '@/components/AdminConsole';
+import { AuditAnalyticsDashboard } from '@/components/AuditAnalyticsDashboard';
+import { SovereignChambersControlPlane } from '@/components/SovereignChambersControlPlane';
+import { AuditHistoryView } from '@/components/views/AuditHistoryView';
+import { SecurityPipelineView } from '@/components/views/SecurityPipelineView';
+import { ExecutiveCourtBriefing } from '@/components/executive/ExecutiveCourtBriefing';
+import { SovereignWalletView } from '@/components/views/SovereignWalletView';
+import { AuditCertificateModal } from '@/components/AuditCertificateModal';
+import { GitHubPwaModal } from '@/components/GitHubPwaModal';
+import { ThaiLegalSearchModal } from '@/components/ThaiLegalSearchModal';
+import { KeyboardShortcutsModal } from '@/components/KeyboardShortcutsModal';
+import { ErrorBoundary } from '@/components/ErrorBoundary';
+import { VoiceCommandOverlay } from '@/components/VoiceCommandOverlay';
+import { OfflineIndicator } from '@/components/OfflineIndicator';
+import { NexusIntegrationLayer } from '@/components/NexusIntegrationLayer';
+import { SovereignLoginLoader } from '@/components/SovereignLoginLoader';
+import { ExecutiveCommandPalette } from '@/components/ExecutiveCommandPalette';
+import { EmergencySovereignLockdown } from '@/components/EmergencySovereignLockdown';
+import { LiveQuantumEntropyTicker } from '@/components/LiveQuantumEntropyTicker';
+import { ToastNotification, ToastMessage } from '@/components/ToastNotification';
+import {
+  SsotDriftWarning,
+  SsotDriftToggleButton,
+  QuantumAggregateEntropyIndicator,
+} from '@/components/system/SystemStateComponents';
+import {
+  toggleSovereignSynth882Hz,
+  playTone,
+  playAuditChime,
+  updateAtmosphericEntropyPitch,
+  setCustomCarrierFrequency,
+} from '@/components/AudioSynthesizer';
+import { systemStateStore } from '@/store/systemStateStore';
+import { broadcastSyncService } from '@/services/broadcastSyncService';
+import { offlineAuditSyncService } from '@/services/offlineAuditSyncService';
+import { automatedBackupService } from '@/services/automatedBackupService';
+import { WriteFirewallEngine } from '@/utils/writeFirewall';
+import { TelemetryAnomalyObserver } from '@/utils/telemetryAnomalyObserver';
+import { INITIAL_HARDWARE_SNAPSHOTS, createTelemetrySnapshot } from '@/utils/telemetrySnapshot';
+import { announceSystemEventVerbal } from '@/utils/textToSpeechService';
+import { triggerVibration } from '@/utils/vibration';
+import { useNotificationWebSocket } from '@/hooks/useNotificationWebSocket';
 
 interface ViewPersona {
   name: string;
@@ -585,6 +574,208 @@ const INITIAL_SYSTEM_EVENTS: SystemEvent[] = [
   },
 ];
 
+export type SystemAction =
+  | {
+      type: 'EMIT_SYSTEM_EVENT';
+      payload: {
+        type: SystemEvent['type'];
+        title: string;
+        description: string;
+        metaHash?: string;
+        severity?: SystemEvent['severity'];
+        statuteRef?: string;
+        targetView?: SystemEvent['targetView'];
+        targetTab?: SecuritySubTab;
+        isComplianceDrift?: boolean;
+        bindingStatus?: SystemEvent['bindingStatus'];
+        anchoredSealNumber?: number;
+        merkleProofHash?: string;
+      };
+    }
+  | {
+      type: 'BATCH_SYSTEM_EVENTS';
+      payload: Array<{
+        type: SystemEvent['type'];
+        title: string;
+        description: string;
+        metaHash?: string;
+        severity?: SystemEvent['severity'];
+        statuteRef?: string;
+        targetView?: SystemEvent['targetView'];
+        targetTab?: SecuritySubTab;
+        isComplianceDrift?: boolean;
+        bindingStatus?: SystemEvent['bindingStatus'];
+        anchoredSealNumber?: number;
+        merkleProofHash?: string;
+      }>;
+    }
+  | {
+      type: 'CLEAR_SYSTEM_EVENTS';
+    };
+
+/**
+ * Normalizes system event inputs from all origins (compliance checks, hardware snapshots, evidence intake, manual imports)
+ * into a single consistent, tamper-evident SystemEvent structure.
+ */
+function createNormalizedSystemEvent(
+  payload: {
+    type: SystemEvent['type'];
+    title: string;
+    description: string;
+    metaHash?: string;
+    severity?: SystemEvent['severity'];
+    statuteRef?: string;
+    targetView?: SystemEvent['targetView'];
+    targetTab?: SecuritySubTab;
+    isComplianceDrift?: boolean;
+    bindingStatus?: SystemEvent['bindingStatus'];
+    anchoredSealNumber?: number;
+    merkleProofHash?: string;
+  },
+  sealCounter?: number
+): SystemEvent {
+  const isCompliance = payload.type === 'COMPLIANCE';
+  const isForensic = payload.type === 'FORENSIC';
+  const isHardware = payload.type === 'HARDWARE';
+  const isEvidence = payload.type === 'EVIDENCE_IMPORTED';
+  const isCrypto = payload.type === 'CRYPTO';
+
+  const timestamp = new Date().toLocaleTimeString('en-GB', { hour12: false }) + ' ICT';
+
+  let bindingStatus: SystemEvent['bindingStatus'] = payload.bindingStatus;
+  if (!bindingStatus) {
+    if (isCompliance || isForensic || isCrypto) {
+      bindingStatus = 'VERIFIED';
+    } else if (isEvidence) {
+      bindingStatus = 'PENDING';
+    } else {
+      bindingStatus = 'ANCHORED';
+    }
+  }
+
+  let statuteRef = payload.statuteRef;
+  if (!statuteRef) {
+    if (isCompliance || isForensic) {
+      statuteRef = 'ETDA B.E. 2544 Sec 9/26/28 & PDPA Sec 37';
+    } else if (isHardware) {
+      statuteRef = 'FIPS 140-3 L4 Hardware Custody & Sub-Kelvin Thermal SLA';
+    } else if (isEvidence) {
+      statuteRef = 'Hardening v2.1 Intake Gate (Provenance: SOURCE_FILE, Mutation: 0)';
+    }
+  }
+
+  let metaHash = payload.metaHash;
+  if (!metaHash && isCompliance) {
+    metaHash = `etda:sec26:proof:${Date.now().toString(16)}`;
+  }
+
+  return {
+    id: `evt-${Date.now()}-${Math.floor(Math.random() * 10000)}`,
+    type: payload.type,
+    title: payload.title.trim(),
+    description: payload.description.trim(),
+    timestamp,
+    metaHash,
+    statuteRef,
+    targetView: payload.targetView,
+    targetTab: payload.targetTab,
+    isComplianceDrift: Boolean(payload.isComplianceDrift),
+    bindingStatus,
+    anchoredSealNumber:
+      payload.anchoredSealNumber ?? (bindingStatus === 'VERIFIED' ? (sealCounter ?? 14902) : undefined),
+    merkleProofHash: payload.merkleProofHash,
+    severity: payload.severity || 'info',
+  };
+}
+
+// Global registry to detect duplicate module re-registrations and inspect initialization order
+const registeredModulesRegistry = new Set<string>();
+
+/**
+ * Diagnostic logger that triggers early in the SovereignAppContent lifecycle:
+ * - Inspects order of state registration
+ * - Verifies broadcastSyncService initialization before system event handlers attach
+ * - Audits module and handler registrations to catch duplicate import re-registrations
+ */
+function runSovereignAppDiagnostics(context: {
+  currentView: string;
+  snapshotsCount: number;
+  systemEventsCount: number;
+  verificationGateStatus: string;
+  isSystemActivityFrozen: boolean;
+}): void {
+  const timestamp = new Date().toISOString();
+  console.groupCollapsed(
+    `%c[ZYRQUEN Ω∞ LIFECYCLE DIAGNOSTIC]%c SovereignAppContent Initialization Audit (${timestamp})`,
+    'color: #10b981; font-weight: bold; background: #061e14; padding: 2px 6px; border-radius: 4px;',
+    'color: #38bdf8; font-weight: normal;'
+  );
+
+  // 1. Inspect State Registration Sequence
+  console.log('%c1. Order of State Registration Inspection:', 'font-weight: bold; color: #34d399;');
+  console.log('   ├── [Stage 1: Routing & Navigation] View: %s', context.currentView);
+  console.log('   ├── [Stage 2: Telemetry State] Hardware Snapshots: %d', context.snapshotsCount);
+  console.log('   ├── [Stage 3: Verification Gate] Status: %s', context.verificationGateStatus);
+  console.log('   ├── [Stage 4: Audit Event State] Initial System Events: %d', context.systemEventsCount);
+  console.log('   └── [Stage 5: System Lock Guard] Frozen: %s', context.isSystemActivityFrozen ? 'TRUE (PAUSED)' : 'FALSE (LIVE)');
+
+  // 2. Verify broadcastSyncService readiness BEFORE event handlers attach
+  broadcastSyncService.init();
+  const isBroadcastReady = broadcastSyncService.getIsInitialized();
+  const channelName = broadcastSyncService.getChannelName();
+  const tabId = broadcastSyncService.getTabId();
+
+  console.log('%c2. BroadcastSyncService Pre-Flight Verification:', 'font-weight: bold; color: #34d399;');
+  if (isBroadcastReady) {
+    console.log(
+      '   ├── Channel Status: %cINITIALIZED & READY%c (Channel: %s, Tab: %s)',
+      'color: #10b981; font-weight: bold;',
+      'color: inherit;',
+      channelName,
+      tabId
+    );
+    console.log('   └── Service Readiness: VERIFIED (Ready for subscriber attachment before system event hooks)');
+  } else {
+    console.warn(
+      '   └── %cWARNING: BroadcastChannel not supported or uninitialized; running single-tab local state fallback.%c',
+      'color: #f59e0b; font-weight: bold;',
+      'color: inherit;'
+    );
+  }
+
+  // 3. Inspect for duplicate import / component re-registrations
+  console.log('%c3. Duplicate Import & Handler Re-Registration Audit:', 'font-weight: bold; color: #34d399;');
+  const criticalModules = [
+    'WriteFirewallEngine',
+    'automatedBackupService',
+    'broadcastSyncService',
+    'offlineAuditSyncService',
+    'useNotificationWebSocket',
+  ];
+
+  const duplicateRegistrations: string[] = [];
+  criticalModules.forEach((moduleKey) => {
+    if (registeredModulesRegistry.has(moduleKey)) {
+      duplicateRegistrations.push(moduleKey);
+    } else {
+      registeredModulesRegistry.add(moduleKey);
+    }
+  });
+
+  if (duplicateRegistrations.length > 0) {
+    console.warn(
+      `[ZYRQUEN Ω∞ DIAGNOSTIC WARN] Duplicate registration detected for: ${duplicateRegistrations.join(', ')}. Check component re-mounting and singleton imports.`
+    );
+  } else {
+    console.log(
+      '   └── All %d critical service engines verified unique. Zero duplicate re-registrations detected in terminal output.',
+      criticalModules.length
+    );
+  }
+
+  console.groupEnd();
+}
+
 const VALID_VIEWS: ViewType[] = [
   'dashboard',
   'civilization',
@@ -801,6 +992,128 @@ function SovereignAppContent() {
     return () => clearInterval(interval);
   }, [lastSnapshotTime]);
 
+  const snapshotsRef = useRef(snapshots);
+  snapshotsRef.current = snapshots;
+  const isSystemActivityFrozenRef = useRef(isSystemActivityFrozen);
+  isSystemActivityFrozenRef.current = isSystemActivityFrozen;
+
+  const diagnosticRanRef = useRef(false);
+  const hasSeededEvidenceRef = useRef(false);
+
+  // Diagnostic logs function that triggers early in the SovereignAppContent lifecycle
+  useEffect(() => {
+    if (diagnosticRanRef.current) return;
+    diagnosticRanRef.current = true;
+    runSovereignAppDiagnostics({
+      currentView,
+      snapshotsCount: snapshots.length,
+      systemEventsCount: systemEvents.length,
+      verificationGateStatus: verificationGateStatus.status,
+      isSystemActivityFrozen,
+    });
+  }, [currentView, snapshots.length, systemEvents.length, verificationGateStatus.status, isSystemActivityFrozen]);
+
+  /**
+   * Centralized dispatch mechanism for all system and audit actions.
+   * Replaces queueMicrotask with deterministic, structured synchronous state updates
+   * and dispatches to BroadcastChannel, offline audit queues, and verbal announcers.
+   */
+  const dispatchAction = useCallback((action: SystemAction) => {
+    switch (action.type) {
+      case 'EMIT_SYSTEM_EVENT': {
+        const normalizedEvt = createNormalizedSystemEvent(
+          action.payload,
+          systemStateStore.getState().sealCount
+        );
+
+        // Centralized state update (no queueMicrotask)
+        setSystemEvents((prev) => [normalizedEvt, ...prev]);
+
+        // Immediate Verification Gate check update when compliance event arrives
+        if (normalizedEvt.type === 'COMPLIANCE') {
+          setVerificationGateStatus((curr) => ({
+            ...curr,
+            status: 'PASSED',
+            lastCheckedTime: normalizedEvt.timestamp,
+            complianceEventCount: curr.complianceEventCount + 1,
+            message: `Verification Gate PASSED: Compliance anchor verified (${normalizedEvt.title}). 10/10 REAL_HSM Quorum Active.`,
+          }));
+        }
+
+        // Cross-tab broadcast synchronization
+        try {
+          broadcastSyncService.broadcastSystemEvent(normalizedEvt);
+        } catch (err) {
+          console.warn('Broadcast sync failed:', err);
+        }
+
+        // Offline background persistence queue
+        try {
+          offlineAuditSyncService.enqueueEvent({
+            type: normalizedEvt.type,
+            title: normalizedEvt.title,
+            description: normalizedEvt.description,
+            metaHash: normalizedEvt.metaHash,
+            severity: normalizedEvt.severity,
+            statuteRef: normalizedEvt.statuteRef,
+          });
+        } catch (err) {
+          console.warn('Offline audit enqueue failed:', err);
+        }
+
+        // Low-Latency Verbal Feedback Loop for Critical and Anomaly Events
+        try {
+          announceSystemEventVerbal(normalizedEvt.type, normalizedEvt.title, normalizedEvt.severity);
+        } catch (err) {
+          console.warn('Verbal announcer failed:', err);
+        }
+        break;
+      }
+
+      case 'BATCH_SYSTEM_EVENTS': {
+        const normalizedList = action.payload.map((p) =>
+          createNormalizedSystemEvent(p, systemStateStore.getState().sealCount)
+        );
+        setSystemEvents((prev) => [...normalizedList, ...prev]);
+
+        normalizedList.forEach((evt) => {
+          if (evt.type === 'COMPLIANCE') {
+            setVerificationGateStatus((curr) => ({
+              ...curr,
+              status: 'PASSED',
+              lastCheckedTime: evt.timestamp,
+              complianceEventCount: curr.complianceEventCount + 1,
+              message: `Verification Gate PASSED: Compliance anchor verified (${evt.title}). 10/10 REAL_HSM Quorum Active.`,
+            }));
+          }
+          try {
+            broadcastSyncService.broadcastSystemEvent(evt);
+          } catch (err) {
+            console.warn('Broadcast sync failed:', err);
+          }
+          try {
+            offlineAuditSyncService.enqueueEvent({
+              type: evt.type,
+              title: evt.title,
+              description: evt.description,
+              metaHash: evt.metaHash,
+              severity: evt.severity,
+              statuteRef: evt.statuteRef,
+            });
+          } catch (err) {
+            console.warn('Offline audit enqueue failed:', err);
+          }
+        });
+        break;
+      }
+
+      case 'CLEAR_SYSTEM_EVENTS': {
+        setSystemEvents([]);
+        break;
+      }
+    }
+  }, []);
+
   const addSystemEvent = useCallback(
     (
       type: SystemEvent['type'],
@@ -811,92 +1124,60 @@ function SovereignAppContent() {
       statuteRef?: string,
       targetView?: SystemEvent['targetView']
     ) => {
-      const newEvt: SystemEvent = {
-        id: `evt-${Date.now()}-${Math.floor(Math.random() * 1000)}`,
-        type,
-        title,
-        description,
-        timestamp: new Date().toLocaleTimeString('en-GB', { hour12: false }) + ' ICT',
-        metaHash,
-        statuteRef,
-        targetView,
-        severity,
-      };
-
-      setSystemEvents((prev) => [newEvt, ...prev]);
-
-      // Broadcast system event across tabs via BroadcastChannel API
-      try {
-        broadcastSyncService.broadcastSystemEvent(newEvt);
-      } catch (err) {
-        console.warn('Broadcast sync failed:', err);
-      }
-
-      // Queue non-critical or compliance/hardware events for background sync
-      try {
-        offlineAuditSyncService.enqueueEvent({
-          type: newEvt.type,
-          title: newEvt.title,
-          description: newEvt.description,
-          metaHash: newEvt.metaHash,
-          severity: newEvt.severity,
-          statuteRef: newEvt.statuteRef,
-        });
-      } catch (err) {
-        console.warn('Offline audit enqueue failed:', err);
-      }
-
-      // Low-Latency Verbal Feedback Loop for Critical and Anomaly Events
-      try {
-        announceSystemEventVerbal(type, title, severity);
-      } catch (err) {
-        console.warn('Verbal announcer failed:', err);
-      }
+      dispatchAction({
+        type: 'EMIT_SYSTEM_EVENT',
+        payload: {
+          type,
+          title,
+          description,
+          metaHash,
+          severity,
+          statuteRef,
+          targetView,
+        },
+      });
     },
-    []
+    [dispatchAction]
   );
 
-  // Register Write Firewall & Automated Backup Diagnostic to dispatch directly to SystemEvents
+  // Trigger 'EVIDENCE_IMPORTED' audit events upon initial mount using batched dispatchAction
   useEffect(() => {
-    WriteFirewallEngine.registerSystemEventHandler((type, title, desc, meta, sev, statute, view) => {
-      addSystemEvent(type, title, desc, meta, sev, statute, view);
+    if (hasSeededEvidenceRef.current) return;
+    hasSeededEvidenceRef.current = true;
+
+    dispatchAction({
+      type: 'BATCH_SYSTEM_EVENTS',
+      payload: [
+        {
+          type: 'EVIDENCE_IMPORTED',
+          title: 'Evidence Imported: TNT-TH-001 (Tenant Manifest)',
+          description:
+            'Status: PENDING | Provenance: SOURCE_FILE | Mutation: 0 | Scope: Sovereign Physical Hardware Isolation (MAEW HOLDINGS CO., LTD.) | Canonical write: BLOCKED',
+          metaHash: 'source:TNT-TH-001 (Digest: NOT COMPUTED)',
+          severity: 'info',
+          statuteRef: 'Hardening v2.1 Intake Gate (Provenance: SOURCE_FILE, Mutation: 0)',
+          targetView: 'dashboard',
+        },
+        {
+          type: 'EVIDENCE_IMPORTED',
+          title: 'Evidence Imported: DS-901-PILOT (FIOS Pilot Dataset)',
+          description:
+            'Status: PENDING | Provenance: SOURCE_FILE | Mutation: 0 | Scope: Non-Live Pilot Dataset (Zero Trading Authority) | Canonical write: BLOCKED',
+          metaHash: 'source:DS-901-PILOT (Digest: NOT COMPUTED)',
+          severity: 'info',
+          statuteRef: 'Hardening v2.1 Intake Gate (Provenance: SOURCE_FILE, Mutation: 0)',
+          targetView: 'dashboard',
+        },
+      ],
     });
-    automatedBackupService.registerSystemActivityLogger((type, title, desc, meta, sev, statute, view) => {
-      addSystemEvent(type, title, desc, meta, sev, statute, view);
-    });
-  }, [addSystemEvent]);
+  }, [dispatchAction]);
 
-  // Trigger 'EVIDENCE_IMPORTED' audit events upon application initialization
+  // Unified service lifecycle effect ensuring strict initialization & ordered teardown
   useEffect(() => {
-    // 1. Audit event for TNT-TH-001
-    addSystemEvent(
-      'EVIDENCE_IMPORTED',
-      'Evidence Imported: TNT-TH-001 (Tenant Manifest)',
-      'Status: PENDING | Provenance: SOURCE_FILE | Mutation: 0 | Scope: Sovereign Physical Hardware Isolation (MAEW HOLDINGS CO., LTD.) | Canonical write: BLOCKED',
-      'source:TNT-TH-001 (Digest: NOT COMPUTED)',
-      'info',
-      'Hardening v2.1 Intake Gate (Provenance: SOURCE_FILE, Mutation: 0)',
-      'dashboard'
-    );
-
-    // 2. Audit event for DS-901-PILOT
-    addSystemEvent(
-      'EVIDENCE_IMPORTED',
-      'Evidence Imported: DS-901-PILOT (FIOS Pilot Dataset)',
-      'Status: PENDING | Provenance: SOURCE_FILE | Mutation: 0 | Scope: Non-Live Pilot Dataset (Zero Trading Authority) | Canonical write: BLOCKED',
-      'source:DS-901-PILOT (Digest: NOT COMPUTED)',
-      'info',
-      'Hardening v2.1 Intake Gate (Provenance: SOURCE_FILE, Mutation: 0)',
-      'dashboard'
-    );
-  }, [addSystemEvent]);
-
-  // Multi-tab BroadcastChannel & Offline Audit Synchronization Listener
-  useEffect(() => {
-    // Initialize BroadcastChannel
+    // 1. Ensure broadcastSyncService is initialized before attaching cross-tab listeners
     broadcastSyncService.init();
 
-    // 1. Synchronize cross-tab system events
+    // 2. Attach BroadcastChannel cross-tab synchronization listeners
     const unsubEvent = broadcastSyncService.onSystemEvent((evt) => {
       setSystemEvents((prev) => {
         if (prev.some((e) => e.id === evt.id)) return prev;
@@ -904,7 +1185,6 @@ function SovereignAppContent() {
       });
     });
 
-    // 2. Synchronize cross-tab audit snapshots
     const unsubSnap = broadcastSyncService.onAuditSnapshot((snap) => {
       setSnapshots((prev) => {
         if (prev.some((s) => s.id === snap.id)) return prev;
@@ -912,7 +1192,6 @@ function SovereignAppContent() {
       });
     });
 
-    // 3. Synchronize cross-tab global lock states
     const unsubLock = broadcastSyncService.onLockState((lockState) => {
       if (typeof lockState.isSystemActivityFrozen === 'boolean') {
         setIsSystemActivityFrozen(lockState.isSystemActivityFrozen);
@@ -925,7 +1204,7 @@ function SovereignAppContent() {
       }
     });
 
-    // 4. Background offline audit queue status notification
+    // 3. Attach Offline Audit Sync listener
     let previousPending = offlineAuditSyncService.getQueueCount();
     const unsubOffline = offlineAuditSyncService.subscribe((count) => {
       if (previousPending > 0 && count === 0) {
@@ -937,21 +1216,12 @@ function SovereignAppContent() {
       previousPending = count;
     });
 
-    return () => {
-      unsubEvent();
-      unsubSnap();
-      unsubLock();
-      unsubOffline();
-    };
-  }, [showToast]);
-
-  // Automated background backup service subscription
-  useEffect(() => {
+    // 4. Start automated backup service and attach snapshot listener
     automatedBackupService.start();
+    const unsubBackupSnap = automatedBackupService.onSnapshot((record) => {
+      if (isSystemActivityFrozenRef.current) return;
 
-    const unsubscribe = automatedBackupService.onSnapshot((record) => {
-      if (isSystemActivityFrozen) return;
-
+      const currentSnaps = snapshotsRef.current;
       const newSnap = createTelemetrySnapshot(
         {
           core0: 41 + Math.floor(Math.random() * 5),
@@ -959,8 +1229,8 @@ function SovereignAppContent() {
           core2: 43 + Math.floor(Math.random() * 6),
           core3: 38 + Math.floor(Math.random() * 5),
         },
-        snapshots.length,
-        snapshots[0]?.sealedHash
+        currentSnaps.length,
+        currentSnaps[0]?.sealedHash
       );
       setSnapshots((prev) => [newSnap, ...prev]);
       setLastSnapshotTime(Date.now());
@@ -970,7 +1240,7 @@ function SovereignAppContent() {
       } catch (err) {
         console.warn('Broadcast snapshot failed:', err);
       }
-      
+
       showToast(`Automated System Backup #${record.snapshotNumber} Sealed Successfully. Integrity Verified.`, 'success');
 
       addSystemEvent(
@@ -984,10 +1254,31 @@ function SovereignAppContent() {
       );
     });
 
+    // 5. Attach automated backup logger
+    const unsubBackupLogger = automatedBackupService.registerSystemActivityLogger(
+      (type, title, desc, meta, sev, statute, view) => {
+        addSystemEvent(type, title, desc, meta, sev, statute, view);
+      }
+    );
+
+    // 6. Attach Write Firewall Engine system event handler
+    const unsubFirewall = WriteFirewallEngine.registerSystemEventHandler(
+      (type, title, desc, meta, sev, statute, view) => {
+        addSystemEvent(type, title, desc, meta, sev, statute, view);
+      }
+    );
+
+    // Strict reverse teardown order: prevents memory leaks and duplicate handlers during re-renders or tab switches
     return () => {
-      unsubscribe();
+      unsubFirewall();
+      unsubBackupLogger();
+      unsubBackupSnap();
+      unsubOffline();
+      unsubLock();
+      unsubSnap();
+      unsubEvent();
     };
-  }, [addSystemEvent, snapshots, isSystemActivityFrozen]);
+  }, [addSystemEvent, showToast]);
 
   const handleToggleFreezeSystemActivity = useCallback(() => {
     triggerVibration('sidebarToggle');

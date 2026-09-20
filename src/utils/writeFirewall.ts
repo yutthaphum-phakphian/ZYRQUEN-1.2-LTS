@@ -75,8 +75,13 @@ export class WriteFirewallEngine {
       statuteRef?: string,
       targetView?: 'security' | 'ledger' | 'dashboard'
     ) => void
-  ) {
+  ): () => void {
     this.onSystemEventCallback = handler;
+    return () => {
+      if (this.onSystemEventCallback === handler) {
+        this.onSystemEventCallback = undefined;
+      }
+    };
   }
 
   private static auditLedger: WriteFirewallAuditRecord[] = [

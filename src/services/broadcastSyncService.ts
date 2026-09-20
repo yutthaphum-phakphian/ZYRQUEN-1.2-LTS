@@ -4,8 +4,8 @@
  * and global lock states across all open tabs, preventing state fragmentation.
  */
 
-import { HardwareSnapshot } from '../types';
-import { SystemEvent } from '../components/SystemEventsSidebar';
+import { HardwareSnapshot } from '@/types';
+import { SystemEvent } from '@/components/SystemEventsSidebar';
 
 export const ZYRQUEN_BROADCAST_CHANNEL_NAME = 'zyrquen_sovereign_sync_channel_v1';
 
@@ -70,6 +70,14 @@ class SovereignBroadcastSyncService {
 
   public getTabId(): string {
     return this.tabId;
+  }
+
+  public getIsInitialized(): boolean {
+    return this.isInitialized;
+  }
+
+  public getChannelName(): string {
+    return ZYRQUEN_BROADCAST_CHANNEL_NAME;
   }
 
   public onSystemEvent(handler: BroadcastEventHandler): () => void {

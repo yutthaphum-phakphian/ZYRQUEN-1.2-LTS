@@ -4,9 +4,9 @@
  * Automated Integrity Verification Routine: Runs a background health check on the immutable evidence ledger every 60 seconds.
  */
 
-import { SYSTEM_METADATA } from '../data/canonicalData';
-import { HardwareSnapshot } from '../types';
-import { WriteFirewallEngine } from '../utils/writeFirewall';
+import { SYSTEM_METADATA } from '@/data/canonicalData';
+import { HardwareSnapshot } from '@/types';
+import { WriteFirewallEngine } from '@/utils/writeFirewall';
 
 export interface DriftDiagnosticReport {
   id: string;
@@ -106,7 +106,7 @@ class AutomatedBackupEngine {
   private driftDiagnosticCountdownSeconds: number = 90;
   private latestDriftDiagnostic: DriftDiagnosticReport | null = null;
   private driftDiagnosticListeners: Set<(report: DriftDiagnosticReport) => void> = new Set();
-  private systemActivityLogger?: (
+  private systemActivityLogger?: ((
     type: 'SECURITY' | 'ALERT' | 'FORENSIC' | 'WARNING',
     title: string,
     description: string,
@@ -114,7 +114,7 @@ class AutomatedBackupEngine {
     severity?: 'info' | 'warning' | 'critical',
     statuteRef?: string,
     targetView?: 'security' | 'ledger' | 'dashboard'
-  ) => void;
+  ) => void) | null;
 
   private history: BackupHistoryItem[] = [
     {
@@ -223,8 +223,13 @@ class AutomatedBackupEngine {
       statuteRef?: string,
       targetView?: 'security' | 'ledger' | 'dashboard'
     ) => void
-  ) {
+  ): () => void {
     this.systemActivityLogger = logger;
+    return () => {
+      if (this.systemActivityLogger === logger) {
+        this.systemActivityLogger = null;
+      }
+    };
   }
 
   private notify() {
