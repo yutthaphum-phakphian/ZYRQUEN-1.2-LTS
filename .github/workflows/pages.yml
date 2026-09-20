@@ -67,7 +67,7 @@ jobs:
           echo "✔ Verified build output directory exists at ./${{ env.BUILD_OUTPUT_DIR }}"
 
       - name: 📤 Upload Pages Artifact
-        uses: actions/upload-pages-artifact@v3
+        uses: actions/upload-pages-artifact@v5
         with:
           path: ${{ env.BUILD_OUTPUT_DIR }}
 
