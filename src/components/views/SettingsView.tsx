@@ -38,6 +38,7 @@ import {
   ShieldCheck,
   HardDrive,
   Database,
+  Filter,
 } from 'lucide-react';
 import { THAI_CUSTODIANS, SYSTEM_METADATA } from '../../data/canonicalData';
 import { ThaiLegalSovereignMapping } from '../ThaiLegalSovereignMapping';
@@ -246,6 +247,26 @@ export const SettingsView: React.FC<SettingsViewProps> = ({
   const [syncPendingCount, setSyncPendingCount] = useState<number>(() => offlineAuditSyncService.getQueueCount());
   const [isForceSyncing, setIsForceSyncing] = useState<boolean>(false);
   const [syncFeedbackMessage, setSyncFeedbackMessage] = useState<{ text: string; isError?: boolean } | null>(null);
+
+  // Audit Logs Status Filter State (PASS, ACTIVE_GUARD, VERIFIED, ALL)
+  const [auditStatusFilter, setAuditStatusFilter] = useState<'ALL' | 'PASS' | 'ACTIVE_GUARD' | 'VERIFIED'>(() => {
+    try {
+      const saved = localStorage.getItem('zyrquen_audit_status_filter');
+      return (saved as 'ALL' | 'PASS' | 'ACTIVE_GUARD' | 'VERIFIED') || 'ALL';
+    } catch {
+      return 'ALL';
+    }
+  });
+
+  const handleAuditStatusFilterChange = (filter: 'ALL' | 'PASS' | 'ACTIVE_GUARD' | 'VERIFIED') => {
+    setAuditStatusFilter(filter);
+    playTone(600, 0.03);
+    try {
+      localStorage.setItem('zyrquen_audit_status_filter', filter);
+    } catch {
+      // ignore
+    }
+  };
 
   useEffect(() => {
     const unsub = subscribeTTSConfig((cfg) => {
@@ -481,6 +502,36 @@ export const SettingsView: React.FC<SettingsViewProps> = ({
             )}
           </button>
 
+          {/* Audit Logs Status Filtering Dropdown (PASS, ACTIVE_GUARD, VERIFIED) */}
+          <div
+            id="container-audit-status-filter"
+            className="flex items-center gap-2 px-3 py-1.5 rounded-2xl bg-black/50 border border-white/10 font-mono text-xs shadow-sm"
+          >
+            <Filter className="w-3.5 h-3.5 text-cyan-400" />
+            <span className="text-zinc-400 text-[11px] font-bold hidden md:inline">Audit Filter:</span>
+            <select
+              id="select-audit-status-filter"
+              value={auditStatusFilter}
+              onChange={(e) => handleAuditStatusFilterChange(e.target.value as any)}
+              className="bg-transparent text-cyan-300 font-bold text-xs focus:outline-none cursor-pointer pr-1"
+              title="Filter audit logs and forensic modules by status (PASS, ACTIVE_GUARD, VERIFIED)"
+            >
+              <option value="ALL" className="bg-slate-900 text-white">ALL STATUSES (ทั้งหมด)</option>
+              <option value="PASS" className="bg-slate-900 text-cyan-300">🔵 PASS (ผ่านการตรวจสอบ)</option>
+              <option value="ACTIVE_GUARD" className="bg-slate-900 text-amber-300">🟡 ACTIVE_GUARD (เฝ้าระวัง)</option>
+              <option value="VERIFIED" className="bg-slate-900 text-emerald-300">🟢 VERIFIED (รับรองความถูกต้อง)</option>
+            </select>
+            {auditStatusFilter !== 'ALL' && (
+              <button
+                onClick={() => handleAuditStatusFilterChange('ALL')}
+                className="text-[10px] text-zinc-500 hover:text-zinc-300 px-1 hover:underline cursor-pointer"
+                title="Clear filter"
+              >
+                ✕
+              </button>
+            )}
+          </div>
+
           <div className="flex items-center p-1 bg-black/40 rounded-2xl border border-white/8 text-xs font-mono">
             <button
               onClick={() => {
@@ -668,7 +719,10 @@ export const SettingsView: React.FC<SettingsViewProps> = ({
       {(activeSettingsTab === 'AUDIT_REDTEAM' || activeSettingsTab === 'ALL') && (
         <>
           {/* ZYRQUEN Ω∞ Sovereign Self-Audit & Evidence-Bound Verification Engine */}
-          <SovereignSelfAuditEngine />
+          <SovereignSelfAuditEngine
+            statusFilter={auditStatusFilter}
+            onStatusFilterChange={handleAuditStatusFilterChange}
+          />
 
           {/* Global Red Team Challenge */}
           <GlobalRedTeamChallenge />

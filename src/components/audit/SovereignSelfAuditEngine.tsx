@@ -48,10 +48,14 @@ export type AuditSubTab =
 
 interface SovereignSelfAuditEngineProps {
   initialTab?: AuditSubTab;
+  statusFilter?: 'ALL' | 'PASS' | 'ACTIVE_GUARD' | 'VERIFIED';
+  onStatusFilterChange?: (filter: 'ALL' | 'PASS' | 'ACTIVE_GUARD' | 'VERIFIED') => void;
 }
 
 export const SovereignSelfAuditEngine: React.FC<SovereignSelfAuditEngineProps> = ({
   initialTab = 'TRUTH_MATRIX',
+  statusFilter,
+  onStatusFilterChange,
 }) => {
   const [activeTab, setActiveTab] = useState<AuditSubTab>(initialTab);
   const [isAuditing, setIsAuditing] = useState<boolean>(false);
@@ -244,7 +248,12 @@ export const SovereignSelfAuditEngine: React.FC<SovereignSelfAuditEngineProps> =
       {/* Tab Panels */}
       <div className="pt-1">
         {activeTab === 'SENATE_30DAY' && <SenateGovernanceAuditDossier />}
-        {activeTab === 'TRUTH_MATRIX' && <TruthMatrix />}
+        {activeTab === 'TRUTH_MATRIX' && (
+          <TruthMatrix
+            statusFilter={statusFilter}
+            onStatusFilterChange={onStatusFilterChange}
+          />
+        )}
         {activeTab === 'DECA_KEY' && <DecaKeyRegistry />}
         {activeTab === 'TRACE_REPLAY' && <ForensicTraceReplay />}
         {activeTab === 'FIOS_DATASET' && <FiosDatasetVerificationModal />}
