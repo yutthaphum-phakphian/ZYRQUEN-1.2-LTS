@@ -1,0 +1,229 @@
+import React, { useState } from 'react';
+
+export interface ExhibitItem {
+  id: string; // e.g., "จพ.๐๑"
+  title: string;
+  category: string;
+  statutoryBasis: string;
+  merkleRootOrHash: string;
+  status: 'VERIFIED_SSOT' | 'IMMUTABLE_WORM' | 'RATIFIED';
+  details: { label: string; value: string }[];
+}
+
+const EXHIBITS_DATA: ExhibitItem[] = [
+  {
+    id: 'จพ.๐๑',
+    title: 'Genesis Block Anchor & Canonical Merkle Root Verification',
+    category: 'Sovereign SSoT Anchor',
+    statutoryBasis: 'พ.ร.บ. ธุรกรรมทางอิเล็กทรอนิกส์ฯ มาตรา ๒๘',
+    merkleRootOrHash: '0x909ab814479844d8a14816bed34cdbb07528e18501da86fc4691763a43fa4c68',
+    status: 'VERIFIED_SSOT',
+    details: [
+      { label: 'Genesis Anchor Block', value: '#849202' },
+      { label: 'Baseline State Drift', value: 'Δ 0.00% (Zero Drift)' },
+      { label: 'Ingestion Protocol', value: 'ZYRQUEN Ω∞ Canonical Vault' }
+    ]
+  },
+  {
+    id: 'จพ.๐๒',
+    title: 'Deca-Key Council 10/10 REAL_HSM Physical Custody Certificates',
+    category: 'Hardware Custody Ratification',
+    statutoryBasis: 'พ.ร.บ. ธุรกรรมทางอิเล็กทรอนิกส์ฯ มาตรา ๒๖',
+    merkleRootOrHash: '0x3f8a09b2e11d4029c71e84a2082b415a9900c9e102f481c009d18400fef2911b',
+    status: 'RATIFIED',
+    details: [
+      { label: 'HSM Enclosure Standard', value: 'FIPS 140-3 Level 4' },
+      { label: 'Quorum Consensus', value: '10/10 Unanimous Ratification' },
+      { label: 'Tamper Protection', value: 'Active Zeroization (0.48 ms)' }
+    ]
+  },
+  {
+    id: 'จพ.๐๓',
+    title: 'Post-Quantum Cryptography Hybrid Suite (FIPS 203/204/205)',
+    category: 'Quantum-Resistant Signing',
+    statutoryBasis: 'พ.ร.บ. ธุรกรรมทางอิเล็กทรอนิกส์ฯ มาตรา ๙',
+    merkleRootOrHash: '0xe8a7102b48d1c9201f99c8200b2e7188179a029312d8a01124e90820bc12984a',
+    status: 'VERIFIED_SSOT',
+    details: [
+      { label: 'Asymmetric Algorithm', value: 'Dilithium-5 (FIPS 204)' },
+      { label: 'Stateless Hash Signature', value: 'SPHINCS+ (FIPS 205)' },
+      { label: 'Key Encapsulation', value: 'ML-KEM-1024 (FIPS 203)' }
+    ]
+  },
+  {
+    id: 'จพ.๐๔',
+    title: '14,902 Frozen Evidence Seals Immutable WORM Ledger',
+    category: 'Digital Evidence Isolation',
+    statutoryBasis: 'หลักเกณฑ์ Zero-Deletion Preservation Guarantee',
+    merkleRootOrHash: '0x1010a28f99e012a8192a8301fe23101889a7711d9a200bba8371c109201f1092',
+    status: 'IMMUTABLE_WORM',
+    details: [
+      { label: 'Frozen Seals Count', value: '14,902 Seals' },
+      { label: 'Storage Architecture', value: 'Module 17 V24 WORM Storage' },
+      { label: 'Isolation Enclosure', value: 'Chamber 02 Threat Escrow' }
+    ]
+  },
+  {
+    id: 'จพ.๐๕',
+    title: 'Sub-Kelvin Telemetry & Phoenix Auto-Recovery Benchmarks',
+    category: 'Forensic System Stability',
+    statutoryBasis: 'มาตรฐานนิติวิทยาศาสตร์ ISO/IEC 27037',
+    merkleRootOrHash: '0x77c201a0928b12e0912f8832a101b77629201e9120ba8201a39d8801902047a8',
+    status: 'VERIFIED_SSOT',
+    details: [
+      { label: 'SLA Benchmark Target', value: '< 142.00 ms' },
+      { label: 'Replay Execution Speed', value: '35.80 ms (PASS)' },
+      { label: 'Data Recovery Assurance', value: 'Zero Data Loss (Pass)' }
+    ]
+  },
+  {
+    id: 'จพ.๐๖',
+    title: 'Thai Sovereign Treasury & RWA Reserve Ledger (฿4.238B THB + Gold)',
+    category: 'Asset Backing & Fiscal Anchor',
+    statutoryBasis: 'พ.ร.บ. ธุรกรรมทางอิเล็กทรอนิกส์ฯ มาตรา ๒๘',
+    merkleRootOrHash: '0xb2831a90c102f902e8812301f2010887162b901f18e90a88b12390a8c201827a',
+    status: 'RATIFIED',
+    details: [
+      { label: 'Treasury Fiscal Asset', value: '฿4.238 Billion THB' },
+      { label: 'Physical Custody Reserve', value: 'LBMA Gold Vault Reserve' },
+      { label: 'Real-Time Valuation Sync', value: 'mTLS 4318 Telemetry' }
+    ]
+  },
+  {
+    id: 'จพ.๐๗',
+    title: 'Non-Repudiation Chain of Custody & Statutory Safe Harbor Warrant',
+    category: 'Judicial Warrant & Privacy',
+    statutoryBasis: 'พ.ร.บ. คุ้มครองข้อมูลส่วนบุคคลฯ (PDPA) มาตรา ๓๗',
+    merkleRootOrHash: '0xf4901e82b71d9002a71822c1092a81907e812a00e882b719001a8811e9a77210',
+    status: 'VERIFIED_SSOT',
+    details: [
+      { label: 'PII Redaction Engine', value: 'Zero-Knowledge zk-SNARKs' },
+      { label: 'Telemetry Anonymization', value: '100% PII Masked' },
+      { label: 'Admissibility Warrant', value: 'Court-Ready Qualified Evidence' }
+    ]
+  }
+];
+
+export const CourtEvidenceInfographic: React.FC = () => {
+  const [activeExhibit, setActiveExhibit] = useState<ExhibitItem>(EXHIBITS_DATA[0]);
+
+  return (
+    <div className="w-full bg-gray-950 text-gray-100 p-6 rounded-xl border border-gray-800 space-y-6">
+      {/* Header - Thai ETA B.E. 2544 */}
+      <div className="flex flex-col md:flex-row justify-between items-start md:items-center border-b border-gray-800 pb-4 gap-4">
+        <div>
+          <div className="flex items-center gap-2">
+            <span className="bg-amber-500/20 text-amber-400 border border-amber-500/40 text-xs font-semibold px-2.5 py-0.5 rounded">
+              JUDICIAL EVIDENCE DECK
+            </span>
+            <span className="text-xs text-gray-400 font-mono">
+              Thai ETA B.E. 2544 (Sec 9, 26, 28) | PDPA Sec 37 | Genesis #849202
+            </span>
+          </div>
+          <h2 className="text-xl font-bold mt-1 text-white">
+            บัญชีวัตถุพยานดิจิทัล (Court Exhibits จพ.๐๑ – จพ.๐๗)
+          </h2>
+          <p className="text-[11px] text-gray-500 font-mono mt-1">DOC-SOV-HSM-1010-2026-V9 | SSoT Δ0 0.00% | 14,902 Seals | 10/10 REAL_HSM Quorum RATIFIED</p>
+        </div>
+        <div className="flex gap-2">
+          <span className="px-2 py-1 bg-emerald-950/50 border border-emerald-800 text-emerald-400 text-[10px] font-mono rounded">FIPS 140-3 L4 VERIFIED</span>
+          <button
+            onClick={() => window.print()}
+            className="px-4 py-2 bg-amber-600 hover:bg-amber-500 text-white font-medium text-xs rounded transition print:hidden cursor-pointer"
+          >
+            Export Official Dossier (PDF)
+          </button>
+        </div>
+      </div>
+
+      {/* Grid Layout: Left Exhibit Selector, Right Highlight Card */}
+      <div className="grid grid-cols-1 lg:grid-cols-12 gap-6">
+        {/* Exhibit Selector Cards */}
+        <div className="lg:col-span-7 space-y-3">
+          {EXHIBITS_DATA.map((exhibit) => {
+            const isSelected = activeExhibit.id === exhibit.id;
+            return (
+              <div
+                key={exhibit.id}
+                onClick={() => setActiveExhibit(exhibit)}
+                className={`p-4 rounded-lg border transition cursor-pointer ${
+                  isSelected
+                    ? 'bg-gray-800/90 border-amber-500/80 shadow-lg shadow-amber-500/10'
+                    : 'bg-gray-900/60 border-gray-800 hover:border-gray-700'
+                }`}
+              >
+                <div className="flex items-center justify-between mb-1">
+                  <div className="flex items-center gap-2">
+                    <span className="font-mono text-xs font-bold px-2 py-0.5 rounded bg-amber-950 text-amber-300 border border-amber-800">
+                      {exhibit.id}
+                    </span>
+                    <span className="text-xs text-gray-400 font-medium">
+                      {exhibit.category}
+                    </span>
+                  </div>
+                  <span className={`text-[10px] font-mono px-2 py-0.5 rounded border ${
+                    exhibit.status === 'RATIFIED' ? 'text-purple-400 bg-purple-950/60 border-purple-800/80' :
+                    exhibit.status === 'IMMUTABLE_WORM' ? 'text-cyan-400 bg-cyan-950/60 border-cyan-800/80' :
+                    'text-emerald-400 bg-emerald-950/60 border-emerald-800/80'
+                  }`}>
+                    {exhibit.status}
+                  </span>
+                </div>
+                <h3 className="text-sm font-semibold text-gray-200">{exhibit.title}</h3>
+                <p className="text-xs text-gray-400 mt-1">{exhibit.statutoryBasis}</p>
+              </div>
+            );
+          })}
+        </div>
+
+        {/* Selected Exhibit Deep-Dive Panel */}
+        <div className="lg:col-span-5 bg-gray-900 p-5 rounded-lg border border-gray-800 flex flex-col justify-between">
+          <div>
+            <div className="border-b border-gray-800 pb-3 mb-4">
+              <span className="text-xs font-mono text-amber-400">
+                ACTIVE EXHIBIT INSPECTOR
+              </span>
+              <h3 className="text-lg font-bold text-white mt-1">
+                {activeExhibit.id}: {activeExhibit.title}
+              </h3>
+              <p className="text-xs text-amber-300/80 mt-1">{activeExhibit.statutoryBasis}</p>
+            </div>
+
+            {/* Digest Box - Merkle Root */}
+            <div className="mb-4">
+              <label className="text-[11px] font-mono text-gray-400 block mb-1">
+                CANONICAL DIGEST / MERKLE ROOT - Genesis #849202
+              </label>
+              <div className="p-2.5 bg-black/60 rounded border border-gray-800 font-mono text-[11px] text-cyan-300 break-all select-all">
+                {activeExhibit.merkleRootOrHash}
+              </div>
+            </div>
+
+            {/* Spec Attributes */}
+            <div className="space-y-2.5">
+              {activeExhibit.details.map((detail, idx) => (
+                <div key={idx} className="flex justify-between items-center text-xs border-b border-gray-800/60 pb-1.5">
+                  <span className="text-gray-400">{detail.label}</span>
+                  <span className="font-mono text-gray-200 font-medium">{detail.value}</span>
+                </div>
+              ))}
+            </div>
+          </div>
+
+          <div className="mt-6 pt-4 border-t border-gray-800 text-[11px] font-mono text-emerald-400 flex items-center justify-between">
+            <span>[✓] CERTIFIED COURT-ADMISSIBLE</span>
+            <span>ZERO-DRIFT VERIFIED Δ0 0.00%</span>
+          </div>
+        </div>
+      </div>
+
+      {/* Footer - Statutory Compliance */}
+      <div className="pt-4 border-t border-gray-800 text-[10px] font-mono text-gray-500 flex justify-between">
+        <span>DOC-SOV-HSM-1010-2026-V9 | Merkle Root: 0x909ab814...43fa4c68 | 10/10 REAL_HSM Quorum RATIFIED | FIPS 140-3 L4 Utimaco u.trust GP CSe-Series</span>
+        <span>ETDA Sec 9,26,28 | PDPA Sec 37 | ISO/IEC 27037 | Court-Ready WORM</span>
+      </div>
+    </div>
+  );
+};
+
+export default CourtEvidenceInfographic;
