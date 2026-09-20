@@ -1,32 +1,6 @@
 import React, { useState, useEffect, useCallback, useRef } from 'react';
-import { AnimatePresence, motion, animate } from 'motion/react';
-import { HashRouter, useLocation, useNavigate } from 'react-router-dom';
-import jsPDF from 'jspdf';
-import autoTable from 'jspdf-autotable';
-import {
-  Shield,
-  Terminal,
-  Keyboard,
-  Activity,
-  Heart,
-  Waves,
-  ShieldCheck,
-  CheckCircle2,
-  Lock,
-  ChevronDown,
-  ChevronUp,
-  Scale,
-  FileText,
-  Info,
-  BookOpen,
-  Fingerprint,
-  Clock,
-  Download,
-  X,
-  Bot,
-  Copy,
-  FileDown,
-} from 'lucide-react';
+import { HashRouter, useLocation, useNavigate } from '@/lib/router';
+import { Lock, Waves } from 'lucide-react';
 
 import { ViewType, HardwareSnapshot } from '@/types';
 import { Navigation } from '@/components/Navigation';
@@ -35,38 +9,8 @@ import { MainFooter } from '@/components/MainFooter';
 import { SovereignControlDock } from '@/components/SovereignControlDock';
 import { CopilotSovereignAI } from '@/components/CopilotSovereignAI';
 import { SystemEventsSidebar, SystemEvent } from '@/components/SystemEventsSidebar';
-import { DashboardView } from '@/components/views/DashboardView';
-import { QuantumView } from '@/components/views/QuantumView';
-import { Chamber11QuantumRadar } from '@/components/views/Chamber11QuantumRadar';
-import { G11CanonicalCore } from '@/components/views/G11CanonicalCore';
-import { NexusView } from '@/components/views/NexusView';
-import { VaultView } from '@/components/views/VaultView';
-import { LedgerView } from '@/components/views/LedgerView';
-import { PulseView } from '@/components/views/PulseView';
-import { ForgeView } from '@/components/views/ForgeView';
-import { MatrixView } from '@/components/views/MatrixView';
-import { ArchiveView } from '@/components/views/ArchiveView';
-import { ConsoleView } from '@/components/views/ConsoleView';
-import { SecurityView, SecuritySubTab } from '@/components/views/SecurityView';
-import { SettingsView } from '@/components/views/SettingsView';
-import { ProductionReadinessView } from '@/components/views/ProductionReadinessView';
-import { CouncilView } from '@/components/views/CouncilView';
-import { LegalView } from '@/components/views/LegalView';
-import { ForensicAuditStepper } from '@/components/ForensicAuditStepper';
-import { StudioView } from '@/components/views/StudioView';
-import { UnifiedMultiverseControlPanel } from '@/components/views/UnifiedMultiverseControlPanel';
-import { UnifiedAuditPlaybackConsole } from '@/components/views/UnifiedAuditPlaybackConsole';
-import { GovernanceHealthHeatmap } from '@/components/views/GovernanceHealthHeatmap';
-import { CivilizationEngineView } from '@/components/views/CivilizationEngineView';
-import { CanonicalIntegrityDashboardView } from '@/components/views/CanonicalIntegrityDashboardView';
-import { QuantumAuditFusionView } from '@/components/views/QuantumAuditFusionView';
-import { AdminConsole } from '@/components/AdminConsole';
-import { AuditAnalyticsDashboard } from '@/components/AuditAnalyticsDashboard';
-import { SovereignChambersControlPlane } from '@/components/SovereignChambersControlPlane';
-import { AuditHistoryView } from '@/components/views/AuditHistoryView';
-import { SecurityPipelineView } from '@/components/views/SecurityPipelineView';
-import { ExecutiveCourtBriefing } from '@/components/executive/ExecutiveCourtBriefing';
-import { SovereignWalletView } from '@/components/views/SovereignWalletView';
+import { ViewRenderer } from '@/app/viewRegistry';
+import { SecuritySubTab } from '@/components/views/SecurityView';
 import { AuditCertificateModal } from '@/components/AuditCertificateModal';
 import { GitHubPwaModal } from '@/components/GitHubPwaModal';
 import { ThaiLegalSearchModal } from '@/components/ThaiLegalSearchModal';
@@ -79,7 +23,7 @@ import { SovereignLoginLoader } from '@/components/SovereignLoginLoader';
 import { ExecutiveCommandPalette } from '@/components/ExecutiveCommandPalette';
 import { GlobalCommandSearch } from '@/components/GlobalCommandSearch';
 import { ForensicAuditMasterDossierModal } from '@/components/forensics/ForensicAuditMasterDossierModal';
-import { ThemeSwitcher, useTheme } from '@/components/ThemeSwitcher';
+import { useTheme } from '@/components/ThemeSwitcher';
 import { EmergencySovereignLockdown } from '@/components/EmergencySovereignLockdown';
 import { LiveQuantumEntropyTicker } from '@/components/LiveQuantumEntropyTicker';
 import { ToastNotification, ToastMessage } from '@/components/ToastNotification';
@@ -105,477 +49,17 @@ import { INITIAL_HARDWARE_SNAPSHOTS, createTelemetrySnapshot } from '@/utils/tel
 import { announceSystemEventVerbal } from '@/utils/textToSpeechService';
 import { triggerVibration } from '@/utils/vibration';
 import { useNotificationWebSocket } from '@/hooks/useNotificationWebSocket';
-
-interface ViewPersona {
-  name: string;
-  orb1: string;
-  orb2: string;
-  orb3: string;
-  accentGlow: string;
-}
-
-const VIEW_PERSONAS: Record<ViewType, ViewPersona> = {
-  dashboard: {
-    name: 'Unified Executive Command',
-    orb1: 'bg-cyan-600/10',
-    orb2: 'bg-violet-600/8',
-    orb3: 'bg-emerald-600/8',
-    accentGlow: 'rgba(6,182,212,0.06)',
-  },
-  fusion: {
-    name: 'Quantum Audit & Telemetry Fusion',
-    orb1: 'bg-fuchsia-600/12',
-    orb2: 'bg-cyan-600/10',
-    orb3: 'bg-amber-500/10',
-    accentGlow: 'rgba(217,70,239,0.08)',
-  },
-  civilization: {
-    name: 'Civilization Engine & Multi-Agent Governance',
-    orb1: 'bg-amber-600/14',
-    orb2: 'bg-cyan-600/12',
-    orb3: 'bg-emerald-600/10',
-    accentGlow: 'rgba(212,175,55,0.1)',
-  },
-  studio: {
-    name: '3D Quantum Citadel Lattice Hologram Studio',
-    orb1: 'bg-cyan-500/20',
-    orb2: 'bg-purple-600/15',
-    orb3: 'bg-emerald-600/15',
-    accentGlow: 'rgba(6,182,212,0.12)',
-  },
-  unified: {
-    name: 'Unified Multiverse Control Panel',
-    orb1: 'bg-cyan-600/16',
-    orb2: 'bg-violet-600/14',
-    orb3: 'bg-emerald-600/12',
-    accentGlow: 'rgba(6,182,212,0.1)',
-  },
-  heatmap: {
-    name: '14,902 Hardware Seals Governance Heatmap',
-    orb1: 'bg-emerald-600/16',
-    orb2: 'bg-teal-600/12',
-    orb3: 'bg-cyan-600/10',
-    accentGlow: 'rgba(16,185,129,0.09)',
-  },
-  playback: {
-    name: '12-Stage Forensic Trace Replay Console',
-    orb1: 'bg-amber-500/15',
-    orb2: 'bg-orange-600/10',
-    orb3: 'bg-cyan-600/10',
-    accentGlow: 'rgba(245,158,11,0.08)',
-  },
-  council: {
-    name: '10/10 REAL_HSM Sovereign Council',
-    orb1: 'bg-amber-500/18',
-    orb2: 'bg-yellow-600/12',
-    orb3: 'bg-cyan-600/10',
-    accentGlow: 'rgba(245,158,11,0.09)',
-  },
-  production: {
-    name: 'Zero-Trust Production Readiness',
-    orb1: 'bg-emerald-500/16',
-    orb2: 'bg-cyan-600/14',
-    orb3: 'bg-teal-600/12',
-    accentGlow: 'rgba(16,185,129,0.08)',
-  },
-  quantum: {
-    name: 'Sub-Kelvin Qubit Nexus',
-    orb1: 'bg-cyan-500/16',
-    orb2: 'bg-sky-600/14',
-    orb3: 'bg-teal-500/10',
-    accentGlow: 'rgba(14,165,233,0.08)',
-  },
-  nexus: {
-    name: 'Neural Knowledge Fabric',
-    orb1: 'bg-violet-600/14',
-    orb2: 'bg-fuchsia-600/10',
-    orb3: 'bg-purple-600/12',
-    accentGlow: 'rgba(139,92,246,0.08)',
-  },
-  vault: {
-    name: 'Sovereign Kyber-1024 Vault',
-    orb1: 'bg-amber-500/14',
-    orb2: 'bg-yellow-600/10',
-    orb3: 'bg-orange-600/10',
-    accentGlow: 'rgba(245,158,11,0.08)',
-  },
-  ledger: {
-    name: 'Immutable Merkle Ledger',
-    orb1: 'bg-emerald-500/14',
-    orb2: 'bg-teal-600/10',
-    orb3: 'bg-green-600/10',
-    accentGlow: 'rgba(16,185,129,0.08)',
-  },
-  pulse: {
-    name: 'Telemetry Pulse & Heartbeat',
-    orb1: 'bg-rose-500/14',
-    orb2: 'bg-cyan-600/12',
-    orb3: 'bg-violet-600/10',
-    accentGlow: 'rgba(244,63,94,0.08)',
-  },
-  forge: {
-    name: 'Autonomous Industrial Forge',
-    orb1: 'bg-amber-500/16',
-    orb2: 'bg-orange-600/14',
-    orb3: 'bg-red-600/10',
-    accentGlow: 'rgba(245,158,11,0.09)',
-  },
-  matrix: {
-    name: 'Multiverse Simulation Matrix',
-    orb1: 'bg-violet-600/16',
-    orb2: 'bg-pink-600/12',
-    orb3: 'bg-indigo-600/12',
-    accentGlow: 'rgba(217,70,239,0.08)',
-  },
-  archive: {
-    name: 'Deep Cobalt 17-Module Archive',
-    orb1: 'bg-blue-600/14',
-    orb2: 'bg-indigo-600/10',
-    orb3: 'bg-cyan-700/10',
-    accentGlow: 'rgba(37,99,235,0.08)',
-  },
-  console: {
-    name: 'Sovereign CLI Terminal',
-    orb1: 'bg-emerald-500/14',
-    orb2: 'bg-green-600/12',
-    orb3: 'bg-teal-600/10',
-    accentGlow: 'rgba(16,185,129,0.07)',
-  },
-  security: {
-    name: 'Zero-Trust Bastion & Shield',
-    orb1: 'bg-rose-600/14',
-    orb2: 'bg-red-600/12',
-    orb3: 'bg-violet-600/10',
-    accentGlow: 'rgba(225,29,72,0.08)',
-  },
-  settings: {
-    name: 'Thai Sovereign Custodian Registry',
-    orb1: 'bg-amber-600/12',
-    orb2: 'bg-slate-600/12',
-    orb3: 'bg-cyan-600/10',
-    accentGlow: 'rgba(217,119,6,0.07)',
-  },
-  legal: {
-    name: 'Thai Sovereign Legal & PDPA Supreme Chamber',
-    orb1: 'bg-blue-600/18',
-    orb2: 'bg-cyan-600/14',
-    orb3: 'bg-emerald-600/12',
-    accentGlow: 'rgba(59,130,246,0.1)',
-  },
-  canonical: {
-    name: 'Canonical Integrity Dashboard & 3D Merkle Topology',
-    orb1: 'bg-emerald-600/18',
-    orb2: 'bg-cyan-600/15',
-    orb3: 'bg-amber-600/12',
-    accentGlow: 'rgba(16,185,129,0.12)',
-  },
-  admin: {
-    name: 'Sovereign Admin Console & Role-Based Access Control',
-    orb1: 'bg-cyan-600/18',
-    orb2: 'bg-indigo-600/14',
-    orb3: 'bg-emerald-600/10',
-    accentGlow: 'rgba(6,182,212,0.1)',
-  },
-  analytics: {
-    name: 'Audit Analytics & UTC Telemetry Volatility Dashboard',
-    orb1: 'bg-emerald-600/18',
-    orb2: 'bg-cyan-600/14',
-    orb3: 'bg-rose-600/10',
-    accentGlow: 'rgba(16,185,129,0.1)',
-  },
-  chambers: {
-    name: '18 Sovereign Chambers Control Plane',
-    orb1: 'bg-indigo-600/18',
-    orb2: 'bg-cyan-600/14',
-    orb3: 'bg-emerald-600/10',
-    accentGlow: 'rgba(99,102,241,0.12)',
-  },
-  audithistory: {
-    name: 'Audit History & Cryptographic Snapshot Records',
-    orb1: 'bg-emerald-600/18',
-    orb2: 'bg-teal-600/14',
-    orb3: 'bg-cyan-600/12',
-    accentGlow: 'rgba(16,185,129,0.12)',
-  },
-  securitypipeline: {
-    name: '3-Tier Sovereign Security Pipeline & Threat Gauge',
-    orb1: 'bg-emerald-600/20',
-    orb2: 'bg-cyan-600/16',
-    orb3: 'bg-teal-600/12',
-    accentGlow: 'rgba(16,185,129,0.15)',
-  },
-  briefing: {
-    name: 'Executive & Court Admissible Briefing',
-    orb1: 'bg-amber-600/18',
-    orb2: 'bg-cyan-600/14',
-    orb3: 'bg-emerald-600/12',
-    accentGlow: 'rgba(212,175,55,0.12)',
-  },
-  'sovereign-wallet': {
-    name: 'Sovereign Wallet & WebAuthn Key Dispatcher',
-    orb1: 'bg-amber-600/18',
-    orb2: 'bg-yellow-600/14',
-    orb3: 'bg-emerald-600/12',
-    accentGlow: 'rgba(212,175,55,0.12)',
-  },
-};
-
-interface BannerAnimatedSealCountProps {
-  sealCount: number;
-  baseSealCount?: number;
-}
-
-const BannerAnimatedSealCount: React.FC<BannerAnimatedSealCountProps> = ({
-  sealCount,
-  baseSealCount = 14902,
-}) => {
-  const [displayedCount, setDisplayedCount] = useState<number>(sealCount);
-  const [isIncrementing, setIsIncrementing] = useState<boolean>(false);
-  const prevCountRef = useRef<number>(sealCount);
-
-  useEffect(() => {
-    if (prevCountRef.current === sealCount) return;
-
-    const fromVal = prevCountRef.current;
-    const toVal = sealCount;
-    prevCountRef.current = sealCount;
-
-    if (toVal > fromVal) {
-      setIsIncrementing(true);
-    }
-
-    const controls = animate(fromVal, toVal, {
-      duration: 0.85,
-      ease: [0.16, 1, 0.3, 1],
-      onUpdate: (latest) => {
-        setDisplayedCount(Math.round(latest));
-      },
-      onComplete: () => {
-        setDisplayedCount(toVal);
-        setIsIncrementing(false);
-      },
-    });
-
-    return (
-    ) => controls.stop();
-  }, [sealCount]);
-
-  const deltaFromBase = Math.max(0, sealCount - baseSealCount);
-
-  return (
-    <span className="flex items-center gap-1.5 font-mono">
-      <Lock
-        className={`w-3.5 h-3.5 transition-colors duration-300 ${
-          isIncrementing ? 'text-emerald-400 animate-pulse' : 'text-cyan-400'
-        }`}
-      />
-      <span>
-        Verified Seals:{' '}
-        <AnimatePresence mode="popLayout">
-          <motion.strong
-            key={displayedCount}
-            initial={isIncrementing ? { opacity: 0.7, y: -4, scale: 1.08 } : false}
-            animate={{ opacity: 1, y: 0, scale: 1 }}
-            exit={{ opacity: 0.7, y: 4, scale: 0.96 }}
-            transition={{ type: 'spring', stiffness: 450, damping: 30 }}
-            className={`inline-block font-bold transition-all duration-300 ${
-              isIncrementing
-                ? 'text-emerald-300 drop-shadow-[0_0_8px_rgba(16,185,129,0.7)]'
-                : 'text-cyan-300'
-            }`}
-          >
-            {displayedCount.toLocaleString()}
-          </motion.strong>
-        </AnimatePresence>
-      </span>
-      {deltaFromBase > 0 && (
-        <motion.span
-          initial={{ opacity: 0, scale: 0.8 }}
-          animate={{ opacity: 1, scale: 1 }}
-          className="px-1.5 py-0.2 rounded text-[9px] font-bold bg-emerald-500/20 text-emerald-300 border border-emerald-500/35 ml-0.5"
-        >
-          +{deltaFromBase}
-        </motion.span>
-      )}
-    </span>
-  );
-};
-
-interface LegalTriggerItem {
-  id: string;
-  act: string;
-  section: string;
-  title: string;
-  titleTh: string;
-  status: 'PASS' | 'ACTIVE_GUARD' | 'VERIFIED';
-  statusText: string;
-  pqcScheme: string;
-  anchor: string;
-  description: string;
-  descriptionTh: string;
-  statuteClause: string;
-}
-
-const ETDA_PDPA_TRIGGERS: LegalTriggerItem[] = [
-  {
-    id: 'etda-sec-09',
-    act: 'ETDA B.E. 2544 / 2562',
-    section: 'มาตรา ๙ (Section 9)',
-    title: 'Electronic Signature Legal Enforceability',
-    titleTh: 'การรับรองผลทางกฎหมายของลายมือชื่ออิเล็กทรอนิกส์',
-    status: 'PASS',
-    statusText: '100% ENFORCED',
-    pqcScheme: 'FIPS 204 ML-DSA-87 (Dilithium-5)',
-    anchor: 'Sovereign Principal #EP-SOVEREIGN-01',
-    description: 'Binds undeniable cryptographic intent and signatory identity to every transaction and seal creation without relying on blind trust.',
-    descriptionTh: 'ผูกมัดเจตนาและอัตลักษณ์ของผู้ลงนามด้วยลายมือชื่อโครงข่ายแลตทิซโพสต์ควอนตัม มีผลผูกพันบังคับใช้ตามกฎหมายอย่างสมบูรณ์',
-    statuteClause: 'พ.ร.บ. ธุรกรรมทางอิเล็กทรอนิกส์ พ.ศ. ๒๕๔๔ มาตรา ๙'
-  },
-  {
-    id: 'etda-sec-26',
-    act: 'ETDA B.E. 2544 / 2562',
-    section: 'มาตรา ๒๖ (Section 26)',
-    title: 'Trustworthy & Advanced Electronic Signature Security',
-    titleTh: 'ลายมือชื่ออิเล็กทรอนิกส์ที่เชื่อถือได้ระดับสูง',
-    status: 'PASS',
-    statusText: '10/10 REAL_HSM',
-    pqcScheme: 'FIPS 140-3 Level 4 Active Tamper Protection',
-    anchor: 'Deca-Custodian Quorum Active Shield',
-    description: 'Guarantees advanced security, key control under sole custody, and automated Tamper-Evident Cascade with immediate Fail-Closed lockdown if altered.',
-    descriptionTh: 'โครงสร้างลายมือชื่อขั้นสูงภายใต้การควบคุมของผู้ดูแล 10 จุด หากตรวจพบการดัดแปลงแม้เพียง 1 บิต ระบบจะปฏิเสธทันที (Fail-Closed)',
-    statuteClause: 'พ.ร.บ. ธุรกรรมทางอิเล็กทรอนิกส์ พ.ศ. ๒๕๔๔ มาตรา ๒๖'
-  },
-  {
-    id: 'etda-sec-28',
-    act: 'ETDA B.E. 2544 / 2562',
-    section: 'มาตรา ๒๘ (Section 28)',
-    title: 'Third-Party Evidentiary Reliance & Certificate Anchors',
-    titleTh: 'ความน่าเชื่อถือและการรับฟังพยานหลักฐานโดยบุคคลภายนอก',
-    status: 'PASS',
-    statusText: 'COURT ADMISSIBLE',
-    pqcScheme: 'Immutable Merkle Root Binding',
-    anchor: 'Root 909ab814...fa4c68 (Block #849202)',
-    description: 'Enforces complete cryptographic audit trail (Ledger V25) certified for forensic presentation in Thai courts without repudiation.',
-    descriptionTh: 'สร้างห่วงโซ่พยานหลักฐานที่ไม่สามารถแก้ไขย้อนหลังได้ (Immutable Ledger) ได้รับการยอมรับฟังในชั้นศาลตามประมวลกฎหมายวิธีพิจารณาความ',
-    statuteClause: 'พ.ร.บ. ธุรกรรมทางอิเล็กทรอนิกส์ พ.ศ. ๒๕๔๔ มาตรา ๒๘'
-  },
-  {
-    id: 'pdpa-sec-09',
-    act: 'PDPA B.E. 2562',
-    section: 'มาตรา ๙ (Section 9)',
-    title: 'Lawful Basis & Sovereign Consent Matrix',
-    titleTh: 'ฐานความชอบด้วยกฎหมายและการควบคุมความยินยอม',
-    status: 'PASS',
-    statusText: 'SSoT Δ0.0% ZERO DRIFT',
-    pqcScheme: 'Zero-Knowledge Policy Engine',
-    anchor: 'Authority: นายยุทธภูมิ พากเพียร',
-    description: 'Restricts personal data operations strictly to predefined lawful purposes and platform boundaries Ω601–Ω1000 with zero drift.',
-    descriptionTh: 'ควบคุมการประมวลผลข้อมูลให้อยู่ในขอบเขตอธิปไตยดิจิทัลที่กำหนด ปราศจากการดัดแปลงโครงสร้าง (Mutation Authority = 0)',
-    statuteClause: 'พ.ร.บ. คุ้มครองข้อมูลส่วนบุคคล พ.ศ. ๒๕๖๒ มาตรา ๙'
-  },
-  {
-    id: 'pdpa-sec-26',
-    act: 'PDPA B.E. 2562',
-    section: 'มาตรา ๒๖ (Section 26)',
-    title: 'Sensitive Personal Data Quantum Vault Protection',
-    titleTh: 'การคุ้มครองข้อมูลส่วนบุคคลอ่อนไหวด้วยห้องนิรภัยควอนตัม',
-    status: 'PASS',
-    statusText: 'CRYO 14.98 mK',
-    pqcScheme: 'FIPS 203 ML-KEM-1024 / SPHINCS+',
-    anchor: 'Chamber 08 PQC Enclave',
-    description: 'Provides quantum-proof encapsulation for sensitive records, biometric telemetry, and executive keys against post-quantum decrypt-later attacks.',
-    descriptionTh: 'เข้ารหัสข้อมูลอ่อนไหวด้วยอัลกอริทึมแลตทิซและฟังก์ชันแฮชไร้สถานะ ป้องกันการถอดรหัสในอนาคตด้วยคอมพิวเตอร์ควอนตัม',
-    statuteClause: 'พ.ร.บ. คุ้มครองข้อมูลส่วนบุคคล พ.ศ. ๒๕๖๒ มาตรา ๒๖'
-  },
-  {
-    id: 'pdpa-sec-28',
-    act: 'PDPA B.E. 2562',
-    section: 'มาตรา ๒๘ (Section 28)',
-    title: 'Cross-Border Sovereign Safeguard Boundaries',
-    titleTh: 'มาตรการคุ้มครองการส่งหรือโอนข้อมูลข้ามพรมแดน',
-    status: 'PASS',
-    statusText: 'ISOLATED ENCLAVE',
-    pqcScheme: 'Sovereign Multi-Mesh Gateway',
-    anchor: 'Bangkok Command & Regional Nodes',
-    description: 'Guarantees destination country adequacy standard and prevents unauthorized exfiltration beyond the sovereign enclave boundary.',
-    descriptionTh: 'รับประกันมาตรฐานความคุ้มครองข้อมูลส่วนบุคคลของปลายทาง ป้องกันการรั่วไหลออกนอกเครือข่ายอธิปไตยไทย',
-    statuteClause: 'พ.ร.บ. คุ้มครองข้อมูลส่วนบุคคล พ.ศ. ๒๕๖๒ มาตรา ๒๘'
-  }
-];
-
-const TRIGGER_PQC_HASHES: Record<string, string> = {
-  'etda-sec-09': '0x5d8e71a0b3c4d5e6f7a8b9c0d1e2f3a4b5c6d7e8f9a0b1c2d3e4f5a6b7c8d9e0',
-  'etda-sec-26': '0x14902_DECA_CUSTODIAN_FIPS140_3_L4_ACTIVE_SHIELD_SIG_909AB8',
-  'etda-sec-28': '0x909ab814479844d8a14816bed34cdbb07528e18501da86fc4691763a43fa4c68',
-  'pdpa-sec-09': '0x7b2274785f6964223a22534f562d4a554d502d343436222c22617574686f72223a224550227d',
-  'pdpa-sec-26': '0x112233445566778899aabbccddeeff00112233445566778899aabbccddeeff00',
-  'pdpa-sec-28': '0xdeadbeef00112233445566778899aabbccddeeff112233445566778899aabbcc',
-};
-
-const INITIAL_SYSTEM_EVENTS: SystemEvent[] = [
-  {
-    id: 'evt-evidence-tnt',
-    type: 'EVIDENCE_IMPORTED',
-    title: 'Evidence Ingested: TNT-TH-001 (Tenant Manifest)',
-    description: 'Status: PENDING | Provenance: SOURCE_FILE | Mutation: 0 | Isolation: Tenant-isolated (MAEW HOLDINGS CO., LTD.) | Canonical write: BLOCKED',
-    timestamp: '05:06:01 ICT',
-    metaHash: 'source:TNT-TH-001 (Digest: NOT COMPUTED)',
-    statuteRef: 'Hardening v2.1 Intake Gate (Provenance: SOURCE_FILE, Mutation: 0)',
-    targetView: 'dashboard',
-    severity: 'info',
-  },
-  {
-    id: 'evt-evidence-fios',
-    type: 'EVIDENCE_IMPORTED',
-    title: 'Evidence Ingested: DS-901-PILOT (FIOS Pilot Dataset)',
-    description: 'Status: PENDING | Provenance: SOURCE_FILE | Mutation: 0 | Classification: Non-live pilot dataset | Canonical write: BLOCKED',
-    timestamp: '05:06:02 ICT',
-    metaHash: 'source:DS-901-PILOT (Digest: NOT COMPUTED)',
-    statuteRef: 'Hardening v2.1 Intake Gate (Provenance: SOURCE_FILE, Mutation: 0)',
-    targetView: 'dashboard',
-    severity: 'info',
-  },
-  {
-    id: 'evt-000',
-    type: 'COMPLIANCE',
-    title: 'Thai Electronic Transactions Act (Sec 9, 26, 28) Bound',
-    description: 'Sovereign Seal Chain runtime anchored to ETDA Level 3+ standards and Passport #EP-SOVEREIGN-01.',
-    timestamp: '05:01:22 ICT',
-    statuteRef: 'มาตรา 9, 26, 28 (ETDA Level 3+)',
-    targetView: 'security',
-    severity: 'success',
-  },
-  {
-    id: 'evt-001',
-    type: 'CRYPTO',
-    title: 'Sovereign Genesis Block #849202 Sealed',
-    description: 'Merkle Root 909ab814...fa4c68 anchored with 14,902 cryptographic certificates.',
-    timestamp: '05:03:08 ICT',
-    metaHash: 'sha256:909ab8146747f520beec1907beab286c06a38096f9bf00f40d8aa536b3fa4c68',
-    statuteRef: 'มาตรา 26: ลายมือชื่อดิจิทัลที่เชื่อถือได้',
-    targetView: 'security',
-    severity: 'success',
-  },
-  {
-    id: 'evt-002',
-    type: 'HARDWARE',
-    title: 'Hardware Cryostat Chamber Stabilized',
-    description: 'Sub-Kelvin base temperature locked at 12.4 mK with 0.9997 coherence ratio.',
-    timestamp: '05:04:12 ICT',
-    metaHash: 'qstate:768Q_COHERENCE_99.97PCT',
-    severity: 'info',
-  },
-  {
-    id: 'evt-003',
-    type: 'COMPLIANCE',
-    title: 'PDPA Thailand Compliance Pre-Flight Verified',
-    description: 'Sections 19, 27, 37 validated against Thai Sovereign Custodian Passport #EP-SOVEREIGN-01.',
-    timestamp: '05:05:30 ICT',
-    statuteRef: 'พ.ร.บ. คุ้มครองข้อมูลส่วนบุคคล (PDPA Sec 37)',
-    targetView: 'security',
-    severity: 'success',
-  },
-];
+import { useTimeoutRegistry } from '@/hooks/useTimeoutRegistry';
+import { useInactivityLock } from '@/hooks/useInactivityLock';
+import { useKeyboardShortcuts } from '@/hooks/useKeyboardShortcuts';
+import { exportLegalTriggerMatrixPdf } from '@/features/legal/exportLegalTriggerMatrixPdf';
+import { VerificationGateBar } from '@/components/layout/VerificationGateBar';
+import {
+  VIEW_PERSONAS,
+  VALID_VIEWS,
+  INITIAL_SYSTEM_EVENTS,
+  TELEMETRY_AUDIT_INTERVAL_SEC,
+} from '@/config/sovereignConfig';
 
 export type SystemAction =
   | {
@@ -783,37 +267,6 @@ function runSovereignAppDiagnostics(context: {
   console.groupEnd();
 }
 
-const VALID_VIEWS: ViewType[] = [
-  'dashboard',
-  'civilization',
-  'studio',
-  'unified',
-  'heatmap',
-  'production',
-  'council',
-  'quantum',
-  'nexus',
-  'vault',
-  'ledger',
-  'pulse',
-  'forge',
-  'matrix',
-  'archive',
-  'console',
-  'security',
-  'settings',
-  'legal',
-  'canonical',
-  'admin',
-  'analytics',
-  'chambers',
-  'fusion',
-  'playback',
-  'audithistory',
-  'securitypipeline',
-  'briefing',
-];
-
 function SovereignAppContent() {
   const location = useLocation();
   const navigate = useNavigate();
@@ -869,15 +322,17 @@ function SovereignAppContent() {
   const [isEventsSidebarOpen, setIsEventsSidebarOpen] = useState(false);
   const [isCopilotOpen, setIsCopilotOpen] = useState(false);
   const [isAudioActive, setIsAudioActive] = useState(false);
+  const [isGateDetailsExpanded, setIsGateDetailsExpanded] = useState(false);
 
+  const { registerTimeout } = useTimeoutRegistry();
   const [toasts, setToasts] = useState<ToastMessage[]>([]);
   const showToast = useCallback((message: string, type: ToastMessage['type'] = 'info') => {
     const id = Math.random().toString(36).substring(2, 9);
     setToasts((prev) => [...prev, { id, message, type }]);
-    setTimeout(() => {
+    registerTimeout(() => {
       setToasts((prev) => prev.filter((t) => t.id !== id));
     }, 4000);
-  }, []);
+  }, [registerTimeout]);
 
   const removeToast = useCallback((id: string) => {
     setToasts((prev) => prev.filter((t) => t.id !== id));
@@ -935,7 +390,6 @@ function SovereignAppContent() {
     message: 'Verification Gate Active: Enforcing COMPLIANCE invariant binding before ledger append.',
   });
 
-  const TELEMETRY_AUDIT_INTERVAL_SEC = 30;
   const [auditCountdownSec, setAuditCountdownSec] = useState<number>(TELEMETRY_AUDIT_INTERVAL_SEC);
   // Scheduled telemetry audit countdown timer (30s cadence)
   useEffect(() => {
@@ -962,8 +416,6 @@ function SovereignAppContent() {
   }, [isSystemActivityFrozen]);
 
   const auditProgressPercent = ((TELEMETRY_AUDIT_INTERVAL_SEC - auditCountdownSec) / TELEMETRY_AUDIT_INTERVAL_SEC) * 100;
-  const [isGateDetailsExpanded, setIsGateDetailsExpanded] = useState<boolean>(false);
-  const [isGateTooltipVisible, setIsGateTooltipVisible] = useState<boolean>(false);
   const [isMonochromeMode, setIsMonochromeMode] = useState<boolean>(() => {
     try {
       return localStorage.getItem('zyrquen_monochrome_mode') === 'true';
@@ -1461,31 +913,28 @@ function SovereignAppContent() {
       message: `Verification Gate PASSED: Validated ${complianceEvents.length} COMPLIANCE events. Telemetry bound to Seal #${newVerifiedSeals.toLocaleString()}.`,
     });
 
-    setSnapshots((prev) => {
-      const nextSnaps = [newSnap, ...prev];
+    // Fix side effects in state updater (pure state transition)
+    const anomalyResult = TelemetryAnomalyObserver.evaluate(newSnap, snapshots);
+    setSnapshots((prev) => [newSnap, ...prev]);
 
-      // Telemetry Anomaly Observer: Detect statistical outliers against baseline distribution
-      const anomalyResult = TelemetryAnomalyObserver.evaluate(newSnap, prev);
-      if (anomalyResult.hasAnomaly) {
-        anomalyResult.anomalies.forEach((anom) => {
-          dispatchAction({
-            type: 'EMIT_SYSTEM_EVENT',
-            payload: {
-              type: 'ANOMALY',
-              title: `Statistical Anomaly: ${anom.metricName} Outlier (${anom.zScore >= 0 ? '+' : ''}${anom.zScore.toFixed(1)}σ)`,
-              description: `Telemetry value ${anom.value.toFixed(1)} deviates significantly from historical baseline (μ = ${anom.mean.toFixed(1)}, σ = ${anom.stdDev.toFixed(1)}). Auto-flagged for isolation.`,
-              metaHash: newSnap.sealedHash,
-              severity: 'critical',
-              statuteRef: 'ISO/IEC 27037 Telemetry Anomaly Protocol',
-              targetView: 'pulse',
-              bindingStatus: 'ORPHANED',
-            },
-          });
+    if (anomalyResult.hasAnomaly) {
+      anomalyResult.anomalies.forEach((anom) => {
+        dispatchAction({
+          type: 'EMIT_SYSTEM_EVENT',
+          payload: {
+            type: 'ANOMALY',
+            title: `Statistical Anomaly: ${anom.metricName} Outlier (${anom.zScore >= 0 ? '+' : ''}${anom.zScore.toFixed(1)}σ)`,
+            description: `Telemetry value ${anom.value.toFixed(1)} deviates significantly from historical baseline (μ = ${anom.mean.toFixed(1)}, σ = ${anom.stdDev.toFixed(1)}). Auto-flagged for isolation.`,
+            metaHash: newSnap.sealedHash,
+            severity: 'critical',
+            statuteRef: 'ISO/IEC 27037 Telemetry Anomaly Protocol',
+            targetView: 'pulse',
+            bindingStatus: 'ORPHANED',
+          },
         });
-      }
+      });
+    }
 
-      return nextSnaps;
-    });
     setLastSnapshotTime(Date.now());
     // Computational activity pulse elevates entropy momentarily
     systemStateStore.bumpEntropy(6.8);
@@ -1508,7 +957,7 @@ function SovereignAppContent() {
     });
 
     // 2. Automatic Legal Compliance Alert (Section 26 & 28 Invariant Verification)
-    setTimeout(() => {
+    registerTimeout(() => {
       dispatchAction({
         type: 'EMIT_SYSTEM_EVENT',
         payload: {
@@ -1529,7 +978,7 @@ function SovereignAppContent() {
 
     // Open sidebar subtly to showcase live activity feed
     setIsEventsSidebarOpen(true);
-  }, [systemEvents, snapshots, dispatchAction, showToast]);
+  }, [systemEvents, snapshots, dispatchAction, showToast, registerTimeout]);
 
   const handleLegalSearchExecuted = (query: string, summary: string) => {
     // 1. Search Query Event
@@ -1546,7 +995,7 @@ function SovereignAppContent() {
     });
 
     // 2. Automatic Legal Compliance Citation Alert
-    setTimeout(() => {
+    registerTimeout(() => {
       dispatchAction({
         type: 'EMIT_SYSTEM_EVENT',
         payload: {
@@ -1566,409 +1015,51 @@ function SovereignAppContent() {
     setIsEventsSidebarOpen(true);
   };
 
-  // Global Keyboard Shortcuts Listener
-  useEffect(() => {
-    const handleKeyDown = (e: KeyboardEvent) => {
-      const target = e.target as HTMLElement;
-      const isInput =
-        target &&
-        (target.tagName === 'INPUT' ||
-          target.tagName === 'TEXTAREA' ||
-          target.isContentEditable);
-
-      // 1. Meta / Ctrl shortcuts (work even inside inputs for global commands)
-      if (e.metaKey || e.ctrlKey) {
-        const key = e.key.toLowerCase();
-
-        if (key === 'k') {
-          e.preventDefault();
-          playTone(680, 0.08);
-          setIsLegalSearchOpen((prev) => !prev);
-          return;
-        }
-
-        if (key === 'b') {
-          e.preventDefault();
-          playTone(600, 0.06);
-          handleToggleSidebar();
-          return;
-        }
-
-        if (key === 'e') {
-          e.preventDefault();
-          playTone(640, 0.06);
-          setIsEventsSidebarOpen((prev) => !prev);
-          return;
-        }
-
-        if (key === 'l') {
-          e.preventDefault();
-          playTone(540, 0.06);
-          setCurrentView('ledger');
-          return;
-        }
-
-        if (key === 'p') {
-          e.preventDefault();
-          playTone(540, 0.06);
-          setCurrentView('pulse');
-          return;
-        }
-
-        if (key === 'q') {
-          e.preventDefault();
-          playTone(540, 0.06);
-          setCurrentView('quantum');
-          return;
-        }
-
-        if (key === 'g') {
-          e.preventDefault();
-          playTone(720, 0.1);
-          setIsCertificateOpen((prev) => !prev);
-          return;
-        }
-
-        if (key === '/') {
-          e.preventDefault();
-          playTone(620, 0.06);
-          setIsShortcutsOpen((prev) => !prev);
-          return;
-        }
-      }
-
-      // 2. Escape to dismiss modals and sidebars
-      if (e.key === 'Escape') {
-        if (isLeftSidebarOpen && typeof window !== 'undefined' && window.innerWidth < 1024) {
-          setIsLeftSidebarOpen(false);
-          return;
-        }
-        if (isEventsSidebarOpen) {
-          setIsEventsSidebarOpen(false);
-          return;
-        }
-        if (isShortcutsOpen) {
-          setIsShortcutsOpen(false);
-          return;
-        }
-        if (isLegalSearchOpen) {
-          setIsLegalSearchOpen(false);
-          return;
-        }
-        if (isCertificateOpen) {
-          setIsCertificateOpen(false);
-          return;
-        }
-      }
-
-      // 3. Direct single-key shortcuts when NOT focusing an input
-      if (!isInput && !e.metaKey && !e.ctrlKey && !e.altKey) {
-        if (e.key === '[') {
-          e.preventDefault();
-          playTone(600, 0.06);
-          setIsLeftSidebarOpen((prev) => !prev);
-          return;
-        }
-
-        if (e.key === '?' || (e.shiftKey && e.key === '/')) {
-          e.preventDefault();
-          playTone(620, 0.06);
-          setIsShortcutsOpen((prev) => !prev);
-          return;
-        }
-
-        if (e.key.toLowerCase() === 'e' && e.shiftKey) {
-          e.preventDefault();
-          playTone(640, 0.06);
-          setIsEventsSidebarOpen((prev) => !prev);
-          return;
-        }
-
-        if (e.key.toLowerCase() === 'm') {
-          e.preventDefault();
-          handleToggleAudio();
-          return;
-        }
-
-        // Direct number key navigation (1-9, 0, -, =, r, c)
-        const viewKeyMap: Record<string, ViewType> = {
-          '1': 'dashboard',
-          'c': 'council',
-          'C': 'council',
-          'r': 'production',
-          'R': 'production',
-          '2': 'quantum',
-          '3': 'nexus',
-          '4': 'vault',
-          '5': 'ledger',
-          '6': 'pulse',
-          '7': 'forge',
-          '8': 'matrix',
-          '9': 'archive',
-          '0': 'console',
-          'u': 'unified',
-          'U': 'unified',
-          'h': 'heatmap',
-          'H': 'heatmap',
-          '-': 'security',
-          '=': 'settings',
-          'l': 'legal',
-          'L': 'legal',
-          'j': 'audithistory',
-          'J': 'audithistory',
-          'x': 'securitypipeline',
-          'X': 'securitypipeline',
-          'e': 'briefing',
-          'E': 'briefing',
-        };
-
-        if (viewKeyMap[e.key]) {
-          e.preventDefault();
-          playTone(560, 0.06);
-          setCurrentView(viewKeyMap[e.key]);
-        }
-      }
-    };
-
-    window.addEventListener('keydown', handleKeyDown);
-    return () => window.removeEventListener('keydown', handleKeyDown);
-  }, [isShortcutsOpen, isLegalSearchOpen, isCertificateOpen, isEventsSidebarOpen, handleToggleAudio]);
-
-  const [isAppLocked, setIsAppLocked] = useState(false);
-  const [inactivityTimerMinutes, setInactivityTimerMinutes] = useState(() => {
-    return Number(localStorage.getItem('zyrquen_inactivity_timer') || 30);
+  // Modularized Global Keyboard Shortcuts
+  useKeyboardShortcuts({
+    isLeftSidebarOpen,
+    isEventsSidebarOpen,
+    isShortcutsOpen,
+    isLegalSearchOpen,
+    isCertificateOpen,
+    setIsLeftSidebarOpen,
+    setIsEventsSidebarOpen,
+    setIsShortcutsOpen,
+    setIsLegalSearchOpen,
+    setIsCertificateOpen,
+    handleToggleSidebar,
+    handleToggleAudio,
+    setCurrentView,
   });
 
-  useEffect(() => {
-    let timeoutId: NodeJS.Timeout;
-
-    const resetTimer = () => {
-      clearTimeout(timeoutId);
-      if (!isAppLocked && inactivityTimerMinutes > 0) {
-        timeoutId = setTimeout(() => {
-          setIsAppLocked(true);
-        }, inactivityTimerMinutes * 60 * 1000);
-      }
-    };
-
-    const handleActivity = () => resetTimer();
-
-    window.addEventListener('mousemove', handleActivity);
-    window.addEventListener('keydown', handleActivity);
-    window.addEventListener('click', handleActivity);
-    window.addEventListener('scroll', handleActivity);
-
-    resetTimer();
-
-    const handleStorageChange = (e: StorageEvent) => {
-      if (e.key === 'zyrquen_inactivity_timer') {
-        const storedTimer = Number(localStorage.getItem('zyrquen_inactivity_timer') || 30);
-        setInactivityTimerMinutes(storedTimer);
-      }
-    };
-    window.addEventListener('storage', handleStorageChange);
-
-    // Custom event to update from same window
-    const handleLocalSettingsChange = () => {
-        const storedTimer = Number(localStorage.getItem('zyrquen_inactivity_timer') || 30);
-        setInactivityTimerMinutes(storedTimer);
-        resetTimer();
-    }
-    window.addEventListener('zyrquen_inactivity_timer_updated', handleLocalSettingsChange);
-
-    return () => {
-      clearTimeout(timeoutId);
-      window.removeEventListener('mousemove', handleActivity);
-      window.removeEventListener('keydown', handleActivity);
-      window.removeEventListener('click', handleActivity);
-      window.removeEventListener('scroll', handleActivity);
-      window.removeEventListener('storage', handleStorageChange);
-      window.removeEventListener('zyrquen_inactivity_timer_updated', handleLocalSettingsChange);
-    };
-  }, [isAppLocked, inactivityTimerMinutes]);
+  // Modularized Inactivity Lock
+  const { isAppLocked, setIsAppLocked, unlockApp } = useInactivityLock();
 
   const persona = VIEW_PERSONAS[currentView] || VIEW_PERSONAS.dashboard;
 
-  const renderCurrentView = () => {
-    switch (currentView) {
-      case 'dashboard':
-        return (
-          <div className="space-y-4">
-            <ForensicAuditStepper
-              onAddSystemEvent={addSystemEvent}
-              onNavigateView={setCurrentView}
-            />
-            <DashboardView
-              snapshots={snapshots}
-              verificationGateStatus={verificationGateStatus}
-              onNavigate={setCurrentView}
-              onOpenCertificate={() => setIsCertificateOpen(true)}
-              isForensicAuditMode={isForensicAuditMode}
-            />
-          </div>
-        );
-      case 'civilization':
-        return <CivilizationEngineView onNavigate={setCurrentView} />;
-      case 'studio':
-        return (
-          <StudioView
-            onNavigate={setCurrentView}
-            onOpenCertificate={() => setIsCertificateOpen(true)}
-            snapshots={snapshots}
-            isAudioActive={isAudioActive}
-          />
-        );
-      case 'unified':
-        return (
-          <UnifiedMultiverseControlPanel
-            onNavigate={setCurrentView}
-            onOpenCertificate={() => setIsCertificateOpen(true)}
-            snapshots={snapshots}
-            onAddHardwareSnapshot={handleAddSnapshot}
-            onAddSystemEvent={addSystemEvent as any}
-            isAudioActive={isAudioActive}
-            onToggleAudio={handleToggleAudio}
-            isSystemActivityFrozen={isSystemActivityFrozen}
-            onToggleFreezeSystemActivity={handleToggleFreezeSystemActivity}
-          />
-        );
-      case 'heatmap':
-        return (
-          <GovernanceHealthHeatmap
-            onNavigateToView={setCurrentView}
-            onAddSystemEvent={addSystemEvent as any}
-          />
-        );
-      case 'council':
-        return <CouncilView onAddSystemEvent={addSystemEvent as any} />;
-      case 'production':
-        return (
-          <ProductionReadinessView
-            onNavigate={setCurrentView}
-            onAddSystemEvent={addSystemEvent as any}
-          />
-        );
-      case 'quantum':
-        return (
-          <div className="space-y-6">
-            <QuantumView />
-            <Chamber11QuantumRadar />
-          </div>
-        );
-      case 'nexus':
-        return <NexusView />;
-      case 'vault':
-        return <VaultView />;
-      case 'ledger':
-        return <LedgerView snapshots={snapshots} />;
-      case 'pulse':
-        return (
-          <PulseView
-            snapshots={snapshots}
-            onOpenEventsSidebar={() => setIsEventsSidebarOpen(true)}
-            onAddHardwareSnapshot={handleAddSnapshot}
-            onAddSystemEvent={addSystemEvent as any}
-            isSystemActivityFrozen={isSystemActivityFrozen}
-          />
-        );
-      case 'forge':
-        return <ForgeView />;
-      case 'matrix':
-        return <MatrixView snapshots={snapshots} onAddSystemEvent={addSystemEvent as any} />;
-      case 'archive':
-        return <ArchiveView onNavigate={setCurrentView} />;
-      case 'console':
-        return (
-          <ConsoleView
-            onCaptureSnapshot={handleAddSnapshot}
-            onNavigate={setCurrentView}
-            snapshots={snapshots}
-            snapshotsCount={snapshots.length}
-          />
-        );
-      case 'security':
-        return <SecurityView onAddSystemEvent={addSystemEvent as any} />;
-      case 'settings':
-        return (
-          <SettingsView
-            isAudioActive={isAudioActive}
-            onToggleAudio={handleToggleAudio}
-            isMonochrome={isMonochromeMode}
-            onToggleMonochrome={handleToggleMonochrome}
-            onCaptureSnapshot={() => handleAddSnapshot(createTelemetrySnapshot({ core0: 42, core1: 39, core2: 44, core3: 38 }, snapshots.length, snapshots[0]?.sealedHash))}
-            onOpenLegalSearch={() => setIsLegalSearchOpen(true)}
-            onTriggerLoginLoader={(mode = 'login') => {
-              setLoginLoaderMode(mode);
-              setShowLoginLoader(true);
-            }}
-            onNotifyEvent={(title, desc, type) => addSystemEvent(type, title, desc, 'settings:profile_switch', 'info')}
-            onAddSystemEvent={addSystemEvent as any}
-          />
-        );
-      case 'legal':
-        return (
-          <LegalView
-            onNavigate={setCurrentView}
-            onOpenSearch={() => setIsLegalSearchOpen(true)}
-            onAddSystemEvent={addSystemEvent as any}
-          />
-        );
-      case 'canonical':
-        return (
-          <div className="space-y-6">
-            <CanonicalIntegrityDashboardView
-              onNavigateToLedger={() => setCurrentView('ledger')}
-            />
-            <G11CanonicalCore />
-          </div>
-        );
-      case 'admin':
-        return <AdminConsole />;
-      case 'fusion':
-        return <QuantumAuditFusionView />;
-      case 'playback':
-        return <UnifiedAuditPlaybackConsole />;
-      case 'analytics':
-        return <AuditAnalyticsDashboard />;
-      case 'chambers':
-        return <SovereignChambersControlPlane />;
-      case 'audithistory':
-        return (
-          <AuditHistoryView
-            snapshots={snapshots}
-            onNavigate={setCurrentView}
-            onCaptureSnapshot={handleAddSnapshot}
-            onOpenCertificate={() => setIsCertificateOpen(true)}
-            onAddSystemEvent={addSystemEvent as any}
-          />
-        );
-      case 'securitypipeline':
-        return (
-          <SecurityPipelineView
-            onNavigate={setCurrentView}
-            onOpenCertificate={() => setIsCertificateOpen(true)}
-            onAddSystemEvent={addSystemEvent as any}
-          />
-        );
-      case 'briefing':
-        return (
-          <ExecutiveCourtBriefing
-            onNavigate={setCurrentView}
-            onOpenCertificate={() => setIsCertificateOpen(true)}
-            onAddSystemEvent={addSystemEvent as any}
-          />
-        );
-      case 'sovereign-wallet':
-        return (
-          <SovereignWalletView
-            onNavigate={setCurrentView}
-            onAddSystemEvent={addSystemEvent as any}
-          />
-        );
-      default:
-        return <DashboardView onNavigate={setCurrentView} onOpenCertificate={() => setIsCertificateOpen(true)} />;
-    }
-  };
+  const renderCurrentView = () => (
+    <ViewRenderer
+      currentView={currentView}
+      setCurrentView={setCurrentView}
+      snapshots={snapshots}
+      handleAddSnapshot={handleAddSnapshot}
+      addSystemEvent={addSystemEvent}
+      verificationGateStatus={verificationGateStatus}
+      isForensicAuditMode={isForensicAuditMode}
+      setIsCertificateOpen={setIsCertificateOpen}
+      isAudioActive={isAudioActive}
+      handleToggleAudio={handleToggleAudio}
+      isSystemActivityFrozen={isSystemActivityFrozen}
+      handleToggleFreezeSystemActivity={handleToggleFreezeSystemActivity}
+      setIsEventsSidebarOpen={setIsEventsSidebarOpen}
+      isMonochromeMode={isMonochromeMode}
+      handleToggleMonochrome={handleToggleMonochrome}
+      setIsLegalSearchOpen={setIsLegalSearchOpen}
+      setLoginLoaderMode={setLoginLoaderMode}
+      setShowLoginLoader={setShowLoginLoader}
+      createTelemetrySnapshot={createTelemetrySnapshot}
+    />
+  );
 
   const handleBatchVerify = useCallback(() => {
     if (navigator.vibrate) navigator.vibrate([50, 100, 50]);
@@ -1986,7 +1077,7 @@ function SovereignAppContent() {
     showToast('Initiating Batch Verification...', 'info');
     
     // Simulate verification delay and success
-    setTimeout(() => {
+    registerTimeout(() => {
       showToast('14,902 chambers verified successfully', 'success');
       dispatchAction({
         type: 'EMIT_SYSTEM_EVENT',
@@ -2001,7 +1092,7 @@ function SovereignAppContent() {
         },
       });
     }, 2500);
-  }, [dispatchAction, showToast]);
+  }, [dispatchAction, showToast, registerTimeout]);
 
   const handleExportAuditLogs = useCallback(() => {
     dispatchAction({
@@ -2017,8 +1108,8 @@ function SovereignAppContent() {
     });
     showToast('Generating signed Audit Log...', 'info');
 
-    setTimeout(() => {
-      // Mock generation of a file download
+    registerTimeout(() => {
+      // Generation of a signed audit log artifact
       const dataStr = "data:text/json;charset=utf-8," + encodeURIComponent(JSON.stringify({
         status: "COURT_READY",
         seals_verified: 14902,
@@ -2046,76 +1137,10 @@ function SovereignAppContent() {
         },
       });
     }, 1500);
-  }, [dispatchAction, showToast]);
-
-  const [copiedHashId, setCopiedHashId] = useState<string | null>(null);
-
-  const handleCopyTriggerHash = useCallback((triggerId: string, hash: string) => {
-    navigator.clipboard.writeText(hash);
-    triggerVibration(30);
-    playTone(880, 0.1, 'sine');
-    setCopiedHashId(triggerId);
-    showToast(`คัดลอก PQC SIG HASH (${triggerId}) สำเร็จ`, 'success');
-    setTimeout(() => setCopiedHashId(null), 2500);
-  }, [showToast]);
+  }, [dispatchAction, showToast, registerTimeout]);
 
   const handleExportLegalTriggerMatrixPDF = useCallback(() => {
-    triggerVibration(40);
-    playTone(659.25, 0.15, 'sine');
-    const doc = new jsPDF({ orientation: 'p', unit: 'mm', format: 'a4' });
-    
-    // Header background
-    doc.setFillColor(7, 10, 18);
-    doc.rect(0, 0, 210, 36, 'F');
-    
-    // Header text
-    doc.setTextColor(6, 182, 212);
-    doc.setFontSize(13);
-    doc.text('ZYRQUEN OMEGA INVARIANT LEGAL TRIGGER MATRIX', 14, 13);
-    
-    doc.setFontSize(9);
-    doc.setTextColor(255, 255, 255);
-    doc.text('FORENSIC ATTESTATION & COURT-ADMISSIBLE STATUTORY EVIDENCE', 14, 19);
-    
-    doc.setFontSize(7.5);
-    doc.setTextColor(148, 163, 184);
-    doc.text(`Principal: นายยุทธภูมิ พากเพียร #EP-SOVEREIGN-01 | Genesis: #849202 | Exported: ${new Date().toLocaleString('th-TH')}`, 14, 25);
-    doc.text(`Canonical Merkle: 909ab814479844d8a14816bed34cdbb07528e18501da86fc4691763a43fa4c68 | SSoT: Δ0.00%`, 14, 30);
-    
-    autoTable(doc, {
-      startY: 42,
-      head: [['Trigger', 'Section', 'Title', 'PQC Scheme', 'Anchor Spec', 'Hash Digest', 'Status']],
-      body: ETDA_PDPA_TRIGGERS.map((t) => [
-        t.id,
-        t.section,
-        t.title,
-        t.pqcScheme,
-        t.anchor,
-        (TRIGGER_PQC_HASHES[t.id] || '').slice(0, 18) + '...',
-        'VERIFIED'
-      ]),
-      theme: 'grid',
-      headStyles: { fillColor: [6, 182, 212], textColor: [255, 255, 255], fontStyle: 'bold', fontSize: 8 },
-      bodyStyles: { fontSize: 7.5, textColor: [30, 41, 59] },
-      alternateRowStyles: { fillColor: [248, 250, 252] },
-      columnStyles: {
-        0: { cellWidth: 20, fontStyle: 'bold' },
-        1: { cellWidth: 24 },
-        2: { cellWidth: 42 },
-        3: { cellWidth: 34 },
-        4: { cellWidth: 32 },
-        5: { cellWidth: 30 },
-        6: { cellWidth: 18, fontStyle: 'bold' },
-      },
-      didDrawPage: (data: any) => {
-        doc.setFontSize(7.5);
-        doc.setTextColor(148, 163, 184);
-        doc.text('Court-Admissible Evidence under ETDA B.E. 2544 (Sec 9, 26, 28) & PDPA B.E. 2562 (Sec 37) | ZQ-GREEN-DEP-849202-3908', 14, 287);
-        doc.text(`Page ${data.pageNumber} of ${(doc as any).internal.getNumberOfPages()}`, 182, 287);
-      },
-    });
-
-    doc.save(`ZYRQUEN_LEGAL_TRIGGER_MATRIX_SIGNED_${Date.now()}.pdf`);
+    exportLegalTriggerMatrixPdf();
     showToast('ส่งออก Legal Trigger Matrix PDF Artifact เรียบร้อยแล้ว', 'success');
     dispatchAction({
       type: 'EMIT_SYSTEM_EVENT',
@@ -2139,7 +1164,6 @@ function SovereignAppContent() {
     } else if (actionId === 'pqc-verify') {
       setIsCertificateOpen(true);
     } else if (actionId === 'lockdown') {
-      setIsGateDetailsExpanded(true);
       showToast('เปิดใช้ Sovereign Isolation Protocol ใน Chamber 02', 'warning');
     } else if (actionId === 'legal-pdf') {
       handleExportLegalTriggerMatrixPDF();
@@ -2239,427 +1263,20 @@ function SovereignAppContent() {
           <SsotDriftWarning />
 
           {/* Verification Gate Active Invariant Banner with Progress Bar & Expandable ETDA/PDPA Triggers */}
-          <div className="rounded-2xl bg-[#0b0e1a]/90 border border-cyan-500/25 backdrop-blur-xl shadow-lg transition-all duration-300 overflow-hidden">
-            <div className="px-4 py-2.5 flex flex-wrap items-center justify-between gap-3 text-xs font-mono">
-              {/* Left: Gate Status & Info with Tooltip Trigger */}
-              <div className="flex items-center gap-2.5 relative">
-                <span className={`w-2.5 h-2.5 rounded-full ${verificationGateStatus.status === 'PASSED' ? 'bg-emerald-400 animate-pulse' : verificationGateStatus.status === 'BLOCKED' ? 'bg-rose-400 animate-ping' : 'bg-cyan-400'}`} />
-                <span className="font-bold text-zinc-200 flex items-center gap-1.5">
-                  <ShieldCheck className="w-4 h-4 text-cyan-400" />
-                  VERIFICATION GATE:
-                </span>
-
-                {/* Status Pill with hover tooltip */}
-                <div 
-                  className="relative inline-block"
-                  onMouseEnter={() => setIsGateTooltipVisible(true)}
-                  onMouseLeave={() => setIsGateTooltipVisible(false)}
-                >
-                  <button
-                    type="button"
-                    onClick={() => setIsGateDetailsExpanded((prev) => !prev)}
-                    className={`px-2 py-0.5 rounded text-[10px] font-bold border flex items-center gap-1 transition-all cursor-pointer ${
-                      verificationGateStatus.status === 'PASSED' 
-                        ? 'bg-emerald-500/10 text-emerald-300 border-emerald-500/30 hover:bg-emerald-500/20' 
-                        : verificationGateStatus.status === 'BLOCKED' 
-                          ? 'bg-rose-500/20 text-rose-200 border-rose-500/60 hover:bg-rose-500/30 animate-pulse shadow-[0_0_15px_rgba(244,63,94,0.45)] ring-1 ring-rose-500/50' 
-                          : 'bg-cyan-500/10 text-cyan-300 border-cyan-500/30 hover:bg-cyan-500/20'
-                    }`}
-                    title="Hover for tooltip / Click to toggle legal triggers summary"
-                  >
-                    {verificationGateStatus.status}
-                    <Info className="w-2.5 h-2.5 opacity-70" />
-                  </button>
-
-                  {/* Floating Tooltip Box: Enhanced Hover-Card Summary */}
-                  <AnimatePresence>
-                    {isGateTooltipVisible && (
-                      <motion.div
-                        initial={{ opacity: 0, y: 6, scale: 0.96 }}
-                        animate={{ opacity: 1, y: 0, scale: 1 }}
-                        exit={{ opacity: 0, y: 4, scale: 0.96 }}
-                        transition={{ duration: 0.15 }}
-                        className="absolute left-0 top-full mt-2 z-50 w-80 sm:w-[460px] p-4 rounded-2xl bg-[#070914]/98 border border-cyan-500/40 backdrop-blur-2xl shadow-[0_20px_50px_rgba(0,0,0,0.85)] text-[11px] font-sans text-zinc-300 pointer-events-none"
-                      >
-                        {/* Header */}
-                        <div className="flex items-center justify-between pb-2 mb-2.5 border-b border-white/10 font-mono text-[11px]">
-                          <div className="flex items-center gap-2">
-                            <div className="p-1.5 rounded-lg bg-emerald-500/10 border border-emerald-500/30 text-emerald-400">
-                              <ShieldCheck className="w-4 h-4" />
-                            </div>
-                            <div>
-                              <div className="font-bold text-white flex items-center gap-1.5">
-                                VERIFICATION GATE
-                                <span className="px-1.5 py-0.5 rounded bg-emerald-500/20 text-emerald-300 text-[9px] border border-emerald-500/40 font-mono">
-                                  {verificationGateStatus.status} • MAINNET LIVE
-                                </span>
-                              </div>
-                              <span className="text-[10px] text-zinc-400">Block #849202 • ZQ-GREEN-DEP-849202-3908</span>
-                            </div>
-                          </div>
-                          <span className="text-emerald-400 font-bold font-mono text-[10px] px-2 py-0.5 rounded bg-emerald-950/60 border border-emerald-500/30">
-                            SSoT Δ0.00%
-                          </span>
-                        </div>
-
-                        {/* Description */}
-                        <p className="text-zinc-300 text-[11px] leading-relaxed mb-3">
-                          {verificationGateStatus.message}
-                        </p>
-
-                        {/* 1. 10/10 REAL_HSM Quorum Status Breakdown */}
-                        <div className="p-2.5 rounded-xl bg-black/50 border border-cyan-500/20 mb-2.5 space-y-2">
-                          <div className="flex items-center justify-between font-mono text-[10px]">
-                            <span className="text-cyan-300 font-bold flex items-center gap-1.5">
-                              <Shield className="w-3.5 h-3.5 text-cyan-400" />
-                              10/10 REAL_HSM QUORUM STATUS
-                            </span>
-                            <span className="text-emerald-400 font-bold">100% UNANIMOUS RATIFIED</span>
-                          </div>
-                          <div className="grid grid-cols-2 gap-1.5 font-mono text-[10px]">
-                            <div className="p-1.5 rounded-lg bg-zinc-900/60 border border-zinc-800">
-                              <span className="text-zinc-400 block text-[9px]">GOVERNANCE PLANE</span>
-                              <span className="text-emerald-300 font-semibold">10/10 PASS (Statutory)</span>
-                            </div>
-                            <div className="p-1.5 rounded-lg bg-zinc-900/60 border border-zinc-800">
-                              <span className="text-zinc-400 block text-[9px]">PHYSICAL HARDWARE</span>
-                              <span className="text-emerald-300 font-semibold">10/10 FIPS 140-3 L4</span>
-                            </div>
-                          </div>
-                          <div className="text-[10px] font-mono text-zinc-400 flex items-center justify-between pt-0.5 border-t border-white/5">
-                            <span>Nodes: TC-01 Sovereign Hub + 9 Custodians</span>
-                            <span className="text-cyan-300">Mean Latency: 0.31 ms</span>
-                          </div>
-                        </div>
-
-                        {/* 2. Active Cryptographic Schemes (3-Tiered Hybrid Shield) */}
-                        <div className="p-2.5 rounded-xl bg-black/50 border border-purple-500/20 mb-2.5 space-y-1.5">
-                          <div className="flex items-center justify-between font-mono text-[10px]">
-                            <span className="text-purple-300 font-bold flex items-center gap-1.5">
-                              <Lock className="w-3.5 h-3.5 text-purple-400" />
-                              ACTIVE CRYPTOGRAPHIC SCHEMES (3-TIER PQC)
-                            </span>
-                            <span className="text-purple-400 text-[9px]">NIST FIPS COMPLIANT</span>
-                          </div>
-                          <div className="space-y-1 font-mono text-[10px]">
-                            <div className="flex justify-between items-center text-zinc-300">
-                              <span className="text-zinc-400">Outer Ring (ML-DSA-87):</span>
-                              <span className="text-purple-300 font-semibold">CRYSTALS-Dilithium-5 (FIPS 204)</span>
-                            </div>
-                            <div className="flex justify-between items-center text-zinc-300">
-                              <span className="text-zinc-400">Middle Ring (ML-KEM):</span>
-                              <span className="text-cyan-300 font-semibold">Kyber-1024 Cat-5 (FIPS 203)</span>
-                            </div>
-                            <div className="flex justify-between items-center text-zinc-300">
-                              <span className="text-zinc-400">Inner Guard (SLH-DSA):</span>
-                              <span className="text-amber-300 font-semibold">SPHINCS+ Stateless (FIPS 205)</span>
-                            </div>
-                            <div className="flex justify-between items-center text-zinc-300 pt-1 border-t border-white/5">
-                              <span className="text-zinc-400">Quantum Hardware:</span>
-                              <span className="text-emerald-300">Cryo 14.98 mK • QKD 256-bit • X448</span>
-                            </div>
-                          </div>
-                        </div>
-
-                        {/* 3. Legal & Court Invariant Details */}
-                        <div className="p-2 rounded-xl bg-zinc-900/40 border border-white/5 text-[10px] font-mono text-zinc-400 space-y-1">
-                          <div className="flex justify-between">
-                            <span>Thai Legal Standards:</span>
-                            <span className="text-emerald-400 font-medium">ETDA Sec 9/26/28 • PDPA Sec 37</span>
-                          </div>
-                          <div className="flex justify-between">
-                            <span>Evidence Admissibility:</span>
-                            <span className="text-amber-300 font-medium">ISO/IEC 27037 Court-Admissible Ready</span>
-                          </div>
-                        </div>
-
-                        <p className="mt-2 text-[10px] text-cyan-400/80 font-mono text-center">
-                          Click status pill to expand / collapse full legal trigger matrix ↓
-                        </p>
-                      </motion.div>
-                    )}
-                  </AnimatePresence>
-                </div>
-
-                <span className="text-zinc-400 hidden lg:inline text-[11px] truncate max-w-md">
-                  {verificationGateStatus.message}
-                </span>
-              </div>
-
-              {/* Right: Metrics, Drift Toggle, Trigger Button, Counters */}
-              <div className="flex items-center gap-2.5 sm:gap-3 text-[11px] text-zinc-400 ml-auto flex-wrap sm:flex-nowrap">
-                {/* SSoT Drift Deviation Simulator Toggle Button */}
-                <SsotDriftToggleButton />
-
-                {/* Expandable Section Toggle Button */}
-                <button
-                  type="button"
-                  onClick={() => setIsGateDetailsExpanded((prev) => !prev)}
-                  className={`px-2.5 py-1 rounded-lg font-mono text-[10px] font-semibold border flex items-center gap-1.5 transition-all cursor-pointer ${
-                    isGateDetailsExpanded
-                      ? 'bg-cyan-500/20 text-cyan-200 border-cyan-400/50 shadow-[0_0_12px_rgba(6,182,212,0.25)]'
-                      : 'bg-white/5 text-zinc-300 border-white/10 hover:bg-white/10 hover:text-cyan-300 hover:border-cyan-500/30'
-                  }`}
-                >
-                  <Scale className="w-3.5 h-3.5 text-cyan-400" />
-                  <span>ETDA / PDPA Triggers</span>
-                  <span className="px-1.5 py-0.2 rounded text-[9px] bg-cyan-500/20 text-cyan-300 border border-cyan-500/40">
-                    6 Active
-                  </span>
-                  {isGateDetailsExpanded ? (
-                    <ChevronUp className="w-3.5 h-3.5 text-cyan-400" />
-                  ) : (
-                    <ChevronDown className="w-3.5 h-3.5 text-zinc-400" />
-                  )}
-                </button>
-
-                <span className="hidden sm:inline text-zinc-600">•</span>
-
-                <span className="flex items-center gap-1">
-                  <CheckCircle2 className="w-3.5 h-3.5 text-emerald-400" />
-                  <span>Anchors: <strong className="text-emerald-300">{verificationGateStatus.complianceEventCount}</strong></span>
-                </span>
-
-                <span>•</span>
-
-                <BannerAnimatedSealCount
-                  sealCount={verificationGateStatus.sealCount}
-                  baseSealCount={14902}
-                />
-
-                <span className="hidden md:inline text-zinc-600">•</span>
-                <span className="text-zinc-500 hidden md:inline">{verificationGateStatus.lastCheckedTime}</span>
-              </div>
-            </div>
-
-            {/* Scheduled Telemetry Audit Real-time Progress Bar */}
-            <div className="px-4 pb-2.5 pt-0.5 space-y-1 bg-black/20 border-t border-white/5">
-              <div className="flex items-center justify-between text-[10px] font-mono text-zinc-400">
-                <span className="flex items-center gap-1.5 text-cyan-300">
-                  <Clock className="w-3 h-3 text-cyan-400" />
-                  <span>Next Telemetry Audit: <strong className="text-white">{auditCountdownSec}s</strong></span>
-                  <span className="text-zinc-600">•</span>
-                  <span className="text-zinc-400">Sub-Kelvin HSM Cycle</span>
-                </span>
-                <span className="text-emerald-400 font-bold">
-                  {Math.round(auditProgressPercent)}% Complete
-                </span>
-              </div>
-              <div className="w-full h-1.5 bg-black/60 rounded-full overflow-hidden border border-white/5 relative">
-                <div
-                  className="h-full bg-cyan-400 transition-all duration-1000 ease-linear rounded-full"
-                  style={{ width: `${auditProgressPercent}%` }}
-                />
-              </div>
-            </div>
-
-          {/* Expandable Section: Comprehensive ETDA & PDPA Trigger Matrix */}
-          <AnimatePresence>
-            {isGateDetailsExpanded && (
-              <motion.div
-                initial={{ height: 0, opacity: 0 }}
-                animate={{ height: 'auto', opacity: 1 }}
-                exit={{ height: 0, opacity: 0 }}
-                transition={{ duration: 0.28, ease: [0.16, 1, 0.3, 1] }}
-                className="border-t border-cyan-500/20 bg-[#060812]/95 px-4 sm:px-6 py-4 space-y-4"
-              >
-                {/* Header Summary */}
-                <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 pb-3 border-b border-white/8 font-mono">
-                  <div className="flex items-center gap-2.5">
-                    <div className="w-8 h-8 rounded-xl bg-cyan-500/10 border border-cyan-500/30 flex items-center justify-center text-cyan-400">
-                      <Scale className="w-4 h-4" />
-                    </div>
-                    <div>
-                      <h4 className="text-sm font-bold text-zinc-100 flex items-center gap-2">
-                        <span>Thai Legal & Cryptographic Compliance Trigger Matrix</span>
-                        <span className="px-2 py-0.5 rounded text-[10px] font-mono font-bold bg-emerald-500/15 text-emerald-300 border border-emerald-500/30">
-                          ALL 6 TRIGGERS GREEN (100%)
-                        </span>
-                      </h4>
-                      <p className="text-xs text-zinc-400 font-sans">
-                        Sovereign Invariants under ETDA B.E. 2544 (2001/2019) & PDPA B.E. 2562 (2019) certified against Passport #EP-SOVEREIGN-01.
-                      </p>
-                    </div>
-                  </div>
-
-                  {/* Actions shortcut */}
-                  <div className="flex items-center gap-2 flex-wrap">
-                    <button
-                      type="button"
-                      onClick={handleExportLegalTriggerMatrixPDF}
-                      className="px-2.5 py-1 rounded-lg bg-cyan-500/20 hover:bg-cyan-500/30 text-cyan-300 border border-cyan-400/50 text-[11px] font-sans font-medium flex items-center gap-1.5 transition-all cursor-pointer shadow-[0_0_12px_rgba(6,182,212,0.2)]"
-                      title="Export signed legal trigger matrix as official PDF artifact"
-                    >
-                      <FileDown className="w-3.5 h-3.5" />
-                      Export Signed Matrix PDF
-                    </button>
-                    <button
-                      type="button"
-                      onClick={() => setIsLegalSearchOpen(true)}
-                      className="px-2.5 py-1 rounded-lg bg-cyan-500/15 hover:bg-cyan-500/25 text-cyan-300 border border-cyan-500/35 text-[11px] font-sans font-medium flex items-center gap-1.5 transition-colors cursor-pointer"
-                    >
-                      <BookOpen className="w-3.5 h-3.5" />
-                      Search Thai Legal Corpus
-                    </button>
-                    <button
-                      type="button"
-                      onClick={() => setIsCertificateOpen(true)}
-                      className="px-2.5 py-1 rounded-lg bg-white/5 hover:bg-white/10 text-zinc-200 border border-white/10 text-[11px] font-sans font-medium flex items-center gap-1.5 transition-colors cursor-pointer"
-                    >
-                      <FileText className="w-3.5 h-3.5 text-emerald-400" />
-                      Inspect Cryptographic Certificate
-                    </button>
-                    <button
-                      type="button"
-                      onClick={handleBatchVerify}
-                      className="px-2.5 py-1 rounded-lg bg-emerald-500/15 hover:bg-emerald-500/25 text-emerald-300 border border-emerald-500/35 text-[11px] font-sans font-medium flex items-center gap-1.5 transition-colors cursor-pointer"
-                    >
-                      <ShieldCheck className="w-3.5 h-3.5" />
-                      Batch Verify Chambers
-                    </button>
-                    <button
-                      type="button"
-                      onClick={handleExportAuditLogs}
-                      className="px-2.5 py-1 rounded-lg bg-purple-500/15 hover:bg-purple-500/25 text-purple-300 border border-purple-500/35 text-[11px] font-sans font-medium flex items-center gap-1.5 transition-colors cursor-pointer"
-                    >
-                      <Download className="w-3.5 h-3.5" />
-                      Export Audit Log
-                    </button>
-                  </div>
-                </div>
-
-                {/* 6 Trigger Cards Grid */}
-                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-3 font-sans">
-                  {ETDA_PDPA_TRIGGERS.map((trigger) => (
-                    <div
-                      key={trigger.id}
-                      className="p-3.5 rounded-xl bg-[#090d1a]/80 border border-cyan-500/20 hover:border-cyan-500/50 hover:scale-[1.02] hover:shadow-[0_8px_25px_rgba(6,182,212,0.18)] transition-all duration-200 space-y-2 group cursor-pointer"
-                    >
-                      <div className="flex items-center justify-between gap-2 font-mono text-[10px]">
-                        <span className="text-cyan-400 font-bold px-1.5 py-0.5 rounded bg-cyan-500/10 border border-cyan-500/25">
-                          {trigger.section}
-                        </span>
-                        <span className="text-emerald-300 font-bold px-1.5 py-0.5 rounded bg-emerald-500/10 border border-emerald-500/30 flex items-center gap-1">
-                          <CheckCircle2 className="w-3 h-3 text-emerald-400" />
-                          {trigger.statusText}
-                        </span>
-                      </div>
-
-                      <div>
-                        <h5 className="text-xs font-bold text-zinc-100 group-hover:text-cyan-300 transition-colors">
-                          {trigger.title}
-                        </h5>
-                        <p className="text-[11px] text-cyan-400/90 font-medium font-thai">
-                          {trigger.titleTh}
-                        </p>
-                      </div>
-
-                      <p className="text-[11px] text-zinc-400 leading-relaxed font-sans">
-                        {trigger.description}
-                      </p>
-
-                      <div className="pt-2 border-t border-white/5 flex flex-col gap-1 font-mono text-[10px]">
-                        <div className="flex items-center justify-between text-zinc-400">
-                          <span className="text-zinc-500">PQC Scheme:</span>
-                          <span className="text-zinc-300 truncate max-w-[160px] text-right" title={trigger.pqcScheme}>
-                            {trigger.pqcScheme}
-                          </span>
-                        </div>
-                        <div className="flex items-center justify-between text-zinc-400">
-                          <span className="text-zinc-500">Anchor:</span>
-                          <span className="text-cyan-400/90 truncate max-w-[160px] text-right" title={trigger.anchor}>
-                            {trigger.anchor}
-                          </span>
-                        </div>
-
-                        {/* PQC Signature Hash with Dedicated Copy to Clipboard Button */}
-                        <div className="flex items-center justify-between text-zinc-400 pt-1 border-t border-white/5">
-                          <span className="text-zinc-500">PQC Sig Hash:</span>
-                          <div className="flex items-center gap-1.5">
-                            <span className="text-purple-300 font-mono text-[9px] truncate max-w-[120px]" title={TRIGGER_PQC_HASHES[trigger.id] || ''}>
-                              {(TRIGGER_PQC_HASHES[trigger.id] || '').slice(0, 14)}...
-                            </span>
-                            <button
-                              type="button"
-                              onClick={(e) => {
-                                e.stopPropagation();
-                                handleCopyTriggerHash(trigger.id, TRIGGER_PQC_HASHES[trigger.id] || '');
-                              }}
-                              className="px-1.5 py-0.5 rounded bg-slate-800/80 hover:bg-cyan-950 border border-slate-700 hover:border-cyan-500/50 text-slate-300 hover:text-cyan-300 transition-colors flex items-center gap-1 text-[9px] font-sans cursor-pointer"
-                              title="คัดลอก PQC Metadata Hash สำหรับการตรวจสอบนิติวิทยาศาสตร์ (Forensic Analysis)"
-                            >
-                              {copiedHashId === trigger.id ? (
-                                <>
-                                  <CheckCircle2 className="w-2.5 h-2.5 text-emerald-400" />
-                                  <span className="text-emerald-300 text-[8px]">Copied</span>
-                                </>
-                              ) : (
-                                <>
-                                  <Copy className="w-2.5 h-2.5 text-cyan-400" />
-                                  <span className="text-[8px]">Copy</span>
-                                </>
-                              )}
-                            </button>
-                          </div>
-                        </div>
-
-                        {/* Forensic Audit Mode Overlay Metadata */}
-                        {isForensicAuditMode && (
-                          <div className="mt-1.5 pt-1.5 border-t border-purple-500/30 bg-purple-950/30 -mx-2 -mb-2 p-2 rounded-b-lg space-y-1 animate-in fade-in duration-200">
-                            <div className="flex items-center justify-between text-[9px] text-purple-300 font-bold">
-                              <span className="flex items-center gap-1">
-                                <Fingerprint className="w-2.5 h-2.5 text-purple-400" />
-                                <span>PQC SIG HASH:</span>
-                              </span>
-                              <span className="text-emerald-400 text-[8px]">VERIFIED (PASS)</span>
-                            </div>
-                            <div className="text-[8px] text-purple-200/90 font-mono break-all bg-black/60 p-1 rounded border border-purple-500/20 flex items-center justify-between gap-1">
-                              <span>{TRIGGER_PQC_HASHES[trigger.id]}</span>
-                              <button
-                                type="button"
-                                onClick={(e) => {
-                                  e.stopPropagation();
-                                  handleCopyTriggerHash(trigger.id, TRIGGER_PQC_HASHES[trigger.id] || '');
-                                }}
-                                className="p-1 rounded hover:bg-white/10 text-purple-300 cursor-pointer shrink-0"
-                                title="Copy hash"
-                              >
-                                {copiedHashId === trigger.id ? (
-                                  <CheckCircle2 className="w-3 h-3 text-emerald-400" />
-                                ) : (
-                                  <Copy className="w-3 h-3 text-purple-300" />
-                                )}
-                              </button>
-                            </div>
-                            <div className="flex items-center justify-between text-[8px] text-zinc-400">
-                              <span>Timestamp: {new Date().toISOString().split('T')[0]} 05:05:30 ICT</span>
-                              <span className="text-cyan-400">Δ0.0% Invariant</span>
-                            </div>
-                          </div>
-                        )}
-                      </div>
-                    </div>
-                  ))}
-                </div>
-
-                {/* Bottom Sovereign Invariant Seal Strip */}
-                <div className="p-2.5 rounded-xl bg-black/40 border border-white/5 flex flex-wrap items-center justify-between gap-3 text-[11px] font-mono text-zinc-400">
-                  <div className="flex items-center gap-2">
-                    <span className="w-2 h-2 rounded-full bg-emerald-400 animate-pulse" />
-                    <span>Genesis Root: <strong className="text-zinc-200">909ab814...43fa4c68</strong></span>
-                    <span className="text-zinc-600 hidden sm:inline">•</span>
-                    <span className="hidden sm:inline">Canonical Block: <strong className="text-zinc-200">#849,202</strong></span>
-                  </div>
-                  <div className="flex items-center gap-2 ml-auto">
-                    <span>Sovereign Architect: <strong className="text-cyan-300">นายยุทธภูมิ พากเพียร</strong></span>
-                    <span className="text-zinc-600">•</span>
-                    <span className="text-emerald-400 font-semibold">SSoT Δ0.0% ZERO DRIFT</span>
-                  </div>
-                </div>
-              </motion.div>
-            )}
-          </AnimatePresence>
-        </div>
+          <VerificationGateBar
+            verificationGateStatus={verificationGateStatus}
+            auditCountdownSec={auditCountdownSec}
+            auditProgressPercent={auditProgressPercent}
+            isGateDetailsExpanded={isGateDetailsExpanded}
+            setIsGateDetailsExpanded={setIsGateDetailsExpanded}
+            isForensicAuditMode={isForensicAuditMode}
+            onExportLegalTriggerMatrixPDF={handleExportLegalTriggerMatrixPDF}
+            onOpenLegalSearch={() => setIsLegalSearchOpen(true)}
+            onOpenCertificate={() => setIsCertificateOpen(true)}
+            onBatchVerify={handleBatchVerify}
+            onExportAuditLogs={handleExportAuditLogs}
+            showToast={showToast}
+          />
 
         {/* Emergency Sovereign Isolation Protocol Control */}
         <EmergencySovereignLockdown />
@@ -2843,7 +1460,7 @@ function SovereignAppContent() {
       <VoiceCommandOverlay 
         onNavigate={setCurrentView} 
         onCaptureSnapshot={() => handleAddSnapshot(createTelemetrySnapshot({ core0: 42, core1: 39, core2: 44, core3: 38 }, snapshots.length, snapshots[0]?.sealedHash))} 
-        onNotifyEvent={addSystemEvent as any} 
+        onNotifyEvent={addSystemEvent} 
       />
 
       {/* Sovereign Copilot AI v6.0 Ultra Panel (Floating Dock, Fullscreen Toggle, 3D Continuum) */}

@@ -1,12 +1,12 @@
 import React from 'react';
 import { Mic, MicOff } from 'lucide-react';
 import { useVoiceCommand } from '../hooks/useVoiceCommand';
-import { ViewType } from '../types';
+import { ViewType, SystemEvent } from '../types';
 
 interface VoiceCommandOverlayProps {
   onNavigate: (view: ViewType) => void;
   onCaptureSnapshot: () => void;
-  onNotifyEvent: (type: any, title: string, desc: string, meta?: string, sev?: "info" | "success" | "warning" | "critical") => void;
+  onNotifyEvent: (type: SystemEvent['type'], title: string, desc: string, meta?: string, sev?: SystemEvent['severity']) => void;
 }
 
 export const VoiceCommandOverlay: React.FC<VoiceCommandOverlayProps> = ({ onNavigate, onCaptureSnapshot, onNotifyEvent }) => {

@@ -15,6 +15,31 @@ import { playAuditChime, playTone } from './AudioSynthesizer';
 
 export { Sparkline };
 
+export interface CryoChamber {
+  id: number;
+  chamberId: string;
+  name: string;
+  coherence: number;
+  coherenceTrend: string;
+  temperature: number;
+  status: string;
+  merkleHash: string;
+  lastSync: string;
+  history24h: number[];
+}
+
+export type SortCriterion = 'coherence_desc' | 'coherence_asc' | 'temp_desc' | 'sync_desc';
+
+export function playUnstableEventChime(force?: boolean): void {
+  try {
+    playTone(440, 0.15, 'triangle');
+  } catch {}
+}
+
+export function generateForensicBatchPDF(chambers?: CryoChamber[]): void {
+  // Batch PDF Forensic Export helper
+}
+
 export type ChamberStatus = 'stable' | 'unstable' | 'recalibrating';
 
 export interface Chamber {

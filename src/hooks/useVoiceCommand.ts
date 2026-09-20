@@ -1,10 +1,10 @@
 import { useEffect, useState, useCallback } from 'react';
-import { ViewType } from '../types';
+import { ViewType, SystemEvent } from '../types';
 
 export const useVoiceCommand = (
   onNavigate: (view: ViewType) => void,
   onCaptureSnapshot: () => void,
-  onNotifyEvent: (type: any, title: string, desc: string, meta?: string, sev?: "info" | "success" | "warning" | "critical") => void
+  onNotifyEvent: (type: SystemEvent['type'], title: string, desc: string, meta?: string, sev?: SystemEvent['severity']) => void
 ) => {
   const [isListening, setIsListening] = useState(false);
   const [lastCommand, setLastCommand] = useState<string>('');
