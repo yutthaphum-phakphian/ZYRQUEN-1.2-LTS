@@ -878,6 +878,18 @@ function SovereignAppContent() {
     setToasts((prev) => prev.filter((t) => t.id !== id));
   }, []);
 
+  // Listen for global chamber threshold alerts (<0.90) and custom system events
+  useEffect(() => {
+    const handleGlobalToast = (e: Event) => {
+      const customEvent = e as CustomEvent<{ message: string; type?: ToastMessage['type'] }>;
+      if (customEvent.detail?.message) {
+        showToast(customEvent.detail.message, customEvent.detail.type || 'warning');
+      }
+    };
+    window.addEventListener('zyrquen-toast', handleGlobalToast);
+    return () => window.removeEventListener('zyrquen-toast', handleGlobalToast);
+  }, [showToast]);
+
   // Connect to Node.js WebSocket Notification Service and pipe incoming alerts to toasts
   useNotificationWebSocket(showToast);
   const [carrierPitchHz, setCarrierPitchHz] = useState<number>(882);
