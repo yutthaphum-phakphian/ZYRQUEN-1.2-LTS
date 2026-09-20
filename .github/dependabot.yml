@@ -1,0 +1,54 @@
+# ==============================================================================
+# ZYRQUEN Ω∞ Sovereign Dependabot Security & Dependency Update Configuration
+# File Path: .github/dependabot.yml
+# System Version: LOCKED_FROZEN_v1.2_LTS | SSoT Δ0 Baseline Drift 0.00%
+# Sovereign Principal: นายยุทธภูมิ พากเพียร (#EP-SOVEREIGN-01)
+# ==============================================================================
+
+version: 2
+updates:
+  # Maintain dependencies for GitHub Actions Workflows
+  - package-ecosystem: "github-actions"
+    directory: "/"
+    schedule:
+      interval: "weekly"
+      day: "monday"
+      time: "06:00"
+      timezone: "Asia/Bangkok"
+    open-pull-requests-limit: 10
+    reviewers:
+      - "yutthaphum-phakphian"
+    labels:
+      - "security"
+      - "ci/cd"
+      - "sovereign-audit"
+
+  # Maintain dependencies for Node.js / React Frontend & Gateway
+  - package-ecosystem: "npm"
+    directory: "/"
+    schedule:
+      interval: "weekly"
+      day: "monday"
+      time: "06:00"
+      timezone: "Asia/Bangkok"
+    open-pull-requests-limit: 10
+    reviewers:
+      - "yutthaphum-phakphian"
+    labels:
+      - "dependencies"
+      - "npm"
+
+  # Maintain dependencies for Python Test & Audit Tools
+  - package-ecosystem: "pip"
+    directory: "/server"
+    schedule:
+      interval: "weekly"
+      day: "monday"
+      time: "06:00"
+      timezone: "Asia/Bangkok"
+    open-pull-requests-limit: 5
+    reviewers:
+      - "yutthaphum-phakphian"
+    labels:
+      - "python"
+      - "security"
