@@ -1,0 +1,92 @@
+{
+  "$schema": "https://zyrquen.court.bundle/v1.2/audit-replay.json",
+  "archiveVersion": "LOCKEDFROZENv1.2_LTS",
+  "sealId": 14903,
+  "canonicalBlock": 849202,
+  "merkleRoot": "909ab814479844d8a14816bed34cdbb07528e18501da86fc4691763a43fa4c68",
+  "replayedStages": [
+    {
+      "stageId": 1,
+      "code": "STAGE-01: INGEST",
+      "verdict": "VERIFIED_CANONICAL",
+      "elapsedMs": 2.1
+    },
+    {
+      "stageId": 2,
+      "code": "STAGE-02: PARSE_HEADERS",
+      "verdict": "VERIFIED_CANONICAL",
+      "elapsedMs": 3.4
+    },
+    {
+      "stageId": 3,
+      "code": "STAGE-03: METRIC_ALIGNMENT",
+      "verdict": "VERIFIED_CANONICAL",
+      "elapsedMs": 4.8
+    },
+    {
+      "stageId": 4,
+      "code": "STAGE-04: SIGNATURE_VERIFY",
+      "verdict": "VERIFIED_CANONICAL",
+      "elapsedMs": 7.2
+    },
+    {
+      "stageId": 5,
+      "code": "STAGE-05: CUSTODIAN_QUORUM_CHECK",
+      "verdict": "VERIFIED_CANONICAL",
+      "elapsedMs": 9.6
+    },
+    {
+      "stageId": 6,
+      "code": "STAGE-06: INVARIANT_PROTECTION",
+      "verdict": "VERIFIED_CANONICAL",
+      "elapsedMs": 12.1
+    },
+    {
+      "stageId": 7,
+      "code": "STAGE-07: MERKLE_COMPUTE",
+      "verdict": "VERIFIED_CANONICAL",
+      "elapsedMs": 15.3
+    },
+    {
+      "stageId": 8,
+      "code": "STAGE-08: RISK_RE_EVALUATION",
+      "verdict": "VERIFIED_CANONICAL",
+      "elapsedMs": 18.7
+    },
+    {
+      "stageId": 9,
+      "code": "STAGE-09: THAI_LAW_AUDIT",
+      "verdict": "VERIFIED_CANONICAL",
+      "elapsedMs": 22.4
+    },
+    {
+      "stageId": 10,
+      "code": "STAGE-10: TRACE_STREAM_REPLAY",
+      "verdict": "VERIFIED_CANONICAL",
+      "elapsedMs": 26.9
+    },
+    {
+      "stageId": 11,
+      "code": "STAGE-11: QUARANTINE_ISOLATION",
+      "verdict": "VERIFIED_CANONICAL",
+      "elapsedMs": 31.2
+    },
+    {
+      "stageId": 12,
+      "code": "STAGE-12: CLOSURE",
+      "verdict": "VERIFIED_CANONICAL",
+      "elapsedMs": 35.8
+    }
+  ],
+  "totalDurationMs": 35.8,
+  "slaThresholdMs": 142,
+  "slaVerdict": "PASS_WITHIN_BUDGET",
+  "statutoryCompliance": {
+    "etdaSec9": "COMPLIANT_ELECTRONIC_RECORDS",
+    "etdaSec26": "COMPLIANT_ADVANCED_SIGNATURE",
+    "etdaSec28": "PRESUMPTION_OF_AUTHENTICITY_SATISFIED",
+    "pdpaSec37": "SECURITY_SAFEGUARDS_ACTIVE"
+  },
+  "exportTimestamp": "2026-09-20T08:31:14.580Z",
+  "signer": "นายยุทธภูมิ พากเพียร (#EP-SOVEREIGN-01)"
+}

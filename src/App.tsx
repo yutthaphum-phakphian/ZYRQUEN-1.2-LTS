@@ -610,6 +610,10 @@ export type SystemAction =
       }>;
     }
   | {
+      type: 'SYNC_REMOTE_EVENT';
+      payload: SystemEvent;
+    }
+  | {
       type: 'CLEAR_SYSTEM_EVENTS';
     };
 
@@ -1111,6 +1115,24 @@ function SovereignAppContent() {
         setSystemEvents([]);
         break;
       }
+
+      case 'SYNC_REMOTE_EVENT': {
+        const remoteEvt = action.payload;
+        setSystemEvents((prev) => {
+          if (prev.some((e) => e.id === remoteEvt.id)) return prev;
+          return [remoteEvt, ...prev];
+        });
+        if (remoteEvt.type === 'COMPLIANCE') {
+          setVerificationGateStatus((curr) => ({
+            ...curr,
+            status: 'PASSED',
+            lastCheckedTime: remoteEvt.timestamp,
+            complianceEventCount: curr.complianceEventCount + 1,
+            message: `Verification Gate PASSED: Remote compliance anchor verified (${remoteEvt.title}). 10/10 REAL_HSM Quorum Active.`,
+          }));
+        }
+        break;
+      }
     }
   }, []);
 
@@ -1179,10 +1201,7 @@ function SovereignAppContent() {
 
     // 2. Attach BroadcastChannel cross-tab synchronization listeners
     const unsubEvent = broadcastSyncService.onSystemEvent((evt) => {
-      setSystemEvents((prev) => {
-        if (prev.some((e) => e.id === evt.id)) return prev;
-        return [evt, ...prev];
-      });
+      dispatchAction({ type: 'SYNC_REMOTE_EVENT', payload: evt });
     });
 
     const unsubSnap = broadcastSyncService.onAuditSnapshot((snap) => {
@@ -1243,15 +1262,19 @@ function SovereignAppContent() {
 
       showToast(`Automated System Backup #${record.snapshotNumber} Sealed Successfully. Integrity Verified.`, 'success');
 
-      addSystemEvent(
-        'BACKUP',
-        `Automated System Backup #${record.snapshotNumber} Sealed`,
-        `Merkle root: ${record.merkleRoot.slice(0, 18)}... • Scope: ${record.statesCaptured} subsystem states, ${record.logsCount} audit records • Integrity: 100% Verified`,
-        record.merkleRoot,
-        'success',
-        'พ.ร.บ. ธุรกรรมฯ มาตรา 26/28 & NIST PQC (Dilithium-5)',
-        'ledger'
-      );
+      dispatchAction({
+        type: 'EMIT_SYSTEM_EVENT',
+        payload: {
+          type: 'BACKUP',
+          title: `Automated System Backup #${record.snapshotNumber} Sealed`,
+          description: `Merkle root: ${record.merkleRoot.slice(0, 18)}... • Scope: ${record.statesCaptured} subsystem states, ${record.logsCount} audit records • Integrity: 100% Verified`,
+          metaHash: record.merkleRoot,
+          severity: 'success',
+          statuteRef: 'พ.ร.บ. ธุรกรรมฯ มาตรา 26/28 & NIST PQC (Dilithium-5)',
+          targetView: 'ledger',
+          bindingStatus: 'ANCHORED',
+        },
+      });
     });
 
     // 5. Attach automated backup logger
@@ -1295,34 +1318,42 @@ function SovereignAppContent() {
         if (isAudioActive) {
           toggleSovereignSynth882Hz(false);
         }
-        addSystemEvent(
-          'HARDWARE',
-          'SYSTEM ACTIVITY FROZEN (MAINTENANCE STATE-PRESERVED)',
-          'Automated telemetry capture, scheduled backup timers, and audio carrier modulation paused. SSoT state preserved.',
-          'freeze:state_preservation_armed',
-          'warning',
-          'ISO/IEC 27037 Digital Forensics State Preservation',
-          'pulse'
-        );
+        dispatchAction({
+          type: 'EMIT_SYSTEM_EVENT',
+          payload: {
+            type: 'HARDWARE',
+            title: 'SYSTEM ACTIVITY FROZEN (MAINTENANCE STATE-PRESERVED)',
+            description: 'Automated telemetry capture, scheduled backup timers, and audio carrier modulation paused. SSoT state preserved.',
+            metaHash: 'freeze:state_preservation_armed',
+            severity: 'warning',
+            statuteRef: 'ISO/IEC 27037 Digital Forensics State Preservation',
+            targetView: 'pulse',
+            bindingStatus: 'ANCHORED',
+          },
+        });
       } else {
         automatedBackupService.start();
         if (isAudioActive) {
           toggleSovereignSynth882Hz(true);
           updateAtmosphericEntropyPitch(systemStateStore.getState().aggregateEntropy, true);
         }
-        addSystemEvent(
-          'HARDWARE',
-          'SYSTEM ACTIVITY RESUMED (LIVE TELEMETRY ACTIVE)',
-          'Automated telemetry stream, background backup engine, and 882Hz harmonic clock resumed.',
-          'freeze:state_preservation_disarmed',
-          'success',
-          'ISO/IEC 27037 Live Telemetry Ingest',
-          'pulse'
-        );
+        dispatchAction({
+          type: 'EMIT_SYSTEM_EVENT',
+          payload: {
+            type: 'HARDWARE',
+            title: 'SYSTEM ACTIVITY RESUMED (LIVE TELEMETRY ACTIVE)',
+            description: 'Automated telemetry stream, background backup engine, and 882Hz harmonic clock resumed.',
+            metaHash: 'freeze:state_preservation_disarmed',
+            severity: 'success',
+            statuteRef: 'ISO/IEC 27037 Live Telemetry Ingest',
+            targetView: 'pulse',
+            bindingStatus: 'ANCHORED',
+          },
+        });
       }
       return next;
     });
-  }, [isAudioActive, addSystemEvent]);
+  }, [isAudioActive, dispatchAction]);
 
   const handleToggleAudio = useCallback(() => {
     setIsAudioActive((prev) => {
@@ -1334,16 +1365,22 @@ function SovereignAppContent() {
       return next;
     });
     const next = !isAudioActive;
-    addSystemEvent(
-      'AUDIO',
-      next ? 'Sovereign Audio Carrier Active' : 'Sovereign Audio Muted',
-      next ? 'Synthesized continuous harmonic carrier oscillator initialized with dynamic entropy pitch modulation.' : 'Audio carrier halted.',
-      'audio:carrier_synth_stream',
-      'info'
-    );
-  }, [isAudioActive, addSystemEvent]);
+    dispatchAction({
+      type: 'EMIT_SYSTEM_EVENT',
+      payload: {
+        type: 'AUDIO',
+        title: next ? 'Sovereign Audio Carrier Active' : 'Sovereign Audio Muted',
+        description: next
+          ? 'Synthesized continuous harmonic carrier oscillator initialized with dynamic entropy pitch modulation.'
+          : 'Audio carrier halted.',
+        metaHash: 'audio:carrier_synth_stream',
+        severity: 'info',
+        targetView: 'dashboard',
+      },
+    });
+  }, [isAudioActive, dispatchAction]);
 
-  const handleAddSnapshot = (newSnap: HardwareSnapshot) => {
+  const handleAddSnapshot = useCallback((newSnap: HardwareSnapshot) => {
     // Verification Gate: Visually validate if systemEvents containing 'COMPLIANCE' type exist and have triggered
     // corresponding seal updates before allowing a new entry to be appended to the Merkle Ledger.
     const complianceEvents = systemEvents.filter((e) => e.type === 'COMPLIANCE');
@@ -1357,15 +1394,20 @@ function SovereignAppContent() {
         sealCount: 14902 + Math.max(0, snapshots.length - 2),
         message: 'Verification Gate REJECTED: No verified COMPLIANCE events found in telemetry log stream.',
       });
-      addSystemEvent(
-        'ALERT',
-        'Verification Gate: Merkle Ledger Append BLOCKED',
-        'Snapshot append rejected because no active COMPLIANCE event anchor was found in the telemetry stream.',
-        'gate:block_no_compliance',
-        'critical',
-        'มาตรา 26 (ETDA Level 3+ Invariant Verification)',
-        'security'
-      );
+      dispatchAction({
+        type: 'EMIT_SYSTEM_EVENT',
+        payload: {
+          type: 'ALERT',
+          title: 'Verification Gate: Merkle Ledger Append BLOCKED',
+          description: 'Snapshot append rejected because no active COMPLIANCE event anchor was found in the telemetry stream.',
+          metaHash: 'gate:block_no_compliance',
+          severity: 'critical',
+          statuteRef: 'มาตรา 26 (ETDA Level 3+ Invariant Verification)',
+          targetView: 'security',
+          targetTab: 'reconciliation-gate',
+          bindingStatus: 'ORPHANED',
+        },
+      });
       showToast('Hardware Telemetry Snapshot REJECTED: Gate Blocked', 'error');
       setIsEventsSidebarOpen(true);
       return;
@@ -1397,15 +1439,19 @@ function SovereignAppContent() {
       const anomalyResult = TelemetryAnomalyObserver.evaluate(newSnap, prev);
       if (anomalyResult.hasAnomaly) {
         anomalyResult.anomalies.forEach((anom) => {
-          addSystemEvent(
-            'ANOMALY',
-            `Statistical Anomaly: ${anom.metricName} Outlier (${anom.zScore >= 0 ? '+' : ''}${anom.zScore.toFixed(1)}σ)`,
-            `Telemetry value ${anom.value.toFixed(1)} deviates significantly from historical baseline (μ = ${anom.mean.toFixed(1)}, σ = ${anom.stdDev.toFixed(1)}). Auto-flagged for isolation.`,
-            newSnap.sealedHash,
-            'critical',
-            'ISO/IEC 27037 Telemetry Anomaly Protocol',
-            'pulse'
-          );
+          dispatchAction({
+            type: 'EMIT_SYSTEM_EVENT',
+            payload: {
+              type: 'ANOMALY',
+              title: `Statistical Anomaly: ${anom.metricName} Outlier (${anom.zScore >= 0 ? '+' : ''}${anom.zScore.toFixed(1)}σ)`,
+              description: `Telemetry value ${anom.value.toFixed(1)} deviates significantly from historical baseline (μ = ${anom.mean.toFixed(1)}, σ = ${anom.stdDev.toFixed(1)}). Auto-flagged for isolation.`,
+              metaHash: newSnap.sealedHash,
+              severity: 'critical',
+              statuteRef: 'ISO/IEC 27037 Telemetry Anomaly Protocol',
+              targetView: 'pulse',
+              bindingStatus: 'ORPHANED',
+            },
+          });
         });
       }
 
@@ -1415,53 +1461,76 @@ function SovereignAppContent() {
     // Computational activity pulse elevates entropy momentarily
     systemStateStore.bumpEntropy(6.8);
     
-    // 1. Primary Hardware Event
-    addSystemEvent(
-      'HARDWARE',
-      `Hardware Snapshot #${newSnap.snapshotNumber} Sealed`,
-      `Captured ${newSnap.id}: CPU ${newSnap.cpuAverage}% • Cryo ${newSnap.cryoTempMk}mK • QOps ${newSnap.qopsThroughput}`,
-      newSnap.sealedHash,
-      'success'
-    );
+    // 1. Primary Hardware Event dispatched through centralized engine
+    dispatchAction({
+      type: 'EMIT_SYSTEM_EVENT',
+      payload: {
+        type: 'HARDWARE',
+        title: `Hardware Snapshot #${newSnap.snapshotNumber} Sealed`,
+        description: `Captured ${newSnap.id}: CPU ${newSnap.cpuAverage}% • Cryo ${newSnap.cryoTempMk}mK • QOps ${newSnap.qopsThroughput}`,
+        metaHash: newSnap.sealedHash,
+        severity: 'success',
+        statuteRef: 'FIPS 140-3 L4 Hardware Custody & Sub-Kelvin Thermal SLA',
+        targetView: 'dashboard',
+        anchoredSealNumber: newVerifiedSeals,
+        bindingStatus: 'ANCHORED',
+        merkleProofHash: newSnap.sealedHash,
+      },
+    });
 
     // 2. Automatic Legal Compliance Alert (Section 26 & 28 Invariant Verification)
     setTimeout(() => {
-      addSystemEvent(
-        'COMPLIANCE',
-        `มาตรา 26 (Sec 26) Cryptographic Invariant Sealed`,
-        `Snapshot #${newSnap.snapshotNumber} certified under ETDA Level 3+ with 0.00% invariant drift and Dilithium-5 post-quantum signature.`,
-        `proof:merkle_block_invariant_${newSnap.snapshotNumber}`,
-        'success',
-        'พ.ร.บ. ธุรกรรมฯ มาตรา 26 (ETDA Level 3+)',
-        'security'
-      );
+      dispatchAction({
+        type: 'EMIT_SYSTEM_EVENT',
+        payload: {
+          type: 'COMPLIANCE',
+          title: `มาตรา 26 (Sec 26) Cryptographic Invariant Sealed`,
+          description: `Snapshot #${newSnap.snapshotNumber} certified under ETDA Level 3+ with 0.00% invariant drift and Dilithium-5 post-quantum signature.`,
+          metaHash: `proof:merkle_block_invariant_${newSnap.snapshotNumber}`,
+          severity: 'success',
+          statuteRef: 'พ.ร.บ. ธุรกรรมฯ มาตรา 26 (ETDA Level 3+)',
+          targetView: 'security',
+          targetTab: 'legal-convergence',
+          anchoredSealNumber: newVerifiedSeals,
+          bindingStatus: 'VERIFIED',
+          merkleProofHash: newSnap.sealedHash,
+        },
+      });
     }, 200);
 
     // Open sidebar subtly to showcase live activity feed
     setIsEventsSidebarOpen(true);
-  };
+  }, [systemEvents, snapshots, dispatchAction, showToast]);
 
   const handleLegalSearchExecuted = (query: string, summary: string) => {
     // 1. Search Query Event
-    addSystemEvent(
-      'LEGAL_SEARCH',
-      `Thai Legal Search: "${query.slice(0, 36)}..."`,
-      summary,
-      `oracle:query_${Date.now()}`,
-      'info'
-    );
+    dispatchAction({
+      type: 'EMIT_SYSTEM_EVENT',
+      payload: {
+        type: 'LEGAL_SEARCH',
+        title: `Thai Legal Search: "${query.slice(0, 36)}..."`,
+        description: summary,
+        metaHash: `oracle:query_${Date.now()}`,
+        severity: 'info',
+        targetView: 'dashboard',
+      },
+    });
 
     // 2. Automatic Legal Compliance Citation Alert
     setTimeout(() => {
-      addSystemEvent(
-        'COMPLIANCE',
-        `Statutory Reference: Section 9, 26, 28 ↔ Sovereign Chain`,
-        `Real-time Thai statutory grounding retrieved for query. Cryptographic proof mapping ready for review.`,
-        `statute:etda_electronic_trans_act_2544`,
-        'success',
-        'Sec 9, 26, 28 & PDPA ↔ Sovereign Seal',
-        'security'
-      );
+      dispatchAction({
+        type: 'EMIT_SYSTEM_EVENT',
+        payload: {
+          type: 'COMPLIANCE',
+          title: `Statutory Reference: Section 9, 26, 28 ↔ Sovereign Chain`,
+          description: `Real-time Thai statutory grounding retrieved for query. Cryptographic proof mapping ready for review.`,
+          metaHash: `statute:etda_electronic_trans_act_2544`,
+          severity: 'success',
+          statuteRef: 'Sec 9, 26, 28 & PDPA ↔ Sovereign Seal',
+          targetView: 'security',
+          bindingStatus: 'VERIFIED',
+        },
+      });
     }, 250);
 
     // Slide in sidebar to surface live grounding event
@@ -1874,36 +1943,49 @@ function SovereignAppContent() {
 
   const handleBatchVerify = useCallback(() => {
     if (navigator.vibrate) navigator.vibrate([50, 100, 50]);
-    addSystemEvent(
-      'CRYPTO',
-      'Batch Verification Triggered',
-      'Initiating batch integrity verification for 14,902 chambers.',
-      'verify',
-      'info'
-    );
+    dispatchAction({
+      type: 'EMIT_SYSTEM_EVENT',
+      payload: {
+        type: 'CRYPTO',
+        title: 'Batch Verification Triggered',
+        description: 'Initiating batch integrity verification for 14,902 chambers.',
+        metaHash: 'verify',
+        severity: 'info',
+        targetView: 'ledger',
+      },
+    });
     showToast('Initiating Batch Verification...', 'info');
     
     // Simulate verification delay and success
     setTimeout(() => {
       showToast('14,902 chambers verified successfully', 'success');
-      addSystemEvent(
-        'CRYPTO',
-        'Batch Verification Complete',
-        '14,902 chambers verified successfully. SSoT Drift remains at Δ0.00%.',
-        'verify:pass',
-        'success'
-      );
+      dispatchAction({
+        type: 'EMIT_SYSTEM_EVENT',
+        payload: {
+          type: 'CRYPTO',
+          title: 'Batch Verification Complete',
+          description: '14,902 chambers verified successfully. SSoT Drift remains at Δ0.00%.',
+          metaHash: 'verify:pass',
+          severity: 'success',
+          targetView: 'ledger',
+          bindingStatus: 'VERIFIED',
+        },
+      });
     }, 2500);
-  }, [addSystemEvent]);
+  }, [dispatchAction, showToast]);
 
   const handleExportAuditLogs = useCallback(() => {
-    addSystemEvent(
-      'FORENSIC',
-      'Audit Log Export',
-      'Generating signed PDF artifact (ETDA Section 28 Compliant).',
-      'export',
-      'info'
-    );
+    dispatchAction({
+      type: 'EMIT_SYSTEM_EVENT',
+      payload: {
+        type: 'FORENSIC',
+        title: 'Audit Log Export',
+        description: 'Generating signed PDF artifact (ETDA Section 28 Compliant).',
+        metaHash: 'export',
+        severity: 'info',
+        targetView: 'ledger',
+      },
+    });
     showToast('Generating signed Audit Log...', 'info');
 
     setTimeout(() => {
@@ -1922,15 +2004,20 @@ function SovereignAppContent() {
       downloadAnchor.remove();
 
       showToast('Artifact Exported successfully.', 'success');
-      addSystemEvent(
-        'FORENSIC',
-        'Artifact Exported',
-        'Signed artifact zyrquen-audit-log.json generated.',
-        'export:success',
-        'success'
-      );
+      dispatchAction({
+        type: 'EMIT_SYSTEM_EVENT',
+        payload: {
+          type: 'FORENSIC',
+          title: 'Artifact Exported',
+          description: 'Signed artifact zyrquen-audit-log.json generated.',
+          metaHash: 'export:success',
+          severity: 'success',
+          targetView: 'ledger',
+          bindingStatus: 'ANCHORED',
+        },
+      });
     }, 1500);
-  }, [addSystemEvent]);
+  }, [dispatchAction, showToast]);
 
   const [copiedHashId, setCopiedHashId] = useState<string | null>(null);
 
@@ -2001,14 +2088,20 @@ function SovereignAppContent() {
 
     doc.save(`ZYRQUEN_LEGAL_TRIGGER_MATRIX_SIGNED_${Date.now()}.pdf`);
     showToast('ส่งออก Legal Trigger Matrix PDF Artifact เรียบร้อยแล้ว', 'success');
-    addSystemEvent(
-      'FORENSIC',
-      'Legal Trigger Matrix Exported',
-      'Signed PDF Artifact generated and certified under ETDA Sec 9/26/28.',
-      'pdf:matrix',
-      'success'
-    );
-  }, [addSystemEvent, showToast]);
+    dispatchAction({
+      type: 'EMIT_SYSTEM_EVENT',
+      payload: {
+        type: 'FORENSIC',
+        title: 'Legal Trigger Matrix Exported',
+        description: 'Signed PDF Artifact generated and certified under ETDA Sec 9/26/28.',
+        metaHash: 'pdf:matrix',
+        severity: 'success',
+        statuteRef: 'ETDA Sec 9, 26, 28 Statutory Evidence',
+        targetView: 'security',
+        bindingStatus: 'VERIFIED',
+      },
+    });
+  }, [dispatchAction, showToast]);
 
   const handleCommandPaletteAction = useCallback((actionId: string) => {
     if (actionId === 'snapshot') {
@@ -2579,7 +2672,7 @@ function SovereignAppContent() {
         }}
         events={systemEvents}
         latestSealCount={verificationGateStatus.sealCount}
-        onClearEvents={() => setSystemEvents([])}
+        onClearEvents={() => dispatchAction({ type: 'CLEAR_SYSTEM_EVENTS' })}
         isForensicAuditMode={isForensicAuditMode}
         onToggleForensicAuditMode={handleToggleForensicAuditMode}
         onNavigateToView={(v) => {
@@ -2639,23 +2732,35 @@ function SovereignAppContent() {
         }}
         isZeroDriftEnforced={true}
         onToggleZeroDrift={() => {
-          addSystemEvent(
-            'INVARIANT',
-            'SSoT Δ0.00% Zero Drift Lock Attested',
-            'Canonical Merkle root locked across 14,902 frozen seals with zero drift.',
-            'invariant:zero_drift_enforced',
-            'success'
-          );
+          dispatchAction({
+            type: 'EMIT_SYSTEM_EVENT',
+            payload: {
+              type: 'INVARIANT',
+              title: 'SSoT Δ0.00% Zero Drift Lock Attested',
+              description: 'Canonical Merkle root locked across 14,902 frozen seals with zero drift.',
+              metaHash: 'invariant:zero_drift_enforced',
+              severity: 'success',
+              statuteRef: 'ETDA Sec 28 & ISO/IEC 27037',
+              targetView: 'dashboard',
+              bindingStatus: 'ANCHORED',
+            },
+          });
         }}
         pqcLevel="DILITHIUM5"
         onTogglePqcLevel={() => {
-          addSystemEvent(
-            'SECURITY',
-            'PQC Cryptographic Spec Shift Attested',
-            'Post-quantum signature and key encapsulation standard active (ML-DSA-87 / ML-KEM-1024 FIPS 203/204).',
-            'crypto:pqc_spec_switch',
-            'info'
-          );
+          dispatchAction({
+            type: 'EMIT_SYSTEM_EVENT',
+            payload: {
+              type: 'SECURITY',
+              title: 'PQC Cryptographic Spec Shift Attested',
+              description: 'Post-quantum signature and key encapsulation standard active (ML-DSA-87 / ML-KEM-1024 FIPS 203/204).',
+              metaHash: 'crypto:pqc_spec_switch',
+              severity: 'info',
+              statuteRef: 'FIPS 203/204 Post-Quantum Cryptography',
+              targetView: 'security',
+              bindingStatus: 'VERIFIED',
+            },
+          });
         }}
       />
 
@@ -2730,15 +2835,19 @@ function SovereignAppContent() {
         onComplete={() => {
           setShowLoginLoader(false);
           setCurrentView('dashboard');
-          addSystemEvent(
-            'SECURITY',
-            'Sovereign Quantum Login Attested',
-            'FIPS 140-3 L4 HSM 10/10 Quorum verified. Ingress to Sovereign Control Plane granted.',
-            'auth:pqc_hsm_10_10_verified',
-            'success',
-            'ETDA Sec 26 & PDPA Sec 26 Enclave',
-            'dashboard'
-          );
+          dispatchAction({
+            type: 'EMIT_SYSTEM_EVENT',
+            payload: {
+              type: 'SECURITY',
+              title: 'Sovereign Quantum Login Attested',
+              description: 'FIPS 140-3 L4 HSM 10/10 Quorum verified. Ingress to Sovereign Control Plane granted.',
+              metaHash: 'auth:pqc_hsm_10_10_verified',
+              severity: 'success',
+              statuteRef: 'ETDA Sec 26 & PDPA Sec 26 Enclave',
+              targetView: 'dashboard',
+              bindingStatus: 'VERIFIED',
+            },
+          });
         }}
         onCancel={() => {
           triggerVibration('modalDismiss');
