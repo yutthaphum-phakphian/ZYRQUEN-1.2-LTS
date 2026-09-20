@@ -2,111 +2,79 @@ name: 🚀 ZYRQUEN Ω∞ Ledger-to-GitHub Sync & PQC Crypto-Agility Pipeline
 
 on:
   push:
-    branches: [ main ]
+    branches: [main]
   workflow_dispatch:
     inputs:
       pqc_override_scheme:
-        description: 'Crypto-Agility Override Scheme (DILITHIUM5 | SPHINCS_FALLBACK)'
+        description: "Crypto-Agility Override Scheme"
+        type: choice
         required: false
-        default: 'AUTO_DETECT'
+        default: AUTO_DETECT
+        options:
+          - AUTO_DETECT
+          - DILITHIUM5
+          - SPHINCS_FALLBACK
 
 permissions:
   contents: write
-  pages: write
   id-token: write
+
+concurrency:
+  group: ledger-sync-${{ github.ref }}
+  cancel-in-progress: true
 
 jobs:
   verify-and-sync-ledger:
     name: 🛡️ Audit Ledger, PQC Parity & SPHINCS+ Fallback Validation
     runs-on: ubuntu-latest
+    timeout-minutes: 20
 
     steps:
-      - name: 📦 Checkout Sovereign Repository
+      - name: 📦 Checkout repository
         uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
 
-      - name: ⚙️ Setup Node.js Environment (v20)
+      - name: ⚙️ Setup Node.js
         uses: actions/setup-node@v4
         with:
           node-version: 20
-          cache: 'npm'
+          cache: npm
 
-      - name: 📥 Clean Install Dependencies (npm ci)
+      - name: 📥 Install dependencies
         run: npm ci
 
-      - name: 🔬 Verify SHA-256 Digest & Genesis Invariants
-        run: |
-          node -e '
-            const fs = require("fs");
-            const tablePath = "./SHA256_VERIFIED_TABLE.json";
-            if (!fs.existsSync(tablePath)) {
-              console.error("❌ CRITICAL: SHA256_VERIFIED_TABLE.json missing!");
-              process.exit(1);
-            }
-            const ledger = JSON.parse(fs.readFileSync(tablePath, "utf8"));
-            
-            console.log("===========================================================================");
-            console.log("  SSoT BASELINE VERIFICATION");
-            console.log("  Block Height Anchor :", ledger.canonical.blockHeight);
-            console.log("  Genesis Merkle Root :", ledger.canonical.merkleRoot);
-            console.log("  Canonical Seals     :", ledger.canonical.canonicalSeals);
-            console.log("  Zero Drift Invariant:", ledger.canonical.drift);
-            console.log("===========================================================================");
-            
-            if (ledger.canonical.blockHeight !== 849202 || ledger.canonical.canonicalSeals !== 14902) {
-              console.error("❌ CRITICAL: SSoT Drift Detected! Mutation Authority Violation.");
-              process.exit(1);
-            }
-            if (ledger.canonical.merkleRoot !== "909ab814479844d8a14816bed34cdbb07528e18501da86fc4691763a43fa4c68") {
-              console.error("❌ CRITICAL: Merkle Root Hash Mismatch!");
-              process.exit(1);
-            }
-            console.log("✅ ALL CANONICAL INVARIANTS SATISFIED — ZERO MUTATION DETECTED");
-          '
+      - name: 🔬 Verify ledger invariants
+        shell: bash
+        run: node ./scripts/verify-ledger.mjs
 
-      - name: 🛡️ PQC Crypto-Agility & SPHINCS+ Fallback Inspection
+      - name: 🛡️ Verify PQC scheme selection
+        shell: bash
         env:
           PQC_OVERRIDE: ${{ github.event.inputs.pqc_override_scheme || 'AUTO_DETECT' }}
-        run: |
-          node -e '
-            console.log("===========================================================================");
-            console.log("  🛡️ PQC CRYPTO-AGILITY & PHOENIX RECOVERY INSPECTION");
-            console.log("===========================================================================");
-            
-            const overrideScheme = process.env.PQC_OVERRIDE;
-            console.log(`[CONFIG] PQC Scheme Selector: ${overrideScheme}`);
+        run: node ./scripts/verify-pqc.mjs
 
-            // Primary Scheme: Dilithium-5 (ML-DSA-87 / FIPS 204)
-            // Fallback Scheme: SPHINCS+ (SLH-DSA-192 / FIPS 205 Stateless Hash)
-            const activeScheme = (overrideScheme === "SPHINCS_FALLBACK") ? "SPHINCS+ (SLH-DSA-192 / FIPS 205)" : "CRYSTALS-Dilithium-5 (ML-DSA-87 / FIPS 204)";
-            const fallbackStatus = "STANDBY_ACTIVE_FAILOVER_READY";
-
-            console.log(`[PQC STATE] Active Signature Scheme : ${activeScheme}`);
-            console.log(`[PQC STATE] Fallback Engine Status  : ${fallbackStatus}`);
-            console.log(`[PQC STATE] FIPS 205 Stateless Hash : ENFORCED & VERIFIED 🟢`);
-            console.log(`[PQC STATE] 10/10 REAL_HSM Quorum    : RATIFIED (CC EAL6+ / FIPS 140-3 L4)`);
-
-            // Verify Phoenix Recovery SLA (< 142ms)
-            const traceReplayTimeMs = 35.80;
-            console.log(`[SLA BENCHMARK] 12-Stage Trace Replay : ${traceReplayTimeMs} ms (< 142.00 ms SLA Limit)`);
-            
-            if (traceReplayTimeMs > 142.0) {
-              console.error("❌ SLA VIOLATION: Forensic Trace Replay exceeded 142ms threshold.");
-              process.exit(1);
-            }
-            console.log("✅ PQC CRYPTO-AGILITY & SPHINCS+ FALLBACK FULLY VALIDATED 🟢");
-          '
-
-      - name: 🧹 Static Analysis & Type Safety Check
+      - name: 🧹 Lint
         run: npm run lint
 
-      - name: 🎭 Sovereign Integration & Forensic Test Suite
-        run: npm test
+      - name: 🎭 Run tests
+        run: npm test -- --ci
 
-      - name: 🚀 Build Mainnet Release Bundle
+      - name: 🚀 Build release bundle
         run: npm run build
 
-      - name: 📤 Commit & Deploy Sync Status
+      - name: 📤 Commit sync status if changed
+        shell: bash
         run: |
-          git config --global user.name "EP-SOVEREIGN-01"
-          git config --global user.email "sovereign@zyrquen.internal"
-          echo "Ledger-to-GitHub Sync with SPHINCS+ Fallback: 100% PURIFIED & LIVE READY"
+          git config user.name "EP-SOVEREIGN-01"
+          git config user.email "sovereign@zyrquen.internal"
+
+          git add -A
+
+          if git diff --cached --quiet; then
+            echo "No changes to commit."
+            exit 0
+          fi
+
+          git commit -m "chore: sync ledger and PQC status"
+          git push origin HEAD:${GITHUB_REF_NAME}
