@@ -23,6 +23,7 @@ import {
 } from 'lucide-react';
 import { io, Socket } from 'socket.io-client';
 import { playAuditChime, playTone } from './AudioSynthesizer';
+import SovereignChamberConsole from './SovereignChamberConsole';
 
 export interface SovereignChamber {
   id: number;
@@ -108,6 +109,9 @@ export const SovereignChambersControlPlane: React.FC = () => {
   const [verifyResult, setVerifyResult] = useState<MerkleProofResult | null>(null);
   const [isVerifyingSeal, setIsVerifyingSeal] = useState(false);
   const [verifyError, setVerifyError] = useState<string | null>(null);
+
+  // Subview Mode: Master Control Plane vs Cryo Chamber Quantum Inspector
+  const [activeViewMode, setActiveViewMode] = useState<'control_plane' | 'cryo_sentinel'>('control_plane');
 
   // Dynamic API base with fallback support
   const API_BASE = (window as unknown as { ENV_API_BASE?: string }).ENV_API_BASE || '/api';
@@ -422,6 +426,41 @@ export const SovereignChambersControlPlane: React.FC = () => {
     }
   };
 
+  if (activeViewMode === 'cryo_sentinel') {
+    return (
+      <div className="min-h-screen bg-slate-950 text-slate-100 p-4 sm:p-6 font-sans">
+        <div className="max-w-7xl mx-auto space-y-4">
+          <div className="flex flex-wrap items-center justify-between gap-4 p-4 bg-slate-900 border border-slate-800 rounded-2xl shadow-xl">
+            <div className="flex items-center gap-3">
+              <span className="text-xl">🧊</span>
+              <div>
+                <span className="text-[10px] font-mono font-bold text-cyan-400 uppercase tracking-wider block">Sub-Console Mode</span>
+                <span className="text-sm font-bold text-white">Cryo Chamber Sovereign Inspector (Active)</span>
+              </div>
+            </div>
+            <div className="flex items-center gap-2">
+              <button
+                type="button"
+                onClick={() => setActiveViewMode('control_plane')}
+                className="px-4 py-2 bg-slate-800 hover:bg-slate-700 text-slate-200 border border-slate-700 rounded-xl text-xs font-bold font-mono transition-all cursor-pointer"
+              >
+                🏛️ Switch to 18 Chambers Control Plane
+              </button>
+              <button
+                type="button"
+                onClick={() => setActiveViewMode('cryo_sentinel')}
+                className="px-4 py-2 bg-cyan-600 text-slate-950 rounded-xl text-xs font-bold font-mono transition-all cursor-pointer"
+              >
+                🧊 Cryo Inspector
+              </button>
+            </div>
+          </div>
+          <SovereignChamberConsole />
+        </div>
+      </div>
+    );
+  }
+
   return (
     <div className="min-h-screen bg-slate-950 text-slate-100 p-4 sm:p-6 font-sans">
       <div className="max-w-7xl mx-auto space-y-6">
@@ -442,6 +481,16 @@ export const SovereignChambersControlPlane: React.FC = () => {
           </div>
 
           <div className="flex flex-wrap items-center gap-3">
+            {/* Switch to Cryo Chamber Inspector */}
+            <button
+              type="button"
+              onClick={() => setActiveViewMode('cryo_sentinel')}
+              className="px-3.5 py-2 bg-cyan-950 hover:bg-cyan-900 text-cyan-300 border border-cyan-600/60 text-sm font-semibold rounded-lg transition-all cursor-pointer flex items-center gap-1.5 shadow-sm shadow-cyan-950"
+              title="Open Cryo Chamber Sovereign Inspector & 14,902 Batch Console"
+            >
+              <span>🧊 Cryo Inspector</span>
+            </button>
+
             {/* WebSocket / Fallback status */}
             <span
               className={`inline-flex items-center px-3 py-1 rounded-full text-xs font-medium border ${
