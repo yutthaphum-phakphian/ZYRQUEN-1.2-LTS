@@ -2,6 +2,77 @@
 <html lang="en">
   <head>
     <meta charset="UTF-8" />
+    <script>
+      // Suppress benign Vite websocket notices and connection errors in sandboxed iframe environment
+      (function() {
+        var isBenign = function(arg) {
+          if (!arg) return false;
+          try {
+            var str = (arg instanceof Error ? (arg.message + ' ' + (arg.stack || '')) : String(arg)).toLowerCase();
+            return str.indexOf('[vite]') !== -1 ||
+                   str.indexOf('websocket') !== -1 ||
+                   str.indexOf('failed to connect') !== -1 ||
+                   str.indexOf('resizeobserver') !== -1;
+          } catch (e) {
+            return false;
+          }
+        };
+
+        window.onerror = function(msg, url, lineNo, columnNo, error) {
+          if (isBenign(msg) || isBenign(error)) {
+            return true;
+          }
+        };
+
+        window.addEventListener('error', function(event) {
+          if (isBenign(event.message) || isBenign(event.error)) {
+            event.stopImmediatePropagation();
+            event.preventDefault();
+            return true;
+          }
+        }, true);
+
+        window.addEventListener('unhandledrejection', function(event) {
+          if (isBenign(event.reason)) {
+            event.stopImmediatePropagation();
+            event.preventDefault();
+          }
+        }, true);
+
+        var originalWarn = console.warn;
+        var originalError = console.error;
+        var originalLog = console.log;
+        var originalInfo = console.info;
+
+        console.warn = function() {
+          for (var i = 0; i < arguments.length; i++) {
+            if (isBenign(arguments[i])) return;
+          }
+          originalWarn.apply(console, arguments);
+        };
+
+        console.error = function() {
+          for (var i = 0; i < arguments.length; i++) {
+            if (isBenign(arguments[i])) return;
+          }
+          originalError.apply(console, arguments);
+        };
+
+        console.log = function() {
+          for (var i = 0; i < arguments.length; i++) {
+            if (isBenign(arguments[i])) return;
+          }
+          originalLog.apply(console, arguments);
+        };
+
+        console.info = function() {
+          for (var i = 0; i < arguments.length; i++) {
+            if (isBenign(arguments[i])) return;
+          }
+          originalInfo.apply(console, arguments);
+        };
+      })();
+    </script>
     <link rel="icon" type="image/svg+xml" href="/icon.svg" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover" />
     <meta name="theme-color" content="#020617" />
@@ -14,45 +85,6 @@
     <meta name="description" content="Sovereign Operating System & Civilization Intelligence Control Plane - Block #849202 (Frozen v1.2 LTS)" />
     <meta property="og:title" content="ZYRQUEN Ω∞ Sovereign World Engine" />
     <meta property="og:description" content="Sovereign Operating System & Civilization Intelligence Control Plane - Block #849202 (Frozen v1.2 LTS)" />
-    <script>
-      // Suppress benign Vite websocket notices in sandboxed iframe environment
-      (function() {
-        const isBenignVite = function(arg) {
-          if (!arg) return false;
-          try {
-            const str = (arg instanceof Error ? (arg.message + ' ' + arg.stack) : String(arg)).toLowerCase();
-            return str.includes('[vite]') || str.includes('websocket') || str.includes('failed to connect');
-          } catch (e) {
-            return false;
-          }
-        };
-        const originalWarn = console.warn;
-        const originalError = console.error;
-        const originalLog = console.log;
-        const originalInfo = console.info;
-        console.warn = function(...args) {
-          if (args.some(isBenignVite)) return;
-          originalWarn.apply(console, args);
-        };
-        console.error = function(...args) {
-          if (args.some(isBenignVite)) return;
-          originalError.apply(console, args);
-        };
-        console.log = function(...args) {
-          if (args.some(isBenignVite)) return;
-          originalLog.apply(console, args);
-        };
-        console.info = function(...args) {
-          if (args.some(isBenignVite)) return;
-          originalInfo.apply(console, args);
-        };
-        window.addEventListener('unhandledrejection', function(event) {
-          if (isBenignVite(event.reason)) {
-            event.preventDefault();
-          }
-        });
-      })();
-    </script>
   </head>
   <body>
     <div id="root"></div>

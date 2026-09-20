@@ -21,34 +21,44 @@ if (typeof window !== 'undefined' && 'serviceWorker' in navigator) {
 
 // Guard against unhandled clipboard rejection errors and benign ResizeObserver notifications
 if (typeof window !== 'undefined') {
-  window.addEventListener('error', (event) => {
-    const errorMsg = event.message || event.error?.message || String(event);
-    if (
-      errorMsg.includes('ResizeObserver loop completed with undelivered notifications') ||
-      errorMsg.includes('ResizeObserver loop limit exceeded') ||
-      errorMsg.includes('[vite]') ||
-      errorMsg.includes('WebSocket')
-    ) {
-      event.stopImmediatePropagation();
-      event.preventDefault();
-      return true;
-    }
-  });
+  window.addEventListener(
+    'error',
+    (event) => {
+      const errorMsg = event.message || event.error?.message || String(event);
+      if (
+        errorMsg.includes('ResizeObserver loop completed with undelivered notifications') ||
+        errorMsg.includes('ResizeObserver loop limit exceeded') ||
+        errorMsg.includes('[vite]') ||
+        errorMsg.includes('WebSocket') ||
+        errorMsg.includes('failed to connect')
+      ) {
+        event.stopImmediatePropagation();
+        event.preventDefault();
+        return true;
+      }
+    },
+    true
+  );
 
-  window.addEventListener('unhandledrejection', (event) => {
-    const reasonMsg = event.reason?.message || String(event.reason || '');
-    if (
-      reasonMsg.includes('Document is not focused') ||
-      reasonMsg.includes('writeText') ||
-      event.reason?.name === 'NotAllowedError' ||
-      reasonMsg.includes('ResizeObserver') ||
-      reasonMsg.includes('[vite]') ||
-      reasonMsg.includes('WebSocket')
-    ) {
-      event.preventDefault();
-      event.stopPropagation();
-    }
-  });
+  window.addEventListener(
+    'unhandledrejection',
+    (event) => {
+      const reasonMsg = event.reason?.message || String(event.reason || '');
+      if (
+        reasonMsg.includes('Document is not focused') ||
+        reasonMsg.includes('writeText') ||
+        event.reason?.name === 'NotAllowedError' ||
+        reasonMsg.includes('ResizeObserver') ||
+        reasonMsg.includes('[vite]') ||
+        reasonMsg.includes('WebSocket') ||
+        reasonMsg.includes('failed to connect')
+      ) {
+        event.stopImmediatePropagation();
+        event.preventDefault();
+      }
+    },
+    true
+  );
 }
 
 createRoot(document.getElementById('root')!).render(
