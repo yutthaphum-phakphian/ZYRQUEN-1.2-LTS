@@ -27,7 +27,15 @@ export interface CryoChamber {
   history24h: number[];        // 8 historic coherence data points for sparkline
 }
 
-export type SortCriterion = 'coherence_desc' | 'coherence_asc' | 'temp_asc' | 'temp_desc' | 'status_pure' | 'status_unstable';
+export type SortCriterion = 
+  | 'coherence_desc' 
+  | 'coherence_asc' 
+  | 'temp_desc' 
+  | 'temp_asc' 
+  | 'sync_desc' 
+  | 'sync_asc' 
+  | 'status_unstable' 
+  | 'status_pure';
 
 export interface StabilityDataPoint {
   hour: number;
@@ -585,12 +593,14 @@ export const SovereignChamberConsole: React.FC = () => {
   const sortedChambers = useMemo(() => {
     return [...chambers].sort((a, b) => {
       switch (sortCriterion) {
+        case 'temp_desc':      return b.temperature - a.temperature;
+        case 'temp_asc':       return a.temperature - b.temperature;
+        case 'sync_desc':      return b.lastSync.localeCompare(a.lastSync);
+        case 'sync_asc':       return a.lastSync.localeCompare(b.lastSync);
         case 'coherence_desc': return b.coherence - a.coherence;
         case 'coherence_asc':  return a.coherence - b.coherence;
-        case 'temp_asc':       return a.temperature - b.temperature;
-        case 'temp_desc':      return b.temperature - a.temperature;
-        case 'status_pure':    return (a.status === 'pure_green' ? -1 : 1) - (b.status === 'pure_green' ? -1 : 1);
         case 'status_unstable':return (a.status === 'unstable' ? -1 : 1) - (b.status === 'unstable' ? -1 : 1);
+        case 'status_pure':    return (a.status === 'pure_green' ? -1 : 1) - (b.status === 'pure_green' ? -1 : 1);
         default: return 0;
       }
     });
@@ -732,12 +742,14 @@ export const SovereignChamberConsole: React.FC = () => {
 
           <div className="flex flex-wrap items-center gap-2">
             {[
+              { id: 'temp_desc', label: 'Temp High → Low 🌡️' },
+              { id: 'temp_asc', label: 'Temp Low → High ❄️' },
+              { id: 'sync_desc', label: 'Sync Newest ⏱️' },
+              { id: 'sync_asc', label: 'Sync Oldest ⏳' },
               { id: 'status_unstable', label: 'Unstable First ⚠️' },
               { id: 'status_pure', label: 'Pure Green First 🟢' },
               { id: 'coherence_desc', label: 'Coherence High → Low' },
-              { id: 'coherence_asc', label: 'Coherence Low → High' },
-              { id: 'temp_asc', label: 'Temp Cool → Warm' },
-              { id: 'temp_desc', label: 'Temp Warm → Cool' }
+              { id: 'coherence_asc', label: 'Coherence Low → High' }
             ].map(opt => (
               <button
                 key={opt.id}
