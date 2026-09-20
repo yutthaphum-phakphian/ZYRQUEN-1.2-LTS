@@ -26,6 +26,8 @@
         };
         const originalWarn = console.warn;
         const originalError = console.error;
+        const originalLog = console.log;
+        const originalInfo = console.info;
         console.warn = function(...args) {
           if (args.some(isBenignVite)) return;
           originalWarn.apply(console, args);
@@ -33,6 +35,14 @@
         console.error = function(...args) {
           if (args.some(isBenignVite)) return;
           originalError.apply(console, args);
+        };
+        console.log = function(...args) {
+          if (args.some(isBenignVite)) return;
+          originalLog.apply(console, args);
+        };
+        console.info = function(...args) {
+          if (args.some(isBenignVite)) return;
+          originalInfo.apply(console, args);
         };
         window.addEventListener('unhandledrejection', function(event) {
           if (isBenignVite(event.reason)) {

@@ -38,6 +38,7 @@ import { SettingsView } from './components/views/SettingsView';
 import { ProductionReadinessView } from './components/views/ProductionReadinessView';
 import { CouncilView } from './components/views/CouncilView';
 import { LegalView } from './components/views/LegalView';
+import { ForensicAuditStepper } from './components/ForensicAuditStepper';
 import { StudioView } from './components/views/StudioView';
 import { UnifiedMultiverseControlPanel } from './components/views/UnifiedMultiverseControlPanel';
 import { UnifiedAuditPlaybackConsole } from './components/views/UnifiedAuditPlaybackConsole';
@@ -1403,13 +1404,19 @@ function SovereignAppContent() {
     switch (currentView) {
       case 'dashboard':
         return (
-          <DashboardView
-            snapshots={snapshots}
-            verificationGateStatus={verificationGateStatus}
-            onNavigate={setCurrentView}
-            onOpenCertificate={() => setIsCertificateOpen(true)}
-            isForensicAuditMode={isForensicAuditMode}
-          />
+          <div className="space-y-4">
+            <ForensicAuditStepper
+              onAddSystemEvent={addSystemEvent}
+              onNavigateView={setCurrentView}
+            />
+            <DashboardView
+              snapshots={snapshots}
+              verificationGateStatus={verificationGateStatus}
+              onNavigate={setCurrentView}
+              onOpenCertificate={() => setIsCertificateOpen(true)}
+              isForensicAuditMode={isForensicAuditMode}
+            />
+          </div>
         );
       case 'civilization':
         return <CivilizationEngineView onNavigate={setCurrentView} />;
@@ -1731,6 +1738,11 @@ function SovereignAppContent() {
     } else if (actionId === 'view-seals') {
       setCurrentView('ledger');
       showToast('เปิดดูทะเบียน Active Evidence Seals', 'info');
+    } else if (actionId === 'forensic-stepper') {
+      setCurrentView('dashboard');
+      const el = document.getElementById('forensic-audit-stepper');
+      if (el) el.scrollIntoView({ behavior: 'smooth' });
+      showToast('นำทางไปยัง 16-Step Forensic Audit Stepper', 'info');
     }
   }, [handleAddSnapshot, handleExportLegalTriggerMatrixPDF, showToast, snapshots]);
 

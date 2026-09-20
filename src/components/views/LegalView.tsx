@@ -50,8 +50,10 @@ import { safeCopyToClipboard } from '../../utils/clipboard';
 import { ViewType } from '../../types';
 
 import { SystemEvent } from '../SystemEventsSidebar';
+import { ForensicAuditStepper } from '../ForensicAuditStepper';
 
 export type LegalSubTab =
+  | 'forensic-stepper'
   | 'etda-statutes'
   | 'pdpa-enclave'
   | 'ncsa-cii'
@@ -371,6 +373,14 @@ export const LegalView: React.FC<LegalViewProps> = ({
       <div className="flex items-center gap-2 overflow-x-auto pb-1 border-b border-white/10">
         {[
           {
+            id: 'forensic-stepper',
+            labelTh: 'กระบวนการตรวจสอบ ๑๖ ขั้นตอน (16-Step Stepper)',
+            labelEn: '16-Stage Forensic Audit Pipeline & Matrix',
+            icon: Sparkles,
+            badge: '16 STEPS',
+            accent: 'text-cyan-400',
+          },
+          {
             id: 'etda-statutes',
             labelTh: 'พ.ร.บ. ธุรกรรมทางอิเล็กทรอนิกส์ (ม. ๙, ๒๖, ๒๘)',
             labelEn: 'Electronic Transactions Act (Sec 9, 26, 28)',
@@ -466,6 +476,18 @@ export const LegalView: React.FC<LegalViewProps> = ({
           );
         })}
       </div>
+
+      {/* Tab 0: 16-Step Forensic Audit Stepper & Matrix */}
+      {activeTab === 'forensic-stepper' && (
+        <motion.div variants={containerVariants} initial="hidden" animate="visible" className="space-y-6">
+          <motion.div variants={itemVariants}>
+            <ForensicAuditStepper
+              onAddSystemEvent={onAddSystemEvent}
+              onNavigateView={onNavigate}
+            />
+          </motion.div>
+        </motion.div>
+      )}
 
       {/* Tab 1: ETDA Electronic Transactions Act */}
       {activeTab === 'etda-statutes' && (

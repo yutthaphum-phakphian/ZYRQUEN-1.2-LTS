@@ -4,26 +4,18 @@ import App from './App';
 import {ErrorBoundary} from './components/ErrorBoundary';
 import './index.css';
 import './styles/print.css';
-import { registerSW } from 'virtual:pwa-register';
 
 // Register PWA Service Worker for offline capabilities
-if ('serviceWorker' in navigator) {
-  registerSW({
-    onOfflineReady() {
-      console.log('ZYRQUEN Ω∞ is ready to work offline. Sovereign operations are cached.');
-    },
-    onRegisteredSW(swUrl, r) {
-      console.log('ZYRQUEN Ω∞ Service Worker registered:', swUrl);
-    },
-    onRegisterError(error) {
-      console.error('ZYRQUEN Ω∞ Service Worker registration failed:', error);
-    }
-  });
-
+if (typeof window !== 'undefined' && 'serviceWorker' in navigator) {
   window.addEventListener('load', () => {
-    navigator.serviceWorker.register('/sw.js').catch((err) => {
-      console.log('Direct /sw.js registration notice:', err?.message || err);
-    });
+    navigator.serviceWorker
+      .register('/sw.js')
+      .then((reg) => {
+        console.log('ZYRQUEN Ω∞ Service Worker registered:', reg.scope);
+      })
+      .catch((err) => {
+        console.warn('ZYRQUEN Ω∞ Service Worker notice:', err?.message || err);
+      });
   });
 }
 
