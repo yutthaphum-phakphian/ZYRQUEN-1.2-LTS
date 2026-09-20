@@ -50,5 +50,12 @@ export const ChamberSparkline: React.FC<ChamberSparklineProps> = ({
   );
 };
 
+export const Sparkline: React.FC<{ data: number[]; strokeColor: string }> = ({
+  data,
+  strokeColor
+}) => {
+  return <ChamberSparkline data={data} color={strokeColor} />;
+};
+
 export default ChamberSparkline;
 
