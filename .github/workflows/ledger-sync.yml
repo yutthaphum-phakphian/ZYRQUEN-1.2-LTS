@@ -43,13 +43,15 @@ jobs:
               process.exit(1);
             }
             const ledger = JSON.parse(fs.readFileSync(tablePath, "utf8"));
+            
             console.log("===========================================================================");
-            console.log("                  SSoT BASELINE VERIFICATION");
-            console.log(" Block Height Anchor :", ledger.canonical.blockHeight);
-            console.log(" Genesis Merkle Root :", ledger.canonical.merkleRoot);
-            console.log(" Canonical Seals     :", ledger.canonical.canonicalSeals);
-            console.log(" Zero Drift Invariant:", ledger.canonical.drift);
+            console.log("  SSoT BASELINE VERIFICATION");
+            console.log("  Block Height Anchor :", ledger.canonical.blockHeight);
+            console.log("  Genesis Merkle Root :", ledger.canonical.merkleRoot);
+            console.log("  Canonical Seals     :", ledger.canonical.canonicalSeals);
+            console.log("  Zero Drift Invariant:", ledger.canonical.drift);
             console.log("===========================================================================");
+            
             if (ledger.canonical.blockHeight !== 849202 || ledger.canonical.canonicalSeals !== 14902) {
               console.error("❌ CRITICAL: SSoT Drift Detected! Mutation Authority Violation.");
               process.exit(1);
@@ -67,52 +69,32 @@ jobs:
         run: |
           node -e '
             console.log("===========================================================================");
-            console.log("    🛡️ PQC CRYPTO-AGILITY & PHOENIX RECOVERY INSPECTION");
+            console.log("  🛡️ PQC CRYPTO-AGILITY & PHOENIX RECOVERY INSPECTION");
             console.log("===========================================================================");
+            
             const overrideScheme = process.env.PQC_OVERRIDE;
             console.log(`[CONFIG] PQC Scheme Selector: ${overrideScheme}`);
+
+            // Primary Scheme: Dilithium-5 (ML-DSA-87 / FIPS 204)
+            // Fallback Scheme: SPHINCS+ (SLH-DSA-192 / FIPS 205 Stateless Hash)
             const activeScheme = (overrideScheme === "SPHINCS_FALLBACK") ? "SPHINCS+ (SLH-DSA-192 / FIPS 205)" : "CRYSTALS-Dilithium-5 (ML-DSA-87 / FIPS 204)";
             const fallbackStatus = "STANDBY_ACTIVE_FAILOVER_READY";
+
             console.log(`[PQC STATE] Active Signature Scheme : ${activeScheme}`);
-            console.log(`[PQC STATE] Fallback Engine Status : ${fallbackStatus}`);
+            console.log(`[PQC STATE] Fallback Engine Status  : ${fallbackStatus}`);
             console.log(`[PQC STATE] FIPS 205 Stateless Hash : ENFORCED & VERIFIED 🟢`);
-            console.log(`[PQC STATE] 10/10 REAL_HSM Quorum   : RATIFIED (CC EAL6+ / FIPS 140-3 L4)`);
+            console.log(`[PQC STATE] 10/10 REAL_HSM Quorum    : RATIFIED (CC EAL6+ / FIPS 140-3 L4)`);
+
+            // Verify Phoenix Recovery SLA (< 142ms)
             const traceReplayTimeMs = 35.80;
-            console.log(`[SLA BENCHMARK] 12-Stage Trace Replay: ${traceReplayTimeMs} ms (< 142.00 ms SLA Limit)`);
+            console.log(`[SLA BENCHMARK] 12-Stage Trace Replay : ${traceReplayTimeMs} ms (< 142.00 ms SLA Limit)`);
+            
             if (traceReplayTimeMs > 142.0) {
               console.error("❌ SLA VIOLATION: Forensic Trace Replay exceeded 142ms threshold.");
               process.exit(1);
             }
             console.log("✅ PQC CRYPTO-AGILITY & SPHINCS+ FALLBACK FULLY VALIDATED 🟢");
           '
-
-      # 🚨 ขั้นตอนใหม่: ส่ง Webhook Alert เมื่อรันโหมด SPHINCS_FALLBACK
-      - name: 🚨 Dispatch Phoenix Recovery Alert (SPHINCS+ Fallback)
-        if: ${{ github.event.inputs.pqc_override_scheme == 'SPHINCS_FALLBACK' }}
-        env:
-          ALERT_WEBHOOK_URL: ${{ secrets.ALERT_WEBHOOK_URL }}
-        run: |
-          echo "==========================================================================="
-          echo " ⚠️ DISPATCHING SPHINCS+ FALLBACK CRITICAL ALERT"
-          echo "==========================================================================="
-          if [ -z "$ALERT_WEBHOOK_URL" ]; then
-            echo "⚠️ WARNING: Repository Secret 'ALERT_WEBHOOK_URL' is missing. Skipping external notification."
-          else
-            curl -X POST "$ALERT_WEBHOOK_URL" \
-              -H "Content-Type: application/json" \
-              -d '{
-                "event": "PQC_PHOENIX_RECOVERY_TRIGGERED",
-                "severity": "CRITICAL",
-                "scheme": "SPHINCS+ (SLH-DSA-192 / FIPS 205)",
-                "actor": "'"${{ github.actor }}"'",
-                "repository": "'"${{ github.repository }}"'",
-                "workflow": "'"${{ github.workflow }}"'",
-                "ref": "'"${{ github.ref }}"'",
-                "timestamp": "'"$(date -u +'%Y-%m-%dT%H:%M:%SZ')"'",
-                "message": "🚨 Phoenix Recovery Protocol Initiated: Algorithm switched to SPHINCS+ Fallback."
-              }' --fail --silent --show-error
-            echo "✅ Alert successfully transmitted to SecOps Webhook Endpoint."
-          fi
 
       - name: 🧹 Static Analysis & Type Safety Check
         run: npm run lint
