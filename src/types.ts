@@ -466,3 +466,5 @@ export function isJobTerminalState(state: JobLifecycleState): boolean {
   return state === 'UPLOADED' || state === 'COMPLETED' || state === 'TERMINAL_BLOCKED' || state === 'TERMINAL_REJECTED';
 }
 
+export type { SystemEvent } from './components/SystemEventsSidebar';
+

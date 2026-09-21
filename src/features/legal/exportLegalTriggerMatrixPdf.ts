@@ -66,7 +66,7 @@ export function exportLegalTriggerMatrixPdf(): void {
       5: { cellWidth: 30 },
       6: { cellWidth: 18, fontStyle: 'bold' },
     },
-    didDrawPage: (data: AutoTableHookData) => {
+    didDrawPage: (data: any) => {
       const totalPages = doc.getNumberOfPages();
       doc.setFontSize(7.5);
       doc.setTextColor(148, 163, 184);
