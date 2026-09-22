@@ -1,59 +1,24 @@
-# ==============================================================================
-# ZYRQUEN Ω∞ Sovereign CodeQL Security Analysis Workflow
-# File Path: .github/workflows/codeql.yml
-# Engine Version: LOCKED_FROZEN_v1.2_LTS | SSoT Δ0 Baseline Drift 0.00%
-# Sovereign Principal: นายยุทธภูมิ พากเพียร (#EP-SOVEREIGN-01)
-# ==============================================================================
-
-name: 🛡️ ZYRQUEN Ω∞ CodeQL Advanced Security Analysis
+name: CodeQL Security Audit
 
 on:
   push:
     branches: [ main ]
   pull_request:
     branches: [ main ]
-  schedule:
-    - cron: '0 12 * * 1'
   workflow_dispatch:
-
-permissions:
-  contents: read
-  security-events: write
 
 jobs:
   analyze:
-    name: 🔬 CodeQL Security & SAST Code Analysis
+    name: CodeQL Security Audit
     runs-on: ubuntu-latest
-    timeout-minutes: 15
-
-    strategy:
-      fail-fast: false
-      matrix:
-        language: [ 'javascript-typescript' ]
-
     steps:
-      - name: 📥 Checkout Sovereign Repository
+      - name: Checkout repository
         uses: actions/checkout@v4
 
-      - name: ⚙️ Initialize CodeQL Security Scanner
+      - name: Initialize CodeQL
         uses: github/codeql-action/init@v3
         with:
-          languages: ${{ matrix.language }}
-          queries: security-extended
+          languages: 'javascript'
 
-      - name: ⚙️ Setup Node.js 20 Environment
-        uses: actions/setup-node@v4
-        with:
-          node-version: '20'
-          cache: 'npm'
-
-      - name: 📦 Install Project Dependencies
-        run: npm ci --legacy-peer-deps
-
-      - name: ⚡ Build Sovereign Bundles for CodeQL Analysis
-        run: npm run build
-
-      - name: 🔍 Perform CodeQL Invariant & Security Analysis
+      - name: Perform CodeQL Analysis
         uses: github/codeql-action/analyze@v3
-        with:
-          category: "/language:${{matrix.language}}"

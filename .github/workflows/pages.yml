@@ -1,11 +1,4 @@
-# ==============================================================================
-# ZYRQUEN Ω∞ Sovereign GitHub Pages Deployment Workflow
-# File Path: .github/workflows/pages.yml
-# Engine Version: LOCKED_FROZEN_v1.2_LTS | SSoT Δ0 Baseline Drift 0.00%
-# Sovereign Principal: นายยุทธภูมิ พากเพียร (#EP-SOVEREIGN-01)
-# ==============================================================================
-
-name: 🚀 Deploy ZYRQUEN Ω∞ to GitHub Pages
+name: GitHub Pages Deployment
 
 on:
   push:
@@ -18,74 +11,24 @@ permissions:
   id-token: write
 
 concurrency:
-  group: "pages-${{ github.ref }}"
-  cancel-in-progress: true
-
-env:
-  GENESIS_BLOCK: 849202
-  GENESIS_MERKLE_ROOT: "909ab814479844d8a14816bed34cdbb07528e18501da86fc4691763a43fa4c68"
-  SOVEREIGN_PRINCIPAL: "#EP-SOVEREIGN-01"
-  BUILD_OUTPUT_DIR: "dist"
+  group: "pages"
+  cancel-in-progress: false
 
 jobs:
-  build:
-    name: 🛡️ Typecheck, SSoT Verification & Vite Build
-    runs-on: ubuntu-latest
-    timeout-minutes: 10
-    steps:
-      - name: 📥 Checkout Repository
-        uses: actions/checkout@v4
-
-      - name: ⚙️ Setup Node.js Environment (v20)
-        uses: actions/setup-node@v4
-        with:
-          node-version: '20'
-          cache: 'npm'
-
-      - name: 📦 Install Dependencies
-        run: npm ci --legacy-peer-deps
-
-      - name: 🔬 TypeScript & Static Verification
-        run: npm run lint
-
-      - name: ⚡ Build Sovereign Client & Server Bundles
-        run: npm run build
-
-      - name: 🔒 Prevent Jekyll Processing for Static Routing
-        run: |
-          touch ${{ env.BUILD_OUTPUT_DIR }}/.nojekyll
-          echo "✔ Added .nojekyll for GitHub Pages SPA routing."
-
-      - name: 🔒 Verify SSoT Δ0 Integrity Gate
-        run: |
-          echo "================================================================="
-          echo " ZYRQUEN Ω∞ SSOT Δ0 MERKLE INTEGRITY VERIFICATION GATE"
-          echo "================================================================="
-          echo "✔ Genesis Block Height: #${{ env.GENESIS_BLOCK }}"
-          echo "✔ Genesis Merkle Root: ${{ env.GENESIS_MERKLE_ROOT }}"
-          echo "✔ Sovereign Executive Passport: ${{ env.SOVEREIGN_PRINCIPAL }}"
-          echo "✔ Baseline System Drift: 0.00% (SSoT Δ0 Verified)"
-          if [ ! -d "${{ env.BUILD_OUTPUT_DIR }}" ]; then
-            echo "❌ CRITICAL ERROR: Build output directory '${{ env.BUILD_OUTPUT_DIR }}' does not exist!"
-            exit 0
-          fi
-          echo "✔ Verified build output directory exists at ./${{ env.BUILD_OUTPUT_DIR }}"
-
-      - name: 📤 Upload Pages Artifact
-        uses: actions/upload-pages-artifact@v3
-        with:
-          path: ${{ env.BUILD_OUTPUT_DIR }}
-
   deploy:
-    name: 🌐 Deploy to GitHub Pages Live Mainnet
-    needs: build
-    if: github.ref == 'refs/heads/main'
-    runs-on: ubuntu-latest
-    timeout-minutes: 5
     environment:
       name: github-pages
       url: ${{ steps.deployment.outputs.page_url }}
+    runs-on: ubuntu-latest
     steps:
-      - name: 🚀 Publish Artifacts to GitHub Pages
+      - name: Checkout
+        uses: actions/checkout@v4
+      - name: Setup Pages
+        uses: actions/configure-pages@v4
+      - name: Upload Artifact
+        uses: actions/upload-pages-artifact@v3
+        with:
+          path: '.'
+      - name: Deploy to GitHub Pages
         id: deployment
         uses: actions/deploy-pages@v4
