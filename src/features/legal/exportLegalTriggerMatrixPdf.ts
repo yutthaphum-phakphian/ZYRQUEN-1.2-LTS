@@ -6,7 +6,7 @@ import { playTone } from '@/components/AudioSynthesizer';
 
 interface AutoTableHookData {
   pageNumber: number;
-  pageCount: number;
+  pageCount?: number;
 }
 
 export function exportLegalTriggerMatrixPdf(): void {

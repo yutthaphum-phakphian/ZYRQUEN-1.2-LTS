@@ -42,6 +42,7 @@ import { speakSystemAlert } from '../../utils/textToSpeechService';
 import { LedgerExportService } from '../../services/ledgerExportService';
 import { ViewType } from '../../types';
 import { GovernanceHealthHeatmap as ChambersHealthHeatmap } from '../GovernanceHealthHeatmap';
+import { BulkLockdownHeatmap } from '../BulkLockdownHeatmap';
 
 export type SealSeverity = 'NOMINAL' | 'LOW_JITTER' | 'CRITICAL_ANOMALY' | 'RECONCILED';
 
@@ -284,7 +285,7 @@ export const GovernanceHealthHeatmap: React.FC<GovernanceHealthHeatmapProps> = (
   const [selectedSeal, setSelectedSeal] = useState<HardwareSealRecord | null>(null);
   const [isSweeping, setIsSweeping] = useState<boolean>(false);
   const [sweepProgress, setSweepProgress] = useState<number>(100);
-  const [activeTab, setActiveTab] = useState<'chambers' | 'seals'>('chambers');
+  const [activeTab, setActiveTab] = useState<'chambers' | 'seals' | 'bulk_lockdown'>('chambers');
   const [viewMode, setViewMode] = useState<'QUORUM_NODES_SPARKLINE' | 'SEALS_MATRIX'>('QUORUM_NODES_SPARKLINE');
   const [currentPage, setCurrentPage] = useState<number>(1);
   const itemsPerPage = 800; // Efficient block rendering for high responsiveness
@@ -511,6 +512,22 @@ export const GovernanceHealthHeatmap: React.FC<GovernanceHealthHeatmapProps> = (
             <ShieldCheck className="w-4 h-4 text-cyan-400" />
             <span>14,902 HARDWARE SEALS SSoT</span>
           </button>
+
+          <button
+            id="tab-btn-bulk-lockdown"
+            onClick={() => {
+              setActiveTab('bulk_lockdown');
+              playTone(650, 0.04);
+            }}
+            className={`px-4 py-2 rounded-xl transition-all flex items-center gap-2 cursor-pointer ${
+              activeTab === 'bulk_lockdown'
+                ? 'bg-rose-500/20 text-rose-300 border border-rose-500/40 font-bold shadow-[0_0_15px_rgba(244,63,94,0.3)]'
+                : 'text-zinc-400 hover:text-white'
+            }`}
+          >
+            <Lock className="w-4 h-4 text-rose-400" />
+            <span>2FA BULK LOCKDOWN (CH-00..CH-17)</span>
+          </button>
         </div>
 
         <div className="text-[11px] font-mono text-zinc-400 flex items-center gap-2 px-3 py-1">
@@ -524,6 +541,8 @@ export const GovernanceHealthHeatmap: React.FC<GovernanceHealthHeatmapProps> = (
           onNavigateToView={onNavigateToView}
           onAddSystemEvent={onAddSystemEvent}
         />
+      ) : activeTab === 'bulk_lockdown' ? (
+        <BulkLockdownHeatmap />
       ) : (
         <>
           {/* Top Banner */}

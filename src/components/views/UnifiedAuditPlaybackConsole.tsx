@@ -25,6 +25,7 @@ import {
 import { playAuditChime, playTone } from '../AudioSynthesizer';
 import { systemStateStore } from '../../store/systemStateStore';
 import { LiveReplayVerificationDashboard } from '../LiveReplayVerificationDashboard';
+import ForensicAuditPlaybackDashboard from '../security/ForensicAuditPlaybackDashboard';
 
 export interface TraceStageDefinition {
   id: number;
@@ -641,6 +642,9 @@ export const UnifiedAuditPlaybackConsole: React.FC = () => {
           </div>
         </div>
       </div>
+
+      {/* Forensic Audit Playback Live Dashboard (12-Stage Deterministic Replay) */}
+      <ForensicAuditPlaybackDashboard />
     </div>
   );
 };
