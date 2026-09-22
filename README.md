@@ -1,4 +1,4 @@
-# 🌌 ZYRQUEN Ω∞ Sovereign Kernel v4.16
+สงมาใหม่# 🌌 ZYRQUEN Ω∞ Sovereign Kernel v4.16
 
 [![Chamber Console CI](https://github.com/yutthaphum-phakphian/ZYRQUEN-1.2-LTS/actions/workflows/chamber-console-ci.yml/badge.svg)](https://github.com/yutthaphum-phakphian/ZYRQUEN-1.2-LTS/actions/workflows/chamber-console-ci.yml)
 [![GitHub Pages Deployment](https://github.com/yutthaphum-phakphian/ZYRQUEN-1.2-LTS/actions/workflows/pages.yml/badge.svg)](https://github.com/yutthaphum-phakphian/ZYRQUEN-1.2-LTS/actions/workflows/pages.yml)
@@ -154,56 +154,3 @@
 ## 💬 Personal Motto
 
 > *"Build boldly. Verify carefully. Document clearly. Improve continuously."*
-# 1. แก้ไขไฟล์ chamber-console-ci.yml ให้รันผ่าน
-cat << 'EOF' > .github/workflows/chamber-console-ci.yml
-name: Chamber Console CI
-
-on:
-  push:
-      branches: [ main ]
-        workflow_dispatch:
-
-        jobs:
-          test:
-              runs-on: ubuntu-latest
-                  steps:
-                        - name: Checkout Repository
-                                uses: actions/checkout@v4
-                                      - name: Verify Chamber Console
-                                              run: |
-                                                        echo "🟢 Chamber Console CI Passed"
-                                                                  exit 0
-                                                                  EOF
-
-                                                                  # 2. Commit และ Push ขึ้น GitHub
-                                                                  git add .github/workflows/chamber-console-ci.yml
-                                                                  git commit -m "fix(ci): update chamber console ci badge to green passing"
-                                                                  git pull --rebase origin main
-                                                                  git push origin main
-                                                                  # 1. แก้ไขไฟล์ chamber-console-ci.yml ให้รันผ่าน
-                                                                  cat << 'EOF' > .github/workflows/chamber-console-ci.yml
-                                                                  name: Chamber Console CI
-
-                                                                  on:
-                                                                    push:
-                                                                        branches: [ main ]
-                                                                          workflow_dispatch:
-
-                                                                          jobs:
-                                                                            test:
-                                                                                runs-on: ubuntu-latest
-                                                                                    steps:
-                                                                                          - name: Checkout Repository
-                                                                                                  uses: actions/checkout@v4
-                                                                                                        - name: Verify Chamber Console
-                                                                                                                run: |
-                                                                                                                          echo "🟢 Chamber Console CI Passed"
-                                                                                                                                    exit 0
-                                                                                                                                    EOF
-
-                                                                                                                                    # 2. Commit และ Push ขึ้น GitHub
-                                                                                                                                    git add .github/workflows/chamber-console-ci.yml
-                                                                                                                                    git commit -m "fix(ci): update chamber console ci badge to green passing"
-                                                                                                                                    git pull --rebase origin main
-                                                                                                                                    git push origin main
-                                                                                                                                    
