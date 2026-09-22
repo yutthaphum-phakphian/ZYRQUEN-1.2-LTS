@@ -1,42 +1,45 @@
 # ==============================================================================
-# ZYRQUEN Ω∞ Sovereign Mainnet Deployment Workflow (E2E Ultra Edition)
-# File Path: .github/workflows/deploy.yml
+# ZYRQUEN Ω∞ Sovereign CodeQL Security Analysis Workflow
+# File Path: .github/workflows/codeql.yml
 # Engine Version: LOCKED_FROZEN_v1.2_LTS | SSoT Δ0 Baseline Drift 0.00%
-# Sovereign Principal Architect: นายยุทธภูมิ พากเพียร (#EP-SOVEREIGN-01)
+# Sovereign Principal: นายยุทธภูมิ พากเพียร (#EP-SOVEREIGN-01)
 # ==============================================================================
 
-name: 🚀 ZYRQUEN Ω∞ Sovereign Mainnet Deployment Pipeline
+name: 🛡️ ZYRQUEN Ω∞ CodeQL Advanced Security Analysis
 
 on:
   push:
     branches: [ main ]
+  pull_request:
+    branches: [ main ]
+  schedule:
+    - cron: '0 12 * * 1'
   workflow_dispatch:
 
 permissions:
   contents: read
-  pages: write
-  id-token: write
-
-concurrency:
-  group: "deploy-${{ github.ref }}"
-  cancel-in-progress: true
-
-env:
-  GENESIS_BLOCK: 849202
-  GENESIS_MERKLE_ROOT: "909ab814479844d8a14816bed34cdbb07528e18501da86fc4691763a43fa4c68"
-  CANONICAL_SEALS_COUNT: 14902
-  SOVEREIGN_PRINCIPAL: "#EP-SOVEREIGN-01"
-  BUILD_OUTPUT_DIR: "dist"
-  PQC_ALGORITHM: "Dilithium-5 (ML-DSA-87 / FIPS 204)"
+  security-events: write
 
 jobs:
-  build-test-and-verify:
-    name: 🛡️ Typecheck, Unit/E2E Tests, SSoT Δ0 Audit & Vite Build
+  analyze:
+    name: 🔬 CodeQL Security & SAST Code Analysis
     runs-on: ubuntu-latest
-    timeout-minutes: 20
+    timeout-minutes: 15
+
+    strategy:
+      fail-fast: false
+      matrix:
+        language: [ 'javascript-typescript' ]
+
     steps:
       - name: 📥 Checkout Sovereign Repository
         uses: actions/checkout@v4
+
+      - name: ⚙️ Initialize CodeQL Security Scanner
+        uses: github/codeql-action/init@v3
+        with:
+          languages: ${{ matrix.language }}
+          queries: security-extended
 
       - name: ⚙️ Setup Node.js 20 Environment
         uses: actions/setup-node@v4
@@ -47,140 +50,10 @@ jobs:
       - name: 📦 Install Project Dependencies
         run: npm ci --legacy-peer-deps
 
-      - name: 🔬 Execute TypeScript Compiler Check (tsc)
-        run: npm run lint
-
-      - name: 🧪 Run Automated Unit & Integration Tests
-        run: |
-          if npm run | grep -q "test"; then
-            echo "🧪 Executing Test Suite (npm run test)..."
-            npm run test -- --watch=false --passWithNoTests
-          else
-            echo "✔ No 'test' script found - Skipping unit test phase."
-          fi
-
-      - name: 🎭 Install Playwright Browsers for E2E Testing
-        run: |
-          if npm run | grep -q "test:e2e" || [ -f "playwright.config.ts" ] || [ -f "playwright.config.js" ]; then
-            echo "🎭 Installing Playwright Chromium..."
-            npx playwright install --with-deps chromium
-          else
-            echo "✔ Playwright configuration not detected - Skipping browser installation."
-          fi
-
-      - name: 🌐 Run Playwright End-to-End (E2E) Tests
-        run: |
-          if npm run | grep -q "test:e2e"; then
-            echo "🌐 Executing Playwright E2E Tests (npm run test:e2e)..."
-            npm run test:e2e
-          elif [ -f "playwright.config.ts" ] || [ -f "playwright.config.js" ]; then
-            echo "🌐 Executing Playwright E2E Tests (npx playwright test)..."
-            npx playwright test
-          else
-            echo "✔ No E2E suite detected - Skipping Playwright execution."
-          fi
-
-      - name: 📊 Upload Playwright Test Report on Failure
-        if: failure()
-        uses: actions/upload-artifact@v4
-        with:
-          name: playwright-e2e-report
-          path: playwright-report/
-          retention-days: 7
-
-      - name: ⚡ Build Sovereign Client & Server Bundles
+      - name: ⚡ Build Sovereign Bundles for CodeQL Analysis
         run: npm run build
 
-      - name: 🔒 Prevent Jekyll Processing & Clean Server Bundles for Pages Target
-        run: |
-          touch ${{ env.BUILD_OUTPUT_DIR }}/.nojekyll
-          echo "✔ Added .nojekyll for static routing."
-
-      - name: 🔒 SSoT Δ0 Genesis Merkle Root & Build Integrity Gate
-        run: |
-          echo "================================================================="
-          echo " ZYRQUEN Ω∞ MAINNET DEPLOYMENT MERKLE INTEGRITY GATE "
-          echo "================================================================="
-          echo "✔ Anchored Genesis Block: #${{ env.GENESIS_BLOCK }}"
-          echo "✔ Target Genesis Merkle Root: ${{ env.GENESIS_MERKLE_ROOT }}"
-          echo "✔ Canonical Seals Count: ${{ env.CANONICAL_SEALS_COUNT }}"
-          echo "✔ Sovereign Lead Principal: ${{ env.SOVEREIGN_PRINCIPAL }}"
-          echo "✔ Cryptographic Signature Scheme: ${{ env.PQC_ALGORITHM }}"
-          echo "✔ Baseline System Drift: 0.00% (SSoT Δ0 Verified)"
-          
-          if [ ! -d "${{ env.BUILD_OUTPUT_DIR }}" ]; then
-            echo "❌ CRITICAL ERROR: Output directory '${{ env.BUILD_OUTPUT_DIR }}' missing!"
-            exit 1
-          fi
-          echo "✔ Verified build output directory exists at ./${{ env.BUILD_OUTPUT_DIR }}"
-
-      - name: 📜 Generate Distribution SHA-256 Manifest & SSoT Δ0 Stamp
-        run: |
-          echo "Generating SHA-256 Checksums for production distribution..."
-          cd ${{ env.BUILD_OUTPUT_DIR }}
-          find . -type f ! -name "checksums.txt" -exec sha256sum {} + > checksums.txt
-          echo "--- SSoT Δ0 ATTESTATION METADATA ---" >> checksums.txt
-          echo "GenesisBlock: #${{ env.GENESIS_BLOCK }}" >> checksums.txt
-          echo "GenesisMerkleRoot: ${{ env.GENESIS_MERKLE_ROOT }}" >> checksums.txt
-          echo "Principal: ${{ env.SOVEREIGN_PRINCIPAL }}" >> checksums.txt
-          echo "BuildTimestamp: $(date -u +'%Y-%m-%dT%H:%M:%SZ')" >> checksums.txt
-          echo "✔ Manifest checksums.txt generated successfully."
-
-      - name: 📤 Upload Pages Artifact
-        uses: actions/upload-pages-artifact@v3
+      - name: 🔍 Perform CodeQL Invariant & Security Analysis
+        uses: github/codeql-action/analyze@v3
         with:
-          path: ${{ env.BUILD_OUTPUT_DIR }}
-
-  deploy-mainnet:
-    name: 🌐 Deploy to Mainnet Production (GitHub Pages)
-    needs: build-test-and-verify
-    if: github.ref == 'refs/heads/main'
-    runs-on: ubuntu-latest
-    timeout-minutes: 5
-    outputs:
-      page_url: ${{ steps.deployment.outputs.page_url }}
-    environment:
-      name: github-pages
-      url: ${{ steps.deployment.outputs.page_url }}
-    steps:
-      - name: 🚀 Publish Production Artifacts to Mainnet
-        id: deployment
-        uses: actions/deploy-pages@v4
-
-  notify-status:
-    name: 🔔 Dispatch SSoT Δ0 Deployment Telemetry & Webhook
-    needs: [build-test-and-verify, deploy-mainnet]
-    if: always() && github.ref == 'refs/heads/main'
-    runs-on: ubuntu-latest
-    steps:
-      - name: 📣 Dispatch Slack / Discord Webhook Notification
-        env:
-          DISCORD_WEBHOOK: ${{ secrets.DISCORD_WEBHOOK_URL }}
-          SLACK_WEBHOOK: ${{ secrets.SLACK_WEBHOOK_URL }}
-          BUILD_STATUS: ${{ needs.deploy-mainnet.result }}
-          COMMIT_SHA: ${{ github.sha }}
-          PAGE_URL: ${{ needs.deploy-mainnet.outputs.page_url }}
-        run: |
-          STATUS_EMOJI="✅"
-          if [ "$BUILD_STATUS" != "success" ]; then
-            STATUS_EMOJI="❌"
-          fi
-          
-          PAYLOAD=$(cat <<EOF
-          {
-            "content": "$STATUS_EMOJI **ZYRQUEN Ω∞ Mainnet Deployment Status: ${BUILD_STATUS^^}**\n• **Genesis Block:** #${{ env.GENESIS_BLOCK }}\n• **Merkle Drift:** 0.00% (SSoT Δ0 Verified)\n• **E2E Testing:** PASSED\n• **Commit:** \`${COMMIT_SHA:0:7}\`\n• **Principal:** ${{ env.SOVEREIGN_PRINCIPAL }}\n• **Live Mainnet URL:** ${PAGE_URL:-"N/A"}"
-          }
-          EOF
-          )
-
-          if [ -n "$DISCORD_WEBHOOK" ]; then
-            echo "Sending notification to Discord..."
-            curl -H "Content-Type: application/json" -X POST -d "$PAYLOAD" "$DISCORD_WEBHOOK" || true
-          fi
-
-          if [ -n "$SLACK_WEBHOOK" ]; then
-            echo "Sending notification to Slack..."
-            curl -H "Content-Type: application/json" -X POST -d "{\"text\": \"$STATUS_EMOJI ZYRQUEN Ω∞ Deployment: ${BUILD_STATUS^^} (${COMMIT_SHA:0:7})\"}" "$SLACK_WEBHOOK" || true
-          fi
-
-          echo "✔ Telemetry notification process completed."
+          category: "/language:${{matrix.language}}"

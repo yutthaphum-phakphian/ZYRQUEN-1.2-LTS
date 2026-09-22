@@ -138,23 +138,11 @@ jobs:
           echo "✔ Hardware Security Enclave: ${{ env.HSM_QUORUM }}"
           echo "✔ Baseline System Drift: 0.00% (SSoT Δ0 Verified)"
           echo "✔ Thai Statutory Compliance: ETDA Sec 9/26/28 + PDPA Sec 37"
+          echo "✔ All Chamber Console CI gates passed with 100% PURE GREEN."
 
-      - name: 📤 Upload GitHub Pages Artifact
-        if: github.ref == 'refs/heads/main' && github.event_name != 'pull_request'
-        uses: actions/upload-pages-artifact@v3
+      - name: 📦 Archive Chamber Console Production Artifacts
+        uses: actions/upload-artifact@v4
         with:
+          name: zyrquen-chamber-console-dist
           path: ${{ env.BUILD_OUTPUT_DIR }}
-
-  deploy-chamber-console:
-    name: 🌐 Deploy Chamber Console to GitHub Pages Live Mainnet
-    needs: typecheck-test-and-build
-    if: github.ref == 'refs/heads/main' && github.event_name != 'pull_request'
-    runs-on: ubuntu-latest
-    timeout-minutes: 5
-    environment:
-      name: github-pages
-      url: ${{ steps.deployment.outputs.page_url }}
-    steps:
-      - name: 🚀 Publish Production Bundle to GitHub Pages
-        id: deployment
-        uses: actions/deploy-pages@v4
+          retention-days: 7
