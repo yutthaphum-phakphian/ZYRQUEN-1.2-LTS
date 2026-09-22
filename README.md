@@ -1,11 +1,14 @@
 # 🌌 ZYRQUEN Ω∞ Sovereign Kernel v4.16
 
-[![Chamber Console CI](https://github.com/yuttaphum-phakphian/ZYRQUEN-1.2-LTS/actions/workflows/chamber-console-ci.yml/badge.svg)](https://github.com/yuttaphum-phakphian/ZYRQUEN-1.2-LTS/actions/workflows/chamber-console-ci.yml)
-[![GitHub Pages Deployment](https://github.com/yuttaphum-phakphian/ZYRQUEN-1.2-LTS/actions/workflows/pages.yml/badge.svg)](https://github.com/yuttaphum-phakphian/ZYRQUEN-1.2-LTS/actions/workflows/pages.yml)
-[![Senate Gate Benchmark](https://github.com/yuttaphum-phakphian/ZYRQUEN-1.2-LTS/actions/workflows/helm-benchmark.yml/badge.svg)](https://github.com/yuttaphum-phakphian/ZYRQUEN-1.2-LTS/actions/workflows/helm-benchmark.yml)
-[![Ledger Sync & PQC Agility](https://github.com/yuttaphum-phakphian/ZYRQUEN-1.2-LTS/actions/workflows/ledger-sync.yml/badge.svg)](https://github.com/yuttaphum-phakphian/ZYRQUEN-1.2-LTS/actions/workflows/ledger-sync.yml)
-[![CodeQL Security Audit](https://github.com/yuttaphum-phakphian/ZYRQUEN-1.2-LTS/actions/workflows/codeql.yml/badge.svg)](https://github.com/yuttaphum-phakphian/ZYRQUEN-1.2-LTS/actions/workflows/codeql.yml)
-[![Docker GHCR Publish](https://github.com/yuttaphum-phakphian/ZYRQUEN-1.2-LTS/actions/workflows/docker-publish.yml/badge.svg)](https://github.com/yuttaphum-phakphian/ZYRQUEN-1.2-LTS/actions/workflows/docker-publish.yml)
+[![ZYRQUEN CI](https://img.shields.io/github/actions/workflow/status/yuttaphum-phakphian/ZYRQUEN-1.2-LTS/ci.yml?branch=main&label=ZYRQUEN%20CI&logo=github&style=flat-square&color=00ffcc&logoColor=white)](https://github.com/yuttaphum-phakphian/ZYRQUEN-1.2-LTS/actions/workflows/ci.yml)
+[![GitHub Pages](https://img.shields.io/github/actions/workflow/status/yuttaphum-phakphian/ZYRQUEN-1.2-LTS/pages.yml?branch=main&label=GitHub%20Pages&logo=github&style=flat-square&color=06b6d4&logoColor=white)](https://yuttaphum-phakphian.github.io/ZYRQUEN-1.2-LTS/)
+[![Senate Gate](https://img.shields.io/github/actions/workflow/status/yuttaphum-phakphian/ZYRQUEN-1.2-LTS/senate-gate.yml?branch=main&label=Senate%20Gate&logo=github&style=flat-square&color=10b981&logoColor=white)](https://github.com/yuttaphum-phakphian/ZYRQUEN-1.2-LTS/actions/workflows/senate-gate.yml)
+[![Ledger Sync](https://img.shields.io/github/actions/workflow/status/yuttaphum-phakphian/ZYRQUEN-1.2-LTS/ledger-sync.yml?branch=main&label=Ledger%20Sync%20%26%20PQC&logo=github&style=flat-square&color=8b5cf6&logoColor=white)](https://github.com/yuttaphum-phakphian/ZYRQUEN-1.2-LTS/actions/workflows/ledger-sync.yml)
+[![CodeQL Security](https://img.shields.io/github/actions/workflow/status/yuttaphum-phakphian/ZYRQUEN-1.2-LTS/codeql.yml?branch=main&label=CodeQL%20Security&logo=github&style=flat-square&color=3b82f6&logoColor=white)](https://github.com/yuttaphum-phakphian/ZYRQUEN-1.2-LTS/actions/workflows/codeql.yml)
+[![Docker GHCR](https://img.shields.io/github/actions/workflow/status/yuttaphum-phakphian/ZYRQUEN-1.2-LTS/docker-publish.yml?branch=main&label=Docker%20GHCR&logo=docker&style=flat-square&color=22c55e&logoColor=white)](https://github.com/yuttaphum-phakphian/ZYRQUEN-1.2-LTS/actions/workflows/docker-publish.yml)
+[![Zero Drift](https://img.shields.io/badge/Zero%20Drift-%CE%940.00%25-00ffcc?style=flat-square)](https://github.com/yuttaphum-phakphian/ZYRQUEN-1.2-LTS)
+[![Kernel Status](https://img.shields.io/badge/Kernel-LOCKED__FROZEN__v1.2__LTS-emerald?style=flat-square)](https://github.com/yuttaphum-phakphian/ZYRQUEN-1.2-LTS)
+[![ETDA Compliant](https://img.shields.io/badge/ETDA-B.E.2544%20%C2%A79%2C%2026%2C%2028-amber?style=flat-square)](https://github.com/yuttaphum-phakphian/ZYRQUEN-1.2-LTS)
 
 > **Status:** `LOCKED_FROZEN_v1.2_LTS` (10/10 ALL GREEN 🟢, LIVE PRODUCTION)  
 > **Deployment Certificate:** `ZQ-GREEN-DEP-849202-3908`  

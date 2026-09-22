@@ -5,11 +5,13 @@ import { ErrorBoundary } from './components/ErrorBoundary';
 import './index.css';
 import './styles/print.css';
 
-if (typeof window!== 'undefined' && 'serviceWorker' in navigator) {
+if (typeof window !== 'undefined' && 'serviceWorker' in navigator) {
   window.addEventListener('load', () => {
-    navigator.serviceWorker.register('/sw.js')
-     .then(reg => console.log('ZYRQUEN Ω∞ SW:', reg.scope))
-     .catch(err => console.warn('SW notice:', err?.message || err));
+    const swUrl = `${import.meta.env.BASE_URL || './'}sw.js`;
+    navigator.serviceWorker
+      .register(swUrl)
+      .then(reg => console.log('ZYRQUEN Ω∞ SW registered:', reg.scope))
+      .catch(err => console.warn('SW notice:', err?.message || err));
   });
 }
 

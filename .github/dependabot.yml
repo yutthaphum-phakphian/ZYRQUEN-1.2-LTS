@@ -16,8 +16,6 @@ updates:
       - "yuttaphum-phakphian"
     labels:
       - "dependencies"
-      - "security"
-      - "sovereign-kernel"
     commit-message:
       prefix: "deps(npm)"
       include: "scope"
@@ -30,11 +28,16 @@ updates:
         patterns:
           - "vite*"
           - "@vitejs/*"
+      node-types:
+        patterns:
+          - "@types/node*"
     ignore:
       # Freeze major breaking updates for locked core LTS dependencies
       - dependency-name: "react"
         update-types: ["version-update:semver-major"]
       - dependency-name: "react-dom"
+        update-types: ["version-update:semver-major"]
+      - dependency-name: "@types/node"
         update-types: ["version-update:semver-major"]
 
   # 2. GitHub Actions CI/CD Workflows

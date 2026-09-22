@@ -9,7 +9,7 @@ import path from 'path';
 // SHA-256 Digest: 4c53a5422dc19d557cfe47b81ac43fc156d768b64ddcdfa82d9169fad03614ab
 
 export default defineConfig({
-  base: '/',
+  base: './',
   plugins: [
     tailwindcss(),
     react(),
@@ -76,23 +76,50 @@ export default defineConfig({
       output: {
         manualChunks(id: string) {
           if (id.includes('node_modules')) {
-            if (id.includes('three')) return 'vendor-three';
-            if (id.includes('lucide-react')) return 'vendor-lucide';
-            if (id.includes('jspdf') || id.includes('jszip')) return 'vendor-pdf';
-            if (id.includes('d3') || id.includes('recharts')) return 'vendor-charts';
-            if (id.includes('motion')) return 'vendor-motion';
-            if (id.includes('socket.io') || id.includes('ws')) return 'vendor-socket';
-            if (id.includes('qrcode') || id.includes('jsqr')) return 'vendor-qr';
-            if (id.includes('@google/genai')) return 'vendor-ai';
-            if (
-              id.includes('react') ||
-              id.includes('react-dom') ||
-              id.includes('react-router-dom') ||
-              id.includes('react-is')
-            ) {
-              return 'vendor-react';
+            // 1. Heavy 3D Graphics & Cryogenic Visualizer (Lazy/Deferred Load)
+            if (id.includes('three')) {
+              return 'vendor-three-3d';
             }
-            return 'vendor-core';
+            // 2. Heavy Forensic Master Dossier PDF & Zip Generation Engine
+            if (id.includes('jspdf') || id.includes('jspdf-autotable') || id.includes('jszip')) {
+              return 'vendor-forensic-pdf';
+            }
+            // 3. Telemetry Charts & D3 Mathematical Visualizations
+            if (id.includes('d3') || id.includes('recharts')) {
+              return 'vendor-charts-telemetry';
+            }
+            // 4. Motion & Animation Layer
+            if (id.includes('motion')) {
+              return 'vendor-motion-engine';
+            }
+            // 5. Iconography Vector Glyphs
+            if (id.includes('lucide-react')) {
+              return 'vendor-icons-lucide';
+            }
+            // 6. QR Code Forensic Scanner & Camera Processing
+            if (id.includes('qrcode') || id.includes('qrcode.react') || id.includes('jsqr')) {
+              return 'vendor-scanner-qr';
+            }
+            // 7. AI Threat Intelligence & Autonomous Copilot Engine
+            if (id.includes('@google/genai')) {
+              return 'vendor-ai-copilot';
+            }
+            // 8. Real-time Mesh & Telemetry WebSockets
+            if (id.includes('socket.io-client') || id.includes('socket.io') || id.includes('ws')) {
+              return 'vendor-realtime-socket';
+            }
+            // 9. Core Framework Runtime
+            if (
+              id.includes('react/') ||
+              id.includes('react-dom/') ||
+              id.includes('react-router-dom/') ||
+              id.includes('react-is/') ||
+              id.includes('scheduler/')
+            ) {
+              return 'vendor-react-core';
+            }
+            // 10. General Vendor Utilities
+            return 'vendor-common-utils';
           }
         },
       },
