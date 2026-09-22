@@ -59,7 +59,7 @@ jobs:
           cache: 'npm'
 
       - name: 📦 Install Project Dependencies
-        run: npm ci || npm install
+        run: npm ci --legacy-peer-deps || npm install
 
       - name: 🔬 Verify Single Source of Truth (SSoT Δ0) Merkle Root
         run: |
