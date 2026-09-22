@@ -31,9 +31,9 @@ concurrency:
   cancel-in-progress: true
 
 env:
-  GENESIS_BLOCK: 849202
+  GENESIS_BLOCK: "849202"
   GENESIS_MERKLE_ROOT: "909ab814479844d8a14816bed34cdbb07528e18501da86fc4691763a43fa4c68"
-  CANONICAL_SEALS_COUNT: 14902
+  CANONICAL_SEALS_COUNT: "14902"
   SOVEREIGN_PRINCIPAL: "#EP-SOVEREIGN-01"
   PQC_ALGORITHM: "Dilithium-5 (ML-DSA-87 / FIPS 204)"
   HSM_QUORUM: "10/10 REAL_HSM (Utimaco FIPS 140-3 Level 4)"
@@ -46,6 +46,9 @@ jobs:
     steps:
       - name: 📥 Checkout Sovereign Repository
         uses: actions/checkout@v4
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
+          persist-credentials: true
 
       - name: ⚙️ Setup Python 3.12 Environment
         uses: actions/setup-python@v5
@@ -59,7 +62,7 @@ jobs:
           cache: 'npm'
 
       - name: 📦 Install Project Dependencies
-        run: npm ci --legacy-peer-deps || npm install
+        run: npm ci --legacy-peer-deps
 
       - name: 🔬 Verify Single Source of Truth (SSoT Δ0) Merkle Root
         run: |
@@ -95,16 +98,16 @@ jobs:
         run: |
           mkdir -p evidence
           python3 -c "
-          import json, time
+          import json, time, os
           receipt = {
               'sync_timestamp_utc': time.strftime('%Y-%m-%dT%H:%M:%SZ', time.gmtime()),
-              'genesis_block': ${{ env.GENESIS_BLOCK }},
-              'genesis_merkle_root': '${{ env.GENESIS_MERKLE_ROOT }}',
-              'canonical_seals': ${{ env.CANONICAL_SEALS_COUNT }},
+              'genesis_block': int(os.environ.get('GENESIS_BLOCK', '849202')),
+              'genesis_merkle_root': os.environ.get('GENESIS_MERKLE_ROOT', ''),
+              'canonical_seals': int(os.environ.get('CANONICAL_SEALS_COUNT', '14902')),
               'ssot_delta': 'Δ0.00%',
-              'hsm_quorum': '${{ env.HSM_QUORUM }}',
-              'pqc_signature': '${{ env.PQC_ALGORITHM }}',
-              'sovereign_principal': '${{ env.SOVEREIGN_PRINCIPAL }}',
+              'hsm_quorum': os.environ.get('HSM_QUORUM', ''),
+              'pqc_signature': os.environ.get('PQC_ALGORITHM', ''),
+              'sovereign_principal': os.environ.get('SOVEREIGN_PRINCIPAL', ''),
               'thai_legal_compliance': ['ETDA_Sec_9', 'ETDA_Sec_26', 'ETDA_Sec_28', 'PDPA_Sec_37'],
               'status': 'PASSED_100_PERCENT_PURE_GREEN'
           }
