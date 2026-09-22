@@ -59,13 +59,13 @@ export default defineConfig({
   ],
   resolve: {
     alias: {
-      '@': path.resolve(__dirname, './src'),
+      '@': path.resolve(process.cwd(), './src'),
     },
     dedupe: ['react', 'react-dom'],
   },
   server: {
     port: 3000,
-    host: true,
+    host: '0.0.0.0',
     strictPort: true,
   },
   build: {
@@ -74,11 +74,13 @@ export default defineConfig({
     chunkSizeWarningLimit: 2500,
     rollupOptions: {
       output: {
-        manualChunks: {
-          vendor: ['react', 'react-dom'],
-          graphics: ['three'],
-          lucide: ['lucide-react'],
-          pdf: ['jspdf', 'jspdf-autotable'],
+        manualChunks(id: string) {
+          if (id.includes('node_modules')) {
+            if (id.includes('three')) return 'graphics';
+            if (id.includes('lucide-react')) return 'lucide';
+            if (id.includes('jspdf')) return 'pdf';
+            if (id.includes('react') || id.includes('react-dom') || id.includes('react-router-dom')) return 'vendor';
+          }
         },
       },
     },
