@@ -4,11 +4,6 @@ import { ETDA_PDPA_TRIGGERS, TRIGGER_PQC_HASHES } from '@/config/sovereignConfig
 import { triggerVibration } from '@/utils/vibration';
 import { playTone } from '@/components/AudioSynthesizer';
 
-interface AutoTableHookData {
-  pageNumber: number;
-  pageCount: number;
-}
-
 export function exportLegalTriggerMatrixPdf(): void {
   triggerVibration('snapshot');
   playTone(659.25, 0.15, 'sine');
@@ -66,7 +61,7 @@ export function exportLegalTriggerMatrixPdf(): void {
       5: { cellWidth: 30 },
       6: { cellWidth: 18, fontStyle: 'bold' },
     },
-    didDrawPage: (data: AutoTableHookData) => {
+    didDrawPage: (data) => {
       const totalPages = doc.getNumberOfPages();
       doc.setFontSize(7.5);
       doc.setTextColor(148, 163, 184);

@@ -22,7 +22,7 @@ import {
   Trash2,
   Download,
 } from 'lucide-react';
-import { QrReader } from 'react-qr-reader';
+import { QrReader } from '../QrReader';
 import jsQR from 'jsqr';
 import { systemStateStore, CustodianRegistrySnapshot } from '../../store/systemStateStore';
 import { COUNCIL_MEMBERS } from '../../data/councilData';
