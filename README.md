@@ -1,4 +1,4 @@
-สงมาใหม่# 🌌 ZYRQUEN Ω∞ Sovereign Kernel v4.16
+# 🌌 ZYRQUEN Ω∞ Sovereign Kernel v4.16
 
 [![Chamber Console CI](https://github.com/yutthaphum-phakphian/ZYRQUEN-1.2-LTS/actions/workflows/chamber-console-ci.yml/badge.svg)](https://github.com/yutthaphum-phakphian/ZYRQUEN-1.2-LTS/actions/workflows/chamber-console-ci.yml)
 [![GitHub Pages Deployment](https://github.com/yutthaphum-phakphian/ZYRQUEN-1.2-LTS/actions/workflows/pages.yml/badge.svg)](https://github.com/yutthaphum-phakphian/ZYRQUEN-1.2-LTS/actions/workflows/pages.yml)
