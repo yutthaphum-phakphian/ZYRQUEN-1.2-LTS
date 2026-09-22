@@ -43,13 +43,18 @@ jobs:
           cache: 'npm'
 
       - name: 📦 Install Dependencies
-        run: npm ci --legacy-peer-deps || npm install
+        run: npm ci --legacy-peer-deps
 
-      - name: 🔬 Execute TypeScript Compiler Check (tsc)
-        run: npx tsc --noEmit
+      - name: 🔬 TypeScript & Static Verification
+        run: npm run lint
 
-      - name: ⚡ Build Vite Static Production Distribution
+      - name: ⚡ Build Sovereign Client & Server Bundles
         run: npm run build
+
+      - name: 🔒 Prevent Jekyll Processing for Static Routing
+        run: |
+          touch ${{ env.BUILD_OUTPUT_DIR }}/.nojekyll
+          echo "✔ Added .nojekyll for GitHub Pages SPA routing."
 
       - name: 🔒 Verify SSoT Δ0 Integrity Gate
         run: |
