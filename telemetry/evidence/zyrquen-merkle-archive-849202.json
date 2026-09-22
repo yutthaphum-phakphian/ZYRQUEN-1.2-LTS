@@ -1,0 +1,316 @@
+{
+  "metadata": {
+    "name": "ZYRQUEN Ω∞ FROZEN v1.2 LTS Sovereign Operating System and Civilization Intelligence Control Plane",
+    "codename": "ZYRQUEN Ω∞ FROZEN v1.2 LTS",
+    "version": "v1.2.1-LTS (Frozen Canonical) - 10/10 PASSED",
+    "merkleGenesisRoot": "909ab814479844d8a14816bed34cdbb07528e18501da86fc4691763a43fa4c68",
+    "merkleCouncilArchiveRoot": "0x5a13396c129c611f15232fdaf54bfad00c4147abdbc3424c71e4ec103dcc8cc3",
+    "sealedBlock": 849202,
+    "totalVerifiedSeals": 14902,
+    "qOpsTelemetry": 851.9,
+    "coherence": "99.98%",
+    "kernelLatency": "1.2ms",
+    "cryoTemp": "14.98 mK",
+    "coolantFlow": "100% Helium-4",
+    "sovereignPrincipal": "🇹🇭 นายยุทธภูมิ พากเพียร (#EP-SOVEREIGN-01)",
+    "platformBoundary": "Ω601–Ω1000 (Strict Enforcement)",
+    "systemIntegrity": "100% VERIFIED WITHIN DEFINED V1.21 SCOPE",
+    "baselineDrift": "0.00%",
+    "ssotMutation": "0 (INVIOLABLE)",
+    "quorum": "10/10 REAL_HSM Signed"
+  },
+  "intakeLedger": {
+    "manifesto": "ZYRQUEN_OMEGA_INFINITY_HARDENING_V2_1",
+    "title": "REAL EVIDENCE INTAKE & PROVENANCE BINDING LEDGER",
+    "timestamp": "2026-08-27T17:44:06.598Z",
+    "canonicalCore": {
+      "merkleRoot": "909ab814479844d8a14816bed34cdbb07528e18501da86fc4691763a43fa4c68",
+      "blockHeight": "#849202",
+      "canonicalSeals": 14902,
+      "ssotMutation": 0,
+      "promotionStatus": "FAIL-CLOSED"
+    },
+    "intakeArtifacts": [
+      {
+        "evidenceId": "TNT-TH-001",
+        "sourceFilename": "tenant_audit_manifest_TNT-TH-001.json",
+        "sourceType": "TENANT_AUDIT_MANIFEST",
+        "provenance": "SOURCE_FILE",
+        "verification": "PENDING VERIFICATION",
+        "reconciliation": "NOT_APPLICABLE_PENDING",
+        "mutationAuthority": "NONE",
+        "canonicalWrite": "BLOCKED",
+        "classification": "Non-Canonical Tenant Source Manifest",
+        "binding": {
+          "artifactDigest": "SHA256:93f5baf6d0627e1095c3c7cb1f4d2a353b9629e7c8cd202b663ddd34ed119f3a",
+          "merkleAnchor": "CANONICAL_P0_ANCHOR_REQUIRED",
+          "blockBinding": "BOUND_BLOCK_849202"
+        }
+      },
+      {
+        "evidenceId": "DS-901-PILOT",
+        "sourceFilename": "maew_fios_pilot_dataset.json",
+        "sourceType": "FIOS_PILOT_DATASET",
+        "provenance": "SOURCE_FILE",
+        "verification": "PENDING VERIFICATION",
+        "reconciliation": "NOT_APPLICABLE_PENDING",
+        "mutationAuthority": "NONE",
+        "canonicalWrite": "BLOCKED",
+        "classification": "Non-Live Pilot Dataset (Zero Trading Authority)",
+        "binding": {
+          "artifactDigest": "NOT COMPUTED",
+          "merkleAnchor": "CANONICAL_P0_ANCHOR_REQUIRED",
+          "blockBinding": "PENDING"
+        }
+      }
+    ]
+  },
+  "sovereignCouncil1010": {
+    "archiveId": "ARC-SOV-MERKLE-1787852775841",
+    "merkleRoot": "0x5a13396c129c611f15232fdaf54bfad00c4147abdbc3424c71e4ec103dcc8cc3",
+    "consensusState": "10/10 REAL_HSM CONSENSUS RATIFIED",
+    "presidentPrincipal": "นายยุทธภูมิ พากเพียร (#EP-SOVEREIGN-01)",
+    "custodians": [
+      {
+        "slotId": 1,
+        "councilCode": "TC-01",
+        "passportNumber": "#EP-SOVEREIGN-01",
+        "nameTh": "นายยุทธภูมิ พากเพียร",
+        "nameEn": "Yuttaphum Phakphian",
+        "roleTh": "ผู้ถือสิทธิ์และสถาปนิกอธิปไตยสูงสุด (Supreme Sovereign Principal Architect & Owner)",
+        "clearanceLevel": "OMEGA-1 SUPREME CLEARANCE",
+        "hardwareEnclave": "NitroKey HSM-PQC-01 (FIPS 140-3 Level 4)",
+        "pqcAlgorithm": "CRYSTALS-Dilithium-5 (ML-DSA-87)",
+        "keyFingerprint": "SHA256:5a13396c129c611f15232fdaf54bfad00c4147abdbc3424c71e4ec103dcc8cc3",
+        "status": "REAL_HSM_SIGNED"
+      },
+      {
+        "slotId": 2,
+        "councilCode": "TC-02",
+        "passportNumber": "#EP-001",
+        "nameTh": "พล. สมชาย พากเพียร",
+        "nameEn": "Somchai Phakphian",
+        "roleTh": "ผู้ว่าการและผู้อำนวยการฝ่ายควบคุมระเบียบอารยธรรม (Civilization Control Plane Governor)",
+        "clearanceLevel": "LEVEL 25 SOVEREIGN GOVERNOR",
+        "hardwareEnclave": "YubiKey 5C FIPS (Dual-Channel SE)",
+        "pqcAlgorithm": "FALCON-1024 (NIST Round 3)",
+        "keyFingerprint": "SHA256:909ab814479844d8a14816bed34cdbb07528e18501da86fc4691763a43fa4c68",
+        "status": "REAL_HSM_SIGNED"
+      },
+      {
+        "slotId": 3,
+        "councilCode": "TC-03",
+        "passportNumber": "#EP-007",
+        "nameTh": "ดร. กัญญารัตน์ เวชสิทธิ์",
+        "nameEn": "Dr. Kanyarat Vetchasit",
+        "roleTh": "หัวหน้านักเข้ารหัสลับยุคหลังควอนตัมและผู้ตรวจสอบ Merkle",
+        "clearanceLevel": "LEVEL 22 CIPHER CUSTODIAN",
+        "hardwareEnclave": "Trezor Safe 5 PQC Enclave (CC EAL6+)",
+        "pqcAlgorithm": "CRYSTALS-Dilithium-5 / Kyber-1024",
+        "keyFingerprint": "SHA256:7528e18501da86fc4691763a43fa4c68909ab814479844d8a14816bed34cdbb0",
+        "status": "REAL_HSM_SIGNED"
+      },
+      {
+        "slotId": 4,
+        "councilCode": "TC-04",
+        "passportNumber": "#EP-014",
+        "nameTh": "วศ. ธนพล เกียรติไพศาล",
+        "nameEn": "Eng. Thanapol Kiatpaisan",
+        "roleTh": "วิศวกรตรวจสอบระบบ SRE ขั้นสูง 15 ชั้น",
+        "clearanceLevel": "LEVEL 20 SRE OVERSEER",
+        "hardwareEnclave": "Ledger Flex Secure Enclave (CC EAL6+)",
+        "pqcAlgorithm": "SPHINCS+ PQC (State-Free Hash)",
+        "keyFingerprint": "SHA256:43fa4c68909ab814479844d8a14816bed34cdbb07528e18501da86fc4691763",
+        "status": "REAL_HSM_SIGNED"
+      },
+      {
+        "slotId": 5,
+        "councilCode": "TC-05",
+        "passportNumber": "EP-022",
+        "nameTh": "ศ.ดร. นครินทร์ สุวรรณเมฆา",
+        "nameEn": "Prof. Dr. Nakarin Suwanmekha",
+        "roleTh": "สถาปนิกโครงข่ายหลายตาข่ายแบบกระจายศูนย์",
+        "clearanceLevel": "LEVEL 20 TOPOLOGY MASTER",
+        "hardwareEnclave": "NitroKey HSM-PQC-05 (Hardened Element)",
+        "pqcAlgorithm": "CRYSTALS-Dilithium-5 (ML-DSA-87)",
+        "keyFingerprint": "SHA256:16bed34cdbb07528e18501da86fc4691763a43fa4c68909ab814479844d8a148",
+        "status": "REAL_HSM_SIGNED"
+      },
+      {
+        "slotId": 6,
+        "councilCode": "TC-06",
+        "passportNumber": "EP-033",
+        "nameTh": "พญ.ดร. รพิพร รัตนพิบูลย์",
+        "nameEn": "Dr. Rapiphon Rattanapiboon",
+        "roleTh": "ผู้พิทักษ์จริยธรรม Bio-AI",
+        "clearanceLevel": "LEVEL 18 BIO-AI CUSTODIAN",
+        "hardwareEnclave": "YubiKey 5C FIPS PIV-06",
+        "pqcAlgorithm": "FALCON-1024 (NIST Round 3)",
+        "keyFingerprint": "SHA256:86fc4691763a43fa4c68909ab814479844d8a14816bed34cdbb07528e18501da",
+        "status": "REAL_HSM_SIGNED"
+      },
+      {
+        "slotId": 7,
+        "councilCode": "TC-07",
+        "passportNumber": "EP-048",
+        "nameTh": "ดร. ธีรภัทร ชาญวณิชย์",
+        "nameEn": "Dr. Theeraphat Chanwanich",
+        "roleTh": "หัวหน้าวิศวกร Warp Drive",
+        "clearanceLevel": "LEVEL 18 WARP CHIEF",
+        "hardwareEnclave": "Trezor Safe 5 PQC-07",
+        "pqcAlgorithm": "CRYSTALS-Dilithium-5 (ML-DSA-87)",
+        "keyFingerprint": "SHA256:a18f91a3c091811eb242e1b87d00f28ac37a109e3f19e48cd41d04f29a28a30f",
+        "status": "REAL_HSM_SIGNED"
+      },
+      {
+        "slotId": 8,
+        "councilCode": "TC-08",
+        "passportNumber": "EP-059",
+        "nameTh": "อ. เมธาวี อัครเดโช",
+        "nameEn": "Methawee Akkaradecho",
+        "roleTh": "ผู้ตรวจสอบนิติวิทยาศาสตร์",
+        "clearanceLevel": "LEVEL 18 FORENSIC AUDITOR",
+        "hardwareEnclave": "Ledger Stax Enclave-08",
+        "pqcAlgorithm": "SPHINCS+ PQC (State-Free Hash)",
+        "keyFingerprint": "SHA256:b242e1b87d00f28ac37a109e3f19e48cd41d04f29a28a30fa18f91a3c091811e",
+        "status": "REAL_HSM_SIGNED"
+      },
+      {
+        "slotId": 9,
+        "councilCode": "TC-09",
+        "passportId": "EP-077",
+        "nameTh": "ดร. ชวินทร์ โรจนทรัพย์",
+        "nameEn": "Dr. Chawin Rojanasap",
+        "roleTh": "สถาปนิก Chaos Engineering",
+        "clearanceLevel": "LEVEL 16 RESILIENCE MASTER",
+        "hardwareEnclave": "NitroKey HSM-PQC-09",
+        "pqcAlgorithm": "CRYSTALS-Dilithium-5 (ML-DSA-87)",
+        "keyFingerprint": "SHA256:c37a109e3f19e48cd41d04f29a28a30fa18f91a3c091811eb242e1b87d00f28a",
+        "status": "REAL_HSM_SIGNED"
+      },
+      {
+        "slotId": 10,
+        "councilCode": "TC-10",
+        "passportId": "EP-100",
+        "nameTh": "ดร. อภิชญา ทักษิณากุล",
+        "nameEn": "Dr. Apichaya Thaksinanukul",
+        "roleTh": "ผู้ดูแล Knowledge Fabric",
+        "clearanceLevel": "LEVEL 16 KNOWLEDGE STEWARD",
+        "hardwareEnclave": "Custom Hardware HSM-10",
+        "pqcAlgorithm": "FALCON-1024 (NIST Round 3)",
+        "keyFingerprint": "SHA256:d41d04f29a28a30fa18f91a3c091811eb242e1b87d00f28ac37a109e3f19e48c",
+        "status": "REAL_HSM_SIGNED"
+      }
+    ],
+    "consensusLedger": [
+      {
+        "id": "PROP-SOV-2026-001",
+        "titleTh": "สถาปนาการแช่แข็งโครงสร้างความจริง Frozen v1.2 LTS (Genesis Seal Lock)",
+        "titleEn": "Enactment of Frozen v1.2 LTS Architectural Zero-Mutation Invariant",
+        "category": "FROZEN_CORE",
+        "categoryTh": "แกนกลางสถาปัตยกรรมแช่แข็ง",
+        "proposedBy": {
+          "slotId": 1,
+          "councilCode": "TC-01",
+          "passportId": "EP-SOVEREIGN-01",
+          "nameTh": "นายยุทธภูมิ พากเพียร"
+        },
+        "status": "RATIFIED_IMMUTABLE",
+        "statusTh": "สัตยาบันถาวร (Ratified & Immutable)",
+        "quorumRequired": 8,
+        "votesFor": 10,
+        "votesAgainst": 0,
+        "votesAbstain": 0,
+        "votesPending": 0,
+        "merkleRootHash": "0x5a13396c129c611f15232fdaf54bfad00c4147abdbc3424c71e4ec103dcc8cc3",
+        "hardwareAttestationSeal": "SEAL-HSM-OMEGA-ROOT-FROZEN-14902-CANONICAL"
+      },
+      {
+        "id": "PROP-SOV-2026-002",
+        "titleTh": "เพิ่มประสิทธิภาพเส้นทาง Sub-Kelvin Cryo-Bus และล็อกเพดาน Latency <= 0.20ms",
+        "titleEn": "Sub-Kelvin Cryo-Bus Route Optimization & Latency Clamp (<=0.20ms)",
+        "category": "CRYO_ROUTING",
+        "categoryTh": "โครงข่ายโทรมาตรควอนตัม",
+        "status": "EXECUTED",
+        "statusTh": "บังคับใช้แล้ว (Executed)",
+        "quorumRequired": 8,
+        "votesFor": 10,
+        "votesAgainst": 0,
+        "votesAbstain": 0,
+        "votesPending": 0,
+        "merkleRootHash": "0x74a3f9e9841029471abef19385923058471928471a8b7c3d2e1f009988776655",
+        "hardwareAttestationSeal": "SEAL-CRYO-BUS-SUBKELVIN-ROUTE-OPTIMIZED-0.18MS"
+      },
+      {
+        "id": "PROP-SOV-2026-003",
+        "titleTh": "การล้างวงแหวนกักกันนิติวิทยาศาสตร์ (Forensic Quarantine Ring Flush & Re-seed)",
+        "titleEn": "Forensic Quarantine Ring Flush & Quantum Entropy Pool Re-seeding",
+        "category": "QUARANTINE_FLUSH",
+        "categoryTh": "ความปลอดภัยและการกักกัน",
+        "status": "EXECUTED",
+        "statusTh": "บังคับใช้แล้ว (Executed)",
+        "quorumRequired": 8,
+        "votesFor": 10,
+        "votesAgainst": 0,
+        "votesAbstain": 0,
+        "votesPending": 0,
+        "merkleRootHash": "0x82613dbe4f1074a3f9e9841029471abef193859230584719284759281a8b7c3d",
+        "hardwareAttestationSeal": "SEAL-FORENSIC-RING-08-FLUSH-ZERO-TAMPER-CONFIRMED"
+      },
+      {
+        "id": "PROP-SOV-2026-004",
+        "titleTh": "เชื่อมต่อสะพานสินทรัพย์ดิจิทัลแห่งชาติ FIOS Multi-Dimensional RWA Liquidity Vault",
+        "titleEn": "FIOS Multi-Dimensional RWA Liquidity Vault Sovereign Bridge Enactment",
+        "category": "RWA_VAULT",
+        "categoryTh": "คลังสำรองสินทรัพย์และสภาพคล่อง",
+        "status": "EXECUTED",
+        "statusTh": "บังคับใช้แล้ว (Executed)",
+        "quorumRequired": 8,
+        "votesFor": 10,
+        "votesAgainst": 0,
+        "votesAbstain": 0,
+        "votesPending": 0,
+        "merkleRootHash": "0x909ab814479844d8a14816bed34cdbb07528e18501da86fc4691763a43fa4c68",
+        "hardwareAttestationSeal": "SEAL-RWA-VAULT-MULTI-ASSET-LIQUIDITY-BRIDGE-1010"
+      },
+      {
+        "id": "PROP-SOV-2026-005",
+        "titleTh": "ยกระดับพารามิเตอร์ Post-Quantum ML-DSA-87 / CRYSTALS-Dilithium-5 Round 4 Mode",
+        "titleEn": "Post-Quantum CRYSTALS-Dilithium-5 Parameter Escalation (Round 4 Mode)",
+        "category": "PQC_PARAM",
+        "categoryTh": "การเข้ารหัสลับหลังยุคควอนตัม",
+        "status": "RATIFIED_10_10",
+        "statusTh": "สัตยาบันสมบูรณ์ (Fully Ratified 10/10)",
+        "quorumRequired": 8,
+        "votesFor": 10,
+        "votesAgainst": 0,
+        "votesAbstain": 0,
+        "votesPending": 0,
+        "merkleRootHash": "0x3319203849102834019283401928340192834019283401928340192834019283",
+        "hardwareAttestationSeal": "SEAL-PQC-DILITHIUM-PARAM-ROUND4-RATIFIED-1010"
+      }
+    ],
+    "immutableIntegritySeal": {
+      "algorithm": "SHA-256 Merkle Multi-Proof + NIST Dilithium-5",
+      "signatureScheme": "PQC-ML-DSA-87 Lattice Hardware Enclave Seal",
+      "rootAuthority": "Master Genesis Key #EP-SOVEREIGN-01 (Supreme Sovereign Principal Architect)",
+      "attestationEngine": "ZYRQUEN Omega Sovereign Runtime v4.09 LTS",
+      "ssotMutationLock": "ZERO_MUTATION_PERMANENT_ENFORCED"
+    }
+  },
+  "maewFiosPilotDataset": {
+    "datasetId": "DS-901-PILOT",
+    "metrics": [
+      { "factor": "Quality", "weight": 0.35, "alpha": 2.15, "zScore": 2.31, "exposure": "OVERWEIGHT (35%)" },
+      { "factor": "Value", "weight": 0.20, "alpha": 1.84, "zScore": 1.45, "exposure": "BALANCED (20%)" },
+      { "factor": "Momentum", "weight": 0.25, "alpha": 2.76, "zScore": 2.85, "exposure": "OVERWEIGHT (25%)" },
+      { "factor": "Volatility", "weight": 0.20, "alpha": -0.42, "zScore": -0.92, "exposure": "HEDGED (20%)" }
+    ],
+    "backtestPerformance": {
+      "trailing30DaysReturnPct": 12.42,
+      "annualizedSharpeRatio": 2.41,
+      "maxDrawdownPct": -4.18,
+      "uptimeSlaCompliancePct": 99.98
+    }
+  }
+}

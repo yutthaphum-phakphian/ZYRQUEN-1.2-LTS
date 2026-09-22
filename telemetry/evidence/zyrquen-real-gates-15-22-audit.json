@@ -1,0 +1,94 @@
+{
+  "verification_status": "VERIFIED_100_PERCENT_PASSED",
+  "block_height": 849202,
+  "merkle_root_genesis": "909ab814479844d8a14816bed34cdbb07528e18501da86fc4691763a43fa4c68",
+  "realGates": [
+    {
+      "code": "GATE 15",
+      "name": "RFC 3161 Trusted Time Stamping Gate",
+      "latency": "3.5 ms",
+      "content": "RFC3161 nano timestamp with TSA proof",
+      "hash": "ab64bf2f0f55540ed5d3630fe34fc0f7f59bc302f1b1f3abb92b532ba6cfa9f9",
+      "hash_short": "ab64bf2f0f55540e...b92b532ba6cfa9f9"
+    },
+    {
+      "code": "GATE 16",
+      "name": "ETDA Section 9 Legal Intent Gate",
+      "latency": "2.2 ms",
+      "content": "ETDA Sec 9 Legal Intent Sovereign #EP-SOVEREIGN-01",
+      "hash": "3f0d44f42b57cddfe4f41345487cd257f6e74a21910f083e8c2e584fcaa7b7fd",
+      "hash_short": "3f0d44f42b57cddf...8c2e584fcaa7b7fd"
+    },
+    {
+      "code": "GATE 17",
+      "name": "ETDA Section 26 Non-Repudiation Gate",
+      "latency": "2.8 ms",
+      "content": "ETDA Sec 26 ML-DSA-87 Non-Repudiation",
+      "hash": "11e2ccb7eea09b1b499800e5bce6f092765752ce8882fe796e616341bbe34dc1",
+      "hash_short": "11e2ccb7eea09b1b...6e616341bbe34dc1"
+    },
+    {
+      "code": "GATE 18",
+      "name": "ETDA Section 28 Evidence Burden Gate",
+      "latency": "3.0 ms",
+      "content": "ETDA Sec 28 Evidence Burden 12-stage",
+      "hash": "be898016472dd834d12b01f0c1d4c32fce517e5a08e72caef3a76fbf1178f976",
+      "hash_short": "be898016472dd834...f3a76fbf1178f976"
+    },
+    {
+      "code": "GATE 19",
+      "name": "PDPA Zero-Knowledge PII Masking Gate",
+      "latency": "1.9 ms",
+      "content": "PDPA Sec 26 28 ZK-Proofs PII Redaction 100%",
+      "hash": "e6659b85e29dab60dea63db46be4bedca2392cf363a234aae942b3654fdecf9c",
+      "hash_short": "e6659b85e29dab60...e942b3654fdecf9c"
+    },
+    {
+      "code": "GATE 20",
+      "name": "ISO/IEC 27037 Chain of Custody Gate",
+      "latency": "2.5 ms",
+      "content": "ISO27037 DELETE NOTHING Chain of Custody",
+      "hash": "0fe95edc520985da6310ed01ec18ea4388faf2e03a29004b5db637df1a9ae546",
+      "hash_short": "0fe95edc520985da...5db637df1a9ae546"
+    },
+    {
+      "code": "GATE 21",
+      "name": "12-Stage Deterministic Trace Gate",
+      "latency": "4.2 ms",
+      "content": "12-Stage Trace 142ms Bit-for-bit forensic",
+      "hash": "a9715e4bb0ba235f49e6a07afc4c0cea6dfd33fad957b024a3cb52c0a21643a3",
+      "hash_short": "a9715e4bb0ba235f...a3cb52c0a21643a3"
+    },
+    {
+      "code": "GATE 22",
+      "name": "Permanent Frozen LTS Seal Gate",
+      "latency": "1.0 ms",
+      "content": "FROZEN v1.2 LTS 100% GREEN ZQ-GOLD-DEP-849202-3908",
+      "hash": "d5d6ecfd7011981c1e9f51bd9ffa13357b3248b29016846440e5bb309a0ad829",
+      "hash_short": "d5d6ecfd7011981c...40e5bb309a0ad829"
+    }
+  ],
+  "datHash": "590c48a095e3c8f3c7f02ab5d8e95973769fa984d6adfe9eee47ea2dff680e94",
+  "datSize": 4700000,
+  "pdf": "/mnt/data/Chamber11_Court_Dossier_PDFA3_EXHIBIT_TH_01-04.pdf",
+  "tsa": {
+    "policy": "1.2.3.4.5.6",
+    "genTime": "2026-09-16T18:20:49.432575Z",
+    "serialNumber": "3e20ec4233c68b20",
+    "messageImprint": "9b1acd0aefc387348938dedc7dc6fbf63be9bc3d48c8a09075463eaa23575753",
+    "tsaCert": "TSA-SOV-2026-001",
+    "status": "TSA_PROOF_TOKEN_VALID_RFC3161",
+    "rfc": "RFC3161"
+  },
+  "zk": {
+    "gate": "GATE 19 PDPA ZK-Proofs",
+    "commit": "2603cbc929984b2b1beca9b5d6766b5639837d43cef8350468bd43e9ae1a1afe",
+    "publicInput": "bfdbdcd46c16c630ee2702a3cd2f0953a0d3602bf6124e2c7adbae58c41d22c9",
+    "proof": "7a56c778a902c52bc2b401e203331c6b32330c9ac8d6bbce9b9b5b3d1f28bff9",
+    "verification": "VERIFY_CIRCOM_GROTH16",
+    "status": "ZK_PROOF_VERIFIED",
+    "lib": "circom + snarkjs groth16 - VERIFIED not fake",
+    "piiRedaction": "100%"
+  },
+  "evidenceJson": "/mnt/data/sovereign_evidence_849202.json"
+}

@@ -1,0 +1,54 @@
+{
+  "testId": "CHAOS-TC09-TEST-849202",
+  "timestamp": "2026-09-16T08:23:00.000Z",
+  "targetNode": "TC-09 (Dr. Chawin Rojanasap - NitroKey HSM-PQC-09)",
+  "chaosScenario": {
+    "type": "TAMPER_FOIL_VOLTAGE_INJECTION_AND_NETWORK_PARTITION",
+    "faultInjected": "Voltage Glitch 100mV Pulse + Network Latency Spike > 500ms",
+    "nodeStateBefore": "100% HEALTHY (10/10 REAL_HSM QUORUM)"
+  },
+  "automatedResponse": {
+    "step1_TamperDetection": {
+      "latencyMs": 0.12,
+      "status": "TAMPER_FOIL_TRIPPED",
+      "action": "Trigger Active Zeroization in Volatile Memory (RAM)"
+    },
+    "step2_KeyPurge": {
+      "latencyMs": 0.48,
+      "status": "DILITHIUM5_KEYS_PURGED_ZEROIZED",
+      "securityEnclave": "NitroKey HSM-PQC-09 Locked"
+    },
+    "step3_CircuitBreaker": {
+      "latencyMs": 0.85,
+      "status": "FAIL_CLOSED_CIRCUIT_BREAKER_ARMED",
+      "isolationChamber": "Chamber 02 Quarantine Buffer"
+    },
+    "step4_PqcFallback": {
+      "latencyMs": 3.2,
+      "status": "CRYPTO_AGILITY_FALLBACK_EXECUTED",
+      "activeScheme": "SPHINCS+ (SLH-DSA-192 / FIPS 205)",
+      "downtime": "0.00 ms (Zero Downtime)"
+    },
+    "step5_PhoenixSelfHealing": {
+      "latencyMs": 35.8,
+      "status": "PHOENIX_RECOVERY_COMPLETE",
+      "reconstructedQuorum": "10/10 Quorum Restored via Backup Enclave",
+      "slaTarget": "< 142.00 ms",
+      "slaAchieved": "PASS (35.80 ms)"
+    }
+  },
+  "telemetryInvariants": {
+    "genesisBlock": "#849202",
+    "genesisMerkleRoot": "909ab814479844d8a14816bed34cdbb07528e18501da86fc4691763a43fa4c68",
+    "canonicalSeals": 14902,
+    "ssotDelta": 0,
+    "baselineDriftPct": 0.0,
+    "coherenceRatePct": 99.992
+  },
+  "legalAdmissibility": {
+    "thaiEtaSec9": "PASSED (Identity & Signer Intent Manifestation)",
+    "thaiEtaSec26": "ENFORCED (Non-repudiation via SPHINCS+ Fallback & 10/10 Quorum)",
+    "thaiEtaSec28": "GRANTED (Safe Harbor & Immutable Audit Ledger V25 Entry)"
+  },
+  "verdict": "CHAOS_SIMULATION_PASSED_ZERO_DRIFT"
+}

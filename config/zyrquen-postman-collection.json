@@ -1,0 +1,278 @@
+{
+  "info": {
+    "_postman_id": "zyrquen-sovereign-api-v1-2",
+    "name": "ZYRQUEN Ω∞ Sovereign Gateway & Chamber 17 Audit Services",
+    "description": "Postman Collection v2.1 for ZYRQUEN Ω∞ Sovereign Control Plane, Chamber 17 Audit Services, and Security Interceptors.",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "variable": [
+    {
+      "key": "baseUrl",
+      "value": "http://localhost:3000",
+      "type": "string"
+    },
+    {
+      "key": "pqcSignature",
+      "value": "SIG_PQC_DILITHIUM-5_FE45D00BC4D25A8C_10/10_REAL_HSM_RATIFIED",
+      "type": "string"
+    },
+    {
+      "key": "hsmQuorumToken",
+      "value": "TOKEN_10/10_REAL_HSM_FIPS140_3_L4_RATIFIED",
+      "type": "string"
+    }
+  ],
+  "item": [
+    {
+      "name": "Telemetry & Homeostasis",
+      "item": [
+        {
+          "name": "1. GET Real-time Sub-Kelvin Telemetry",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/api/v1/telemetry",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "v1",
+                "telemetry"
+              ]
+            },
+            "description": "Returns live system telemetry (Cryo 14.98 mK, 851.9 QOps, Coherence 99.992%) and verifies SSoT Δ0."
+          }
+        }
+      ]
+    },
+    {
+      "name": "Audit & Evidence",
+      "item": [
+        {
+          "name": "2. GET Immutable Audit Evidence Records",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "X-Zyrquen-Sovereign-Sig",
+                "value": "{{pqcSignature}}",
+                "type": "text"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/api/v1/audit/records?sealId=14902",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "v1",
+                "audit",
+                "records"
+              ],
+              "query": [
+                {
+                  "key": "sealId",
+                  "value": "14902"
+                }
+              ]
+            },
+            "description": "Retrieves unalterable evidence record from Chamber 17 and Module 17 V24 WORM Storage."
+          }
+        }
+      ]
+    },
+    {
+      "name": "Forensics & Replay",
+      "item": [
+        {
+          "name": "3. POST Execute 12-Stage Forensic Trace Replay",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json",
+                "type": "text"
+              },
+              {
+                "key": "X-Zyrquen-Sovereign-Sig",
+                "value": "{{pqcSignature}}",
+                "type": "text"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"sealId\": 14903,\n  \"auditMode\": \"FULL_TRACE_REPLAY\"\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/api/v1/audit/replay",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "v1",
+                "audit",
+                "replay"
+              ]
+            },
+            "description": "Triggers sequential 12-stage forensic trace simulation for evidence verification within SLA < 142.00ms."
+          }
+        }
+      ]
+    },
+    {
+      "name": "Identity & Governance",
+      "item": [
+        {
+          "name": "4. POST Register User Auth (Sec 26 Gate)",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json",
+                "type": "text"
+              },
+              {
+                "key": "X-Zyrquen-Sovereign-Sig",
+                "value": "{{pqcSignature}}",
+                "type": "text"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"user\": {\n    \"id\": \"USR-001\",\n    \"name\": \"Yuttaphum Phakphian\",\n    \"role\": \"Sovereign Principal Architect\"\n  },\n  \"auth\": {\n    \"ial\": 3,\n    \"aal\": 3,\n    \"cryptoScheme\": \"Dilithium-5\",\n    \"hsmSigned\": true\n  }\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/api/v2/auth/register",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "v2",
+                "auth",
+                "register"
+              ]
+            },
+            "description": "Evaluates user IAL/AAL compliance tier, runs Sentinel AI Interceptor, and registers identity."
+          }
+        },
+        {
+          "name": "4b. POST Trigger Sentinel Quarantine Attack Simulation",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json",
+                "type": "text"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"user\": {\n    \"id\": \"USR-SUSPECT\",\n    \"name\": \"Malicious Probe Bot\",\n    \"role\": \"Unauthorized Intruder\"\n  },\n  \"auth\": {\n    \"ial\": 1,\n    \"aal\": 1,\n    \"cryptoScheme\": \"None\"\n  }\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/api/v2/auth/register",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "v2",
+                "auth",
+                "register"
+              ]
+            },
+            "description": "Simulates suspect payload (Risk Score 0.96 >= 0.85). Expects HTTP 403 ZYRQUEN_QUARANTINE_TRIGGERED."
+          }
+        }
+      ]
+    },
+    {
+      "name": "Sovereign Treasury",
+      "item": [
+        {
+          "name": "5. POST Allocate FIOS Treasury Gas Refund (Sec 28 Gate)",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json",
+                "type": "text"
+              },
+              {
+                "key": "X-Zyrquen-Sovereign-Sig",
+                "value": "{{pqcSignature}}",
+                "type": "text"
+              },
+              {
+                "key": "X-Zyrquen-HSM-Quorum",
+                "value": "{{hsmQuorumToken}}",
+                "type": "text"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"allocationSegment\": \"Gen_Z_Core\",\n  \"totalGasRefundPoolThb\": 12500000.0\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/api/v2/treasury/refund",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "v2",
+                "treasury",
+                "refund"
+              ]
+            },
+            "description": "Allocates gas refund from the ฿12.5M pool using Nc x Vc Chain Model. Requires 10/10 REAL_HSM Quorum."
+          }
+        }
+      ]
+    },
+    {
+      "name": "Public Verification & Judicial Audit",
+      "item": [
+        {
+          "name": "6. POST Verify Gold Seal Merkle Proof",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json",
+                "type": "text"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"sealId\": 14902,\n  \"leafHash\": \"0x5a13396c129c611f15232fdaf54bfad00c4147abdbc3424c71e4ec103dcc8cc3\"\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/api/v1/gold-seal/verify",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "v1",
+                "gold-seal",
+                "verify"
+              ]
+            },
+            "description": "Public verification endpoint for courts and ETDA to verify Merkle Leaf inclusion against Genesis Root."
+          }
+        }
+      ]
+    }
+  ]
+}
