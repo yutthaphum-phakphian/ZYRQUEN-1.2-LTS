@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useMemo } from 'react';
 import {
   ShieldCheck,
   Award,
@@ -23,17 +23,43 @@ import {
   Terminal,
   QrCode,
   Smartphone,
+  Camera,
+  Search,
+  FileCheck2,
+  Filter,
 } from 'lucide-react';
-import { FORENSIC_DOSSIER_V9, TechnicalPillar, ForensicAuditStep } from '../../data/forensicAuditMasterDossierData';
-import { downloadMasterForensicDossierV9Pdf } from '../../utils/forensicDossierPdfExport';
+import {
+  FORENSIC_DOSSIER_V9,
+  TechnicalPillar,
+  ForensicAuditStep,
+  StatutoryLegalAlignment,
+} from '../../data/forensicAuditMasterDossierData';
+import {
+  downloadMasterForensicDossierV9Pdf,
+  downloadEvidenceManifestPdf,
+} from '../../utils/forensicDossierPdfExport';
 import { safeCopyToClipboard } from '../../utils/clipboard';
 import { playAuditChime, playTone } from '../AudioSynthesizer';
-import { ForensicEvidenceQrGenerator } from './ForensicEvidenceQrGeneratorModal';
+import {
+  ForensicEvidenceQrGenerator,
+  buildAllForensicEvidenceItems,
+  ForensicEvidenceItem,
+} from './ForensicEvidenceQrGeneratorModal';
+import { ForensicEvidenceQrScanner } from './ForensicEvidenceQrScanner';
+
+export type DossierModalTab =
+  | 'pillars'
+  | 'audit-trail'
+  | 'manifest'
+  | 'scanner'
+  | 'legal'
+  | 'qr-generator'
+  | 'raw-json';
 
 export interface ForensicAuditMasterDossierModalProps {
   isOpen: boolean;
   onClose: () => void;
-  initialTab?: 'pillars' | 'audit-trail' | 'legal' | 'qr-generator' | 'raw-json';
+  initialTab?: DossierModalTab;
 }
 
 export const ForensicAuditMasterDossierModal: React.FC<ForensicAuditMasterDossierModalProps> = ({
@@ -41,12 +67,34 @@ export const ForensicAuditMasterDossierModal: React.FC<ForensicAuditMasterDossie
   onClose,
   initialTab = 'pillars',
 }) => {
-  const [activeTab, setActiveTab] = useState<'pillars' | 'audit-trail' | 'legal' | 'qr-generator' | 'raw-json'>(initialTab);
+  const [activeTab, setActiveTab] = useState<DossierModalTab>(initialTab);
   const [selectedStep, setSelectedStep] = useState<ForensicAuditStep | null>(null);
+  const [selectedManifestItem, setSelectedManifestItem] = useState<ForensicEvidenceItem | null>(null);
   const [copiedField, setCopiedField] = useState<string | null>(null);
-  const [isExportingPdf, setIsExportingPdf] = useState(false);
+  const [isExportingDossierPdf, setIsExportingDossierPdf] = useState(false);
+  const [isExportingManifestPdf, setIsExportingManifestPdf] = useState(false);
   const [qrEvidenceId, setQrEvidenceId] = useState<string>('master-dossier');
   const [isQrModalOpen, setIsQrModalOpen] = useState<boolean>(false);
+  const [manifestSearch, setManifestSearch] = useState<string>('');
+  const [manifestTypeFilter, setManifestTypeFilter] = useState<string>('ALL');
+
+  const dossier = FORENSIC_DOSSIER_V9;
+  const allEvidenceItems = useMemo(() => buildAllForensicEvidenceItems(dossier), [dossier]);
+
+  // Filtered evidence items for Manifest Tab
+  const filteredEvidenceItems = useMemo(() => {
+    return allEvidenceItems.filter((item) => {
+      const matchesType = manifestTypeFilter === 'ALL' || item.type === manifestTypeFilter;
+      const matchesSearch =
+        !manifestSearch.trim() ||
+        item.title.toLowerCase().includes(manifestSearch.toLowerCase()) ||
+        item.code.toLowerCase().includes(manifestSearch.toLowerCase()) ||
+        item.statute.toLowerCase().includes(manifestSearch.toLowerCase()) ||
+        item.merkleHash.toLowerCase().includes(manifestSearch.toLowerCase()) ||
+        item.cryptographicScheme.toLowerCase().includes(manifestSearch.toLowerCase());
+      return matchesType && matchesSearch;
+    });
+  }, [allEvidenceItems, manifestTypeFilter, manifestSearch]);
 
   if (!isOpen) return null;
 
@@ -63,17 +111,34 @@ export const ForensicAuditMasterDossierModal: React.FC<ForensicAuditMasterDossie
     playTone(620, 0.04);
   };
 
-  const handleDownloadPdf = () => {
-    setIsExportingPdf(true);
+  const handleDownloadDossierPdf = () => {
+    setIsExportingDossierPdf(true);
     playAuditChime();
     try {
       downloadMasterForensicDossierV9Pdf(FORENSIC_DOSSIER_V9);
     } finally {
-      setIsExportingPdf(false);
+      setIsExportingDossierPdf(false);
     }
   };
 
-  const dossier = FORENSIC_DOSSIER_V9;
+  const handleDownloadManifestPdf = () => {
+    setIsExportingManifestPdf(true);
+    playAuditChime();
+    try {
+      downloadEvidenceManifestPdf(FORENSIC_DOSSIER_V9, allEvidenceItems);
+    } finally {
+      setIsExportingManifestPdf(false);
+    }
+  };
+
+  const handleScannerEvidenceSelect = (evidenceId: string, item: ForensicEvidenceItem) => {
+    setSelectedManifestItem(item);
+    if (item.type === 'AUDIT_STEP') {
+      const stepNumber = parseInt(item.id.replace('step-', ''), 10);
+      const stepObj = dossier.steps.find((s) => s.step === stepNumber);
+      if (stepObj) setSelectedStep(stepObj);
+    }
+  };
 
   return (
     <div
@@ -82,15 +147,15 @@ export const ForensicAuditMasterDossierModal: React.FC<ForensicAuditMasterDossie
       onClick={onClose}
     >
       <div
-        className="w-full max-w-5xl bg-[#080d16] bg-theme-card border border-emerald-500/40 border-theme rounded-3xl shadow-[0_0_60px_rgba(16,185,129,0.25)] overflow-hidden flex flex-col max-h-[90vh] transition-all text-theme"
+        className="w-full max-w-6xl bg-[#080d16] bg-theme-card border border-emerald-500/40 border-theme rounded-3xl shadow-[0_0_60px_rgba(16,185,129,0.25)] overflow-hidden flex flex-col max-h-[92vh] transition-all text-theme"
         onClick={(e) => e.stopPropagation()}
       >
         {/* ================================================================= */}
         {/* HEADER BAR                                                        */}
         {/* ================================================================= */}
-        <div className="flex items-center justify-between px-6 py-4 border-b border-emerald-500/30 border-theme bg-[#060a12] bg-theme-surface">
+        <div className="flex items-center justify-between px-6 py-4 border-b border-emerald-500/30 border-theme bg-[#060a12] bg-theme-surface flex-wrap gap-3">
           <div className="flex items-center gap-3">
-            <div className="w-10 h-10 rounded-2xl bg-emerald-500/20 border border-emerald-500/40 flex items-center justify-center text-emerald-400 shadow-[0_0_15px_rgba(16,185,129,0.3)]">
+            <div className="w-10 h-10 rounded-2xl bg-emerald-500/20 border border-emerald-500/40 flex items-center justify-center text-emerald-400 shadow-[0_0_15px_rgba(16,185,129,0.3)] shrink-0">
               <ShieldCheck className="w-5 h-5 text-emerald-400" />
             </div>
             <div>
@@ -106,37 +171,60 @@ export const ForensicAuditMasterDossierModal: React.FC<ForensicAuditMasterDossie
                 </span>
               </div>
               <p className="text-[11px] text-zinc-400 mt-0.5">
-                Executive Passport <strong className="text-zinc-200">{dossier.passportId}</strong> • Genesis #{dossier.genesisBlock} • 14,902 Canonical Seals
+                Executive Passport <strong className="text-zinc-200">{dossier.passportId}</strong> • Genesis #{dossier.genesisBlock} • 14,902 Canonical Seals • 22 Evidence Anchors
               </p>
             </div>
           </div>
 
-          <div className="flex items-center gap-2">
+          {/* Header Action Buttons */}
+          <div className="flex items-center gap-2 flex-wrap">
+            {/* Scan Physical Label (QR) Button */}
             <button
-              id="btn-open-master-qr"
-              onClick={() => handleOpenQrForEvidence('master-dossier')}
-              className="flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-cyan-500/20 hover:bg-cyan-500/30 border border-cyan-500/50 text-cyan-300 font-bold text-xs transition cursor-pointer active:scale-95 shadow-sm"
-              title="Verify Master Forensic Dossier on Mobile Device via QR Code"
+              id="btn-scan-evidence-qr"
+              onClick={() => {
+                setActiveTab('scanner');
+                playTone(550, 0.04);
+              }}
+              className={`flex items-center gap-1.5 px-3 py-1.5 rounded-xl font-bold text-xs transition cursor-pointer active:scale-95 shadow-sm ${
+                activeTab === 'scanner'
+                  ? 'bg-emerald-500/30 text-emerald-200 border border-emerald-400 shadow-[0_0_12px_rgba(16,185,129,0.3)]'
+                  : 'bg-emerald-500/20 hover:bg-emerald-500/30 border border-emerald-500/40 text-emerald-300'
+              }`}
+              title="Scan physical hardware QR labels using device camera"
             >
-              <QrCode className="w-3.5 h-3.5" />
-              <span className="hidden sm:inline">Mobile QR Verify</span>
+              <Camera className="w-3.5 h-3.5" />
+              <span>Scan Label (QR)</span>
             </button>
 
+            {/* Download Evidence Manifest Button */}
+            <button
+              id="btn-download-evidence-manifest"
+              onClick={handleDownloadManifestPdf}
+              disabled={isExportingManifestPdf}
+              className="flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-cyan-500/20 hover:bg-cyan-500/30 border border-cyan-500/50 text-cyan-300 font-bold text-xs transition cursor-pointer active:scale-95 shadow-sm"
+              title="Download official signed PDF inventory of all listed evidence items (Evidence Manifest)"
+            >
+              <FileCheck2 className="w-3.5 h-3.5" />
+              <span>Download Evidence Manifest</span>
+            </button>
+
+            {/* Export Court Dossier PDF Button */}
             <button
               id="btn-download-dossier-pdf"
-              onClick={handleDownloadPdf}
-              disabled={isExportingPdf}
+              onClick={handleDownloadDossierPdf}
+              disabled={isExportingDossierPdf}
               className="flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-emerald-500/20 hover:bg-emerald-500/30 border border-emerald-500/50 text-emerald-300 font-bold text-xs transition cursor-pointer active:scale-95 shadow-sm"
               title="Download official court-admissible PDF dossier"
             >
               <Download className="w-3.5 h-3.5" />
-              <span className="hidden sm:inline">Export Court Dossier PDF</span>
+              <span className="hidden sm:inline">Export Dossier PDF</span>
             </button>
 
+            {/* Close Button */}
             <button
               id="btn-close-dossier-modal"
               onClick={onClose}
-              className="p-1.5 rounded-xl hover:bg-zinc-800/80 text-zinc-400 hover:text-white transition cursor-pointer"
+              className="p-1.5 rounded-xl hover:bg-zinc-800/80 text-zinc-400 hover:text-white transition cursor-pointer ml-1"
             >
               <X className="w-5 h-5" />
             </button>
@@ -144,10 +232,11 @@ export const ForensicAuditMasterDossierModal: React.FC<ForensicAuditMasterDossie
         </div>
 
         {/* ================================================================= */}
-        {/* TAB CONTROLS                                                      */}
+        {/* TAB NAVIGATION CONTROLS                                           */}
         {/* ================================================================= */}
-        <div className="flex items-center gap-2 px-6 py-2.5 border-b border-zinc-800 bg-[#090e1a] overflow-x-auto text-xs">
+        <div className="flex items-center gap-2 px-6 py-2.5 border-b border-zinc-800 bg-[#090e1a] overflow-x-auto text-xs scrollbar-none">
           <button
+            id="tab-btn-pillars"
             onClick={() => setActiveTab('pillars')}
             className={`flex items-center gap-1.5 px-3 py-1.5 rounded-xl font-bold transition cursor-pointer whitespace-nowrap ${
               activeTab === 'pillars'
@@ -156,10 +245,11 @@ export const ForensicAuditMasterDossierModal: React.FC<ForensicAuditMasterDossie
             }`}
           >
             <Layers className="w-3.5 h-3.5" />
-            <span>Core Technical Pillars (4)</span>
+            <span>Core Pillars (4)</span>
           </button>
 
           <button
+            id="tab-btn-audit-trail"
             onClick={() => setActiveTab('audit-trail')}
             className={`flex items-center gap-1.5 px-3 py-1.5 rounded-xl font-bold transition cursor-pointer whitespace-nowrap ${
               activeTab === 'audit-trail'
@@ -168,11 +258,42 @@ export const ForensicAuditMasterDossierModal: React.FC<ForensicAuditMasterDossie
             }`}
           >
             <Clock className="w-3.5 h-3.5" />
-            <span>16-Step Master Audit Trail</span>
+            <span>16-Step Audit Trail</span>
             <span className="w-2 h-2 rounded-full bg-emerald-400 animate-pulse" />
           </button>
 
           <button
+            id="tab-btn-manifest"
+            onClick={() => setActiveTab('manifest')}
+            className={`flex items-center gap-1.5 px-3 py-1.5 rounded-xl font-bold transition cursor-pointer whitespace-nowrap ${
+              activeTab === 'manifest'
+                ? 'bg-emerald-500/20 text-emerald-300 border border-emerald-500/40 shadow-sm'
+                : 'text-zinc-400 hover:text-zinc-200 hover:bg-zinc-800/50 border border-transparent'
+            }`}
+          >
+            <FileCheck2 className="w-3.5 h-3.5 text-cyan-400" />
+            <span>Evidence Manifest</span>
+            <span className="px-1.5 py-0.2 rounded text-[9px] font-mono bg-cyan-500/20 text-cyan-300 border border-cyan-500/30">
+              {allEvidenceItems.length} ITEMS
+            </span>
+          </button>
+
+          <button
+            id="tab-btn-scanner"
+            onClick={() => setActiveTab('scanner')}
+            className={`flex items-center gap-1.5 px-3 py-1.5 rounded-xl font-bold transition cursor-pointer whitespace-nowrap ${
+              activeTab === 'scanner'
+                ? 'bg-emerald-500/20 text-emerald-300 border border-emerald-500/40 shadow-sm'
+                : 'text-zinc-400 hover:text-zinc-200 hover:bg-zinc-800/50 border border-transparent'
+            }`}
+          >
+            <Camera className="w-3.5 h-3.5 text-emerald-400" />
+            <span>Scan Evidence Label</span>
+            <span className="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-ping" />
+          </button>
+
+          <button
+            id="tab-btn-legal"
             onClick={() => setActiveTab('legal')}
             className={`flex items-center gap-1.5 px-3 py-1.5 rounded-xl font-bold transition cursor-pointer whitespace-nowrap ${
               activeTab === 'legal'
@@ -181,7 +302,7 @@ export const ForensicAuditMasterDossierModal: React.FC<ForensicAuditMasterDossie
             }`}
           >
             <Scale className="w-3.5 h-3.5" />
-            <span>Statutory Legal Alignment (ETDA / PDPA)</span>
+            <span>Statutory Legal (ETDA / PDPA)</span>
           </button>
 
           <button
@@ -195,12 +316,10 @@ export const ForensicAuditMasterDossierModal: React.FC<ForensicAuditMasterDossie
           >
             <QrCode className="w-3.5 h-3.5 text-emerald-400" />
             <span>Mobile QR Verifier</span>
-            <span className="px-1.5 py-0.2 rounded text-[9px] font-mono bg-emerald-500/30 text-emerald-200">
-              ALL ITEMS
-            </span>
           </button>
 
           <button
+            id="tab-btn-raw-json"
             onClick={() => setActiveTab('raw-json')}
             className={`flex items-center gap-1.5 px-3 py-1.5 rounded-xl font-bold transition cursor-pointer whitespace-nowrap ${
               activeTab === 'raw-json'
@@ -209,12 +328,12 @@ export const ForensicAuditMasterDossierModal: React.FC<ForensicAuditMasterDossie
             }`}
           >
             <Terminal className="w-3.5 h-3.5" />
-            <span>Raw Evidence JSON</span>
+            <span>Raw JSON</span>
           </button>
         </div>
 
         {/* ================================================================= */}
-        {/* TAB BODY                                                          */}
+        {/* TAB BODY CONTAINER                                                */}
         {/* ================================================================= */}
         <div className="p-6 overflow-y-auto space-y-6 flex-1 text-xs">
           {/* TAB 1: CORE TECHNICAL PILLARS */}
@@ -369,7 +488,7 @@ export const ForensicAuditMasterDossierModal: React.FC<ForensicAuditMasterDossie
                     </span>
                     <button
                       onClick={() => setSelectedStep(null)}
-                      className="text-zinc-400 hover:text-white"
+                      className="text-zinc-400 hover:text-white cursor-pointer"
                     >
                       <X className="w-4 h-4" />
                     </button>
@@ -404,7 +523,204 @@ export const ForensicAuditMasterDossierModal: React.FC<ForensicAuditMasterDossie
             </div>
           )}
 
-          {/* TAB 3: STATUTORY LEGAL ALIGNMENT */}
+          {/* TAB 3: EVIDENCE MANIFEST INVENTORY (ALL LISTED EVIDENCE ITEMS) */}
+          {activeTab === 'manifest' && (
+            <div className="space-y-4">
+              {/* Manifest Header Controls */}
+              <div className="p-4 rounded-2xl bg-[#090e1c] border border-cyan-500/30 flex flex-col sm:flex-row sm:items-center justify-between gap-3">
+                <div>
+                  <div className="flex items-center gap-2">
+                    <FileCheck2 className="w-4 h-4 text-cyan-400" />
+                    <h3 className="text-sm font-bold text-white">
+                      Signed Evidence Manifest Inventory (RFC 3161 / ETDA Standards)
+                    </h3>
+                  </div>
+                  <p className="text-[11px] text-zinc-400 mt-0.5">
+                    Full judicial inventory of {allEvidenceItems.length} verifiable proof anchors bound to Genesis Merkle Root.
+                  </p>
+                </div>
+
+                <div className="flex items-center gap-2">
+                  <button
+                    id="btn-manifest-download-pdf-inner"
+                    onClick={handleDownloadManifestPdf}
+                    disabled={isExportingManifestPdf}
+                    className="flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-cyan-500/20 hover:bg-cyan-500/30 border border-cyan-500/50 text-cyan-300 font-bold text-xs transition cursor-pointer"
+                  >
+                    <Download className="w-3.5 h-3.5" />
+                    <span>Download Signed PDF Manifest</span>
+                  </button>
+                </div>
+              </div>
+
+              {/* Filter & Search Bar */}
+              <div className="flex flex-col sm:flex-row gap-2 items-center justify-between">
+                <div className="flex items-center gap-1.5 overflow-x-auto w-full sm:w-auto">
+                  {[
+                    { id: 'ALL', label: 'All Items' },
+                    { id: 'MASTER_DOSSIER', label: 'Master Root' },
+                    { id: 'AUDIT_STEP', label: '16 Audit Steps' },
+                    { id: 'TECHNICAL_PILLAR', label: '4 Pillars' },
+                    { id: 'LEGAL_ALIGNMENT', label: 'Statutory Legal' },
+                  ].map((filter) => (
+                    <button
+                      key={filter.id}
+                      onClick={() => setManifestTypeFilter(filter.id)}
+                      className={`px-2.5 py-1 rounded-xl text-[11px] font-bold transition cursor-pointer whitespace-nowrap ${
+                        manifestTypeFilter === filter.id
+                          ? 'bg-cyan-500/20 text-cyan-300 border border-cyan-500/40'
+                          : 'text-zinc-400 hover:text-zinc-200 bg-zinc-900 border border-zinc-800'
+                      }`}
+                    >
+                      {filter.label}
+                    </button>
+                  ))}
+                </div>
+
+                <div className="relative w-full sm:w-64">
+                  <Search className="w-3.5 h-3.5 absolute left-3 top-1/2 -translate-y-1/2 text-zinc-500" />
+                  <input
+                    type="text"
+                    value={manifestSearch}
+                    onChange={(e) => setManifestSearch(e.target.value)}
+                    placeholder="Search code, title, hash..."
+                    className="w-full pl-8 pr-3 py-1.5 rounded-xl bg-zinc-900 border border-zinc-800 text-xs text-zinc-200 placeholder-zinc-500 focus:outline-none focus:border-cyan-500/50"
+                  />
+                </div>
+              </div>
+
+              {/* Manifest Table */}
+              <div className="rounded-2xl border border-zinc-800 overflow-hidden bg-[#090e1a]">
+                <div className="overflow-x-auto">
+                  <table className="w-full text-left text-xs border-collapse">
+                    <thead>
+                      <tr className="border-b border-zinc-800 bg-[#060a14] text-zinc-400 text-[10px] uppercase font-bold tracking-wider">
+                        <th className="p-3 text-center w-12">#</th>
+                        <th className="p-3 w-28">Ref Code</th>
+                        <th className="p-3">Evidence Item Title</th>
+                        <th className="p-3">Statutory Anchor</th>
+                        <th className="p-3">PQC Scheme / Hardware</th>
+                        <th className="p-3 text-center">Status</th>
+                        <th className="p-3 text-right">Actions</th>
+                      </tr>
+                    </thead>
+                    <tbody className="divide-y divide-zinc-800/60">
+                      {filteredEvidenceItems.map((item, index) => (
+                        <tr
+                          key={item.id}
+                          onClick={() => setSelectedManifestItem(item)}
+                          className={`hover:bg-cyan-950/20 transition cursor-pointer ${
+                            selectedManifestItem?.id === item.id ? 'bg-cyan-950/30' : ''
+                          }`}
+                        >
+                          <td className="p-3 text-center text-zinc-500 font-bold">{index + 1}</td>
+                          <td className="p-3 font-mono font-bold text-cyan-400">{item.code}</td>
+                          <td className="p-3 font-bold text-zinc-100">
+                            <div>{item.title}</div>
+                            <div className="text-[10px] text-zinc-400 font-normal mt-0.5">{item.category}</div>
+                          </td>
+                          <td className="p-3 text-zinc-300">{item.statute}</td>
+                          <td className="p-3 text-zinc-400 font-mono text-[10px]">
+                            <span className="text-emerald-300 block">{item.cryptographicScheme}</span>
+                            <span className="text-zinc-500">{item.enclaveHardware}</span>
+                          </td>
+                          <td className="p-3 text-center">
+                            <span className="px-2 py-0.5 rounded-full text-[10px] font-bold bg-emerald-500/20 text-emerald-300 border border-emerald-500/30">
+                              {item.status}
+                            </span>
+                          </td>
+                          <td className="p-3 text-right">
+                            <div className="flex items-center justify-end gap-1.5">
+                              <button
+                                onClick={(e) => {
+                                  e.stopPropagation();
+                                  handleOpenQrForEvidence(item.id);
+                                }}
+                                className="px-2 py-1 rounded bg-cyan-950/60 hover:bg-cyan-800/60 border border-cyan-500/40 text-[10px] text-cyan-300 flex items-center gap-1 transition cursor-pointer"
+                                title="Open QR Verifier for this item"
+                              >
+                                <QrCode className="w-3 h-3" />
+                                <span>QR</span>
+                              </button>
+                              <button
+                                onClick={(e) => {
+                                  e.stopPropagation();
+                                  handleCopy(item.merkleHash, `manifest-hash-${item.id}`);
+                                }}
+                                className="px-2 py-1 rounded bg-zinc-800/80 hover:bg-zinc-700 text-[10px] text-zinc-300 transition"
+                                title="Copy Merkle Hash"
+                              >
+                                {copiedField === `manifest-hash-${item.id}` ? 'Copied' : 'Hash'}
+                              </button>
+                            </div>
+                          </td>
+                        </tr>
+                      ))}
+                    </tbody>
+                  </table>
+                </div>
+              </div>
+
+              {/* Selected Manifest Item Detail Drawer */}
+              {selectedManifestItem && (
+                <div className="p-4 rounded-2xl bg-zinc-900/90 border border-cyan-500/40 space-y-2 animate-in fade-in">
+                  <div className="flex items-center justify-between border-b border-zinc-800 pb-2">
+                    <span className="font-bold text-white text-xs">
+                      {selectedManifestItem.code}: {selectedManifestItem.title}
+                    </span>
+                    <button
+                      onClick={() => setSelectedManifestItem(null)}
+                      className="text-zinc-400 hover:text-white cursor-pointer"
+                    >
+                      <X className="w-4 h-4" />
+                    </button>
+                  </div>
+                  {selectedManifestItem.description && (
+                    <p className="text-zinc-300 text-[11px] leading-relaxed">
+                      {selectedManifestItem.description}
+                    </p>
+                  )}
+                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-2 text-[10px] text-zinc-400 pt-1">
+                    <div>Hardware Enclave: <strong className="text-zinc-200">{selectedManifestItem.enclaveHardware}</strong></div>
+                    <div>Statutory Law: <strong className="text-cyan-300">{selectedManifestItem.statute}</strong></div>
+                    <div className="col-span-full break-all">
+                      Proof Merkle Hash: <code className="text-emerald-300">{selectedManifestItem.merkleHash}</code>
+                    </div>
+                  </div>
+                  <div className="flex items-center justify-between pt-2 border-t border-zinc-800 flex-wrap gap-2">
+                    <button
+                      onClick={() => handleOpenQrForEvidence(selectedManifestItem.id)}
+                      className="flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-cyan-500/20 hover:bg-cyan-500/30 border border-cyan-500/50 text-cyan-300 font-bold text-xs transition cursor-pointer"
+                    >
+                      <QrCode className="w-3.5 h-3.5" />
+                      <span>Verify {selectedManifestItem.code} via QR Code</span>
+                    </button>
+                    <button
+                      onClick={() => handleCopy(selectedManifestItem.merkleHash, `manifest-detail-hash-${selectedManifestItem.id}`)}
+                      className="px-2.5 py-1.5 rounded-xl bg-zinc-800 hover:bg-zinc-700 text-xs text-zinc-300 transition cursor-pointer flex items-center gap-1"
+                    >
+                      {copiedField === `manifest-detail-hash-${selectedManifestItem.id}` ? <Check className="w-3 h-3 text-emerald-400" /> : <Copy className="w-3 h-3 text-zinc-400" />}
+                      <span>{copiedField === `manifest-detail-hash-${selectedManifestItem.id}` ? 'Copied' : 'Copy Hash'}</span>
+                    </button>
+                  </div>
+                </div>
+              )}
+            </div>
+          )}
+
+          {/* TAB 4: PHYSICAL EVIDENCE QR CAMERA SCANNER */}
+          {activeTab === 'scanner' && (
+            <div className="animate-in fade-in duration-150">
+              <ForensicEvidenceQrScanner
+                inline={true}
+                onSelectEvidence={handleScannerEvidenceSelect}
+                onOpenQrGenerator={handleOpenQrForEvidence}
+                onNavigateTab={(tab) => setActiveTab(tab)}
+              />
+            </div>
+          )}
+
+          {/* TAB 5: STATUTORY LEGAL ALIGNMENT */}
           {activeTab === 'legal' && (
             <div className="space-y-4">
               <div className="grid grid-cols-1 gap-4">
@@ -453,7 +769,7 @@ export const ForensicAuditMasterDossierModal: React.FC<ForensicAuditMasterDossie
             </div>
           )}
 
-          {/* TAB 4: MOBILE QR CODE GENERATOR FOR ALL EVIDENCE ITEMS */}
+          {/* TAB 6: MOBILE QR CODE GENERATOR FOR ALL EVIDENCE ITEMS */}
           {activeTab === 'qr-generator' && (
             <div className="animate-in fade-in duration-150">
               <ForensicEvidenceQrGenerator
@@ -463,7 +779,7 @@ export const ForensicAuditMasterDossierModal: React.FC<ForensicAuditMasterDossie
             </div>
           )}
 
-          {/* TAB 5: RAW EVIDENCE JSON */}
+          {/* TAB 7: RAW EVIDENCE JSON */}
           {activeTab === 'raw-json' && (
             <div className="space-y-3">
               <div className="flex items-center justify-between">
@@ -496,7 +812,7 @@ export const ForensicAuditMasterDossierModal: React.FC<ForensicAuditMasterDossie
             <code className="text-zinc-300 font-mono">0x909ab814...4c68</code>
             <button
               onClick={() => handleCopy(dossier.merkleRoot, 'merkle')}
-              className="text-[10px] px-1.5 py-0.5 rounded bg-zinc-800 text-zinc-300 hover:text-white"
+              className="text-[10px] px-1.5 py-0.5 rounded bg-zinc-800 text-zinc-300 hover:text-white cursor-pointer"
             >
               {copiedField === 'merkle' ? 'Copied' : 'Copy'}
             </button>

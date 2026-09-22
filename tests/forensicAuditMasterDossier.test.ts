@@ -1,7 +1,11 @@
 // @vitest-environment happy-dom
 import { describe, it, expect } from 'vitest';
 import { FORENSIC_DOSSIER_V9 } from '../src/data/forensicAuditMasterDossierData';
-import { generateMasterForensicDossierV9Pdf } from '../src/utils/forensicDossierPdfExport';
+import {
+  generateMasterForensicDossierV9Pdf,
+  generateEvidenceManifestPdf,
+} from '../src/utils/forensicDossierPdfExport';
+import { buildAllForensicEvidenceItems } from '../src/components/forensics/ForensicEvidenceQrGeneratorModal';
 import { calculateRelevanceScore } from '../src/hooks/useGlobalSearch';
 
 describe('Forensic Audit Master Dossier (DOC-SOV-HSM-1010-2026-V9)', () => {
@@ -75,6 +79,34 @@ describe('Forensic Audit Master Dossier (DOC-SOV-HSM-1010-2026-V9)', () => {
     expect(doc).toBeDefined();
     // Verify document contains at least 2 pages
     expect(doc.getNumberOfPages()).toBeGreaterThanOrEqual(2);
+  });
+
+  it('builds full forensic evidence inventory items accurately', () => {
+    const items = buildAllForensicEvidenceItems(FORENSIC_DOSSIER_V9);
+    expect(items.length).toBeGreaterThanOrEqual(22);
+
+    // Verify presence of Master Dossier, 16 steps, 4 pillars, and legal items
+    const master = items.find((i) => i.id === 'master-dossier');
+    expect(master).toBeDefined();
+    expect(master?.code).toBe('DOC-MASTER-ROOT');
+
+    const step1 = items.find((i) => i.id === 'step-1');
+    expect(step1).toBeDefined();
+    expect(step1?.code).toBe('STG-01');
+
+    const pillar2 = items.find((i) => i.id === 'pillar-2');
+    expect(pillar2).toBeDefined();
+    expect(pillar2?.code).toBe('PIL-02');
+
+    const legal1 = items.find((i) => i.id === 'legal-1');
+    expect(legal1).toBeDefined();
+    expect(legal1?.code).toBe('LEG-01');
+  });
+
+  it('generates signed PDF evidence manifest inventory without throwing', () => {
+    const doc = generateEvidenceManifestPdf(FORENSIC_DOSSIER_V9);
+    expect(doc).toBeDefined();
+    expect(doc.getNumberOfPages()).toBeGreaterThanOrEqual(1);
   });
 
   it('verifies search query scoring matches DOC-SOV-HSM-1010-2026-V9', () => {
