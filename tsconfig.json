@@ -16,9 +16,8 @@
     "allowJs": false,
     "allowImportingTsExtensions": true,
     "types": ["node"],
-    "baseUrl": ".",
     "paths": {
-      "@/*": ["src/*"]
+      "@/*": ["./src/*"]
     }
   },
   "include": ["src", "server.ts", "scripts"],
