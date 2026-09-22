@@ -699,22 +699,23 @@ function createNormalizedSystemEvent(
   };
 }
 
-// Global registry to detect duplicate module re-registrations and inspect initialization order
-const registeredModulesRegistry = new Set<string>();
+// Session-level audit tracking to inspect module registration uniqueness cleanly
+const registeredModulesAuditSet = new Set<string>();
 
 /**
  * Diagnostic logger that triggers early in the SovereignAppContent lifecycle:
  * - Inspects order of state registration
- * - Verifies broadcastSyncService initialization before system event handlers attach
+ * - Prioritizes and verifies broadcastSyncService initialization before system event handlers attach
  * - Audits module and handler registrations to catch duplicate import re-registrations
+ * Returns a promise confirming stable sequence readiness.
  */
-function runSovereignAppDiagnostics(context: {
+async function runSovereignAppDiagnostics(context: {
   currentView: string;
   snapshotsCount: number;
   systemEventsCount: number;
   verificationGateStatus: string;
   isSystemActivityFrozen: boolean;
-}): void {
+}): Promise<{ isBroadcastReady: boolean; mode: string; isSequenceStable: boolean }> {
   const timestamp = new Date().toISOString();
   console.groupCollapsed(
     `%c[ZYRQUEN Ω∞ LIFECYCLE DIAGNOSTIC]%c SovereignAppContent Initialization Audit (${timestamp})`,
@@ -730,27 +731,35 @@ function runSovereignAppDiagnostics(context: {
   console.log('   ├── [Stage 4: Audit Event State] Initial System Events: %d', context.systemEventsCount);
   console.log('   └── [Stage 5: System Lock Guard] Frozen: %s', context.isSystemActivityFrozen ? 'TRUE (PAUSED)' : 'FALSE (LIVE)');
 
-  // 2. Verify broadcastSyncService readiness BEFORE event handlers attach
-  broadcastSyncService.init();
+  // 2. Sequential Promise-based BroadcastSyncService Pre-Flight Verification
+  await broadcastSyncService.initAsync();
   const isBroadcastReady = broadcastSyncService.getIsInitialized();
+  const broadcastMode = broadcastSyncService.getMode();
   const channelName = broadcastSyncService.getChannelName();
   const tabId = broadcastSyncService.getTabId();
 
   console.log('%c2. BroadcastSyncService Pre-Flight Verification:', 'font-weight: bold; color: #34d399;');
   if (isBroadcastReady) {
-    console.log(
-      '   ├── Channel Status: %cINITIALIZED & READY%c (Channel: %s, Tab: %s)',
-      'color: #10b981; font-weight: bold;',
-      'color: inherit;',
-      channelName,
-      tabId
-    );
+    if (broadcastMode === 'BROADCAST_CHANNEL') {
+      console.log(
+        '   ├── Channel Status: %cINITIALIZED & READY%c (Native BroadcastChannel: %s, Tab: %s)',
+        'color: #10b981; font-weight: bold;',
+        'color: inherit;',
+        channelName,
+        tabId
+      );
+    } else {
+      console.log(
+        '   ├── Channel Status: %cINITIALIZED & READY%c (Isolated Local Memory Fallback, Tab: %s)',
+        'color: #10b981; font-weight: bold;',
+        'color: inherit;',
+        tabId
+      );
+    }
     console.log('   └── Service Readiness: VERIFIED (Ready for subscriber attachment before system event hooks)');
   } else {
-    console.warn(
-      '   └── %cWARNING: BroadcastChannel not supported or uninitialized; running single-tab local state fallback.%c',
-      'color: #f59e0b; font-weight: bold;',
-      'color: inherit;'
+    console.log(
+      '   └── Service Status: Standalone Local Mode (Single-tab isolated state)'
     );
   }
 
@@ -764,18 +773,21 @@ function runSovereignAppDiagnostics(context: {
     'useNotificationWebSocket',
   ];
 
-  const duplicateRegistrations: string[] = [];
+  // Audit uniqueness of critical modules within this execution context
+  const currentRunRegistry = new Set<string>();
+  const duplicatesInRun: string[] = [];
   criticalModules.forEach((moduleKey) => {
-    if (registeredModulesRegistry.has(moduleKey)) {
-      duplicateRegistrations.push(moduleKey);
+    if (currentRunRegistry.has(moduleKey)) {
+      duplicatesInRun.push(moduleKey);
     } else {
-      registeredModulesRegistry.add(moduleKey);
+      currentRunRegistry.add(moduleKey);
+      registeredModulesAuditSet.add(moduleKey);
     }
   });
 
-  if (duplicateRegistrations.length > 0) {
+  if (duplicatesInRun.length > 0) {
     console.warn(
-      `[ZYRQUEN Ω∞ DIAGNOSTIC WARN] Duplicate registration detected for: ${duplicateRegistrations.join(', ')}. Check component re-mounting and singleton imports.`
+      `[ZYRQUEN Ω∞ DIAGNOSTIC WARN] Duplicate registration detected for: ${duplicatesInRun.join(', ')}. Check component re-mounting and singleton imports.`
     );
   } else {
     console.log(
@@ -785,6 +797,12 @@ function runSovereignAppDiagnostics(context: {
   }
 
   console.groupEnd();
+
+  return {
+    isBroadcastReady,
+    mode: broadcastMode,
+    isSequenceStable: isBroadcastReady && duplicatesInRun.length === 0,
+  };
 }
 
 const VALID_VIEWS: ViewType[] = [
@@ -1034,21 +1052,7 @@ function SovereignAppContent() {
   const isSystemActivityFrozenRef = useRef(isSystemActivityFrozen);
   isSystemActivityFrozenRef.current = isSystemActivityFrozen;
 
-  const diagnosticRanRef = useRef(false);
   const hasSeededEvidenceRef = useRef(false);
-
-  // Diagnostic logs function that triggers early in the SovereignAppContent lifecycle
-  useEffect(() => {
-    if (diagnosticRanRef.current) return;
-    diagnosticRanRef.current = true;
-    runSovereignAppDiagnostics({
-      currentView,
-      snapshotsCount: snapshots.length,
-      systemEventsCount: systemEvents.length,
-      verificationGateStatus: verificationGateStatus.status,
-      isSystemActivityFrozen,
-    });
-  }, [currentView, snapshots.length, systemEvents.length, verificationGateStatus.status, isSystemActivityFrozen]);
 
   /**
    * Centralized dispatch mechanism for all system and audit actions.
@@ -1227,114 +1231,136 @@ function SovereignAppContent() {
     });
   }, [dispatchAction]);
 
-  // Unified service lifecycle effect ensuring strict initialization & ordered teardown
+  // Unified service lifecycle effect ensuring strict sequential initialization & ordered teardown
   useEffect(() => {
-    // 1. Ensure broadcastSyncService is initialized before attaching cross-tab listeners
-    broadcastSyncService.init();
+    let isMounted = true;
+    let cleanupSubscriptions: (() => void) | null = null;
 
-    // 2. Attach BroadcastChannel cross-tab synchronization listeners
-    const unsubEvent = broadcastSyncService.onSystemEvent((evt) => {
-      dispatchAction({ type: 'SYNC_REMOTE_EVENT', payload: evt });
-    });
-
-    const unsubSnap = broadcastSyncService.onAuditSnapshot((snap) => {
-      setSnapshots((prev) => {
-        if (prev.some((s) => s.id === snap.id)) return prev;
-        return [snap, ...prev];
+    async function initializeStartupSequence() {
+      // 1. Run diagnostics & sequential promise-based initialization of broadcastSyncService
+      await runSovereignAppDiagnostics({
+        currentView,
+        snapshotsCount: snapshotsRef.current.length,
+        systemEventsCount: systemEvents.length,
+        verificationGateStatus: verificationGateStatus.status,
+        isSystemActivityFrozen,
       });
-    });
 
-    const unsubLock = broadcastSyncService.onLockState((lockState) => {
-      if (typeof lockState.isSystemActivityFrozen === 'boolean') {
-        setIsSystemActivityFrozen(lockState.isSystemActivityFrozen);
-      }
-      if (typeof lockState.isForensicAuditMode === 'boolean') {
-        setIsForensicAuditMode(lockState.isForensicAuditMode);
-      }
-      if (typeof lockState.isMonochromeMode === 'boolean') {
-        setIsMonochromeMode(lockState.isMonochromeMode);
-      }
-    });
+      if (!isMounted) return;
 
-    // 3. Attach Offline Audit Sync listener
-    let previousPending = offlineAuditSyncService.getQueueCount();
-    const unsubOffline = offlineAuditSyncService.subscribe((count) => {
-      if (previousPending > 0 && count === 0) {
-        showToast(
-          `Background Sync: ${previousPending} offline audit logs flushed to sovereign ledger.`,
-          'success'
+      // 2. Attach BroadcastChannel cross-tab synchronization listeners only AFTER verified readiness
+      const unsubEvent = broadcastSyncService.onSystemEvent((evt) => {
+        dispatchAction({ type: 'SYNC_REMOTE_EVENT', payload: evt });
+      });
+
+      const unsubSnap = broadcastSyncService.onAuditSnapshot((snap) => {
+        setSnapshots((prev) => {
+          if (prev.some((s) => s.id === snap.id)) return prev;
+          return [snap, ...prev];
+        });
+      });
+
+      const unsubLock = broadcastSyncService.onLockState((lockState) => {
+        if (typeof lockState.isSystemActivityFrozen === 'boolean') {
+          setIsSystemActivityFrozen(lockState.isSystemActivityFrozen);
+        }
+        if (typeof lockState.isForensicAuditMode === 'boolean') {
+          setIsForensicAuditMode(lockState.isForensicAuditMode);
+        }
+        if (typeof lockState.isMonochromeMode === 'boolean') {
+          setIsMonochromeMode(lockState.isMonochromeMode);
+        }
+      });
+
+      // 3. Attach Offline Audit Sync listener
+      let previousPending = offlineAuditSyncService.getQueueCount();
+      const unsubOffline = offlineAuditSyncService.subscribe((count) => {
+        if (previousPending > 0 && count === 0) {
+          showToast(
+            `Background Sync: ${previousPending} offline audit logs flushed to sovereign ledger.`,
+            'success'
+          );
+        }
+        previousPending = count;
+      });
+
+      // 4. Start automated backup service and attach snapshot listener
+      automatedBackupService.start();
+      const unsubBackupSnap = automatedBackupService.onSnapshot((record) => {
+        if (isSystemActivityFrozenRef.current) return;
+
+        const currentSnaps = snapshotsRef.current;
+        const newSnap = createTelemetrySnapshot(
+          {
+            core0: 41 + Math.floor(Math.random() * 5),
+            core1: 39 + Math.floor(Math.random() * 4),
+            core2: 43 + Math.floor(Math.random() * 6),
+            core3: 38 + Math.floor(Math.random() * 5),
+          },
+          currentSnaps.length,
+          currentSnaps[0]?.sealedHash
         );
-      }
-      previousPending = count;
-    });
+        setSnapshots((prev) => [newSnap, ...prev]);
+        setLastSnapshotTime(Date.now());
+        triggerVibration('snapshot');
+        try {
+          broadcastSyncService.broadcastAuditSnapshot(newSnap);
+        } catch (err) {
+          console.warn('Broadcast snapshot failed:', err);
+        }
 
-    // 4. Start automated backup service and attach snapshot listener
-    automatedBackupService.start();
-    const unsubBackupSnap = automatedBackupService.onSnapshot((record) => {
-      if (isSystemActivityFrozenRef.current) return;
+        showToast(`Automated System Backup #${record.snapshotNumber} Sealed Successfully. Integrity Verified.`, 'success');
 
-      const currentSnaps = snapshotsRef.current;
-      const newSnap = createTelemetrySnapshot(
-        {
-          core0: 41 + Math.floor(Math.random() * 5),
-          core1: 39 + Math.floor(Math.random() * 4),
-          core2: 43 + Math.floor(Math.random() * 6),
-          core3: 38 + Math.floor(Math.random() * 5),
-        },
-        currentSnaps.length,
-        currentSnaps[0]?.sealedHash
-      );
-      setSnapshots((prev) => [newSnap, ...prev]);
-      setLastSnapshotTime(Date.now());
-      triggerVibration('snapshot');
-      try {
-        broadcastSyncService.broadcastAuditSnapshot(newSnap);
-      } catch (err) {
-        console.warn('Broadcast snapshot failed:', err);
-      }
-
-      showToast(`Automated System Backup #${record.snapshotNumber} Sealed Successfully. Integrity Verified.`, 'success');
-
-      dispatchAction({
-        type: 'EMIT_SYSTEM_EVENT',
-        payload: {
-          type: 'BACKUP',
-          title: `Automated System Backup #${record.snapshotNumber} Sealed`,
-          description: `Merkle root: ${record.merkleRoot.slice(0, 18)}... • Scope: ${record.statesCaptured} subsystem states, ${record.logsCount} audit records • Integrity: 100% Verified`,
-          metaHash: record.merkleRoot,
-          severity: 'success',
-          statuteRef: 'พ.ร.บ. ธุรกรรมฯ มาตรา 26/28 & NIST PQC (Dilithium-5)',
-          targetView: 'ledger',
-          bindingStatus: 'ANCHORED',
-        },
+        dispatchAction({
+          type: 'EMIT_SYSTEM_EVENT',
+          payload: {
+            type: 'BACKUP',
+            title: `Automated System Backup #${record.snapshotNumber} Sealed`,
+            description: `Merkle root: ${record.merkleRoot.slice(0, 18)}... • Scope: ${record.statesCaptured} subsystem states, ${record.logsCount} audit records • Integrity: 100% Verified`,
+            metaHash: record.merkleRoot,
+            severity: 'success',
+            statuteRef: 'พ.ร.บ. ธุรกรรมฯ มาตรา 26/28 & NIST PQC (Dilithium-5)',
+            targetView: 'ledger',
+            bindingStatus: 'ANCHORED',
+          },
+        });
       });
-    });
 
-    // 5. Attach automated backup logger
-    const unsubBackupLogger = automatedBackupService.registerSystemActivityLogger(
-      (type, title, desc, meta, sev, statute, view) => {
-        addSystemEvent(type, title, desc, meta, sev, statute, view);
-      }
-    );
+      // 5. Attach automated backup logger
+      const unsubBackupLogger = automatedBackupService.registerSystemActivityLogger(
+        (type, title, desc, meta, sev, statute, view) => {
+          addSystemEvent(type, title, desc, meta, sev, statute, view);
+        }
+      );
 
-    // 6. Attach Write Firewall Engine system event handler
-    const unsubFirewall = WriteFirewallEngine.registerSystemEventHandler(
-      (type, title, desc, meta, sev, statute, view) => {
-        addSystemEvent(type, title, desc, meta, sev, statute, view);
-      }
-    );
+      // 6. Attach Write Firewall Engine system event handler
+      const unsubFirewall = WriteFirewallEngine.registerSystemEventHandler(
+        (type, title, desc, meta, sev, statute, view) => {
+          addSystemEvent(type, title, desc, meta, sev, statute, view);
+        }
+      );
+
+      cleanupSubscriptions = () => {
+        unsubFirewall();
+        unsubBackupLogger();
+        unsubBackupSnap();
+        unsubOffline();
+        unsubLock();
+        unsubSnap();
+        unsubEvent();
+      };
+    }
+
+    initializeStartupSequence();
 
     // Strict reverse teardown order: prevents memory leaks and duplicate handlers during re-renders or tab switches
     return () => {
-      unsubFirewall();
-      unsubBackupLogger();
-      unsubBackupSnap();
-      unsubOffline();
-      unsubLock();
-      unsubSnap();
-      unsubEvent();
+      isMounted = false;
+      if (cleanupSubscriptions) {
+        cleanupSubscriptions();
+      }
     };
-  }, [addSystemEvent, showToast]);
+  }, [addSystemEvent, showToast, dispatchAction]);
 
   const handleToggleFreezeSystemActivity = useCallback(() => {
     triggerVibration('sidebarToggle');
