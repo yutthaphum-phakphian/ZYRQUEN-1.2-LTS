@@ -9,6 +9,7 @@ import path from 'path';
 // SHA-256 Digest: 4c53a5422dc19d557cfe47b81ac43fc156d768b64ddcdfa82d9169fad03614ab
 
 export default defineConfig({
+  base: './',
   plugins: [
     tailwindcss(),
     react(),

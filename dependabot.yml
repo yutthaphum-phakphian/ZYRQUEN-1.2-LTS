@@ -17,7 +17,7 @@ updates:
       timezone: "Asia/Bangkok"
     open-pull-requests-limit: 10
     reviewers:
-      - "yutthaphum-phakphian"
+      - "yuttaphum-phakphian"
     labels:
       - "security"
       - "ci/cd"
@@ -33,7 +33,7 @@ updates:
       timezone: "Asia/Bangkok"
     open-pull-requests-limit: 10
     reviewers:
-      - "yutthaphum-phakphian"
+      - "yuttaphum-phakphian"
     labels:
       - "dependencies"
       - "npm"
@@ -48,7 +48,7 @@ updates:
       timezone: "Asia/Bangkok"
     open-pull-requests-limit: 5
     reviewers:
-      - "yutthaphum-phakphian"
+      - "yuttaphum-phakphian"
     labels:
       - "python"
       - "security"

@@ -11,9 +11,9 @@ updates:
       timezone: "Asia/Bangkok"
     open-pull-requests-limit: 5
     reviewers:
-      - "yutthaphum-phakphian"
+      - "yuttaphum-phakphian"
     assignees:
-      - "yutthaphum-phakphian"
+      - "yuttaphum-phakphian"
     labels:
       - "dependencies"
       - "security"
@@ -47,9 +47,9 @@ updates:
       timezone: "Asia/Bangkok"
     open-pull-requests-limit: 5
     reviewers:
-      - "yutthaphum-phakphian"
+      - "yuttaphum-phakphian"
     assignees:
-      - "yutthaphum-phakphian"
+      - "yuttaphum-phakphian"
     labels:
       - "ci/cd"
       - "github-actions"
@@ -64,9 +64,9 @@ updates:
       interval: "monthly"
     open-pull-requests-limit: 3
     reviewers:
-      - "yutthaphum-phakphian"
+      - "yuttaphum-phakphian"
     assignees:
-      - "yutthaphum-phakphian"
+      - "yuttaphum-phakphian"
     labels:
       - "docker"
       - "container-security"

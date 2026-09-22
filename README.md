@@ -1,15 +1,16 @@
 # 🌌 ZYRQUEN Ω∞ Sovereign Kernel v4.16
 
-[![Chamber Console CI](https://github.com/yutthaphum-phakphian/ZYRQUEN-1.2-LTS/actions/workflows/chamber-console-ci.yml/badge.svg)](https://github.com/yutthaphum-phakphian/ZYRQUEN-1.2-LTS/actions/workflows/chamber-console-ci.yml)
-[![GitHub Pages Deployment](https://github.com/yutthaphum-phakphian/ZYRQUEN-1.2-LTS/actions/workflows/pages.yml/badge.svg)](https://github.com/yutthaphum-phakphian/ZYRQUEN-1.2-LTS/actions/workflows/pages.yml)
-[![Senate Gate Benchmark](https://github.com/yutthaphum-phakphian/ZYRQUEN-1.2-LTS/actions/workflows/helm-benchmark.yml/badge.svg)](https://github.com/yutthaphum-phakphian/ZYRQUEN-1.2-LTS/actions/workflows/helm-benchmark.yml)
-[![Ledger Sync & PQC Agility](https://github.com/yutthaphum-phakphian/ZYRQUEN-1.2-LTS/actions/workflows/ledger-sync.yml/badge.svg)](https://github.com/yutthaphum-phakphian/ZYRQUEN-1.2-LTS/actions/workflows/ledger-sync.yml)
-[![CodeQL Security Audit](https://github.com/yutthaphum-phakphian/ZYRQUEN-1.2-LTS/actions/workflows/codeql.yml/badge.svg)](https://github.com/yutthaphum-phakphian/ZYRQUEN-1.2-LTS/actions/workflows/codeql.yml)
-[![Docker GHCR Publish](https://github.com/yutthaphum-phakphian/ZYRQUEN-1.2-LTS/actions/workflows/docker-publish.yml/badge.svg)](https://github.com/yutthaphum-phakphian/ZYRQUEN-1.2-LTS/actions/workflows/docker-publish.yml)
+[![Chamber Console CI](https://github.com/yuttaphum-phakphian/ZYRQUEN-1.2-LTS/actions/workflows/chamber-console-ci.yml/badge.svg)](https://github.com/yuttaphum-phakphian/ZYRQUEN-1.2-LTS/actions/workflows/chamber-console-ci.yml)
+[![GitHub Pages Deployment](https://github.com/yuttaphum-phakphian/ZYRQUEN-1.2-LTS/actions/workflows/pages.yml/badge.svg)](https://github.com/yuttaphum-phakphian/ZYRQUEN-1.2-LTS/actions/workflows/pages.yml)
+[![Senate Gate Benchmark](https://github.com/yuttaphum-phakphian/ZYRQUEN-1.2-LTS/actions/workflows/helm-benchmark.yml/badge.svg)](https://github.com/yuttaphum-phakphian/ZYRQUEN-1.2-LTS/actions/workflows/helm-benchmark.yml)
+[![Ledger Sync & PQC Agility](https://github.com/yuttaphum-phakphian/ZYRQUEN-1.2-LTS/actions/workflows/ledger-sync.yml/badge.svg)](https://github.com/yuttaphum-phakphian/ZYRQUEN-1.2-LTS/actions/workflows/ledger-sync.yml)
+[![CodeQL Security Audit](https://github.com/yuttaphum-phakphian/ZYRQUEN-1.2-LTS/actions/workflows/codeql.yml/badge.svg)](https://github.com/yuttaphum-phakphian/ZYRQUEN-1.2-LTS/actions/workflows/codeql.yml)
+[![Docker GHCR Publish](https://github.com/yuttaphum-phakphian/ZYRQUEN-1.2-LTS/actions/workflows/docker-publish.yml/badge.svg)](https://github.com/yuttaphum-phakphian/ZYRQUEN-1.2-LTS/actions/workflows/docker-publish.yml)
 
-> **Status:** `LOCKED_FROZEN_v1.2_LTS` (10/10 ALL GREEN 🟢, LIVE PRODUCTION)
-> **Deployment Certificate:** `ZQ-GREEN-DEP-849202-3908`
-> **Sovereign Principal Architect:** นายยุทธภูมิ พากเพียร (`#EP-SOVEREIGN-01` OMEGA-1 SUPREME)
+> **Status:** `LOCKED_FROZEN_v1.2_LTS` (10/10 ALL GREEN 🟢, LIVE PRODUCTION)  
+> **Deployment Certificate:** `ZQ-GREEN-DEP-849202-3908`  
+> **Sovereign Principal Architect:** นายยุทธภูมิ พากเพียร (`#EP-SOVEREIGN-01` OMEGA-1 SUPREME)  
+> **Live GitHub Pages URL:** [https://yuttaphum-phakphian.github.io/ZYRQUEN-1.2-LTS/](https://yuttaphum-phakphian.github.io/ZYRQUEN-1.2-LTS/)  
 
 ---
 
@@ -128,7 +129,7 @@
 
 **1. Clone Repository & Install Dependencies**
 ```bash
-git clone https://github.com/yutthaphum-phakphian/ZYRQUEN-1.2-LTS.git
+git clone https://github.com/yuttaphum-phakphian/ZYRQUEN-1.2-LTS.git
 cd ZYRQUEN-1.2-LTS
 npm ci
 ```

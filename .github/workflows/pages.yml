@@ -1,4 +1,4 @@
-name: GitHub Pages Deployment
+name: 🌐 Deploy ZYRQUEN PWA to GitHub Pages
 
 on:
   push:
@@ -15,20 +15,41 @@ concurrency:
   cancel-in-progress: false
 
 jobs:
-  deploy:
+  build-and-deploy:
     environment:
       name: github-pages
       url: ${{ steps.deployment.outputs.page_url }}
     runs-on: ubuntu-latest
     steps:
-      - name: Checkout
+      - name: 📥 Checkout Codebase
         uses: actions/checkout@v4
-      - name: Setup Pages
-        uses: actions/configure-pages@v4
-      - name: Upload Artifact
+
+      - name: ⚙️ Setup Node.js Runtime
+        uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: 'npm'
+
+      - name: 📦 Install Dependencies
+        run: npm ci --legacy-peer-deps
+
+      - name: ⚡ Build Static Client Assets
+        run: |
+          npm run build
+          # Create 404.html fallback for Single Page Application routing on GitHub Pages
+          cp dist/index.html dist/404.html
+          # Ensure .nojekyll exists so files starting with underscore or special names are served
+          touch dist/.nojekyll
+
+      - name: 🌐 Configure GitHub Pages
+        uses: actions/configure-pages@v5
+
+      - name: 📦 Upload Pages Artifact
         uses: actions/upload-pages-artifact@v3
         with:
-          path: '.'
-      - name: Deploy to GitHub Pages
+          path: './dist'
+
+      - name: 🚀 Deploy to GitHub Pages
         id: deployment
         uses: actions/deploy-pages@v4
+
