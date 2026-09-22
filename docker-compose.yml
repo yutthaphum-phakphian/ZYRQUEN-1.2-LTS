@@ -1,0 +1,33 @@
+version: '3.8'
+
+services:
+  zyrquen-mock-api:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: zyrquen-sovereign-mock-api
+    restart: unless-stopped
+    ports:
+      - "3000:3000"
+    environment:
+      - PORT=3000
+      - SYSTEM_STATUS=LOCKED_FROZEN_v1.2_LTS
+      - MERKLE_GENESIS=0x909ab814479844d8a14816bed34cdbb07528e18501da86fc4691763a43fa4c68
+    healthcheck:
+      test: ["CMD-SHELL", "python3 -c \"import urllib.request; urllib.request.urlopen('http://localhost:3000/api/v1/telemetry')\" || exit 1"]
+      interval: 15s
+      timeout: 5s
+      retries: 3
+      start_period: 5s
+    networks:
+      - zyrquen-mesh
+    logging:
+      driver: "json-file"
+      options:
+        max-size: "10m"
+        max-file: "3"
+
+networks:
+  zyrquen-mesh:
+    driver: bridge
+    name: zyrquen-sovereign-mesh

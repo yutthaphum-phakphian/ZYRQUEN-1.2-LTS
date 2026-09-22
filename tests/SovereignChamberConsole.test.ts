@@ -114,4 +114,37 @@ describe('Sovereign Chamber Console Interactive Feature Suite', () => {
     const sortedSyncDesc = [chamberB, chamberA].sort((a, b) => parseSyncTimeToSeconds(b.lastSync) - parseSyncTimeToSeconds(a.lastSync));
     expect(sortedSyncDesc[0].chamberId).toBe('CH-003');
   });
+
+  it('[TC-CONSOLE-05] Move to Quarantine Action & System Log Event Verification (HARDWARE Severity)', async () => {
+    const { systemStateStore, addSystemEvent } = await import('../src/store/systemStateStore');
+    
+    // Initial events count
+    const initialEventsCount = systemStateStore.getState().events.length;
+
+    // Simulate moving CHAMBER-01 to Quarantine
+    const targetChamberId = 'CHAMBER-01';
+    const targetChamberName = 'Cryo-Vault Alpha';
+    const degradedScore = 71.4;
+    const temp = -195.2;
+
+    const eventId = `evt-quarantine-${targetChamberId.toLowerCase()}-${Date.now()}`;
+    addSystemEvent({
+      id: eventId,
+      title: `[QUARANTINE TRANSITION] ${targetChamberId}: ${targetChamberName}`,
+      description: `Chamber ${targetChamberId} transitioned to UNSTABLE status and moved to Chamber 02 Quarantine containment (Temp: ${temp}°C, Coherence: ${degradedScore}%). Fail-Closed hardware policy engaged.`,
+      severity: 'HARDWARE',
+      handler: () => {}
+    });
+
+    const state = systemStateStore.getState();
+    expect(state.events.length).toBe(initialEventsCount + 1);
+    
+    const loggedEvent = state.events.find(e => e.id === eventId);
+    expect(loggedEvent).toBeDefined();
+    expect(loggedEvent?.title).toContain('QUARANTINE TRANSITION');
+    expect(loggedEvent?.title).toContain(targetChamberId);
+    expect(loggedEvent?.severity).toBe('HARDWARE');
+    expect(loggedEvent?.description).toContain('UNSTABLE');
+    expect(loggedEvent?.description).toContain('Fail-Closed');
+  });
 });

@@ -755,6 +755,35 @@ class SystemStateStore {
     this.notify();
   }
 
+  addSystemEvent(
+    eventOrTitle: SystemEvent | { title: string; description: string; severity?: string; handler?: () => void } | string,
+    description?: string,
+    severity: string = 'HARDWARE',
+    handler?: () => void
+  ) {
+    if (typeof eventOrTitle === 'object' && eventOrTitle !== null) {
+      const evt: SystemEvent = {
+        id: 'id' in eventOrTitle && eventOrTitle.id ? eventOrTitle.id : `evt-hw-${Date.now()}-${Math.random().toString(36).substring(2, 7)}`,
+        title: eventOrTitle.title,
+        description: eventOrTitle.description || '',
+        severity: eventOrTitle.severity || 'HARDWARE',
+        handler: eventOrTitle.handler || (() => {}),
+      };
+      this.addEvent(evt);
+    } else {
+      const evt: SystemEvent = {
+        id: `evt-hw-${Date.now()}-${Math.random().toString(36).substring(2, 7)}`,
+        title: eventOrTitle,
+        description: description || '',
+        severity: severity || 'HARDWARE',
+        handler: handler || (() => {
+          console.info(`[SYSTEM EVENT: ${severity}] ${eventOrTitle}`);
+        }),
+      };
+      this.addEvent(evt);
+    }
+  }
+
   subscribe(listener: (state: SystemState) => void): () => void {
     this.listeners.add(listener);
     return () => {
@@ -770,6 +799,15 @@ class SystemStateStore {
 }
 
 export const systemStateStore = new SystemStateStore();
+
+export function addSystemEvent(
+  eventOrTitle: SystemEvent | { title: string; description?: string; severity?: string; handler?: () => void } | string,
+  description?: string,
+  severity: string = 'HARDWARE',
+  handler?: () => void
+) {
+  systemStateStore.addSystemEvent(eventOrTitle as any, description, severity, handler);
+}
 
 import { useState, useEffect } from 'react';
 

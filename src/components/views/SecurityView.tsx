@@ -74,8 +74,10 @@ import { UtimacoSecondaryHSMGauge } from '../UtimacoSecondaryHSMGauge';
 
 import { VerificationPassRatesChart } from '../VerificationPassRatesChart';
 import { LiveFlowVisualizerView } from './Security/LiveFlowVisualizerView';
+import { SecurityAnalyticsDashboard } from '../SecurityAnalyticsDashboard';
 
 export type SecuritySubTab =
+  | 'security-analytics'
   | 'court-evidence-qr'
   | 'hardware-seal-scanner'
   | 'smart-contract'
@@ -375,6 +377,21 @@ export const SecurityView: React.FC<SecurityViewProps> = ({
       {/* Unified Tab Switcher Navigation Bar */}
       <div className="flex items-center bg-[#070914]/90 backdrop-blur-xl border border-cyan-500/20 rounded-2xl p-2 font-mono text-xs shadow-inner flex-wrap gap-2 relative overflow-hidden">
         <div className="absolute inset-0 bg-gradient-to-r from-cyan-500/5 via-violet-500/5 to-transparent pointer-events-none" />
+
+        <button
+          onClick={() => {
+            playTone(630, 0.04);
+            setActiveTab('security-analytics');
+          }}
+          className={`relative z-10 px-4 py-2.5 rounded-xl flex items-center gap-2 transition-all font-bold tracking-wide ${
+            activeTab === 'security-analytics'
+              ? 'bg-gradient-to-r from-cyan-500/40 via-rose-500/30 to-amber-500/30 text-white border border-cyan-400/60 shadow-[0_0_20px_rgba(6,182,212,0.35)]'
+              : 'text-cyan-300/80 hover:text-cyan-200 hover:bg-cyan-500/10 border border-cyan-500/20'
+          }`}
+        >
+          <Activity className={`w-4 h-4 ${activeTab === 'security-analytics' ? 'text-cyan-300 animate-pulse' : 'text-cyan-400'}`} />
+          <span>Security Analytics (Sentinel AI D3)</span>
+        </button>
 
         <button
           onClick={() => {
@@ -774,6 +791,15 @@ export const SecurityView: React.FC<SecurityViewProps> = ({
         <div className="p-4 rounded-2xl bg-emerald-500/10 border border-emerald-500/20 text-emerald-300 text-xs font-mono flex items-center gap-2 animate-in fade-in">
           <CheckCircle2 className="w-4 h-4 shrink-0" />
           <span>{scanResult}</span>
+        </div>
+      )}
+
+      {/* Security Analytics D3 30-Day Sentinel AI & Chamber 02 Dashboard */}
+      {activeTab === 'security-analytics' && (
+        <div className="space-y-6 animate-in fade-in duration-300">
+          <SecurityAnalyticsDashboard
+            onAddSystemEvent={onAddSystemEvent}
+          />
         </div>
       )}
 

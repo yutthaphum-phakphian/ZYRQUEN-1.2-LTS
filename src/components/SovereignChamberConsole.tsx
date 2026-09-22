@@ -12,6 +12,7 @@ import {
 import { ChamberSparkline, Sparkline } from './ChamberSparkline';
 import { CoherenceGauge } from './CoherenceGauge';
 import { playAuditChime, playTone } from './AudioSynthesizer';
+import { systemStateStore, addSystemEvent } from '../store/systemStateStore';
 
 export { Sparkline };
 
@@ -40,7 +41,7 @@ export function generateForensicBatchPDF(chambers?: CryoChamber[]): void {
   // Batch PDF Forensic Export helper
 }
 
-export type ChamberStatus = 'stable' | 'unstable' | 'recalibrating';
+export type ChamberStatus = 'stable' | 'unstable' | 'recalibrating' | 'quarantined';
 
 export interface Chamber {
   id: string;
@@ -141,6 +142,7 @@ export const SovereignChamberConsole: React.FC = () => {
   const [sortOption, setSortOption] = useState<SortOption>('coherence_desc');
   const [activeTab, setActiveTab] = useState<ConsoleTab>('grid');
   const [isSyncing, setIsSyncing] = useState<boolean>(false);
+  const [recentLogMessage, setRecentLogMessage] = useState<string | null>(null);
 
   // Request browser notification permission on mount
   useEffect(() => {
@@ -179,6 +181,11 @@ export const SovereignChamberConsole: React.FC = () => {
     [chambers]
   );
 
+  const quarantinedCount = useMemo(
+    () => chambers.filter((c) => c.status === 'quarantined').length,
+    [chambers]
+  );
+
   const sortedChambers = useMemo(() => {
     return [...chambers].sort((a, b) => {
       switch (sortOption) {
@@ -205,6 +212,87 @@ export const SovereignChamberConsole: React.FC = () => {
       stabilityIndexPercentage: Number((c.historicalStabilityIndex * 100).toFixed(1)),
       coherenceScore: c.coherenceScore
     }));
+  }, [chambers]);
+
+  /**
+   * Moves a chamber into Quarantine containment, updates its status to 'unstable',
+   * updates visual indicators accordingly, and calls addSystemEvent with 'HARDWARE' severity.
+   */
+  const handleMoveToQuarantine = useCallback((chamberId: string) => {
+    const targetChamber = chambers.find((c) => c.id === chamberId);
+    if (!targetChamber) return;
+
+    try {
+      playTone(320, 0.16, 'sawtooth');
+    } catch {}
+
+    // 1. Update chamber status to 'unstable' and degrade coherence telemetry
+    const degradedScore = targetChamber.status === 'unstable' ? targetChamber.coherenceScore : 71.4;
+    setChambers((prev) =>
+      prev.map((c) =>
+        c.id === chamberId
+          ? {
+              ...c,
+              status: 'unstable' as ChamberStatus,
+              coherenceScore: degradedScore,
+              coherenceTrend24h: [...c.coherenceTrend24h.slice(1), degradedScore]
+            }
+          : c
+      )
+    );
+
+    // 2. Trigger system log entry by calling addSystemEvent with 'HARDWARE' severity
+    const eventId = `evt-quarantine-${chamberId.toLowerCase()}-${Date.now()}`;
+    addSystemEvent({
+      id: eventId,
+      title: `[QUARANTINE TRANSITION] ${targetChamber.id}: ${targetChamber.name}`,
+      description: `Chamber ${targetChamber.id} transitioned to UNSTABLE status and moved to Chamber 02 Quarantine containment (Temp: ${targetChamber.currentTemp}°C, Coherence: ${degradedScore}%). Fail-Closed hardware policy engaged.`,
+      severity: 'HARDWARE',
+      handler: () => {
+        console.info(`[SYSTEM EVENT: HARDWARE] Chamber ${chamberId} Quarantined`);
+      }
+    });
+
+    setRecentLogMessage(`Chamber ${targetChamber.id} (${targetChamber.name}) moved to Quarantine [Status: UNSTABLE | Severity: HARDWARE].`);
+  }, [chambers]);
+
+  /**
+   * Restores an unstable/quarantined chamber back to nominal Stable SSoT baseline.
+   */
+  const handleRestoreChamber = useCallback((chamberId: string) => {
+    const targetChamber = chambers.find((c) => c.id === chamberId);
+    if (!targetChamber) return;
+
+    try {
+      playAuditChime();
+    } catch {}
+
+    const restoredCoherence = 98.9;
+    setChambers((prev) =>
+      prev.map((c) =>
+        c.id === chamberId
+          ? {
+              ...c,
+              status: 'stable' as ChamberStatus,
+              coherenceScore: restoredCoherence,
+              coherenceTrend24h: [...c.coherenceTrend24h.slice(1), restoredCoherence]
+            }
+          : c
+      )
+    );
+
+    const eventId = `evt-restore-${chamberId.toLowerCase()}-${Date.now()}`;
+    addSystemEvent({
+      id: eventId,
+      title: `[CHAMBER RESTORED] ${targetChamber.id}: ${targetChamber.name}`,
+      description: `Chamber ${targetChamber.id} verified and restored from Quarantine to Stable SSoT baseline (Coherence: ${restoredCoherence}%).`,
+      severity: 'HARDWARE',
+      handler: () => {
+        console.info(`[SYSTEM EVENT: HARDWARE] Chamber ${chamberId} Restored`);
+      }
+    });
+
+    setRecentLogMessage(`Chamber ${targetChamber.id} restored to Stable SSoT baseline.`);
   }, [chambers]);
 
   const handleBatchRecalibrate = useCallback(() => {
@@ -270,10 +358,35 @@ export const SovereignChamberConsole: React.FC = () => {
           </button>
         </div>
 
-        <span className="text-[11px] font-mono text-gray-400">
-          Chamber Monitoring Engine v2.4 • Coherence Matrix
-        </span>
+        <div className="flex items-center gap-2">
+          {quarantinedCount > 0 && (
+            <span className="text-[10px] font-mono px-2 py-0.5 rounded-full bg-rose-950/80 text-rose-300 border border-rose-600/70 font-bold">
+              ☣️ {quarantinedCount} Quarantined
+            </span>
+          )}
+          <span className="text-[11px] font-mono text-gray-400">
+            Chamber Monitoring Engine v2.4 • Coherence Matrix
+          </span>
+        </div>
       </div>
+
+      {/* Recent System Event Notification */}
+      {recentLogMessage && (
+        <div className="p-3 bg-slate-900/95 border border-indigo-500/40 text-indigo-200 rounded-xl text-xs font-mono flex items-center justify-between gap-3 shadow-lg shadow-black/40 animate-in fade-in duration-200">
+          <div className="flex items-center gap-2.5 min-w-0">
+            <span className="w-2 h-2 rounded-full bg-cyan-400 animate-pulse shrink-0" />
+            <span className="truncate">{recentLogMessage}</span>
+          </div>
+          <button
+            type="button"
+            onClick={() => setRecentLogMessage(null)}
+            className="text-slate-400 hover:text-white px-1.5 py-0.5 rounded hover:bg-slate-800 text-[11px] shrink-0 cursor-pointer"
+            title="Dismiss notification"
+          >
+            ✕
+          </button>
+        </div>
+      )}
 
       {/* TAB 1: Grid View */}
       {activeTab === 'grid' && (
@@ -330,12 +443,19 @@ export const SovereignChamberConsole: React.FC = () => {
             {sortedChambers.map((chamber) => {
               const isUnstable = chamber.status === 'unstable';
               const isRecalibrating = chamber.status === 'recalibrating';
+              const isQuarantined = chamber.status === 'quarantined';
 
               let cardStyle = 'border-gray-800 bg-gray-900/90 hover:border-gray-700';
               let badgeStyle = 'bg-emerald-950/80 text-emerald-300 border-emerald-500/60';
               let sparklineColor = '#34D399';
 
-              if (isUnstable) {
+              if (isQuarantined) {
+                cardStyle =
+                  'border-rose-500/80 bg-rose-950/20 shadow-[0_0_20px_rgba(244,63,94,0.3)] ring-1 ring-rose-500/40';
+                badgeStyle =
+                  'bg-rose-950/90 text-rose-300 border-rose-500/80 font-bold';
+                sparklineColor = '#F43F5E';
+              } else if (isUnstable) {
                 cardStyle =
                   'border-amber-500/80 bg-gray-900/90 shadow-[0_0_20px_rgba(245,158,11,0.3)] animate-pulse';
                 badgeStyle =
@@ -354,56 +474,91 @@ export const SovereignChamberConsole: React.FC = () => {
                   key={chamber.id}
                   className={`p-4 rounded-xl border transition-all duration-300 flex flex-col justify-between ${cardStyle}`}
                 >
-                  <div className="flex justify-between items-start mb-2.5 gap-2">
-                    <div className="min-w-0">
-                      <span className="text-[10px] font-mono text-gray-500 tracking-wider block">
-                        {chamber.id}
-                      </span>
-                      <h3 className="text-sm font-bold text-white truncate" title={chamber.name}>
-                        {chamber.name}
-                      </h3>
-                    </div>
-                    <span
-                      className={`px-2 py-0.5 text-[10px] font-mono font-bold rounded-full border shrink-0 ${badgeStyle}`}
-                    >
-                      {chamber.status.toUpperCase()}
-                    </span>
-                  </div>
-
-                  {/* D3 Circular Coherence Arc Gauge & Sparkline */}
-                  <div className="my-3 flex items-center justify-between bg-black/40 p-2.5 rounded-lg border border-gray-800/80 gap-2">
-                    <div className="flex items-center gap-2">
-                      {/* D3 Arc Gauge */}
-                      <CoherenceGauge score={chamber.coherenceScore} size={64} />
-                      <div>
-                        <span className="text-[9px] font-mono text-gray-400 block tracking-wider">
-                          COHERENCE
+                  <div>
+                    <div className="flex justify-between items-start mb-2.5 gap-2">
+                      <div className="min-w-0">
+                        <span className="text-[10px] font-mono text-gray-500 tracking-wider block">
+                          {chamber.id}
                         </span>
-                        <span className="text-[11px] font-mono text-gray-200 font-semibold">
-                          {chamber.coherenceScore >= 80 ? 'OPTIMAL' : 'DEGRADED'}
+                        <h3 className="text-sm font-bold text-white truncate" title={chamber.name}>
+                          {chamber.name}
+                        </h3>
+                      </div>
+                      <span
+                        className={`px-2 py-0.5 text-[10px] font-mono font-bold rounded-full border shrink-0 ${badgeStyle}`}
+                      >
+                        {chamber.status.toUpperCase()}
+                      </span>
+                    </div>
+
+                    {/* D3 Circular Coherence Arc Gauge & Sparkline */}
+                    <div className="my-3 flex items-center justify-between bg-black/40 p-2.5 rounded-lg border border-gray-800/80 gap-2">
+                      <div className="flex items-center gap-2">
+                        {/* D3 Arc Gauge */}
+                        <CoherenceGauge score={chamber.coherenceScore} size={64} />
+                        <div>
+                          <span className="text-[9px] font-mono text-gray-400 block tracking-wider">
+                            COHERENCE
+                          </span>
+                          <span className="text-[11px] font-mono text-gray-200 font-semibold">
+                            {isQuarantined
+                              ? 'ISOLATED'
+                              : chamber.coherenceScore >= 80
+                              ? 'OPTIMAL'
+                              : 'DEGRADED'}
+                          </span>
+                        </div>
+                      </div>
+
+                      <ChamberSparkline
+                        data={chamber.coherenceTrend24h}
+                        color={sparklineColor}
+                      />
+                    </div>
+
+                    <div className="grid grid-cols-2 gap-2 text-[11px] font-mono pt-2 border-t border-gray-800">
+                      <div>
+                        <span className="text-gray-500 block text-[10px]">HISTORICAL STABILITY</span>
+                        <span className="text-gray-200 font-semibold">
+                          {(chamber.historicalStabilityIndex * 100).toFixed(0)}%
+                        </span>
+                      </div>
+                      <div className="text-right">
+                        <span className="text-gray-500 block text-[10px]">CURRENT TEMP</span>
+                        <span className="text-gray-200 font-semibold">
+                          {chamber.currentTemp.toFixed(1)}°C
                         </span>
                       </div>
                     </div>
-
-                    <ChamberSparkline
-                      data={chamber.coherenceTrend24h}
-                      color={sparklineColor}
-                    />
                   </div>
 
-                  <div className="grid grid-cols-2 gap-2 text-[11px] font-mono pt-2 border-t border-gray-800">
-                    <div>
-                      <span className="text-gray-500 block text-[10px]">HISTORICAL STABILITY</span>
-                      <span className="text-gray-200 font-semibold">
-                        {(chamber.historicalStabilityIndex * 100).toFixed(0)}%
-                      </span>
-                    </div>
-                    <div className="text-right">
-                      <span className="text-gray-500 block text-[10px]">CURRENT TEMP</span>
-                      <span className="text-gray-200 font-semibold">
-                        {chamber.currentTemp.toFixed(1)}°C
-                      </span>
-                    </div>
+                  {/* Chamber Action Control Buttons */}
+                  <div className="mt-3.5 space-y-2">
+                    <button
+                      type="button"
+                      id={`move-quarantine-btn-${chamber.id}`}
+                      onClick={() => handleMoveToQuarantine(chamber.id)}
+                      className={`w-full py-1.5 px-3 text-xs font-mono font-bold rounded-lg transition-all flex items-center justify-center gap-1.5 cursor-pointer shadow-sm ${
+                        isUnstable
+                          ? 'bg-amber-500/30 hover:bg-amber-500/40 text-amber-200 border border-amber-400 shadow-amber-950/60 animate-pulse'
+                          : 'bg-amber-500/15 hover:bg-amber-500/25 text-amber-300 border border-amber-500/60 hover:border-amber-400 shadow-black/40'
+                      }`}
+                      title={`Move ${chamber.name} (${chamber.id}) to Quarantine Containment`}
+                    >
+                      <span>☣️ Move to Quarantine</span>
+                    </button>
+
+                    {isUnstable && (
+                      <button
+                        type="button"
+                        id={`restore-chamber-btn-${chamber.id}`}
+                        onClick={() => handleRestoreChamber(chamber.id)}
+                        className="w-full py-1 px-2.5 bg-emerald-500/15 hover:bg-emerald-500/25 text-emerald-300 border border-emerald-500/60 hover:border-emerald-400 text-[11px] font-mono font-semibold rounded-lg transition-all flex items-center justify-center gap-1 cursor-pointer"
+                        title={`Restore ${chamber.name} to Stable SSoT baseline`}
+                      >
+                        <span>✓ Restore to Stable</span>
+                      </button>
+                    )}
                   </div>
                 </div>
               );

@@ -1,5 +1,6 @@
 import { useEffect, useState, useCallback } from 'react';
-import { ViewType, SystemEvent } from '../types';
+import { ViewType } from '../types';
+import { SystemEvent } from '../components/SystemEventsSidebar';
 
 export const useVoiceCommand = (
   onNavigate: (view: ViewType) => void,

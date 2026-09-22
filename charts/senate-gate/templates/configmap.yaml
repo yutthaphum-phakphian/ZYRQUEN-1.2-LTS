@@ -1,0 +1,18 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: zyrquen-sovereign-config
+  namespace: {{ .Values.namespace | default "zyrquen-system" }}
+  labels:
+    app.kubernetes.io/name: zyrquen-sovereign
+    app.kubernetes.io/part-of: zyrquen-omega
+    {{- include "senate-gate.labels" . | nindent 4 }}
+data:
+  GENESIS_BLOCK: "849202"
+  GENESIS_MERKLE_ROOT: "909ab814479844d8a14816bed34cdbb07528e18501da86fc4691763a43fa4c68"
+  SOVEREIGN_PRINCIPAL: "#EP-SOVEREIGN-01"
+  SSOT_DELTA: "0.00"
+  PQC_SCHEME: "Dilithium-5"
+  HSM_QUORUM: "10/10_REAL_HSM"
+  OTEL_PORT: "4318"
+  API_PORT: "8443"

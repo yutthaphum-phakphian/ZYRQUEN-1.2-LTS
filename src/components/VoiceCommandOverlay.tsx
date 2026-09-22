@@ -1,7 +1,8 @@
 import React from 'react';
 import { Mic, MicOff } from 'lucide-react';
 import { useVoiceCommand } from '../hooks/useVoiceCommand';
-import { ViewType, SystemEvent } from '../types';
+import { ViewType } from '../types';
+import { SystemEvent } from './SystemEventsSidebar';
 
 interface VoiceCommandOverlayProps {
   onNavigate: (view: ViewType) => void;

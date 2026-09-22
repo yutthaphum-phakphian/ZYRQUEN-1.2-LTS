@@ -382,7 +382,7 @@ export const DashboardView: React.FC<DashboardViewProps> = ({
             </span>
             <span className="text-cyan-400 text-[10px] font-semibold">QOps / SEC</span>
           </div>
-          <div className="text-2xl font-mono font-bold text-white tracking-tight">
+          <div className="text-base sm:text-lg lg:text-2xl font-mono font-bold text-white tracking-tight">
             {SYSTEM_METADATA.qOpsTelemetry} <span className="text-xs font-normal text-zinc-400">QOps/s</span>
           </div>
           <div className="text-[11px] font-mono text-zinc-400 flex items-center gap-1">
@@ -414,7 +414,7 @@ export const DashboardView: React.FC<DashboardViewProps> = ({
             </span>
             <span className="text-violet-400 text-[10px] font-semibold">768 QUBITS</span>
           </div>
-          <div className="text-2xl font-mono font-bold text-white tracking-tight">
+          <div className="text-base sm:text-lg lg:text-2xl font-mono font-bold text-white tracking-tight">
             {SYSTEM_METADATA.coherence}
           </div>
           <div className="text-[11px] font-mono text-zinc-400 flex items-center gap-1">
@@ -446,7 +446,7 @@ export const DashboardView: React.FC<DashboardViewProps> = ({
             </span>
             <span className="text-amber-400 text-[10px] font-semibold">SUBZERO HELIUM</span>
           </div>
-          <div className="text-2xl font-mono font-bold text-white tracking-tight">
+          <div className="text-base sm:text-lg lg:text-2xl font-mono font-bold text-white tracking-tight">
             {SYSTEM_METADATA.cryoTemp}
           </div>
           <div className="text-[11px] font-mono text-zinc-400 flex items-center gap-1">

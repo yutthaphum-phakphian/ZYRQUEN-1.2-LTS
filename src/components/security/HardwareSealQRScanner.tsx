@@ -24,7 +24,7 @@ import {
   FileText,
   ExternalLink,
 } from 'lucide-react';
-import { QrReader } from 'react-qr-reader';
+import { QrReader } from '../QrReader';
 import jsQR from 'jsqr';
 import {
   HARDWARE_SEALS_LEDGER,

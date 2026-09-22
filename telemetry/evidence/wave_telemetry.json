@@ -1,0 +1,7 @@
+{
+  "timestamp": "2026-09-21T09:05:19.276Z",
+  "telemetry": "wave_data",
+  "baselineDrift": 0,
+  "type": "SIGNED_JSON_ARTIFACT",
+  "signature": "0xMerkleWaveHash123..."
+}

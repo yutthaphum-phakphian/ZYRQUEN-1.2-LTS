@@ -1,54 +1,75 @@
-# ==============================================================================
-# ZYRQUEN Ω∞ Sovereign Dependabot Security & Dependency Update Configuration
-# File Path: .github/dependabot.yml
-# System Version: LOCKED_FROZEN_v1.2_LTS | SSoT Δ0 Baseline Drift 0.00%
-# Sovereign Principal: นายยุทธภูมิ พากเพียร (#EP-SOVEREIGN-01)
-# ==============================================================================
-
+# 🛡️ ZYRQUEN Ω∞ Sovereign Kernel v4.16 — Dependabot Automated Security Configuration
 version: 2
 updates:
-  # Maintain dependencies for GitHub Actions Workflows
-  - package-ecosystem: "github-actions"
-    directory: "/"
-    schedule:
-      interval: "weekly"
-      day: "monday"
-      time: "06:00"
-      timezone: "Asia/Bangkok"
-    open-pull-requests-limit: 10
-    reviewers:
-      - "yutthaphum-phakphian"
-    labels:
-      - "security"
-      - "ci/cd"
-      - "sovereign-audit"
-
-  # Maintain dependencies for Node.js / React Frontend & Gateway
+  # 1. Node.js NPM Package Dependencies
   - package-ecosystem: "npm"
     directory: "/"
     schedule:
       interval: "weekly"
       day: "monday"
-      time: "06:00"
-      timezone: "Asia/Bangkok"
-    open-pull-requests-limit: 10
-    reviewers:
-      - "yutthaphum-phakphian"
-    labels:
-      - "dependencies"
-      - "npm"
-
-  # Maintain dependencies for Python Test & Audit Tools
-  - package-ecosystem: "pip"
-    directory: "/server"
-    schedule:
-      interval: "weekly"
-      day: "monday"
-      time: "06:00"
+      time: "00:00"
       timezone: "Asia/Bangkok"
     open-pull-requests-limit: 5
     reviewers:
       - "yutthaphum-phakphian"
+    assignees:
+      - "yutthaphum-phakphian"
     labels:
-      - "python"
+      - "dependencies"
       - "security"
+      - "sovereign-kernel"
+    commit-message:
+      prefix: "deps(npm)"
+      include: "scope"
+    groups:
+      react-ecosystem:
+        patterns:
+          - "react*"
+          - "@types/react*"
+      vite-tools:
+        patterns:
+          - "vite*"
+          - "@vitejs/*"
+    ignore:
+      # Freeze major breaking updates for locked core LTS dependencies
+      - dependency-name: "react"
+        update-types: ["version-update:semver-major"]
+      - dependency-name: "react-dom"
+        update-types: ["version-update:semver-major"]
+
+  # 2. GitHub Actions CI/CD Workflows
+  - package-ecosystem: "github-actions"
+    directory: "/"
+    schedule:
+      interval: "weekly"
+      day: "monday"
+      time: "00:00"
+      timezone: "Asia/Bangkok"
+    open-pull-requests-limit: 5
+    reviewers:
+      - "yutthaphum-phakphian"
+    assignees:
+      - "yutthaphum-phakphian"
+    labels:
+      - "ci/cd"
+      - "github-actions"
+    commit-message:
+      prefix: "ci(actions)"
+      include: "scope"
+
+  # 3. Docker Container Base Images
+  - package-ecosystem: "docker"
+    directory: "/"
+    schedule:
+      interval: "monthly"
+    open-pull-requests-limit: 3
+    reviewers:
+      - "yutthaphum-phakphian"
+    assignees:
+      - "yutthaphum-phakphian"
+    labels:
+      - "docker"
+      - "container-security"
+    commit-message:
+      prefix: "build(docker)"
+      include: "scope"
