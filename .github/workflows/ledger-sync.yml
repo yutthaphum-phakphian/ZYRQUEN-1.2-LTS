@@ -45,7 +45,7 @@ jobs:
     timeout-minutes: 10
     steps:
       - name: 📥 Checkout Sovereign Repository
-        uses: actions/checkout@v4
+        uses: actions/checkout@v7
         with:
           token: ${{ secrets.GITHUB_TOKEN }}
           persist-credentials: true

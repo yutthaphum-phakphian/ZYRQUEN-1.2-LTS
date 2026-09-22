@@ -53,7 +53,7 @@ jobs:
     timeout-minutes: 12
     steps:
       - name: 📥 Checkout Sovereign Repository
-        uses: actions/checkout@v4
+        uses: actions/checkout@v7
 
       - name: ⚙️ Setup Node.js 20 Environment
         uses: actions/setup-node@v4
