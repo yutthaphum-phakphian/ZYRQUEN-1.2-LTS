@@ -45,10 +45,10 @@ jobs:
           cache: 'npm'
 
       - name: 📦 Install Project Dependencies
-        run: npm ci --legacy-peer-deps || npm install
+        run: npm ci --legacy-peer-deps
 
       - name: 🔬 Execute TypeScript Compiler Check (tsc)
-        run: npx tsc --noEmit
+        run: npm run lint
 
       - name: 🧪 Run Automated Unit & Integration Tests
         run: |
@@ -88,8 +88,13 @@ jobs:
           path: playwright-report/
           retention-days: 7
 
-      - name: ⚡ Build Vite Static Production Bundle
+      - name: ⚡ Build Sovereign Client & Server Bundles
         run: npm run build
+
+      - name: 🔒 Prevent Jekyll Processing & Clean Server Bundles for Pages Target
+        run: |
+          touch ${{ env.BUILD_OUTPUT_DIR }}/.nojekyll
+          echo "✔ Added .nojekyll for static routing."
 
       - name: 🔒 SSoT Δ0 Genesis Merkle Root & Build Integrity Gate
         run: |
@@ -132,6 +137,8 @@ jobs:
     if: github.ref == 'refs/heads/main'
     runs-on: ubuntu-latest
     timeout-minutes: 5
+    outputs:
+      page_url: ${{ steps.deployment.outputs.page_url }}
     environment:
       name: github-pages
       url: ${{ steps.deployment.outputs.page_url }}
