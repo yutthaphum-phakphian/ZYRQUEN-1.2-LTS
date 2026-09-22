@@ -9,10 +9,16 @@ import { QuantumReliabilitySuite } from '../QuantumReliabilitySuite';
 import { Chamber11QuantumRadar } from '../Chamber11QuantumRadar';
 import { Chamber15SpatialEntropySimulator } from '../Chamber15SpatialEntropySimulator';
 import { G11CanonicalCore } from '../Chamber01CanonicalCore';
+import { QuantumResilienceDashboard } from '../QuantumResilienceDashboard';
+import { QuantumTelemetryOverlay } from '../QuantumTelemetryOverlay';
+import { ResilienceHeatmap } from '../ResilienceHeatmap';
+import { AnomalyObserverOverlay } from '../AnomalyObserverOverlay';
+import { SovereignRecoveryTimeline } from '../SovereignRecoveryTimeline';
+import { QuantumPerformanceReport } from '../QuantumPerformanceReport';
 import { Radio, Compass, Shield } from 'lucide-react';
 
 export const QuantumView: React.FC = () => {
-  const [activeTab, setActiveTab] = useState<'chamber15_spatial' | 'quantum_radar' | 'g11_canonical' | '3d_atlas' | 'cryo_telemetry' | 'reliability_suite' | 'overview' | 'entropy' | 'attestation'>('chamber15_spatial');
+  const [activeTab, setActiveTab] = useState<'quantum_resilience' | 'chamber15_spatial' | 'quantum_radar' | 'g11_canonical' | '3d_atlas' | 'cryo_telemetry' | 'reliability_suite' | 'overview' | 'entropy' | 'attestation'>('quantum_resilience');
 
   const [qubitState, setQubitState] = useState({
     activeQubits: 768,
@@ -95,6 +101,21 @@ export const QuantumView: React.FC = () => {
         <div className="flex flex-wrap items-center gap-2">
           {/* Tab Selector */}
           <div className="flex items-center bg-black/40 border border-white/10 rounded-2xl p-1 font-mono text-xs flex-wrap gap-1">
+            <button
+              onClick={() => {
+                playTone(760, 0.04);
+                setActiveTab('quantum_resilience');
+              }}
+              className={`px-3 py-1.5 rounded-xl flex items-center gap-1.5 transition-all text-xs ${
+                activeTab === 'quantum_resilience'
+                  ? 'bg-gradient-to-r from-cyan-500/30 via-emerald-500/30 to-amber-500/20 text-white font-bold border border-cyan-500/40 shadow-sm'
+                  : 'text-zinc-400 hover:text-cyan-300'
+              }`}
+            >
+              <ShieldCheck className="w-3.5 h-3.5 text-cyan-400" />
+              <span>Quantum Resilience & Telemetry</span>
+            </button>
+
             <button
               onClick={() => {
                 playTone(720, 0.04);
@@ -245,6 +266,17 @@ export const QuantumView: React.FC = () => {
           </button>
         </div>
       </div>
+
+      {activeTab === 'quantum_resilience' && (
+        <div className="space-y-6">
+          <QuantumResilienceDashboard />
+          <QuantumTelemetryOverlay />
+          <QuantumPerformanceReport />
+          <ResilienceHeatmap />
+          <AnomalyObserverOverlay />
+          <SovereignRecoveryTimeline />
+        </div>
+      )}
 
       {activeTab === 'chamber15_spatial' && (
         <div className="space-y-6">

@@ -76,6 +76,11 @@ import { GitHubPwaModal } from '@/components/GitHubPwaModal';
 import { ThaiLegalSearchModal } from '@/components/ThaiLegalSearchModal';
 import { KeyboardShortcutsModal } from '@/components/KeyboardShortcutsModal';
 import { ErrorBoundary } from '@/components/ErrorBoundary';
+import { SovereignSelfHealingBoundary } from '@/components/SovereignSelfHealingBoundary';
+import { ResilienceHeatmap } from '@/components/ResilienceHeatmap';
+import { AnomalyObserverOverlay } from '@/components/AnomalyObserverOverlay';
+import { SovereignRecoveryTimeline } from '@/components/SovereignRecoveryTimeline';
+import { QuantumPerformanceReport } from '@/components/QuantumPerformanceReport';
 import { VoiceCommandOverlay } from '@/components/VoiceCommandOverlay';
 import { OfflineIndicator } from '@/components/OfflineIndicator';
 import { NexusIntegrationLayer } from '@/components/NexusIntegrationLayer';
@@ -2256,6 +2261,24 @@ function SovereignAppContent() {
       const el = document.getElementById('forensic-audit-stepper');
       if (el) el.scrollIntoView({ behavior: 'smooth' });
       showToast('นำทางไปยัง 16-Step Forensic Audit Stepper', 'info');
+    } else if (actionId === 'resilience-heatmap' || actionId === 'chamber-heatmap') {
+      setCurrentView('quantum');
+      showToast('เปิดแสดง Chamber Resilience Heatmap บน Control Plane', 'info');
+    } else if (actionId === 'anomaly-observer' || actionId === 'ai-threats') {
+      setCurrentView('quantum');
+      showToast('เปิดแสดง AI-Driven Anomaly Observer & Threat Neutralization', 'info');
+    } else if (actionId === 'recovery-timeline' || actionId === 'chamber-recovery') {
+      setCurrentView('quantum');
+      showToast('เปิดแสดง Sovereign Recovery Timeline (35.80ms SLA Replay)', 'info');
+    } else if (
+      actionId === 'quantum-performance-report' ||
+      actionId === 'export-telemetry-pdf' ||
+      actionId === 'telemetry-report'
+    ) {
+      setCurrentView('quantum');
+      const el = document.getElementById('quantum-performance-report-widget');
+      if (el) el.scrollIntoView({ behavior: 'smooth' });
+      showToast('เปิดใช้งาน Quantum Performance Report & Forensic Dossier Exporter', 'info');
     } else if (
       actionId === 'export-dossier-pdf' ||
       actionId === 'open-forensic-master-dossier' ||
@@ -3047,9 +3070,11 @@ function SovereignAppContent() {
 
 export default function App() {
   return (
-    <HashRouter>
-      <SovereignAppContent />
-    </HashRouter>
+    <SovereignSelfHealingBoundary>
+      <HashRouter>
+        <SovereignAppContent />
+      </HashRouter>
+    </SovereignSelfHealingBoundary>
   );
 }
 

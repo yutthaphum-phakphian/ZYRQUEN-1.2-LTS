@@ -441,7 +441,10 @@ async function startServer() {
     });
     app.use(vite.middlewares);
 
-    app.use('*', async (req: Request, res: Response, next: NextFunction) => {
+    app.use(async (req: Request, res: Response, next: NextFunction) => {
+      if (req.originalUrl.startsWith('/api')) {
+        return res.status(404).json({ error: 'API_ENDPOINT_NOT_FOUND', path: req.originalUrl });
+      }
       const url = req.originalUrl;
       try {
         const indexPath = path.resolve(process.cwd(), 'index.html');
@@ -458,7 +461,7 @@ async function startServer() {
   } else {
     const distPath = path.join(process.cwd(), 'dist');
     app.use(express.static(distPath));
-    app.get('*', (_req: Request, res: Response) => {
+    app.use((_req: Request, res: Response) => {
       res.sendFile(path.join(distPath, 'index.html'));
     });
   }

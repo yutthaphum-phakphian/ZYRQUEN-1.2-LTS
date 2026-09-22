@@ -9,7 +9,7 @@ import path from 'path';
 // SHA-256 Digest: 4c53a5422dc19d557cfe47b81ac43fc156d768b64ddcdfa82d9169fad03614ab
 
 export default defineConfig({
-  base: './',
+  base: '/',
   plugins: [
     tailwindcss(),
     react(),
@@ -76,10 +76,23 @@ export default defineConfig({
       output: {
         manualChunks(id: string) {
           if (id.includes('node_modules')) {
-            if (id.includes('three')) return 'graphics';
-            if (id.includes('lucide-react')) return 'lucide';
-            if (id.includes('jspdf')) return 'pdf';
-            if (id.includes('react') || id.includes('react-dom') || id.includes('react-router-dom')) return 'vendor';
+            if (id.includes('three')) return 'vendor-three';
+            if (id.includes('lucide-react')) return 'vendor-lucide';
+            if (id.includes('jspdf') || id.includes('jszip')) return 'vendor-pdf';
+            if (id.includes('d3') || id.includes('recharts')) return 'vendor-charts';
+            if (id.includes('motion')) return 'vendor-motion';
+            if (id.includes('socket.io') || id.includes('ws')) return 'vendor-socket';
+            if (id.includes('qrcode') || id.includes('jsqr')) return 'vendor-qr';
+            if (id.includes('@google/genai')) return 'vendor-ai';
+            if (
+              id.includes('react') ||
+              id.includes('react-dom') ||
+              id.includes('react-router-dom') ||
+              id.includes('react-is')
+            ) {
+              return 'vendor-react';
+            }
+            return 'vendor-core';
           }
         },
       },

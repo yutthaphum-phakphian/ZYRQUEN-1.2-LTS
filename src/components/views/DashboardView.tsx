@@ -37,6 +37,10 @@ import { RealtimeVerifiedSealTelemetry } from '../RealtimeVerifiedSealTelemetry'
 import { SystemResourceGrid } from '../SystemResourceGrid';
 import { AggregateSystemEntropyChart } from '../AggregateSystemEntropyChart';
 import { SpatialEntropyHeatMap } from '../SpatialEntropyHeatMap';
+import { ResilienceHeatmap } from '../ResilienceHeatmap';
+import { AnomalyObserverOverlay } from '../AnomalyObserverOverlay';
+import { SovereignRecoveryTimeline } from '../SovereignRecoveryTimeline';
+import { QuantumPerformanceReport } from '../QuantumPerformanceReport';
 import { SovereignAuditDashboard } from '../SovereignAuditDashboard';
 import { GitHubSyncStatusUtility } from '../dashboard/GitHubSyncStatusUtility';
 import { QuickActionsMenu } from '../QuickActionsMenu';
@@ -1088,6 +1092,10 @@ export const DashboardView: React.FC<DashboardViewProps> = ({
         <div className="space-y-5 animate-in fade-in duration-200">
           <GitHubSyncStatusUtility />
           <LiveAutomatedHealthWidget />
+          <ResilienceHeatmap />
+          <AnomalyObserverOverlay />
+          <SovereignRecoveryTimeline />
+          <QuantumPerformanceReport />
           <SystemResourceGrid />
           <AggregateSystemEntropyChart />
           <SpatialEntropyHeatMap />

@@ -306,4 +306,15 @@ export const ThemeSwitcher: React.FC<ThemeSwitcherProps> = ({
   );
 };
 
+export const sovereignThemeStyle = {
+  background: 'linear-gradient(135deg, #070a13 0%, #0d1b33 100%)',
+  border: '1.5px solid #00ffcc',
+  boxShadow: '0 0 20px rgba(0, 255, 204, 0.25)',
+  borderRadius: '12px',
+  padding: '24px',
+  color: '#00ffcc',
+  fontFamily: 'monospace',
+  margin: '20px 0',
+};
+
 export default ThemeSwitcher;
