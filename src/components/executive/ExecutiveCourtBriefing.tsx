@@ -649,41 +649,41 @@ export const ExecutiveCourtBriefing: React.FC<ExecutiveCourtBriefingProps> = ({
       {activeTab === 'dashboard' && (
         <div className="space-y-6">
           {/* Top Metric Cards based directly on the user's snippet design */}
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
-            <div className="p-4 rounded-xl bg-black/40 backdrop-blur-md border border-emerald-500/40 shadow-lg hover:scale-[1.02] transition-transform">
+          <div className="main-dashboard-stats-grid grid grid-cols-2 sm:grid-cols-2 lg:grid-cols-4 gap-2 sm:gap-4">
+            <div className="p-3 sm:p-4 rounded-xl bg-black/40 backdrop-blur-md border border-emerald-500/40 shadow-lg hover:scale-[1.02] transition-transform">
               <div className="flex items-center justify-between">
                 <h3 className="text-xs font-semibold text-[#D4AF37] uppercase tracking-wider">Verified Seals</h3>
                 <CheckCircle2 className="w-4 h-4 text-emerald-400" />
               </div>
-              <p className="text-2xl font-bold text-emerald-400 mt-2 font-mono">14,902</p>
-              <div className="text-[11px] text-zinc-400 mt-1 font-mono">100% Frozen Seals Active</div>
+              <p className="text-base sm:text-lg lg:text-2xl font-bold text-emerald-400 mt-2 font-mono">14,902</p>
+              <div className="text-[10px] sm:text-[11px] text-zinc-400 mt-1 font-mono">100% Frozen Seals Active</div>
             </div>
 
-            <div className="p-4 rounded-xl bg-black/40 backdrop-blur-md border border-cyan-500/40 shadow-lg hover:scale-[1.02] transition-transform">
+            <div className="p-3 sm:p-4 rounded-xl bg-black/40 backdrop-blur-md border border-cyan-500/40 shadow-lg hover:scale-[1.02] transition-transform">
               <div className="flex items-center justify-between">
                 <h3 className="text-xs font-semibold text-[#D4AF37] uppercase tracking-wider">Cryo Thermal</h3>
                 <Cpu className="w-4 h-4 text-cyan-400" />
               </div>
-              <p className="text-2xl font-bold text-cyan-400 mt-2 font-mono">14.98 mK</p>
-              <div className="text-[11px] text-zinc-400 mt-1 font-mono">Sub-Kelvin Bus Nominal (&lt;18mK)</div>
+              <p className="text-base sm:text-lg lg:text-2xl font-bold text-cyan-400 mt-2 font-mono">14.98 mK</p>
+              <div className="text-[10px] sm:text-[11px] text-zinc-400 mt-1 font-mono">Sub-Kelvin Bus Nominal (&lt;18mK)</div>
             </div>
 
-            <div className="p-4 rounded-xl bg-black/40 backdrop-blur-md border border-amber-500/40 shadow-lg hover:scale-[1.02] transition-transform">
+            <div className="p-3 sm:p-4 rounded-xl bg-black/40 backdrop-blur-md border border-amber-500/40 shadow-lg hover:scale-[1.02] transition-transform">
               <div className="flex items-center justify-between">
                 <h3 className="text-xs font-semibold text-[#D4AF37] uppercase tracking-wider">Coherence Index</h3>
                 <Activity className="w-4 h-4 text-amber-400" />
               </div>
-              <p className="text-2xl font-bold text-amber-400 mt-2 font-mono">99.98%</p>
-              <div className="text-[11px] text-zinc-400 mt-1 font-mono">Quantum Phase-Lock Active</div>
+              <p className="text-base sm:text-lg lg:text-2xl font-bold text-amber-400 mt-2 font-mono">99.98%</p>
+              <div className="text-[10px] sm:text-[11px] text-zinc-400 mt-1 font-mono">Quantum Phase-Lock Active</div>
             </div>
 
-            <div className="p-4 rounded-xl bg-black/40 backdrop-blur-md border border-purple-500/40 shadow-lg hover:scale-[1.02] transition-transform">
+            <div className="p-3 sm:p-4 rounded-xl bg-black/40 backdrop-blur-md border border-purple-500/40 shadow-lg hover:scale-[1.02] transition-transform">
               <div className="flex items-center justify-between">
                 <h3 className="text-xs font-semibold text-[#D4AF37] uppercase tracking-wider">Zero Drift</h3>
                 <ShieldCheck className="w-4 h-4 text-purple-400" />
               </div>
-              <p className="text-2xl font-bold text-purple-400 mt-2 font-mono">0.00%</p>
-              <div className="text-[11px] text-zinc-400 mt-1 font-mono">SSoT Δ0 Zero Mutation</div>
+              <p className="text-base sm:text-lg lg:text-2xl font-bold text-purple-400 mt-2 font-mono">0.00%</p>
+              <div className="text-[10px] sm:text-[11px] text-zinc-400 mt-1 font-mono">SSoT Δ0 Zero Mutation</div>
             </div>
           </div>
 

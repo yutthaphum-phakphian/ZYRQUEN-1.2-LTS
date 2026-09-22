@@ -94,11 +94,11 @@ export const GitHubSyncStatusUtility: React.FC = () => {
         </div>
 
         {/* Action Controls */}
-        <div className="flex flex-wrap items-center gap-2 w-full lg:w-auto shrink-0 pt-2 lg:pt-0">
+        <div className="flex flex-col sm:flex-row flex-wrap items-stretch sm:items-center gap-2 w-full lg:w-auto shrink-0 pt-2 lg:pt-0">
           <button
             onClick={handleRunChecksumAudit}
             disabled={isVerifyingChecksum}
-            className="px-3 py-1.5 rounded-xl bg-[#070a12] hover:bg-cyan-950/60 border border-cyan-500/40 text-cyan-300 hover:text-white text-xs flex items-center gap-1.5 transition-all cursor-pointer disabled:opacity-50"
+            className="px-3 py-1.5 rounded-xl bg-[#070a12] hover:bg-cyan-950/60 border border-cyan-500/40 text-cyan-300 hover:text-white text-xs flex items-center justify-center gap-1.5 transition-all cursor-pointer disabled:opacity-50 whitespace-nowrap"
           >
             <span>{isVerifyingChecksum ? '⏳' : '🔍'}</span>
             <span>{isVerifyingChecksum ? 'Verifying...' : 'Run Checksum Audit'}</span>
@@ -108,17 +108,17 @@ export const GitHubSyncStatusUtility: React.FC = () => {
             <button
               onClick={handleForceResync}
               disabled={syncState.isSyncing}
-              className="px-3.5 py-1.5 rounded-xl bg-[#D4AF37] hover:bg-[#D4AF37]/90 text-[#070a12] font-bold text-xs flex items-center gap-1.5 shadow-[0_0_15px_rgba(212,175,55,0.4)] transition-all cursor-pointer disabled:opacity-50"
+              className="px-3.5 py-1.5 rounded-xl bg-[#D4AF37] hover:bg-[#D4AF37]/90 text-[#070a12] font-bold text-xs flex items-center justify-center gap-1.5 shadow-[0_0_15px_rgba(212,175,55,0.4)] transition-all cursor-pointer disabled:opacity-50 whitespace-nowrap"
             >
               <span>{syncState.isSyncing ? '⏳' : '⚡'}</span>
               <span>Force Remote Re-sync</span>
             </button>
           ) : (
-            <div className="flex flex-wrap items-center gap-2">
+            <div className="flex flex-col sm:flex-row flex-wrap items-stretch sm:items-center gap-2 w-full sm:w-auto">
               <button
                 onClick={handleForceResync}
                 disabled={syncState.isSyncing}
-                className="px-3 py-1.5 rounded-xl bg-gradient-to-r from-cyan-600/30 to-sky-600/25 hover:from-cyan-500/40 hover:to-sky-500/40 border border-cyan-400/50 text-cyan-200 hover:text-white font-bold text-xs flex items-center gap-1.5 transition-all shadow-[0_0_12px_rgba(6,182,212,0.25)] cursor-pointer disabled:opacity-50"
+                className="px-3 py-1.5 rounded-xl bg-gradient-to-r from-cyan-600/30 to-sky-600/25 hover:from-cyan-500/40 hover:to-sky-500/40 border border-cyan-400/50 text-cyan-200 hover:text-white font-bold text-xs flex items-center justify-center gap-1.5 transition-all shadow-[0_0_12px_rgba(6,182,212,0.25)] cursor-pointer disabled:opacity-50 whitespace-nowrap"
                 title="ดึงอัปเดทและซิงค์ข้อมูลกับ GitHub Remote SSoT (origin/main)"
               >
                 <span>{syncState.isSyncing ? '⏳' : '⚡'}</span>
@@ -126,7 +126,7 @@ export const GitHubSyncStatusUtility: React.FC = () => {
               </button>
               <button
                 onClick={handleSimulateDrift}
-                className="px-2.5 py-1.5 rounded-xl bg-[#070a12] hover:bg-white/10 border border-white/10 text-zinc-400 hover:text-white text-xs transition-colors cursor-pointer"
+                className="px-2.5 py-1.5 rounded-xl bg-[#070a12] hover:bg-white/10 border border-white/10 text-zinc-400 hover:text-white text-xs transition-colors cursor-pointer text-center justify-center flex items-center whitespace-nowrap"
                 title="Test the visual drift warning system"
               >
                 🧪 Simulate Drift (+2)
