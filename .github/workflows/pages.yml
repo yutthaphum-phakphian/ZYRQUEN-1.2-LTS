@@ -58,7 +58,7 @@ jobs:
         run: npm run build
 
       - name: 🌐 Setup Pages
-        uses: actions/configure-pages@v6   # <-- อัปเดตจาก @v4 เป็น @v6
+        uses: actions/configure-pages@v6
 
       - name: 📤 Upload Artifact - ONLY dist
         uses: actions/upload-pages-artifact@v3
