@@ -58,12 +58,12 @@ jobs:
         run: npm run build
 
       - name: 🌐 Setup Pages
-        uses: actions/configure-pages@v4
+        uses: actions/configure-pages@v6   # <-- อัปเดตจาก @v4 เป็น @v6
 
       - name: 📤 Upload Artifact - ONLY dist
         uses: actions/upload-pages-artifact@v3
         with:
-          path: './dist'   # <-- แก้จาก '.' เป็น './dist' (Tomin Cleanup)
+          path: './dist'
 
       - name: 🚀 Deploy to GitHub Pages
         id: deployment
