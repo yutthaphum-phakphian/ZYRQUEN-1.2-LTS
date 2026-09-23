@@ -10,10 +10,17 @@ import {
   ChevronDown,
   CheckCircle2,
   Clock,
+  Pin,
+  PinOff,
+  QrCode,
+  X,
 } from 'lucide-react';
 import { BannerAnimatedSealCount } from '@/components/layout/BannerAnimatedSealCount';
 import { LegalTriggerMatrixSection } from '@/components/layout/LegalTriggerMatrixSection';
 import { SsotDriftToggleButton } from '@/components/system/SystemStateComponents';
+import { MerkleRootQrCodeModal } from '@/components/MerkleRootQrCodeModal';
+import { CANONICAL_GENESIS_BLOCK, CANONICAL_MERKLE_ROOT } from '@/data/canonicalData';
+import { playTone } from '@/components/AudioSynthesizer';
 
 export interface VerificationGateStatusInfo {
   status: 'ACTIVE_GUARD' | 'PASSED' | 'BLOCKED' | 'PENDING';
@@ -53,11 +60,13 @@ export const VerificationGateBar: React.FC<VerificationGateBarProps> = ({
   showToast,
 }) => {
   const [isGateTooltipVisible, setIsGateTooltipVisible] = useState(false);
+  const [isGateTooltipPinned, setIsGateTooltipPinned] = useState(false);
+  const [isGateQrModalOpen, setIsGateQrModalOpen] = useState(false);
 
   return (
     <div className="rounded-2xl bg-[#0b0e1a]/90 border border-cyan-500/25 backdrop-blur-xl shadow-lg transition-all duration-300 overflow-hidden">
       <div className="px-4 py-2.5 flex flex-wrap items-center justify-between gap-3 text-xs font-mono">
-        {/* Left: Gate Status & Info with Tooltip Trigger */}
+        {/* Left: Gate Status & Info with Tooltip Trigger & Pin Toggle */}
         <div className="flex items-center gap-2.5 relative">
           <span
             className={`w-2.5 h-2.5 rounded-full ${
@@ -73,11 +82,15 @@ export const VerificationGateBar: React.FC<VerificationGateBarProps> = ({
             VERIFICATION GATE:
           </span>
 
-          {/* Status Pill with hover tooltip */}
+          {/* Status Pill with hover tooltip & quick pin toggle */}
           <div
-            className="relative inline-block"
+            className="relative inline-flex items-center gap-1"
             onMouseEnter={() => setIsGateTooltipVisible(true)}
-            onMouseLeave={() => setIsGateTooltipVisible(false)}
+            onMouseLeave={() => {
+              if (!isGateTooltipPinned) {
+                setIsGateTooltipVisible(false);
+              }
+            }}
           >
             <button
               type="button"
@@ -89,43 +102,128 @@ export const VerificationGateBar: React.FC<VerificationGateBarProps> = ({
                   ? 'bg-rose-500/20 text-rose-200 border-rose-500/60 hover:bg-rose-500/30 animate-pulse shadow-[0_0_15px_rgba(244,63,94,0.45)] ring-1 ring-rose-500/50'
                   : 'bg-cyan-500/10 text-cyan-300 border-cyan-500/30 hover:bg-cyan-500/20'
               }`}
-              title="Hover for tooltip / Click to toggle legal triggers summary"
+              title="Hover for summary / Click to toggle legal triggers breakdown"
             >
               {verificationGateStatus.status}
               <Info className="w-2.5 h-2.5 opacity-70" />
             </button>
 
-            {/* Floating Tooltip Box: Enhanced Hover-Card Summary */}
+            {/* Quick Pin Toggle on Status Pill */}
+            <button
+              type="button"
+              onClick={(e) => {
+                e.stopPropagation();
+                playTone(isGateTooltipPinned ? 520 : 780, 0.05);
+                setIsGateTooltipPinned((prev) => !prev);
+                setIsGateTooltipVisible(true);
+              }}
+              className={`p-1 rounded transition-all cursor-pointer border ${
+                isGateTooltipPinned
+                  ? 'bg-cyan-500/25 text-cyan-200 border-cyan-400/50 shadow-[0_0_8px_rgba(6,182,212,0.4)]'
+                  : 'bg-white/5 text-zinc-400 hover:text-zinc-200 border-white/10 hover:border-cyan-500/30'
+              }`}
+              title={isGateTooltipPinned ? 'Unpin Verification Gate summary' : 'Pin Verification Gate summary to keep visible while using dashboard'}
+            >
+              {isGateTooltipPinned ? (
+                <PinOff className="w-2.5 h-2.5 text-cyan-300" />
+              ) : (
+                <Pin className="w-2.5 h-2.5 text-zinc-400 hover:text-zinc-200" />
+              )}
+            </button>
+
+            {/* Floating Tooltip Box: Enhanced Hover-Card & Pinned Summary with Subtle Entry Animation */}
             <AnimatePresence>
               {isGateTooltipVisible && (
                 <motion.div
-                  initial={{ opacity: 0, y: 6, scale: 0.96 }}
-                  animate={{ opacity: 1, y: 0, scale: 1 }}
-                  exit={{ opacity: 0, y: 4, scale: 0.96 }}
-                  transition={{ duration: 0.15 }}
-                  className="absolute left-0 top-full mt-2 z-50 w-80 sm:w-[460px] p-4 rounded-2xl bg-[#070914]/98 border border-cyan-500/40 backdrop-blur-2xl shadow-[0_20px_50px_rgba(0,0,0,0.85)] text-[11px] font-sans text-zinc-300 pointer-events-none"
+                  initial={{ opacity: 0, y: -8, scale: 0.97, filter: 'blur(4px)' }}
+                  animate={{ opacity: 1, y: 0, scale: 1, filter: 'blur(0px)' }}
+                  exit={{ opacity: 0, y: -6, scale: 0.97, filter: 'blur(3px)' }}
+                  transition={{ type: 'spring', stiffness: 450, damping: 32, mass: 0.8 }}
+                  className={`absolute left-0 top-full mt-2.5 z-50 w-80 sm:w-[480px] p-4 rounded-2xl bg-[#070914]/98 border backdrop-blur-2xl transition-all duration-200 pointer-events-auto ${
+                    isGateTooltipPinned
+                      ? 'border-cyan-400/80 shadow-[0_0_35px_rgba(6,182,212,0.35),0_25px_60px_rgba(0,0,0,0.95)] ring-1 ring-cyan-400/50'
+                      : 'border-cyan-500/40 shadow-[0_20px_50px_rgba(0,0,0,0.85)] hover:border-cyan-400/60'
+                  } text-[11px] font-sans text-zinc-300`}
                 >
                   {/* Header */}
-                  <div className="flex items-center justify-between pb-2 mb-2.5 border-b border-white/10 font-mono text-[11px]">
-                    <div className="flex items-center gap-2">
-                      <div className="p-1.5 rounded-lg bg-emerald-500/10 border border-emerald-500/30 text-emerald-400">
+                  <div className="flex items-center justify-between pb-2 mb-2.5 border-b border-white/10 font-mono text-[11px] gap-2">
+                    <div className="flex items-center gap-2 min-w-0">
+                      <div className="p-1.5 rounded-lg bg-emerald-500/10 border border-emerald-500/30 text-emerald-400 shrink-0">
                         <ShieldCheck className="w-4 h-4" />
                       </div>
-                      <div>
-                        <div className="font-bold text-white flex items-center gap-1.5">
-                          VERIFICATION GATE
+                      <div className="min-w-0">
+                        <div className="font-bold text-white flex items-center gap-1.5 flex-wrap">
+                          <span>VERIFICATION GATE</span>
                           <span className="px-1.5 py-0.5 rounded bg-emerald-500/20 text-emerald-300 text-[9px] border border-emerald-500/40 font-mono">
                             {verificationGateStatus.status} • MAINNET LIVE
                           </span>
+                          {isGateTooltipPinned && (
+                            <span className="px-1.5 py-0.5 rounded-full bg-cyan-500/20 text-cyan-300 text-[9px] border border-cyan-400/50 font-mono font-bold flex items-center gap-1 shadow-[0_0_8px_rgba(6,182,212,0.3)] animate-pulse">
+                              <Pin className="w-2.5 h-2.5 text-cyan-300 rotate-45" />
+                              PINNED
+                            </span>
+                          )}
                         </div>
-                        <span className="text-[10px] text-zinc-400">
+                        <span className="text-[10px] text-zinc-400 block truncate">
                           Block #849202 • ZQ-GREEN-DEP-849202-3908
                         </span>
                       </div>
                     </div>
-                    <span className="text-emerald-400 font-bold font-mono text-[10px] px-2 py-0.5 rounded bg-emerald-950/60 border border-emerald-500/30">
-                      SSoT Δ0.00%
-                    </span>
+
+                    <div className="flex items-center gap-1.5 shrink-0">
+                      <span className="text-emerald-400 font-bold font-mono text-[10px] px-2 py-0.5 rounded bg-emerald-950/60 border border-emerald-500/30 hidden sm:inline-block">
+                        SSoT Δ0.00%
+                      </span>
+
+                      {/* Pin / Unpin Button */}
+                      <button
+                        type="button"
+                        onClick={(e) => {
+                          e.stopPropagation();
+                          playTone(isGateTooltipPinned ? 520 : 780, 0.05);
+                          setIsGateTooltipPinned((prev) => !prev);
+                        }}
+                        className={`px-2 py-1 rounded-lg border text-xs flex items-center gap-1 transition-all cursor-pointer ${
+                          isGateTooltipPinned
+                            ? 'bg-cyan-500/25 border-cyan-400/60 text-cyan-200 shadow-[0_0_10px_rgba(6,182,212,0.3)]'
+                            : 'bg-white/5 hover:bg-white/10 text-zinc-400 hover:text-zinc-200 border-white/10 hover:border-cyan-500/30'
+                        }`}
+                        title={
+                          isGateTooltipPinned
+                            ? 'Unpin tooltip (closes when mouse leaves trigger)'
+                            : 'Pin tooltip (keeps legal/HSM summary visible while you use dashboard)'
+                        }
+                      >
+                        {isGateTooltipPinned ? (
+                          <>
+                            <PinOff className="w-3 h-3 text-cyan-300" />
+                            <span className="text-[9px] font-mono font-semibold">UNPIN</span>
+                          </>
+                        ) : (
+                          <>
+                            <Pin className="w-3 h-3 text-zinc-400" />
+                            <span className="text-[9px] font-mono">PIN</span>
+                          </>
+                        )}
+                      </button>
+
+                      {/* Close button if pinned */}
+                      {isGateTooltipPinned && (
+                        <button
+                          type="button"
+                          onClick={(e) => {
+                            e.stopPropagation();
+                            playTone(500, 0.04);
+                            setIsGateTooltipPinned(false);
+                            setIsGateTooltipVisible(false);
+                          }}
+                          className="p-1 rounded-lg bg-white/5 hover:bg-rose-500/20 text-zinc-400 hover:text-rose-300 border border-white/10 hover:border-rose-500/30 transition-colors cursor-pointer"
+                          title="Close pinned tooltip"
+                        >
+                          <X className="w-3.5 h-3.5" />
+                        </button>
+                      )}
+                    </div>
                   </div>
 
                   {/* Description */}
@@ -188,7 +286,7 @@ export const VerificationGateBar: React.FC<VerificationGateBarProps> = ({
                   </div>
 
                   {/* 3. Legal & Court Invariant Details */}
-                  <div className="p-2 rounded-xl bg-zinc-900/40 border border-white/5 text-[10px] font-mono text-zinc-400 space-y-1">
+                  <div className="p-2 rounded-xl bg-zinc-900/40 border border-white/5 text-[10px] font-mono text-zinc-400 space-y-1 mb-2.5">
                     <div className="flex justify-between">
                       <span>Thai Legal Standards:</span>
                       <span className="text-emerald-400 font-medium">ETDA Sec 9/26/28 • PDPA Sec 37</span>
@@ -199,8 +297,25 @@ export const VerificationGateBar: React.FC<VerificationGateBarProps> = ({
                     </div>
                   </div>
 
-                  <p className="mt-2 text-[10px] text-cyan-400/80 font-mono text-center">
-                    Click status pill to expand / collapse full legal trigger matrix ↓
+                  {/* Quick Mobile Audit QR Trigger Button */}
+                  <button
+                    type="button"
+                    onClick={(e) => {
+                      e.stopPropagation();
+                      playTone(720, 0.05);
+                      setIsGateQrModalOpen(true);
+                    }}
+                    className="w-full py-1.5 px-2.5 rounded-xl bg-cyan-950/60 hover:bg-cyan-900/70 border border-cyan-500/30 hover:border-cyan-400/60 text-cyan-200 hover:text-white font-mono text-[10px] font-semibold flex items-center justify-center gap-2 transition-all cursor-pointer shadow-sm mb-2"
+                    title="Generate & display shareable QR code with Merkle root & block height for mobile-based audit verification"
+                  >
+                    <QrCode className="w-3.5 h-3.5 text-cyan-400" />
+                    <span>Generate Shareable Mobile Audit QR (Merkle #849202)</span>
+                  </button>
+
+                  <p className="text-[10px] text-cyan-400/80 font-mono text-center">
+                    {isGateTooltipPinned
+                      ? 'Pinned mode active • You can browse other screens while keeping this visible'
+                      : 'Click status pill to expand / collapse full legal trigger matrix ↓'}
                   </p>
                 </motion.div>
               )}
@@ -216,6 +331,20 @@ export const VerificationGateBar: React.FC<VerificationGateBarProps> = ({
         <div className="flex items-center gap-2.5 sm:gap-3 text-[11px] text-zinc-400 ml-auto flex-wrap sm:flex-nowrap">
           {/* SSoT Drift Deviation Simulator Toggle Button */}
           <SsotDriftToggleButton />
+
+          {/* Mobile Audit QR Code Share Button */}
+          <button
+            type="button"
+            onClick={() => {
+              playTone(720, 0.05);
+              setIsGateQrModalOpen(true);
+            }}
+            className="px-2.5 py-1 rounded-lg font-mono text-[10px] font-semibold border flex items-center gap-1.5 transition-all cursor-pointer bg-cyan-950/40 hover:bg-cyan-900/50 text-cyan-200 border-cyan-500/40 hover:border-cyan-400/70 shadow-[0_0_10px_rgba(6,182,212,0.18)]"
+            title="Generate and display shareable QR code containing Merkle root & block height for mobile audit"
+          >
+            <QrCode className="w-3.5 h-3.5 text-cyan-400" />
+            <span>Mobile Audit QR</span>
+          </button>
 
           {/* Expandable Section Toggle Button */}
           <button
@@ -293,6 +422,14 @@ export const VerificationGateBar: React.FC<VerificationGateBarProps> = ({
         onBatchVerify={onBatchVerify}
         onExportAuditLogs={onExportAuditLogs}
         showToast={showToast}
+      />
+
+      {/* Verification Gate Mobile Audit Merkle Root QR Modal */}
+      <MerkleRootQrCodeModal
+        isOpen={isGateQrModalOpen}
+        onClose={() => setIsGateQrModalOpen(false)}
+        currentBlockHeight={CANONICAL_GENESIS_BLOCK}
+        merkleRootHash={CANONICAL_MERKLE_ROOT}
       />
     </div>
   );

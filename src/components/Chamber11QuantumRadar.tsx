@@ -581,6 +581,33 @@ export const Chamber11QuantumRadar: React.FC = () => {
               onClick={handleCanvasClick}
               className="max-w-full h-auto rounded-xl border border-emerald-500/20"
             />
+            {/* Export Waveform Telemetry Button */}
+            <button
+              onClick={() => {
+                playAuditChime();
+                const telemetryBlob = new Blob([JSON.stringify({
+                  artifact: "MerkleWave_Telemetry",
+                  timestamp: new Date().toISOString(),
+                  baseline_drift: baselineDrift,
+                  signature: "SHA3-512-R-FIPS",
+                  genesis_block: 849202,
+                  coherence_pct: 99.992,
+                  active_vectors: threats.length,
+                  vectors: threats
+                }, null, 2)], { type: 'application/json' });
+                const url = URL.createObjectURL(telemetryBlob);
+                const a = document.createElement('a');
+                a.href = url;
+                a.download = `merklewave-telemetry-${Date.now()}.json`;
+                a.click();
+                URL.revokeObjectURL(url);
+              }}
+              className="absolute bottom-3 right-3 z-10 px-2.5 py-1.5 bg-black/80 hover:bg-emerald-950/90 border border-emerald-500/50 rounded-lg flex items-center gap-1.5 text-[10px] font-mono text-emerald-400 shadow-lg backdrop-blur-md transition-all cursor-pointer hover:border-emerald-400 active:scale-95"
+              title="ส่งออกชุดข้อมูลเวฟฟอร์มและเวกเตอร์โทรมาตรเพื่อการตรวจพิสูจน์พยานหลักฐาน"
+            >
+              <Download className="w-3 h-3 text-emerald-400" />
+              <span>Export Waveform Telemetry</span>
+            </button>
           </div>
 
           {/* Radar Bottom Telemetry Strip */}

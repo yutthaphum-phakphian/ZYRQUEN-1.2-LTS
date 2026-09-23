@@ -40,7 +40,7 @@ export const MerkleRootQrCodeModal: React.FC<MerkleRootQrCodeModalProps> = ({
   const canvasRef = useRef<HTMLCanvasElement | null>(null);
 
   // Construct URLs and Payloads
-  const baseUrl = typeof window !== 'undefined' ? window.location.origin : 'https://hugeplease66-debug.github.io';
+  const baseUrl = typeof window !== 'undefined' ? window.location.origin : '';
   const liveAuditUrl = `${baseUrl}/?audit=live&merkle_root=${merkleRootHash}&block=${currentBlockHeight}&seals=${CANONICAL_SEALS}&pqc=ML-DSA-87`;
   
   const cryptographicManifestPayload = JSON.stringify({
@@ -294,17 +294,36 @@ export const MerkleRootQrCodeModal: React.FC<MerkleRootQrCodeModalProps> = ({
             <div className="md:col-span-6 space-y-3.5 font-mono text-xs">
               <div className="p-3.5 rounded-2xl bg-[#0D0F1F] border border-white/10 space-y-2">
                 <div className="flex items-center justify-between text-zinc-400 text-[11px]">
-                  <span>GENESIS MERKLE ROOT</span>
-                  <button
-                    onClick={() => handleCopy(merkleRootHash, 'MERKLE_ROOT')}
-                    className="text-cyan-300 hover:text-cyan-200 flex items-center gap-1"
-                  >
-                    {copiedField === 'MERKLE_ROOT' ? <Check className="w-3 h-3 text-emerald-400" /> : <Copy className="w-3 h-3" />}
-                    <span>{copiedField === 'MERKLE_ROOT' ? 'Copied' : 'Copy'}</span>
-                  </button>
+                  <span className="font-semibold tracking-wider text-zinc-300">GENESIS MERKLE ROOT</span>
+                  <span className="text-[10px] text-cyan-400/80 font-mono">SHA-256 SSoT Anchor</span>
                 </div>
-                <div className="p-2 rounded-xl bg-black/60 border border-cyan-500/30 font-mono text-[11px] text-cyan-200 break-all select-all">
-                  {merkleRootHash}
+                <div className="flex flex-col sm:flex-row items-stretch gap-2">
+                  <div className="flex-1 p-2.5 rounded-xl bg-black/70 border border-cyan-500/30 font-mono text-[11px] text-cyan-200 break-all select-all flex items-center">
+                    {merkleRootHash}
+                  </div>
+                  <button
+                    type="button"
+                    onClick={() => handleCopy(merkleRootHash, 'MERKLE_ROOT')}
+                    aria-label="Copy Merkle Root hash to clipboard"
+                    title="Copy Merkle Root hash to clipboard for forensic sharing"
+                    className={`px-3.5 py-2 rounded-xl font-mono text-xs font-semibold flex items-center justify-center gap-1.5 transition-all shrink-0 cursor-pointer shadow-sm ${
+                      copiedField === 'MERKLE_ROOT'
+                        ? 'bg-emerald-500/25 border border-emerald-500/50 text-emerald-200 shadow-[0_0_12px_rgba(16,185,129,0.3)]'
+                        : 'bg-cyan-500/20 hover:bg-cyan-500/30 border border-cyan-500/40 text-cyan-200 hover:text-white shadow-[0_0_12px_rgba(6,182,212,0.2)]'
+                    }`}
+                  >
+                    {copiedField === 'MERKLE_ROOT' ? (
+                      <>
+                        <Check className="w-4 h-4 text-emerald-400" />
+                        <span className="text-[11px]">Copied!</span>
+                      </>
+                    ) : (
+                      <>
+                        <Copy className="w-4 h-4 text-cyan-300" />
+                        <span className="text-[11px]">Copy to Clipboard</span>
+                      </>
+                    )}
+                  </button>
                 </div>
               </div>
 

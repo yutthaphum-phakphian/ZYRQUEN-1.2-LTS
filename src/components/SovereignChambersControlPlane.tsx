@@ -24,6 +24,7 @@ import {
 import { io, Socket } from 'socket.io-client';
 import { playAuditChime, playTone } from './AudioSynthesizer';
 import SovereignChamberConsole from './SovereignChamberConsole';
+import ChaosFaultInjector from './ChaosFaultInjector';
 
 export interface SovereignChamber {
   id: number;
@@ -476,7 +477,10 @@ export const SovereignChambersControlPlane: React.FC = () => {
               </button>
             </div>
           </div>
-          <SovereignChamberConsole />
+          <div className="space-y-6">
+            <ChaosFaultInjector />
+            <SovereignChamberConsole />
+          </div>
         </div>
       </div>
     );

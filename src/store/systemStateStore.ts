@@ -509,6 +509,9 @@ export type SystemState = {
   ssotMutationDrift: string;
   sealCount: number;
   sealedBlock: number;
+  blockHeight: number;
+  systemStatus: string;
+  merkleRoot: string;
   custodianProofs: number;
   custodianRegistry: CustodianRegistrySnapshot;
   fcmDeviceToken?: string;
@@ -516,6 +519,8 @@ export type SystemState = {
   fcmRegisteredAt?: string;
   fcmActiveChannel?: string;
   events: SystemEvent[];
+  isQuarantineIsolated: boolean;
+  coherenceScore: number;
 };
 
 class SystemStateStore {
@@ -536,8 +541,13 @@ class SystemStateStore {
     ssotMutationDrift: SYSTEM_METADATA.baselineDrift,
     sealCount: SYSTEM_METADATA.canonicalSeals,
     sealedBlock: SYSTEM_METADATA.sealedBlock,
+    blockHeight: SYSTEM_METADATA.sealedBlock,
+    systemStatus: 'LOCKED_FROZEN_v1.2_LTS',
+    merkleRoot: SYSTEM_METADATA.merkleRoot,
     custodianProofs: 10, // 10/10 Verified Super-Majority Attained (Super-Majority Invariant ≥8/10)
     custodianRegistry: this.custodianRegistry.getSnapshot(),
+    isQuarantineIsolated: false,
+    coherenceScore: 0.998,
     events: [
       {
         id: 'evt-genesis-01',
@@ -784,6 +794,48 @@ class SystemStateStore {
     }
   }
 
+  public triggerQuarantineIsolation(reason?: string) {
+    this.state = {
+      ...this.state,
+      isQuarantineIsolated: true,
+      coherenceScore: Math.min(this.state.coherenceScore, 0.742),
+    };
+    this.addSystemEvent({
+      id: `quarantine-${Date.now()}`,
+      title: '🚨 Chamber 02 Quarantine Isolation Triggered',
+      description: reason || 'High-Risk Cryptographic Forgery or Anomaly Isolated in Chamber 02 Buffer',
+      severity: 'critical',
+    });
+    this.notify();
+  }
+
+  public updateCoherence(score: number) {
+    this.state = { ...this.state, coherenceScore: score };
+    this.notify();
+  }
+
+  public resetToSSoTBaseline() {
+    this.state = {
+      ...this.state,
+      isQuarantineIsolated: false,
+      coherenceScore: 0.998,
+      ssotMutationDrift: SYSTEM_METADATA.baselineDrift,
+      sealCount: SYSTEM_METADATA.canonicalSeals,
+      sealedBlock: SYSTEM_METADATA.sealedBlock,
+      blockHeight: SYSTEM_METADATA.sealedBlock,
+      systemStatus: 'LOCKED_FROZEN_v1.2_LTS',
+      merkleRoot: SYSTEM_METADATA.merkleRoot,
+      custodianProofs: 10,
+    };
+    this.notify();
+  }
+
+  public logSystemEvent(
+    event: SystemEvent | { id?: string; title: string; description?: string; severity?: string; handler?: () => void }
+  ) {
+    this.addSystemEvent(event as any);
+  }
+
   subscribe(listener: (state: SystemState) => void): () => void {
     this.listeners.add(listener);
     return () => {
@@ -811,14 +863,30 @@ export function addSystemEvent(
 
 import { useState, useEffect } from 'react';
 
-export function useSystemStateStore<T = SystemState>(
-  selector: (state: SystemState) => T = (s) => s as unknown as T
+export type SystemStateWithActions = SystemState & {
+  triggerQuarantineIsolation: (reason?: string) => void;
+  updateCoherence: (score: number) => void;
+  resetToSSoTBaseline: () => void;
+  logSystemEvent: (event: any) => void;
+};
+
+export function useSystemStateStore<T = SystemStateWithActions>(
+  selector?: (state: SystemStateWithActions) => T
 ): T {
-  const [state, setState] = useState(() => selector(systemStateStore.getState()));
+  const getCombined = (): SystemStateWithActions => ({
+    ...systemStateStore.getState(),
+    triggerQuarantineIsolation: (reason?: string) => systemStateStore.triggerQuarantineIsolation(reason),
+    updateCoherence: (score: number) => systemStateStore.updateCoherence(score),
+    resetToSSoTBaseline: () => systemStateStore.resetToSSoTBaseline(),
+    logSystemEvent: (event: any) => systemStateStore.logSystemEvent(event),
+  });
+
+  const [state, setState] = useState(() => (selector ? selector(getCombined()) : (getCombined() as unknown as T)));
 
   useEffect(() => {
-    const unsubscribe = systemStateStore.subscribe((newState) => {
-      setState(selector(newState));
+    const unsubscribe = systemStateStore.subscribe(() => {
+      const combined = getCombined();
+      setState(selector ? selector(combined) : (combined as unknown as T));
     });
     return unsubscribe;
   }, [selector]);

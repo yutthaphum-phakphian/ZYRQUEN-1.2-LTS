@@ -64,6 +64,23 @@ export const useWebAudioTelemetry = () => {
     }
   }, [getAudioContext]);
 
+  const playCascadingSiren = useCallback(() => {
+    const ctx = getAudioContext();
+    const now = ctx.currentTime;
+    const osc = ctx.createOscillator();
+    const gain = ctx.createGain();
+    osc.type = 'sawtooth';
+    osc.frequency.setValueAtTime(400, now);
+    osc.frequency.linearRampToValueAtTime(1200, now + 0.4);
+    osc.frequency.linearRampToValueAtTime(400, now + 0.8);
+    gain.gain.setValueAtTime(0.12, now);
+    gain.gain.exponentialRampToValueAtTime(0.001, now + 0.9);
+    osc.connect(gain);
+    gain.connect(ctx.destination);
+    osc.start(now);
+    osc.stop(now + 0.9);
+  }, [getAudioContext]);
+
   const stopAllAudio = useCallback(() => {
     if (audioCtxRef.current) {
       void audioCtxRef.current.close();
@@ -71,5 +88,5 @@ export const useWebAudioTelemetry = () => {
     }
   }, []);
 
-  return { playTelemetrySweep, playDissonantWarning, playQuarantineAlarm, stopAllAudio };
+  return { playTelemetrySweep, playDissonantWarning, playQuarantineAlarm, playCascadingSiren, stopAllAudio };
 };

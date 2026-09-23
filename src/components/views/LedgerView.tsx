@@ -80,6 +80,7 @@ import { downloadSimplifiedForensicReport } from '../../utils/simplifiedForensic
 import { exportSignedLedgerSnapshotJson } from '../../utils/snapshotEvidenceExport';
 import { LedgerHeartbeatD3Chart } from '../LedgerHeartbeatD3Chart';
 import { triggerVibration } from '../../utils/vibration';
+import { SyncStatusIndicator } from '../SyncStatusIndicator';
 
 interface LedgerViewProps {
   snapshots?: HardwareSnapshot[];
@@ -582,6 +583,7 @@ export const LedgerView: React.FC<LedgerViewProps> = ({ snapshots = INITIAL_HARD
               {allSnapshots.length} HARDWARE SNAPSHOTS
             </span>
             <MerkleVerificationBadge showInspectorButton={true} compact={false} />
+            <SyncStatusIndicator />
           </div>
           <h2 className="text-xl sm:text-3xl font-mono font-bold text-transparent bg-clip-text bg-gradient-to-r from-white to-cyan-100 mt-1 tracking-tight">
             Immutable Audit Ledger, Forensics Trace & Evidence Exporter

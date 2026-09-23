@@ -10,13 +10,15 @@ export interface CopilotSovereignAIProps {
   onClose?: () => void;
   onOpen?: () => void;
   onNavigate?: (view: any) => void;
+  floatingActions?: React.ReactNode;
 }
 
 export const CopilotSovereignAI: React.FC<CopilotSovereignAIProps> = ({
   isOpen,
   onClose,
   onOpen,
-  onNavigate
+  onNavigate,
+  floatingActions
 }) => {
   const [isMinimized, setIsMinimized] = useState(false);
   const [isExpanded, setIsExpanded] = useState(false);
@@ -78,16 +80,18 @@ export const CopilotSovereignAI: React.FC<CopilotSovereignAIProps> = ({
     ]);
   };
 
-  /* โหมดพับเก็บเป็นปุ่มลอย (Floating Badge) บนจอมือถือ */
+  /* โหมดพับเก็บเป็นปุ่มลอย (Floating Badge) พร้อม docked assistant controls */
   if (isMinimized) {
     return (
-      <div className="fixed bottom-20 sm:bottom-4 right-4 z-50">
+      <div className="fixed bottom-3 sm:bottom-4 right-3 sm:right-4 z-50 flex items-center gap-2">
+        {floatingActions}
         <button 
           onClick={handleRestore}
-          className="flex items-center gap-2 px-3.5 py-2 rounded-xl bg-gradient-to-r from-cyan-950 via-slate-900 to-indigo-950 border border-cyan-500/60 text-cyan-300 shadow-xl shadow-cyan-950/80 hover:scale-105 transition-all animate-pulse cursor-pointer"
+          className="flex items-center gap-2 h-10 px-3 sm:px-3.5 rounded-xl bg-gradient-to-r from-cyan-950 via-slate-900 to-indigo-950 border border-cyan-500/60 text-cyan-300 shadow-xl shadow-cyan-950/80 hover:scale-105 transition-all animate-pulse cursor-pointer shrink-0"
         >
           <Bot className="w-4 h-4 text-cyan-400" />
-          <span className="text-xs font-bold tracking-wider">COPILOT v6.0 ULTRA</span>
+          <span className="text-xs font-bold tracking-wider hidden xs:inline sm:inline">COPILOT v6.0 ULTRA</span>
+          <span className="text-xs font-bold tracking-wider xs:hidden sm:hidden">COPILOT</span>
           <span className="w-2 h-2 rounded-full bg-emerald-400 animate-ping" />
         </button>
       </div>
@@ -98,7 +102,7 @@ export const CopilotSovereignAI: React.FC<CopilotSovereignAIProps> = ({
     <aside className={`fixed z-50 transition-all duration-300 ${
       isExpanded 
         ? 'inset-2 sm:inset-4 md:inset-6 max-w-full h-[calc(100vh-1rem)] sm:h-[calc(100vh-2rem)]' 
-        : 'bottom-20 sm:bottom-4 right-2 left-2 sm:left-auto sm:right-4 sm:w-[460px] max-h-[75vh] sm:max-h-[85vh]'
+        : 'bottom-3 sm:bottom-4 right-2 left-2 sm:left-auto sm:right-4 sm:w-[460px] max-h-[75vh] sm:max-h-[85vh]'
     } flex flex-col bg-slate-950/95 backdrop-blur-xl border border-cyan-500/40 rounded-2xl shadow-2xl shadow-cyan-950/80 overflow-hidden`}>
       
       {/* Top Header */}
@@ -118,6 +122,7 @@ export const CopilotSovereignAI: React.FC<CopilotSovereignAIProps> = ({
         </div>
 
         <div className="flex items-center gap-1 shrink-0">
+          {floatingActions}
           <button 
             onClick={() => setIsExpanded(!isExpanded)}
             className="p-1.5 rounded-lg text-slate-400 hover:text-white hover:bg-slate-800/80 transition-colors cursor-pointer"

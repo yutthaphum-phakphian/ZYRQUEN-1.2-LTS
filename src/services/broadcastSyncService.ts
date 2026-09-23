@@ -14,12 +14,36 @@ export type BroadcastSyncMessageType =
   | 'AUDIT_SNAPSHOT_ADDED'
   | 'GLOBAL_LOCK_STATE_CHANGED'
   | 'SYNC_PING'
-  | 'SYNC_PONG';
+  | 'SYNC_PONG'
+  | 'SYNC_HEARTBEAT';
 
 export interface GlobalLockStatePayload {
   isSystemActivityFrozen?: boolean;
   isForensicAuditMode?: boolean;
   isMonochromeMode?: boolean;
+}
+
+export interface SovereignSyncPeerNode {
+  id: string;
+  label: string;
+  lastSeen: number;
+  isSelf: boolean;
+  role: 'PRIMARY_COORDINATOR' | 'ENCLAVE_PEER' | 'STANDBY_VALIDATOR';
+  latencyMs?: number;
+  merkleRoot?: string;
+  blockHeight?: number;
+}
+
+export interface SovereignSyncStatus {
+  mode: 'BROADCAST_CHANNEL' | 'LOCAL_FALLBACK';
+  state: 'SYNCHRONIZED' | 'SYNCING' | 'SOLO_ACTIVE' | 'ISOLATED';
+  activeNodeCount: number;
+  peerCount: number;
+  nodes: SovereignSyncPeerNode[];
+  channelName: string;
+  lastSyncTimestamp: number;
+  roundTripLatencyMs: number;
+  merkleCoherence: boolean;
 }
 
 export interface BroadcastSyncMessage {
@@ -32,12 +56,15 @@ export interface BroadcastSyncMessage {
     lockState?: GlobalLockStatePayload;
     totalEventsCount?: number;
     totalSnapshotsCount?: number;
+    pingTime?: number;
+    nodeInfo?: SovereignSyncPeerNode;
   };
 }
 
 export type BroadcastEventHandler = (event: SystemEvent) => void;
 export type BroadcastSnapshotHandler = (snapshot: HardwareSnapshot) => void;
 export type BroadcastLockStateHandler = (state: GlobalLockStatePayload) => void;
+export type BroadcastSyncStatusHandler = (status: SovereignSyncStatus) => void;
 
 class SovereignBroadcastSyncService {
   private channel: BroadcastChannel | null = null;
@@ -45,11 +72,29 @@ class SovereignBroadcastSyncService {
   private eventHandlers: Set<BroadcastEventHandler> = new Set();
   private snapshotHandlers: Set<BroadcastSnapshotHandler> = new Set();
   private lockStateHandlers: Set<BroadcastLockStateHandler> = new Set();
+  private syncStatusHandlers: Set<BroadcastSyncStatusHandler> = new Set();
+  private peerNodes: Map<string, SovereignSyncPeerNode> = new Map();
   private isInitialized = false;
   private mode: 'BROADCAST_CHANNEL' | 'LOCAL_FALLBACK' = 'LOCAL_FALLBACK';
+  private lastSyncTimestamp: number = Date.now();
+  private roundTripLatencyMs: number = 0.8;
+  private heartbeatTimer: any = null;
 
   constructor() {
     this.tabId = `tab_${Date.now()}_${Math.random().toString(36).substring(2, 7)}`;
+  }
+
+  private getSelfNode(): SovereignSyncPeerNode {
+    return {
+      id: this.tabId,
+      label: `Node-${this.tabId.slice(-4).toUpperCase()} (Local)`,
+      lastSeen: Date.now(),
+      isSelf: true,
+      role: 'PRIMARY_COORDINATOR',
+      latencyMs: 0.1,
+      merkleRoot: '0x909ab814479844d8a14816bed34cdbb07528e18501da86fc4691763a43fa4c68',
+      blockHeight: 849202,
+    };
   }
 
   /**
@@ -92,7 +137,8 @@ class SovereignBroadcastSyncService {
         this.mode = 'BROADCAST_CHANNEL';
 
         // Broadcast a ping so any existing tabs know a new window opened
-        this.postMessage('SYNC_PING', {});
+        this.pingEnclave();
+        this.startHeartbeat();
         return true;
       } catch (err) {
         this.channel = null;
@@ -106,6 +152,91 @@ class SovereignBroadcastSyncService {
       this.mode = 'LOCAL_FALLBACK';
       return true;
     }
+  }
+
+  private startHeartbeat() {
+    if (this.heartbeatTimer) clearInterval(this.heartbeatTimer);
+    if (typeof window === 'undefined') return;
+
+    // Heartbeat every 8 seconds to maintain active node presence & check latency
+    this.heartbeatTimer = setInterval(() => {
+      this.pingEnclave();
+      this.cleanStalePeers();
+    }, 8000);
+  }
+
+  private cleanStalePeers() {
+    const now = Date.now();
+    let changed = false;
+    for (const [id, peer] of this.peerNodes.entries()) {
+      // Mark or prune peers older than 25 seconds
+      if (now - peer.lastSeen > 25000) {
+        this.peerNodes.delete(id);
+        changed = true;
+      }
+    }
+    if (changed) {
+      this.notifySyncStatus();
+    }
+  }
+
+  private notifySyncStatus() {
+    const status = this.getSyncStatus();
+    this.syncStatusHandlers.forEach((handler) => {
+      try {
+        handler(status);
+      } catch (err) {
+        console.error('[broadcastSyncService] Error in sync status handler:', err);
+      }
+    });
+  }
+
+  public getSyncStatus(): SovereignSyncStatus {
+    const peers = Array.from(this.peerNodes.values());
+    const selfNode = this.getSelfNode();
+    const allNodes = [selfNode, ...peers];
+    const peerCount = peers.length;
+
+    let state: SovereignSyncStatus['state'] = 'SOLO_ACTIVE';
+    if (this.mode === 'LOCAL_FALLBACK') {
+      state = 'ISOLATED';
+    } else if (peerCount > 0) {
+      state = 'SYNCHRONIZED';
+    } else {
+      state = 'SOLO_ACTIVE';
+    }
+
+    return {
+      mode: this.mode,
+      state,
+      activeNodeCount: allNodes.length,
+      peerCount,
+      nodes: allNodes,
+      channelName: ZYRQUEN_BROADCAST_CHANNEL_NAME,
+      lastSyncTimestamp: this.lastSyncTimestamp,
+      roundTripLatencyMs: this.roundTripLatencyMs,
+      merkleCoherence: true,
+    };
+  }
+
+  public onSyncStatusChange(handler: BroadcastSyncStatusHandler): () => void {
+    if (!this.isInitialized) this.init();
+    this.syncStatusHandlers.add(handler);
+    // Immediately emit current status
+    try {
+      handler(this.getSyncStatus());
+    } catch (e) {
+      // Ignore immediate invoke error
+    }
+    return () => this.syncStatusHandlers.delete(handler);
+  }
+
+  public pingEnclave(): void {
+    if (!this.isInitialized) this.init();
+    this.postMessage('SYNC_PING', {
+      pingTime: Date.now(),
+      nodeInfo: this.getSelfNode(),
+    });
   }
 
   public getTabId(): string {
@@ -144,17 +275,23 @@ class SovereignBroadcastSyncService {
 
   public broadcastSystemEvent(event: SystemEvent) {
     if (!this.isInitialized) this.init();
+    this.lastSyncTimestamp = Date.now();
     this.postMessage('SYSTEM_EVENT_ADDED', { event });
+    this.notifySyncStatus();
   }
 
   public broadcastAuditSnapshot(snapshot: HardwareSnapshot) {
     if (!this.isInitialized) this.init();
+    this.lastSyncTimestamp = Date.now();
     this.postMessage('AUDIT_SNAPSHOT_ADDED', { snapshot });
+    this.notifySyncStatus();
   }
 
   public broadcastGlobalLockState(lockState: GlobalLockStatePayload) {
     if (!this.isInitialized) this.init();
+    this.lastSyncTimestamp = Date.now();
     this.postMessage('GLOBAL_LOCK_STATE_CHANGED', { lockState });
+    this.notifySyncStatus();
   }
 
   private postMessage(type: BroadcastSyncMessageType, payload: BroadcastSyncMessage['payload']) {
@@ -176,28 +313,83 @@ class SovereignBroadcastSyncService {
     const data = ev.data;
     if (!data || data.sourceTabId === this.tabId) return;
 
+    this.lastSyncTimestamp = Date.now();
+
     switch (data.type) {
       case 'SYSTEM_EVENT_ADDED':
         if (data.payload.event) {
           this.eventHandlers.forEach((fn) => fn(data.payload.event!));
         }
+        this.notifySyncStatus();
         break;
 
       case 'AUDIT_SNAPSHOT_ADDED':
         if (data.payload.snapshot) {
           this.snapshotHandlers.forEach((fn) => fn(data.payload.snapshot!));
         }
+        this.notifySyncStatus();
         break;
 
       case 'GLOBAL_LOCK_STATE_CHANGED':
         if (data.payload.lockState) {
           this.lockStateHandlers.forEach((fn) => fn(data.payload.lockState!));
         }
+        this.notifySyncStatus();
         break;
 
-      case 'SYNC_PING':
-        // Acknowledge new tab presence
+      case 'SYNC_PING': {
+        const peerNode: SovereignSyncPeerNode = data.payload.nodeInfo || {
+          id: data.sourceTabId,
+          label: `Node-${data.sourceTabId.slice(-4).toUpperCase()}`,
+          lastSeen: Date.now(),
+          isSelf: false,
+          role: 'ENCLAVE_PEER',
+          merkleRoot: '0x909ab814479844d8a14816bed34cdbb07528e18501da86fc4691763a43fa4c68',
+          blockHeight: 849202,
+        };
+        peerNode.lastSeen = Date.now();
+        this.peerNodes.set(data.sourceTabId, peerNode);
+
+        // Acknowledge by responding with SYNC_PONG
+        this.postMessage('SYNC_PONG', {
+          pingTime: data.payload.pingTime || data.timestamp,
+          nodeInfo: this.getSelfNode(),
+        });
+        this.notifySyncStatus();
         break;
+      }
+
+      case 'SYNC_PONG': {
+        if (data.payload.pingTime) {
+          const rtt = Math.max(0.4, Date.now() - data.payload.pingTime);
+          this.roundTripLatencyMs = Number(rtt.toFixed(2));
+        }
+        const peerNode: SovereignSyncPeerNode = data.payload.nodeInfo || {
+          id: data.sourceTabId,
+          label: `Node-${data.sourceTabId.slice(-4).toUpperCase()}`,
+          lastSeen: Date.now(),
+          isSelf: false,
+          role: 'ENCLAVE_PEER',
+          latencyMs: this.roundTripLatencyMs,
+          merkleRoot: '0x909ab814479844d8a14816bed34cdbb07528e18501da86fc4691763a43fa4c68',
+          blockHeight: 849202,
+        };
+        peerNode.lastSeen = Date.now();
+        peerNode.latencyMs = this.roundTripLatencyMs;
+        this.peerNodes.set(data.sourceTabId, peerNode);
+        this.notifySyncStatus();
+        break;
+      }
+
+      case 'SYNC_HEARTBEAT': {
+        if (data.payload.nodeInfo) {
+          const peer = data.payload.nodeInfo;
+          peer.lastSeen = Date.now();
+          this.peerNodes.set(data.sourceTabId, peer);
+          this.notifySyncStatus();
+        }
+        break;
+      }
 
       default:
         break;
@@ -205,6 +397,10 @@ class SovereignBroadcastSyncService {
   }
 
   public destroy() {
+    if (this.heartbeatTimer) {
+      clearInterval(this.heartbeatTimer);
+      this.heartbeatTimer = null;
+    }
     if (this.channel) {
       this.channel.close();
       this.channel = null;
@@ -212,6 +408,8 @@ class SovereignBroadcastSyncService {
     this.eventHandlers.clear();
     this.snapshotHandlers.clear();
     this.lockStateHandlers.clear();
+    this.syncStatusHandlers.clear();
+    this.peerNodes.clear();
     this.isInitialized = false;
   }
 }

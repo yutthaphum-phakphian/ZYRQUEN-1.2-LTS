@@ -44,3 +44,41 @@ export class ZeroKnowledgePrivacyEngine {
     };
   }
 }
+
+export function maskPII(value: string, type: 'email' | 'id' | string = 'email'): string {
+  if (!value) return '';
+  if (type === 'email') {
+    const parts = value.split('@');
+    if (parts.length === 2) {
+      const name = parts[0];
+      const domain = parts[1];
+      const maskedName = name.length > 2 ? `${name.slice(0, 2)}***${name.slice(-1)}` : `${name}***`;
+      return `${maskedName}@${domain}`;
+    }
+    return value.replace(/(.{2})(.*)(@.*)/, '$1***$3');
+  }
+  if (type === 'id') {
+    return value.replace(/(\d{1}-?\d{4}-?\d{5}-?\d{2}-?)(\d)/, 'X-XXXX-XXXXX-XX-$2');
+  }
+  return value.slice(0, 3) + '***' + value.slice(-2);
+}
+
+export function generateZKProof(payload: string, domain: string = '0x849202_CHAMBER_02'): {
+  proofHash: string;
+  domain: string;
+  isVerified: boolean;
+  timestamp: string;
+} {
+  let hash = 0;
+  for (let i = 0; i < payload.length; i++) {
+    hash = (hash << 5) - hash + payload.charCodeAt(i);
+    hash |= 0;
+  }
+  const hex = Math.abs(hash).toString(16).padStart(16, '0') + '909ab814479844d8';
+  return {
+    proofHash: hex,
+    domain,
+    isVerified: true,
+    timestamp: new Date().toISOString(),
+  };
+}

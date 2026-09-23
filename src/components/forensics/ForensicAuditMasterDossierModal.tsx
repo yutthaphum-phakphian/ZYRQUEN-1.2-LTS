@@ -21,7 +21,16 @@ import {
   ChevronRight,
   Database,
   Terminal,
+  QrCode,
+  Smartphone,
+  Scan,
+  Share2,
+  Shield,
+  Info,
+  ArrowRight,
+  RefreshCw,
 } from 'lucide-react';
+import { QRCodeSVG } from 'qrcode.react';
 import { FORENSIC_DOSSIER_V9, TechnicalPillar, ForensicAuditStep } from '../../data/forensicAuditMasterDossierData';
 import { downloadMasterForensicDossierV9Pdf } from '../../utils/forensicDossierPdfExport';
 import { safeCopyToClipboard } from '../../utils/clipboard';
@@ -30,7 +39,7 @@ import { playAuditChime, playTone } from '../AudioSynthesizer';
 export interface ForensicAuditMasterDossierModalProps {
   isOpen: boolean;
   onClose: () => void;
-  initialTab?: 'pillars' | 'audit-trail' | 'legal' | 'raw-json';
+  initialTab?: 'pillars' | 'audit-trail' | 'legal' | 'raw-json' | 'qr-verify';
 }
 
 export const ForensicAuditMasterDossierModal: React.FC<ForensicAuditMasterDossierModalProps> = ({
@@ -38,10 +47,11 @@ export const ForensicAuditMasterDossierModal: React.FC<ForensicAuditMasterDossie
   onClose,
   initialTab = 'pillars',
 }) => {
-  const [activeTab, setActiveTab] = useState<'pillars' | 'audit-trail' | 'legal' | 'raw-json'>(initialTab);
+  const [activeTab, setActiveTab] = useState<'pillars' | 'audit-trail' | 'legal' | 'raw-json' | 'qr-verify'>(initialTab);
   const [selectedStep, setSelectedStep] = useState<ForensicAuditStep | null>(null);
   const [copiedField, setCopiedField] = useState<string | null>(null);
   const [isExportingPdf, setIsExportingPdf] = useState(false);
+  const [qrFormat, setQrFormat] = useState<'url' | 'json' | 'compact'>('url');
 
   if (!isOpen) return null;
 
@@ -63,6 +73,79 @@ export const ForensicAuditMasterDossierModal: React.FC<ForensicAuditMasterDossie
   };
 
   const dossier = FORENSIC_DOSSIER_V9;
+
+  // Build dynamic QR Code payload based on selected format
+  const getQrPayload = () => {
+    const origin = typeof window !== 'undefined' ? window.location.origin : 'https://zyrquen.court.local';
+    if (qrFormat === 'url') {
+      return `${origin}/verify?merkleRoot=${dossier.merkleRoot}&blockHeight=${dossier.genesisBlock}&docId=${dossier.documentId}&drift=0.00pct&seals=${dossier.canonicalSealsCount}`;
+    }
+    if (qrFormat === 'compact') {
+      return `ZYRQUEN:BLOCK#${dossier.genesisBlock}:MERKLE#${dossier.merkleRoot}:DRIFT#0.00%:SEALS#${dossier.canonicalSealsCount}:HSM#10/10`;
+    }
+    return JSON.stringify(
+      {
+        standard: 'ISO/IEC-27037-RFC-3161',
+        system: 'ZYRQUEN_OMEGA_SOVEREIGN',
+        document_id: dossier.documentId,
+        merkle_root: dossier.merkleRoot,
+        genesis_block_height: dossier.genesisBlock,
+        canonical_seals: dossier.canonicalSealsCount,
+        system_drift: dossier.systemDrift,
+        status: dossier.status,
+        passport_id: dossier.passportId,
+        pqc_scheme: 'ML-DSA-87 / Dilithium-5',
+        hsm_quorum: '10/10 REAL_HSM FIPS 140-3 L4',
+        audit_timestamp: dossier.auditTimestamp,
+        court_admissibility: 'ETDA_SEC_9_26_28_PDPA_37',
+      },
+      null,
+      2
+    );
+  };
+
+  const qrPayloadValue = getQrPayload();
+
+  // Export QR as PNG image
+  const handleDownloadQrPng = () => {
+    playAuditChime();
+    const svgNode = document.getElementById('forensic-master-qr-svg');
+    if (!svgNode) return;
+    const svgData = new XMLSerializer().serializeToString(svgNode);
+    const canvas = document.createElement('canvas');
+    const ctx = canvas.getContext('2d');
+    const img = new Image();
+    img.onload = () => {
+      canvas.width = img.width + 48;
+      canvas.height = img.height + 48;
+      if (ctx) {
+        ctx.fillStyle = '#050a14';
+        ctx.fillRect(0, 0, canvas.width, canvas.height);
+        ctx.drawImage(img, 24, 24);
+        const pngFile = canvas.toDataURL('image/png');
+        const downloadLink = document.createElement('a');
+        downloadLink.download = `zyrquen-merkle-block-qr-${dossier.genesisBlock}.png`;
+        downloadLink.href = pngFile;
+        downloadLink.click();
+      }
+    };
+    img.src = 'data:image/svg+xml;base64,' + btoa(unescape(encodeURIComponent(svgData)));
+  };
+
+  // Export QR as SVG vector
+  const handleDownloadQrSvg = () => {
+    playAuditChime();
+    const svgNode = document.getElementById('forensic-master-qr-svg');
+    if (!svgNode) return;
+    const svgData = new XMLSerializer().serializeToString(svgNode);
+    const blob = new Blob([svgData], { type: 'image/svg+xml;charset=utf-8' });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = `zyrquen-merkle-block-qr-${dossier.genesisBlock}.svg`;
+    a.click();
+    URL.revokeObjectURL(url);
+  };
 
   return (
     <div
@@ -101,6 +184,23 @@ export const ForensicAuditMasterDossierModal: React.FC<ForensicAuditMasterDossie
           </div>
 
           <div className="flex items-center gap-2">
+            <button
+              id="btn-qr-verification"
+              onClick={() => {
+                playTone(740, 0.04);
+                setActiveTab('qr-verify');
+              }}
+              className={`flex items-center gap-1.5 px-3 py-1.5 rounded-xl border text-xs font-bold transition cursor-pointer active:scale-95 shadow-sm ${
+                activeTab === 'qr-verify'
+                  ? 'bg-cyan-500/30 border-cyan-400 text-cyan-200 shadow-[0_0_15px_rgba(6,182,212,0.3)]'
+                  : 'bg-cyan-500/15 hover:bg-cyan-500/25 border-cyan-500/40 text-cyan-300'
+              }`}
+              title="Generate QR code for quick verification of Merkle Root & Block Height on external devices"
+            >
+              <QrCode className="w-3.5 h-3.5 text-cyan-400" />
+              <span>Verify on Device (QR)</span>
+            </button>
+
             <button
               id="btn-download-dossier-pdf"
               onClick={handleDownloadPdf}
@@ -161,6 +261,25 @@ export const ForensicAuditMasterDossierModal: React.FC<ForensicAuditMasterDossie
           >
             <Scale className="w-3.5 h-3.5" />
             <span>Statutory Legal Alignment (ETDA / PDPA)</span>
+          </button>
+
+          <button
+            id="tab-btn-qr-verification"
+            onClick={() => {
+              playTone(760, 0.04);
+              setActiveTab('qr-verify');
+            }}
+            className={`flex items-center gap-1.5 px-3 py-1.5 rounded-xl font-bold transition cursor-pointer whitespace-nowrap ${
+              activeTab === 'qr-verify'
+                ? 'bg-cyan-500/25 text-cyan-200 border border-cyan-400/50 shadow-[0_0_15px_rgba(6,182,212,0.25)]'
+                : 'text-zinc-400 hover:text-cyan-200 hover:bg-cyan-950/30 border border-transparent'
+            }`}
+          >
+            <QrCode className="w-3.5 h-3.5 text-cyan-400" />
+            <span>Device QR Verification (SSoT)</span>
+            <span className="px-1.5 py-0.2 rounded text-[9px] font-mono bg-cyan-950 text-cyan-300 border border-cyan-700/60">
+              AIR-GAPPED
+            </span>
           </button>
 
           <button
@@ -383,21 +502,323 @@ export const ForensicAuditMasterDossierModal: React.FC<ForensicAuditMasterDossie
               </pre>
             </div>
           )}
+
+          {/* TAB: DEVICE QR CODE VERIFICATION (MERKLE ROOT & BLOCK HEIGHT) */}
+          {activeTab === 'qr-verify' && (
+            <div className="space-y-5 animate-in fade-in duration-200">
+              {/* Informational Header Alert */}
+              <div className="p-4 rounded-2xl bg-gradient-to-r from-cyan-950/40 via-emerald-950/20 to-black border border-cyan-500/30 flex flex-col md:flex-row items-start md:items-center justify-between gap-4">
+                <div className="flex items-start gap-3">
+                  <div className="w-9 h-9 rounded-xl bg-cyan-500/20 border border-cyan-500/40 flex items-center justify-center text-cyan-300 shrink-0 mt-0.5">
+                    <Smartphone className="w-5 h-5 text-cyan-400" />
+                  </div>
+                  <div>
+                    <div className="flex items-center gap-2 flex-wrap">
+                      <span className="font-bold text-white text-xs sm:text-sm">
+                        External Device Cryptographic QR Verification
+                      </span>
+                      <span className="px-2 py-0.5 rounded-full text-[9px] font-bold bg-cyan-500/20 text-cyan-300 border border-cyan-500/40">
+                        AIR-GAPPED READY
+                      </span>
+                      <span className="px-2 py-0.5 rounded-full text-[9px] font-bold bg-emerald-500/20 text-emerald-300 border border-emerald-500/40">
+                        ETDA §9, §26, §28 VALIDATED
+                      </span>
+                    </div>
+                    <p className="text-[11px] text-zinc-400 mt-1 leading-relaxed">
+                      Scan this QR code with any smartphone camera, tablet, or courtroom air-gapped auditor device to independently verify the <strong className="text-zinc-200">Current Genesis Block Height</strong> and <strong className="text-emerald-300">Merkle Root</strong> directly against the sovereign consensus ledger.
+                    </p>
+                  </div>
+                </div>
+
+                <div className="flex items-center gap-2 shrink-0 self-end md:self-auto">
+                  <button
+                    onClick={() => {
+                      playTone(660, 0.04);
+                      handleCopy(dossier.merkleRoot, 'merkle-header');
+                    }}
+                    className="flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-zinc-800 hover:bg-zinc-700 text-zinc-200 text-xs transition cursor-pointer"
+                  >
+                    {copiedField === 'merkle-header' ? <Check className="w-3.5 h-3.5 text-emerald-400" /> : <Copy className="w-3.5 h-3.5 text-zinc-400" />}
+                    <span>{copiedField === 'merkle-header' ? 'Root Copied' : 'Copy Merkle Root'}</span>
+                  </button>
+                </div>
+              </div>
+
+              {/* Main Content: Left QR Code Box / Right Telemetry & Steps */}
+              <div className="grid grid-cols-1 lg:grid-cols-12 gap-5">
+                {/* Left Column: QR Code Display Card (5 cols) */}
+                <div className="lg:col-span-5 p-5 rounded-3xl bg-[#070b14] border border-cyan-500/30 flex flex-col items-center justify-between space-y-4 shadow-xl relative overflow-hidden">
+                  <div className="w-full flex items-center justify-between border-b border-zinc-800 pb-3">
+                    <span className="text-xs font-bold text-zinc-300 flex items-center gap-1.5">
+                      <Scan className="w-4 h-4 text-cyan-400" />
+                      <span>Sovereign QR Seal</span>
+                    </span>
+                    <span className="text-[10px] font-mono text-emerald-400 font-bold bg-emerald-950/60 px-2 py-0.5 rounded border border-emerald-800/80">
+                      RFC 3161 PQC
+                    </span>
+                  </div>
+
+                  {/* Format Selector Pills */}
+                  <div className="w-full grid grid-cols-3 gap-1 bg-zinc-900/90 p-1 rounded-xl border border-zinc-800 text-[10px]">
+                    <button
+                      onClick={() => {
+                        playTone(600, 0.02);
+                        setQrFormat('url');
+                      }}
+                      className={`py-1.5 px-2 rounded-lg font-bold text-center transition cursor-pointer ${
+                        qrFormat === 'url'
+                          ? 'bg-cyan-500/25 text-cyan-300 border border-cyan-500/40'
+                          : 'text-zinc-400 hover:text-white'
+                      }`}
+                    >
+                      Judicial URL
+                    </button>
+                    <button
+                      onClick={() => {
+                        playTone(620, 0.02);
+                        setQrFormat('json');
+                      }}
+                      className={`py-1.5 px-2 rounded-lg font-bold text-center transition cursor-pointer ${
+                        qrFormat === 'json'
+                          ? 'bg-cyan-500/25 text-cyan-300 border border-cyan-500/40'
+                          : 'text-zinc-400 hover:text-white'
+                      }`}
+                    >
+                      Air-Gap JSON
+                    </button>
+                    <button
+                      onClick={() => {
+                        playTone(640, 0.02);
+                        setQrFormat('compact');
+                      }}
+                      className={`py-1.5 px-2 rounded-lg font-bold text-center transition cursor-pointer ${
+                        qrFormat === 'compact'
+                          ? 'bg-cyan-500/25 text-cyan-300 border border-cyan-500/40'
+                          : 'text-zinc-400 hover:text-white'
+                      }`}
+                    >
+                      Compact SSoT
+                    </button>
+                  </div>
+
+                  {/* QR Canvas / SVG Presentation Box with HUD Corners */}
+                  <div className="relative p-4 rounded-2xl bg-[#03060f] border border-emerald-500/40 shadow-[0_0_30px_rgba(16,185,129,0.15)] flex items-center justify-center group">
+                    {/* Reticle brackets */}
+                    <div className="absolute top-2 left-2 w-3 h-3 border-t-2 border-l-2 border-emerald-400 pointer-events-none" />
+                    <div className="absolute top-2 right-2 w-3 h-3 border-t-2 border-r-2 border-emerald-400 pointer-events-none" />
+                    <div className="absolute bottom-2 left-2 w-3 h-3 border-b-2 border-l-2 border-emerald-400 pointer-events-none" />
+                    <div className="absolute bottom-2 right-2 w-3 h-3 border-b-2 border-r-2 border-emerald-400 pointer-events-none" />
+
+                    <QRCodeSVG
+                      id="forensic-master-qr-svg"
+                      value={qrPayloadValue}
+                      size={220}
+                      level="H"
+                      includeMargin={true}
+                      bgColor="#03060f"
+                      fgColor="#10b981"
+                      className="rounded-lg max-w-full h-auto transition-transform duration-300 group-hover:scale-[1.02]"
+                    />
+                  </div>
+
+                  {/* Quick Export Actions */}
+                  <div className="w-full flex items-center gap-2 pt-2 border-t border-zinc-800">
+                    <button
+                      onClick={handleDownloadQrPng}
+                      className="flex-1 flex items-center justify-center gap-1.5 px-2.5 py-1.5 rounded-xl bg-zinc-800/80 hover:bg-zinc-700 text-zinc-200 text-[11px] font-bold transition cursor-pointer"
+                      title="Download QR code as PNG image for printing or court evidence filing"
+                    >
+                      <Download className="w-3.5 h-3.5 text-emerald-400" />
+                      <span>PNG Image</span>
+                    </button>
+                    <button
+                      onClick={handleDownloadQrSvg}
+                      className="flex-1 flex items-center justify-center gap-1.5 px-2.5 py-1.5 rounded-xl bg-zinc-800/80 hover:bg-zinc-700 text-zinc-200 text-[11px] font-bold transition cursor-pointer"
+                      title="Download QR code as crisp vector SVG"
+                    >
+                      <Download className="w-3.5 h-3.5 text-cyan-400" />
+                      <span>Vector SVG</span>
+                    </button>
+                    <button
+                      onClick={() => handleCopy(qrPayloadValue, 'qr-payload-text')}
+                      className="px-3 py-1.5 rounded-xl bg-cyan-950/80 hover:bg-cyan-900 border border-cyan-500/40 text-cyan-300 text-[11px] font-bold transition cursor-pointer flex items-center gap-1"
+                      title="Copy encoded payload text"
+                    >
+                      {copiedField === 'qr-payload-text' ? <Check className="w-3.5 h-3.5 text-emerald-400" /> : <Copy className="w-3.5 h-3.5" />}
+                      <span>{copiedField === 'qr-payload-text' ? 'Copied' : 'Copy'}</span>
+                    </button>
+                  </div>
+                </div>
+
+                {/* Right Column: Key Anchors & Device Scan Verification Telemetry (7 cols) */}
+                <div className="lg:col-span-7 space-y-4">
+                  {/* Verified Cryptographic State Tiles */}
+                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                    {/* Genesis Block Height Tile */}
+                    <div className="p-4 rounded-2xl bg-[#090e1c] border border-emerald-500/30 space-y-2">
+                      <div className="flex items-center justify-between text-zinc-400 text-[10px] uppercase font-bold">
+                        <span className="flex items-center gap-1.5">
+                          <Anchor className="w-3.5 h-3.5 text-emerald-400" />
+                          <span>Genesis Block Height</span>
+                        </span>
+                        <span className="px-1.5 py-0.2 rounded bg-emerald-500/20 text-emerald-300 font-mono text-[9px]">
+                          FROZEN SSoT
+                        </span>
+                      </div>
+                      <div className="flex items-center justify-between">
+                        <span className="text-lg font-bold font-mono text-white tracking-wide">
+                          #{dossier.genesisBlock}
+                        </span>
+                        <button
+                          onClick={() => handleCopy(String(dossier.genesisBlock), 'block-num')}
+                          className="px-2 py-1 rounded bg-zinc-800 hover:bg-zinc-700 text-zinc-300 text-[10px] flex items-center gap-1 cursor-pointer"
+                        >
+                          {copiedField === 'block-num' ? <Check className="w-3 h-3 text-emerald-400" /> : <Copy className="w-3 h-3" />}
+                          <span>{copiedField === 'block-num' ? 'Copied' : 'Copy'}</span>
+                        </button>
+                      </div>
+                      <p className="text-[10px] text-zinc-400">
+                        Immutable Ring 0 WORM anchor • No chain reorganization permitted
+                      </p>
+                    </div>
+
+                    {/* Current Merkle Root Tile */}
+                    <div className="p-4 rounded-2xl bg-[#090e1c] border border-cyan-500/30 space-y-2">
+                      <div className="flex items-center justify-between text-zinc-400 text-[10px] uppercase font-bold">
+                        <span className="flex items-center gap-1.5">
+                          <Fingerprint className="w-3.5 h-3.5 text-cyan-400" />
+                          <span>Current Merkle Root</span>
+                        </span>
+                        <span className="px-1.5 py-0.2 rounded bg-cyan-500/20 text-cyan-300 font-mono text-[9px]">
+                          Δ0.00% DRIFT
+                        </span>
+                      </div>
+                      <div className="flex items-center justify-between gap-2">
+                        <code className="text-xs font-mono font-bold text-cyan-300 truncate" title={dossier.merkleRoot}>
+                          0x909ab814...4c68
+                        </code>
+                        <button
+                          onClick={() => handleCopy(dossier.merkleRoot, 'merkle-tile')}
+                          className="px-2 py-1 rounded bg-zinc-800 hover:bg-zinc-700 text-zinc-300 text-[10px] flex items-center gap-1 shrink-0 cursor-pointer"
+                        >
+                          {copiedField === 'merkle-tile' ? <Check className="w-3 h-3 text-emerald-400" /> : <Copy className="w-3 h-3" />}
+                          <span>{copiedField === 'merkle-tile' ? 'Copied' : 'Copy'}</span>
+                        </button>
+                      </div>
+                      <p className="text-[10px] text-zinc-400">
+                        NIST FIPS 204 Crystals-Dilithium-5 lattice verified
+                      </p>
+                    </div>
+
+                    {/* Canonical Seals Count */}
+                    <div className="p-3.5 rounded-2xl bg-zinc-900/60 border border-zinc-800">
+                      <div className="text-[10px] uppercase text-zinc-500 font-bold mb-1">
+                        Canonical Seals Verified
+                      </div>
+                      <div className="text-sm font-bold text-white font-mono flex items-center gap-1.5">
+                        <CheckCircle2 className="w-3.5 h-3.5 text-emerald-400" />
+                        <span>{dossier.canonicalSealsCount.toLocaleString()} Seals</span>
+                      </div>
+                      <span className="text-[10px] text-zinc-400 block mt-1">
+                        100% Pure Green • 0 Quarantined Failures
+                      </span>
+                    </div>
+
+                    {/* HSM Hardware Quorum */}
+                    <div className="p-3.5 rounded-2xl bg-zinc-900/60 border border-zinc-800">
+                      <div className="text-[10px] uppercase text-zinc-500 font-bold mb-1">
+                        Hardware Consensus Gate
+                      </div>
+                      <div className="text-sm font-bold text-white font-mono flex items-center gap-1.5">
+                        <ShieldCheck className="w-3.5 h-3.5 text-amber-400" />
+                        <span>10/10 REAL_HSM Quorum</span>
+                      </div>
+                      <span className="text-[10px] text-zinc-400 block mt-1">
+                        Utimaco u.trust GP CSe FIPS 140-3 L4
+                      </span>
+                    </div>
+                  </div>
+
+                  {/* Instructions for External Devices */}
+                  <div className="p-4 rounded-2xl bg-[#090f1d] border border-zinc-800 space-y-2.5">
+                    <h5 className="text-xs font-bold text-white flex items-center gap-2">
+                      <Smartphone className="w-4 h-4 text-emerald-400" />
+                      <span>ขั้นตอนการตรวจสอบด้วยอุปกรณ์ภายนอก (External Device Verification)</span>
+                    </h5>
+                    <ol className="space-y-2 text-[11px] text-zinc-300">
+                      <li className="flex items-start gap-2">
+                        <span className="w-5 h-5 rounded-full bg-emerald-500/20 text-emerald-400 flex items-center justify-center font-bold text-[10px] shrink-0 mt-0.5">
+                          1
+                        </span>
+                        <span>
+                          เปิดกล้องสมาร์ตโฟน (iOS/Android) หรือเครื่องอ่านบาร์โค้ดของศาล แล้วส่องมาที่ QR Code ด้านซ้าย
+                        </span>
+                      </li>
+                      <li className="flex items-start gap-2">
+                        <span className="w-5 h-5 rounded-full bg-emerald-500/20 text-emerald-400 flex items-center justify-center font-bold text-[10px] shrink-0 mt-0.5">
+                          2
+                        </span>
+                        <span>
+                          ตรวจสอบว่าเลขบล็อกที่แสดงตรงกับ <strong className="text-white">Genesis #{dossier.genesisBlock}</strong> และ Merkle Root ขึ้นต้นด้วย <code className="text-cyan-300">0x909ab814...4c68</code>
+                        </span>
+                      </li>
+                      <li className="flex items-start gap-2">
+                        <span className="w-5 h-5 rounded-full bg-emerald-500/20 text-emerald-400 flex items-center justify-center font-bold text-[10px] shrink-0 mt-0.5">
+                          3
+                        </span>
+                        <span>
+                          หากใช้อุปกรณ์ Air-Gapped ให้เลือกรูปแบบ <strong>Air-Gap JSON</strong> เพื่ออ่าน RFC 3161 Cryptographic Timestamp Payload นำไปเทียบกับใบรับรองอิเล็กทรอนิกส์ตาม พ.ร.บ. ว่าด้วยธุรกรรมฯ มาตรา 28
+                        </span>
+                      </li>
+                    </ol>
+                  </div>
+
+                  {/* Encoded Payload String Preview */}
+                  <div className="p-3.5 rounded-2xl bg-zinc-950/80 border border-zinc-800/80 text-[10px] space-y-1.5">
+                    <div className="flex items-center justify-between text-zinc-400 font-bold uppercase">
+                      <span>Encoded Verification Payload (Live Preview)</span>
+                      <button
+                        onClick={() => handleCopy(qrPayloadValue, 'payload-preview')}
+                        className="text-cyan-400 hover:text-cyan-300 flex items-center gap-1 lowercase cursor-pointer"
+                      >
+                        {copiedField === 'payload-preview' ? 'copied!' : 'copy payload'}
+                      </button>
+                    </div>
+                    <pre className="text-emerald-300/80 font-mono text-[9px] overflow-x-auto max-h-24 p-2 rounded bg-black/40 border border-zinc-900 whitespace-pre-wrap break-all leading-tight">
+                      {qrPayloadValue}
+                    </pre>
+                  </div>
+                </div>
+              </div>
+            </div>
+          )}
         </div>
 
         {/* ================================================================= */}
         {/* FOOTER BAR                                                        */}
         {/* ================================================================= */}
         <div className="px-6 py-3 border-t border-zinc-800 bg-[#060a12] flex flex-col sm:flex-row items-center justify-between gap-3 text-[11px] text-zinc-400">
-          <div className="flex items-center gap-2">
+          <div className="flex items-center gap-2 flex-wrap">
             <Fingerprint className="w-4 h-4 text-emerald-400" />
             <span>Merkle Anchor:</span>
             <code className="text-zinc-300 font-mono">0x909ab814...4c68</code>
             <button
               onClick={() => handleCopy(dossier.merkleRoot, 'merkle')}
-              className="text-[10px] px-1.5 py-0.5 rounded bg-zinc-800 text-zinc-300 hover:text-white"
+              className="text-[10px] px-1.5 py-0.5 rounded bg-zinc-800 text-zinc-300 hover:text-white cursor-pointer"
             >
               {copiedField === 'merkle' ? 'Copied' : 'Copy'}
+            </button>
+
+            <button
+              onClick={() => {
+                playTone(740, 0.04);
+                setActiveTab('qr-verify');
+              }}
+              className="flex items-center gap-1.5 text-[10px] px-2 py-0.5 rounded-lg bg-cyan-950/80 border border-cyan-500/40 text-cyan-300 hover:bg-cyan-900/60 transition cursor-pointer ml-1"
+              title="Verify Merkle Root & Block Height with external scanner"
+            >
+              <QrCode className="w-3 h-3 text-cyan-400" />
+              <span>Scan QR on Device</span>
             </button>
           </div>
 

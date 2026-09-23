@@ -1,87 +1,97 @@
 import { defineConfig } from 'vite';
 import react from '@vitejs/plugin-react';
 import tailwindcss from '@tailwindcss/vite';
-import { VitePWA } from 'vite-plugin-pwa';
 import path from 'path';
 
-// 🏛️ Sovereign Console SSoT Anchor
-// Genesis Block: #849202
-// Merkle Root: 909ab814479844d8a14816bed34cdbb07528e18501da86fc4691763a43fa4c68
-// Seals Δ0: 14,902
+// ZYRQUEN Ω∞ Sovereign Kernel v1.2 LTS — Vite Configuration
+// Block Anchor: #849202 | Genesis Merkle Root: 0x909ab814...43fa4c68
+// SHA-256 Digest: 4c53a5422dc19d557cfe47b81ac43fc156d768b64ddcdfa82d9169fad03614ab
 
-export default defineConfig({
-  plugins: [
-    react(),
-    tailwindcss(),
-    VitePWA({
-      injectRegister: 'auto',
-      registerType: 'autoUpdate',
-      devOptions: {
-        enabled: true,
-      },
-      manifest: {
-        includeAssets: ['favicon.ico', 'icon.svg'],
-        name: 'ZYRQUEN Ω - Sovereign World Engine',
-        short_name: 'ZYRQUEN',
-        description:
-          'Sovereign Operating System & Civilization Intelligence Control Plane - Block #849202',
-        theme_color: '#020617',
-        background_color: '#020617',
-        display: 'standalone',
-        start_url: 'CYBERGEN-1-L175',
-        scope: 'CYBERGEN-1-L175',
-        icons: [
-          {
-            src: 'pwa-192x192.png',
-            sizes: '192x192',
-            type: 'image/png',
+export default defineConfig(async ({ command }) => {
+  const plugins = [tailwindcss(), react()];
+
+  if (command === 'build') {
+    try {
+      const { VitePWA } = await import('vite-plugin-pwa');
+      plugins.push(
+        VitePWA({
+          registerType: 'autoUpdate',
+          injectRegister: false,
+          includeAssets: ['favicon.ico', 'icon.svg', 'apple-touch-icon.png'],
+          manifest: {
+            id: '/',
+            name: 'ZYRQUEN Ω∞ Sovereign World Engine',
+            short_name: 'ZYRQUEN',
+            description:
+              'Sovereign Operating System & Civilization Intelligence Control Plane - Block #849202 (Frozen v1.2 LTS)',
+            theme_color: '#020617',
+            background_color: '#020617',
+            display: 'standalone',
+            start_url: '/',
+            scope: '/',
+            icons: [
+              {
+                src: 'pwa-192x192.png',
+                sizes: '192x192',
+                type: 'image/png',
+                purpose: 'any',
+              },
+              {
+                src: 'pwa-512x512.png',
+                sizes: '512x512',
+                type: 'image/png',
+                purpose: 'any',
+              },
+              {
+                src: 'pwa-maskable-512x512.png',
+                sizes: '512x512',
+                type: 'image/png',
+                purpose: 'maskable',
+              },
+            ],
           },
-          {
-            src: 'pwa-512x512.png',
-            sizes: '512x512',
-            type: 'image/png',
+          workbox: {
+            maximumFileSizeToCacheInBytes: 15 * 1024 * 1024,
+            globPatterns: ['**/*.{js,css,html,ico,png,svg,woff,woff2,json}'],
           },
-          {
-            src: 'pwa-maskable-512x512.png',
-            sizes: '512x512',
-            type: 'image/png',
-            purpose: 'any maskable',
-          },
-        ],
+        })
+      );
+    } catch (e) {
+      console.warn('VitePWA build plugin deferred:', e);
+    }
+  }
+
+  return {
+    plugins,
+    resolve: {
+      alias: {
+        '@': path.resolve(__dirname, './src'),
       },
-      workbox: {
-        maximumFileSizeToCacheInBytes: 15 * 1024 * 1024,
-        globPatterns: ['**/*.{js,css,html,ico,png,svg,woff2,json}'],
-      },
-    }),
-  ],
-  resolve: {
-    alias: {
-      '@': path.resolve(__dirname, './src'),
+      dedupe: ['react', 'react-dom'],
     },
-  },
-  server: {
-    port: 3000,
-    host: true,
-  },
-  build: {
-    outDir: 'dist',
-    sourcemap: false,
-    chunkSizeWarningLimit: 2500,
-    rollupOptions: {
-      output: {
-        manualChunks(id) {
-          if (id.includes('node_modules')) {
-            if (id.includes('react')) return 'vendor-react';
-            if (id.includes('lucide-react')) return 'vendor-icons';
-            if (id.includes('jspdf')) return 'pdf';
-            return 'vendor';
-          }
+    server: {
+      port: 3000,
+      host: '0.0.0.0',
+      strictPort: true,
+    },
+    build: {
+      outDir: 'dist',
+      sourcemap: false,
+      chunkSizeWarningLimit: 2500,
+      rollupOptions: {
+        output: {
+          manualChunks: {
+            vendor: ['react', 'react-dom'],
+            graphics: ['three'],
+            lucide: ['lucide-react'],
+            pdf: ['jspdf', 'jspdf-autotable'],
+          },
         },
       },
     },
-  },
-  define: {
-    'process.env.ZYRQUEN_BLOCK_HEIGHT': '"849202"',
-  },
+    define: {
+      'process.env.ZYRQUEN_BLOCK_HEIGHT': '849202',
+      'process.env.ZYRQUEN_MERKLE_ROOT': '"909ab814479844d8a14816bed34cdbb07528e18501da86fc4691763a43fa4c68"',
+    },
+  };
 });

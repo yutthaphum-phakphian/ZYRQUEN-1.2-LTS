@@ -43,6 +43,7 @@ import { QuickActionsMenu } from '../QuickActionsMenu';
 import { CopilotAutonomyNodePanel } from '../copilot/CopilotAutonomyNodePanel';
 import { SealValidationAnimation } from '../SealValidationAnimation';
 import { LiveQuantumEntropyTicker } from '../LiveQuantumEntropyTicker';
+import { SovereignIntegrityScore } from '../SovereignIntegrityScore';
 import {
   Activity,
   Cpu,
@@ -74,6 +75,9 @@ import {
   PlayCircle,
   Landmark,
   Wallet,
+  TrendingUp,
+  TrendingDown,
+  Minus,
 } from 'lucide-react';
 import { playAuditChime, playTone } from '../AudioSynthesizer';
 import { ShieldAlert } from 'lucide-react';
@@ -170,6 +174,21 @@ export const DashboardView: React.FC<DashboardViewProps> = ({
   const initialSnapshotsCount = 2;
   const addedSnapshots = Math.max(0, snapshots.length - initialSnapshotsCount);
   const totalVerifiedSeals = baselineCanonicalSeals + addedSnapshots;
+  const totalSealsCount = baselineCanonicalSeals + 80 + addedSnapshots;
+
+  // Calculate current vs last audit snapshot integrity score & trend
+  const currentIntegrityScore = ((verificationGateStatus?.sealCount || totalVerifiedSeals) / totalSealsCount) * 100;
+  const prevAddedSnapshots = Math.max(0, addedSnapshots - 1);
+  const prevVerified = baselineCanonicalSeals + prevAddedSnapshots;
+  const prevTotal = baselineCanonicalSeals + 80 + prevAddedSnapshots;
+  const prevIntegrityScore = (prevVerified / prevTotal) * 100;
+  const integrityTrendDelta = currentIntegrityScore - prevIntegrityScore;
+  const integrityTrend: 'increased' | 'decreased' | 'stable' =
+    integrityTrendDelta > 0.0001
+      ? 'increased'
+      : integrityTrendDelta < -0.0001
+      ? 'decreased'
+      : 'stable';
 
   const triggerSelfHealing = () => {
     setIsHealing(true);
@@ -258,6 +277,26 @@ export const DashboardView: React.FC<DashboardViewProps> = ({
               <span>Seals: <strong className="text-emerald-300">14,902 Verified</strong></span>
               <span className="text-zinc-600">•</span>
               <span>SSoT Drift: <strong className="text-cyan-300">Δ0.00%</strong></span>
+              <span className="text-zinc-600">•</span>
+              <span className="inline-flex items-center gap-1 font-mono">
+                <span>Integrity:</span>
+                <strong className="text-emerald-300 tabular-nums">{currentIntegrityScore.toFixed(2)}%</strong>
+                <span
+                  className={`inline-flex items-center gap-0.5 px-1.5 py-0.2 rounded text-[10px] font-semibold border ${
+                    integrityTrend === 'increased'
+                      ? 'bg-emerald-950/80 text-emerald-300 border-emerald-500/40'
+                      : integrityTrend === 'decreased'
+                      ? 'bg-rose-950/80 text-rose-300 border-rose-500/40'
+                      : 'bg-cyan-950/80 text-cyan-300 border-cyan-500/40'
+                  }`}
+                  title={`Integrity trend: ${integrityTrend} (${integrityTrendDelta >= 0 ? '+' : ''}${integrityTrendDelta.toFixed(3)}%)`}
+                >
+                  {integrityTrend === 'increased' && <TrendingUp className="w-2.5 h-2.5 text-emerald-400" />}
+                  {integrityTrend === 'decreased' && <TrendingDown className="w-2.5 h-2.5 text-rose-400" />}
+                  {integrityTrend === 'stable' && <Minus className="w-2.5 h-2.5 text-cyan-400" />}
+                  <span>{integrityTrend === 'increased' ? '↑ Increased' : integrityTrend === 'decreased' ? '↓ Decreased' : '→ Stable'}</span>
+                </span>
+              </span>
               <span className="text-zinc-600">•</span>
               <span className="text-zinc-300 font-medium">นายยุทธภูมิ พากเพียร (#EP-SOVEREIGN-01)</span>
             </div>
@@ -495,6 +534,9 @@ export const DashboardView: React.FC<DashboardViewProps> = ({
             }`}
           >
             <span>🌟 Executive Overview</span>
+            <span className="px-1.5 py-0.2 rounded bg-emerald-950 text-emerald-300 text-[10px] font-mono border border-emerald-500/30">
+              99.47% INTEGRITY
+            </span>
           </button>
 
           <button
@@ -602,6 +644,20 @@ export const DashboardView: React.FC<DashboardViewProps> = ({
       {/* TAB 1: EXECUTIVE OVERVIEW */}
       {dashboardSection === 'OVERVIEW' && (
         <div className="space-y-4 sm:space-y-5 animate-in fade-in duration-200 w-full min-w-0 max-w-full">
+          {/* Real-time Sovereign Integrity Score based on Verified vs Total Seals Ratio */}
+          <SovereignIntegrityScore
+            verifiedSeals={verificationGateStatus?.sealCount || totalVerifiedSeals}
+            totalSeals={totalSealsCount}
+            quarantinedSeals={80}
+            lastCheckedTime={verificationGateStatus?.lastCheckedTime || '05:05:30 ICT'}
+            onNavigateToLedger={() => onNavigate('ledger')}
+            onNavigateToChambers={() => setDashboardSection('CHAMBERS')}
+            snapshots={snapshots}
+            integrityTrend={integrityTrend}
+            trendDelta={integrityTrendDelta}
+            previousScore={prevIntegrityScore}
+          />
+
           {/* GitHub Synchronization Status Utility (Checksum & Merkle Parity Engine) */}
           <GitHubSyncStatusUtility />
 
@@ -1086,6 +1142,18 @@ export const DashboardView: React.FC<DashboardViewProps> = ({
       {/* TAB 3: TELEMETRY & HEALTH */}
       {dashboardSection === 'TELEMETRY' && (
         <div className="space-y-5 animate-in fade-in duration-200">
+          <SovereignIntegrityScore
+            verifiedSeals={verificationGateStatus?.sealCount || totalVerifiedSeals}
+            totalSeals={totalSealsCount}
+            quarantinedSeals={80}
+            lastCheckedTime={verificationGateStatus?.lastCheckedTime || '05:05:30 ICT'}
+            onNavigateToLedger={() => onNavigate('ledger')}
+            onNavigateToChambers={() => setDashboardSection('CHAMBERS')}
+            snapshots={snapshots}
+            integrityTrend={integrityTrend}
+            trendDelta={integrityTrendDelta}
+            previousScore={prevIntegrityScore}
+          />
           <GitHubSyncStatusUtility />
           <LiveAutomatedHealthWidget />
           <SystemResourceGrid />

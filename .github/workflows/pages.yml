@@ -1,4 +1,4 @@
-name: 🚀 ZYRQUEN Ω∞ GitHub Pages Deployment - Tomin Cleanup Fixed
+name: GitHub Pages Deployment
 
 on:
   push:
@@ -21,50 +21,14 @@ jobs:
       url: ${{ steps.deployment.outputs.page_url }}
     runs-on: ubuntu-latest
     steps:
-      - name: 📦 Checkout
+      - name: Checkout
         uses: actions/checkout@v4
-        with:
-          fetch-depth: 0
-
-      - name: ⚙️ Setup Node 20
-        uses: actions/setup-node@v4
-        with:
-          node-version: 20
-          cache: 'npm'
-
-      - name: 📥 Install Dependencies
-        run: |
-          if [ -f pnpm-lock.yaml ]; then
-            corepack enable && pnpm install --frozen-lockfile
-          elif [ -f yarn.lock ]; then
-            yarn install --frozen-lockfile
-          elif [ -f package-lock.json ]; then
-            npm ci
-          else
-            npm install
-          fi
-
-      - name: 🔬 Verify SSoT Invariants # ลิงก์กับ ledger-sync.yml
-        run: |
-          echo "Genesis #849202 | Merkle 909ab814...43fa4c68 | 14,902 Seals Δ0 0.00%"
-          echo "HSM 10/10 REAL_HSM RATIFIED"
-
-      - name: 🚀 Build Sovereign Console
-        env:
-          VITE_GENESIS_BLOCK: "849202"
-          VITE_MERKLE_ROOT: "909ab814479844d8a14816bed34cdbb07528e18501da86fc4691763a43fa4c68"
-          VITE_ATTESTATION_ID: "ZQ-GREEN-DEP-849202-3908"
-          VITE_CANONICAL_SEALS: "14902"
-        run: npm run build
-
-      - name: 🌐 Setup Pages
-        uses: actions/configure-pages@v6
-
-      - name: 📤 Upload Artifact - ONLY dist
+      - name: Setup Pages
+        uses: actions/configure-pages@v4
+      - name: Upload Artifact
         uses: actions/upload-pages-artifact@v3
         with:
-          path: './dist'
-
-      - name: 🚀 Deploy to GitHub Pages
+          path: '.'
+      - name: Deploy to GitHub Pages
         id: deployment
         uses: actions/deploy-pages@v4

@@ -50,9 +50,9 @@ export const RightSidebar: React.FC<RightSidebarProps> = ({
 
   return (
     <aside className="w-[340px] bg-[#060a14] border-l border-slate-800/80 flex flex-col h-[calc(100vh-3.5rem)] shrink-0 select-none overflow-hidden">
-        <div className="mb-4 h-64">
-          <SovereignCopilot />
-        </div>
+      <div className="p-2 shrink-0 h-[290px]">
+        <SovereignCopilot />
+      </div>
 
       {/* Canonical Trust Anchor Badge */}
       <div className="p-3.5 border-b border-slate-800/80 bg-gradient-to-b from-slate-950/80 to-[#060a14]">

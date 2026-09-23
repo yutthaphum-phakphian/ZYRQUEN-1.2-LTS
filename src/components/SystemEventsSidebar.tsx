@@ -38,6 +38,7 @@ import {
   FileSpreadsheet,
   Send,
   RadioTower,
+  Search,
 } from 'lucide-react';
 import { playTone, playAuditChime } from './AudioSynthesizer';
 import { SecuritySubTab } from './views/SecurityView';
@@ -240,6 +241,7 @@ export const SystemEventsSidebar: React.FC<SystemEventsSidebarProps> = ({
   onToggleForensicAuditMode,
 }) => {
   const [filter, setFilter] = useState<SystemEventFilterType>('ALL');
+  const [searchQuery, setSearchQuery] = useState<string>('');
   const [copiedId, setCopiedId] = useState<string | null>(null);
   const [backupState, setBackupState] = useState<AutomatedBackupState>(() => automatedBackupService.getState());
   const [isDemoMode, setIsDemoMode] = useState<boolean>(false);
@@ -302,12 +304,30 @@ export const SystemEventsSidebar: React.FC<SystemEventsSidebarProps> = ({
     return counts;
   }, [events]);
 
-  // Filtered events based on selected filter dropdown
+  // Filtered events based on selected filter dropdown & text search query (title or statute reference)
   const filteredEvents = events.filter((ev) => {
-    if (filter === 'ALL') return true;
-    if (filter === 'COMPLIANCE') return ev.type === 'COMPLIANCE' || ev.type === 'LEGAL_SEARCH' || ev.isComplianceDrift;
-    if (filter === 'ANOMALY') return ev.type === 'ANOMALY' || ev.severity === 'critical' || ev.severity === 'warning';
-    return ev.type === filter;
+    // 1. Category Filter Match
+    let categoryMatch = true;
+    if (filter === 'COMPLIANCE') {
+      categoryMatch = ev.type === 'COMPLIANCE' || ev.type === 'LEGAL_SEARCH' || Boolean(ev.isComplianceDrift);
+    } else if (filter === 'ANOMALY') {
+      categoryMatch = ev.type === 'ANOMALY' || ev.severity === 'critical' || ev.severity === 'warning';
+    } else if (filter !== 'ALL') {
+      categoryMatch = ev.type === filter;
+    }
+    if (!categoryMatch) return false;
+
+    // 2. Text Search Query Match (Title or Statute Reference or Description)
+    if (searchQuery.trim()) {
+      const q = searchQuery.trim().toLowerCase();
+      const titleMatches = ev.title ? ev.title.toLowerCase().includes(q) : false;
+      const statuteMatches = ev.statuteRef ? ev.statuteRef.toLowerCase().includes(q) : false;
+      const descMatches = ev.description ? ev.description.toLowerCase().includes(q) : false;
+      const metaMatches = ev.metaHash ? ev.metaHash.toLowerCase().includes(q) : false;
+      return titleMatches || statuteMatches || descMatches || metaMatches;
+    }
+
+    return true;
   });
 
   // Calculate 60-second rolling event frequency sparkline (12 buckets of 5 seconds each)
@@ -1120,13 +1140,95 @@ export const SystemEventsSidebar: React.FC<SystemEventsSidebarProps> = ({
         </div>
       )}
 
-      {/* Event Filter Dropdown & Quick Selector */}
-      <div className="px-4 py-2.5 border-b border-white/8 bg-[#080c18] space-y-2">
-        <div className="flex items-center justify-between gap-2">
+      {/* Event Filter Dropdown, Search Input & Quick Selector */}
+      <div className="px-4 py-2.5 border-b border-white/8 bg-[#080c18] space-y-2.5">
+        {/* Text-based Filter Input (Title or Statute Reference) */}
+        <div className="space-y-1.5">
+          <div className="flex items-center justify-between text-zinc-400 text-xs">
+            <label htmlFor="system-event-search-input" className="text-[11px] text-zinc-300 font-bold flex items-center gap-1.5">
+              <Search className="w-3.5 h-3.5 text-cyan-400" />
+              <span>Search Audit Logs:</span>
+            </label>
+            {searchQuery && (
+              <span className="text-[10px] font-mono text-cyan-300 bg-cyan-950/60 px-2 py-0.5 rounded border border-cyan-500/30">
+                {filteredEvents.length} {filteredEvents.length === 1 ? 'match' : 'matches'}
+              </span>
+            )}
+          </div>
+          
+          <div className="relative">
+            <Search className="w-3.5 h-3.5 text-zinc-400 absolute left-3 top-1/2 -translate-y-1/2 pointer-events-none" />
+            <input
+              id="system-event-search-input"
+              type="text"
+              value={searchQuery}
+              onChange={(e) => setSearchQuery(e.target.value)}
+              placeholder="Search by title or statute (e.g. ETDA Sec 26, PDPA, Quorum)..."
+              className="w-full pl-9 pr-8 py-1.5 rounded-xl bg-[#0e1428] border border-cyan-500/30 hover:border-cyan-500/50 focus:border-cyan-400 text-xs font-mono text-zinc-200 placeholder:text-zinc-500 focus:outline-none focus:ring-1 focus:ring-cyan-400/40 transition-all shadow-inner"
+            />
+            {searchQuery && (
+              <button
+                type="button"
+                onClick={() => {
+                  playTone(480, 0.03);
+                  setSearchQuery('');
+                }}
+                className="absolute right-2.5 top-1/2 -translate-y-1/2 text-zinc-400 hover:text-white p-1 rounded-md transition-colors cursor-pointer"
+                title="Clear search"
+              >
+                <X className="w-3.5 h-3.5" />
+              </button>
+            )}
+          </div>
+
+          {/* Quick Statute Filter Chips */}
+          <div className="flex items-center gap-1.5 overflow-x-auto text-[10px] font-mono no-scrollbar pt-0.5">
+            <span className="text-zinc-500 shrink-0 text-[9px] uppercase tracking-wider">Statute:</span>
+            {[
+              { label: 'ETDA §26', query: 'ETDA' },
+              { label: 'PDPA §37', query: 'PDPA' },
+              { label: 'FIPS 140-3', query: 'FIPS' },
+              { label: 'ML-DSA-87', query: 'ML-DSA' },
+              { label: 'HSM Quorum', query: 'Quorum' },
+            ].map((chip) => {
+              const isActive = searchQuery.toLowerCase().includes(chip.query.toLowerCase());
+              return (
+                <button
+                  key={chip.label}
+                  type="button"
+                  onClick={() => {
+                    playTone(600, 0.03);
+                    setSearchQuery((prev) => (prev.toLowerCase().includes(chip.query.toLowerCase()) ? '' : chip.query));
+                  }}
+                  className={`px-2 py-0.5 rounded-md border shrink-0 transition-all cursor-pointer ${
+                    isActive
+                      ? 'bg-cyan-500/25 text-cyan-200 border-cyan-400/60 font-bold shadow-[0_0_8px_rgba(6,182,212,0.3)]'
+                      : 'bg-white/5 text-zinc-400 hover:text-zinc-200 border-white/10 hover:border-cyan-500/30'
+                  }`}
+                  title={`Filter by ${chip.label}`}
+                >
+                  {chip.label}
+                </button>
+              );
+            })}
+            {searchQuery && (
+              <button
+                type="button"
+                onClick={() => setSearchQuery('')}
+                className="px-1.5 py-0.5 rounded-md text-[9px] text-rose-300 hover:text-rose-200 bg-rose-500/10 border border-rose-500/20 shrink-0 cursor-pointer"
+              >
+                Clear
+              </button>
+            )}
+          </div>
+        </div>
+
+        {/* Category Dropdown */}
+        <div className="flex items-center justify-between gap-2 pt-1 border-t border-white/5">
           <div className="flex items-center gap-1.5 text-zinc-400 text-xs font-medium">
             <Filter className="w-3.5 h-3.5 text-cyan-400" />
             <label htmlFor="system-event-filter-select" className="text-[11px] text-zinc-300 font-bold">
-              Filter Event Type:
+              Category:
             </label>
           </div>
           
@@ -1383,12 +1485,32 @@ export const SystemEventsSidebar: React.FC<SystemEventsSidebarProps> = ({
       {/* Events Stream List */}
       <div className="flex-1 overflow-y-auto p-4 space-y-3 scrollbar-thin scrollbar-thumb-white/10">
         {filteredEvents.length === 0 ? (
-          <div className="h-64 flex flex-col items-center justify-center text-center p-6 text-zinc-500 space-y-2">
+          <div className="h-64 flex flex-col items-center justify-center text-center p-6 text-zinc-500 space-y-2.5">
             <Radio className="w-8 h-8 text-zinc-600 animate-pulse" />
-            <p className="text-xs">No active telemetry events in buffer.</p>
-            <p className="text-[10px] text-zinc-600 font-sans">
-              Events stream automatically upon snapshot capture, legal search, or cryptographic block sealing.
+            <p className="text-xs font-medium text-zinc-300">
+              {searchQuery ? `No events matching "${searchQuery}"` : 'No active telemetry events in buffer.'}
             </p>
+            {searchQuery ? (
+              <div className="flex flex-col items-center gap-2">
+                <p className="text-[10px] text-zinc-500 font-sans">
+                  Try searching for keywords like "ETDA", "PDPA", "Quorum", "ML-DSA", or switch categories.
+                </p>
+                <button
+                  type="button"
+                  onClick={() => {
+                    playTone(480, 0.03);
+                    setSearchQuery('');
+                  }}
+                  className="px-3 py-1 rounded-lg bg-cyan-500/10 border border-cyan-500/30 text-cyan-300 text-xs font-mono hover:bg-cyan-500/20 transition-all cursor-pointer"
+                >
+                  Clear Search Filter
+                </button>
+              </div>
+            ) : (
+              <p className="text-[10px] text-zinc-600 font-sans">
+                Events stream automatically upon snapshot capture, legal search, or cryptographic block sealing.
+              </p>
+            )}
           </div>
         ) : (
           filteredEvents.map((ev) => {

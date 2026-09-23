@@ -47,8 +47,8 @@ git commit -m "feat: initial commit from AI Studio with PWA setup"
 # 4. เปลี่ยนชื่อบรันช์หลักเป็น main
 git branch -M main
 
-# 5. เชื่อมไปยัง Repository บน GitHub (นำ URL จาก GitHub มาวาง)
-git remote add origin https://github.com/YOUR_USERNAME/YOUR_REPOSITORY_NAME.git
+# 5. เชื่อมไปยัง Repository บน GitHub (yutthaphum-phakphian/ZYRQUEN-1.2-LTS)
+git remote add origin https://github.com/yutthaphum-phakphian/ZYRQUEN-1.2-LTS.git
 
 # 6. อัปโหลดไฟล์ขึ้น GitHub
 git push -u origin main`;

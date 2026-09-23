@@ -497,6 +497,22 @@ export const SecurityView: React.FC<SecurityViewProps> = ({
           <Activity className={`w-4 h-4 ${activeTab === 'threat-analysis' ? 'text-fuchsia-300 animate-pulse' : 'text-fuchsia-400'}`} />
           <span>Threat Vector &amp; Entropy Analysis</span>
         </button>
+
+        <button
+          id="btn-tab-threat-injection-lab"
+          onClick={() => {
+            playTone(720, 0.04);
+            setActiveTab('level3-threat-injection');
+          }}
+          className={`relative z-10 px-4 py-2.5 rounded-xl flex items-center gap-2 transition-all font-bold tracking-wide ${
+            activeTab === 'level3-threat-injection'
+              ? 'bg-gradient-to-r from-rose-600/40 via-red-600/30 to-amber-600/30 text-rose-100 border border-rose-500/60 shadow-[0_0_20px_rgba(244,63,94,0.35)]'
+              : 'text-rose-300/80 hover:text-rose-200 hover:bg-rose-500/10 border border-rose-500/20'
+          }`}
+        >
+          <ShieldAlert className={`w-4 h-4 ${activeTab === 'level3-threat-injection' ? 'text-rose-300 animate-pulse' : 'text-rose-400'}`} />
+          <span>Threat Injection Lab (Level 3 Gate)</span>
+        </button>
         
         <button
           onClick={() => {

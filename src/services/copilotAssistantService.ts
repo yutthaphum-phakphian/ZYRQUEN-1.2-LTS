@@ -975,7 +975,7 @@ export const copilotAssistantService = {
     // 1. Synchronous reactive UI & cryptographic side-effects
     if (queryLower.includes('snapshot') || queryLower.includes('สแนปช็อต') || queryLower.includes('ดาวน์โหลด') || queryLower.includes('download')) {
       const dl = this.triggerSnapshotDownload();
-      localActionNotice = `📥 [Sovereign Action] ดาวน์โหลด Signed Snapshot เรียบร้อย: ${dl.filename} (${dl.totalSeals.toLocaleString()} Seals)\n`;
+      localActionNotice = `������ [Sovereign Action] ดาวน์โหลด Signed Snapshot เรียบร้อย: ${dl.filename} (${dl.totalSeals.toLocaleString()} Seals)\n`;
       actionTaken = 'DOWNLOAD_SNAPSHOT_ACTION';
       actionPayload = { type: 'DOWNLOAD_SNAPSHOT', label: '📥 ดาวน์โหลด Signed Snapshot อีกครั้ง' };
     } else if (queryLower.includes('pqc') || queryLower.includes('quantum') || queryLower.includes('dilithium') || queryLower.includes('โพสต์ควอนตัม')) {
