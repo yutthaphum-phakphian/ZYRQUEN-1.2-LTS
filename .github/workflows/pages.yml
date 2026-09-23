@@ -63,7 +63,7 @@ jobs:
       - name: 📤 Upload Artifact - ONLY dist
         uses: actions/upload-pages-artifact@v3
         with:
-          path: './dist'   # <-- แก้จาก '.' เป็น './dist' นี่คือ Tomin Cleanup
+          path: './dist'   # <-- แก้จาก '.' เป็น './dist' (Tomin Cleanup)
 
       - name: 🚀 Deploy to GitHub Pages
         id: deployment
