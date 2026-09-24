@@ -23,7 +23,7 @@
 
 ## 🏗️ System Architecture & Visual Topology
 
-![ZYRQUEN Ω∞ Sovereign System Architecture](./zyrquen_system_architecture_diagram.png)
+![ZYRQUEN Ω∞ Sovereign System Architecture](./public/zyrquen_system_architecture_diagram.png)
 
 ```
 ┌─────────────────────────────────────────────────────────────────────────────┐
@@ -70,7 +70,7 @@
 
 ## 🛡️ Security, Cryptography & Compliance Architecture
 
-![GitHub Security & Protection Architecture](./zyrquen_github_security_architecture.png)
+![GitHub Security & Protection Architecture](./public/zyrquen_github_security_architecture.png)
 
 ### 1. 10/10 REAL_HSM Deca-Key Council
 สภาผู้พิทักษ์กุญแจ 10 โหนด (TC-01 ถึง TC-10) ควบคุมสิทธิ์ผ่านอุปกรณ์ Hardware Security Module (HSM) มาตรฐาน FIPS 140-3 Level 4 และ CC EAL6+ พร้อมระบบแผงตาข่ายนำไฟฟ้า (Tamper Foil Mesh) ที่จะสั่งการ **Active Zeroization ล้างคีย์ใน RAM ทันทีภายใน < 1.2ms** (ประมวลผลจริง 0.48ms) เมื่อถูกบุกรุกทางกายภาพ พร้อมสลับไปใช้ **SPHINCS+ Fallback** ภายใน 3.20ms โดยไร้ดาวน์ไทม์
@@ -143,10 +143,10 @@
 5. **Run Verification & Security Penetration Test Scripts:**
    ```bash
    # Run 12-Stage Forensic Trace Replay Simulation
-   python3 court_replay_verification.py
+   python3 tests/court_replay_verification.py
 
    # Run Full-Spectrum Security Penetration Test Suite
-   python3 test_sovereign_security_pen_test.py
+   python3 tests/test_sovereign_security_pen_test.py
    ```
 
 ---

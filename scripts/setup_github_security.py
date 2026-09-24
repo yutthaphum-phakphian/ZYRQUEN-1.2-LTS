@@ -22,7 +22,7 @@ def check_github_auth():
     token = os.environ.get("GITHUB_TOKEN") or os.environ.get("GH_TOKEN")
     if not token:
         print("[WARN] GITHUB_TOKEN environment variable not found.")
-        print("       Run with: export GITHUB_TOKEN=\"ghp_xxx\" python3 setup_github_security.py")
+        print("       Run with: export GITHUB_TOKEN=\"ghp_xxx\" python3 scripts/setup_github_security.py")
         return False
 
     req = urllib.request.Request(
