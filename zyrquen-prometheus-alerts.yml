@@ -1,0 +1,62 @@
+groups:
+  - name: zyrquen_sovereign_alerts
+    rules:
+      - alert: SSoTBaselineDriftDetected
+        expr: zyrquen_ssot_drift_percentage > 0
+        for: 0m
+        labels:
+          severity: critical
+          tier: sovereign_core
+        annotations:
+          summary: "CRITICAL: SSoT Delta Drift Detected (> 0.00%)"
+          description: "Genesis Block #849202 Merkle root inconsistency detected. Baseline drift is {{ $value }}%. Immediate Phoenix Recovery required."
+
+      - alert: HSMQuorumDegraded
+        expr: zyrquen_hsm_quorum_active_nodes < 10
+        for: 0m
+        labels:
+          severity: critical
+          tier: hsm_enclave
+        annotations:
+          summary: "CRITICAL: 10/10 REAL_HSM Quorum Compromised"
+          description: "Active HSM nodes dropped to {{ $value }}/10. Deca-Key consensus threshold lost."
+
+      - alert: SubKelvinCryoTempSpike
+        expr: zyrquen_subkelvin_temperature_mkelvin > 20.0
+        for: 30s
+        labels:
+          severity: warning
+          tier: hardware_cryo
+        annotations:
+          summary: "WARNING: Sub-Kelvin Cryo Bus Temperature Spike"
+          description: "Cryo Bus temperature reached {{ $value }} mK (Nominal target: 14.98 mK)."
+
+      - alert: SentinelInterceptorQuarantineTriggered
+        expr: zyrquen_sentinel_risk_score >= 0.85
+        for: 0m
+        labels:
+          severity: warning
+          tier: sentinel_ai
+        annotations:
+          summary: "NOTICE: High Risk Intercepted -> Chamber 02 Quarantine"
+          description: "Payload risk score {{ $value }} >= 0.85. Diverted to Chamber 02 Quarantine Escrow Buffer."
+
+      - alert: ForensicTraceReplaySLABreach
+        expr: zyrquen_trace_replay_latency_ms > 142.0
+        for: 1m
+        labels:
+          severity: warning
+          tier: SLA_forensics
+        annotations:
+          summary: "WARNING: 12-Stage Trace Replay SLA Exceeded"
+          description: "Replay latency reached {{ $value }} ms (SLA Threshold: 142.0 ms, Baseline: 35.8 ms)."
+
+      - alert: PQCSignatureVerificationFailure
+        expr: zyrquen_pqc_signature_failures_total > 0
+        for: 0m
+        labels:
+          severity: critical
+          tier: pqc_crypto
+        annotations:
+          summary: "CRITICAL: Dilithium-5 (ML-DSA-87) PQC Signature Failure"
+          description: "Detected {{ $value }} invalid post-quantum digital signature(s)."
