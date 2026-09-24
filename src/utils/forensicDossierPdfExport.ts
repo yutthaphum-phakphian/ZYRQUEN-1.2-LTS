@@ -1,6 +1,7 @@
 import jsPDF from 'jspdf';
 import autoTable from 'jspdf-autotable';
 import QRCode from 'qrcode';
+import { getAutoTableFinalY } from './pdfAutoTable';
 import { FORENSIC_DOSSIER_V9, ForensicDossierMaster } from '../data/forensicAuditMasterDossierData';
 
 export type ChamberCoherenceState = 'FROZEN' | 'QUARANTINE' | 'TEMPERED';
@@ -170,7 +171,7 @@ export function generateMasterForensicDossierV9Pdf(dossier: ForensicDossierMaste
   });
 
   // Section 3: Statutory Alignment Summary Table on Page 1
-  const finalPillarY = (doc as any).lastAutoTable?.finalY || 195;
+  const finalPillarY = getAutoTableFinalY(doc, 195);
   doc.setFontSize(11);
   doc.setFont('helvetica', 'bold');
   doc.setTextColor(255, 255, 255);
@@ -253,7 +254,7 @@ export function generateMasterForensicDossierV9Pdf(dossier: ForensicDossierMaste
     },
   });
 
-  const finalStepsY = (doc as any).lastAutoTable?.finalY || 230;
+  const finalStepsY = getAutoTableFinalY(doc, 230);
 
   // Signatures & Chain of Custody Box
   doc.setFillColor(248, 250, 252);
@@ -479,7 +480,7 @@ export function generateFocusedChamberPdfSync(
     },
   });
 
-  const tableFinalY = (doc as any).lastAutoTable?.finalY || 215;
+  const tableFinalY = getAutoTableFinalY(doc, 215);
 
   // Chain of Custody & Court Certification Box
   doc.setFillColor(248, 250, 252);

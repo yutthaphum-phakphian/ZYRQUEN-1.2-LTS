@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import jsPDF from 'jspdf';
 import autoTable from 'jspdf-autotable';
+import { getAutoTableFinalY } from '../utils/pdfAutoTable';
 import {
   Zap,
   Download,
@@ -216,7 +217,7 @@ export const QuantumPerformanceReport: React.FC<QuantumPerformanceReportProps> =
       // -----------------------------------------------------------------------
       // 4. REAL-TIME TELEMETRY LOG BUFFER TABLE
       // -----------------------------------------------------------------------
-      const currentFinalY = (doc as any).lastAutoTable ? (doc as any).lastAutoTable.finalY + 8 : 130;
+      const currentFinalY = getAutoTableFinalY(doc, 130) + 8;
       doc.setFontSize(10);
       doc.setFont('helvetica', 'bold');
       doc.setTextColor(15, 23, 42);
@@ -247,7 +248,7 @@ export const QuantumPerformanceReport: React.FC<QuantumPerformanceReportProps> =
       // -----------------------------------------------------------------------
       // 5. FORENSIC SEAL & COURT-ADMISSIBLE FOOTER
       // -----------------------------------------------------------------------
-      const footerY = (doc as any).lastAutoTable ? (doc as any).lastAutoTable.finalY + 12 : 240;
+      const footerY = getAutoTableFinalY(doc, 240) + 12;
 
       doc.setFillColor(248, 250, 252);
       doc.setDrawColor(203, 213, 225);

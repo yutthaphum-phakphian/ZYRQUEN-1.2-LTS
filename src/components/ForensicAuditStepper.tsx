@@ -32,6 +32,7 @@ import {
 } from 'lucide-react';
 import jsPDF from 'jspdf';
 import autoTable from 'jspdf-autotable';
+import { getAutoTableFinalY } from '../utils/pdfAutoTable';
 import { playAuditChime, playTone, playSnapshotSealChime } from './AudioSynthesizer';
 import { speakSystemAlert } from '../utils/textToSpeechService';
 import { safeCopyToClipboard } from '../utils/clipboard';
@@ -387,7 +388,7 @@ export function exportSingleStepPDF(step: AuditStep) {
   });
 
   // Description section
-  const finalY = (doc as any).lastAutoTable.finalY + 10;
+  const finalY = getAutoTableFinalY(doc, 80) + 10;
   doc.setFontSize(10);
   doc.setFont('helvetica', 'bold');
   doc.setTextColor(15, 23, 42);
