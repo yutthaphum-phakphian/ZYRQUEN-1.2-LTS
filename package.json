@@ -5,10 +5,10 @@
   "type": "module",
   "scripts": {
     "dev": "tsx server.ts",
-    "build": "vite build && (mkdir -p build && cp -r dist/* build/ 2>/dev/null || true)",
+    "build": "vite build",
     "lint": "tsc --noEmit",
     "preview": "vite preview",
-    "start": "tsx server.ts"
+    "start": "node server.ts"
   },
   "dependencies": {
     "@google/genai": "^2.24.0",
