@@ -2332,7 +2332,7 @@ function SovereignAppContent() {
       <LiveQuantumEntropyTicker />
 
       {/* App Body Layout with Collapsible Left Sidebar */}
-      <div className="relative z-10 max-w-[1780px] mx-auto px-2 sm:px-4 flex items-start">
+      <div className="relative z-10 max-w-[1780px] w-full max-w-full mx-auto px-2 sm:px-4 flex items-start overflow-hidden">
         {/* Left Sidebar (Open / Close Collapsible) */}
         <LeftSidebar
           isOpen={isLeftSidebarOpen}
@@ -2346,7 +2346,7 @@ function SovereignAppContent() {
         />
 
         {/* Main Content Area with Sliding Curtain OS Entrance Transitions */}
-        <main className="flex-1 min-w-0 w-full px-2 sm:px-4 py-4 pb-28 sm:pb-32 overflow-hidden space-y-4 transition-all duration-300">
+        <main className="flex-1 min-w-0 w-full max-w-full overflow-hidden px-2 sm:px-4 py-4 pb-28 sm:pb-32 space-y-4 transition-all duration-300">
           {/* Visual Notification System: SSoT Mutation Drift Warning (Triggered if deviation >= 0.01%) */}
           <SsotDriftWarning />
 
@@ -2907,7 +2907,7 @@ function SovereignAppContent() {
         <AnimatePresence mode="wait">
           <motion.div
             key={currentView}
-            className="relative"
+            className="relative w-full min-w-0 max-w-full overflow-hidden"
             initial={{ opacity: 0, x: 24, filter: 'blur(5px)' }}
             animate={{ opacity: 1, x: 0, filter: 'blur(0px)' }}
             exit={{ opacity: 0, x: -24, filter: 'blur(5px)' }}
