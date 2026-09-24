@@ -15,7 +15,7 @@ concurrency:
   cancel-in-progress: false
 
 jobs:
-  deploy:
+  build-and-deploy:
     environment:
       name: github-pages
       url: ${{ steps.deployment.outputs.page_url }}
@@ -23,12 +23,33 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@v4
+
+      # 1. ติดตั้ง Node.js v22 พร้อมระบบ Cache Dependencies
+      - name: Setup Node.js v22
+        uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: 'npm'
+
+      # 2. ติดตั้ง Packages
+      - name: Install Dependencies
+        run: npm ci
+
+      # 3. คอมไพล์โปรเจกต์ด้วย Vite
+      - name: Build Project
+        run: npm run build
+
+      # 4. ตั้งค่า GitHub Pages
       - name: Setup Pages
-        uses: actions/configure-pages@v4
+        uses: actions/configure-pages@v6
+
+      # 5. อัปโหลดโฟลเดอร์ ./dist ที่คอมไพล์แล้ว
       - name: Upload Artifact
         uses: actions/upload-pages-artifact@v3
         with:
-          path: '.'
+          path: './dist'
+
+      # 6. Deploy ขึ้น GitHub Pages
       - name: Deploy to GitHub Pages
         id: deployment
         uses: actions/deploy-pages@v4
