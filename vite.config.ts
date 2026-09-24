@@ -7,8 +7,8 @@ import path from 'path';
 // https://vitejs.dev/config/
 export default defineConfig(({ mode }) => {
   return {
-    // 1. ตั้งค่า Base Path สำหรับ GitHub Pages (ใช้ './' เพื่อให้โหลด Relative Path ได้ทันที)
-    base: process.env.GITHUB_PAGES === 'true' ? './' : '/',
+    // 1. ตั้งค่า Base Path สำหรับ GitHub Pages & Production (ใช้ './' เพื่อให้โหลด Relative Path ได้ทุก Subpath)
+    base: process.env.GITHUB_PAGES === 'true' || process.env.GITHUB_ACTIONS === 'true' || mode === 'production' ? './' : '/',
 
     // 2. ปลั๊กอินตามที่ระบุใน package.json (React + Tailwind v4 + PWA)
     plugins: [

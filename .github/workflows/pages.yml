@@ -2,7 +2,7 @@ name: GitHub Pages Deployment
 
 on:
   push:
-    branches: [ main ]
+    branches: [ main, master ]
   workflow_dispatch:
 
 permissions:
@@ -24,32 +24,43 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v4
 
-      # 1. ติดตั้ง Node.js v22 พร้อมระบบ Cache Dependencies
-      - name: Setup Node.js v22
+      # 1. Setup Node.js v20/22 with cache
+      - name: Setup Node.js
         uses: actions/setup-node@v4
         with:
-          node-version: 22
+          node-version: 20
           cache: 'npm'
 
-      # 2. ติดตั้ง Packages
+      # 2. Install Packages with legacy peer deps for React 19 compatibility
       - name: Install Dependencies
-        run: npm ci
+        run: npm ci --legacy-peer-deps || npm install --legacy-peer-deps
 
-      # 3. คอมไพล์โปรเจกต์ด้วย Vite
+      # 3. Build Project with Vite (Relative Base Path for GitHub Pages)
       - name: Build Project
         run: npm run build
+        env:
+          CI: false
+          GITHUB_PAGES: 'true'
 
-      # 4. ตั้งค่า GitHub Pages
+      # 4. Create 404 fallback for SPA routing on GitHub Pages
+      - name: Prepare SPA 404 Fallback
+        run: |
+          if [ -d "dist" ]; then
+            cp dist/index.html dist/404.html 2>/dev/null || true
+          fi
+
+      # 5. Setup Pages
       - name: Setup Pages
-        uses: actions/configure-pages@v6
+        uses: actions/configure-pages@v5
 
-      # 5. อัปโหลดโฟลเดอร์ ./dist ที่คอมไพล์แล้ว
+      # 6. Upload Artifact
       - name: Upload Artifact
         uses: actions/upload-pages-artifact@v3
         with:
           path: './dist'
 
-      # 6. Deploy ขึ้น GitHub Pages
+      # 7. Deploy to GitHub Pages
       - name: Deploy to GitHub Pages
         id: deployment
         uses: actions/deploy-pages@v4
+

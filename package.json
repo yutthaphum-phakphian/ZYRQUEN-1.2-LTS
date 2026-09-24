@@ -5,7 +5,7 @@
   "type": "module",
   "scripts": {
     "dev": "tsx server.ts",
-    "build": "vite build",
+    "build": "vite build && (mkdir -p build && cp -r dist/* build/ 2>/dev/null || true)",
     "lint": "tsc --noEmit",
     "preview": "vite preview",
     "start": "tsx server.ts"
@@ -36,6 +36,7 @@
     "tailwind-merge": "^3.0.1",
     "tailwindcss": "^4.0.0",
     "three": "^0.174.0",
+    "tsx": "^4.19.3",
     "ws": "^8.18.0"
   },
   "devDependencies": {
@@ -49,7 +50,6 @@
     "@types/three": "^0.174.0",
     "@types/ws": "^8.5.14",
     "@vitejs/plugin-react": "^4.3.4",
-    "tsx": "^4.19.3",
     "typescript": "~5.8.2",
     "vite": "^6.2.0",
     "vite-plugin-pwa": "^0.21.1"
