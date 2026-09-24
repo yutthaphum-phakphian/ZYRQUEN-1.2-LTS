@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <script>
+      // Suppress benign Vite websocket notices and connection errors in sandboxed iframe environment
+      (function() {
+        var isBenign = function(arg) {
+          if (!arg) return false;
+          try {
+            var str = (arg instanceof Error ? (arg.message + ' ' + (arg.stack || '')) : String(arg)).toLowerCase();
+            return str.indexOf('[vite]') !== -1 ||
+                   str.indexOf('websocket') !== -1 ||
+                   str.indexOf('failed to connect') !== -1 ||
+                   str.indexOf('resizeobserver') !== -1;
+          } catch (e) {
+            return false;
+          }
+        };
+
+        window.onerror = function(msg, url, lineNo, columnNo, error) {
+          if (isBenign(msg) || isBenign(error)) {
+            return true;
+          }
+        };
+
+        window.addEventListener('error', function(event) {
+          if (isBenign(event.message) || isBenign(event.error)) {
+            event.stopImmediatePropagation();
+            event.preventDefault();
+            return true;
+          }
+        }, true);
+
+        window.addEventListener('unhandledrejection', function(event) {
+          if (isBenign(event.reason)) {
+            event.stopImmediatePropagation();
+            event.preventDefault();
+          }
+        }, true);
+
+        var originalWarn = console.warn;
+        var originalError = console.error;
+        var originalLog = console.log;
+        var originalInfo = console.info;
+
+        console.warn = function() {
+          for (var i = 0; i < arguments.length; i++) {
+            if (isBenign(arguments[i])) return;
+          }
+          originalWarn.apply(console, arguments);
+        };
+
+        console.error = function() {
+          for (var i = 0; i < arguments.length; i++) {
+            if (isBenign(arguments[i])) return;
+          }
+          originalError.apply(console, arguments);
+        };
+
+        console.log = function() {
+          for (var i = 0; i < arguments.length; i++) {
+            if (isBenign(arguments[i])) return;
+          }
+          originalLog.apply(console, arguments);
+        };
+
+        console.info = function() {
+          for (var i = 0; i < arguments.length; i++) {
+            if (isBenign(arguments[i])) return;
+          }
+          originalInfo.apply(console, arguments);
+        };
+      })();
+    </script>
+    <link rel="icon" type="image/svg+xml" href="./icon.svg" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover" />
+    <meta name="theme-color" content="#020617" />
+    <meta name="mobile-web-app-capable" content="yes" />
+    <meta name="apple-mobile-web-app-capable" content="yes" />
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+    <link rel="manifest" href="./manifest.json" />
+    <link rel="apple-touch-icon" href="./pwa-192x192.png" />
+    <title>ZYRQUEN Ω∞ Sovereign World Engine</title>
+    <meta name="description" content="Sovereign Operating System & Civilization Intelligence Control Plane - Block #849202 (Frozen v1.2 LTS)" />
+    <meta property="og:title" content="ZYRQUEN Ω∞ Sovereign World Engine" />
+    <meta property="og:description" content="Sovereign Operating System & Civilization Intelligence Control Plane - Block #849202 (Frozen v1.2 LTS)" />
+    <script type="module" crossorigin src="./assets/index-Dg3_QR_5.js"></script>
+    <link rel="modulepreload" crossorigin href="./assets/charts-D9ttWVO-.js">
+    <link rel="modulepreload" crossorigin href="./assets/three-EVpp77tI.js">
+    <link rel="stylesheet" crossorigin href="./assets/index-DlGFMhKR.css">
+  <link rel="manifest" href="./manifest.webmanifest"><script id="vite-plugin-pwa:register-sw" src="./registerSW.js"></script></head>
+  <body>
+    <div id="root"></div>
+  </body>
+</html>

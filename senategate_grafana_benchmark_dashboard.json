@@ -1,0 +1,222 @@
+{
+  "annotations": {
+    "list": []
+  },
+  "editable": true,
+  "fiscalYearStartMonth": 0,
+  "graphTooltip": 1,
+  "id": null,
+  "links": [],
+  "liveNow": true,
+  "panels": [
+    {
+      "collapsed": false,
+      "gridPos": { "h": 1, "w": 24, "x": 0, "y": 0 },
+      "id": 100,
+      "title": "🏛️ ZYRQUEN Ω∞ Senate Gate — Real-Time SLA & Latency Gauges (v5.0 LTS)",
+      "type": "row"
+    },
+    {
+      "id": 1,
+      "title": "p99 Evaluation Latency (Target < 1.00ms)",
+      "type": "gauge",
+      "gridPos": { "h": 6, "w": 6, "x": 0, "y": 1 },
+      "targets": [
+        {
+          "expr": "histogram_quantile(0.99, sum(rate(senategate_eval_duration_seconds_bucket[1m])) by (le)) * 1000",
+          "legendFormat": "p99 Latency (ms)"
+        }
+      ],
+      "fieldConfig": {
+        "defaults": {
+          "unit": "ms",
+          "min": 0,
+          "max": 3.0,
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              { "color": "green", "value": null },
+              { "color": "yellow", "value": 0.85 },
+              { "color": "red", "value": 1.0 }
+            ]
+          }
+        }
+      }
+    },
+    {
+      "id": 2,
+      "title": "Global Evaluation Throughput (RPS)",
+      "type": "stat",
+      "gridPos": { "h": 6, "w": 6, "x": 6, "y": 1 },
+      "targets": [
+        {
+          "expr": "sum(rate(senategate_evaluations_total[1m]))",
+          "legendFormat": "Total Req/sec"
+        }
+      ],
+      "fieldConfig": {
+        "defaults": {
+          "unit": "reqps",
+          "color": { "mode": "palette-classic" }
+        }
+      }
+    },
+    {
+      "id": 3,
+      "title": "Short-Circuit Rejection Ratio",
+      "type": "gauge",
+      "gridPos": { "h": 6, "w": 6, "x": 12, "y": 1 },
+      "targets": [
+        {
+          "expr": "sum(rate(senategate_short_circuit_triggers_total[1m])) / sum(rate(senategate_evaluations_total[1m])) * 100",
+          "legendFormat": "Fast-Drop %"
+        }
+      ],
+      "fieldConfig": {
+        "defaults": {
+          "unit": "percent",
+          "min": 0,
+          "max": 100,
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              { "color": "blue", "value": null },
+              { "color": "purple", "value": 15.0 }
+            ]
+          }
+        }
+      }
+    },
+    {
+      "id": 4,
+      "title": "Quorum Attestation Health",
+      "type": "stat",
+      "gridPos": { "h": 6, "w": 6, "x": 18, "y": 1 },
+      "targets": [
+        {
+          "expr": "sum(senategate_senate_nodes_active{status=\"ATTESTED\"}) / sum(senategate_senate_nodes_active) * 100",
+          "legendFormat": "Active Quorum %"
+        }
+      ],
+      "fieldConfig": {
+        "defaults": {
+          "unit": "percent",
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              { "color": "red", "value": null },
+              { "color": "yellow", "value": 80.0 },
+              { "color": "green", "value": 90.0 }
+            ]
+          }
+        }
+      }
+    },
+    {
+      "collapsed": false,
+      "gridPos": { "h": 1, "w": 24, "x": 0, "y": 7 },
+      "id": 200,
+      "title": "⚡ Sub-Millisecond Latency Profile (Percentiles: p50, p90, p95, p99, p99.9)",
+      "type": "row"
+    },
+    {
+      "id": 5,
+      "title": "Latency Percentiles (ms)",
+      "type": "timeseries",
+      "gridPos": { "h": 8, "w": 16, "x": 0, "y": 8 },
+      "targets": [
+        {
+          "expr": "histogram_quantile(0.50, sum(rate(senategate_eval_duration_seconds_bucket[1m])) by (le)) * 1000",
+          "legendFormat": "p50 (Median)"
+        },
+        {
+          "expr": "histogram_quantile(0.90, sum(rate(senategate_eval_duration_seconds_bucket[1m])) by (le)) * 1000",
+          "legendFormat": "p90"
+        },
+        {
+          "expr": "histogram_quantile(0.95, sum(rate(senategate_eval_duration_seconds_bucket[1m])) by (le)) * 1000",
+          "legendFormat": "p95"
+        },
+        {
+          "expr": "histogram_quantile(0.99, sum(rate(senategate_eval_duration_seconds_bucket[1m])) by (le)) * 1000",
+          "legendFormat": "p99 (SLA)"
+        }
+      ],
+      "fieldConfig": {
+        "defaults": {
+          "unit": "ms",
+          "custom": {
+            "lineWidth": 2,
+            "fillOpacity": 10
+          }
+        }
+      }
+    },
+    {
+      "id": 6,
+      "title": "Fast Reject Short-Circuit Stage Triggers",
+      "type": "barchart",
+      "gridPos": { "h": 8, "w": 8, "x": 16, "y": 8 },
+      "targets": [
+        {
+          "expr": "sum by (guard_name) (rate(senategate_guard_evaluations_total{status=\"SHORT_CIRCUITED\"}[5m]))",
+          "legendFormat": "{{guard_name}}"
+        }
+      ]
+    },
+    {
+      "collapsed": false,
+      "gridPos": { "h": 1, "w": 24, "x": 0, "y": 16 },
+      "id": 300,
+      "title": "🌐 Geo-Distributed Multi-Region Latency & Merkle Consensus",
+      "type": "row"
+    },
+    {
+      "id": 7,
+      "title": "Cross-Region Sync Latency & Merkle Parity",
+      "type": "timeseries",
+      "gridPos": { "h": 7, "w": 12, "x": 0, "y": 17 },
+      "targets": [
+        {
+          "expr": "senategate_cross_region_sync_latency_ms{target_region=\"eu-central-1\"}",
+          "legendFormat": "us-east-1 -> eu-central-1"
+        },
+        {
+          "expr": "senategate_cross_region_sync_latency_ms{target_region=\"ap-southeast-1\"}",
+          "legendFormat": "us-east-1 -> ap-southeast-1"
+        }
+      ],
+      "fieldConfig": {
+        "defaults": {
+          "unit": "ms"
+        }
+      }
+    },
+    {
+      "id": 8,
+      "title": "Chaos Vector Mitigation (Active Defense)",
+      "type": "timeseries",
+      "gridPos": { "h": 7, "w": 12, "x": 12, "y": 17 },
+      "targets": [
+        {
+          "expr": "sum by (vector_type) (rate(senategate_chaos_mitigation_total[1m]))",
+          "legendFormat": "{{vector_type}}"
+        }
+      ]
+    }
+  ],
+  "refresh": "5s",
+  "schemaVersion": 38,
+  "style": "dark",
+  "tags": ["zyrquen", "senate-gate", "v5.0-lts", "benchmark", "opa", "pqc"],
+  "time": {
+    "from": "now-15m",
+    "to": "now"
+  },
+  "timepicker": {
+    "refresh_intervals": ["1s", "5s", "10s", "30s", "1m"]
+  },
+  "timezone": "utc",
+  "title": "🛡️ ZYRQUEN Ω∞ Senate Gate — Enterprise Benchmark Dashboard v5.0 LTS",
+  "version": 1
+}
