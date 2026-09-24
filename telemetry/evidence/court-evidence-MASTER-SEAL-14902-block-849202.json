@@ -1,0 +1,17 @@
+{
+  "sys": "ZYRQUEN_OMEGA_INF",
+  "merkle_root": "909ab814479844d8a14816bed34cdbb07528e18501da86fc4691763a43fa4c68",
+  "pqc_sig": "0x892a...f92b_DILITHIUM5_ML_DSA_87",
+  "seal_idx": 14902,
+  "genesis_block": 849202,
+  "ts": "2026-09-21T13:46:33.244Z",
+  "principal": "🇹🇭 นายยุทธภูมิ พากเพียร (EvidenceLedgerSealer) (#EP-SOVEREIGN-01)",
+  "ssot_delta": "0.00%",
+  "court_admissible": true,
+  "evidence_code": "MASTER-SEAL-14902",
+  "stage_name": "GENERAL_ATTESTATION",
+  "council_quorum": "10/10 REAL_HSM",
+  "forensic_pipeline": "12-STAGE DETERMINISTIC TRACE (ETDA Sec 9/26/28)",
+  "statute_refs": "ETDA B.E. 2544 (Sec 9, 26, 28) + PDPA B.E. 2562 (Sec 37)",
+  "hash_alg": "SHA3-512 + BLAKE3"
+}

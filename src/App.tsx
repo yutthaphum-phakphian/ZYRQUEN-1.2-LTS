@@ -4,7 +4,7 @@
 
 import React, { useState, useEffect, useCallback, useRef } from 'react';
 import { AnimatePresence, motion, animate } from 'motion/react';
-import { HashRouter, useLocation, useNavigate } from 'react-router-dom';
+import { HashRouter, useLocation, useNavigate } from '@/lib/router';
 import jsPDF from 'jspdf';
 import autoTable from 'jspdf-autotable';
 import {
@@ -33,6 +33,9 @@ import {
   Pin,
   PinOff,
   QrCode,
+  Settings,
+  Sparkles,
+  SlidersHorizontal,
 } from 'lucide-react';
 import { MerkleRootQrCodeModal } from '@/components/MerkleRootQrCodeModal';
 import { CANONICAL_GENESIS_BLOCK, CANONICAL_MERKLE_ROOT } from '@/data/canonicalData';
@@ -42,6 +45,7 @@ import { Navigation } from '@/components/Navigation';
 import { LeftSidebar } from '@/components/LeftSidebar';
 import { MainFooter } from '@/components/MainFooter';
 import { SovereignControlDock } from '@/components/SovereignControlDock';
+import { SovereignBottomStatusBar } from '@/components/SovereignBottomStatusBar';
 import { CopilotSovereignAI } from '@/components/CopilotSovereignAI';
 import { SystemEventsSidebar, SystemEvent } from '@/components/SystemEventsSidebar';
 import { DashboardView } from '@/components/views/DashboardView';
@@ -895,6 +899,7 @@ function SovereignAppContent() {
   const [isShortcutsOpen, setIsShortcutsOpen] = useState(false);
   const [isEventsSidebarOpen, setIsEventsSidebarOpen] = useState(false);
   const [isCopilotOpen, setIsCopilotOpen] = useState(false);
+  const [isControlDockOpen, setIsControlDockOpen] = useState(false);
   const [isAudioActive, setIsAudioActive] = useState(false);
 
   const [toasts, setToasts] = useState<ToastMessage[]>([]);
@@ -915,7 +920,7 @@ function SovereignAppContent() {
     const handleGlobalToast = (e: Event) => {
       const customEvent = e as CustomEvent<{ message: string; type?: ToastMessage['type'] }>;
       if (customEvent.detail?.message) {
-        showToast(customEvent.detail.message, customEvent.detail.type || 'warning');
+        showToast(customEvent.detail.message, customEvent.detail.type || 'info');
       }
     };
     window.addEventListener('zyrquen-toast', handleGlobalToast);
@@ -3001,6 +3006,9 @@ function SovereignAppContent() {
 
       {/* Sovereign Control Dock (Cybernetic Floating Glassmorphism Controls) */}
       <SovereignControlDock
+        isOpen={isControlDockOpen}
+        onOpenChange={setIsControlDockOpen}
+        showFab={false}
         audioEnabled={isAudioActive}
         onToggleAudio={handleToggleAudio}
         frequency={carrierPitchHz}
@@ -3042,39 +3050,66 @@ function SovereignAppContent() {
         }}
       />
 
-      {/* Dynamic Atmospheric Ambient Sound Generator Floating HUD - Non-colliding responsive layout */}
-      <div className="fixed max-sm:bottom-15 max-sm:left-3 sm:bottom-3 sm:left-16 z-40 flex items-center gap-2 pointer-events-none sm:pointer-events-auto">
-        <div className="pointer-events-auto">
-        <button
-          onClick={handleToggleAudio}
-          className={`px-2.5 sm:px-3 min-h-[38px] sm:min-h-[42px] py-1 sm:py-1.5 rounded-xl border font-mono text-xs backdrop-blur-xl transition-all shadow-xl flex items-center gap-2 ${
-            isAudioActive
-              ? 'bg-cyan-950/80 border-cyan-500/40 text-cyan-200 shadow-[0_0_20px_rgba(6,182,212,0.25)]'
-              : 'bg-black/60 border-white/10 text-zinc-400 hover:text-zinc-200 hover:border-white/20'
-          }`}
-          title="Dynamic Atmospheric Ambient Sound Generator (Modulates Carrier Pitch by Aggregate System Entropy)"
-        >
-          <span className="relative flex h-2 w-2">
-            {isAudioActive && (
-              <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-cyan-400 opacity-75"></span>
-            )}
-            <span
-              className={`relative inline-flex rounded-full h-2 w-2 ${
-                isAudioActive ? 'bg-cyan-400' : 'bg-zinc-600'
+      {/* Dynamic Bottom Floating Control Toolbar (Layered at bottom-12 to prevent overlap) */}
+      <div className="fixed bottom-12 left-0 right-0 z-30 px-2.5 sm:px-4 pointer-events-none">
+        <div className="max-w-7xl mx-auto flex items-center justify-between bg-slate-900/90 border border-slate-800 rounded-xl p-2 backdrop-blur-md shadow-xl pointer-events-auto text-xs font-mono">
+          {/* Left: Quick Settings & Audio Control */}
+          <div className="flex items-center gap-2">
+            <button
+              onClick={() => {
+                triggerVibration('click');
+                setIsControlDockOpen((prev) => !prev);
+              }}
+              className={`p-1.5 rounded-lg transition-colors cursor-pointer ${
+                isControlDockOpen
+                  ? 'bg-cyan-500/20 text-cyan-300 border border-cyan-500/50 shadow-[0_0_12px_rgba(6,182,212,0.3)]'
+                  : 'bg-slate-800 hover:bg-slate-700 text-slate-300'
               }`}
-            ></span>
-          </span>
-          <Waves className={`w-3.5 h-3.5 ${isAudioActive ? 'text-cyan-400 animate-pulse' : 'text-zinc-500'}`} />
-          <span className="font-bold hidden md:inline">
-            ATMOSPHERIC AUDIO
-          </span>
-          <span className="text-[11px] text-zinc-300 border-l border-white/10 pl-2 font-mono">
-            {isAudioActive ? `${carrierPitchHz} Hz` : 'MUTED'}
-          </span>
-          <QuantumAggregateEntropyIndicator />
-        </button>
+              title="Settings & Sovereign System Controls"
+            >
+              <Settings className="w-4 h-4" />
+            </button>
+
+            <button
+              onClick={handleToggleAudio}
+              className="text-[11px] text-slate-400 px-2 py-0.5 bg-slate-950 rounded border border-slate-800 hover:border-cyan-500/40 hover:text-cyan-300 transition-colors flex items-center gap-1.5 cursor-pointer"
+              title={isAudioActive ? `Atmospheric Audio: ${carrierPitchHz} Hz (Click to mute)` : 'Atmospheric Audio: MUTED (Click to enable)'}
+            >
+              <Waves className={`w-3.5 h-3.5 ${isAudioActive ? 'text-cyan-400 animate-pulse' : 'text-zinc-500'}`} />
+              <span>{isAudioActive ? `${carrierPitchHz} Hz` : 'MUTED'}</span>
+            </button>
+
+            <div className="hidden xs:flex items-center">
+              <QuantumAggregateEntropyIndicator />
+            </div>
+          </div>
+
+          {/* Right: Voice Command & Copilot Button */}
+          <div className="flex items-center gap-2">
+            <VoiceCommandOverlay 
+              inline
+              onNavigate={setCurrentView} 
+              onCaptureSnapshot={() => handleAddSnapshot(createTelemetrySnapshot({ core0: 42, core1: 39, core2: 44, core3: 38 }, snapshots.length, snapshots[0]?.sealedHash))} 
+              onNotifyEvent={addSystemEvent as any} 
+            />
+
+            <button
+              onClick={() => {
+                triggerVibration('click');
+                setIsCopilotOpen(true);
+              }}
+              className="px-3 py-1 bg-gradient-to-r from-cyan-600 to-blue-600 hover:from-cyan-500 hover:to-blue-500 text-white font-bold rounded-lg text-xs flex items-center gap-1.5 shadow-md cursor-pointer active:scale-95 transition-all"
+              title="Open Sovereign Copilot AI (v6.0 Ultra)"
+            >
+              <Sparkles className="w-3.5 h-3.5" />
+              <span>COPILOT</span>
+            </button>
+          </div>
         </div>
       </div>
+
+      {/* Sovereign Bottom Status Bar (Background Sync & Network Telemetry at bottom-0) */}
+      <SovereignBottomStatusBar />
 
       {/* Sovereign Copilot AI v6.0 Ultra Panel with docked Voice-to-Command Bridge */}
       <CopilotSovereignAI

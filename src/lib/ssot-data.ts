@@ -403,4 +403,24 @@ export const CHAMBERS_DATA: ChamberData[] = [
       { name: 'Judicial Export Generator', desc: 'Generates ISO/IEC 27037 compliant audit reports for regulatory bodies', status: 'READY' },
     ],
   },
+  {
+    id: 'ch-18',
+    num: '18',
+    titleEn: 'NEURAL SENTINEL & PREDICTIVE GOVERNANCE',
+    titleTh: '18 — ผู้พิทักษ์โครงข่ายประสาท และธรรมาภิบาลเชิงคาดการณ์',
+    badge: 'NEURAL SENTINEL',
+    status: 'ACTIVE',
+    descriptionEn: 'Real-time telemetry stream anomaly detection and predictive governance index processing (12,480 spans/m).',
+    descriptionTh: 'ตรวจจับความผิดปกติในสายธารข้อมูลโทรมาตรแบบ Real-time และประมวลผลดรรชนีความเสี่ยงธรรมาภิบาลเชิงคาดการณ์',
+    metrics: [
+      { label: 'Span Ingestion', value: '12,480 spans/m', status: 'active' },
+      { label: 'Phase Jitter', value: '1.33 fs Baseline', status: 'nominal' },
+      { label: 'Fail-Closed Guard', value: 'Chamber 02 Quarantine Armed', status: 'nominal' },
+    ],
+    subModules: [
+      { name: 'Latent Phase Anomaly Score (A_t)', desc: 'Phase jitter and latency deviation from 14.98 mK Helium-4 baseline', status: 'ACTIVE' },
+      { name: 'Predictive Drift Risk (R_drift)', desc: 'Evaluates SSoT baseline divergence risk from Δ0.00%', status: 'MONITORING' },
+      { name: 'Fail-Closed Quarantine Proximity (P_FC)', desc: 'Evaluates proximity before auto-freezing to Chamber 02 Buffer (<142ms)', status: 'ARMED' },
+    ],
+  },
 ];

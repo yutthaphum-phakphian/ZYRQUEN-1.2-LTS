@@ -613,11 +613,11 @@ export const GlobalCommandSearch: React.FC<GlobalCommandSearchProps> = ({
   return (
     <div
       id="global-command-search-modal"
-      className="fixed inset-0 z-50 flex items-start justify-center pt-10 sm:pt-16 p-3 sm:p-4 bg-black/85 backdrop-blur-xl font-mono text-zinc-100 animate-in fade-in duration-150"
+      className="fixed inset-0 z-50 flex items-start justify-center pt-10 sm:pt-16 p-3 sm:p-4 bg-black/85 backdrop-blur-xl font-mono text-zinc-100 animate-in fade-in-0 duration-300"
       onClick={handleClose}
     >
       <div
-        className="w-full max-w-2xl bg-[#090d18] bg-theme-card border border-cyan-500/40 border-theme rounded-3xl shadow-[0_0_60px_var(--shadow-glow,rgba(6,182,212,0.25))] overflow-hidden flex flex-col max-h-[85vh] transition-all text-theme"
+        className="w-full max-w-2xl transform rounded-3xl bg-[#090d18] bg-theme-card border border-cyan-500/40 border-theme shadow-[0_0_60px_var(--shadow-glow,rgba(6,182,212,0.25))] overflow-hidden flex flex-col max-h-[85vh] transition-all animate-in fade-in-0 slide-in-from-top-6 duration-300 ease-out text-theme"
         onClick={(e) => e.stopPropagation()}
       >
         {/* Top Header Bar */}

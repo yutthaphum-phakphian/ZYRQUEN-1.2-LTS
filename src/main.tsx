@@ -5,11 +5,20 @@ import { ErrorBoundary } from './components/ErrorBoundary';
 import './index.css';
 import './styles/print.css';
 
-if (typeof window!== 'undefined' && 'serviceWorker' in navigator) {
+if (typeof window !== 'undefined' && 'serviceWorker' in navigator) {
   window.addEventListener('load', () => {
-    navigator.serviceWorker.register('/sw.js')
-     .then(reg => console.log('ZYRQUEN Ω∞ SW:', reg.scope))
-     .catch(err => console.warn('SW notice:', err?.message || err));
+    navigator.serviceWorker.register('/service-worker.js')
+      .then(reg => {
+        console.log('ZYRQUEN Ω∞ Audit Service Worker registered:', reg.scope);
+        if ('sync' in reg) {
+          console.log('⚡ Background Sync API supported and active');
+        }
+      })
+      .catch(err => {
+        console.warn('SW register notice:', err?.message || err);
+        // Fallback to /sw.js if needed
+        navigator.serviceWorker.register('/sw.js').catch(() => {});
+      });
   });
 }
 

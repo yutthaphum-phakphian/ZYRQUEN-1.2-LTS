@@ -1,0 +1,17 @@
+{
+  "test_id": "CHAOS-TC09-TEST-849202",
+  "target_node": "TC-09",
+  "anomaly_injected": "CRYOGENIC_THERMAL_RUNAWAY",
+  "injected_temperature_mK": 45.2,
+  "system_action": "CIRCUIT_BREAKER_TRIGGERED",
+  "circuit_breaker_rule": "RULE_04_TEMP_THRESHOLD_EXCEEDED",
+  "quarantine_state": "ISOLATED",
+  "node_status_after_isolation": "OFFLINE_SAFE",
+  "active_quorum_count": 9,
+  "quorum_status": "SUPER_MAJORITY_VALID",
+  "data_loss": "0_RECORDS",
+  "phoenix_recovery_status": "SUCCESSFUL",
+  "recovery_duration_ms": 32.4,
+  "sla_limit_ms": 142.0,
+  "court_admissible_proof": "PASSED_CRITERIA"
+}

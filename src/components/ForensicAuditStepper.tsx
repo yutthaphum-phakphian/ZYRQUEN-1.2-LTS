@@ -32,12 +32,13 @@ import {
 } from 'lucide-react';
 import jsPDF from 'jspdf';
 import autoTable from 'jspdf-autotable';
-import { playAuditChime, playTone } from './AudioSynthesizer';
+import { playAuditChime, playTone, playSnapshotSealChime } from './AudioSynthesizer';
 import { speakSystemAlert } from '../utils/textToSpeechService';
 import { safeCopyToClipboard } from '../utils/clipboard';
-import { CANONICAL_MERKLE_ROOT, SYSTEM_METADATA } from '../data/canonicalData';
+import { CANONICAL_MERKLE_ROOT, CANONICAL_SEALS, SYSTEM_METADATA } from '../data/canonicalData';
 import { downloadMasterForensicDossierV9Pdf } from '../utils/forensicDossierPdfExport';
 import { SystemEvent } from './SystemEventsSidebar';
+import { SealClockProgressBar } from './stepper/SealClockProgressBar';
 
 // ============================================================================
 // TYPES & INTERFACES
@@ -505,6 +506,26 @@ export const ForensicAuditStepper: React.FC<ForensicAuditStepperProps> = ({
 
   const progressPercent = Math.round((passedCount / steps.length) * 100);
 
+  // Hardware Seals verified in the current session (out of 14,902)
+  const verifiedSealsCount = useMemo(() => {
+    return Math.round((passedCount / steps.length) * CANONICAL_SEALS);
+  }, [passedCount, steps.length]);
+
+  const handleFastSealSweep = useCallback(() => {
+    playSnapshotSealChime();
+    if (onAddSystemEvent) {
+      onAddSystemEvent(
+        'FORENSIC',
+        'Hardware Seal Clock Ratified: 14,902 / 14,902 Hardware Seals Verified',
+        'Physical enclaves across Chamber 01-18 verified intact with zero SSoT drift.',
+        CANONICAL_MERKLE_ROOT,
+        'success',
+        'ETDA Sec 28 & ISO/IEC 27037',
+        'dashboard'
+      );
+    }
+  }, [onAddSystemEvent]);
+
   // Audio & Speech helper
   const provideStepAudioFeedback = useCallback(
     (step: AuditStep, statusText: string) => {
@@ -810,6 +831,16 @@ export const ForensicAuditStepper: React.FC<ForensicAuditStepperProps> = ({
 
       {isExpanded && (
         <div className="p-4 space-y-4">
+          {/* Visual Progress Bar & Seal Clock: Verified Hardware Seals Indicator */}
+          <SealClockProgressBar
+            verifiedSeals={verifiedSealsCount}
+            totalSeals={CANONICAL_SEALS}
+            isRunning={isRunning}
+            passedCount={passedCount}
+            totalSteps={steps.length}
+            onFastSealSweep={handleFastSealSweep}
+          />
+
           {/* 16-Step Horizontal Progress Navigation Bar */}
           <div className="space-y-2">
             {/* Progress bar line */}

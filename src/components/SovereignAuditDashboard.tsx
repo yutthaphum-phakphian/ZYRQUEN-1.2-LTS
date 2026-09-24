@@ -355,7 +355,7 @@ export const SovereignAuditDashboard: React.FC<{
 
   const renderHeatmapTileShape = (props: any) => {
     const { cx, cy, payload } = props;
-    if (cx === undefined || cy === undefined || !payload) return null;
+    if (cx === undefined || cy === undefined || !payload) return <g />;
     const color = getEntropyHeatmapColor(payload.entropy);
     const isSelected = selectedHeatmapTile?.id === payload.id;
     return (

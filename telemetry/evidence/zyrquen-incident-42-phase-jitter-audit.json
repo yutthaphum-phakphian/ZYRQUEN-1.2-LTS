@@ -1,0 +1,80 @@
+{
+  "dossierId": "DOS-ZYRQUEN-ANOMALY-42-JITTER",
+  "statuteCompliance": "Electronic Transactions Act B.E. 2544 (Sections 26 & 28)",
+  "incidentType": "PHASE_JITTER_DECOHERENCE",
+  "severity": "CRITICAL_SYSTEMIC_ANOMALY",
+  "anomalyScore": 1.0,
+  "activeThreshold": 0.85,
+  "summary": {
+    "totalEvents": 42,
+    "timeframe": {
+      "startUTC": "2026-09-24T11:17:05.846Z",
+      "endUTC": "2026-09-24T11:24:20.157Z",
+      "durationSeconds": 434.31,
+      "durationFormatted": "7m 14.31s"
+    },
+    "affectedNodesCount": 6,
+    "topImpactedNode": "SG02",
+    "propagationPattern": "Cascading Lateral Phase Jitter Decoherence across 6 Continuum Nodes"
+  },
+  "nodeBreakdown": [
+    {
+      "nodeId": "SG02",
+      "occurrences": 11,
+      "percentage": 26.19,
+      "eventIds": [
+        "BRK-46223", "BRK-86545", "BRK-45687", "BRK-63099", "BRK-89928",
+        "BRK-32827", "BRK-92688", "BRK-58723", "BRK-36729", "BRK-79427", "BRK-87700"
+      ],
+      "status": "PRIMARY_EPICENTER"
+    },
+    {
+      "nodeId": "TY03",
+      "occurrences": 8,
+      "percentage": 19.05,
+      "eventIds": [
+        "BRK-35406", "BRK-80864", "BRK-38190", "BRK-65420", "BRK-91573",
+        "BRK-53069", "BRK-58904", "BRK-72667"
+      ],
+      "status": "INCIDENT_ORIGINATOR_AND_FINALIZER"
+    },
+    {
+      "nodeId": "SV05",
+      "occurrences": 8,
+      "percentage": 19.05,
+      "eventIds": [
+        "BRK-62746", "BRK-57875", "BRK-39411", "BRK-34261", "BRK-14168",
+        "BRK-51640", "BRK-35475", "BRK-53780"
+      ],
+      "status": "SUSTAINED_CONDUIT"
+    },
+    {
+      "nodeId": "LD06",
+      "occurrences": 8,
+      "percentage": 19.05,
+      "eventIds": [
+        "BRK-27534", "BRK-84191", "BRK-24377", "BRK-57486", "BRK-88604",
+        "BRK-15359", "BRK-43545", "BRK-65729"
+      ],
+      "status": "HIGH_FREQUENCY_BURST_NODE"
+    },
+    {
+      "nodeId": "BK01",
+      "occurrences": 4,
+      "percentage": 9.52,
+      "eventIds": [
+        "BRK-61431", "BRK-69633", "BRK-85099", "BRK-22217"
+      ],
+      "status": "SECONDARY_RESONATOR"
+    },
+    {
+      "nodeId": "ZH04",
+      "occurrences": 3,
+      "percentage": 7.14,
+      "eventIds": [
+        "BRK-44614", "BRK-31652", "BRK-75671"
+      ],
+      "status": "TRANSIENT_INTERMEDIARY"
+    }
+  ]
+}

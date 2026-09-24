@@ -17,6 +17,9 @@ import { playTone, toggleSovereignSynth882Hz, setCustomCarrierFrequency } from '
 import { triggerVibration } from '../utils/vibration';
 
 export interface SovereignControlDockProps {
+  isOpen?: boolean;
+  onOpenChange?: (open: boolean) => void;
+  showFab?: boolean;
   audioEnabled?: boolean;
   onToggleAudio?: () => void;
   frequency?: number;
@@ -29,6 +32,9 @@ export interface SovereignControlDockProps {
 }
 
 export const SovereignControlDock: React.FC<SovereignControlDockProps> = ({
+  isOpen: controlledIsOpen,
+  onOpenChange,
+  showFab = false,
   audioEnabled: controlledAudio,
   onToggleAudio,
   frequency: controlledFreq,
@@ -39,7 +45,16 @@ export const SovereignControlDock: React.FC<SovereignControlDockProps> = ({
   onTogglePqcLevel,
   className = ''
 }) => {
-  const [isOpen, setIsOpen] = useState(false);
+  const [internalIsOpen, setInternalIsOpen] = useState(false);
+  const isOpen = controlledIsOpen !== undefined ? controlledIsOpen : internalIsOpen;
+  const toggleOpen = () => {
+    const next = !isOpen;
+    if (onOpenChange) {
+      onOpenChange(next);
+    } else {
+      setInternalIsOpen(next);
+    }
+  };
   const [localAudioEnabled, setLocalAudioEnabled] = useState(true);
   const [localFrequency, setLocalFrequency] = useState(882);
   const [localZeroDriftEnforced, setLocalZeroDriftEnforced] = useState(true);
@@ -93,11 +108,11 @@ export const SovereignControlDock: React.FC<SovereignControlDockProps> = ({
   };
 
   return (
-    <div className={`fixed bottom-3 left-3 z-50 font-mono text-slate-100 select-none ${className}`}>
+    <div className={`fixed bottom-24 left-3 z-50 font-mono text-slate-100 select-none ${className}`}>
       
       {/* 1. EXPANDABLE QUICK-CONTROL POPOVER DOCK */}
       {isOpen && (
-        <div className="absolute bottom-14 left-0 w-80 sm:w-88 bg-slate-950/95 border border-cyan-500/40 rounded-2xl p-4 shadow-[0_0_30px_rgba(6,182,212,0.2)] backdrop-blur-xl space-y-4 animate-in fade-in slide-in-from-bottom-4 duration-300">
+        <div className="absolute bottom-12 left-0 w-80 sm:w-88 max-w-[calc(100vw-2rem)] bg-slate-950/95 border border-cyan-500/40 rounded-2xl p-4 shadow-[0_0_30px_rgba(6,182,212,0.2)] backdrop-blur-xl space-y-4 animate-in fade-in slide-in-from-bottom-4 duration-300">
           
           {/* Header */}
           <div className="flex items-center justify-between border-b border-slate-800 pb-2.5">
@@ -114,7 +129,11 @@ export const SovereignControlDock: React.FC<SovereignControlDockProps> = ({
             <button
               onClick={() => {
                 triggerVibration('modalDismiss');
-                setIsOpen(false);
+                if (onOpenChange) {
+                  onOpenChange(false);
+                } else {
+                  setInternalIsOpen(false);
+                }
               }}
               className="p-1 rounded-lg hover:bg-slate-800 text-slate-400 hover:text-white transition cursor-pointer"
               title="Close Dock"
@@ -212,26 +231,28 @@ export const SovereignControlDock: React.FC<SovereignControlDockProps> = ({
         </div>
       )}
 
-      {/* 2. MAIN FLOATING BUTTON TRIGGER (FAB) */}
-      <button
-        id="btn-sovereign-control-dock-fab"
-        onClick={() => {
-          triggerVibration('click');
-          playTone(isOpen ? 480 : 720, 0.05);
-          setIsOpen(!isOpen);
-        }}
-        className={`relative group p-2.5 rounded-xl border transition-all duration-300 backdrop-blur-md shadow-lg flex items-center justify-center cursor-pointer ${
-          isOpen
-            ? 'bg-cyan-500/20 border-cyan-400 text-cyan-300 shadow-[0_0_20px_rgba(6,182,212,0.4)] scale-105'
-            : 'bg-slate-900/90 border-slate-700 hover:border-cyan-500/60 text-slate-300 hover:text-cyan-400 hover:shadow-[0_0_15px_rgba(6,182,212,0.25)]'
-        }`}
-        title="Toggle Sovereign Quick Control Dock"
-      >
-        {/* Glowing Indicator Pulse Dot */}
-        <span className="absolute -top-1 -right-1 w-2.5 h-2.5 rounded-full bg-cyan-400 border-2 border-slate-950 animate-pulse" />
+      {/* 2. MAIN FLOATING BUTTON TRIGGER (FAB - optional) */}
+      {showFab && (
+        <button
+          id="btn-sovereign-control-dock-fab"
+          onClick={() => {
+            triggerVibration('click');
+            playTone(isOpen ? 480 : 720, 0.05);
+            toggleOpen();
+          }}
+          className={`relative group p-2.5 rounded-xl border transition-all duration-300 backdrop-blur-md shadow-lg flex items-center justify-center cursor-pointer ${
+            isOpen
+              ? 'bg-cyan-500/20 border-cyan-400 text-cyan-300 shadow-[0_0_20px_rgba(6,182,212,0.4)] scale-105'
+              : 'bg-slate-900/90 border-slate-700 hover:border-cyan-500/60 text-slate-300 hover:text-cyan-400 hover:shadow-[0_0_15px_rgba(6,182,212,0.25)]'
+          }`}
+          title="Toggle Sovereign Quick Control Dock"
+        >
+          {/* Glowing Indicator Pulse Dot */}
+          <span className="absolute -top-1 -right-1 w-2.5 h-2.5 rounded-full bg-cyan-400 border-2 border-slate-950 animate-pulse" />
 
-        <SlidersHorizontal className={`w-4 h-4 transition-transform duration-300 ${isOpen ? 'rotate-90 scale-110' : 'group-hover:scale-110'}`} />
-      </button>
+          <SlidersHorizontal className={`w-4 h-4 transition-transform duration-300 ${isOpen ? 'rotate-90 scale-110' : 'group-hover:scale-110'}`} />
+        </button>
+      )}
 
     </div>
   );

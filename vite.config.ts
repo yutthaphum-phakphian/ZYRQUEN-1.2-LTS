@@ -17,6 +17,10 @@ export default defineConfig(({ mode }) => {
       VitePWA({
         registerType: 'autoUpdate',
         includeAssets: ['favicon.ico', 'apple-touch-icon.png', 'masked-icon.svg'],
+        workbox: {
+          maximumFileSizeToCacheInBytes: 15 * 1024 * 1024,
+          globPatterns: ['**/*.{js,css,html,ico,png,svg,webmanifest,json}'],
+        },
         manifest: {
           name: 'ZYRQUEN Ω∞ Control Center',
           short_name: 'ZYRQUEN',
@@ -40,17 +44,32 @@ export default defineConfig(({ mode }) => {
       })
     ],
 
-    // 3. ตั้งค่า Path Alias (@/ -> src/)
+    // 3. ตั้งค่า Path Alias (@/ -> src/) และ Deduplication ของ React
     resolve: {
       alias: {
         '@': path.resolve(__dirname, './src'),
       },
+      dedupe: ['react', 'react-dom', 'react-router', 'react-router-dom'],
+    },
+
+    optimizeDeps: {
+      include: [
+        'react',
+        'react-dom',
+        'react-dom/client',
+        'react-router',
+        'react-router-dom',
+        'lucide-react',
+        'clsx',
+        'tailwind-merge',
+      ],
     },
 
     // 4. การจัดการ Build Output
     build: {
       outDir: 'dist',
       emptyOutDir: true,
+      chunkSizeWarningLimit: 10000,
       sourcemap: mode === 'development',
       rollupOptions: {
         output: {

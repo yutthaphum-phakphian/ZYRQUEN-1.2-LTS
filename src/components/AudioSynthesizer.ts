@@ -91,6 +91,63 @@ export const AUDIO_PROFILES: AudioProfile[] = [
 let activeProfileId: AudioProfileId = 'circuitry';
 let currentMasterVolume = 0.04;
 
+const AUDIT_CHIME_STORAGE_KEY = 'zyrquen_audit_chime_enabled';
+const AUDIT_CHIME_VOLUME_KEY = 'zyrquen_audit_chime_volume';
+
+let auditChimeEnabled: boolean = (() => {
+  try {
+    const val = localStorage.getItem(AUDIT_CHIME_STORAGE_KEY);
+    return val !== null ? val === 'true' : true;
+  } catch {
+    return true;
+  }
+})();
+
+let auditChimeVolume: number = (() => {
+  try {
+    const val = localStorage.getItem(AUDIT_CHIME_VOLUME_KEY);
+    return val !== null ? parseFloat(val) : 0.8;
+  } catch {
+    return 0.8;
+  }
+})();
+
+export const isAuditChimeEnabled = (): boolean => auditChimeEnabled;
+
+export const setAuditChimeEnabled = (enabled: boolean) => {
+  auditChimeEnabled = enabled;
+  try {
+    localStorage.setItem(AUDIT_CHIME_STORAGE_KEY, String(enabled));
+    if (typeof window !== 'undefined') {
+      window.dispatchEvent(
+        new CustomEvent('zyrquen_audit_chime_change', {
+          detail: { enabled, volume: auditChimeVolume },
+        })
+      );
+    }
+  } catch {
+    // ignore
+  }
+};
+
+export const getAuditChimeVolume = (): number => auditChimeVolume;
+
+export const setAuditChimeVolume = (vol: number) => {
+  auditChimeVolume = Math.max(0, Math.min(1, vol));
+  try {
+    localStorage.setItem(AUDIT_CHIME_VOLUME_KEY, String(auditChimeVolume));
+    if (typeof window !== 'undefined') {
+      window.dispatchEvent(
+        new CustomEvent('zyrquen_audit_chime_change', {
+          detail: { enabled: auditChimeEnabled, volume: auditChimeVolume },
+        })
+      );
+    }
+  } catch {
+    // ignore
+  }
+};
+
 function getAudioContext(): AudioContext {
   if (!audioCtx) {
     const AudioContextClass =
@@ -136,10 +193,52 @@ export const playTone = (frequency = 440, duration = 0.12, type: OscillatorType 
   }
 };
 
-export const playAuditChime = () => {
-  playTone(523.25, 0.1, 'sine', 0.06); // C5
-  setTimeout(() => playTone(659.25, 0.1, 'sine', 0.06), 80); // E5
-  setTimeout(() => playTone(783.99, 0.18, 'sine', 0.08), 160); // G5
+export const playAuditChime = (overrideVolume?: number) => {
+  if (!auditChimeEnabled) return;
+  const vol = overrideVolume ?? auditChimeVolume;
+  if (vol <= 0) return;
+
+  playTone(523.25, 0.1, 'sine', 0.06 * vol); // C5
+  setTimeout(() => {
+    if (auditChimeEnabled) playTone(659.25, 0.1, 'sine', 0.06 * vol); // E5
+  }, 80);
+  setTimeout(() => {
+    if (auditChimeEnabled) playTone(783.99, 0.18, 'sine', 0.08 * vol); // G5
+  }, 160);
+};
+
+/**
+ * Specialized chime for forensic snapshot seals (C5 -> G5 -> C6).
+ */
+export const playSnapshotSealChime = (overrideVolume?: number) => {
+  if (!auditChimeEnabled) return;
+  const vol = overrideVolume ?? auditChimeVolume;
+  if (vol <= 0) return;
+
+  playTone(523.25, 0.09, 'sine', 0.05 * vol); // C5
+  setTimeout(() => {
+    if (auditChimeEnabled) playTone(783.99, 0.11, 'sine', 0.07 * vol); // G5
+  }, 90);
+  setTimeout(() => {
+    if (auditChimeEnabled) playTone(1046.5, 0.22, 'sine', 0.09 * vol); // C6 Harmonic Seal
+  }, 180);
+};
+
+/**
+ * Specialized chime for compliance verification ratification (F5 -> A5 -> C6).
+ */
+export const playComplianceVerificationChime = (overrideVolume?: number) => {
+  if (!auditChimeEnabled) return;
+  const vol = overrideVolume ?? auditChimeVolume;
+  if (vol <= 0) return;
+
+  playTone(698.46, 0.1, 'triangle', 0.06 * vol); // F5
+  setTimeout(() => {
+    if (auditChimeEnabled) playTone(880.0, 0.12, 'triangle', 0.07 * vol); // A5
+  }, 90);
+  setTimeout(() => {
+    if (auditChimeEnabled) playTone(1046.5, 0.22, 'sine', 0.08 * vol); // C6
+  }, 190);
 };
 
 /**

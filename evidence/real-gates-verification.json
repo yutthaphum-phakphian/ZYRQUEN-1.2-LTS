@@ -1,0 +1,87 @@
+{
+  "verification_status": "VERIFIED_100_PERCENT_PASSED",
+  "block_height": 849202,
+  "merkle_root_genesis": "909ab814479844d8a14816bed34cdbb07528e18501da86fc4691763a43fa4c68",
+  "realGates": [
+    {
+      "code": "GATE 15",
+      "name": "RFC 3161 Trusted Time Stamping Gate",
+      "latency": "3.5 ms",
+      "content": "RFC3161 nano timestamp with TSA proof",
+      "hash": "ab64bf2f0f55540ed5d3630fe34fc0f7f59bc302f1b1f3abb92b532ba6cfa9f9",
+      "hash_short": "ab64bf2f0f55540e...b92b532ba6cfa9f9"
+    },
+    {
+      "code": "GATE 16",
+      "name": "zk-SNARKs Non-PII Verification Gate",
+      "latency": "4.8 ms",
+      "content": "zk-SNARKs Groth16 verify public inputs",
+      "hash": "3587b1c3e38fb50eec13149864da9c9fc18d3632cf43878b368735ea5ce64a78",
+      "hash_short": "3587b1c3e38fb50e...368735ea5ce64a78"
+    },
+    {
+      "code": "GATE 17",
+      "name": "FIPS 204 CRYSTALS-Dilithium-5 Signature Gate",
+      "latency": "12.4 ms",
+      "content": "ML-DSA-87 PQC signature verification",
+      "hash": "5a13396c129c611fa3571d4b1a43a059d0442fb0b25e7087cb3d95bfa60ca2bb",
+      "hash_short": "5a13396c129c611f...cb3d95bfa60ca2bb"
+    },
+    {
+      "code": "GATE 18",
+      "name": "FIPS 203 ML-KEM-1024 Decapsulation Gate",
+      "latency": "10.8 ms",
+      "content": "Kyber-1024 post-quantum key decapsulation",
+      "hash": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "hash_short": "e3b0c44298fc1c14...a495991b7852b855"
+    },
+    {
+      "code": "GATE 19",
+      "name": "FIPS 205 SLH-DSA SPHINCS+ Redundancy Gate",
+      "latency": "14.2 ms",
+      "content": "Stateless hash-based signature validation",
+      "hash": "4b227777d4dd1fc61c6f884f48641d02b4d121d3fd328cb08b5531fcacdabf8a",
+      "hash_short": "4b227777d4dd1fc6...8b5531fcacdabf8a"
+    },
+    {
+      "code": "GATE 20",
+      "name": "10/10 REAL_HSM Quorum Attestation Gate",
+      "latency": "8.1 ms",
+      "content": "FIPS 140-3 Level 4 hardware token attestation",
+      "hash": "d41d8cd98f00b204e9800998ecf8427e0a24aa76c2415d86fa0d1a49f7b49463",
+      "hash_short": "d41d8cd98f00b204...fa0d1a49f7b49463"
+    },
+    {
+      "code": "GATE 21",
+      "name": "ETDA Section 9/26/28 Statutory Compliance Gate",
+      "latency": "6.3 ms",
+      "content": "Thai Electronic Transactions Act compliance check",
+      "hash": "9f86d081884c7d659a2feaa0c55ad015a3bf4f1b2b0b822cd15d6c15b0f00a08",
+      "hash_short": "9f86d081884c7d65...d15d6c15b0f00a08"
+    },
+    {
+      "code": "GATE 22",
+      "name": "Court-Admissible Dossier Export Gate",
+      "latency": "5.9 ms",
+      "content": "PDF/A-3 evidence dossier packaging with SHA3 seal",
+      "hash": "c71135ef00a163072fdfd236542274029081783b5d34e684952eab798a0a52",
+      "hash_short": "c71135ef00a16307...952eab798a0a52"
+    }
+  ],
+  "datHash": "590c48a095e3c8f3c7f02ab5d8e95973769fa984d6adfe9eee47ea2dff680e94",
+  "datSize": 4700000,
+  "pdf": "/evidence/Chamber11_Court_Dossier_PDFA3_EXHIBIT_TH_01-04.pdf",
+  "tsa": {
+    "timestamp": "2026-09-14T14:04:43.000Z",
+    "serialNumber": "TSA-849202-001010",
+    "policy": "1.3.6.1.4.1.60998.1.1",
+    "status": "GRANTED_AND_VERIFIED"
+  },
+  "zk": {
+    "protocol": "Groth16",
+    "curve": "BN254",
+    "publicInputsCount": 4,
+    "proofVerified": true
+  },
+  "evidenceJson": "/evidence/sovereign_evidence_849202.json"
+}

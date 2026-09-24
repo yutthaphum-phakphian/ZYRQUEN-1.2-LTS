@@ -1,0 +1,113 @@
+{
+  "dossierId": "DOS-ZYRQUEN-ANOMALY-38-JITTER",
+  "statuteCompliance": "Electronic Transactions Act B.E. 2544 (Sections 26 & 28)",
+  "incidentType": "PHASE_JITTER_DECOHERENCE",
+  "severity": "CRITICAL_SYSTEMIC_ANOMALY",
+  "anomalyScore": 1.0,
+  "activeThreshold": 0.85,
+  "summary": {
+    "totalEvents": 38,
+    "timeframe": {
+      "startUTC": "11:17:05 UTC",
+      "endUTC": "11:24:20 UTC",
+      "durationSeconds": 435,
+      "durationFormatted": "7m 15s"
+    },
+    "affectedNodesCount": 6,
+    "topImpactedNode": "SG02",
+    "propagationPattern": "Cascading Effect across Distributed Continuum Nodes"
+  },
+  "nodeBreakdown": [
+    {
+      "nodeId": "SG02",
+      "occurrences": 11,
+      "percentage": 28.95,
+      "eventIds": [
+        "BRK-46223", "BRK-86545", "BRK-45687", "BRK-63099",
+        "BRK-89928", "BRK-32827", "BRK-92688", "BRK-58723",
+        "BRK-36729", "BRK-79427", "BRK-87700"
+      ],
+      "status": "PERSISTENT_HOTSPOT"
+    },
+    {
+      "nodeId": "TY03",
+      "occurrences": 7,
+      "percentage": 18.42,
+      "eventIds": [
+        "BRK-35406", "BRK-80864", "BRK-38190", "BRK-65420",
+        "BRK-53069", "BRK-58904", "BRK-72667"
+      ],
+      "status": "INCIDENT_INITIATOR_AND_FINALIZER"
+    },
+    {
+      "nodeId": "SV05",
+      "occurrences": 7,
+      "percentage": 18.42,
+      "eventIds": [
+        "BRK-62746", "BRK-57875", "BRK-39411", "BRK-34261",
+        "BRK-14168", "BRK-51640", "BRK-53780"
+      ],
+      "status": "INTERMEDIATE_PROPAGATOR"
+    },
+    {
+      "nodeId": "LD06",
+      "occurrences": 7,
+      "percentage": 18.42,
+      "eventIds": [
+        "BRK-27534", "BRK-84191", "BRK-57486", "BRK-88604",
+        "BRK-15359", "BRK-43545", "BRK-65729"
+      ],
+      "status": "HIGH_BURST_AMPLIFIER"
+    },
+    {
+      "nodeId": "BK01",
+      "occurrences": 4,
+      "percentage": 10.53,
+      "eventIds": [
+        "BRK-61431", "BRK-69633", "BRK-85099", "BRK-22217"
+      ],
+      "status": "SECONDARY_RESONATOR"
+    },
+    {
+      "nodeId": "ZH04",
+      "occurrences": 2,
+      "percentage": 5.26,
+      "eventIds": [
+        "BRK-44614", "BRK-31652"
+      ],
+      "status": "INITIAL_TRANSIENT_NODE"
+    }
+  ],
+  "timelineSequence": [
+    {
+      "phase": "PHASE_1_INCEPTION",
+      "timeRangeUTC": "11:17 - 11:18 UTC",
+      "description": "Transient decoherence initialized across distributed edge points TY03, ZH04, SG02, and SV05.",
+      "nodesInvolved": ["TY03", "ZH04", "SG02", "SV05"]
+    },
+    {
+      "phase": "PHASE_2_EXPANSION",
+      "timeRangeUTC": "11:19 - 11:20 UTC",
+      "description": "Frequency escalation detected in SV05 and SG02; lateral propagation reached LD06.",
+      "nodesInvolved": ["SV05", "SG02", "LD06"]
+    },
+    {
+      "phase": "PHASE_3_PEAK_BURST",
+      "timeRangeUTC": "11:21 - 11:22 UTC",
+      "description": "Acute high-frequency burst in LD06 (5 events in <120s) with resonance spillover into node BK01.",
+      "nodesInvolved": ["LD06", "BK01"]
+    },
+    {
+      "phase": "PHASE_4_CONTAINMENT_AND_EXPIRY",
+      "timeRangeUTC": "11:23 - 11:24 UTC",
+      "description": "Persistent tail waves in SG02, TY03, BK01 terminating with final event BRK-72667 at 11:24:20 UTC.",
+      "nodesInvolved": ["SG02", "TY03", "BK01"]
+    }
+  ],
+  "forensicObservations": [
+    "SG02 represents the primary persistent epicenter (11 events, 28.95% of total payload).",
+    "LD06 exhibited a concentrated burst pattern at 11:21 UTC indicating localized buffer saturation.",
+    "Systemic pattern classified as a classical Cascading Lateral Decoherence across 6 federation nodes.",
+    "100% of audit records conform to ETDA Section 26 Immutable WORM specifications."
+  ]
+}

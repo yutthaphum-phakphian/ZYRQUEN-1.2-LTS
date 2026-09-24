@@ -351,6 +351,21 @@ export const CHAMBERS_18_STATUS_DATA: ChamberStatusItem[] = [
     targetView: 'ledger',
     operationalMode: 'FORENSIC_QUARANTINE',
   },
+  {
+    ...CHAMBERS_DATA[18],
+    chamberId: 'room18',
+    chamberNumber: '18',
+    name: 'NEURAL SENTINEL & PREDICTIVE GOVERNANCE',
+    truthLevel: 'OPERATIONAL_RUNTIME',
+    truthLabel: 'L5 Neural Sentinel Telemetry',
+    category: 'Intelligence & Predictive Governance',
+    isVisited: true,
+    visitCount: 92,
+    lastVisited: '2026-09-01T19:55:00.000Z',
+    hashAnchor: '909ab814479844d8a14816bed34cdbb07528e18501da86fc4691763a43fa4c68',
+    targetView: 'dashboard',
+    operationalMode: 'RUNTIME_TELEMETRY',
+  },
 ];
 
 interface ChamberStatusGridProps {

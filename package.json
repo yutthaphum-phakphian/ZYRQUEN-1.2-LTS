@@ -1,70 +1,57 @@
-"scripts": {
-  "dev": "tsx server.ts",
-  "build": "vite build && esbuild server.ts --bundle --platform=node --format=cjs --packages=external --sourcemap --outfile=dist/server.cjs",
-  "build:client": "vite build",
-  "start": "node dist/server.cjs",
-  ...
+{
+  "name": "zyrquen-sovereign-world-engine",
+  "private": true,
+  "version": "1.2.0",
+  "type": "module",
+  "scripts": {
+    "dev": "tsx server.ts",
+    "build": "vite build",
+    "lint": "tsc --noEmit",
+    "preview": "vite preview",
+    "start": "tsx server.ts"
+  },
+  "dependencies": {
+    "@google/genai": "^2.24.0",
+    "@tailwindcss/vite": "^4.0.0",
+    "clsx": "^2.1.1",
+    "cors": "^2.8.5",
+    "d3": "^7.9.0",
+    "dotenv": "^16.4.7",
+    "express": "^4.21.2",
+    "jspdf": "^2.5.2",
+    "jspdf-autotable": "^3.8.4",
+    "jsqr": "^1.4.0",
+    "jszip": "^3.10.1",
+    "lucide-react": "^0.475.0",
+    "motion": "^12.4.7",
+    "qrcode": "^1.5.4",
+    "qrcode.react": "^4.2.0",
+    "react": "^19.0.0",
+    "react-dom": "^19.0.0",
+    "react-qr-reader": "^3.0.0-beta-1",
+    "react-router-dom": "^7.2.0",
+    "recharts": "^2.15.1",
+    "socket.io": "^4.8.1",
+    "socket.io-client": "^4.8.1",
+    "tailwind-merge": "^3.0.1",
+    "tailwindcss": "^4.0.0",
+    "three": "^0.174.0",
+    "ws": "^8.18.0"
+  },
+  "devDependencies": {
+    "@types/cors": "^2.8.17",
+    "@types/d3": "^7.4.3",
+    "@types/express": "^5.0.0",
+    "@types/node": "^22.13.5",
+    "@types/qrcode": "^1.5.5",
+    "@types/react": "^19.0.10",
+    "@types/react-dom": "^19.0.4",
+    "@types/three": "^0.174.0",
+    "@types/ws": "^8.5.14",
+    "@vitejs/plugin-react": "^4.3.4",
+    "tsx": "^4.19.3",
+    "typescript": "~5.8.2",
+    "vite": "^6.2.0",
+    "vite-plugin-pwa": "^0.21.1"
+  }
 }
-```[span_9](start_span)[span_9](end_span)
-
----
-
-### 🚀 ไฟล์ `.github/workflows/pages.yml` สำหรับ `zyrquen-frozen-v1.2-lts`
-
-ปรับแต่ง GitHub Actions Workflow ให้ดึง Script `npm run build:client`[span_10](start_span)[span_10](end_span) พร้อมรองรับ React Router v7[span_11](start_span)[span_11](end_span) (จัดการปัญหา Single Page Application 404 Reload)[span_12](start_span)[span_12](end_span):
-
-```yaml
-name: GitHub Pages Deployment
-
-on:
-  push:
-    branches: [ main ]
-  workflow_dispatch:
-
-permissions:
-  contents: read
-  pages: write
-  id-token: write
-
-concurrency:
-  group: "pages"
-  cancel-in-progress: false
-
-jobs:
-  build-and-deploy:
-    environment:
-      name: github-pages
-      url: ${{ steps.deployment.outputs.page_url }}
-    runs-on: ubuntu-latest
-    steps:
-      - name: Checkout
-        uses: actions/checkout@v4
-
-      - name: Setup Node.js v22
-        uses: actions/setup-node@v4
-        with:
-          node-version: 22
-          cache: 'npm'
-
-      - name: Install Dependencies
-        run: npm ci
-
-      # คอมไพล์เฉพาะส่วน Static Assets ของ Vite
-      - name: Build Client Static Assets
-        run: npm run build:client
-
-      # คัดลอก index.html เป็น 404.html ป้องกันปัญหา Routing ของ react-router-dom
-      - name: Setup SPA Fallback for React Router
-        run: cp dist/index.html dist/404.html
-
-      - name: Setup Pages
-        uses: actions/configure-pages@v6
-
-      - name: Upload Artifact
-        uses: actions/upload-pages-artifact@v3
-        with:
-          path: './dist'
-
-      - name: Deploy to GitHub Pages
-        id: deployment
-        uses: actions/deploy-pages@v4

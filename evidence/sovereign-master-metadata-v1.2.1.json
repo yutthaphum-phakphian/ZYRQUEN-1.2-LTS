@@ -1,0 +1,41 @@
+{
+  "system": "ZYRQUEN Ω∞ SOVEREIGN OPERATING SYSTEM",
+  "version": "LOCKED_FROZEN_v1.2_LTS",
+  "release_tag": "v4.16 GOLD MASTER ULTIMATE FINAL MERGED",
+  "genesis_block": 849202,
+  "canonical_merkle_root": "909ab814479844d8a14816bed34cdbb07528e18501da86fc4691763a43fa4c68",
+  "ssot_drift": 0.0,
+  "sovereign_principal": "นายยุทธภูมิ พากเพียร (#EP-SOVEREIGN-01)",
+  "canonical_seals_active": 14902,
+  "quarantined_seals": 80,
+  "total_raw_seals": 14982,
+  "deca_key_council": {
+    "ratification_level": "10/10 REAL_HSM",
+    "fips_compliance": "FIPS 140-3 Level 4 / CC EAL6+",
+    "nodes": [
+      { "id": "TC-01", "role": "Supreme Sovereign", "pqc": "Dilithium-5 (ML-DSA-87)", "status": "HSM_RATIFIED" },
+      { "id": "TC-02", "role": "Chief Security Guardian", "pqc": "FALCON-1024", "status": "VERIFIED_OK" },
+      { "id": "TC-03", "role": "Quantum Cryptography Lead", "pqc": "Dilithium-5 / Kyber-1024", "status": "VERIFIED_OK" },
+      { "id": "TC-04", "role": "Distributed Systems Architect", "pqc": "SPHINCS+", "status": "VERIFIED_OK" },
+      { "id": "TC-05", "role": "Causal AI Research Director", "pqc": "Dilithium-5 (ML-DSA-87)", "status": "VERIFIED_OK" },
+      { "id": "TC-06", "role": "Bio-Secure Identity Lead", "pqc": "FALCON-1024", "status": "VERIFIED_OK" },
+      { "id": "TC-07", "role": "Federated Learning Architect", "pqc": "Dilithium-5 (ML-DSA-87)", "status": "VERIFIED_OK" },
+      { "id": "TC-08", "role": "Treasury & RWA Custodian", "pqc": "SPHINCS+", "status": "VERIFIED_OK" },
+      { "id": "TC-09", "role": "Global Mesh Topology Lead", "pqc": "Dilithium-5 (ML-DSA-87)", "status": "VERIFIED_OK" },
+      { "id": "TC-10", "role": "Differential Privacy & Ethics", "pqc": "FALCON-1024", "status": "VERIFIED_OK" }
+    ]
+  },
+  "legal_compliance": {
+    "etda_sec9": "Digital Signature Non-Repudiation Valid",
+    "etda_sec26": "Secure Electronic Signature Non-Repudiation Guaranteed",
+    "etda_sec28": "Immutable Audit Ledger (WORM / Delete-Nothing)",
+    "pdpa_sec37": "Zero-Knowledge Data Vault & 100% PII Redaction Guaranteed"
+  },
+  "treasury": {
+    "total_value_thb": 4230000000.0,
+    "physical_gold_oz": 14902.0,
+    "rwa_tenants": 400,
+    "tenants_range": "Ω601-Ω1000",
+    "guarantor": "100% Thai Treasury Guaranteed"
+  }
+}

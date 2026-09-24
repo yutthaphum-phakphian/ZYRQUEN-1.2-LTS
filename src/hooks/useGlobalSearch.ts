@@ -114,6 +114,15 @@ export function useGlobalSearch(query: string) {
     // 2. ETDA & PDPA Legal Triggers
     const legalItems: SearchItem[] = [
       {
+        id: 'legal-18-chambers-dossier-pdf',
+        title: '18 Chambers Field QR & Dossier (Download Chamber PDF)',
+        description: 'Dynamic visual indicator (FROZEN/QUARANTINE/TEMPERED) and individual chamber court filing PDF with embedded QR code',
+        category: 'legal',
+        badge: '18 SSoT Chambers',
+        shortcut: '⌘C',
+        action: () => navigate('/chambers-dossier'),
+      },
+      {
         id: 'legal-forensic-master-dossier-v9',
         title: 'Forensic Audit Master Dossier (DOC-SOV-HSM-1010-2026-V9)',
         description: 'Sovereign Mathematical Truth & Court-Admissible Master Dossier under #EP-SOVEREIGN-01 (100% Pure Green, 14,902 Seals, Δ0.00%)',

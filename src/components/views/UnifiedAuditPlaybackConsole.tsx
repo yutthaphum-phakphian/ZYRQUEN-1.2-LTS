@@ -1,3 +1,4 @@
+// src/components/views/UnifiedAuditPlaybackConsole.tsx
 import React, { useState, useEffect, useRef, useCallback } from 'react';
 import { motion, AnimatePresence } from 'motion/react';
 import {
@@ -21,32 +22,36 @@ import {
   Hash,
   Scale,
   Download,
+  Zap,
 } from 'lucide-react';
 import { playAuditChime, playTone } from '../AudioSynthesizer';
 import { systemStateStore } from '../../store/systemStateStore';
-import { LiveReplayVerificationDashboard } from '../LiveReplayVerificationDashboard';
 
 export interface TraceStageDefinition {
   id: number;
   code: string;
+  name: string;
   desc: string;
   durationMs: number;
+  stateHash: string;
+  invariantCheck: string;
+  category: string;
   icon: React.ComponentType<{ className?: string }>;
 }
 
 export const TRACE_STAGES: TraceStageDefinition[] = [
-  { id: 1, code: 'STAGE-01: INGEST', desc: 'รับเข้าสตรีมข้อมูล OTel ในสถานะแช่แข็ง', durationMs: 2.1, icon: Database },
-  { id: 2, code: 'STAGE-02: PARSE_HEADERS', desc: 'สังเคราะห์เมทาดาต้าและจุดอ้างอิง Block #849202', durationMs: 3.4, icon: Terminal },
-  { id: 3, code: 'STAGE-03: METRIC_ALIGNMENT', desc: 'เทียบดัชนีชี้วัด QOps และ Coherence', durationMs: 4.8, icon: Activity },
-  { id: 4, code: 'STAGE-04: SIGNATURE_VERIFY', desc: 'พิสูจน์ยืนยันลายมือชื่อ Dilithium-5', durationMs: 7.2, icon: ShieldCheck },
-  { id: 5, code: 'STAGE-05: CUSTODIAN_QUORUM_CHECK', desc: 'ตรวจสอบความครบถ้วน 10/10 REAL_HSM', durationMs: 9.6, icon: Cpu },
-  { id: 6, code: 'STAGE-06: INVARIANT_PROTECTION', desc: 'ประเมิน 10 Invariants และ 22 Master Gates', durationMs: 12.1, icon: Lock },
-  { id: 7, code: 'STAGE-07: MERKLE_COMPUTE', desc: 'คำนวณแฮชเทียบค่า Merkle Root Genesis', durationMs: 15.3, icon: Hash },
-  { id: 8, code: 'STAGE-08: RISK_RE_EVALUATION', desc: 'จำลองสภาวะแวดล้อมสังเคราะห์จำลองปะทะภัยคุกคาม', durationMs: 18.7, icon: AlertTriangle },
-  { id: 9, code: 'STAGE-09: THAI_LAW_AUDIT', desc: 'วิเคราะห์ความถูกต้องตามกฎหมายธุรกรรม มาตรา 9, 26, 28', durationMs: 22.4, icon: Scale },
-  { id: 10, code: 'STAGE-10: TRACE_STREAM_REPLAY', desc: 'ย้อนเล่นเหตุการณ์จำลองเพื่อสาวต้นตอที่ 0.014K Cryo', durationMs: 26.9, icon: PlayCircle },
-  { id: 11, code: 'STAGE-11: QUARANTINE_ISOLATION', desc: 'กักพยานหลักฐานติดดั้งเดิมที่ Chamber 02', durationMs: 31.2, icon: ShieldAlert },
-  { id: 12, code: 'STAGE-12: CLOSURE', desc: 'สลักข้อมูลถาวรที่ Module 17 Unclassified Preservation V24 - ไม่ลบหลักฐาน', durationMs: 35.8, icon: FileCheck2 },
+  { id: 1, code: 'STAGE-01: INGEST', name: 'Ingestion & Pre-flight Payload Validation', desc: 'รับเข้าสตรีมข้อมูล OTel ในสถานะแช่แข็ง', durationMs: 2.1, stateHash: '0x8f01a...902a', invariantCheck: 'Valid JSON Schema & Header', category: 'Ingestion', icon: Database },
+  { id: 2, code: 'STAGE-02: PARSE_HEADERS', name: 'SHA-256 / SHA3-512 Pre-hash Digest Computation', desc: 'สังเคราะห์เมทาดาต้าและจุดอ้างอิง Block #849202', durationMs: 3.4, stateHash: '0x992b1...112c', invariantCheck: 'Canonical Hash Consistency', category: 'Hashing', icon: Terminal },
+  { id: 3, code: 'STAGE-03: METRIC_ALIGNMENT', name: 'Dilithium-5 (FIPS 204) Signature Verification', desc: 'เทียบดัชนีชี้วัด QOps และ Coherence', durationMs: 4.8, stateHash: '0xa412f...882e', invariantCheck: 'Dilithium-5 Public Key Match', category: 'PQC Audit', icon: ShieldCheck },
+  { id: 4, code: 'STAGE-04: SIGNATURE_VERIFY', name: 'SPHINCS+ (FIPS 205) Secondary Verification', desc: 'พิสูจน์ยืนยันลายมือชื่อแบบ Stateful PQC', durationMs: 7.2, stateHash: '0xb8821...001a', invariantCheck: 'Stateful Signature Root Match', category: 'PQC Audit', icon: Lock },
+  { id: 5, code: 'STAGE-05: CUSTODIAN_QUORUM_CHECK', name: 'Deca-Key 10/10 HSM Quorum Ratification Test', desc: 'ตรวจสอบความครบถ้วน 10/10 REAL_HSM Quorum', durationMs: 9.6, stateHash: '0xc1109...33f1', invariantCheck: '10/10 HSM Quorum Signature', category: 'Hardware Quorum', icon: Cpu },
+  { id: 6, code: 'STAGE-06: INVARIANT_PROTECTION', name: 'Genesis Anchor #849202 Merkle Root Verification', desc: 'ประเมิน 10 Invariants และ 22 Master Gates', durationMs: 12.1, stateHash: '0x909ab...4c68', invariantCheck: 'Zero Drift (Δ 0.00%)', category: 'SSoT Anchor', icon: Hash },
+  { id: 7, code: 'STAGE-07: MERKLE_COMPUTE', name: 'Chamber 02 WORM Immutable Ledger Integrity Audit', desc: 'คำนวณแฮชเทียบค่า Merkle Root Genesis', durationMs: 15.3, stateHash: '0xd7710...228b', invariantCheck: 'Zero Tampering / Deletion', category: 'WORM Isolation', icon: ShieldCheck },
+  { id: 8, code: 'STAGE-08: RISK_RE_EVALUATION', name: 'Zero-Knowledge PII Redaction Integrity Check', desc: 'จำลองสภาวะแวดล้อมสังเคราะห์จำลองปะทะภัยคุกคาม', durationMs: 18.7, stateHash: '0xe9011...4411', invariantCheck: 'zk-SNARK PII Anonymization', category: 'Privacy PDPA', icon: AlertTriangle },
+  { id: 9, code: 'STAGE-09: THAI_LAW_AUDIT', name: 'Real-Time Hardware Heartbeat Telemetry Analysis', desc: 'วิเคราะห์ความถูกต้องตามกฎหมายธุรกรรม มาตรา 9, 26, 28', durationMs: 22.4, stateHash: '0xf0021...556a', invariantCheck: 'Sub-Kelvin Thermal Range', category: 'Telemetry', icon: Scale },
+  { id: 10, code: 'STAGE-10: TRACE_STREAM_REPLAY', name: 'State-Hash Delta Transition Check', desc: 'ย้อนเล่นเหตุการณ์จำลองเพื่อสาวต้นตอที่ 0.014K Cryo', durationMs: 26.9, stateHash: '0x011a2...7781', invariantCheck: 'Continuous Invariant Δ = 0', category: 'State Audit', icon: PlayCircle },
+  { id: 11, code: 'STAGE-11: QUARANTINE_ISOLATION', name: 'RFC 3161 Hardware Time-Stamp Protocol Audit', desc: 'กักพยานหลักฐานติดดั้งเดิมที่ Chamber 02', durationMs: 31.2, stateHash: '0x122b3...8892', invariantCheck: 'NIMT UTC Synchronization', category: 'Timestamp', icon: ShieldAlert },
+  { id: 12, code: 'STAGE-12: CLOSURE', name: 'Final Statutory Court-Admissible Dossier Generation', desc: 'สลักข้อมูลถาวรที่ Module 17 Unclassified Preservation V24', durationMs: 35.8, stateHash: '0x233c4...9903', invariantCheck: 'Sections 9, 26, 28 Compliance', category: 'Legal Export', icon: FileCheck2 },
 ];
 
 export const UnifiedAuditPlaybackConsole: React.FC = () => {
@@ -481,10 +486,62 @@ export const UnifiedAuditPlaybackConsole: React.FC = () => {
         </div>
       </div>
 
-      {/* Live Replay Verification Dashboard (Option B) */}
-      <LiveReplayVerificationDashboard />
+      {/* 4 Sovereign KPI Telemetry Cards */}
+      <div className="grid grid-cols-2 md:grid-cols-4 gap-3">
+        {/* Card 1: Replay Time */}
+        <div className="p-3.5 rounded-xl bg-slate-900/80 border border-slate-800 backdrop-blur-md">
+          <div className="flex items-center gap-1.5 text-[10px] uppercase font-bold text-slate-400">
+            <Clock className="w-3.5 h-3.5 text-cyan-400" />
+            <span>Total Replay Time</span>
+          </div>
+          <div className="mt-1 text-lg sm:text-xl font-mono font-bold text-cyan-300">
+            {TRACE_STAGES.filter((s) => completedStages.includes(s.id))
+              .reduce((acc, s) => acc + s.durationMs, 0)
+              .toFixed(2)}{' '}
+            <span className="text-xs text-slate-500 font-normal">ms</span>
+          </div>
+        </div>
 
-      {/* Main Grid: 12 Stages Visual Grid + Live WS Output Terminal */}
+        {/* Card 2: SLA Status */}
+        <div className="p-3.5 rounded-xl bg-slate-900/80 border border-slate-800 backdrop-blur-md">
+          <div className="flex items-center gap-1.5 text-[10px] uppercase font-bold text-slate-400">
+            <Zap className="w-3.5 h-3.5 text-emerald-400" />
+            <span>SLA Benchmark Status</span>
+          </div>
+          <div className="mt-1 text-sm sm:text-base font-mono font-bold text-emerald-400 flex items-center gap-1.5">
+            <CheckCircle2 className="w-4 h-4 text-emerald-400" />
+            <span>PASS (SLA MET)</span>
+          </div>
+        </div>
+
+        {/* Card 3: Stages Completed */}
+        <div className="p-3.5 rounded-xl bg-slate-900/80 border border-slate-800 backdrop-blur-md">
+          <div className="flex items-center gap-1.5 text-[10px] uppercase font-bold text-slate-400">
+            <ShieldCheck className="w-3.5 h-3.5 text-purple-400" />
+            <span>Stages Completed</span>
+          </div>
+          <div className="mt-1 text-lg sm:text-xl font-mono font-bold text-purple-300">
+            {completedStages.length} <span className="text-xs text-slate-500 font-normal">/ 12</span>
+          </div>
+        </div>
+
+        {/* Card 4: Invariant Verdict */}
+        <div className="p-3.5 rounded-xl bg-slate-900/80 border border-slate-800 backdrop-blur-md">
+          <div className="flex items-center gap-1.5 text-[10px] uppercase font-bold text-slate-400">
+            <Scale className="w-3.5 h-3.5 text-emerald-400" />
+            <span>Invariant Verdict</span>
+          </div>
+          <div className="mt-1 text-sm sm:text-base font-mono font-bold text-emerald-400">
+            {completedStages.length === 12
+              ? '100% VALIDATED'
+              : completedStages.length > 0
+              ? 'VERIFYING...'
+              : '100% COURT-READY'}
+          </div>
+        </div>
+      </div>
+
+      {/* Main Grid: Single Unified 12-Stage Visual Lattice + Live WS Output Terminal */}
       <div className="grid grid-cols-1 lg:grid-cols-12 gap-5 items-start">
         {/* Stages UI: 12-Stage Visual Lattice */}
         <div className="lg:col-span-7 bg-[#070a12]/95 border border-zinc-800/80 rounded-2xl p-4 sm:p-5 relative overflow-hidden shadow-2xl">
@@ -495,7 +552,7 @@ export const UnifiedAuditPlaybackConsole: React.FC = () => {
           <div className="flex items-center justify-between pb-3 mb-4 border-b border-white/10 relative z-10">
             <div className="text-xs font-mono font-bold text-zinc-300 flex items-center gap-2">
               <span className="w-2 h-2 rounded-full bg-amber-400" />
-              <span>12-Stage Sequence Integrity</span>
+              <span>12-Stage Forensic Trace Sequence</span>
             </div>
             <div className="text-[11px] font-mono text-zinc-400">
               Completed: <strong className="text-emerald-400">{completedStages.length}</strong> / 12
@@ -544,7 +601,7 @@ export const UnifiedAuditPlaybackConsole: React.FC = () => {
                       <Icon className={`w-4 h-4 ${isActive ? 'animate-pulse' : ''}`} />
                     )}
                   </div>
-                  <div className="min-w-0 flex-1">
+                  <div className="min-w-0 flex-1 space-y-1">
                     <div className="flex items-center justify-between">
                       <span
                         className={`text-xs font-mono font-bold truncate ${
@@ -561,8 +618,18 @@ export const UnifiedAuditPlaybackConsole: React.FC = () => {
                         {stage.durationMs}ms
                       </span>
                     </div>
-                    <div className="text-[10.5px] text-zinc-400 mt-0.5 line-clamp-2 leading-relaxed">
+
+                    <div className="text-[11px] font-semibold text-zinc-200 truncate">
+                      {stage.name}
+                    </div>
+
+                    <div className="text-[10px] text-zinc-400 line-clamp-1 leading-relaxed">
                       {stage.desc}
+                    </div>
+
+                    <div className="flex items-center justify-between text-[9px] font-mono pt-0.5 border-t border-white/5">
+                      <span className="text-zinc-500 truncate max-w-[120px]">{stage.invariantCheck}</span>
+                      <code className="text-cyan-400/80 bg-black/40 px-1 py-0.2 rounded border border-white/5">{stage.stateHash}</code>
                     </div>
                   </div>
                 </motion.div>

@@ -96,7 +96,7 @@ export const EntropyGridHeatmap: React.FC = () => {
   // Custom Shape renderer for Recharts Scatter to draw 2D matrix tile cells
   const renderCellTile = (props: any) => {
     const { cx, cy, payload } = props;
-    if (!cx || !cy || !payload) return null;
+    if (!cx || !cy || !payload) return <g />;
 
     const cell = payload as EntropyHeatmapCell;
     const isHovered =

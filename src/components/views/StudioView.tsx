@@ -24,7 +24,10 @@ import {
   Crown,
   Scale,
   RefreshCw,
-  Search
+  Search,
+  Maximize2,
+  ZoomIn,
+  X
 } from 'lucide-react';
 import { QuantumCitadelLatticeHologramVisualizer, LATTICE_CHAMBERS } from '../QuantumCitadelLatticeHologramVisualizer';
 import { ViewType, HardwareSnapshot } from '../../types';
@@ -120,6 +123,7 @@ export const StudioView: React.FC<StudioViewProps> = ({
   const [copiedText, setCopiedText] = useState<string | null>(null);
   const [filterCategory, setFilterCategory] = useState<string>('ALL');
   const [isVisualizerExpanded, setIsVisualizerExpanded] = useState<boolean>(false);
+  const [isDiagramModalOpen, setIsDiagramModalOpen] = useState<boolean>(false);
 
   const filteredArtifacts = useMemo(() => {
     if (filterCategory === 'ALL') return MASTER_ARTIFACTS;
@@ -232,6 +236,200 @@ export const StudioView: React.FC<StudioViewProps> = ({
           onNavigate={onNavigate}
         />
       </div>
+
+      {/* 18-Chamber Matrix Architecture & Merkle Root Convergence Vector Schematic */}
+      <div className="p-6 sm:p-7 rounded-[28px] bg-gradient-to-br from-[#0c1024]/95 via-[#080d1c]/90 to-[#050711]/95 border border-cyan-500/30 backdrop-blur-2xl space-y-5 shadow-[0_0_50px_rgba(6,182,212,0.15)] relative overflow-hidden">
+        <div className="flex flex-col lg:flex-row lg:items-center justify-between gap-4 border-b border-white/10 pb-4">
+          <div className="space-y-1">
+            <div className="flex flex-wrap items-center gap-2">
+              <span className="px-3 py-1 rounded-full bg-cyan-500/15 border border-cyan-500/40 text-xs font-mono font-bold text-cyan-300 flex items-center gap-1.5 shadow-[0_0_15px_rgba(6,182,212,0.25)]">
+                <Sparkles className="w-3.5 h-3.5 text-cyan-400" />
+                CANONICAL ARCHITECTURE VECTOR SCHEMATIC
+              </span>
+              <span className="px-3 py-1 rounded-full bg-emerald-500/15 border border-emerald-500/40 text-xs font-mono font-bold text-emerald-300">
+                18-CHAMBER MESH ➔ MERKLE ROOT
+              </span>
+              <span className="px-3 py-1 rounded-full bg-violet-500/15 border border-violet-500/40 text-xs font-mono font-bold text-violet-300">
+                BLOCK #849,202
+              </span>
+            </div>
+            <h2 className="text-xl sm:text-2xl font-mono font-bold text-white tracking-tight flex items-center gap-2">
+              <span>18-Chamber Matrix Architecture &amp; Merkle Root Convergence</span>
+            </h2>
+            <p className="text-xs text-zinc-400 font-mono">
+              แผนผังเวกเตอร์ความละเอียดสูงแสดงสถาปัตยกรรมโครงข่าย 18 ห้องปฏิบัติการอธิปไตย (Chambers 00–17) และจุดบรรจบรวมศูนย์สู่รากแก้วเจเนซิส Merkle Root ภายใต้ระบบรักษาความปลอดภัย NIST PQC ML-DSA-87
+            </p>
+          </div>
+
+          <div className="flex flex-wrap items-center gap-2 shrink-0">
+            <button
+              onClick={() => {
+                playTone(720, 0.04);
+                setIsDiagramModalOpen(true);
+              }}
+              className="px-3.5 py-2 rounded-xl bg-cyan-500/20 hover:bg-cyan-500/30 border border-cyan-400/50 text-cyan-200 font-mono text-xs font-bold flex items-center gap-1.5 transition-all shadow-md cursor-pointer"
+              title="Expand high-fidelity vector schematic to full resolution"
+            >
+              <ZoomIn className="w-4 h-4 text-cyan-300" />
+              <span>Inspect Fullscreen Vector</span>
+            </button>
+            <button
+              onClick={() => {
+                playTone(680, 0.04);
+                onNavigate('ledger');
+              }}
+              className="px-3.5 py-2 rounded-xl bg-white/5 hover:bg-white/10 border border-white/10 text-zinc-300 hover:text-white font-mono text-xs font-bold flex items-center gap-1.5 transition-all cursor-pointer"
+            >
+              <Layers className="w-4 h-4 text-emerald-400" />
+              <span>View Merkle Tree Graph</span>
+            </button>
+          </div>
+        </div>
+
+        {/* Vector Graphic Hero Container */}
+        <div className="relative group rounded-2xl overflow-hidden border border-cyan-500/30 bg-[#04060d] shadow-2xl">
+          <img
+            src="/src/assets/images/chamber_matrix_diagram_1790237741290.jpg"
+            alt="18-Chamber Matrix Architecture and Merkle Root Convergence Diagram"
+            referrerPolicy="no-referrer"
+            className="w-full h-auto object-cover max-h-[540px] transition-transform duration-700 group-hover:scale-[1.015] cursor-pointer"
+            onClick={() => {
+              playTone(720, 0.04);
+              setIsDiagramModalOpen(true);
+            }}
+          />
+
+          {/* Interactive Overlay Overlay Badge */}
+          <div className="absolute top-4 left-4 p-3 rounded-xl bg-[#070a14]/90 backdrop-blur-xl border border-cyan-500/40 text-xs font-mono space-y-1 shadow-2xl pointer-events-none">
+            <div className="flex items-center gap-2">
+              <span className="w-2.5 h-2.5 rounded-full bg-emerald-400 animate-ping" />
+              <span className="font-bold text-white">GENESIS ANCHOR VERIFIED</span>
+            </div>
+            <div className="text-[11px] text-zinc-400">
+              Root Hash: <span className="text-cyan-300 font-bold">{SYSTEM_METADATA.merkleRoot.slice(0, 16)}...{SYSTEM_METADATA.merkleRoot.slice(-8)}</span>
+            </div>
+            <div className="text-[10px] text-emerald-400">
+              18/18 Chambers Bound • 14,902 Verified Seals • Δ0.00% Zero Drift
+            </div>
+          </div>
+
+          <button
+            onClick={() => {
+              playTone(720, 0.04);
+              setIsDiagramModalOpen(true);
+            }}
+            className="absolute bottom-4 right-4 px-3 py-1.5 rounded-xl bg-black/80 hover:bg-black text-cyan-200 border border-cyan-500/50 backdrop-blur-md text-xs font-mono font-bold flex items-center gap-1.5 transition-all shadow-xl cursor-pointer"
+          >
+            <Maximize2 className="w-3.5 h-3.5" />
+            <span>Click to Zoom</span>
+          </button>
+        </div>
+
+        {/* 4-Tier Matrix Architecture Legend Cards */}
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-3 pt-2">
+          <div className="p-3.5 rounded-2xl bg-cyan-950/20 border border-cyan-500/30 text-xs font-mono space-y-1.5">
+            <div className="flex items-center justify-between">
+              <span className="text-cyan-300 font-bold">Tier 01: Core Cryo Enclave</span>
+              <span className="px-1.5 py-0.5 rounded bg-cyan-500/20 text-cyan-200 text-[10px]">CH 00–03</span>
+            </div>
+            <p className="text-[11px] text-zinc-400 leading-snug">
+              ฮาร์ดแวร์ความเย็นยิ่งยวด 14.98 mK, Genesis Root Anchor, Zero Trust Gate, และบัฟเฟอร์กักกัน Fail-Closed
+            </p>
+            <div className="text-[10px] text-emerald-400 font-bold">3,312 Verified Seals Intact</div>
+          </div>
+
+          <div className="p-3.5 rounded-2xl bg-emerald-950/20 border border-emerald-500/30 text-xs font-mono space-y-1.5">
+            <div className="flex items-center justify-between">
+              <span className="text-emerald-300 font-bold">Tier 02: PQC BFT Consensus</span>
+              <span className="px-1.5 py-0.5 rounded bg-emerald-500/20 text-emerald-200 text-[10px]">CH 04–08</span>
+            </div>
+            <p className="text-[11px] text-zinc-400 leading-snug">
+              ฉันทามติ FIPS 204 ML-DSA-87 (Dilithium-5) พร้อมระบบสลับ Fallback SPHINCS+ และโครงข่าย 10/10 REAL_HSM
+            </p>
+            <div className="text-[10px] text-emerald-400 font-bold">4,140 Verified Seals Intact</div>
+          </div>
+
+          <div className="p-3.5 rounded-2xl bg-purple-950/20 border border-purple-500/30 text-xs font-mono space-y-1.5">
+            <div className="flex items-center justify-between">
+              <span className="text-purple-300 font-bold">Tier 03: Telemetry Sentinel</span>
+              <span className="px-1.5 py-0.5 rounded bg-purple-500/20 text-purple-200 text-[10px]">CH 09–13</span>
+            </div>
+            <p className="text-[11px] text-zinc-400 leading-snug">
+              ท่อ OTel สังเกตการณ์ความเร็วสูง, เรดาร์ควอนตัม 8K, เอนจินวิเคราะห์ความผิดปกติ และบัฟเฟอร์ PII Masked 100%
+            </p>
+            <div className="text-[10px] text-emerald-400 font-bold">4,140 Verified Seals Intact</div>
+          </div>
+
+          <div className="p-3.5 rounded-2xl bg-amber-950/20 border border-amber-500/30 text-xs font-mono space-y-1.5">
+            <div className="flex items-center justify-between">
+              <span className="text-amber-300 font-bold">Tier 04: Sovereign Root &amp; Law</span>
+              <span className="px-1.5 py-0.5 rounded bg-amber-500/20 text-amber-200 text-[10px]">CH 14–17</span>
+            </div>
+            <p className="text-[11px] text-zinc-400 leading-snug">
+              รากแก้วอธิปไตยดิจิทัลไทย #EP-SOVEREIGN-01, ETDA Sec 9/26/28, PDPA ROPA, และสิทธิทางกฎหมายชั้นศาล
+            </p>
+            <div className="text-[10px] text-emerald-400 font-bold">3,310 Verified Seals Intact</div>
+          </div>
+        </div>
+      </div>
+
+      {/* Fullscreen High-Resolution Vector Diagram Lightbox Modal */}
+      {isDiagramModalOpen && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/90 backdrop-blur-xl animate-in fade-in duration-200 font-sans">
+          <div className="relative w-full max-w-6xl max-h-[92vh] flex flex-col bg-[#070914] border border-cyan-500/50 rounded-[32px] overflow-hidden shadow-[0_0_80px_rgba(6,182,212,0.3)]">
+            <div className="flex items-center justify-between px-6 py-4 border-b border-white/10 bg-[#0a0e1e]/90 backdrop-blur-xl">
+              <div className="flex items-center gap-3">
+                <span className="p-2 rounded-xl bg-cyan-500/20 text-cyan-300">
+                  <Sparkles className="w-5 h-5" />
+                </span>
+                <div>
+                  <h3 className="text-base sm:text-lg font-mono font-bold text-white">
+                    18-Chamber Matrix Architecture &amp; Merkle Root Convergence (High-Fidelity Schematic)
+                  </h3>
+                  <p className="text-xs text-zinc-400 font-mono">
+                    Genesis Block #849,202 • Canonical Root: 909ab8144798...43fa4c68 • NIST PQC FIPS 203/204/205
+                  </p>
+                </div>
+              </div>
+
+              <div className="flex items-center gap-2">
+                <button
+                  onClick={() => handleCopy(SYSTEM_METADATA.merkleRoot)}
+                  className="px-3 py-1.5 rounded-xl bg-cyan-500/20 hover:bg-cyan-500/30 text-cyan-200 border border-cyan-400/40 text-xs font-mono font-bold flex items-center gap-1.5 transition-all"
+                >
+                  <Copy className="w-3.5 h-3.5" />
+                  <span>{copiedText === SYSTEM_METADATA.merkleRoot ? 'Copied Root!' : 'Copy Root Hash'}</span>
+                </button>
+                <button
+                  onClick={() => setIsDiagramModalOpen(false)}
+                  className="p-2 rounded-xl bg-white/5 hover:bg-white/10 text-zinc-400 hover:text-white transition-all cursor-pointer"
+                >
+                  <X className="w-5 h-5" />
+                </button>
+              </div>
+            </div>
+
+            <div className="p-6 overflow-y-auto flex-1 flex flex-col items-center justify-center bg-[#03050a]">
+              <img
+                src="/src/assets/images/chamber_matrix_diagram_1790237741290.jpg"
+                alt="18-Chamber Matrix Architecture & Merkle Root Convergence Diagram Fullscreen"
+                referrerPolicy="no-referrer"
+                className="w-full h-auto max-h-[75vh] object-contain rounded-xl shadow-2xl border border-cyan-500/20"
+              />
+            </div>
+
+            <div className="px-6 py-3 border-t border-white/10 bg-[#070a14] flex flex-col sm:flex-row sm:items-center justify-between gap-2 text-xs font-mono text-zinc-400">
+              <div className="flex items-center gap-2 text-emerald-400">
+                <ShieldCheck className="w-4 h-4" />
+                <span>All 18 Chambers Mathematically Bound to Merkle Root #849,202 (Δ0.00% Drift)</span>
+              </div>
+              <div className="text-[11px] text-zinc-500">
+                Custody: นายยุทธภูมิ พากเพียร (#EP-SOVEREIGN-01) • OMEGA-1 SUPREME CLEARANCE
+              </div>
+            </div>
+          </div>
+        </div>
+      )}
 
       {/* 18 Chambers Telemetry & Thermal Entropy Matrix */}
       <div className="p-6 rounded-[28px] bg-[#0b0e1e]/90 border border-white/10 backdrop-blur-2xl space-y-4">

@@ -8,5 +8,9 @@ coverage/
 artifact.tar
 rendered-manifests.yaml
 *.tsbuildinfo
-.env*
+.env
+.env.local
+.env.*
 !.env.example
+*.pem
+*.key

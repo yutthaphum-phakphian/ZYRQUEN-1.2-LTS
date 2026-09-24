@@ -212,8 +212,11 @@ export const GitHubSyncStatusUtility: React.FC = () => {
                 <div>Principal: <span className="text-white">นายยุทธภูมิ พากเพียร</span></div>
                 <div>Status: <span className="text-[#10B981]">LOCKED_FROZEN_v1.2_LTS</span></div>
               </div>
-              <div className="text-[10px] text-zinc-500 pt-1 border-t border-white/5 break-all">
-                Merkle: <span className="text-zinc-300 font-mono">{syncState.localMerkleRoot}</span>
+              <div className="text-[10px] text-zinc-500 pt-1 border-t border-white/5 space-y-1">
+                <span className="text-zinc-400 font-semibold block text-[9px] uppercase tracking-wider">Local Merkle Digest:</span>
+                <code className="text-emerald-400 font-mono text-[10px] bg-slate-950 px-2 py-1 rounded border border-slate-800 break-all select-all block">
+                  {syncState.localMerkleRoot}
+                </code>
               </div>
             </div>
 
@@ -252,17 +255,17 @@ export const GitHubSyncStatusUtility: React.FC = () => {
                   </span>
                 </div>
               </div>
-              <div className="text-[10px] text-zinc-500 pt-1 border-t border-white/5 break-all">
-                Git SHA:{' '}
-                <span
-                  className={`font-mono ${
+              <div className="text-[10px] text-zinc-500 pt-1 border-t border-white/5 space-y-1">
+                <span className="text-zinc-400 font-semibold block text-[9px] uppercase tracking-wider">Remote Git SHA Digest:</span>
+                <code
+                  className={`font-mono text-[10px] bg-slate-950 px-2 py-1 rounded border border-slate-800 break-all select-all block ${
                     syncState.localMerkleRoot === syncState.remoteGitTreeSha
-                      ? 'text-zinc-300'
+                      ? 'text-cyan-300'
                       : 'text-[#EF4444]'
                   }`}
                 >
                   {syncState.remoteGitTreeSha}
-                </span>
+                </code>
               </div>
             </div>
           </div>

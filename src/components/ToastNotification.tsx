@@ -17,7 +17,7 @@ interface ToastNotificationProps {
 
 export const ToastNotification: React.FC<ToastNotificationProps> = ({ toasts, removeToast }) => {
   return (
-    <div className="fixed top-20 right-6 z-[9999] flex flex-col gap-3 pointer-events-none">
+    <div className="fixed top-4 right-4 sm:top-20 sm:right-6 z-[9999] flex flex-col gap-2.5 max-w-[calc(100vw-2rem)] sm:max-w-sm pointer-events-none">
       <AnimatePresence>
         {toasts.map((toast) => (
           <motion.div

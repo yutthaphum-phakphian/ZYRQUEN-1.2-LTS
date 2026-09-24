@@ -3,6 +3,7 @@ import { GlobalRedTeamChallenge } from '../GlobalRedTeamChallenge';
 import { SovereignMasterForensicReportCard } from '../SovereignMasterForensicReportCard';
 import { SovereignSelfAuditEngine } from '../audit/SovereignSelfAuditEngine';
 import { DataPersistenceSettingsTab } from '../settings/DataPersistenceSettingsTab';
+import { AuditChimeSettingsCard } from '../settings/AuditChimeSettingsCard';
 import { offlineAuditSyncService } from '../../services/offlineAuditSyncService';
 import React, { useState, useEffect } from 'react';
 import {
@@ -933,6 +934,9 @@ export const SettingsView: React.FC<SettingsViewProps> = ({
           })}
         </div>
       </div>
+
+      {/* Forensic Audit Chime & Compliance Audio Feedback Controls */}
+      <AuditChimeSettingsCard />
 
       {/* Sovereign Text-to-Speech (TTS) Verbal Feedback Loop Controls */}
       <div className="p-6 rounded-[28px] bg-[#0b0e1a]/75 border border-cyan-500/20 backdrop-blur-xl space-y-6">

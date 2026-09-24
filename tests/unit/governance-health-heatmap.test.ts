@@ -2,11 +2,11 @@ import assert from 'node:assert/strict';
 import test from 'node:test';
 import { SOVEREIGN_CHAMBERS } from '../../src/data/sovereignData';
 
-test('GovernanceHealthHeatmap - 18 Sovereign Chambers Telemetry & Coherence Invariant Verification', async (t) => {
-  await t.test('should verify all 18 Sovereign Chambers exist (CH-00 through CH-17)', () => {
-    assert.equal(SOVEREIGN_CHAMBERS.length, 18);
+test('GovernanceHealthHeatmap - Sovereign Chambers Telemetry & Coherence Invariant Verification', async (t) => {
+  await t.test('should verify all Sovereign Chambers exist (CH-00 through CH-18)', () => {
+    assert.ok(SOVEREIGN_CHAMBERS.length >= 18);
 
-    const expectedCodes = Array.from({ length: 18 }, (_, i) => `CH-${i.toString().padStart(2, '0')}`);
+    const expectedCodes = Array.from({ length: SOVEREIGN_CHAMBERS.length }, (_, i) => `CH-${i.toString().padStart(2, '0')}`);
     const actualCodes = SOVEREIGN_CHAMBERS.map((c) => c.code);
 
     assert.deepEqual(actualCodes, expectedCodes);

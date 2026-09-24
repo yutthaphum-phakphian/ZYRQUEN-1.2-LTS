@@ -1,7 +1,15 @@
 // @vitest-environment happy-dom
 import { describe, it, expect } from 'vitest';
 import { FORENSIC_DOSSIER_V9 } from '../src/data/forensicAuditMasterDossierData';
-import { generateMasterForensicDossierV9Pdf } from '../src/utils/forensicDossierPdfExport';
+import {
+  generateMasterForensicDossierV9Pdf,
+  generateFocusedChamberPdfSync,
+  generateFocusedChamberPdf,
+  getChamberCoherenceState,
+  getDefaultSealStatus,
+  buildChamberQRPayload,
+} from '../src/utils/forensicDossierPdfExport';
+import { INITIAL_18_CHAMBERS } from '../src/components/chamberConsoleData';
 import { calculateRelevanceScore } from '../src/hooks/useGlobalSearch';
 
 describe('Forensic Audit Master Dossier (DOC-SOV-HSM-1010-2026-V9)', () => {
@@ -92,5 +100,87 @@ describe('Forensic Audit Master Dossier (DOC-SOV-HSM-1010-2026-V9)', () => {
     const score2 = calculateRelevanceScore(item, 'Pillar');
     const score3 = calculateRelevanceScore(item, 'EP-SOVEREIGN-01');
     expect(score3).toBeGreaterThan(0);
+  });
+
+  it('validates dynamic coherence state classification (FROZEN, QUARANTINE, TEMPERED)', () => {
+    expect(getChamberCoherenceState(0.998)).toBe('FROZEN');
+    expect(getChamberCoherenceState(0.950)).toBe('FROZEN');
+    expect(getChamberCoherenceState(0.949)).toBe('QUARANTINE');
+    expect(getChamberCoherenceState(0.742)).toBe('QUARANTINE');
+    expect(getChamberCoherenceState(0.700)).toBe('QUARANTINE');
+    expect(getChamberCoherenceState(0.680)).toBe('TEMPERED');
+    expect(getChamberCoherenceState(0.500)).toBe('TEMPERED');
+
+    expect(getDefaultSealStatus('FROZEN')).toContain('CANONICAL_SEALED');
+    expect(getDefaultSealStatus('QUARANTINE')).toContain('QUARANTINE_HOLD');
+    expect(getDefaultSealStatus('TEMPERED')).toContain('INTEGRITY_BREACH');
+  });
+
+  it('generates high-contrast QR payload embedding Chamber ID, coherence state, and current seal status', () => {
+    const chamber = INITIAL_18_CHAMBERS[0]; // CH-001
+    const state = getChamberCoherenceState(chamber.coherence);
+    const seal = getDefaultSealStatus(state);
+
+    const payload = buildChamberQRPayload({
+      chamberId: chamber.chamberId,
+      name: chamber.name,
+      coherence: chamber.coherence,
+      coherenceState: state,
+      sealStatus: seal,
+      merkleHash: chamber.merkleHash,
+      temperature: chamber.temperature,
+    });
+
+    expect(payload).toContain(`id=${chamber.chamberId}`);
+    expect(payload).toContain(`state=${state}`);
+    expect(payload).toContain('coherence=99.80%');
+    expect(payload).toContain('sealStatus=');
+    expect(payload).toContain('block=849202');
+    expect(payload).toContain(chamber.merkleHash);
+  });
+
+  it('generates focused Chamber PDF with technical breakdown and QR container', async () => {
+    const chamber = INITIAL_18_CHAMBERS[0]; // CH-001
+    const state = getChamberCoherenceState(chamber.coherence);
+    const seal = getDefaultSealStatus(state);
+
+    const doc = await generateFocusedChamberPdf({
+      chamberId: chamber.chamberId,
+      name: chamber.name,
+      coherence: chamber.coherence,
+      coherenceState: state,
+      sealStatus: seal,
+      temperature: chamber.temperature,
+      merkleHash: chamber.merkleHash,
+    });
+
+    expect(doc).toBeDefined();
+    expect(doc.getNumberOfPages()).toBe(1);
+  });
+
+  it('verifies all 18 chambers produce valid payloads and coherence state mappings', () => {
+    expect(INITIAL_18_CHAMBERS).toHaveLength(18);
+
+    INITIAL_18_CHAMBERS.forEach((chamber) => {
+      const state = getChamberCoherenceState(chamber.coherence, chamber.status);
+      expect(['FROZEN', 'QUARANTINE', 'TEMPERED']).toContain(state);
+
+      const seal = getDefaultSealStatus(state);
+      expect(seal).toBeTruthy();
+
+      const payload = buildChamberQRPayload({
+        chamberId: chamber.chamberId,
+        name: chamber.name,
+        coherence: chamber.coherence,
+        coherenceState: state,
+        sealStatus: seal,
+        merkleHash: chamber.merkleHash,
+        temperature: chamber.temperature,
+      });
+
+      expect(payload).toContain(`id=${chamber.chamberId}`);
+      expect(payload).toContain(`state=${state}`);
+      expect(payload).toContain(`sealStatus=`);
+    });
   });
 });

@@ -368,6 +368,23 @@ export const SOVEREIGN_CHAMBERS: Chamber[] = [
       { label: 'Matrix Verdict', value: 'ALL GREEN (40/40)', sublabel: 'Unbroken Seal' },
     ],
   },
+  {
+    id: '18',
+    code: 'CH-18',
+    name: 'Neural Sentinel & Predictive Governance',
+    nameTh: 'ห้องปฏิบัติการที่ 18: ผู้พิทักษ์โครงข่ายประสาทและธรรมาภิบาลเชิงคาดการณ์',
+    description: 'Real-time telemetry stream anomaly detection and predictive governance index processing (12,480 spans/m).',
+    descriptionTh: 'ตรวจจับความผิดปกติในสายธารข้อมูลโทรมาตรแบบ Real-time และประมวลผลดรรชนีความเสี่ยงธรรมาภิบาลเชิงคาดการณ์',
+    category: 'Intelligence',
+    status: 'ACTIVE',
+    invariants: ['INV-DRIFT-DETECTION', 'INV-FAIL-CLOSED-GUARD'],
+    metrics: [
+      { label: 'Ingest Rate', value: '12,480 spans/m', sublabel: 'OpenTelemetry Protobuf' },
+      { label: 'Phase Jitter', value: '1.33 fs', sublabel: '14.98 mK Helium-4 Baseline' },
+      { label: 'Drift Risk', value: '0.000%', sublabel: 'SSoT Δ0.00% Invariant' },
+      { label: 'Fail-Closed', value: '142 ms RTO', sublabel: 'Chamber 02 Auto-Quarantine' },
+    ],
+  },
 ];
 
 export const CHAMBERS = SOVEREIGN_CHAMBERS;

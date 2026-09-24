@@ -35,6 +35,7 @@ import { Room16MasterPanel } from '../Room16MasterPanel';
 import { Room17MasterPanel } from '../Room17MasterPanel';
 import { RealtimeVerifiedSealTelemetry } from '../RealtimeVerifiedSealTelemetry';
 import { SystemResourceGrid } from '../SystemResourceGrid';
+import { HealthDashboard } from '../HealthDashboard';
 import { AggregateSystemEntropyChart } from '../AggregateSystemEntropyChart';
 import { SpatialEntropyHeatMap } from '../SpatialEntropyHeatMap';
 import { SovereignAuditDashboard } from '../SovereignAuditDashboard';
@@ -44,6 +45,7 @@ import { CopilotAutonomyNodePanel } from '../copilot/CopilotAutonomyNodePanel';
 import { SealValidationAnimation } from '../SealValidationAnimation';
 import { LiveQuantumEntropyTicker } from '../LiveQuantumEntropyTicker';
 import { SovereignIntegrityScore } from '../SovereignIntegrityScore';
+import { useOfflineWarning } from '../../hooks/useOfflineWarning';
 import {
   Activity,
   Cpu,
@@ -158,6 +160,9 @@ export const DashboardView: React.FC<DashboardViewProps> = ({
   onOpenCertificate,
   isForensicAuditMode = false,
 }) => {
+  // Listen and alert on browser offline / online events
+  useOfflineWarning();
+
   // Main executive sections: Overview (clean summary), Sovereign Audit Dashboard, Chambers Explorer, Telemetry, Evidence, Android 16+ FCM Push, Chamber Visualizer
   const [dashboardSection, setDashboardSection] = useState<'OVERVIEW' | 'AUDIT' | 'CHAMBERS' | 'TELEMETRY' | 'EVIDENCE' | 'FCM_PUSH' | 'VISUALIZER'>('OVERVIEW');
   const [activeCanvasTab, setActiveCanvasTab] = useState<'hologram' | 'atlas' | 'overview' | 'topology'>('hologram');
@@ -661,6 +666,9 @@ export const DashboardView: React.FC<DashboardViewProps> = ({
           {/* GitHub Synchronization Status Utility (Checksum & Merkle Parity Engine) */}
           <GitHubSyncStatusUtility />
 
+          {/* System Health Dashboard (CPU, Memory, Cryostat Recharts Realtime Stream) */}
+          <HealthDashboard snapshots={snapshots} />
+
           {/* Main Grid: Visual Lattice / Topology & Live Subsystem Rail */}
           <div className="grid grid-cols-1 lg:grid-cols-12 gap-3.5 sm:gap-5 items-start w-full min-w-0 max-w-full">
             {/* Left 7 Columns: Visual Canvas & Active Core Views */}
@@ -1155,6 +1163,7 @@ export const DashboardView: React.FC<DashboardViewProps> = ({
             previousScore={prevIntegrityScore}
           />
           <GitHubSyncStatusUtility />
+          <HealthDashboard snapshots={snapshots} />
           <LiveAutomatedHealthWidget />
           <SystemResourceGrid />
           <AggregateSystemEntropyChart />

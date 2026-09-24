@@ -219,28 +219,28 @@ export const GitHubSyncWarningNav: React.FC = () => {
                   />
                 </div>
 
-                <div className="space-y-1 text-[10px] pt-1">
-                  <div className="flex justify-between">
-                    <span className="text-zinc-500">Local Merkle:</span>
-                    <span className="text-zinc-300 truncate max-w-[280px]">
+                <div className="space-y-2 text-[10px] pt-1">
+                  <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-1 border-b border-white/5 pb-1">
+                    <span className="text-zinc-500 font-bold uppercase tracking-wider text-[9px]">Local Merkle:</span>
+                    <code className="text-emerald-400 font-mono text-[10px] bg-black/50 px-1.5 py-0.5 rounded border border-white/10 break-all select-all max-w-full">
                       {syncState.localMerkleRoot}
-                    </span>
+                    </code>
                   </div>
-                  <div className="flex justify-between">
-                    <span className="text-zinc-500">Remote Git SHA:</span>
-                    <span
-                      className={`truncate max-w-[280px] ${
+                  <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-1 border-b border-white/5 pb-1">
+                    <span className="text-zinc-500 font-bold uppercase tracking-wider text-[9px]">Remote Git SHA:</span>
+                    <code
+                      className={`font-mono text-[10px] bg-black/50 px-1.5 py-0.5 rounded border border-white/10 break-all select-all max-w-full ${
                         syncState.localMerkleRoot === syncState.remoteGitTreeSha
                           ? 'text-[#10B981]'
                           : 'text-[#EF4444]'
                       }`}
                     >
                       {syncState.remoteGitTreeSha}
-                    </span>
+                    </code>
                   </div>
-                  <div className="flex justify-between">
-                    <span className="text-zinc-500">Merkle Bit Parity:</span>
-                    <span className="text-cyan-300 font-bold">
+                  <div className="flex items-center justify-between pt-0.5">
+                    <span className="text-zinc-500 font-bold uppercase tracking-wider text-[9px]">Merkle Bit Parity:</span>
+                    <span className="text-cyan-300 font-bold bg-cyan-950/60 px-2 py-0.5 rounded border border-cyan-500/30">
                       {syncState.matchingHexChars}/64 chars ({syncState.merkleParityPercentage}%)
                     </span>
                   </div>

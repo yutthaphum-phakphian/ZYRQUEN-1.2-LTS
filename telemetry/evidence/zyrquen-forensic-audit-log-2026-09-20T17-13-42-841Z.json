@@ -1,0 +1,47 @@
+{
+  "format": "ZYRQUEN_FORENSIC_AUDIT_LOG_SNAPSHOT",
+  "version": "v1.2 LTS PDPA FINAL FROZEN",
+  "ssotBlock": 849202,
+  "merkleRoot": "909ab814479844d8a14816bed34cdbb07528e18501da86fc4691763a43fa4c68",
+  "boundary": "Ω600_1000",
+  "totalVerifiedSeals": 14902,
+  "hsmQuorum": "10/10 REAL_HSM FIPS 140-3 L4",
+  "ssotDrift": "Δ0.00% ZERO DRIFT",
+  "exportTimestampUtc": "Sun, 20 Sep 2026 17:13:42 GMT",
+  "exportTimestampIct": "21/9/2569 00:13:42",
+  "sovereignPrincipal": "🇹🇭 นายยุทธภูมิ พากเพียร (EvidenceLedgerSealer) (#EP-SOVEREIGN-01)",
+  "totalSnapshots": 1,
+  "snapshots": [
+    {
+      "id": "SNAP-849202-001",
+      "snapshotNumber": 1,
+      "timestampIct": "2026-08-20 05:03:08 ICT",
+      "timestampUtc": "2026-08-19 22:03:08 UTC",
+      "epoch": 1787180588000,
+      "cpuAverage": 41.2,
+      "cpuCores": [
+        42.1,
+        39.8,
+        44.5,
+        38.6
+      ],
+      "memoryUsedMb": 5214,
+      "memoryTotalMb": 8192,
+      "cryoTempMk": 14.98,
+      "heliumFlowPct": 74.2,
+      "networkRxMbps": 84.2,
+      "networkTxMbps": 112.6,
+      "qopsThroughput": 24960,
+      "coherencePct": 99.98,
+      "otelSpansSec": 2450,
+      "ssdWearLevelPct": 0.82,
+      "voltageStabilityPct": 99.98,
+      "SSD_Wear_Level": 0.82,
+      "Voltage_Stability": 99.98,
+      "parentHash": "909ab814479844d8a14816bed34cdbb07528e18501da86fc4691763a43fa4c68",
+      "sealedHash": "0x909ab814e5a973d4bb79e0a293673f8373a4b6c3d2e1f0a9b8c7d6e5f4a3b2c1",
+      "actor": "SOVEREIGN-CUSTODIAN-EP001 (นายยุทธภูมิ พากเพียร)",
+      "status": "SEALED"
+    }
+  ]
+}

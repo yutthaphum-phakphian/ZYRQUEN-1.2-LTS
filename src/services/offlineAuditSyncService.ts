@@ -33,6 +33,100 @@ class OfflineAuditSyncService {
         console.log('[OfflineAuditSync] Connectivity restored. Initiating automatic flush...');
         this.flushQueue();
       });
+
+      // Listen for Service Worker background sync completions
+      if ('serviceWorker' in navigator) {
+        navigator.serviceWorker.addEventListener('message', (event) => {
+          if (event.data?.type === 'AUDIT_LOGS_SYNCED') {
+            console.log('[OfflineAuditSyncService] SW Synced logs remotely, reconciling queue...');
+            this.saveQueue([]);
+            this.notifyListeners([]);
+          }
+        });
+      }
+
+      if (typeof BroadcastChannel !== 'undefined') {
+        try {
+          const channel = new BroadcastChannel('zyrquen_audit_sync_bus');
+          channel.onmessage = (event) => {
+            if (event.data?.type === 'AUDIT_LOGS_SYNCED') {
+              this.saveQueue([]);
+              this.notifyListeners([]);
+            }
+          };
+        } catch {
+          // BroadcastChannel fallback
+        }
+      }
+    }
+  }
+
+  /**
+   * Registers a background sync event with the Service Worker whenever an event is queued offline
+   */
+  private async registerBackgroundSync(item: QueuedAuditEvent) {
+    if (typeof window === 'undefined' || !('serviceWorker' in navigator)) return;
+    try {
+      const reg = await navigator.serviceWorker.ready;
+      if (reg.active) {
+        reg.active.postMessage({
+          type: 'QUEUE_AUDIT_LOG',
+          payload: item
+        });
+      }
+      if ('sync' in reg) {
+        await (reg as any).sync.register('sync-audit-logs');
+        console.log('[OfflineAuditSyncService] Background sync registered with tag: sync-audit-logs');
+      }
+    } catch (err) {
+      console.warn('[OfflineAuditSyncService] Background sync registration skipped:', err);
+    }
+  }
+
+  /**
+   * Retrieves cache status and pending sync count directly from the Service Worker
+   */
+  public async getServiceWorkerCacheStatus(): Promise<{
+    pendingLogsCount: number;
+    cacheName?: string;
+    cachedAssetsCount?: number;
+    isSyncSupported?: boolean;
+  }> {
+    if (typeof window === 'undefined' || !('serviceWorker' in navigator)) {
+      return { pendingLogsCount: this.getQueueCount() };
+    }
+
+    try {
+      const reg = await navigator.serviceWorker.ready;
+      const targetWorker = reg.active || navigator.serviceWorker.controller;
+      if (!targetWorker) {
+        return { pendingLogsCount: this.getQueueCount() };
+      }
+
+      return new Promise((resolve) => {
+        const messageChannel = new MessageChannel();
+        const timeout = setTimeout(() => {
+          resolve({ pendingLogsCount: this.getQueueCount() });
+        }, 1200);
+
+        messageChannel.port1.onmessage = (event) => {
+          clearTimeout(timeout);
+          if (event.data && typeof event.data.pendingLogsCount === 'number') {
+            resolve({
+              pendingLogsCount: event.data.pendingLogsCount,
+              cacheName: event.data.cacheName,
+              cachedAssetsCount: event.data.cachedAssetsCount,
+              isSyncSupported: event.data.isSyncSupported
+            });
+          } else {
+            resolve({ pendingLogsCount: this.getQueueCount() });
+          }
+        };
+
+        targetWorker.postMessage({ type: 'GET_CACHE_STATUS' }, [messageChannel.port2]);
+      });
+    } catch (e) {
+      return { pendingLogsCount: this.getQueueCount() };
     }
   }
 
@@ -104,6 +198,9 @@ class OfflineAuditSyncService {
     queue.push(item);
     this.saveQueue(queue);
     this.notifyListeners(queue);
+
+    // Register Background Sync with Service Worker
+    this.registerBackgroundSync(item);
 
     console.log(`[OfflineAuditSync] Queued event: ${item.title} (Queue depth: ${queue.length})`);
     return item;
