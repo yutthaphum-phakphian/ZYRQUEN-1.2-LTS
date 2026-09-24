@@ -1,10 +1,8 @@
-version: '3.8'
-
 services:
   zyrquen-mock-api:
     build:
-      context: .
-      dockerfile: Dockerfile
+      context: ..
+      dockerfile: scripts/Dockerfile
     container_name: zyrquen-sovereign-mock-api
     restart: unless-stopped
     ports:

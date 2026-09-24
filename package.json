@@ -7,6 +7,8 @@
     "dev": "tsx server.ts",
     "build": "vite build",
     "lint": "tsc --noEmit",
+    "test": "npm run test:unit && vitest run",
+    "test:unit": "tsx --test tests/unit/*.test.ts",
     "preview": "vite preview",
     "start": "node server.ts"
   },
@@ -52,6 +54,7 @@
     "@vitejs/plugin-react": "^4.3.4",
     "typescript": "~5.8.2",
     "vite": "^6.2.0",
-    "vite-plugin-pwa": "^0.21.1"
+    "vite-plugin-pwa": "^0.21.1",
+    "vitest": "^5.0.1"
   }
 }

@@ -79,6 +79,10 @@ class SovereignBroadcastSyncService {
   private lastSyncTimestamp: number = Date.now();
   private roundTripLatencyMs: number = 0.8;
   private heartbeatTimer: any = null;
+  private pendingMessages: Array<{ type: BroadcastSyncMessageType; payload: BroadcastSyncMessage['payload'] }> = [];
+  private pendingEvents: SystemEvent[] = [];
+  private pendingSnapshots: HardwareSnapshot[] = [];
+  private lastLockState: GlobalLockStatePayload | null = null;
 
   constructor() {
     this.tabId = `tab_${Date.now()}_${Math.random().toString(36).substring(2, 7)}`;
@@ -136,6 +140,7 @@ class SovereignBroadcastSyncService {
         this.isInitialized = true;
         this.mode = 'BROADCAST_CHANNEL';
 
+        this.flushPendingMessages();
         // Broadcast a ping so any existing tabs know a new window opened
         this.pingEnclave();
         this.startHeartbeat();
@@ -256,46 +261,49 @@ class SovereignBroadcastSyncService {
   }
 
   public onSystemEvent(handler: BroadcastEventHandler): () => void {
-    if (!this.isInitialized) this.init();
     this.eventHandlers.add(handler);
+    this.pendingEvents.splice(0).forEach((event) => handler(event));
     return () => this.eventHandlers.delete(handler);
   }
 
   public onAuditSnapshot(handler: BroadcastSnapshotHandler): () => void {
-    if (!this.isInitialized) this.init();
     this.snapshotHandlers.add(handler);
+    this.pendingSnapshots.splice(0).forEach((snapshot) => handler(snapshot));
     return () => this.snapshotHandlers.delete(handler);
   }
 
   public onLockState(handler: BroadcastLockStateHandler): () => void {
-    if (!this.isInitialized) this.init();
     this.lockStateHandlers.add(handler);
+    if (this.lastLockState) handler(this.lastLockState);
     return () => this.lockStateHandlers.delete(handler);
   }
 
   public broadcastSystemEvent(event: SystemEvent) {
-    if (!this.isInitialized) this.init();
     this.lastSyncTimestamp = Date.now();
+    if (this.eventHandlers.size === 0) this.pendingEvents.push(event);
     this.postMessage('SYSTEM_EVENT_ADDED', { event });
     this.notifySyncStatus();
   }
 
   public broadcastAuditSnapshot(snapshot: HardwareSnapshot) {
-    if (!this.isInitialized) this.init();
     this.lastSyncTimestamp = Date.now();
+    if (this.snapshotHandlers.size === 0) this.pendingSnapshots.push(snapshot);
     this.postMessage('AUDIT_SNAPSHOT_ADDED', { snapshot });
     this.notifySyncStatus();
   }
 
   public broadcastGlobalLockState(lockState: GlobalLockStatePayload) {
-    if (!this.isInitialized) this.init();
     this.lastSyncTimestamp = Date.now();
+    this.lastLockState = lockState;
     this.postMessage('GLOBAL_LOCK_STATE_CHANGED', { lockState });
     this.notifySyncStatus();
   }
 
   private postMessage(type: BroadcastSyncMessageType, payload: BroadcastSyncMessage['payload']) {
-    if (!this.channel) return;
+    if (!this.channel) {
+      this.pendingMessages.push({ type, payload });
+      return;
+    }
     try {
       const message: BroadcastSyncMessage = {
         type,
@@ -309,6 +317,11 @@ class SovereignBroadcastSyncService {
     }
   }
 
+  private flushPendingMessages() {
+    const messages = this.pendingMessages.splice(0);
+    messages.forEach(({ type, payload }) => this.postMessage(type, payload));
+  }
+
   private handleMessage(ev: MessageEvent<BroadcastSyncMessage>) {
     const data = ev.data;
     if (!data || data.sourceTabId === this.tabId) return;
@@ -318,20 +331,23 @@ class SovereignBroadcastSyncService {
     switch (data.type) {
       case 'SYSTEM_EVENT_ADDED':
         if (data.payload.event) {
-          this.eventHandlers.forEach((fn) => fn(data.payload.event!));
+          if (this.eventHandlers.size === 0) this.pendingEvents.push(data.payload.event);
+          else this.eventHandlers.forEach((fn) => fn(data.payload.event!));
         }
         this.notifySyncStatus();
         break;
 
       case 'AUDIT_SNAPSHOT_ADDED':
         if (data.payload.snapshot) {
-          this.snapshotHandlers.forEach((fn) => fn(data.payload.snapshot!));
+          if (this.snapshotHandlers.size === 0) this.pendingSnapshots.push(data.payload.snapshot);
+          else this.snapshotHandlers.forEach((fn) => fn(data.payload.snapshot!));
         }
         this.notifySyncStatus();
         break;
 
       case 'GLOBAL_LOCK_STATE_CHANGED':
         if (data.payload.lockState) {
+          this.lastLockState = data.payload.lockState;
           this.lockStateHandlers.forEach((fn) => fn(data.payload.lockState!));
         }
         this.notifySyncStatus();
@@ -354,6 +370,7 @@ class SovereignBroadcastSyncService {
         this.postMessage('SYNC_PONG', {
           pingTime: data.payload.pingTime || data.timestamp,
           nodeInfo: this.getSelfNode(),
+          lockState: this.lastLockState || undefined,
         });
         this.notifySyncStatus();
         break;
@@ -410,6 +427,10 @@ class SovereignBroadcastSyncService {
     this.lockStateHandlers.clear();
     this.syncStatusHandlers.clear();
     this.peerNodes.clear();
+    this.pendingMessages = [];
+    this.pendingEvents = [];
+    this.pendingSnapshots = [];
+    this.lastLockState = null;
     this.isInitialized = false;
   }
 }
