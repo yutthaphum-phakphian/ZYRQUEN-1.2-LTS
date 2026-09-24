@@ -296,7 +296,7 @@ export const SecurityView: React.FC<SecurityViewProps> = ({
               setIsQrValidatorOpen(true);
             }}
             className="px-4 py-2.5 rounded-2xl text-[11px] sm:text-xs font-bold bg-gradient-to-r from-cyan-600 via-blue-600 to-indigo-600 hover:from-cyan-500 hover:to-blue-500 border border-cyan-400/50 text-white flex items-center gap-2 transition-all shadow-[0_0_20px_rgba(6,182,212,0.3)] cursor-pointer"
-            title="Scan forensic Custodian QR codes with react-qr-reader to ratify quorum sign-offs"
+            title="Scan forensic Custodian QR codes to ratify quorum sign-offs"
           >
             <QrCode className="w-4 h-4 text-cyan-200" />
             <span className="tracking-wide">Scan Custodian QR</span>
@@ -320,7 +320,7 @@ export const SecurityView: React.FC<SecurityViewProps> = ({
               setActiveTab('hardware-seal-scanner');
             }}
             className="px-4 py-2.5 rounded-2xl text-[11px] sm:text-xs font-bold bg-gradient-to-r from-emerald-600 via-teal-600 to-cyan-600 hover:from-emerald-500 hover:to-teal-500 border border-emerald-400/50 text-white flex items-center gap-2 transition-all shadow-[0_0_20px_rgba(16,185,129,0.3)] cursor-pointer"
-            title="Scan physical hardware seals using react-qr-reader to verify against digital ledger"
+            title="Scan physical hardware seals to verify against digital ledger"
           >
             <QrCode className="w-4 h-4 text-emerald-200" />
             <span className="tracking-wide">Scan Hardware Seal (QR)</span>
@@ -849,7 +849,7 @@ export const SecurityView: React.FC<SecurityViewProps> = ({
         </div>
       )}
 
-      {/* Hardware Seal QR Scanner (react-qr-reader & Digital Ledger SSoT) */}
+      {/* Hardware Seal QR Scanner (Digital Ledger SSoT) */}
       {activeTab === 'hardware-seal-scanner' && (
         <div className="space-y-6">
           <HardwareSealQRScanner

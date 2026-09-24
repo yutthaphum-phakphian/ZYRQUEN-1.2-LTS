@@ -157,7 +157,7 @@ export const HardwareSealQRScanner: React.FC<HardwareSealQRScannerProps> = ({
     }
   };
 
-  // Callback from react-qr-reader
+  // Callback from the shared camera QR reader
   const handleQrResult = (result: any | null | undefined, error: any | null | undefined) => {
     if (result) {
       const text = typeof result === 'string' ? result : result?.getText?.() || result?.text;

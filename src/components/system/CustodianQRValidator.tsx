@@ -203,7 +203,7 @@ export const CustodianQRValidator: React.FC<CustodianQRValidatorProps> = ({
 
   if (!isOpen) return null;
 
-  // Handles result from react-qr-reader
+  // Handles results from the shared camera QR reader
   const handleQrReaderResult = (result: any | null | undefined, error: any | null | undefined) => {
     if (result) {
       const text = typeof result === 'string' ? result : result?.getText?.() || result?.text;
@@ -215,7 +215,7 @@ export const CustodianQRValidator: React.FC<CustodianQRValidatorProps> = ({
       }
     }
     if (error) {
-      // Normal continuous frame search errors in react-qr-reader can be safely suppressed
+      // Normal continuous frame search errors can be safely suppressed
       // unless user camera is actively denied
       if (error?.name === 'NotAllowedError') {
         setCameraError('Camera access permission was denied. Please allow camera or upload an image.');
@@ -730,7 +730,7 @@ export const CustodianQRValidator: React.FC<CustodianQRValidatorProps> = ({
               </span>
             </div>
             <p className="text-xs text-zinc-400 mt-0.5">
-              Scan forensic optical credentials using 'react-qr-reader' to validate against CustodianRegistry SSoT (Ω600_1000).
+              Scan forensic optical credentials to validate against CustodianRegistry SSoT (Ω600_1000).
             </p>
           </div>
         </div>
@@ -772,7 +772,7 @@ export const CustodianQRValidator: React.FC<CustodianQRValidatorProps> = ({
             }`}
           >
             <Camera className="w-4 h-4" />
-            <span>Optical QR Scanner (react-qr-reader)</span>
+                        <span>Optical QR Scanner</span>
           </button>
 
           <button
