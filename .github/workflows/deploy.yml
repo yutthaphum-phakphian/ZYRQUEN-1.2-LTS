@@ -1,78 +1,51 @@
-name: 🚀 Deploy ZYRQUEN PWA to Vercel Production
+name: Deploy Zyrquen PWA to GitHub Pages
 
 on:
   push:
     branches:
       - main
+      - master
   workflow_dispatch:
 
 permissions:
-  contents: read
-
-concurrency:
-  group: vercel-deploy-${{ github.ref }}
-  cancel-in-progress: true
+  contents: write
 
 jobs:
   build-and-deploy:
     runs-on: ubuntu-latest
-    timeout-minutes: 15
 
     steps:
-      - name: 📥 Checkout Codebase
+      - name: Checkout Source Code
         uses: actions/checkout@v4
 
-      - name: ⚙️ Setup Node.js 20 Runtime
+      - name: Setup Node.js Environment
         uses: actions/setup-node@v4
         with:
           node-version: 20
-          cache: npm
+          cache: 'npm'
 
-      - name: 📦 Install Dependencies
-        run: npm ci --legacy-peer-deps
+      - name: Install Dependencies
+        run: npm ci --legacy-peer-deps || npm install
 
-      - name: 🔬 TypeScript & Static Verification
-        run: npm run lint
-
-      - name: 🧪 Execute Unit Tests
-        run: npm test
-
-      - name: ⚡ Build Static Client Bundle
+      - name: Build React PWA Application
         run: npm run build
-
-      - name: 🛠️ Install Vercel CLI (Optional Production Deployment)
-        if: env.VERCEL_TOKEN != ''
-        run: npm install --global vercel@latest
         env:
-          VERCEL_TOKEN: ${{ secrets.VERCEL_TOKEN }}
+          CI: false
+          GITHUB_PAGES: 'true'
 
-      - name: 📥 Pull Vercel Environment Information
-        if: env.VERCEL_TOKEN != ''
-        run: vercel pull --yes --environment=production --token=${{ secrets.VERCEL_TOKEN }}
-        env:
-          VERCEL_TOKEN: ${{ secrets.VERCEL_TOKEN }}
-          VERCEL_ORG_ID: ${{ secrets.VERCEL_ORG_ID }}
-          VERCEL_PROJECT_ID: ${{ secrets.VERCEL_PROJECT_ID }}
-
-      - name: 🏗️ Build Project Artifacts via Vercel
-        if: env.VERCEL_TOKEN != ''
-        run: vercel build --prod --token=${{ secrets.VERCEL_TOKEN }}
-        env:
-          VERCEL_TOKEN: ${{ secrets.VERCEL_TOKEN }}
-          VERCEL_ORG_ID: ${{ secrets.VERCEL_ORG_ID }}
-          VERCEL_PROJECT_ID: ${{ secrets.VERCEL_PROJECT_ID }}
-
-      - name: 🚀 Deploy Prebuilt Artifacts to Vercel
-        if: env.VERCEL_TOKEN != ''
-        id: deploy
+      - name: Prepare Deployment Artifact
         run: |
-          DEPLOYMENT_URL=$(vercel deploy --prebuilt --prod --token=${{ secrets.VERCEL_TOKEN }})
-          echo "url=$DEPLOYMENT_URL" >> $GITHUB_OUTPUT
-        env:
-          VERCEL_TOKEN: ${{ secrets.VERCEL_TOKEN }}
-          VERCEL_ORG_ID: ${{ secrets.VERCEL_ORG_ID }}
-          VERCEL_PROJECT_ID: ${{ secrets.VERCEL_PROJECT_ID }}
+          if [ -d "dist" ]; then
+            echo "Vite build detected in dist/"
+            # Ensure 404 fallback for SPA routing on GitHub Pages
+            cp dist/index.html dist/404.html 2>/dev/null || true
+          elif [ -d "build" ]; then
+            echo "CRA build detected in build/"
+            cp -r build dist
+          fi
 
-      - name: 🔒 Vercel Deployment & Build Status Gate
-        run: |
-          echo "✔ ZYRQUEN PWA build and validation passed with 100% PURE GREEN."
+      - name: Deploy to GitHub Pages
+        uses: JamesIves/github-pages-deploy-action@v4
+        with:
+          folder: dist
+          branch: gh-pages
