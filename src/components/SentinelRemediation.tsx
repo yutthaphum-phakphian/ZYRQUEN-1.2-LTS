@@ -17,6 +17,11 @@ interface AnomalyEvent {
   zkProofHash?: string;
 }
 
+interface SentinelRemediationProps {
+  onAlertLevelChange?: (level: 'NOMINAL' | 'CRITICAL') => void;
+  monitoringIntervalMs?: number;
+}
+
 const INITIAL_ANOMALY: AnomalyEvent = {
   id: 'ANOM-8492-01',
   timestamp: new Date().toISOString(),
@@ -28,7 +33,10 @@ const INITIAL_ANOMALY: AnomalyEvent = {
   zkProofHash: '0x909ab814...4c68',
 };
 
-export const SentinelRemediation: React.FC = () => {
+export const SentinelRemediation: React.FC<SentinelRemediationProps> = ({
+  onAlertLevelChange,
+  monitoringIntervalMs = 4500,
+}) => {
   const [anomalies, setAnomalies] = useState<AnomalyEvent[]>([INITIAL_ANOMALY]);
   const [isShieldActive, setIsShieldActive] = useState(true);
   const [remediationCount, setRemediationCount] = useState(1490);
@@ -37,6 +45,7 @@ export const SentinelRemediation: React.FC = () => {
 
   useEffect(() => {
     const statusResetTimers = new Set<ReturnType<typeof setTimeout>>();
+    onAlertLevelChange?.('NOMINAL');
     const interval = setInterval(() => {
       if (!isShieldActive) {
         return;
@@ -63,6 +72,7 @@ export const SentinelRemediation: React.FC = () => {
       };
 
       setAnomalies((previous) => [newAnomaly, ...previous.slice(0, 4)]);
+      onAlertLevelChange?.('CRITICAL');
       setRemediationCount((previous) => previous + 1);
       setCiCdStatus(`PATCH EXECUTED [${newAnomaly.id}]`);
       setActivePqcMode((previous) => previous.includes('Dilithium-5')
@@ -71,13 +81,13 @@ export const SentinelRemediation: React.FC = () => {
 
       const resetTimer = setTimeout(() => setCiCdStatus('IDLE / ARMED'), 2500);
       statusResetTimers.add(resetTimer);
-    }, 4500);
+    }, monitoringIntervalMs);
 
     return () => {
       clearInterval(interval);
       statusResetTimers.forEach((timer) => clearTimeout(timer));
     };
-  }, [isShieldActive]);
+  }, [isShieldActive, monitoringIntervalMs, onAlertLevelChange]);
 
   return (
     <div className="bg-cyber-800/80 border border-cyan-500/30 rounded-2xl p-6 backdrop-blur-md shadow-xl text-gray-100 max-w-4xl mx-auto font-sans">

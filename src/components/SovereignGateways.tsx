@@ -9,37 +9,32 @@ interface GatewayStatus {
   name: string;
   endpoint: string;
   purpose: string;
-  status: 'ARMED' | 'MONITORED';
+  status: 'OPERATIONAL' | 'ALERT';
 }
 
-const GATEWAYS: GatewayStatus[] = [
+const GATEWAYS: Omit<GatewayStatus, 'status'>[] = [
   {
-    name: 'Health & SSoT',
-    endpoint: '/api/v1/health',
-    purpose: 'Genesis anchor and zero-drift readiness',
-    status: 'ARMED',
+    name: 'Quantum Satellite Gateway',
+    endpoint: 'telemetry://quantum-satellite',
+    purpose: 'Telemetric signal and 99.992% coherence monitoring',
   },
   {
-    name: 'Telemetry Ingestion',
-    endpoint: '/api/v1/telemetry',
-    purpose: 'PQC-signed telemetry stream',
-    status: 'MONITORED',
+    name: 'Legal Smart Contract Gateway',
+    endpoint: 'legal://etda-sec-26-28',
+    purpose: 'ETDA Sections 26 and 28 verification',
   },
   {
-    name: 'Audit Intake',
-    endpoint: '/api/v1/audit/intake',
-    purpose: 'Sentinel risk interception and quarantine',
-    status: 'ARMED',
-  },
-  {
-    name: 'Evidence Verification',
-    endpoint: '/api/v1/verify/evidence',
-    purpose: 'ETDA Sections 9, 26 and 28 verification',
-    status: 'MONITORED',
+    name: 'Cryo-Thermal Bus Gateway',
+    endpoint: 'cryo://thermal-bus',
+    purpose: 'Sub-Kelvin 14.98 mK stability monitoring',
   },
 ];
 
-export const SovereignGateways: React.FC = () => (
+interface SovereignGatewaysProps {
+  alertLevel?: 'NOMINAL' | 'CRITICAL';
+}
+
+export const SovereignGateways: React.FC<SovereignGatewaysProps> = ({ alertLevel = 'NOMINAL' }) => (
   <section className="bg-cyber-800/80 border border-cyan-500/30 rounded-2xl p-6 backdrop-blur-md shadow-xl text-gray-100 max-w-4xl mx-auto font-sans">
     <div className="flex flex-col sm:flex-row justify-between gap-3 pb-4 border-b border-cyber-700">
       <div>
@@ -56,7 +51,9 @@ export const SovereignGateways: React.FC = () => (
         <article key={gateway.endpoint} className="bg-cyber-900/70 border border-cyber-700 rounded-xl p-4">
           <div className="flex items-center justify-between gap-3">
             <h3 className="text-sm font-semibold text-gray-100">{gateway.name}</h3>
-            <span className="text-[10px] font-mono text-emerald-400">{gateway.status}</span>
+            <span className={`text-[10px] font-mono ${alertLevel === 'CRITICAL' ? 'text-rose-400' : 'text-emerald-400'}`}>
+              {alertLevel === 'CRITICAL' ? 'ALERT' : 'OPERATIONAL'}
+            </span>
           </div>
           <p className="text-xs font-mono text-cyan-300 mt-2 break-all">{gateway.endpoint}</p>
           <p className="text-xs text-gray-400 mt-2">{gateway.purpose}</p>
