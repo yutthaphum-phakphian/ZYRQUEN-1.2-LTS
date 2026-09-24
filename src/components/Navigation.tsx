@@ -91,6 +91,7 @@ interface NavItem {
 
 export const NAVIGATION_ITEMS: NavItem[] = [
   { id: 'dashboard', labelEn: 'Dashboard', labelTh: 'ศูนย์บัญชาการ', icon: LayoutDashboard, dotColor: '#06B6D4', badge: 'HQ', shortcut: '1' },
+  { id: 'sovereign', labelEn: 'Unified Control Plane', labelTh: 'ศูนย์ควบคุมรวม Sentinel', icon: ShieldAlert, dotColor: '#06B6D4', badge: 'SENTINEL', shortcut: 'V' },
   { id: 'briefing', labelEn: 'Executive & Court', labelTh: 'สรุปผู้บริหาร & ศาล', icon: Landmark, dotColor: '#D4AF37', badge: 'EXECUTIVE', shortcut: 'E' },
   { id: 'sovereign-wallet', labelEn: 'Sovereign Wallet', labelTh: 'กระเป๋าอธิปไตย & คีย์ QR', icon: Wallet, dotColor: '#D4AF37', badge: 'WEBAUTHN', shortcut: 'Q' },
   { id: 'fusion', labelEn: 'Fusion Console', labelTh: 'รวมศูนย์นิติวิทยาศาสตร์', icon: Activity, dotColor: '#D946EF', badge: 'FUSION', shortcut: 'F' },

@@ -80,6 +80,7 @@ import { AuditHistoryView } from '@/components/views/AuditHistoryView';
 import { SecurityPipelineView } from '@/components/views/SecurityPipelineView';
 import { ExecutiveCourtBriefing } from '@/components/executive/ExecutiveCourtBriefing';
 import { SovereignWalletView } from '@/components/views/SovereignWalletView';
+import { SovereignDashboard } from '@/pages/SovereignDashboard';
 import { AuditCertificateModal } from '@/components/AuditCertificateModal';
 import { GitHubPwaModal } from '@/components/GitHubPwaModal';
 import { ThaiLegalSearchModal } from '@/components/ThaiLegalSearchModal';
@@ -330,6 +331,13 @@ const VIEW_PERSONAS: Record<ViewType, ViewPersona> = {
     orb2: 'bg-yellow-600/14',
     orb3: 'bg-emerald-600/12',
     accentGlow: 'rgba(212,175,55,0.12)',
+  },
+  sovereign: {
+    name: 'Unified Sentinel & Gateway Control Plane',
+    orb1: 'bg-cyan-600/14',
+    orb2: 'bg-emerald-600/10',
+    orb3: 'bg-amber-500/8',
+    accentGlow: 'rgba(6,182,212,0.1)',
   },
 };
 
@@ -843,6 +851,7 @@ const VALID_VIEWS: ViewType[] = [
   'audithistory',
   'securitypipeline',
   'briefing',
+  'sovereign',
 ];
 
 function SovereignAppContent() {
@@ -2007,6 +2016,8 @@ function SovereignAppContent() {
             onAddSystemEvent={addSystemEvent as any}
           />
         );
+      case 'sovereign':
+        return <SovereignDashboard />;
       default:
         return <DashboardView onNavigate={setCurrentView} onOpenCertificate={() => setIsCertificateOpen(true)} />;
     }

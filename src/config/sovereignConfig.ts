@@ -213,6 +213,13 @@ export const VIEW_PERSONAS: Record<ViewType, ViewPersona> = {
     orb3: 'bg-emerald-600/12',
     accentGlow: 'rgba(212,175,55,0.12)',
   },
+  sovereign: {
+    name: 'Unified Sentinel & Gateway Control Plane',
+    orb1: 'bg-cyan-600/14',
+    orb2: 'bg-emerald-600/10',
+    orb3: 'bg-amber-500/8',
+    accentGlow: 'rgba(6,182,212,0.1)',
+  },
 };
 
 export const VALID_VIEWS: ViewType[] = [
@@ -245,6 +252,7 @@ export const VALID_VIEWS: ViewType[] = [
   'securitypipeline',
   'briefing',
   'sovereign-wallet',
+  'sovereign',
 ];
 
 export interface LegalTriggerItem {
