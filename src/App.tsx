@@ -96,6 +96,7 @@ import { GlobalCommandSearch } from '@/components/GlobalCommandSearch';
 import { ForensicAuditMasterDossierModal } from '@/components/forensics/ForensicAuditMasterDossierModal';
 import { ThemeSwitcher, useTheme } from '@/components/ThemeSwitcher';
 import { EmergencySovereignLockdown } from '@/components/EmergencySovereignLockdown';
+import { SovereignWatermarkOverlay } from '@/components/SovereignWatermark';
 import { LiveQuantumEntropyTicker } from '@/components/LiveQuantumEntropyTicker';
 import { ToastNotification, ToastMessage } from '@/components/ToastNotification';
 import {
@@ -2310,6 +2311,9 @@ function SovereignAppContent() {
           className={`absolute bottom-[-10%] left-[30%] w-[750px] h-[750px] rounded-full blur-[170px] transition-all duration-1000 ease-in-out ${persona.orb3}`}
         />
       </div>
+
+      {/* Subtle Customizable ZYRQUEN Ω∞ Watermark Overlay across all views */}
+      <SovereignWatermarkOverlay currentView={currentView} />
 
       {/* Top Fixed Navigation & Status Bar */}
       <Navigation

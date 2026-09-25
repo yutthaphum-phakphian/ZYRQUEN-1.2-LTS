@@ -18,7 +18,7 @@ export default defineConfig(() => {
         registerType: 'autoUpdate',
         includeAssets: ['favicon.ico', 'apple-touch-icon.png', 'icon.svg'],
         workbox: {
-          maximumFileSizeToCacheInBytes: 6 * 1024 * 1024,
+          maximumFileSizeToCacheInBytes: 15 * 1024 * 1024,
           globPatterns: ['**/*.{js,css,html,ico,png,svg,json}'],
           globIgnores: ['**/*.zip', '**/*.pdf', '**/assets/three-*.js'],
         },
@@ -49,8 +49,6 @@ export default defineConfig(() => {
     resolve: {
       alias: {
         '@': path.resolve(__dirname, './src'),
-        'react': path.resolve(__dirname, './node_modules/react'),
-        'react-dom': path.resolve(__dirname, './node_modules/react-dom'),
       },
       dedupe: ['react', 'react-dom', 'react-router', 'react-router-dom', 'motion', 'motion/react'],
     },
@@ -102,8 +100,8 @@ export default defineConfig(() => {
 
     // 5. Dev Server
     server: {
-      port: 5173,
-      host: true,
+      port: 3000,
+      host: '0.0.0.0',
     },
   };
 });

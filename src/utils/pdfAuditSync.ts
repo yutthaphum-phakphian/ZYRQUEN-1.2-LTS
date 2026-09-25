@@ -141,7 +141,7 @@ export class PdfAuditSync {
         canonicalSeals: SYSTEM_METADATA.canonicalSeals,
         pqcAlgorithm: 'Dilithium-5',
         hsmQuorum: SYSTEM_METADATA.quorum,
-        tsaToken: `RFC3161_TSA_CUSTOM_${computedRoot.slice(0, 24)}`,
+        tsaToken: `RFC3161_TSA_TOKEN_CUSTOM_${computedRoot.slice(0, 24)}`,
         timestampUTC: nowIso,
         zeroDrift: 'Δ0 0.00%',
         isFailClosedActive: true,

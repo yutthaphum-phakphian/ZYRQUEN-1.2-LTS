@@ -1069,7 +1069,9 @@ export const copilotAssistantService = {
 
     // 3. Resilient Fallback if backend was unreachable or returned empty
     if (!responseText) {
-      if (queryLower.includes('snapshot') || queryLower.includes('สแนปช็อต') || queryLower.includes('ดาวน์โหลด')) {
+      if (queryLower.includes('rule') || queryLower.includes('กฎ') || queryLower.includes('cursor') || queryLower.includes('system_rule')) {
+        responseText = `🏛️ กฎเหล็กของ Sovereign Coding Agent (SYSTEM_RULES.md / .cursorrules):\n1. SSoT Δ0 Zero-Drift Constraint: รักษาค่าบิต 100% (Genesis Block #${state.epochBlock}, Merkle 0x909ab814..., 14,902 Seals)\n2. Fail-Closed Architecture: Anomaly Score >= 85% กักกันเข้า Chamber 02 Buffer Gamma ทันที และความร้อนเกิน 85.0°C สั่ง Active Zeroization\n3. Deca-Key Quorum: ฉันทามติ 10/10 REAL_HSM Unanimous Quorum (FIPS 140-3 Level 4)\n4. Post-Quantum Cryptography: บังคับใช้ Dilithium-5 (FIPS 204), Kyber-1024 (FIPS 203), SPHINCS+ (FIPS 205) ห้ามใช้ RSA/ECDSA/MD5 โดยเด็ดขาด\n5. Zero-Any Policy & DOM Sanitization: โค้ด TypeScript ต้องไร้ Type 'any' และผ่าน DOMPurify.sanitize() เสมอครับ`;
+      } else if (queryLower.includes('snapshot') || queryLower.includes('สแนปช็อต') || queryLower.includes('ดาวน์โหลด')) {
         responseText = `${localActionNotice}🏛️ ดาวน์โหลดและลงลายมือชื่อดิจิทัล FIPS 204 ML-DSA-87 พร้อมส่งมอบไฟล์หลักฐาน JSON สู่เครื่องของท่านเรียบร้อยแล้วครับ`;
       } else if (
         queryLower.includes('อัปเดท') ||

@@ -32,7 +32,7 @@ jobs:
           python-version: '3.12'
 
       - name: Install Dependencies
-        run: npm ci
+        run: npm ci --legacy-peer-deps || npm install --legacy-peer-deps
 
       - name: Compile Python Scripts & Tests
         run: find scripts tests -type f -name '*.py' -print0 | xargs -0 -r python -m py_compile

@@ -108,9 +108,12 @@ export const CopilotAssistantDrawer: React.FC<CopilotAssistantDrawerProps> = ({
   };
 
   const quickPrompts = [
+    '📜 กฎเหล็ก Coding Rules (SYSTEM_RULES)',
     '⚡ ดึงอัปเดทระบบ (Pull SSoT)',
     '📥 ดาวน์โหลด Signed Snapshot',
     '🛡️ ตรวจสอบ PQC Dilithium-5',
+    '🔒 ตรวจสอบ Biometric Lockdown',
+    '✨ ตรวจสอบ Watermark Overlay',
     '🐝 สั่งการ Quantum Swarm',
     '📊 สถิติ Entropy 60 นาที (Max 9885)',
     '🧊 เจาะลึกเหตุการณ์ Minute 48 Cryo-Burst',

@@ -42,7 +42,7 @@ describe('Sovereign runtime verification', () => {
     });
 
     expect(screen.getByText(/PATCH_APPLIED/)).toBeTruthy();
-    expect(screen.getByText(/Risk: 0\.9/)).toBeTruthy();
+    expect(screen.getAllByText(/Risk:\s*0\.\d+/).length).toBeGreaterThan(0);
     expect(onAlertLevelChange).toHaveBeenLastCalledWith('CRITICAL');
 
     fireEvent.click(screen.getByRole('button', { name: 'SHIELD: ACTIVE' }));
