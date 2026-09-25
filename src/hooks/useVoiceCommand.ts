@@ -1,6 +1,12 @@
 import { useEffect, useState, useCallback } from 'react';
 import { ViewType } from '../types';
 import { SystemEvent } from '../components/SystemEventsSidebar';
+import {
+  speakSystemAlert,
+  announceSecurityLockdown,
+  announceHandsFreeBriefing,
+  repeatLastAnnouncement,
+} from '../utils/textToSpeechService';
 
 export const useVoiceCommand = (
   onNavigate: (view: ViewType) => void,
@@ -53,10 +59,40 @@ export const useVoiceCommand = (
 
       let matched = false;
 
+      // Status briefing command (Hands-free operation)
+      if (transcript.includes('briefing') || transcript.includes('status report') || transcript.includes('system status')) {
+        announceHandsFreeBriefing({
+          blockHeight: 849202,
+          sealCount: 14902,
+          drift: '0.00%',
+          quorum: '10/10 REAL_HSM',
+          tempMK: 14.98,
+        });
+        onNotifyEvent('AUDIO', 'Hands-Free Briefing Requested', 'Spoken system invariants report delivered.', 'voice:briefing', 'info');
+        return;
+      }
+
+      // Repeat last announcement command
+      if (transcript.includes('repeat') || transcript.includes('say again') || transcript.includes('what was that')) {
+        repeatLastAnnouncement();
+        return;
+      }
+
+      // Voice lockdown trigger
+      if (transcript.includes('lockdown') || transcript.includes('quarantine protocol') || transcript.includes('isolate system')) {
+        announceSecurityLockdown('engaged', {
+          chamber: 'Chamber 02 Quarantine',
+          reason: 'Voice command lockdown initiated hands-free',
+        });
+        onNotifyEvent('SECURITY', 'Voice Command Lockdown', 'Chamber 02 Quarantine engaged via verbal command.', 'voice:lockdown', 'critical');
+        return;
+      }
+
       // View switching
       for (const [key, view] of Object.entries(commandMap)) {
         if (transcript.includes(key)) {
           onNavigate(view);
+          speakSystemAlert(`Navigating to ${key}`, 'info');
           onNotifyEvent(
             'AUDIO',
             'Voice Command Executed',
@@ -72,6 +108,7 @@ export const useVoiceCommand = (
       // Snapshot trigger
       if (!matched && (transcript.includes('capture') || transcript.includes('snapshot'))) {
         onCaptureSnapshot();
+        speakSystemAlert('Signed snapshot captured and sealed.', 'info');
         onNotifyEvent(
           'AUDIO',
           'Voice Command Executed',

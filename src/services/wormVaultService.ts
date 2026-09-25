@@ -209,7 +209,11 @@ export class WormVaultService implements IWormVaultReadOnlyInterface {
     this.dataset = Object.freeze({
       chamberId: 'CH-02',
       totalEvents: RAW_CHAMBER_02_DATASET.total_events,
-      timeWindow: Object.freeze({ ...RAW_CHAMBER_02_DATASET.time_window }),
+      timeWindow: Object.freeze({
+        start: RAW_CHAMBER_02_DATASET.time_window.start,
+        end: RAW_CHAMBER_02_DATASET.time_window.end,
+        durationSec: RAW_CHAMBER_02_DATASET.time_window.duration_sec,
+      }),
       nodes: Object.freeze({ ...RAW_CHAMBER_02_DATASET.nodes }),
       trigger: RAW_CHAMBER_02_DATASET.trigger,
       anomalyScore: RAW_CHAMBER_02_DATASET.anomaly_score,

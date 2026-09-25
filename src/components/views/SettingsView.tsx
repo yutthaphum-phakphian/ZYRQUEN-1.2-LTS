@@ -63,7 +63,14 @@ import {
   updateTTSConfig,
   speakSystemAlert,
   toggleTTSEnabled,
+  toggleHandsFreeMode,
+  announceSecurityLockdown,
+  announceHandsFreeBriefing,
+  repeatLastAnnouncement,
+  cancelAllAnnouncements,
+  getAvailableVoices,
   subscribeTTSConfig,
+  subscribeSpeechState,
   TTSConfig,
 } from '../../utils/textToSpeechService';
 
@@ -243,6 +250,9 @@ export const SettingsView: React.FC<SettingsViewProps> = ({
 
   // Text-to-Speech (TTS) Sovereign Verbal Audio Warnings Configuration
   const [ttsConfig, setTtsConfig] = useState<TTSConfig>(() => getTTSConfig());
+  const [isSpeaking, setIsSpeaking] = useState<boolean>(false);
+  const [currentSpokenPhrase, setCurrentSpokenPhrase] = useState<string>('');
+  const [availableVoices, setAvailableVoices] = useState<SpeechSynthesisVoice[]>([]);
 
   // Offline Audit Log Synchronization State
   const [syncPendingCount, setSyncPendingCount] = useState<number>(() => offlineAuditSyncService.getQueueCount());
@@ -273,12 +283,33 @@ export const SettingsView: React.FC<SettingsViewProps> = ({
     const unsub = subscribeTTSConfig((cfg) => {
       setTtsConfig(cfg);
     });
+    const unsubSpeech = subscribeSpeechState((speaking, phrase) => {
+      setIsSpeaking(speaking);
+      setCurrentSpokenPhrase(phrase);
+    });
     const unsubSync = offlineAuditSyncService.subscribe((count) => {
       setSyncPendingCount(count);
     });
+
+    // Populate voices
+    const updateVoices = () => {
+      const voices = getAvailableVoices();
+      if (voices && voices.length > 0) {
+        setAvailableVoices(voices);
+      }
+    };
+    updateVoices();
+    if (typeof window !== 'undefined' && 'speechSynthesis' in window) {
+      window.speechSynthesis.onvoiceschanged = updateVoices;
+    }
+
     return () => {
       unsub();
+      unsubSpeech();
       unsubSync();
+      if (typeof window !== 'undefined' && 'speechSynthesis' in window) {
+        window.speechSynthesis.onvoiceschanged = null;
+      }
     };
   }, []);
 
@@ -939,28 +970,73 @@ export const SettingsView: React.FC<SettingsViewProps> = ({
       <AuditChimeSettingsCard />
 
       {/* Sovereign Text-to-Speech (TTS) Verbal Feedback Loop Controls */}
-      <div className="p-6 rounded-[28px] bg-[#0b0e1a]/75 border border-cyan-500/20 backdrop-blur-xl space-y-6">
-        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 border-b border-white/8 pb-4">
+      <div className="p-6 rounded-[28px] bg-[#0b0e1a]/75 border border-cyan-500/25 backdrop-blur-xl space-y-6">
+        <div className="flex flex-col lg:flex-row lg:items-center justify-between gap-4 border-b border-white/8 pb-4">
           <div className="flex items-center gap-3">
-            <div className="w-10 h-10 rounded-2xl bg-cyan-500/15 border border-cyan-500/30 flex items-center justify-center text-cyan-300">
-              <Radio className="w-5 h-5 animate-pulse" />
+            <div className={`w-11 h-11 rounded-2xl flex items-center justify-center border transition-all ${
+              ttsConfig.enabled
+                ? 'bg-cyan-500/20 border-cyan-500/40 text-cyan-300 shadow-[0_0_20px_rgba(6,182,212,0.3)]'
+                : 'bg-zinc-800/80 border-zinc-700 text-zinc-500'
+            }`}>
+              <Radio className={`w-5 h-5 ${ttsConfig.enabled ? 'animate-pulse' : ''}`} />
             </div>
             <div>
-              <div className="flex items-center gap-2">
+              <div className="flex items-center gap-2 flex-wrap">
                 <span className="font-bold font-mono text-white text-sm uppercase tracking-wide">
-                  Text-to-Speech Verbal Alert Feedback Loop
+                  Verbal Feedback Service &amp; Hands-Free Audio Telemetry
                 </span>
                 <span className="text-[10px] px-2 py-0.5 rounded-full bg-cyan-500/15 text-cyan-300 border border-cyan-500/30 font-mono font-semibold">
-                  LOW-LATENCY AUDIO
+                  WEB SPEECH API
                 </span>
+                {ttsConfig.handsFreeMode && (
+                  <span className="text-[10px] px-2 py-0.5 rounded-full bg-emerald-500/20 text-emerald-300 border border-emerald-500/40 font-mono font-bold animate-pulse flex items-center gap-1">
+                    <span>⚡ HANDS-FREE ACTIVE</span>
+                  </span>
+                )}
+                {isSpeaking && (
+                  <span className="text-[10px] px-2 py-0.5 rounded-full bg-amber-500/20 text-amber-300 border border-amber-500/40 font-mono font-bold flex items-center gap-1 animate-pulse">
+                    <span>🔊 SPEAKING...</span>
+                  </span>
+                )}
               </div>
               <p className="text-xs text-zinc-400 font-sans mt-0.5">
-                Verbal speech synthesis announcements for 'Critical' and 'Anomaly' system events with Thai and English auto-detection.
+                Low-latency verbal audio announcements for critical system events, security lockdown alerts, and hands-free telemetry monitoring.
               </p>
             </div>
           </div>
 
-          <div className="flex items-center gap-3">
+          <div className="flex items-center gap-2.5 flex-wrap">
+            {/* Hands-Free Mode Toggle */}
+            <button
+              onClick={() => {
+                const next = toggleHandsFreeMode();
+                playTone(next ? 880 : 440, 0.06);
+                if (onAddSystemEvent) {
+                  onAddSystemEvent(
+                    'AUDIO',
+                    next ? 'Hands-Free Verbal Telemetry Engaged' : 'Hands-Free Verbal Telemetry Standby',
+                    next
+                      ? 'Hands-free continuous audio telemetry monitoring active for all critical security events.'
+                      : 'Hands-free continuous audio telemetry returned to standard mode.',
+                    'tts:handsfree',
+                    'info',
+                    'Acoustic Telemetry Interface',
+                    'settings'
+                  );
+                }
+              }}
+              className={`px-3.5 py-2 rounded-2xl border font-mono font-bold text-xs flex items-center gap-2 transition-all cursor-pointer ${
+                ttsConfig.handsFreeMode
+                  ? 'bg-emerald-500/25 text-emerald-200 border-emerald-400/50 shadow-[0_0_20px_rgba(16,185,129,0.35)]'
+                  : 'bg-white/5 hover:bg-white/10 text-zinc-400 border-white/10'
+              }`}
+              title="Toggle Hands-Free Operation Mode (Automatic audible announcements of security states & alerts)"
+            >
+              <span>🎧</span>
+              <span>{ttsConfig.handsFreeMode ? 'HANDS-FREE: ON' : 'ENABLE HANDS-FREE'}</span>
+            </button>
+
+            {/* Master Verbal Alert Toggle */}
             <button
               onClick={() => {
                 const next = toggleTTSEnabled();
@@ -991,8 +1067,50 @@ export const SettingsView: React.FC<SettingsViewProps> = ({
           </div>
         </div>
 
-        {/* Severity Event Filters & Controls */}
-        <div className="grid grid-cols-1 sm:grid-cols-3 gap-3.5">
+        {/* Live Speech Indicator Pill */}
+        {isSpeaking && currentSpokenPhrase && (
+          <div className="p-3 rounded-2xl bg-cyan-950/60 border border-cyan-500/40 text-cyan-200 flex items-center justify-between gap-3 text-xs font-mono animate-in fade-in duration-200">
+            <div className="flex items-center gap-2.5 truncate">
+              <span className="w-2.5 h-2.5 rounded-full bg-cyan-400 animate-ping shrink-0" />
+              <span className="font-bold text-cyan-300">Announcing:</span>
+              <span className="truncate text-zinc-200">"{currentSpokenPhrase}"</span>
+            </div>
+            <button
+              onClick={() => cancelAllAnnouncements()}
+              className="px-2 py-0.5 rounded-lg bg-red-500/20 hover:bg-red-500/30 text-red-300 border border-red-500/40 text-[10px] font-bold shrink-0 cursor-pointer"
+            >
+              Silence Speech
+            </button>
+          </div>
+        )}
+
+        {/* Severity & Event Category Filters */}
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3.5">
+          {/* Security Lockdown Alerts */}
+          <div
+            onClick={() => {
+              updateTTSConfig({ announceLockdown: !ttsConfig.announceLockdown });
+              playTone(550, 0.04);
+            }}
+            className={`p-4 rounded-2xl border transition-all cursor-pointer flex items-center justify-between font-mono ${
+              ttsConfig.announceLockdown
+                ? 'bg-red-500/15 border-red-500/40 text-red-200 shadow-md ring-1 ring-red-500/20'
+                : 'bg-black/30 border-white/5 text-zinc-500 hover:text-zinc-300'
+            }`}
+          >
+            <div>
+              <div className="text-xs font-bold flex items-center gap-1.5">
+                <Lock className="w-3.5 h-3.5 text-red-400" />
+                <span>Lockdown Alerts</span>
+              </div>
+              <div className="text-[10px] text-zinc-400 mt-0.5">Chamber 02 Quarantine &amp; Isolation</div>
+            </div>
+            <span className={`text-xs font-bold ${ttsConfig.announceLockdown ? 'text-red-400' : 'text-zinc-600'}`}>
+              {ttsConfig.announceLockdown ? 'ON' : 'OFF'}
+            </span>
+          </div>
+
+          {/* Critical System Events */}
           <div
             onClick={() => {
               updateTTSConfig({ announceCritical: !ttsConfig.announceCritical });
@@ -1000,7 +1118,7 @@ export const SettingsView: React.FC<SettingsViewProps> = ({
             }}
             className={`p-4 rounded-2xl border transition-all cursor-pointer flex items-center justify-between font-mono ${
               ttsConfig.announceCritical
-                ? 'bg-rose-500/15 border-rose-500/40 text-rose-200 shadow-md'
+                ? 'bg-rose-500/15 border-rose-500/40 text-rose-200 shadow-md ring-1 ring-rose-500/20'
                 : 'bg-black/30 border-white/5 text-zinc-500 hover:text-zinc-300'
             }`}
           >
@@ -1016,6 +1134,7 @@ export const SettingsView: React.FC<SettingsViewProps> = ({
             </span>
           </div>
 
+          {/* System Anomalies */}
           <div
             onClick={() => {
               updateTTSConfig({ announceAnomaly: !ttsConfig.announceAnomaly });
@@ -1023,7 +1142,7 @@ export const SettingsView: React.FC<SettingsViewProps> = ({
             }}
             className={`p-4 rounded-2xl border transition-all cursor-pointer flex items-center justify-between font-mono ${
               ttsConfig.announceAnomaly
-                ? 'bg-amber-500/15 border-amber-500/40 text-amber-200 shadow-md'
+                ? 'bg-amber-500/15 border-amber-500/40 text-amber-200 shadow-md ring-1 ring-amber-500/20'
                 : 'bg-black/30 border-white/5 text-zinc-500 hover:text-zinc-300'
             }`}
           >
@@ -1032,13 +1151,14 @@ export const SettingsView: React.FC<SettingsViewProps> = ({
                 <Zap className="w-3.5 h-3.5 text-amber-400" />
                 <span>System Anomalies</span>
               </div>
-              <div className="text-[10px] text-zinc-400 mt-0.5">Decoherence & Jitter spikes</div>
+              <div className="text-[10px] text-zinc-400 mt-0.5">Decoherence &amp; Jitter spikes</div>
             </div>
             <span className={`text-xs font-bold ${ttsConfig.announceAnomaly ? 'text-amber-400' : 'text-zinc-600'}`}>
               {ttsConfig.announceAnomaly ? 'ON' : 'OFF'}
             </span>
           </div>
 
+          {/* General Warnings */}
           <div
             onClick={() => {
               updateTTSConfig({ announceWarning: !ttsConfig.announceWarning });
@@ -1046,7 +1166,7 @@ export const SettingsView: React.FC<SettingsViewProps> = ({
             }}
             className={`p-4 rounded-2xl border transition-all cursor-pointer flex items-center justify-between font-mono ${
               ttsConfig.announceWarning
-                ? 'bg-cyan-500/15 border-cyan-500/40 text-cyan-200 shadow-md'
+                ? 'bg-cyan-500/15 border-cyan-500/40 text-cyan-200 shadow-md ring-1 ring-cyan-500/20'
                 : 'bg-black/30 border-white/5 text-zinc-500 hover:text-zinc-300'
             }`}
           >
@@ -1055,7 +1175,7 @@ export const SettingsView: React.FC<SettingsViewProps> = ({
                 <Bell className="w-3.5 h-3.5 text-cyan-400" />
                 <span>General Warnings</span>
               </div>
-              <div className="text-[10px] text-zinc-400 mt-0.5">Threshold flutters & notices</div>
+              <div className="text-[10px] text-zinc-400 mt-0.5">Threshold flutters &amp; notices</div>
             </div>
             <span className={`text-xs font-bold ${ttsConfig.announceWarning ? 'text-cyan-400' : 'text-zinc-600'}`}>
               {ttsConfig.announceWarning ? 'ON' : 'OFF'}
@@ -1063,15 +1183,16 @@ export const SettingsView: React.FC<SettingsViewProps> = ({
           </div>
         </div>
 
-        {/* Speed, Pitch & Test Triggers */}
-        <div className="p-4 rounded-2xl bg-black/40 border border-white/5 flex flex-col md:flex-row md:items-center justify-between gap-4 font-mono text-xs">
-          <div className="flex flex-wrap items-center gap-4">
-            <div className="flex items-center gap-2">
-              <span className="text-zinc-400">Language:</span>
+        {/* Speed, Pitch, Voice & Audio Prepend Controls */}
+        <div className="p-4 rounded-2xl bg-black/40 border border-white/5 space-y-4 font-mono text-xs">
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
+            {/* Language Selector */}
+            <div className="flex flex-col gap-1.5">
+              <span className="text-zinc-400 text-[11px]">Primary Language:</span>
               <select
                 value={ttsConfig.language}
                 onChange={(e) => updateTTSConfig({ language: e.target.value as any })}
-                className="bg-black/60 border border-white/10 rounded-lg px-2.5 py-1 text-xs text-zinc-200 focus:outline-none"
+                className="bg-black/70 border border-white/10 rounded-xl px-2.5 py-1.5 text-xs text-zinc-200 focus:outline-none focus:border-cyan-500/50"
               >
                 <option value="auto">Auto-Detect (TH/EN)</option>
                 <option value="th">Thai Only (ภาษาไทย)</option>
@@ -1079,8 +1200,29 @@ export const SettingsView: React.FC<SettingsViewProps> = ({
               </select>
             </div>
 
-            <div className="flex items-center gap-2">
-              <span className="text-zinc-400">Speech Rate:</span>
+            {/* Voice Engine Selector */}
+            <div className="flex flex-col gap-1.5">
+              <span className="text-zinc-400 text-[11px]">Voice Engine:</span>
+              <select
+                value={ttsConfig.preferredVoiceName || ''}
+                onChange={(e) => updateTTSConfig({ preferredVoiceName: e.target.value })}
+                className="bg-black/70 border border-white/10 rounded-xl px-2.5 py-1.5 text-xs text-zinc-200 focus:outline-none focus:border-cyan-500/50 truncate"
+              >
+                <option value="">Default Optimal Voice</option>
+                {availableVoices.map((v) => (
+                  <option key={`${v.name}-${v.lang}`} value={v.name}>
+                    {v.name} ({v.lang})
+                  </option>
+                ))}
+              </select>
+            </div>
+
+            {/* Speech Rate Slider */}
+            <div className="flex flex-col gap-1.5">
+              <div className="flex items-center justify-between text-[11px]">
+                <span className="text-zinc-400">Speech Rate:</span>
+                <span className="text-cyan-300 font-bold">{ttsConfig.rate}x</span>
+              </div>
               <input
                 type="range"
                 min="0.8"
@@ -1088,30 +1230,120 @@ export const SettingsView: React.FC<SettingsViewProps> = ({
                 step="0.05"
                 value={ttsConfig.rate}
                 onChange={(e) => updateTTSConfig({ rate: parseFloat(e.target.value) })}
-                className="w-20 accent-cyan-400 cursor-pointer"
+                className="w-full accent-cyan-400 cursor-pointer h-1.5 bg-zinc-800 rounded-lg"
               />
-              <span className="text-cyan-300 font-bold">{ttsConfig.rate}x</span>
+            </div>
+
+            {/* Volume & Acoustic Cue Prepend */}
+            <div className="flex flex-col gap-1.5">
+              <div className="flex items-center justify-between text-[11px]">
+                <span className="text-zinc-400">Speech Volume:</span>
+                <span className="text-cyan-300 font-bold">{Math.round(ttsConfig.volume * 100)}%</span>
+              </div>
+              <input
+                type="range"
+                min="0"
+                max="1"
+                step="0.05"
+                value={ttsConfig.volume}
+                onChange={(e) => updateTTSConfig({ volume: parseFloat(e.target.value) })}
+                className="w-full accent-cyan-400 cursor-pointer h-1.5 bg-zinc-800 rounded-lg"
+              />
             </div>
           </div>
 
-          <div className="flex items-center gap-2">
+          {/* Acoustic Cue Toggle */}
+          <div className="flex items-center justify-between pt-2 border-t border-white/5 text-[11px]">
+            <div className="flex items-center gap-2">
+              <input
+                type="checkbox"
+                id="check-audible-chime-prepend"
+                checked={ttsConfig.audibleChimePrepend}
+                onChange={(e) => updateTTSConfig({ audibleChimePrepend: e.target.checked })}
+                className="accent-cyan-400 cursor-pointer w-4 h-4 rounded"
+              />
+              <label htmlFor="check-audible-chime-prepend" className="text-zinc-300 cursor-pointer">
+                Sound acoustic cue prior to verbal announcements (hands-free auditory alert tone)
+              </label>
+            </div>
+            <span className="text-zinc-500 hidden sm:inline">Prevents missed words in high-noise environments</span>
+          </div>
+        </div>
+
+        {/* Hands-Free Operational Actions & Test Audio Triggers */}
+        <div className="p-4 rounded-2xl bg-[#070a16] border border-cyan-500/20 flex flex-wrap items-center justify-between gap-3 font-mono text-xs">
+          {/* Hands-free utility controls */}
+          <div className="flex items-center gap-2 flex-wrap">
             <button
               onClick={() => {
-                speakSystemAlert('แจ้งเตือนฉุกเฉิน: ตรวจพบความผันผวนของควอนตัมในห้องปฏิบัติการที่เจ็ด', 'critical', 'th');
-                playAuditChime();
+                repeatLastAnnouncement();
               }}
-              className="px-3 py-1.5 rounded-xl bg-cyan-500/15 hover:bg-cyan-500/25 border border-cyan-500/30 text-cyan-300 font-bold text-xs flex items-center gap-1.5 transition cursor-pointer"
+              className="px-3 py-1.5 rounded-xl bg-cyan-950/70 hover:bg-cyan-900 border border-cyan-700/50 text-cyan-200 font-bold text-xs flex items-center gap-1.5 transition cursor-pointer active:scale-95"
+              title="Repeat the last verbal announcement"
             >
-              <span>🔊 TEST THAI ALERT</span>
+              <span>🔁</span>
+              <span>Repeat Last Alert</span>
             </button>
+
             <button
               onClick={() => {
-                speakSystemAlert('Critical Alert: Chamber zero seven qubit decoherence detected. Quarantine engaged.', 'critical', 'en');
-                playAuditChime();
+                announceHandsFreeBriefing({
+                  blockHeight: 849202,
+                  sealCount: 14902,
+                  drift: '0.00%',
+                  quorum: '10/10 REAL_HSM',
+                  tempMK: 14.98,
+                });
               }}
-              className="px-3 py-1.5 rounded-xl bg-white/5 hover:bg-white/10 border border-white/10 text-zinc-300 font-bold text-xs flex items-center gap-1.5 transition cursor-pointer"
+              className="px-3 py-1.5 rounded-xl bg-purple-950/70 hover:bg-purple-900 border border-purple-700/50 text-purple-200 font-bold text-xs flex items-center gap-1.5 transition cursor-pointer active:scale-95"
+              title="Speak hands-free status briefing of current sovereign invariants"
             >
-              <span>🔊 TEST ENGLISH ALERT</span>
+              <span>📊</span>
+              <span>Hands-Free Briefing</span>
+            </button>
+
+            <button
+              onClick={() => cancelAllAnnouncements()}
+              className="px-3 py-1.5 rounded-xl bg-zinc-800 hover:bg-zinc-700 border border-zinc-600 text-zinc-300 font-bold text-xs flex items-center gap-1.5 transition cursor-pointer active:scale-95"
+              title="Cancel all active speech"
+            >
+              <span>⏹</span>
+              <span>Stop Speech</span>
+            </button>
+          </div>
+
+          {/* Test Buttons */}
+          <div className="flex items-center gap-2 flex-wrap">
+            <button
+              onClick={() => {
+                announceSecurityLockdown('engaged', {
+                  chamber: 'Chamber 02 Quarantine',
+                  reason: 'High-entropy adversarial payload intercepted at Gateway',
+                });
+              }}
+              className="px-3 py-1.5 rounded-xl bg-red-950/70 hover:bg-red-900 border border-red-700/60 text-red-200 font-bold text-xs flex items-center gap-1.5 transition cursor-pointer active:scale-95"
+              title="Simulate security lockdown announcement"
+            >
+              <span>🚨</span>
+              <span>TEST LOCKDOWN</span>
+            </button>
+
+            <button
+              onClick={() => {
+                speakSystemAlert('แจ้งเตือนฉุกเฉิน: ตรวจพบความผันผวนของควอนตัมในห้องปฏิบัติการที่เจ็ด ดำเนินการกักกันทันที', 'critical', 'th');
+              }}
+              className="px-3 py-1.5 rounded-xl bg-cyan-500/15 hover:bg-cyan-500/25 border border-cyan-500/30 text-cyan-300 font-bold text-xs flex items-center gap-1.5 transition cursor-pointer active:scale-95"
+            >
+              <span>🔊 Thai Alert</span>
+            </button>
+
+            <button
+              onClick={() => {
+                speakSystemAlert('Critical Alert: Chamber zero seven qubit decoherence detected. Quarantine isolation engaged.', 'critical', 'en');
+              }}
+              className="px-3 py-1.5 rounded-xl bg-white/5 hover:bg-white/10 border border-white/10 text-zinc-300 font-bold text-xs flex items-center gap-1.5 transition cursor-pointer active:scale-95"
+            >
+              <span>🔊 English Alert</span>
             </button>
           </div>
         </div>

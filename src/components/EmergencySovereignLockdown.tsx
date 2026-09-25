@@ -1,7 +1,8 @@
 import React, { useState } from 'react';
-import { ShieldAlert, Lock, CheckCircle2, ShieldCheck } from 'lucide-react';
+import { ShieldAlert, Lock, CheckCircle2, ShieldCheck, Volume2 } from 'lucide-react';
 import { triggerVibration } from '../utils/vibration';
 import { playTone } from './AudioSynthesizer';
+import { announceSecurityLockdown } from '../utils/textToSpeechService';
 
 interface EmergencySovereignLockdownProps {
   onLockdownChange?: (isLocked: boolean) => void;
@@ -25,6 +26,16 @@ export const EmergencySovereignLockdown: React.FC<EmergencySovereignLockdownProp
       }
       playTone(nextState ? 440 : 880, 0.25, 'triangle');
       triggerVibration([80, 50, 80]);
+
+      // Announce lockdown status change verbally for hands-free operations
+      try {
+        announceSecurityLockdown(nextState ? 'engaged' : 'released', {
+          chamber: 'Chamber 02 Quarantine',
+          reason: nextState ? 'Operator initiated Sovereign Isolation Protocol' : 'Normal operations restored',
+        });
+      } catch (err) {
+        console.warn('Verbal alert failed:', err);
+      }
     }, 1200);
   };
 
