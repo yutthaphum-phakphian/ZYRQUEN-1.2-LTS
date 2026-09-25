@@ -5,21 +5,22 @@ import { VitePWA } from 'vite-plugin-pwa';
 import path from 'path';
 
 // https://vitejs.dev/config/
-export default defineConfig(({ mode }) => {
+export default defineConfig(() => {
   return {
-    // 1. ตั้งค่า Base Path สำหรับ GitHub Pages & Production (ใช้ './' เพื่อให้โหลด Relative Path ได้ทุก Subpath)
-    base: process.env.GITHUB_PAGES === 'true' || process.env.GITHUB_ACTIONS === 'true' || mode === 'production' ? './' : '/',
+    // 1. Root Base Path for standard AI Studio Cloud Run and Production hosting
+    base: '/',
 
-    // 2. ปลั๊กอินตามที่ระบุใน package.json (React + Tailwind v4 + PWA)
+    // 2. Plugins
     plugins: [
       react(),
       tailwindcss(),
       VitePWA({
         registerType: 'autoUpdate',
-        includeAssets: ['favicon.ico', 'apple-touch-icon.png', 'masked-icon.svg'],
+        includeAssets: ['favicon.ico', 'apple-touch-icon.png', 'icon.svg'],
         workbox: {
-          maximumFileSizeToCacheInBytes: 15 * 1024 * 1024,
-          globPatterns: ['**/*.{js,css,html,ico,png,svg,webmanifest,json}'],
+          maximumFileSizeToCacheInBytes: 6 * 1024 * 1024,
+          globPatterns: ['**/*.{js,css,html,ico,png,svg,json}'],
+          globIgnores: ['**/*.zip', '**/*.pdf', '**/assets/three-*.js'],
         },
         manifest: {
           name: 'ZYRQUEN Ω∞ Control Center',
@@ -32,24 +33,26 @@ export default defineConfig(({ mode }) => {
             {
               src: 'pwa-192x192.png',
               sizes: '192x192',
-              type: 'image/png'
+              type: 'image/png',
             },
             {
               src: 'pwa-512x512.png',
               sizes: '512x512',
-              type: 'image/png'
-            }
-          ]
-        }
-      })
+              type: 'image/png',
+            },
+          ],
+        },
+      }),
     ],
 
-    // 3. ตั้งค่า Path Alias (@/ -> src/) และ Deduplication ของ React
+    // 3. Path Alias & React Single-Instance Deduplication
     resolve: {
       alias: {
         '@': path.resolve(__dirname, './src'),
+        'react': path.resolve(__dirname, './node_modules/react'),
+        'react-dom': path.resolve(__dirname, './node_modules/react-dom'),
       },
-      dedupe: ['react', 'react-dom', 'react-router', 'react-router-dom'],
+      dedupe: ['react', 'react-dom', 'react-router', 'react-router-dom', 'motion', 'motion/react'],
     },
 
     optimizeDeps: {
@@ -57,32 +60,47 @@ export default defineConfig(({ mode }) => {
         'react',
         'react-dom',
         'react-dom/client',
-        'react-router',
-        'react-router-dom',
         'lucide-react',
         'clsx',
         'tailwind-merge',
+        'motion',
+        'motion/react',
       ],
     },
 
-    // 4. การจัดการ Build Output
+    // 4. Build Output & Clean Chunk Splitting
     build: {
       outDir: 'dist',
       emptyOutDir: true,
-      chunkSizeWarningLimit: 10000,
-      sourcemap: mode === 'development',
+      chunkSizeWarningLimit: 3000,
+      sourcemap: false,
       rollupOptions: {
         output: {
-          manualChunks: {
-            vendor: ['react', 'react-dom', 'react-router-dom'],
-            three: ['three'],
-            charts: ['recharts', 'd3'],
+          manualChunks(id) {
+            if (id.includes('node_modules')) {
+              if (id.includes('three')) {
+                return 'vendor-three';
+              }
+              if (id.includes('recharts') || id.includes('d3')) {
+                return 'vendor-charts';
+              }
+              if (id.includes('jspdf')) {
+                return 'vendor-pdf';
+              }
+              if (id.includes('lucide-react')) {
+                return 'vendor-icons';
+              }
+              if (id.includes('motion')) {
+                return 'vendor-motion';
+              }
+              return 'vendor-core';
+            }
           },
         },
       },
     },
 
-    // 5. พอร์ตสำหรับ Dev Server
+    // 5. Dev Server
     server: {
       port: 5173,
       host: true,

@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { AlertOctagon, Flame, ShieldAlert, RefreshCw, Radio, Zap } from 'lucide-react';
-import { useSystemStateStore } from '../stores/systemStateStore';
+import { useSystemStateStore } from '../store/systemStateStore';
 import { useWebAudioTelemetry } from '../hooks/useWebAudioTelemetry';
 import { maskPII, generateZKProof } from '../utils/ZeroKnowledgePrivacyEngine';
 

@@ -1,6 +1,6 @@
 import { useMemo } from 'react';
 import { useNavigate } from '../lib/router';
-import { useSystemStateStore } from '../stores/systemStateStore';
+import { useSystemStateStore } from '../store/systemStateStore';
 
 export type SearchCategory = 'navigation' | 'system' | 'legal';
 

@@ -6,7 +6,7 @@
  */
 
 import crypto from 'crypto';
-import { Request, Response, NextFunction } from 'express';
+import type { Request, Response, NextFunction } from 'express';
 
 export const SENTINEL_THRESHOLD = 0.85;
 export const QUARANTINE_CHAMBER = "Chamber 02 Quarantine";

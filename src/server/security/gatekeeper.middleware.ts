@@ -4,7 +4,7 @@
  * Thai ETA B.E. 2544 Sec 9, 26, 28 + IAL/AAL + Dilithium-5/SPHINCS+ + 10/10 HSM Quorum
  */
 
-import { Response, NextFunction } from 'express';
+import type { Response, NextFunction } from 'express';
 import { AuthenticatedRequest } from './sentinel.middleware';
 
 export interface GateRule {

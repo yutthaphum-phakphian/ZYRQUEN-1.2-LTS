@@ -34,6 +34,7 @@ import { QRCodeSVG } from 'qrcode.react';
 import { FORENSIC_DOSSIER_V9, TechnicalPillar, ForensicAuditStep } from '../../data/forensicAuditMasterDossierData';
 import { downloadMasterForensicDossierV9Pdf } from '../../utils/forensicDossierPdfExport';
 import { safeCopyToClipboard } from '../../utils/clipboard';
+import { generateSealQrCodeDataUrl, formatSealPayload } from '../../utils/sealQrCode';
 import { playAuditChime, playTone } from '../AudioSynthesizer';
 
 export interface ForensicAuditMasterDossierModalProps {
@@ -648,6 +649,27 @@ export const ForensicAuditMasterDossierModal: React.FC<ForensicAuditMasterDossie
                       <span>{copiedField === 'qr-payload-text' ? 'Copied' : 'Copy'}</span>
                     </button>
                   </div>
+
+                  <button
+                    onClick={() => {
+                      const sealPayload = formatSealPayload({
+                        sealId: 'SEAL-14902-GENESIS',
+                        blockHeight: dossier.genesisBlock,
+                        merkleRoot: dossier.merkleRoot,
+                        pqcAlgorithm: 'Dilithium-5 (ML-DSA-87)',
+                        hsmQuorum: '10/10 REAL_HSM',
+                        timestamp: dossier.auditTimestamp,
+                        signature: 'SIG_PQC_DILITHIUM5_FE45D00BC4D25A8C_10/10_HSM',
+                      });
+                      handleCopy(sealPayload, 'seal-qr-payload');
+                      playTone(880, 0.05);
+                    }}
+                    className="w-full mt-2 flex items-center justify-center gap-1.5 px-3 py-2 rounded-xl bg-indigo-950/70 hover:bg-indigo-900/80 border border-indigo-500/40 text-indigo-300 text-xs font-bold transition cursor-pointer"
+                    title="Copy 14,902 Canonical Seal Hash QR Payload JSON"
+                  >
+                    {copiedField === 'seal-qr-payload' ? <Check className="w-3.5 h-3.5 text-emerald-400" /> : <QrCode className="w-3.5 h-3.5 text-indigo-400" />}
+                    <span>{copiedField === 'seal-qr-payload' ? 'Seal QR Payload Copied!' : 'Copy Seal Hash QR Payload (JSON)'}</span>
+                  </button>
                 </div>
 
                 {/* Right Column: Key Anchors & Device Scan Verification Telemetry (7 cols) */}

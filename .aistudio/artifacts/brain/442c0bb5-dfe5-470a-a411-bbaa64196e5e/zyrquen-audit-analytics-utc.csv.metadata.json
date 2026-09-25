@@ -1,0 +1,5 @@
+{
+  "summary":  "Standard RFC 4180 CSV audit dataset containing 30-day UTC daily grouped invariant verification, zero baseline drift (Δ0.00%), sub-36ms replay latency, 10/10 REAL_HSM quorum consensus, and Dilithium-5/SPHINCS+ quantum attestation for Thai Court Evidence submission (ETDA B.E. 2544 & PDPA B.E. 2562).",
+  "updatedAt":  "2026-09-25T07:47:03.958104642Z",
+  "userFacing":  true
+}

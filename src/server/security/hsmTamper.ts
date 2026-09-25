@@ -4,7 +4,7 @@
  * - Phoenix Recovery -> SPHINCS+ SLH-DSA-192 FIPS 205 Stateless Hash auto switch within 3.20ms zero downtime
  */
 
-import { Response, NextFunction } from 'express';
+import type { Response, NextFunction } from 'express';
 import { AuthenticatedRequest } from './sentinel.middleware';
 
 export interface HsmConfig {

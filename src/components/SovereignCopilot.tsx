@@ -20,7 +20,7 @@ import {
   Activity,
   Layers
 } from 'lucide-react';
-import { useSystemStateStore } from '../stores/systemStateStore';
+import { useSystemStateStore } from '../store/systemStateStore';
 
 export interface CopilotMessage {
   id: string;

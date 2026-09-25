@@ -267,4 +267,17 @@ describe('Audit Analytics & CSV Export', () => {
     assert.equal(preview.delimiter, ';');
     assert.ok(preview.rawPreviewText.includes('"Event_ID";"Event_Type";"Severity_Level"'));
   });
+
+  it('validates public zyrquen-audit-analytics-utc.csv contains 30-day invariant records', async () => {
+    const fs = await import('node:fs');
+    const path = await import('node:path');
+    const csvPath = path.resolve(process.cwd(), 'public/zyrquen-audit-analytics-utc.csv');
+    assert.ok(fs.existsSync(csvPath), 'zyrquen-audit-analytics-utc.csv must exist in public directory');
+    const content = fs.readFileSync(csvPath, 'utf-8');
+    const lines = content.trim().split('\n');
+    assert.equal(lines.length, 31, 'Header + 30 daily records = 31 lines');
+    assert.ok(content.includes('0x909ab814479844d8a14816bed34cdbb07528e18501da86fc4691763a43fa4c68'));
+    assert.ok(content.includes('10/10 REAL_HSM'));
+    assert.ok(content.includes('CRYSTALS-Dilithium-5 (FIPS 204)'));
+  });
 });
