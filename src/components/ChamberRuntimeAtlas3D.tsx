@@ -887,7 +887,7 @@ export const ChamberRuntimeAtlas3D: React.FC<ChamberRuntimeAtlas3DProps> = ({
   return (
     <div
       ref={containerRef}
-      className={`relative w-full rounded-[28px] bg-[#0a0f1e] border border-[#06B6D4]/30 overflow-hidden shadow-[0_0_50px_-10px_rgba(6,182,212,0.25)] flex flex-col transition-all duration-300 ${
+      className={`relative w-full rounded-[28px] bg-[#0a0f1e] border-[#06B6D4]/30 overflow-hidden shadow-[0_0_50px_-10px_rgba(6,182,212,0.25)] flex flex-col transition-all duration-300 ${
         expanded ? 'h-[85vh] sm:h-[88vh]' : 'h-[540px] sm:h-[620px]'
       } ${className}`}
     >
@@ -897,14 +897,14 @@ export const ChamberRuntimeAtlas3D: React.FC<ChamberRuntimeAtlas3DProps> = ({
       {/* Top HUD Header: Sovereign Deck & Quantum Telemetry Bar */}
       <div className="relative z-10 p-4 sm:p-5 flex flex-col sm:flex-row sm:items-center justify-between gap-3 bg-[#070a12]/90 border-b border-[#06B6D4]/20 pointer-events-none">
         <div className="flex items-center gap-3 pointer-events-auto">
-          <div className="w-10 h-10 rounded-2xl bg-[#070a12] border border-[#D4AF37]/50 flex items-center justify-center shadow-[0_0_20px_rgba(212,175,55,0.35)] shrink-0">
+          <div className="w-10 h-10 rounded-2xl bg-[#070a12] border-[#D4AF37]/50 flex items-center justify-center shadow-[0_0_20px_rgba(212,175,55,0.35)] shrink-0">
             <Orbit className="w-5 h-5 text-[#D4AF37] animate-spin" style={{ animationDuration: '20s' }} />
           </div>
           <div>
             <div className="flex flex-wrap items-center gap-2">
               <h2 className="text-sm sm:text-base font-mono font-bold text-white tracking-wider uppercase flex items-center gap-2">
                 Chamber Runtime Atlas 3D
-                <span className="text-[10px] font-mono font-semibold text-[#D4AF37] bg-[#070a12] px-2 py-0.5 rounded-full border border-[#D4AF37]/50">
+                <span className="text-[10px] font-mono font-semibold text-[#D4AF37] bg-[#070a12] px-2 py-0.5 rounded-full border-[#D4AF37]/50">
                   SSoT Block #849202
                 </span>
               </h2>
@@ -921,15 +921,15 @@ export const ChamberRuntimeAtlas3D: React.FC<ChamberRuntimeAtlas3DProps> = ({
 
         {/* Quick Diagnostics Badges */}
         <div className="flex items-center gap-2 pointer-events-auto flex-wrap sm:flex-nowrap">
-          <div className="px-2.5 py-1 rounded-xl bg-black/60 border border-cyan-500/30 text-[10px] font-mono text-cyan-300 flex items-center gap-1.5 shadow-inner">
+          <div className="px-2.5 py-1 rounded-xl bg-black/60 border-cyan-500/30 text-[10px] font-mono text-cyan-300 flex items-center gap-1.5 shadow-inner">
             <Activity className="w-3 h-3 text-cyan-400" />
             <span>CRYO: 14.98 mK</span>
           </div>
-          <div className="px-2.5 py-1 rounded-xl bg-black/60 border border-emerald-500/30 text-[10px] font-mono text-emerald-300 flex items-center gap-1.5 shadow-inner">
+          <div className="px-2.5 py-1 rounded-xl bg-black/60 border-emerald-500/30 text-[10px] font-mono text-emerald-300 flex items-center gap-1.5 shadow-inner">
             <ShieldCheck className="w-3 h-3 text-emerald-400" />
             <span>PQC: ML-DSA-87</span>
           </div>
-          <div className="px-2.5 py-1 rounded-xl bg-black/60 border border-amber-500/30 text-[10px] font-mono text-amber-300 flex items-center gap-1.5 shadow-inner">
+          <div className="px-2.5 py-1 rounded-xl bg-black/60 border-amber-500/30 text-[10px] font-mono text-amber-300 flex items-center gap-1.5 shadow-inner">
             <Lock className="w-3 h-3 text-amber-400" />
             <span>SEALS: 14,902</span>
           </div>
@@ -945,7 +945,7 @@ export const ChamberRuntimeAtlas3D: React.FC<ChamberRuntimeAtlas3DProps> = ({
             playTone(640, 0.03);
           }}
           title="Adjust Warp Rotation Speed"
-          className="p-2 rounded-xl bg-black/70 border border-white/10 hover:border-cyan-500/50 text-zinc-300 hover:text-cyan-300 backdrop-blur-md shadow-lg transition-all flex items-center gap-1 text-xs font-mono"
+          className="p-2 rounded-xl bg-black/70 border-white/10 hover:border-cyan-500/50 text-zinc-300 hover:text-cyan-300 backdrop-blur-md shadow-lg transition-all flex items-center gap-1 text-xs font-mono"
         >
           <Gauge className="w-4 h-4 text-cyan-400" />
           <span>{warpSpeed}x</span>
@@ -1014,7 +1014,7 @@ export const ChamberRuntimeAtlas3D: React.FC<ChamberRuntimeAtlas3DProps> = ({
         <button
           onClick={resetCamera}
           title="Reset Camera Viewport"
-          className="p-2 rounded-xl bg-black/70 border border-white/10 hover:border-amber-500/50 text-zinc-300 hover:text-amber-300 backdrop-blur-md shadow-lg transition-all flex items-center justify-center"
+          className="p-2 rounded-xl bg-black/70 border-white/10 hover:border-amber-500/50 text-zinc-300 hover:text-amber-300 backdrop-blur-md shadow-lg transition-all flex items-center justify-center"
         >
           <RotateCcw className="w-4 h-4" />
         </button>
@@ -1026,7 +1026,7 @@ export const ChamberRuntimeAtlas3D: React.FC<ChamberRuntimeAtlas3DProps> = ({
               playTone(660, 0.04);
             }}
             title={expanded ? 'Minimize Viewport' : 'Expand Viewport'}
-            className="p-2 rounded-xl bg-black/70 border border-white/10 hover:border-cyan-500/50 text-zinc-300 hover:text-cyan-300 backdrop-blur-md shadow-lg transition-all flex items-center justify-center"
+            className="p-2 rounded-xl bg-black/70 border-white/10 hover:border-cyan-500/50 text-zinc-300 hover:text-cyan-300 backdrop-blur-md shadow-lg transition-all flex items-center justify-center"
           >
             {expanded ? <Minimize2 className="w-4 h-4 text-cyan-400" /> : <Maximize2 className="w-4 h-4" />}
           </button>
@@ -1035,7 +1035,7 @@ export const ChamberRuntimeAtlas3D: React.FC<ChamberRuntimeAtlas3DProps> = ({
 
       {/* Hovered Node Tooltip HUD */}
       {hoveredNode && !selectedNode && (
-        <div className="absolute top-20 left-6 z-20 p-3 rounded-2xl bg-black/80 border border-cyan-500/40 backdrop-blur-xl shadow-2xl pointer-events-none max-w-xs animate-in fade-in zoom-in-95 duration-150">
+        <div className="absolute top-20 left-6 z-20 p-3 rounded-2xl bg-black/80 border-cyan-500/40 backdrop-blur-xl shadow-2xl pointer-events-none max-w-xs animate-in fade-in zoom-in-95 duration-150">
           <div className="flex items-center gap-2 text-xs font-mono font-bold text-white">
             <span
               className="w-2.5 h-2.5 rounded-full"
@@ -1052,7 +1052,7 @@ export const ChamberRuntimeAtlas3D: React.FC<ChamberRuntimeAtlas3DProps> = ({
 
       {/* Selected Node Inspector Drawer / Card */}
       {selectedNode && (
-        <div className="absolute bottom-24 left-4 sm:left-6 z-20 p-4 sm:p-5 rounded-2xl bg-[#090D1C]/90 border border-cyan-500/40 backdrop-blur-2xl shadow-[0_0_40px_rgba(0,0,0,0.8)] max-w-sm sm:max-w-md w-[calc(100%-2rem)] sm:w-auto animate-in slide-in-from-bottom-4 duration-200">
+        <div className="absolute bottom-24 left-4 sm:left-6 z-20 p-4 sm:p-5 rounded-2xl bg-[#090D1C]/90 border-cyan-500/40 backdrop-blur-2xl shadow-[0_0_40px_rgba(0,0,0,0.8)] max-w-sm sm:max-w-md w-[calc(100%-2rem)] sm:w-auto animate-in slide-in-from-bottom-4 duration-200">
           <div className="flex items-start justify-between gap-3">
             <div className="flex items-center gap-2.5">
               <div
@@ -1080,18 +1080,18 @@ export const ChamberRuntimeAtlas3D: React.FC<ChamberRuntimeAtlas3DProps> = ({
           {/* Metrics Grid */}
           <div className="grid grid-cols-2 gap-2 my-3">
             {selectedNode.metrics.map((m, idx) => (
-              <div key={idx} className="p-2 rounded-xl bg-black/50 border border-white/5 font-mono">
+              <div key={idx} className="p-2 rounded-xl bg-black/50 border-white/5 font-mono">
                 <div className="text-[9px] text-zinc-500 uppercase">{m.label}</div>
                 <div className="text-xs font-bold text-cyan-300 mt-0.5 truncate">{m.value}</div>
               </div>
             ))}
-            <div className="p-2 rounded-xl bg-black/50 border border-white/5 font-mono">
+            <div className="p-2 rounded-xl bg-black/50 border-white/5 font-mono">
               <div className="text-[9px] text-zinc-500 uppercase">Clearance</div>
               <div className="text-[10px] font-bold text-amber-300 mt-0.5 truncate">
                 {selectedNode.clearance}
               </div>
             </div>
-            <div className="p-2 rounded-xl bg-black/50 border border-white/5 font-mono">
+            <div className="p-2 rounded-xl bg-black/50 border-white/5 font-mono">
               <div className="text-[9px] text-zinc-500 uppercase">Status</div>
               <div className="text-[10px] font-bold text-emerald-400 mt-0.5 flex items-center gap-1">
                 <CheckCircle2 className="w-3 h-3" />
@@ -1100,7 +1100,7 @@ export const ChamberRuntimeAtlas3D: React.FC<ChamberRuntimeAtlas3DProps> = ({
             </div>
           </div>
 
-          <div className="text-[9px] font-mono text-zinc-400 bg-black/60 p-2 rounded-xl border border-white/5 truncate">
+          <div className="text-[9px] font-mono text-zinc-400 bg-black/60 p-2 rounded-xl border-white/5 truncate">
             <span className="text-zinc-500">SEALED MASTER HASH: </span>
             <span className="text-amber-300">{selectedNode.hash}</span>
           </div>
@@ -1138,7 +1138,7 @@ export const ChamberRuntimeAtlas3D: React.FC<ChamberRuntimeAtlas3DProps> = ({
         </div>
 
         {/* Right: QuantumWaveSim Entropy Real-Time Sparkline */}
-        <div className="flex items-center gap-3 shrink-0 bg-black/60 px-3.5 py-1.5 rounded-2xl border border-cyan-500/20 shadow-inner">
+        <div className="flex items-center gap-3 shrink-0 bg-black/60 px-3.5 py-1.5 rounded-2xl border-cyan-500/20 shadow-inner">
           <div className="flex flex-col">
             <span className="text-[9px] font-mono text-zinc-400">QUANTUM WAVE ENTROPY</span>
             <span className="text-xs font-mono font-bold text-fuchsia-400">

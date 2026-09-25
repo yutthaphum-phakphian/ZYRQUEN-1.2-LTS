@@ -127,7 +127,7 @@ export const PhysicalAttestationGate: React.FC<PhysicalAttestationGateProps> = (
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 border-b border-white/10 pb-4">
         <div className="space-y-1">
           <div className="flex items-center gap-2">
-            <span className="px-2.5 py-0.5 rounded-full bg-amber-500/20 text-amber-300 text-[10px] font-bold border border-amber-500/40 flex items-center gap-1.5">
+            <span className="px-2.5 py-0.5 rounded-full bg-amber-500/20 text-amber-300 text-[10px] font-bold border-amber-500/40 flex items-center gap-1.5">
               <ShieldCheck className="w-3.5 h-3.5 text-amber-400" />
               PHYSICAL ATTESTATION GATE &bull; SLOTS #06–#08
             </span>
@@ -145,7 +145,7 @@ export const PhysicalAttestationGate: React.FC<PhysicalAttestationGateProps> = (
         </div>
 
         <div className="flex items-center gap-2">
-          <div className="p-3 rounded-xl bg-black/60 border border-amber-500/30 text-right">
+          <div className="p-3 rounded-xl bg-black/60 border-amber-500/30 text-right">
             <span className="text-[10px] text-zinc-500 block">SLOTS #06–#08 VERIFIED</span>
             <strong className="text-sm font-bold text-amber-300">
               {verifiedCount} / {claimedCount} Real HSMs
@@ -175,8 +175,8 @@ export const PhysicalAttestationGate: React.FC<PhysicalAttestationGateProps> = (
                 }}
                 className={`px-3 py-1.5 rounded-xl font-bold flex items-center gap-1.5 text-xs transition-all cursor-pointer ${
                   activeTab === tab.id
-                    ? 'bg-amber-500/20 text-amber-300 border border-amber-500/40 shadow-sm'
-                    : 'bg-white/5 text-zinc-400 border border-white/5 hover:text-zinc-200'
+                    ? 'bg-amber-500/20 text-amber-300 border-amber-500/40 shadow-sm'
+                    : 'bg-white/5 text-zinc-400 border-white/5 hover:text-zinc-200'
                 }`}
               >
                 <Icon className="w-3.5 h-3.5" />
@@ -187,10 +187,10 @@ export const PhysicalAttestationGate: React.FC<PhysicalAttestationGateProps> = (
         </div>
 
         <div className="flex items-center gap-2 text-[10px] text-amber-400/90">
-          <span className="px-2 py-0.5 rounded bg-amber-950/40 border border-amber-500/30">
+          <span className="px-2 py-0.5 rounded bg-amber-950/40 border-amber-500/30">
             CLAIMED ≠ VERIFIED
           </span>
-          <span className="px-2 py-0.5 rounded bg-rose-950/40 border border-rose-500/30">
+          <span className="px-2 py-0.5 rounded bg-rose-950/40 border-rose-500/30">
             BUILD ≠ RUNTIME
           </span>
         </div>
@@ -268,7 +268,7 @@ export const PhysicalAttestationGate: React.FC<PhysicalAttestationGateProps> = (
                     </div>
                   </div>
 
-                  <div className="p-2 rounded-xl bg-black/40 border border-white/5 flex items-center justify-between text-[10px]">
+                  <div className="p-2 rounded-xl bg-black/40 border-white/5 flex items-center justify-between text-[10px]">
                     <span className="text-zinc-400 truncate max-w-[130px]">{slot.expectedDevice}</span>
                     <span className="text-cyan-300 font-mono text-[9px]">{slot.pqcAlgorithm}</span>
                   </div>
@@ -278,7 +278,7 @@ export const PhysicalAttestationGate: React.FC<PhysicalAttestationGateProps> = (
           </div>
 
           {/* Selected Slot Detailed Deep Dive */}
-          <div className="p-5 rounded-2xl bg-black/80 border border-amber-500/30 space-y-4">
+          <div className="p-5 rounded-2xl bg-black/80 border-amber-500/30 space-y-4">
             <div className="flex flex-wrap items-center justify-between gap-2 border-b border-white/10 pb-3">
               <div className="flex items-center gap-2">
                 <Cpu className="w-4 h-4 text-amber-400" />
@@ -291,7 +291,7 @@ export const PhysicalAttestationGate: React.FC<PhysicalAttestationGateProps> = (
                 <button
                   onClick={() => handleSimulateVerificationCheck(currentSlot)}
                   disabled={isEvaluating !== null}
-                  className="px-3 py-1 rounded-xl bg-amber-500/20 hover:bg-amber-500/30 border border-amber-500/40 text-amber-200 font-bold text-xs flex items-center gap-1.5 transition-all cursor-pointer"
+                  className="px-3 py-1 rounded-xl bg-amber-500/20 hover:bg-amber-500/30 border-amber-500/40 text-amber-200 font-bold text-xs flex items-center gap-1.5 transition-all cursor-pointer"
                 >
                   <RefreshCw className={`w-3.5 h-3.5 ${isEvaluating === currentState.slotId ? 'animate-spin' : ''}`} />
                   <span>{isEvaluating === currentState.slotId ? 'AUDITING...' : 'RUN PROOF AUDIT'}</span>
@@ -300,7 +300,7 @@ export const PhysicalAttestationGate: React.FC<PhysicalAttestationGateProps> = (
                 {currentSlot.classification === 'REAL_HSM_SIGNED' && onSelectEvidence && (
                   <button
                     onClick={() => onSelectEvidence(currentSlot)}
-                    className="px-3 py-1 rounded-xl bg-emerald-500/20 hover:bg-emerald-500/30 border border-emerald-500/40 text-emerald-300 font-bold text-xs flex items-center gap-1.5 transition-all cursor-pointer"
+                    className="px-3 py-1 rounded-xl bg-emerald-500/20 hover:bg-emerald-500/30 border-emerald-500/40 text-emerald-300 font-bold text-xs flex items-center gap-1.5 transition-all cursor-pointer"
                   >
                     <ShieldCheck className="w-3.5 h-3.5" />
                     <span>VIEW PROOF MODAL</span>
@@ -311,13 +311,13 @@ export const PhysicalAttestationGate: React.FC<PhysicalAttestationGateProps> = (
 
             {/* 5-Step Status Breakdown */}
             <div className="grid grid-cols-2 sm:grid-cols-5 gap-2.5">
-              <div className="p-3 rounded-xl bg-white/[0.02] border border-white/10 space-y-1">
+              <div className="p-3 rounded-xl bg-white/[0.02] border-white/10 space-y-1">
                 <span className="text-[10px] text-zinc-500 block">STEP 1: CLAIMED</span>
                 <strong className="text-emerald-400 text-xs block">SLOT REGISTERED</strong>
                 <span className="text-[9px] text-zinc-400">Statutory role defined</span>
               </div>
 
-              <div className="p-3 rounded-xl bg-white/[0.02] border border-white/10 space-y-1">
+              <div className="p-3 rounded-xl bg-white/[0.02] border-white/10 space-y-1">
                 <span className="text-[10px] text-zinc-500 block">STEP 2: EVIDENCE TOKEN</span>
                 <strong className={currentState.evidencePresent ? 'text-emerald-400 text-xs block' : 'text-amber-400 text-xs block'}>
                   {currentState.evidencePresent ? 'PAYLOAD DETECTED' : 'AWAITING PAYLOAD'}
@@ -325,7 +325,7 @@ export const PhysicalAttestationGate: React.FC<PhysicalAttestationGateProps> = (
                 <span className="text-[9px] text-zinc-400">{currentSlot.evidenceId || 'No Evidence ID'}</span>
               </div>
 
-              <div className="p-3 rounded-xl bg-white/[0.02] border border-white/10 space-y-1">
+              <div className="p-3 rounded-xl bg-white/[0.02] border-white/10 space-y-1">
                 <span className="text-[10px] text-zinc-500 block">STEP 3: CRYPTO VERIFIED</span>
                 <strong className={currentState.cryptoVerified ? 'text-emerald-400 text-xs block' : 'text-zinc-500 text-xs block'}>
                   {currentState.cryptoVerified ? 'PQC SIGNATURE VALID' : 'UNVERIFIED'}
@@ -333,7 +333,7 @@ export const PhysicalAttestationGate: React.FC<PhysicalAttestationGateProps> = (
                 <span className="text-[9px] text-zinc-400">{currentState.pqcAlgo}</span>
               </div>
 
-              <div className="p-3 rounded-xl bg-white/[0.02] border border-white/10 space-y-1">
+              <div className="p-3 rounded-xl bg-white/[0.02] border-white/10 space-y-1">
                 <span className="text-[10px] text-zinc-500 block">STEP 4: PHYSICAL HSM</span>
                 <strong className={currentState.physicalAttested ? 'text-emerald-400 text-xs block' : 'text-zinc-500 text-xs block'}>
                   {currentState.physicalAttested ? 'CERTIFIED ENCLAVE' : 'PENDING CEREMONY'}
@@ -341,7 +341,7 @@ export const PhysicalAttestationGate: React.FC<PhysicalAttestationGateProps> = (
                 <span className="text-[9px] text-zinc-400">{currentState.device}</span>
               </div>
 
-              <div className="p-3 rounded-xl bg-white/[0.02] border border-white/10 space-y-1">
+              <div className="p-3 rounded-xl bg-white/[0.02] border-white/10 space-y-1">
                 <span className="text-[10px] text-zinc-500 block">STEP 5: QUORUM IMPACT</span>
                 <strong className={currentState.quorumWeight === 1 ? 'text-emerald-400 text-xs block' : 'text-amber-400 text-xs block'}>
                   {currentState.quorumWeight === 1 ? 'QUORUM WEIGHT: +1' : 'QUORUM WEIGHT: 0'}
@@ -352,7 +352,7 @@ export const PhysicalAttestationGate: React.FC<PhysicalAttestationGateProps> = (
 
             {/* Cryptographic Parameters Grid */}
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 text-[11px]">
-              <div className="p-3 rounded-xl bg-black/60 border border-white/10 space-y-1.5">
+              <div className="p-3 rounded-xl bg-black/60 border-white/10 space-y-1.5">
                 <div className="flex items-center gap-1.5 text-zinc-400 text-[10px]">
                   <Key className="w-3.5 h-3.5 text-cyan-400" />
                   <span>Expected Key Fingerprint:</span>
@@ -362,7 +362,7 @@ export const PhysicalAttestationGate: React.FC<PhysicalAttestationGateProps> = (
                 </div>
               </div>
 
-              <div className="p-3 rounded-xl bg-black/60 border border-white/10 space-y-1.5">
+              <div className="p-3 rounded-xl bg-black/60 border-white/10 space-y-1.5">
                 <div className="flex items-center gap-1.5 text-zinc-400 text-[10px]">
                   <Fingerprint className="w-3.5 h-3.5 text-amber-400" />
                   <span>Hardware Security Module (HSM):</span>
@@ -389,14 +389,14 @@ export const PhysicalAttestationGate: React.FC<PhysicalAttestationGateProps> = (
       {/* Main Tab 2: Pipeline Inspector */}
       {activeTab === 'PIPELINE_INSPECTOR' && (
         <div className="space-y-4">
-          <div className="p-4 rounded-2xl bg-black/80 border border-cyan-500/30 space-y-3">
+          <div className="p-4 rounded-2xl bg-black/80 border-cyan-500/30 space-y-3">
             <div className="flex items-center gap-2 text-cyan-300 font-bold text-xs">
               <Terminal className="w-4 h-4" />
               <span>Anti-Fraud Proof Pipeline Invariants (Deterministic Gate Chain)</span>
             </div>
 
             <div className="space-y-2 text-[11px] text-zinc-300">
-              <div className="p-3 rounded-xl bg-white/[0.02] border border-white/5 flex items-start gap-3">
+              <div className="p-3 rounded-xl bg-white/[0.02] border-white/5 flex items-start gap-3">
                 <span className="w-5 h-5 rounded-full bg-cyan-500/20 text-cyan-300 flex items-center justify-center font-bold text-[10px] shrink-0">1</span>
                 <div>
                   <strong className="text-white block text-xs">Hardware Enclave Identity Check</strong>
@@ -406,7 +406,7 @@ export const PhysicalAttestationGate: React.FC<PhysicalAttestationGateProps> = (
                 </div>
               </div>
 
-              <div className="p-3 rounded-xl bg-white/[0.02] border border-white/5 flex items-start gap-3">
+              <div className="p-3 rounded-xl bg-white/[0.02] border-white/5 flex items-start gap-3">
                 <span className="w-5 h-5 rounded-full bg-cyan-500/20 text-cyan-300 flex items-center justify-center font-bold text-[10px] shrink-0">2</span>
                 <div>
                   <strong className="text-white block text-xs">Post-Quantum Lattice Verification</strong>
@@ -416,7 +416,7 @@ export const PhysicalAttestationGate: React.FC<PhysicalAttestationGateProps> = (
                 </div>
               </div>
 
-              <div className="p-3 rounded-xl bg-white/[0.02] border border-white/5 flex items-start gap-3">
+              <div className="p-3 rounded-xl bg-white/[0.02] border-white/5 flex items-start gap-3">
                 <span className="w-5 h-5 rounded-full bg-cyan-500/20 text-cyan-300 flex items-center justify-center font-bold text-[10px] shrink-0">3</span>
                 <div>
                   <strong className="text-white block text-xs">Genesis Epoch &amp; Anti-Replay Guard</strong>
@@ -430,7 +430,7 @@ export const PhysicalAttestationGate: React.FC<PhysicalAttestationGateProps> = (
 
           {/* Audit Logs */}
           {auditLog.length > 0 && (
-            <div className="p-3.5 rounded-xl bg-black border border-white/10 space-y-1.5">
+            <div className="p-3.5 rounded-xl bg-black border-white/10 space-y-1.5">
               <span className="text-[10px] text-zinc-500 font-bold block">REAL-TIME ATTESTATION AUDIT LOG:</span>
               <div className="space-y-1 text-[10px] font-mono text-zinc-300">
                 {auditLog.map((log, idx) => (
@@ -444,14 +444,14 @@ export const PhysicalAttestationGate: React.FC<PhysicalAttestationGateProps> = (
 
       {/* Main Tab 3: Legal & Safe Harbor Truth Matrix */}
       {activeTab === 'TRUTH_MATRIX' && (
-        <div className="p-5 rounded-2xl bg-black/80 border border-amber-500/30 space-y-4">
+        <div className="p-5 rounded-2xl bg-black/80 border-amber-500/30 space-y-4">
           <div className="flex items-center gap-2 text-amber-300 font-bold text-xs">
             <FileCheck2 className="w-4 h-4" />
             <span>Thai Electronic Transactions Act B.E. 2544 (Sections 9, 26, 28) Safe Harbor Gate</span>
           </div>
 
           <div className="grid grid-cols-1 sm:grid-cols-3 gap-3 text-[11px]">
-            <div className="p-3.5 rounded-xl bg-white/[0.02] border border-white/10 space-y-1.5">
+            <div className="p-3.5 rounded-xl bg-white/[0.02] border-white/10 space-y-1.5">
               <strong className="text-amber-300 block text-xs">Section 9 (มาตรา ๙)</strong>
               <p className="text-zinc-400 text-[10px] leading-relaxed">
                 Legal recognition of electronic signatures. Requires verifiable identity and clear intent manifesting from the signatory.
@@ -459,7 +459,7 @@ export const PhysicalAttestationGate: React.FC<PhysicalAttestationGateProps> = (
               <span className="text-emerald-400 text-[9px] font-bold block">STATUS: STATUTORILY COMPLIANT</span>
             </div>
 
-            <div className="p-3.5 rounded-xl bg-white/[0.02] border border-white/10 space-y-1.5">
+            <div className="p-3.5 rounded-xl bg-white/[0.02] border-white/10 space-y-1.5">
               <strong className="text-amber-300 block text-xs">Section 26 (มาตรา ๒๖)</strong>
               <p className="text-zinc-400 text-[10px] leading-relaxed">
                 Statutory presumption of reliability for reliable electronic signatures under the sole control of the signatory.
@@ -467,7 +467,7 @@ export const PhysicalAttestationGate: React.FC<PhysicalAttestationGateProps> = (
               <span className="text-emerald-400 text-[9px] font-bold block">STATUS: SOVEREIGN ENCLAVE CONTROL</span>
             </div>
 
-            <div className="p-3.5 rounded-xl bg-white/[0.02] border border-white/10 space-y-1.5">
+            <div className="p-3.5 rounded-xl bg-white/[0.02] border-white/10 space-y-1.5">
               <strong className="text-amber-300 block text-xs">Section 28 (มาตรา ๒๘)</strong>
               <p className="text-zinc-400 text-[10px] leading-relaxed">
                 Duty of care & safe harbor immunity for Relying Parties and Custodians utilizing FIPS certified hardware keys.

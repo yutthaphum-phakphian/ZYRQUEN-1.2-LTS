@@ -111,11 +111,11 @@ export const QuarantineInspector: React.FC = () => {
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 border-b border-white/10 pb-4">
         <div className="space-y-1">
           <div className="flex items-center gap-2">
-            <span className="px-2.5 py-0.5 rounded-full bg-amber-500/20 text-amber-300 text-[10px] font-bold border border-amber-500/40 flex items-center gap-1.5">
+            <span className="px-2.5 py-0.5 rounded-full bg-amber-500/20 text-amber-300 text-[10px] font-bold border-amber-500/40 flex items-center gap-1.5">
               <ShieldAlert className="w-3.5 h-3.5 text-amber-400" />
               FORENSIC QUARANTINE INSPECTOR &bull; SEALS #14,903–#14,907
             </span>
-            <span className="px-2 py-0.5 rounded bg-black/60 border border-white/10 text-[9px] text-zinc-400">
+            <span className="px-2 py-0.5 rounded bg-black/60 border-white/10 text-[9px] text-zinc-400">
               STRICTLY READ-ONLY
             </span>
           </div>
@@ -129,7 +129,7 @@ export const QuarantineInspector: React.FC = () => {
         </div>
 
         <div className="flex items-center gap-2">
-          <div className="p-3 rounded-xl bg-black/60 border border-amber-500/30 text-right">
+          <div className="p-3 rounded-xl bg-black/60 border-amber-500/30 text-right">
             <span className="text-[10px] text-zinc-500 block">QUARANTINED DELTA</span>
             <strong className="text-sm font-bold text-amber-300">+{QUARANTINE_COUNT} Isolated Seals</strong>
             <span className="text-[9px] text-emerald-400 block mt-0.5">SSoT Mutation = {SSOT_MUTATION} (Zero)</span>
@@ -139,15 +139,15 @@ export const QuarantineInspector: React.FC = () => {
 
       {/* Truth Notice Box */}
       <div className="grid grid-cols-1 sm:grid-cols-3 gap-2.5 text-[10px]">
-        <div className="p-2.5 rounded-xl bg-black/50 border border-white/10 text-zinc-300 space-y-0.5">
+        <div className="p-2.5 rounded-xl bg-black/50 border-white/10 text-zinc-300 space-y-0.5">
           <strong className="text-cyan-300 block">1. CANONICAL LEDGER</strong>
           <p className="text-zinc-400">{CANONICAL_SEALS.toLocaleString()} Immutable Seals &bull; 0.00% Drift</p>
         </div>
-        <div className="p-2.5 rounded-xl bg-amber-950/20 border border-amber-500/30 text-amber-300 space-y-0.5">
+        <div className="p-2.5 rounded-xl bg-amber-950/20 border-amber-500/30 text-amber-300 space-y-0.5">
           <strong className="text-amber-300 block">2. QUARANTINE BUFFER</strong>
           <p className="text-amber-200/80">+{QUARANTINE_COUNT} Delta Artifacts &bull; Ring-04 Hard Enclave</p>
         </div>
-        <div className="p-2.5 rounded-xl bg-rose-950/20 border border-rose-500/30 text-rose-300 space-y-0.5">
+        <div className="p-2.5 rounded-xl bg-rose-950/20 border-rose-500/30 text-rose-300 space-y-0.5">
           <strong className="text-rose-300 block">3. PROMOTION CIRCUIT</strong>
           <p className="text-rose-200/80">FAIL-CLOSED 🔒 &bull; Zero Write Authority</p>
         </div>
@@ -159,63 +159,63 @@ export const QuarantineInspector: React.FC = () => {
           <div
             key={seal.sealId}
             id={`quarantine-card-${seal.sealId}`}
-            className="p-4 rounded-2xl bg-black/70 border border-white/10 space-y-3 relative overflow-hidden"
+            className="p-4 rounded-2xl bg-black/70 border-white/10 space-y-3 relative overflow-hidden"
           >
             {/* Top Bar: Seal ID and Status Badge */}
             <div className="flex items-start justify-between gap-2 border-b border-white/5 pb-2.5">
               <div className="flex items-center gap-2">
-                <span className="px-2 py-0.5 rounded-lg bg-amber-500/20 text-amber-300 font-mono text-xs font-bold border border-amber-500/30">
+                <span className="px-2 py-0.5 rounded-lg bg-amber-500/20 text-amber-300 font-mono text-xs font-bold border-amber-500/30">
                   SEAL #{seal.sealId.toLocaleString()}
                 </span>
                 <span className="text-[10px] text-zinc-400 font-bold">
                   {seal.anomalyClass}
                 </span>
               </div>
-              <span className="px-2 py-0.5 rounded text-[9px] font-bold bg-amber-950/40 text-amber-300 border border-amber-500/30 shrink-0">
+              <span className="px-2 py-0.5 rounded text-[9px] font-bold bg-amber-950/40 text-amber-300 border-amber-500/30 shrink-0">
                 {seal.evidenceStatus}
               </span>
             </div>
 
             {/* Metadata Fields Grid */}
             <div className="space-y-2 text-[10px]">
-              <div className="p-2.5 rounded-xl bg-white/[0.02] border border-white/5 space-y-1">
+              <div className="p-2.5 rounded-xl bg-white/[0.02] border-white/5 space-y-1">
                 <span className="text-zinc-500 block uppercase">Quarantine Rationale:</span>
                 <p className="text-zinc-200 leading-relaxed font-sans">{seal.quarantineReason}</p>
               </div>
 
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-2">
-                <div className="p-2 rounded-lg bg-black/40 border border-white/5 space-y-0.5">
+                <div className="p-2 rounded-lg bg-black/40 border-white/5 space-y-0.5">
                   <span className="text-zinc-500 block">Telemetry Source:</span>
                   <span className="text-zinc-300 truncate block">{seal.sourceTelemetry}</span>
                 </div>
-                <div className="p-2 rounded-lg bg-black/40 border border-white/5 space-y-0.5">
+                <div className="p-2 rounded-lg bg-black/40 border-white/5 space-y-0.5">
                   <span className="text-zinc-500 block">Block / Epoch Info:</span>
                   <span className="text-amber-300 truncate block font-mono">{seal.blockEpochInfo}</span>
                 </div>
               </div>
 
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-2">
-                <div className="p-2 rounded-lg bg-black/40 border border-white/5 space-y-0.5">
+                <div className="p-2 rounded-lg bg-black/40 border-white/5 space-y-0.5">
                   <span className="text-zinc-500 block">Algorithm Scheme:</span>
                   <span className="text-cyan-300 truncate block font-mono">{seal.cryptographicAlgo}</span>
                 </div>
-                <div className="p-2 rounded-lg bg-black/40 border border-white/5 space-y-0.5">
+                <div className="p-2 rounded-lg bg-black/40 border-white/5 space-y-0.5">
                   <span className="text-zinc-500 block">SSoT Mutation Delta:</span>
                   <span className="text-emerald-400 font-bold block">{seal.impactOnSsoT}</span>
                 </div>
               </div>
 
-              <div className="p-2 rounded-lg bg-black/40 border border-white/5 space-y-0.5">
+              <div className="p-2 rounded-lg bg-black/40 border-white/5 space-y-0.5">
                 <span className="text-zinc-500 block">Canonical Core Relationship:</span>
                 <span className="text-rose-300 block font-mono text-[9px]">{seal.canonicalRelationship}</span>
               </div>
 
-              <div className="p-2 rounded-lg bg-black/60 border border-white/10 space-y-0.5">
+              <div className="p-2 rounded-lg bg-black/60 border-white/10 space-y-0.5">
                 <span className="text-zinc-500 block">Isolation Boundary:</span>
                 <span className="text-amber-400 block font-mono text-[9px] truncate">{seal.isolationBoundary}</span>
               </div>
 
-              <div className="p-2 rounded-lg bg-black border border-white/10 space-y-0.5">
+              <div className="p-2 rounded-lg bg-black border-white/10 space-y-0.5">
                 <span className="text-zinc-500 block">Telemetry Digest Hash:</span>
                 <code className="text-cyan-300 block font-mono text-[9px] break-all select-all">{seal.payloadDigest}</code>
               </div>

@@ -83,7 +83,7 @@ export const SystemAuditReport: React.FC<SystemAuditReportProps> = ({
       {/* Sovereign Header & Official Branding */}
       <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 border-b border-emerald-500/20 pb-6">
         <div className="flex items-start gap-4">
-          <div className="w-12 h-12 rounded-2xl bg-emerald-500/20 border border-emerald-500/40 flex items-center justify-center text-emerald-400 shrink-0 shadow-[0_0_20px_rgba(16,185,129,0.3)]">
+          <div className="w-12 h-12 rounded-2xl bg-emerald-500/20 border-emerald-500/40 flex items-center justify-center text-emerald-400 shrink-0 shadow-[0_0_20px_rgba(16,185,129,0.3)]">
             <ShieldCheck className="w-6 h-6" />
           </div>
           <div>
@@ -91,10 +91,10 @@ export const SystemAuditReport: React.FC<SystemAuditReportProps> = ({
               <span className="text-white font-bold text-base sm:text-lg tracking-wider">
                 ZYRQUEN Ω∞ SOVEREIGN FROZEN v1.2 LTS
               </span>
-              <span className="px-2.5 py-0.5 rounded-full text-[10px] font-bold bg-emerald-500/20 text-emerald-300 border border-emerald-500/40">
+              <span className="px-2.5 py-0.5 rounded-full text-[10px] font-bold bg-emerald-500/20 text-emerald-300 border-emerald-500/40">
                 AUDIT SNAPSHOT
               </span>
-              <span className="px-2.5 py-0.5 rounded-full text-[10px] font-bold bg-black/60 text-zinc-400 border border-white/10 flex items-center gap-1">
+              <span className="px-2.5 py-0.5 rounded-full text-[10px] font-bold bg-black/60 text-zinc-400 border-white/10 flex items-center gap-1">
                 <Lock className="w-3 h-3 text-amber-400" />
                 STRICT READ-ONLY
               </span>
@@ -111,7 +111,7 @@ export const SystemAuditReport: React.FC<SystemAuditReportProps> = ({
         </div>
 
         {/* Global Seal Status Badge */}
-        <div className="flex flex-row md:flex-col items-end justify-between md:justify-center gap-2 shrink-0 bg-black/60 p-3.5 rounded-2xl border border-white/10">
+        <div className="flex flex-row md:flex-col items-end justify-between md:justify-center gap-2 shrink-0 bg-black/60 p-3.5 rounded-2xl border-white/10">
           <div className="text-[10px] text-zinc-400 font-sans">CANONICAL STATUS</div>
           <div className="flex items-center gap-2">
             <div className="w-2.5 h-2.5 rounded-full bg-emerald-400 animate-pulse" />
@@ -126,7 +126,7 @@ export const SystemAuditReport: React.FC<SystemAuditReportProps> = ({
       {/* Primary Invariants Verification Grid */}
       <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-3">
         {/* Canonical Seals */}
-        <div className="p-3.5 bg-black/60 rounded-2xl border border-emerald-500/30 space-y-1">
+        <div className="p-3.5 bg-black/60 rounded-2xl border-emerald-500/30 space-y-1">
           <div className="text-zinc-400 text-[10px] flex items-center gap-1.5">
             <Lock className="w-3.5 h-3.5 text-emerald-400" />
             <span>CANONICAL SEALS</span>
@@ -138,7 +138,7 @@ export const SystemAuditReport: React.FC<SystemAuditReportProps> = ({
         </div>
 
         {/* Observed Seals */}
-        <div className="p-3.5 bg-black/60 rounded-2xl border border-amber-500/30 space-y-1">
+        <div className="p-3.5 bg-black/60 rounded-2xl border-amber-500/30 space-y-1">
           <div className="text-zinc-400 text-[10px] flex items-center gap-1.5">
             <Activity className="w-3.5 h-3.5 text-amber-400" />
             <span>OBSERVED SEALS</span>
@@ -150,7 +150,7 @@ export const SystemAuditReport: React.FC<SystemAuditReportProps> = ({
         </div>
 
         {/* Quarantine Delta */}
-        <div className="p-3.5 bg-black/60 rounded-2xl border border-amber-500/30 space-y-1">
+        <div className="p-3.5 bg-black/60 rounded-2xl border-amber-500/30 space-y-1">
           <div className="text-zinc-400 text-[10px] flex items-center gap-1.5">
             <Layers className="w-3.5 h-3.5 text-amber-400" />
             <span>QUARANTINE DELTA</span>
@@ -162,7 +162,7 @@ export const SystemAuditReport: React.FC<SystemAuditReportProps> = ({
         </div>
 
         {/* SSoT Mutation Count */}
-        <div className="p-3.5 bg-black/60 rounded-2xl border border-emerald-500/40 space-y-1">
+        <div className="p-3.5 bg-black/60 rounded-2xl border-emerald-500/40 space-y-1">
           <div className="text-zinc-400 text-[10px] flex items-center gap-1.5">
             <CheckCircle2 className="w-3.5 h-3.5 text-emerald-400" />
             <span>SSoT MUTATION</span>
@@ -174,7 +174,7 @@ export const SystemAuditReport: React.FC<SystemAuditReportProps> = ({
         </div>
 
         {/* HSM Quorum */}
-        <div className="p-3.5 bg-black/60 rounded-2xl border border-cyan-500/30 space-y-1">
+        <div className="p-3.5 bg-black/60 rounded-2xl border-cyan-500/30 space-y-1">
           <div className="text-zinc-400 text-[10px] flex items-center gap-1.5">
             <Cpu className="w-3.5 h-3.5 text-cyan-400" />
             <span>HSM QUORUM</span>
@@ -186,7 +186,7 @@ export const SystemAuditReport: React.FC<SystemAuditReportProps> = ({
         </div>
 
         {/* Promotion Firewall */}
-        <div className="p-3.5 bg-black/60 rounded-2xl border border-rose-500/30 space-y-1">
+        <div className="p-3.5 bg-black/60 rounded-2xl border-rose-500/30 space-y-1">
           <div className="text-zinc-400 text-[10px] flex items-center gap-1.5">
             <AlertTriangle className="w-3.5 h-3.5 text-rose-400" />
             <span>PROMOTION GATE</span>
@@ -199,7 +199,7 @@ export const SystemAuditReport: React.FC<SystemAuditReportProps> = ({
       </div>
 
       {/* Hardware Telemetry & Quantum Health Snapshot */}
-      <div className="p-5 rounded-2xl bg-black/70 border border-white/10 space-y-4">
+      <div className="p-5 rounded-2xl bg-black/70 border-white/10 space-y-4">
         <div className="flex items-center justify-between border-b border-white/5 pb-3">
           <div className="flex items-center gap-2">
             <Server className="w-4 h-4 text-emerald-400" />
@@ -214,7 +214,7 @@ export const SystemAuditReport: React.FC<SystemAuditReportProps> = ({
 
         <div className="grid grid-cols-2 sm:grid-cols-4 gap-3">
           {/* Cryo Temp */}
-          <div className="p-3 bg-black/50 rounded-xl border border-white/5 space-y-1">
+          <div className="p-3 bg-black/50 rounded-xl border-white/5 space-y-1">
             <div className="text-zinc-400 text-[10px] flex items-center gap-1">
               <Flame className="w-3 h-3 text-cyan-400" />
               <span>CRYO TEMPERATURE</span>
@@ -226,7 +226,7 @@ export const SystemAuditReport: React.FC<SystemAuditReportProps> = ({
           </div>
 
           {/* Coherence */}
-          <div className="p-3 bg-black/50 rounded-xl border border-white/5 space-y-1">
+          <div className="p-3 bg-black/50 rounded-xl border-white/5 space-y-1">
             <div className="text-zinc-400 text-[10px] flex items-center gap-1">
               <Sparkles className="w-3 h-3 text-emerald-400" />
               <span>QUANTUM COHERENCE</span>
@@ -238,7 +238,7 @@ export const SystemAuditReport: React.FC<SystemAuditReportProps> = ({
           </div>
 
           {/* CPU & Memory */}
-          <div className="p-3 bg-black/50 rounded-xl border border-white/5 space-y-1">
+          <div className="p-3 bg-black/50 rounded-xl border-white/5 space-y-1">
             <div className="text-zinc-400 text-[10px] flex items-center gap-1">
               <Cpu className="w-3 h-3 text-amber-400" />
               <span>CPU LOAD / MEMORY</span>
@@ -250,7 +250,7 @@ export const SystemAuditReport: React.FC<SystemAuditReportProps> = ({
           </div>
 
           {/* Hardware Stability */}
-          <div className="p-3 bg-black/50 rounded-xl border border-white/5 space-y-1">
+          <div className="p-3 bg-black/50 rounded-xl border-white/5 space-y-1">
             <div className="text-zinc-400 text-[10px] flex items-center gap-1">
               <Zap className="w-3 h-3 text-emerald-400" />
               <span>VOLTAGE / SSD WEAR</span>
@@ -265,7 +265,7 @@ export const SystemAuditReport: React.FC<SystemAuditReportProps> = ({
         {/* Cryptographic Hashes Verification */}
         <div className="grid grid-cols-1 md:grid-cols-2 gap-3 pt-1">
           {/* Merkle Root */}
-          <div className="p-3 bg-black/90 rounded-xl border border-white/5 space-y-1">
+          <div className="p-3 bg-black/90 rounded-xl border-white/5 space-y-1">
             <div className="flex items-center justify-between">
               <span className="text-zinc-400 text-[10px] flex items-center gap-1">
                 <Hash className="w-3 h-3 text-emerald-400" />
@@ -286,7 +286,7 @@ export const SystemAuditReport: React.FC<SystemAuditReportProps> = ({
           </div>
 
           {/* Latest Sealed Hash */}
-          <div className="p-3 bg-black/90 rounded-xl border border-white/5 space-y-1">
+          <div className="p-3 bg-black/90 rounded-xl border-white/5 space-y-1">
             <div className="flex items-center justify-between">
               <span className="text-zinc-400 text-[10px] flex items-center gap-1">
                 <FileCheck className="w-3 h-3 text-cyan-400" />
@@ -309,7 +309,7 @@ export const SystemAuditReport: React.FC<SystemAuditReportProps> = ({
       </div>
 
       {/* System Events Ledger Stream (Read-Only) */}
-      <div className="p-5 rounded-2xl bg-black/70 border border-white/10 space-y-3">
+      <div className="p-5 rounded-2xl bg-black/70 border-white/10 space-y-3">
         <div className="flex items-center justify-between border-b border-white/5 pb-3">
           <div className="flex items-center gap-2">
             <Radio className="w-4 h-4 text-cyan-400" />
@@ -331,7 +331,7 @@ export const SystemAuditReport: React.FC<SystemAuditReportProps> = ({
             {activeEvents.slice(0, 8).map((evt) => (
               <div
                 key={evt.id}
-                className="p-2.5 rounded-xl bg-black/50 border border-white/5 flex items-start justify-between gap-3 text-[11px]"
+                className="p-2.5 rounded-xl bg-black/50 border-white/5 flex items-start justify-between gap-3 text-[11px]"
               >
                 <div className="space-y-0.5 min-w-0">
                   <div className="flex items-center gap-2 flex-wrap">
@@ -342,12 +342,12 @@ export const SystemAuditReport: React.FC<SystemAuditReportProps> = ({
                     <span
                       className={`px-1.5 py-0.5 rounded text-[9px] font-bold ${
                         evt.severity === 'critical'
-                          ? 'bg-rose-500/20 text-rose-300 border border-rose-500/40'
+                          ? 'bg-rose-500/20 text-rose-300 border-rose-500/40'
                           : evt.severity === 'warning'
-                          ? 'bg-amber-500/20 text-amber-300 border border-amber-500/40'
+                          ? 'bg-amber-500/20 text-amber-300 border-amber-500/40'
                           : evt.severity === 'success'
-                          ? 'bg-emerald-500/20 text-emerald-300 border border-emerald-500/40'
-                          : 'bg-cyan-500/20 text-cyan-300 border border-cyan-500/40'
+                          ? 'bg-emerald-500/20 text-emerald-300 border-emerald-500/40'
+                          : 'bg-cyan-500/20 text-cyan-300 border-cyan-500/40'
                       }`}
                     >
                       {evt.severity.toUpperCase()}
@@ -375,7 +375,7 @@ export const SystemAuditReport: React.FC<SystemAuditReportProps> = ({
       </div>
 
       {/* Read-Only Assurance & Immutable Guarantee Footer */}
-      <div className="p-4 rounded-2xl bg-gradient-to-r from-emerald-950/20 to-black border border-emerald-500/30 flex items-center justify-between flex-wrap gap-3">
+      <div className="p-4 rounded-2xl bg-gradient-to-r from-emerald-950/20 to-black border-emerald-500/30 flex items-center justify-between flex-wrap gap-3">
         <div className="flex items-center gap-2 text-xs">
           <CheckCircle2 className="w-4 h-4 text-emerald-400 shrink-0" />
           <span className="text-zinc-300 font-sans text-xs">

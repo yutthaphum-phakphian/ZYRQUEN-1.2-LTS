@@ -125,9 +125,9 @@ export const AuditAnalyticsDashboard: React.FC = () => {
   return (
     <div className="w-full max-w-6xl mx-auto p-4 sm:p-6 space-y-6 font-mono text-white">
       {/* Header & Filter Controls */}
-      <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 p-5 rounded-2xl bg-[#0a0f1e] border border-cyan-500/30 shadow-[0_0_30px_rgba(6,182,212,0.15)]">
+      <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 p-5 rounded-2xl bg-[#0a0f1e] border-cyan-500/30 shadow-[0_0_30px_rgba(6,182,212,0.15)]">
         <div className="flex items-center gap-3.5">
-          <div className="w-12 h-12 rounded-xl bg-cyan-950/70 border border-cyan-500/40 flex items-center justify-center text-cyan-400">
+          <div className="w-12 h-12 rounded-xl bg-cyan-950/70 border-cyan-500/40 flex items-center justify-center text-cyan-400">
             <TrendingUp className="w-6 h-6" />
           </div>
           <div>
@@ -135,7 +135,7 @@ export const AuditAnalyticsDashboard: React.FC = () => {
               <h1 className="text-lg sm:text-xl font-bold tracking-wider text-white">
                 ZYRQUEN Audit Analytics & Trends
               </h1>
-              <span className="px-2 py-0.5 rounded text-[10px] font-bold bg-cyan-950 text-cyan-300 border border-cyan-500/40">
+              <span className="px-2 py-0.5 rounded text-[10px] font-bold bg-cyan-950 text-cyan-300 border-cyan-500/40">
                 UTC BOUND
               </span>
             </div>
@@ -147,7 +147,7 @@ export const AuditAnalyticsDashboard: React.FC = () => {
 
         <div className="flex flex-wrap items-center gap-2.5 w-full sm:w-auto">
           {/* Timeframe Selector */}
-          <div className="flex items-center bg-[#070b14] border border-zinc-800 rounded-xl p-1 text-xs">
+          <div className="flex items-center bg-[#070b14] border-zinc-800 rounded-xl p-1 text-xs">
             {(['24h', '7d', '30d'] as TimeframeOption[]).map((tf) => (
               <button
                 key={tf}
@@ -169,7 +169,7 @@ export const AuditAnalyticsDashboard: React.FC = () => {
           <button
             onClick={() => fetchAnalytics(timeframe)}
             disabled={isLoading}
-            className="p-2 rounded-xl bg-[#070b14] border border-zinc-800 hover:border-cyan-500/40 text-zinc-300 hover:text-white transition-colors cursor-pointer disabled:opacity-50"
+            className="p-2 rounded-xl bg-[#070b14] border-zinc-800 hover:border-cyan-500/40 text-zinc-300 hover:text-white transition-colors cursor-pointer disabled:opacity-50"
             title="Refresh Analytics"
           >
             <RefreshCw className={`w-4 h-4 ${isLoading ? 'animate-spin text-cyan-400' : ''}`} />
@@ -179,7 +179,7 @@ export const AuditAnalyticsDashboard: React.FC = () => {
           <button
             onClick={handleExportCsv}
             disabled={!analyticsData || !analyticsData.events.length}
-            className="flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-[#070b14] border border-cyan-500/30 hover:bg-cyan-950/40 text-cyan-300 text-xs transition-colors cursor-pointer disabled:opacity-40"
+            className="flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-[#070b14] border-cyan-500/30 hover:bg-cyan-950/40 text-cyan-300 text-xs transition-colors cursor-pointer disabled:opacity-40"
           >
             <FileSpreadsheet className="w-3.5 h-3.5" />
             <span>CSV</span>
@@ -188,7 +188,7 @@ export const AuditAnalyticsDashboard: React.FC = () => {
           <button
             onClick={handleExportJson}
             disabled={!analyticsData || !analyticsData.events.length}
-            className="flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-[#070b14] border border-cyan-500/30 hover:bg-cyan-950/40 text-cyan-300 text-xs transition-colors cursor-pointer disabled:opacity-40"
+            className="flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-[#070b14] border-cyan-500/30 hover:bg-cyan-950/40 text-cyan-300 text-xs transition-colors cursor-pointer disabled:opacity-40"
           >
             <FileCode className="w-3.5 h-3.5" />
             <span>JSON</span>
@@ -198,7 +198,7 @@ export const AuditAnalyticsDashboard: React.FC = () => {
 
       {/* Error Fallback Banner */}
       {errorMessage && (
-        <div className="p-4 rounded-2xl bg-amber-950/30 border border-amber-500/40 text-amber-200 text-xs space-y-2">
+        <div className="p-4 rounded-2xl bg-amber-950/30 border-amber-500/40 text-amber-200 text-xs space-y-2">
           <div className="flex items-center gap-2 font-bold text-amber-400">
             <AlertTriangle className="w-4 h-4 text-amber-400 shrink-0" />
             <span>Telemetry Fallback Status</span>
@@ -215,7 +215,7 @@ export const AuditAnalyticsDashboard: React.FC = () => {
       {/* Summary KPI Cards */}
       {analyticsData && (
         <div className="grid grid-cols-2 lg:grid-cols-4 gap-3 sm:gap-4">
-          <div className="p-4 rounded-2xl bg-[#0a0f1e] border border-cyan-500/20">
+          <div className="p-4 rounded-2xl bg-[#0a0f1e] border-cyan-500/20">
             <span className="text-[10.5px] text-zinc-400 block mb-1">Total Audit Events</span>
             <div className="text-xl sm:text-2xl font-bold text-white tracking-tight">
               {analyticsData.totalEvents.toLocaleString()}
@@ -223,7 +223,7 @@ export const AuditAnalyticsDashboard: React.FC = () => {
             <span className="text-[10px] text-cyan-400/80 mt-1 block">Window: {timeframe.toUpperCase()}</span>
           </div>
 
-          <div className="p-4 rounded-2xl bg-[#0a0f1e] border border-rose-500/30">
+          <div className="p-4 rounded-2xl bg-[#0a0f1e] border-rose-500/30">
             <span className="text-[10.5px] text-zinc-400 block mb-1">Detected Anomalies</span>
             <div className="text-xl sm:text-2xl font-bold text-rose-400 tracking-tight flex items-center gap-2">
               <span>{analyticsData.totalAnomalies}</span>
@@ -234,7 +234,7 @@ export const AuditAnalyticsDashboard: React.FC = () => {
             <span className="text-[10px] text-rose-400/80 mt-1 block">Drift ≥ 15% or Failure</span>
           </div>
 
-          <div className="p-4 rounded-2xl bg-[#0a0f1e] border border-emerald-500/30">
+          <div className="p-4 rounded-2xl bg-[#0a0f1e] border-emerald-500/30">
             <span className="text-[10.5px] text-zinc-400 block mb-1">Acknowledged</span>
             <div className="text-xl sm:text-2xl font-bold text-emerald-400 tracking-tight">
               {analyticsData.acknowledgedAnomalies} / {analyticsData.totalAnomalies}
@@ -242,7 +242,7 @@ export const AuditAnalyticsDashboard: React.FC = () => {
             <span className="text-[10px] text-emerald-400/80 mt-1 block">Immutable Trail Signed</span>
           </div>
 
-          <div className="p-4 rounded-2xl bg-[#0a0f1e] border border-cyan-500/20">
+          <div className="p-4 rounded-2xl bg-[#0a0f1e] border-cyan-500/20">
             <span className="text-[10.5px] text-zinc-400 block mb-1">Mean Telemetric Drift</span>
             <div className="text-xl sm:text-2xl font-bold text-cyan-300 tracking-tight">
               {analyticsData.avgDriftPercentage.toFixed(2)}%
@@ -253,7 +253,7 @@ export const AuditAnalyticsDashboard: React.FC = () => {
       )}
 
       {/* UTC Trend Graph */}
-      <div className="p-5 rounded-2xl bg-[#0a0f1e] border border-cyan-500/20 space-y-4">
+      <div className="p-5 rounded-2xl bg-[#0a0f1e] border-cyan-500/20 space-y-4">
         <div className="flex items-center justify-between">
           <div className="flex items-center gap-2 text-xs font-bold text-zinc-200">
             <Activity className="w-4 h-4 text-cyan-400" />
@@ -325,7 +325,7 @@ export const AuditAnalyticsDashboard: React.FC = () => {
       <HardwareHeartbeatStabilityTrend />
 
       {/* Anomalies Inspection List */}
-      <div className="rounded-2xl bg-[#0a0f1e] border border-cyan-500/20 overflow-hidden shadow-xl">
+      <div className="rounded-2xl bg-[#0a0f1e] border-cyan-500/20 overflow-hidden shadow-xl">
         <div className="p-4 border-b border-cyan-500/20 flex items-center justify-between bg-[#080d19]">
           <div className="flex items-center gap-2 text-xs font-bold text-zinc-200">
             <ShieldAlert className="w-4 h-4 text-amber-400" />
@@ -356,18 +356,18 @@ export const AuditAnalyticsDashboard: React.FC = () => {
                     <span className="font-bold text-white">{anom.eventType}</span>
                     <span className={`px-2 py-0.2 rounded text-[9.5px] font-bold uppercase ${
                       anom.status === 'SUCCESS'
-                        ? 'bg-amber-950 text-amber-300 border border-amber-500/40'
-                        : 'bg-rose-950 text-rose-300 border border-rose-500/40'
+                        ? 'bg-amber-950 text-amber-300 border-amber-500/40'
+                        : 'bg-rose-950 text-rose-300 border-rose-500/40'
                     }`}>
                       {anom.status}
                     </span>
                     {anom.acknowledged ? (
-                      <span className="px-1.5 py-0.2 rounded bg-emerald-950 text-emerald-300 border border-emerald-500/40 text-[9px] font-bold flex items-center gap-1">
+                      <span className="px-1.5 py-0.2 rounded bg-emerald-950 text-emerald-300 border-emerald-500/40 text-[9px] font-bold flex items-center gap-1">
                         <CheckCircle2 className="w-2.5 h-2.5" />
                         ACKNOWLEDGED
                       </span>
                     ) : (
-                      <span className="px-1.5 py-0.2 rounded bg-amber-950 text-amber-300 border border-amber-500/40 text-[9px] font-bold">
+                      <span className="px-1.5 py-0.2 rounded bg-amber-950 text-amber-300 border-amber-500/40 text-[9px] font-bold">
                         ACTION REQUIRED
                       </span>
                     )}
@@ -390,7 +390,7 @@ export const AuditAnalyticsDashboard: React.FC = () => {
                   </div>
                   <button
                     type="button"
-                    className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-cyan-950/60 border border-cyan-500/30 text-cyan-300 text-xs hover:bg-cyan-900/60 transition-colors"
+                    className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-cyan-950/60 border-cyan-500/30 text-cyan-300 text-xs hover:bg-cyan-900/60 transition-colors"
                   >
                     <Eye className="w-3.5 h-3.5" />
                     <span>Inspect</span>

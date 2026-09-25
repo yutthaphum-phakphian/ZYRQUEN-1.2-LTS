@@ -65,7 +65,7 @@ export const QuantumRealitySyncMonitor: React.FC<QuantumRealitySyncMonitorProps>
   const quarantinedCount = syncRecords.filter((r) => r.status === 'QUARANTINED').length;
 
   return (
-    <div className="p-6 sm:p-8 rounded-[28px] bg-gradient-to-br from-[#0c1222] via-[#080c18] to-[#04060d] border border-cyan-500/25 backdrop-blur-2xl relative overflow-hidden shadow-2xl space-y-6 font-mono">
+    <div className="p-6 sm:p-8 rounded-[28px] bg-gradient-to-br from-[#0c1222] via-[#080c18] to-[#04060d] border-cyan-500/25 backdrop-blur-2xl relative overflow-hidden shadow-2xl space-y-6 font-mono">
       {/* Background radial aura */}
       <div className="absolute -top-24 -right-24 w-96 h-96 bg-cyan-500/10 rounded-full blur-3xl pointer-events-none" />
       <div className="absolute -bottom-24 -left-24 w-96 h-96 bg-purple-500/10 rounded-full blur-3xl pointer-events-none" />
@@ -74,14 +74,14 @@ export const QuantumRealitySyncMonitor: React.FC<QuantumRealitySyncMonitorProps>
       <div className="relative z-10 flex flex-col lg:flex-row lg:items-center justify-between gap-6 pb-6 border-b border-white/10">
         <div className="space-y-2">
           <div className="flex flex-wrap items-center gap-2">
-            <span className="px-3 py-1 rounded-full bg-cyan-500/15 text-cyan-300 border border-cyan-500/30 text-xs font-bold flex items-center gap-1.5 shadow-[0_0_15px_rgba(6,182,212,0.25)]">
+            <span className="px-3 py-1 rounded-full bg-cyan-500/15 text-cyan-300 border-cyan-500/30 text-xs font-bold flex items-center gap-1.5 shadow-[0_0_15px_rgba(6,182,212,0.25)]">
               <Globe2 className="w-4 h-4 text-cyan-400 animate-pulse" />
               18 CHAMBERS QUANTUM REALITY SYNC
             </span>
-            <span className="px-3 py-1 rounded-full bg-emerald-500/15 text-emerald-300 border border-emerald-500/30 text-xs font-bold">
+            <span className="px-3 py-1 rounded-full bg-emerald-500/15 text-emerald-300 border-emerald-500/30 text-xs font-bold">
               POST-QUANTUM DILITHIUM-5
             </span>
-            <span className="px-3 py-1 rounded-full bg-purple-500/15 text-purple-300 border border-purple-500/30 text-xs font-bold">
+            <span className="px-3 py-1 rounded-full bg-purple-500/15 text-purple-300 border-purple-500/30 text-xs font-bold">
               SPHINCS+ ATTESTATION
             </span>
           </div>
@@ -97,15 +97,15 @@ export const QuantumRealitySyncMonitor: React.FC<QuantumRealitySyncMonitorProps>
 
         {/* Global Summary Stats */}
         <div className="flex flex-wrap items-center gap-2.5">
-          <div className="px-3.5 py-2 rounded-xl bg-emerald-500/10 border border-emerald-500/30 text-emerald-300 text-xs font-bold flex items-center gap-2">
+          <div className="px-3.5 py-2 rounded-xl bg-emerald-500/10 border-emerald-500/30 text-emerald-300 text-xs font-bold flex items-center gap-2">
             <span className="w-2 h-2 rounded-full bg-emerald-400 animate-pulse" />
             <span>{activeCount} ACTIVE</span>
           </div>
-          <div className="px-3.5 py-2 rounded-xl bg-cyan-500/10 border border-cyan-500/30 text-cyan-300 text-xs font-bold flex items-center gap-2">
+          <div className="px-3.5 py-2 rounded-xl bg-cyan-500/10 border-cyan-500/30 text-cyan-300 text-xs font-bold flex items-center gap-2">
             <Lock className="w-3.5 h-3.5 text-cyan-400" />
             <span>{sealedCount} SEALED</span>
           </div>
-          <div className="px-3.5 py-2 rounded-xl bg-rose-500/10 border border-rose-500/30 text-rose-300 text-xs font-bold flex items-center gap-2">
+          <div className="px-3.5 py-2 rounded-xl bg-rose-500/10 border-rose-500/30 text-rose-300 text-xs font-bold flex items-center gap-2">
             <Flame className="w-3.5 h-3.5 text-rose-400" />
             <span>{quarantinedCount} QUARANTINED</span>
           </div>
@@ -114,7 +114,7 @@ export const QuantumRealitySyncMonitor: React.FC<QuantumRealitySyncMonitorProps>
 
       {/* Control Bar: Filters & Search */}
       <div className="flex flex-col sm:flex-row items-stretch sm:items-center justify-between gap-3">
-        <div className="flex items-center gap-1.5 p-1 rounded-xl bg-black/50 border border-white/10 w-fit">
+        <div className="flex items-center gap-1.5 p-1 rounded-xl bg-black/50 border-white/10 w-fit">
           {(['ALL', 'ACTIVE', 'SEALED', 'QUARANTINED'] as const).map((filter) => (
             <button
               key={filter}
@@ -124,7 +124,7 @@ export const QuantumRealitySyncMonitor: React.FC<QuantumRealitySyncMonitorProps>
               }}
               className={`px-3 py-1.5 rounded-lg text-xs font-bold transition-all ${
                 activeFilter === filter
-                  ? 'bg-cyan-500/20 text-cyan-200 border border-cyan-500/40 shadow-sm'
+                  ? 'bg-cyan-500/20 text-cyan-200 border-cyan-500/40 shadow-sm'
                   : 'text-zinc-400 hover:text-zinc-200'
               }`}
             >
@@ -140,7 +140,7 @@ export const QuantumRealitySyncMonitor: React.FC<QuantumRealitySyncMonitorProps>
             value={searchQuery}
             onChange={(e) => setSearchQuery(e.target.value)}
             placeholder="ค้นหาห้องปฏิบัติการ, อัลกอริทึม, หรือแฮช..."
-            className="pl-9 pr-3 py-2 rounded-xl bg-black/60 border border-white/10 text-xs text-white placeholder-zinc-500 focus:outline-none focus:border-cyan-500/50 w-full sm:w-72"
+            className="pl-9 pr-3 py-2 rounded-xl bg-black/60 border-white/10 text-xs text-white placeholder-zinc-500 focus:outline-none focus:border-cyan-500/50 w-full sm:w-72"
           />
         </div>
       </div>
@@ -160,11 +160,11 @@ export const QuantumRealitySyncMonitor: React.FC<QuantumRealitySyncMonitorProps>
             <motion.div
               key={record.chamber}
               whileHover={{ y: -2 }}
-              className="p-4 rounded-2xl bg-black/40 border border-white/10 hover:border-cyan-500/40 transition-all flex flex-col justify-between space-y-3 relative group overflow-hidden"
+              className="p-4 rounded-2xl bg-black/40 border-white/10 hover:border-cyan-500/40 transition-all flex flex-col justify-between space-y-3 relative group overflow-hidden"
             >
               <div className="flex items-center justify-between">
                 <div className="flex items-center gap-2">
-                  <span className="px-2.5 py-1 rounded-lg bg-white/5 border border-white/10 text-xs font-black text-white">
+                  <span className="px-2.5 py-1 rounded-lg bg-white/5 border-white/10 text-xs font-black text-white">
                     {record.chamber}
                   </span>
                   <span className="text-[11px] font-bold text-zinc-300 truncate max-w-[130px]">
@@ -182,7 +182,7 @@ export const QuantumRealitySyncMonitor: React.FC<QuantumRealitySyncMonitorProps>
               </div>
 
               {/* Technical Specifications */}
-              <div className="p-2.5 rounded-xl bg-zinc-950/60 border border-white/5 space-y-1 text-[10px]">
+              <div className="p-2.5 rounded-xl bg-zinc-950/60 border-white/5 space-y-1 text-[10px]">
                 <div className="flex items-center justify-between text-zinc-400">
                   <span>PQC Cryptography:</span>
                   <span className="text-cyan-300 font-semibold">{record.pqcAlgorithm}</span>
@@ -211,7 +211,7 @@ export const QuantumRealitySyncMonitor: React.FC<QuantumRealitySyncMonitorProps>
                 <button
                   onClick={() => handleTriggerDeploy(record.chamber, record.status)}
                   disabled={isDeploying}
-                  className="px-3 py-1 rounded-lg bg-cyan-500/10 hover:bg-cyan-500/25 border border-cyan-500/30 text-cyan-300 text-[10px] font-bold flex items-center gap-1.5 transition-all"
+                  className="px-3 py-1 rounded-lg bg-cyan-500/10 hover:bg-cyan-500/25 border-cyan-500/30 text-cyan-300 text-[10px] font-bold flex items-center gap-1.5 transition-all"
                 >
                   <Zap className={`w-3 h-3 text-cyan-400 ${isDeploying ? 'animate-spin' : ''}`} />
                   <span>{isDeploying ? 'Deploying...' : 'Reality Sync'}</span>

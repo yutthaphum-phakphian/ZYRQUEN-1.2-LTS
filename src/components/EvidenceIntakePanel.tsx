@@ -228,7 +228,7 @@ export const EvidenceIntakePanel: React.FC<EvidenceIntakePanelProps> = ({
       <div className="p-6 rounded-[28px] bg-gradient-to-br from-[#0c1328]/95 via-[#0a0f20]/90 to-[#060810] border-2 border-indigo-500/40 shadow-2xl backdrop-blur-xl">
         <div className="flex flex-col lg:flex-row lg:items-center justify-between gap-4 border-b border-indigo-500/20 pb-4">
           <div className="flex items-center gap-3.5">
-            <div className="w-12 h-12 rounded-2xl bg-indigo-500/20 border border-indigo-400 text-indigo-300 flex items-center justify-center shrink-0 shadow-[0_0_20px_rgba(99,102,241,0.3)]">
+            <div className="w-12 h-12 rounded-2xl bg-indigo-500/20 border-indigo-400 text-indigo-300 flex items-center justify-center shrink-0 shadow-[0_0_20px_rgba(99,102,241,0.3)]">
               <FileCode className="w-6 h-6" />
             </div>
             <div>
@@ -236,10 +236,10 @@ export const EvidenceIntakePanel: React.FC<EvidenceIntakePanelProps> = ({
                 <h2 className="text-base sm:text-lg font-bold text-indigo-100 font-serif tracking-wide">
                   REAL EVIDENCE INTAKE
                 </h2>
-                <span className="text-[10px] px-2.5 py-0.5 rounded-full bg-indigo-500/20 text-indigo-300 border border-indigo-400/40 font-bold">
+                <span className="text-[10px] px-2.5 py-0.5 rounded-full bg-indigo-500/20 text-indigo-300 border-indigo-400/40 font-bold">
                   HARDENING v2.1
                 </span>
-                <span className="text-[10px] px-2.5 py-0.5 rounded bg-emerald-500/20 text-emerald-300 border border-emerald-500/40 font-bold">
+                <span className="text-[10px] px-2.5 py-0.5 rounded bg-emerald-500/20 text-emerald-300 border-emerald-500/40 font-bold">
                   SSOT MUTATION = 0
                 </span>
               </div>
@@ -255,7 +255,7 @@ export const EvidenceIntakePanel: React.FC<EvidenceIntakePanelProps> = ({
                 setIsManifestOpen(true);
                 playTone(700, 0.03);
               }}
-              className="px-3.5 py-2 rounded-xl bg-amber-500/20 hover:bg-amber-500/30 border border-amber-400/50 text-amber-200 text-xs font-bold flex items-center gap-2 transition-all shadow-[0_0_15px_rgba(245,158,11,0.2)]"
+              className="px-3.5 py-2 rounded-xl bg-amber-500/20 hover:bg-amber-500/30 border-amber-400/50 text-amber-200 text-xs font-bold flex items-center gap-2 transition-all shadow-[0_0_15px_rgba(245,158,11,0.2)]"
             >
               <Award className="w-3.5 h-3.5 text-amber-400" />
               <span>PHASE 3 MANIFEST</span>
@@ -263,7 +263,7 @@ export const EvidenceIntakePanel: React.FC<EvidenceIntakePanelProps> = ({
 
             <button
               onClick={handleDownloadLedger}
-              className="px-3.5 py-2 rounded-xl bg-indigo-500/20 hover:bg-indigo-500/30 border border-indigo-400/50 text-indigo-200 text-xs font-bold flex items-center gap-2 transition-all shadow-[0_0_15px_rgba(99,102,241,0.2)]"
+              className="px-3.5 py-2 rounded-xl bg-indigo-500/20 hover:bg-indigo-500/30 border-indigo-400/50 text-indigo-200 text-xs font-bold flex items-center gap-2 transition-all shadow-[0_0_15px_rgba(99,102,241,0.2)]"
             >
               <Download className="w-3.5 h-3.5" />
               <span>EXPORT INTAKE LEDGER</span>
@@ -272,7 +272,7 @@ export const EvidenceIntakePanel: React.FC<EvidenceIntakePanelProps> = ({
         </div>
 
         {/* Status Distinction Taxonomy Legend */}
-        <div className="mt-4 p-3.5 rounded-2xl bg-black/60 border border-white/10 space-y-2">
+        <div className="mt-4 p-3.5 rounded-2xl bg-black/60 border-white/10 space-y-2">
           <div className="flex items-center justify-between text-[11px]">
             <span className="font-bold text-zinc-300 flex items-center gap-1.5">
               <Shield className="w-3.5 h-3.5 text-indigo-400" />
@@ -282,25 +282,25 @@ export const EvidenceIntakePanel: React.FC<EvidenceIntakePanelProps> = ({
           </div>
 
           <div className="flex flex-wrap gap-2 text-[10px]">
-            <span className="px-2 py-0.5 rounded-md bg-emerald-500/20 text-emerald-300 border border-emerald-500/40 font-bold">
+            <span className="px-2 py-0.5 rounded-md bg-emerald-500/20 text-emerald-300 border-emerald-500/40 font-bold">
               CANONICAL (SSoT Core)
             </span>
-            <span className="px-2 py-0.5 rounded-md bg-indigo-500/20 text-indigo-300 border border-indigo-500/40 font-bold">
+            <span className="px-2 py-0.5 rounded-md bg-indigo-500/20 text-indigo-300 border-indigo-500/40 font-bold">
               REAL SOURCE FILE (Supplied Input)
             </span>
-            <span className="px-2 py-0.5 rounded-md bg-amber-500/20 text-amber-300 border border-amber-500/40 font-bold">
+            <span className="px-2 py-0.5 rounded-md bg-amber-500/20 text-amber-300 border-amber-500/40 font-bold">
               PENDING VERIFICATION (Awaiting Hardware Node)
             </span>
-            <span className="px-2 py-0.5 rounded-md bg-cyan-500/20 text-cyan-300 border border-cyan-500/40 font-bold">
+            <span className="px-2 py-0.5 rounded-md bg-cyan-500/20 text-cyan-300 border-cyan-500/40 font-bold">
               OBSERVED (Runtime Telemetry Probe)
             </span>
-            <span className="px-2 py-0.5 rounded-md bg-purple-500/20 text-purple-300 border border-purple-500/40 font-bold">
+            <span className="px-2 py-0.5 rounded-md bg-purple-500/20 text-purple-300 border-purple-500/40 font-bold">
               REFERENCE (RFC / Standard Spec)
             </span>
-            <span className="px-2 py-0.5 rounded-md bg-zinc-700/50 text-zinc-300 border border-zinc-500/40 font-bold">
+            <span className="px-2 py-0.5 rounded-md bg-zinc-700/50 text-zinc-300 border-zinc-500/40 font-bold">
               SIMULATED (Local Fallback)
             </span>
-            <span className="px-2 py-0.5 rounded-md bg-rose-900/40 text-rose-300 border border-rose-500/40 font-bold">
+            <span className="px-2 py-0.5 rounded-md bg-rose-900/40 text-rose-300 border-rose-500/40 font-bold">
               BLOCKED (Write Firewall)
             </span>
           </div>
@@ -308,7 +308,7 @@ export const EvidenceIntakePanel: React.FC<EvidenceIntakePanelProps> = ({
 
         {/* 4 State Comparison Grid */}
         <div className="mt-4 grid grid-cols-2 sm:grid-cols-4 gap-3 text-xs">
-          <div className="p-3 rounded-xl bg-black/60 border border-emerald-500/30 space-y-1">
+          <div className="p-3 rounded-xl bg-black/60 border-emerald-500/30 space-y-1">
             <div className="text-[10px] text-zinc-400 flex items-center justify-between">
               <span>CANONICAL STATE</span>
               <Lock className="w-3 h-3 text-emerald-400" />
@@ -317,7 +317,7 @@ export const EvidenceIntakePanel: React.FC<EvidenceIntakePanelProps> = ({
             <div className="text-[9px] text-zinc-400">Root: 909ab814...fa4c68</div>
           </div>
 
-          <div className="p-3 rounded-xl bg-black/60 border border-indigo-500/30 space-y-1">
+          <div className="p-3 rounded-xl bg-black/60 border-indigo-500/30 space-y-1">
             <div className="text-[10px] text-zinc-400 flex items-center justify-between">
               <span>INTAKE FILES</span>
               <Layers className="w-3 h-3 text-indigo-400" />
@@ -326,7 +326,7 @@ export const EvidenceIntakePanel: React.FC<EvidenceIntakePanelProps> = ({
             <div className="text-[9px] text-indigo-400 truncate">{evidenceIds.join(' • ')}</div>
           </div>
 
-          <div className="p-3 rounded-xl bg-black/60 border border-amber-500/30 space-y-1">
+          <div className="p-3 rounded-xl bg-black/60 border-amber-500/30 space-y-1">
             <div className="text-[10px] text-zinc-400 flex items-center justify-between">
               <span>VERIFICATION</span>
               <Clock className="w-3 h-3 text-amber-400" />
@@ -335,7 +335,7 @@ export const EvidenceIntakePanel: React.FC<EvidenceIntakePanelProps> = ({
             <div className="text-[9px] text-zinc-400">Presence &ne; Validity</div>
           </div>
 
-          <div className="p-3 rounded-xl bg-black/60 border border-rose-500/30 space-y-1">
+          <div className="p-3 rounded-xl bg-black/60 border-rose-500/30 space-y-1">
             <div className="text-[10px] text-zinc-400 flex items-center justify-between">
               <span>PROMOTION GATE</span>
               <ShieldAlert className="w-3 h-3 text-rose-400" />
@@ -508,14 +508,14 @@ export const EvidenceIntakePanel: React.FC<EvidenceIntakePanelProps> = ({
               Strict Non-Canonical Source Data &bull; Zero Write Authority &bull; Pure Read-Only Intake
             </p>
           </div>
-          <span className="text-[10px] px-2.5 py-0.5 rounded bg-rose-500/20 text-rose-300 border border-rose-500/40 font-bold self-start sm:self-auto">
+          <span className="text-[10px] px-2.5 py-0.5 rounded bg-rose-500/20 text-rose-300 border-rose-500/40 font-bold self-start sm:self-auto">
             ALL WRITE ATTEMPTS BLOCKED
           </span>
         </div>
 
         <div className="space-y-3">
           {evidenceIds.length === 0 ? (
-            <div className="p-8 rounded-2xl bg-black/50 border border-white/10 text-center space-y-2">
+            <div className="p-8 rounded-2xl bg-black/50 border-white/10 text-center space-y-2">
               <ShieldAlert className="w-8 h-8 text-zinc-500 mx-auto" />
               <div className="text-sm font-bold text-zinc-300 font-mono">NO EVIDENCE RECORDED</div>
               <p className="text-xs text-zinc-500 max-w-md mx-auto">
@@ -544,7 +544,7 @@ export const EvidenceIntakePanel: React.FC<EvidenceIntakePanelProps> = ({
             return (
               <div
                 key={id}
-                className="p-4 rounded-2xl bg-black/70 border border-indigo-500/30 hover:border-indigo-400/50 transition-all space-y-3"
+                className="p-4 rounded-2xl bg-black/70 border-indigo-500/30 hover:border-indigo-400/50 transition-all space-y-3"
               >
                 {/* Header Row */}
                 <div className="flex flex-col md:flex-row md:items-center justify-between gap-2 border-b border-white/5 pb-2.5">
@@ -561,10 +561,10 @@ export const EvidenceIntakePanel: React.FC<EvidenceIntakePanelProps> = ({
                     <div>
                       <div className="flex flex-wrap items-center gap-2">
                         <span className="text-sm font-bold text-white font-serif">{data.evidenceId}</span>
-                        <span className="text-[10px] px-2 py-0.2 rounded bg-indigo-500/20 text-indigo-300 border border-indigo-400/40 font-bold">
+                        <span className="text-[10px] px-2 py-0.2 rounded bg-indigo-500/20 text-indigo-300 border-indigo-400/40 font-bold">
                           PROVENANCE: {data.provenance}
                         </span>
-                        <span className="text-[10px] px-2 py-0.2 rounded bg-zinc-800 text-zinc-300 border border-white/10 font-bold">
+                        <span className="text-[10px] px-2 py-0.2 rounded bg-zinc-800 text-zinc-300 border-white/10 font-bold">
                           TYPE: {data.sourceType}
                         </span>
                       </div>
@@ -574,12 +574,12 @@ export const EvidenceIntakePanel: React.FC<EvidenceIntakePanelProps> = ({
 
                   {/* Verification Status & Canonical Write Indicators */}
                   <div className="flex flex-wrap items-center gap-2 self-start md:self-center">
-                    <span className="pending-state-pulse px-2.5 py-1 rounded-lg bg-amber-500/20 text-amber-300 border border-amber-500/50 text-[10px] font-bold flex items-center gap-1.5 shadow-[0_0_12px_rgba(245,158,11,0.2)]">
+                    <span className="pending-state-pulse px-2.5 py-1 rounded-lg bg-amber-500/20 text-amber-300 border-amber-500/50 text-[10px] font-bold flex items-center gap-1.5 shadow-[0_0_12px_rgba(245,158,11,0.2)]">
                       <Clock className="w-3 h-3 text-amber-400" />
                       <span>{data.status}</span>
                     </span>
 
-                    <span className="px-2.5 py-1 rounded-lg bg-rose-500/20 text-rose-300 border border-rose-500/50 text-[10px] font-bold flex items-center gap-1.5 shadow-[0_0_12px_rgba(244,63,94,0.2)]">
+                    <span className="px-2.5 py-1 rounded-lg bg-rose-500/20 text-rose-300 border-rose-500/50 text-[10px] font-bold flex items-center gap-1.5 shadow-[0_0_12px_rgba(244,63,94,0.2)]">
                       <Ban className="w-3 h-3 text-rose-400" />
                       <span>NO CANONICAL WRITE</span>
                     </span>
@@ -588,22 +588,22 @@ export const EvidenceIntakePanel: React.FC<EvidenceIntakePanelProps> = ({
 
                 {/* Read-Only Details Grid */}
                 <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-2.5 text-[11px]">
-                  <div className="p-2.5 rounded-xl bg-zinc-900/60 border border-white/5 space-y-0.5">
+                  <div className="p-2.5 rounded-xl bg-zinc-900/60 border-white/5 space-y-0.5">
                     <div className="text-[9px] text-zinc-500 font-bold uppercase">Classification</div>
                     <div className="text-amber-300 font-bold truncate">{data.dataClassification}</div>
                   </div>
 
-                  <div className="p-2.5 rounded-xl bg-zinc-900/60 border border-white/5 space-y-0.5">
+                  <div className="p-2.5 rounded-xl bg-zinc-900/60 border-white/5 space-y-0.5">
                     <div className="text-[9px] text-zinc-500 font-bold uppercase">Isolation Scope</div>
                     <div className="text-zinc-200 truncate">{data.isolationScope}</div>
                   </div>
 
-                  <div className="p-2.5 rounded-xl bg-zinc-900/60 border border-white/5 space-y-0.5">
+                  <div className="p-2.5 rounded-xl bg-zinc-900/60 border-white/5 space-y-0.5">
                     <div className="text-[9px] text-zinc-500 font-bold uppercase">Issuing/Source Entity</div>
                     <div className="text-indigo-300 truncate">{data.organizationOrGoverningBody}</div>
                   </div>
 
-                  <div className="p-2.5 rounded-xl bg-zinc-900/60 border border-white/5 space-y-0.5">
+                  <div className="p-2.5 rounded-xl bg-zinc-900/60 border-white/5 space-y-0.5">
                     <div className="text-[9px] text-zinc-500 font-bold uppercase">Digest &amp; Write Gate</div>
                     <div className="text-rose-300 font-bold flex items-center justify-between">
                       <span>{data.digestStatus}</span>
@@ -613,7 +613,7 @@ export const EvidenceIntakePanel: React.FC<EvidenceIntakePanelProps> = ({
                 </div>
 
                 {/* Source Provided Claims Summary Banner */}
-                <div className="p-2.5 rounded-xl bg-black/40 border border-white/5 text-[10px] text-zinc-400 flex flex-col sm:flex-row sm:items-center justify-between gap-1">
+                <div className="p-2.5 rounded-xl bg-black/40 border-white/5 text-[10px] text-zinc-400 flex flex-col sm:flex-row sm:items-center justify-between gap-1">
                   <span>
                     <strong className="text-zinc-300">Source Claims (Read-Only):</strong> {data.claimsSummary}
                   </span>
@@ -630,7 +630,7 @@ export const EvidenceIntakePanel: React.FC<EvidenceIntakePanelProps> = ({
 
                     <button
                       onClick={() => handleEvaluatePolicy(id)}
-                      className="px-2.5 py-1 rounded-lg bg-indigo-600/30 hover:bg-indigo-600/50 border border-indigo-400/50 text-indigo-200 text-[10px] font-bold flex items-center gap-1.5 transition-all shadow-[0_0_10px_rgba(99,102,241,0.2)]"
+                      className="px-2.5 py-1 rounded-lg bg-indigo-600/30 hover:bg-indigo-600/50 border-indigo-400/50 text-indigo-200 text-[10px] font-bold flex items-center gap-1.5 transition-all shadow-[0_0_10px_rgba(99,102,241,0.2)]"
                     >
                       <Sparkles className="w-3 h-3 text-indigo-300" />
                       <span>Test Promotion Request via Policy Engine</span>
@@ -638,10 +638,10 @@ export const EvidenceIntakePanel: React.FC<EvidenceIntakePanelProps> = ({
                   </div>
 
                   {policyResults[id] && (
-                    <div className="p-3 rounded-xl bg-rose-950/40 border border-rose-500/40 space-y-1.5 text-xs animate-in fade-in duration-200">
+                    <div className="p-3 rounded-xl bg-rose-950/40 border-rose-500/40 space-y-1.5 text-xs animate-in fade-in duration-200">
                       <div className="flex flex-wrap items-center justify-between gap-2 border-b border-rose-500/20 pb-1">
                         <div className="flex items-center gap-2">
-                          <span className="px-2 py-0.5 rounded bg-rose-500/20 text-rose-300 border border-rose-400/50 text-[10px] font-bold">
+                          <span className="px-2 py-0.5 rounded bg-rose-500/20 text-rose-300 border-rose-400/50 text-[10px] font-bold">
                             DECISION: {policyResults[id].decision}
                           </span>
                           <span className="text-[10px] text-zinc-400 font-mono">
@@ -679,45 +679,45 @@ export const EvidenceIntakePanel: React.FC<EvidenceIntakePanelProps> = ({
               EVIDENCE INTAKE RECONCILIATION &amp; P0 INVARIANT ENFORCEMENT
             </h3>
           </div>
-          <span className="text-[10px] px-2 py-0.5 rounded bg-emerald-500/20 text-emerald-300 border border-emerald-500/40 font-bold self-start sm:self-auto">
+          <span className="text-[10px] px-2 py-0.5 rounded bg-emerald-500/20 text-emerald-300 border-emerald-500/40 font-bold self-start sm:self-auto">
             ALL MUTATION GATES = LOCKED (0)
           </span>
         </div>
 
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-4 text-xs">
           {/* Left: Reconciliation Table */}
-          <div className="p-3 rounded-xl bg-black/60 border border-white/5 space-y-2">
+          <div className="p-3 rounded-xl bg-black/60 border-white/5 space-y-2">
             <div className="text-[10px] text-zinc-400 font-bold flex justify-between">
               <span>ARTIFACT RECONCILIATION STATUS</span>
               <span className="text-zinc-500">P0 MATCH COMPARISON</span>
             </div>
             <div className="space-y-1.5 text-[11px]">
-              <div className="p-2 rounded-lg bg-zinc-900/60 border border-white/5 flex items-center justify-between">
+              <div className="p-2 rounded-lg bg-zinc-900/60 border-white/5 flex items-center justify-between">
                 <div>
                   <span className="font-bold text-indigo-300">TNT-TH-001:</span>
                   <span className="text-zinc-400 ml-1.5 text-[10px]">Tenant Manifest</span>
                 </div>
-                <span className="text-[9px] px-2 py-0.5 rounded bg-amber-500/20 text-amber-300 border border-amber-500/40 font-bold">
+                <span className="text-[9px] px-2 py-0.5 rounded bg-amber-500/20 text-amber-300 border-amber-500/40 font-bold">
                   NOT APPLICABLE / PENDING
                 </span>
               </div>
 
-              <div className="p-2 rounded-lg bg-zinc-900/60 border border-white/5 flex items-center justify-between">
+              <div className="p-2 rounded-lg bg-zinc-900/60 border-white/5 flex items-center justify-between">
                 <div>
                   <span className="font-bold text-cyan-300">DS-901-PILOT:</span>
                   <span className="text-zinc-400 ml-1.5 text-[10px]">Pilot Dataset</span>
                 </div>
-                <span className="text-[9px] px-2 py-0.5 rounded bg-amber-500/20 text-amber-300 border border-amber-500/40 font-bold">
+                <span className="text-[9px] px-2 py-0.5 rounded bg-amber-500/20 text-amber-300 border-amber-500/40 font-bold">
                   NOT APPLICABLE (NON-LIVE)
                 </span>
               </div>
 
-              <div className="p-2 rounded-lg bg-zinc-900/60 border border-white/5 flex items-center justify-between">
+              <div className="p-2 rounded-lg bg-zinc-900/60 border-white/5 flex items-center justify-between">
                 <div>
                   <span className="font-bold text-purple-300">FIOS-EVIDENCE-PKG:</span>
                   <span className="text-zinc-400 ml-1.5 text-[10px]">13 Manifests / Gold Master</span>
                 </div>
-                <span className="text-[9px] px-2 py-0.5 rounded bg-indigo-500/20 text-indigo-300 border border-indigo-500/40 font-bold">
+                <span className="text-[9px] px-2 py-0.5 rounded bg-indigo-500/20 text-indigo-300 border-indigo-500/40 font-bold">
                   REGISTERED / PENDING VERIFICATION
                 </span>
               </div>
@@ -725,25 +725,25 @@ export const EvidenceIntakePanel: React.FC<EvidenceIntakePanelProps> = ({
           </div>
 
           {/* Right: P0 Immutable Core Verification */}
-          <div className="p-3 rounded-xl bg-black/60 border border-white/5 space-y-2">
+          <div className="p-3 rounded-xl bg-black/60 border-white/5 space-y-2">
             <div className="text-[10px] text-zinc-400 font-bold flex justify-between">
               <span>CANONICAL P0 INVARIANTS (FROZEN CORE)</span>
               <Lock className="w-3 h-3 text-emerald-400" />
             </div>
             <div className="grid grid-cols-2 gap-2 text-[10px]">
-              <div className="p-2 rounded-lg bg-zinc-900/60 border border-white/5">
+              <div className="p-2 rounded-lg bg-zinc-900/60 border-white/5">
                 <div className="text-zinc-500">P0 MERKLE ROOT:</div>
                 <div className="font-mono text-emerald-400 font-bold truncate">909ab814...fa4c68 🔒</div>
               </div>
-              <div className="p-2 rounded-lg bg-zinc-900/60 border border-white/5">
+              <div className="p-2 rounded-lg bg-zinc-900/60 border-white/5">
                 <div className="text-zinc-500">CANONICAL BLOCK:</div>
                 <div className="font-mono text-emerald-400 font-bold">#849202 🔒</div>
               </div>
-              <div className="p-2 rounded-lg bg-zinc-900/60 border border-white/5">
+              <div className="p-2 rounded-lg bg-zinc-900/60 border-white/5">
                 <div className="text-zinc-500">CANONICAL SEALS:</div>
                 <div className="font-mono text-emerald-400 font-bold">14,902 SEALS 🔒</div>
               </div>
-              <div className="p-2 rounded-lg bg-zinc-900/60 border border-white/5">
+              <div className="p-2 rounded-lg bg-zinc-900/60 border-white/5">
                 <div className="text-zinc-500">SSOT MUTATION:</div>
                 <div className="font-mono text-emerald-400 font-bold">0 MUTATIONS 🔒</div>
               </div>
@@ -760,7 +760,7 @@ export const EvidenceIntakePanel: React.FC<EvidenceIntakePanelProps> = ({
             {/* Header */}
             <div className="flex items-center justify-between border-b border-indigo-500/20 pb-3">
               <div className="flex items-center gap-2.5">
-                <div className="w-8 h-8 rounded-xl bg-indigo-500/20 border border-indigo-400 text-indigo-300 flex items-center justify-center shrink-0">
+                <div className="w-8 h-8 rounded-xl bg-indigo-500/20 border-indigo-400 text-indigo-300 flex items-center justify-center shrink-0">
                   <Building2 className="w-4 h-4" />
                 </div>
                 <div>
@@ -768,7 +768,7 @@ export const EvidenceIntakePanel: React.FC<EvidenceIntakePanelProps> = ({
                     <span className="text-sm font-bold text-indigo-100 font-serif">
                       TNT-TH-001
                     </span>
-                    <span className="text-[9px] px-2 py-0.5 rounded bg-indigo-500/20 text-indigo-300 border border-indigo-400/40 font-bold">
+                    <span className="text-[9px] px-2 py-0.5 rounded bg-indigo-500/20 text-indigo-300 border-indigo-400/40 font-bold">
                       SOURCE_FILE
                     </span>
                   </div>
@@ -777,7 +777,7 @@ export const EvidenceIntakePanel: React.FC<EvidenceIntakePanelProps> = ({
               </div>
 
               <div className="text-right">
-                <span className="pending-state-pulse text-[9px] px-2 py-0.5 rounded bg-amber-500/20 text-amber-300 border border-amber-500/40 font-bold">
+                <span className="pending-state-pulse text-[9px] px-2 py-0.5 rounded bg-amber-500/20 text-amber-300 border-amber-500/40 font-bold">
                   PENDING VERIFICATION
                 </span>
                 <div className="text-[9px] text-rose-400 font-bold mt-1">NO CANONICAL WRITE</div>
@@ -790,7 +790,7 @@ export const EvidenceIntakePanel: React.FC<EvidenceIntakePanelProps> = ({
                 Source-Provided Manifest Properties (Non-Canonical &bull; Read-Only):
               </div>
 
-              <div className="p-3 rounded-xl bg-black/70 border border-white/5 space-y-2">
+              <div className="p-3 rounded-xl bg-black/70 border-white/5 space-y-2">
                 <div className="flex justify-between items-center text-[11px]">
                   <span className="text-zinc-400">Organization:</span>
                   <span className="text-zinc-100 font-bold">MAEW HOLDINGS CO., LTD. (Sovereign HQ)</span>
@@ -811,18 +811,18 @@ export const EvidenceIntakePanel: React.FC<EvidenceIntakePanelProps> = ({
 
               {/* Source-Provided Cryptographic Claims */}
               <div className="grid grid-cols-2 gap-2 text-[10px]">
-                <div className="p-2.5 rounded-xl bg-black/60 border border-white/5 space-y-1">
+                <div className="p-2.5 rounded-xl bg-black/60 border-white/5 space-y-1">
                   <div className="text-zinc-500">KEY FINGERPRINT (SOURCE):</div>
                   <div className="text-indigo-300 font-bold truncate">0xTH-990A-F11E-8C2A-4F11</div>
                 </div>
-                <div className="p-2.5 rounded-xl bg-black/60 border border-white/5 space-y-1">
+                <div className="p-2.5 rounded-xl bg-black/60 border-white/5 space-y-1">
                   <div className="text-zinc-500">CRYPTO PROOF (SOURCE):</div>
                   <div className="text-amber-300 font-bold truncate">sha256_tenant_audit_tnt_th_001_sealed</div>
                 </div>
               </div>
 
               {/* Source Quota Metrics */}
-              <div className="p-2.5 rounded-xl bg-black/60 border border-white/5 space-y-1 text-[10px]">
+              <div className="p-2.5 rounded-xl bg-black/60 border-white/5 space-y-1 text-[10px]">
                 <div className="text-zinc-500 flex justify-between">
                   <span>QUOTA TELEMETRY (SOURCE-REPORTED):</span>
                   <span className="text-zinc-400">CPU 32% &bull; Storage 480/2000 GB &bull; 142.8M Req/mo</span>
@@ -830,7 +830,7 @@ export const EvidenceIntakePanel: React.FC<EvidenceIntakePanelProps> = ({
               </div>
 
               {/* Cryptographic Binding Record */}
-              <div className="p-3 rounded-xl bg-indigo-950/30 border border-indigo-500/30 space-y-1 text-[10px]">
+              <div className="p-3 rounded-xl bg-indigo-950/30 border-indigo-500/30 space-y-1 text-[10px]">
                 <div className="font-bold text-indigo-300 flex items-center justify-between">
                   <span>CRYPTOGRAPHIC BINDING RECORD</span>
                   <span className="text-amber-300">VERIFICATION: PENDING</span>
@@ -846,7 +846,7 @@ export const EvidenceIntakePanel: React.FC<EvidenceIntakePanelProps> = ({
           </div>
 
           {/* Tenant Isolation Boundary */}
-          <div className="mt-4 p-3 rounded-xl bg-rose-500/10 border border-rose-500/30 text-[10px] text-rose-200 space-y-1">
+          <div className="mt-4 p-3 rounded-xl bg-rose-500/10 border-rose-500/30 text-[10px] text-rose-200 space-y-1">
             <div className="font-bold text-rose-300 flex items-center gap-1.5">
               <ShieldAlert className="w-3.5 h-3.5" />
               <span>TENANT ISOLATION BOUNDARY: STRICTLY ISOLATED</span>
@@ -863,7 +863,7 @@ export const EvidenceIntakePanel: React.FC<EvidenceIntakePanelProps> = ({
             {/* Header */}
             <div className="flex items-center justify-between border-b border-cyan-500/20 pb-3">
               <div className="flex items-center gap-2.5">
-                <div className="w-8 h-8 rounded-xl bg-cyan-500/20 border border-cyan-400 text-cyan-300 flex items-center justify-center shrink-0">
+                <div className="w-8 h-8 rounded-xl bg-cyan-500/20 border-cyan-400 text-cyan-300 flex items-center justify-center shrink-0">
                   <TrendingUp className="w-4 h-4" />
                 </div>
                 <div>
@@ -871,7 +871,7 @@ export const EvidenceIntakePanel: React.FC<EvidenceIntakePanelProps> = ({
                     <span className="text-sm font-bold text-cyan-100 font-serif">
                       DS-901-PILOT
                     </span>
-                    <span className="text-[9px] px-2 py-0.5 rounded bg-cyan-500/20 text-cyan-300 border border-cyan-400/40 font-bold">
+                    <span className="text-[9px] px-2 py-0.5 rounded bg-cyan-500/20 text-cyan-300 border-cyan-400/40 font-bold">
                       SOURCE_FILE
                     </span>
                   </div>
@@ -880,7 +880,7 @@ export const EvidenceIntakePanel: React.FC<EvidenceIntakePanelProps> = ({
               </div>
 
               <div className="text-right">
-                <span className="pending-state-pulse text-[9px] px-2 py-0.5 rounded bg-amber-500/20 text-amber-300 border border-amber-500/40 font-bold">
+                <span className="pending-state-pulse text-[9px] px-2 py-0.5 rounded bg-amber-500/20 text-amber-300 border-amber-500/40 font-bold">
                   PENDING VERIFICATION
                 </span>
                 <div className="text-[9px] text-rose-400 font-bold mt-1">NON-LIVE &bull; NO CANONICAL WRITE</div>
@@ -893,7 +893,7 @@ export const EvidenceIntakePanel: React.FC<EvidenceIntakePanelProps> = ({
                 Source-Provided Dataset Attribution (Non-Live &bull; Read-Only):
               </div>
 
-              <div className="p-3 rounded-xl bg-black/70 border border-white/5 space-y-2">
+              <div className="p-3 rounded-xl bg-black/70 border-white/5 space-y-2">
                 <div className="flex justify-between items-center text-[11px]">
                   <span className="text-zinc-400">Manifesto:</span>
                   <span className="text-zinc-100 font-bold">MAEW Ω∞ FIOS ULTIMATE v2.1 LTS</span>
@@ -914,22 +914,22 @@ export const EvidenceIntakePanel: React.FC<EvidenceIntakePanelProps> = ({
 
               {/* 4 Factor Quantitative Breakdown (Source Data) */}
               <div className="grid grid-cols-2 sm:grid-cols-4 gap-2 text-[10px]">
-                <div className="p-2 rounded-lg bg-black/60 border border-white/5 text-center">
+                <div className="p-2 rounded-lg bg-black/60 border-white/5 text-center">
                   <div className="text-zinc-500 font-bold">QUALITY (35%)</div>
                   <div className="text-emerald-400 font-bold">+2.15 &alpha;</div>
                   <div className="text-[9px] text-purple-300">z: +2.31</div>
                 </div>
-                <div className="p-2 rounded-lg bg-black/60 border border-white/5 text-center">
+                <div className="p-2 rounded-lg bg-black/60 border-white/5 text-center">
                   <div className="text-zinc-500 font-bold">VALUE (20%)</div>
                   <div className="text-emerald-400 font-bold">+1.84 &alpha;</div>
                   <div className="text-[9px] text-purple-300">z: +1.45</div>
                 </div>
-                <div className="p-2 rounded-lg bg-black/60 border border-white/5 text-center">
+                <div className="p-2 rounded-lg bg-black/60 border-white/5 text-center">
                   <div className="text-zinc-500 font-bold">MOMENTUM (25%)</div>
                   <div className="text-emerald-400 font-bold">+2.76 &alpha;</div>
                   <div className="text-[9px] text-purple-300">z: +2.85</div>
                 </div>
-                <div className="p-2 rounded-lg bg-black/60 border border-white/5 text-center">
+                <div className="p-2 rounded-lg bg-black/60 border-white/5 text-center">
                   <div className="text-zinc-500 font-bold">VOLATILITY (20%)</div>
                   <div className="text-amber-400 font-bold">-0.42 &alpha;</div>
                   <div className="text-[9px] text-zinc-400">z: -0.92</div>
@@ -937,7 +937,7 @@ export const EvidenceIntakePanel: React.FC<EvidenceIntakePanelProps> = ({
               </div>
 
               {/* Backtest Reported */}
-              <div className="p-2.5 rounded-xl bg-black/60 border border-white/5 space-y-1 text-[10px]">
+              <div className="p-2.5 rounded-xl bg-black/60 border-white/5 space-y-1 text-[10px]">
                 <div className="text-zinc-400 flex justify-between font-bold">
                   <span>BACKTEST REPORTED (PILOT DATASET):</span>
                   <span className="text-cyan-300">30D: +12.42% &bull; Sharpe: 2.41 &bull; MaxDD: -4.18%</span>
@@ -945,7 +945,7 @@ export const EvidenceIntakePanel: React.FC<EvidenceIntakePanelProps> = ({
               </div>
 
               {/* Cryptographic Binding Record */}
-              <div className="p-3 rounded-xl bg-cyan-950/30 border border-cyan-500/30 space-y-1 text-[10px]">
+              <div className="p-3 rounded-xl bg-cyan-950/30 border-cyan-500/30 space-y-1 text-[10px]">
                 <div className="font-bold text-cyan-300 flex items-center justify-between">
                   <span>CRYPTOGRAPHIC BINDING RECORD</span>
                   <span className="text-amber-300">VERIFICATION: PENDING</span>
@@ -961,7 +961,7 @@ export const EvidenceIntakePanel: React.FC<EvidenceIntakePanelProps> = ({
           </div>
 
           {/* Financial Safety Boundary */}
-          <div className="mt-4 p-3 rounded-xl bg-amber-500/10 border border-amber-500/30 text-[10px] text-amber-200 space-y-1">
+          <div className="mt-4 p-3 rounded-xl bg-amber-500/10 border-amber-500/30 text-[10px] text-amber-200 space-y-1">
             <div className="font-bold text-amber-300 flex items-center gap-1.5">
               <AlertTriangle className="w-3.5 h-3.5" />
               <span>FINANCIAL SAFETY BOUNDARY: ENFORCED</span>

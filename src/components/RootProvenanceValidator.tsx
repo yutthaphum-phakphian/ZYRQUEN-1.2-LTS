@@ -173,7 +173,7 @@ export const RootProvenanceValidator: React.FC<RootProvenanceValidatorProps> = (
       {/* 3-Tier Layer Breakdown */}
       <div className="grid grid-cols-1 md:grid-cols-3 gap-3">
         {/* Tier 1: Token Match */}
-        <div className="p-3.5 rounded-2xl bg-black/60 border border-white/10 space-y-1.5">
+        <div className="p-3.5 rounded-2xl bg-black/60 border-white/10 space-y-1.5">
           <div className="flex items-center justify-between text-[10px] text-zinc-400">
             <span>LAYER 1: TOKEN STRING</span>
             <span
@@ -191,7 +191,7 @@ export const RootProvenanceValidator: React.FC<RootProvenanceValidatorProps> = (
         </div>
 
         {/* Tier 2: Dilithium-5 Proof */}
-        <div className="p-3.5 rounded-2xl bg-black/60 border border-white/10 space-y-1.5">
+        <div className="p-3.5 rounded-2xl bg-black/60 border-white/10 space-y-1.5">
           <div className="flex items-center justify-between text-[10px] text-zinc-400">
             <span>LAYER 2: CRYPTOGRAPHIC PROOF</span>
             <span
@@ -209,7 +209,7 @@ export const RootProvenanceValidator: React.FC<RootProvenanceValidatorProps> = (
         </div>
 
         {/* Tier 3: Physical Genesis Binding */}
-        <div className="p-3.5 rounded-2xl bg-black/60 border border-white/10 space-y-1.5">
+        <div className="p-3.5 rounded-2xl bg-black/60 border-white/10 space-y-1.5">
           <div className="flex items-center justify-between text-[10px] text-zinc-400">
             <span>LAYER 3: PHYSICAL GENESIS</span>
             <span
@@ -229,7 +229,7 @@ export const RootProvenanceValidator: React.FC<RootProvenanceValidatorProps> = (
 
       {/* Merkle Root Specs */}
       <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-        <div className="p-4 rounded-2xl bg-black/70 border border-white/10 space-y-2">
+        <div className="p-4 rounded-2xl bg-black/70 border-white/10 space-y-2">
           <div className="flex items-center justify-between text-[11px]">
             <span className="text-zinc-400">Canonical Merkle Root SSoT:</span>
             <button
@@ -240,7 +240,7 @@ export const RootProvenanceValidator: React.FC<RootProvenanceValidatorProps> = (
               <span>{copiedId === 'merkle-root' ? 'COPIED' : 'COPY'}</span>
             </button>
           </div>
-          <div className="p-2.5 rounded-xl bg-[#060a12] border border-cyan-500/20 text-cyan-300 font-mono text-[11px] break-all select-all">
+          <div className="p-2.5 rounded-xl bg-[#060a12] border-cyan-500/20 text-cyan-300 font-mono text-[11px] break-all select-all">
             {CANONICAL_MERKLE_ROOT}
           </div>
           <div className="flex justify-between text-[10px] text-zinc-500 pt-1">
@@ -249,12 +249,12 @@ export const RootProvenanceValidator: React.FC<RootProvenanceValidatorProps> = (
           </div>
         </div>
 
-        <div className="p-4 rounded-2xl bg-black/70 border border-white/10 space-y-2">
+        <div className="p-4 rounded-2xl bg-black/70 border-white/10 space-y-2">
           <div className="flex items-center justify-between text-[11px]">
             <span className="text-zinc-400">Physical Genesis Proof Keyring:</span>
             <span className="text-[10px] text-amber-400 font-bold">HSM SLOT #00 &bull; DILITHIUM-5</span>
           </div>
-          <div className="p-2.5 rounded-xl bg-[#060a12] border border-white/10 text-zinc-400 font-mono text-[10px] space-y-1">
+          <div className="p-2.5 rounded-xl bg-[#060a12] border-white/10 text-zinc-400 font-mono text-[10px] space-y-1">
             <div className="flex justify-between"><span>Lattice Param:</span><strong className="text-cyan-300">k=8, l=7, NIST Level 5</strong></div>
             <div className="flex justify-between"><span>Causal Nonce:</span><strong className="text-amber-300">0x849202FA4C68</strong></div>
             <div className="flex justify-between"><span>Provenance:</span><strong className={provenancePhase === 'VALID' ? 'text-emerald-400' : 'text-amber-400'}>{provenancePhase}</strong></div>
@@ -263,7 +263,7 @@ export const RootProvenanceValidator: React.FC<RootProvenanceValidatorProps> = (
       </div>
 
       {/* Verification Input Box */}
-      <div className="p-4 rounded-2xl bg-black/80 border border-cyan-500/30 space-y-3">
+      <div className="p-4 rounded-2xl bg-black/80 border-cyan-500/30 space-y-3">
         <div className="flex items-center justify-between text-[11px]">
           <label htmlFor="genesis-proof-input" className="text-white font-bold flex items-center gap-1.5">
             <FileCheck className="w-3.5 h-3.5 text-cyan-400" />
@@ -272,7 +272,7 @@ export const RootProvenanceValidator: React.FC<RootProvenanceValidatorProps> = (
           <div className="flex items-center gap-2">
             <button
               onClick={handleInjectSampleGenesisProof}
-              className="text-[10px] px-2.5 py-1 rounded bg-cyan-500/20 hover:bg-cyan-500/30 text-cyan-300 border border-cyan-500/40 font-bold cursor-pointer transition-colors"
+              className="text-[10px] px-2.5 py-1 rounded bg-cyan-500/20 hover:bg-cyan-500/30 text-cyan-300 border-cyan-500/40 font-bold cursor-pointer transition-colors"
             >
               INSERT AUTHORIZED PROOF TOKEN
             </button>
@@ -298,7 +298,7 @@ export const RootProvenanceValidator: React.FC<RootProvenanceValidatorProps> = (
               onProvenanceStateChange?.(false);
             }}
             placeholder="Paste physical Genesis Proof string e.g. GENESIS-AUTH-ZYRQUEN-..."
-            className="flex-1 px-3.5 py-2.5 rounded-xl bg-[#070b14] border border-white/15 text-white placeholder:text-zinc-600 focus:outline-none focus:border-cyan-400 font-mono text-xs"
+            className="flex-1 px-3.5 py-2.5 rounded-xl bg-[#070b14] border-white/15 text-white placeholder:text-zinc-600 focus:outline-none focus:border-cyan-400 font-mono text-xs"
           />
           <button
             onClick={handleRunCryptographicProof}
@@ -321,7 +321,7 @@ export const RootProvenanceValidator: React.FC<RootProvenanceValidatorProps> = (
 
         {/* Real-time Verification Logs */}
         {verificationLogs.length > 0 && (
-          <div className="p-3 rounded-xl bg-[#060810] border border-cyan-500/30 text-[11px] font-mono space-y-1">
+          <div className="p-3 rounded-xl bg-[#060810] border-cyan-500/30 text-[11px] font-mono space-y-1">
             {verificationLogs.map((log, idx) => (
               <div key={idx} className={log.startsWith('✅') ? 'text-emerald-300 font-bold' : log.startsWith('❌') ? 'text-rose-300 font-bold' : 'text-zinc-300'}>
                 {log}

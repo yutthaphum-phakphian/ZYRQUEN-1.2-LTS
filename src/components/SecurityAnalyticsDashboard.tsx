@@ -534,22 +534,22 @@ export const SecurityAnalyticsDashboard: React.FC<SecurityAnalyticsDashboardProp
   return (
     <div className="space-y-6 animate-in fade-in duration-300">
       {/* Top Header Card */}
-      <div className="p-6 rounded-[24px] bg-gradient-to-br from-[#0c1021]/95 via-[#080c1b]/98 to-[#04060e] border border-cyan-500/30 shadow-2xl relative overflow-hidden backdrop-blur-xl">
+      <div className="p-6 rounded-[24px] bg-gradient-to-br from-[#0c1021]/95 via-[#080c1b]/98 to-[#04060e] border-cyan-500/30 shadow-2xl relative overflow-hidden backdrop-blur-xl">
         <div className="absolute top-0 right-0 w-96 h-64 bg-cyan-500/10 rounded-full blur-[90px] pointer-events-none" />
         <div className="absolute bottom-0 left-1/3 w-80 h-48 bg-rose-500/10 rounded-full blur-[80px] pointer-events-none" />
 
         <div className="flex flex-col lg:flex-row lg:items-center justify-between gap-4 relative z-10">
           <div>
             <div className="flex items-center gap-2.5 flex-wrap mb-2">
-              <span className="px-3 py-1 rounded-full text-xs font-mono font-bold bg-cyan-500/15 text-cyan-300 border border-cyan-500/30 flex items-center gap-1.5 shadow-sm">
+              <span className="px-3 py-1 rounded-full text-xs font-mono font-bold bg-cyan-500/15 text-cyan-300 border-cyan-500/30 flex items-center gap-1.5 shadow-sm">
                 <ShieldAlert className="w-3.5 h-3.5 text-cyan-400" />
                 SENTINEL AI RISK ENGINE
               </span>
-              <span className="px-3 py-1 rounded-full text-xs font-mono font-bold bg-rose-500/15 text-rose-300 border border-rose-500/30 flex items-center gap-1.5 shadow-sm">
+              <span className="px-3 py-1 rounded-full text-xs font-mono font-bold bg-rose-500/15 text-rose-300 border-rose-500/30 flex items-center gap-1.5 shadow-sm">
                 <Flame className="w-3.5 h-3.5 text-rose-400" />
                 CHAMBER 02 QUARANTINE BUFFER
               </span>
-              <span className="px-3 py-1 rounded-full text-xs font-mono font-bold bg-amber-500/15 text-amber-200 border border-amber-500/30 flex items-center gap-1.5 shadow-sm">
+              <span className="px-3 py-1 rounded-full text-xs font-mono font-bold bg-amber-500/15 text-amber-200 border-amber-500/30 flex items-center gap-1.5 shadow-sm">
                 <Scale className="w-3.5 h-3.5 text-amber-400" />
                 ETDA ม.๙, ๒๖, ๒๘ • PDPA ม.๓๗
               </span>
@@ -581,7 +581,7 @@ export const SecurityAnalyticsDashboard: React.FC<SecurityAnalyticsDashboardProp
 
             <button
               onClick={handleExportCsv}
-              className="px-4 py-2.5 rounded-xl text-xs font-bold bg-cyan-500/15 hover:bg-cyan-500/25 text-cyan-200 border border-cyan-500/30 hover:border-cyan-400/50 flex items-center gap-2 transition-all shadow-sm cursor-pointer"
+              className="px-4 py-2.5 rounded-xl text-xs font-bold bg-cyan-500/15 hover:bg-cyan-500/25 text-cyan-200 border-cyan-500/30 hover:border-cyan-400/50 flex items-center gap-2 transition-all shadow-sm cursor-pointer"
               title="Export 30-day Sentinel AI telemetry dataset as CSV"
             >
               <Download className="w-4 h-4 text-cyan-300" />
@@ -592,7 +592,7 @@ export const SecurityAnalyticsDashboard: React.FC<SecurityAnalyticsDashboardProp
 
         {/* Live Simulation Toast */}
         {simulationToast && (
-          <div className="mt-4 p-3 rounded-xl bg-rose-500/20 border border-rose-500/50 text-rose-200 text-xs font-mono flex items-center gap-2 animate-in fade-in slide-in-from-top-2">
+          <div className="mt-4 p-3 rounded-xl bg-rose-500/20 border-rose-500/50 text-rose-200 text-xs font-mono flex items-center gap-2 animate-in fade-in slide-in-from-top-2">
             <AlertOctagon className="w-4 h-4 text-rose-400 shrink-0" />
             <span>{simulationToast}</span>
           </div>
@@ -601,7 +601,7 @@ export const SecurityAnalyticsDashboard: React.FC<SecurityAnalyticsDashboardProp
 
       {/* 6 Key Telemetry Metric Cards */}
       <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-3.5 font-mono">
-        <div className="p-4 rounded-2xl bg-[#090d1f]/90 border border-cyan-500/20 shadow-sm relative overflow-hidden">
+        <div className="p-4 rounded-2xl bg-[#090d1f]/90 border-cyan-500/20 shadow-sm relative overflow-hidden">
           <div className="text-[11px] text-zinc-400 flex items-center gap-1.5 mb-1">
             <Activity className="w-3.5 h-3.5 text-cyan-400" />
             <span>30-Day Avg Risk</span>
@@ -615,7 +615,7 @@ export const SecurityAnalyticsDashboard: React.FC<SecurityAnalyticsDashboardProp
           </div>
         </div>
 
-        <div className="p-4 rounded-2xl bg-[#090d1f]/90 border border-rose-500/30 shadow-sm relative overflow-hidden">
+        <div className="p-4 rounded-2xl bg-[#090d1f]/90 border-rose-500/30 shadow-sm relative overflow-hidden">
           <div className="text-[11px] text-zinc-400 flex items-center gap-1.5 mb-1">
             <Flame className="w-3.5 h-3.5 text-rose-400" />
             <span>Peak Intercept Risk</span>
@@ -628,7 +628,7 @@ export const SecurityAnalyticsDashboard: React.FC<SecurityAnalyticsDashboardProp
           </div>
         </div>
 
-        <div className="p-4 rounded-2xl bg-[#090d1f]/90 border border-amber-500/25 shadow-sm relative overflow-hidden">
+        <div className="p-4 rounded-2xl bg-[#090d1f]/90 border-amber-500/25 shadow-sm relative overflow-hidden">
           <div className="text-[11px] text-zinc-400 flex items-center gap-1.5 mb-1">
             <AlertOctagon className="w-3.5 h-3.5 text-amber-400" />
             <span>Quarantined Count</span>
@@ -641,7 +641,7 @@ export const SecurityAnalyticsDashboard: React.FC<SecurityAnalyticsDashboardProp
           </div>
         </div>
 
-        <div className="p-4 rounded-2xl bg-[#090d1f]/90 border border-emerald-500/25 shadow-sm relative overflow-hidden">
+        <div className="p-4 rounded-2xl bg-[#090d1f]/90 border-emerald-500/25 shadow-sm relative overflow-hidden">
           <div className="text-[11px] text-zinc-400 flex items-center gap-1.5 mb-1">
             <ShieldCheck className="w-3.5 h-3.5 text-emerald-400" />
             <span>Intercept Success</span>
@@ -654,7 +654,7 @@ export const SecurityAnalyticsDashboard: React.FC<SecurityAnalyticsDashboardProp
           </div>
         </div>
 
-        <div className="p-4 rounded-2xl bg-[#090d1f]/90 border border-purple-500/25 shadow-sm relative overflow-hidden">
+        <div className="p-4 rounded-2xl bg-[#090d1f]/90 border-purple-500/25 shadow-sm relative overflow-hidden">
           <div className="text-[11px] text-zinc-400 flex items-center gap-1.5 mb-1">
             <Cpu className="w-3.5 h-3.5 text-purple-400" />
             <span>Isolation Latency</span>
@@ -667,7 +667,7 @@ export const SecurityAnalyticsDashboard: React.FC<SecurityAnalyticsDashboardProp
           </div>
         </div>
 
-        <div className="p-4 rounded-2xl bg-[#090d1f]/90 border border-cyan-500/25 shadow-sm relative overflow-hidden">
+        <div className="p-4 rounded-2xl bg-[#090d1f]/90 border-cyan-500/25 shadow-sm relative overflow-hidden">
           <div className="text-[11px] text-zinc-400 flex items-center gap-1.5 mb-1">
             <Lock className="w-3.5 h-3.5 text-cyan-400" />
             <span>SSoT State Drift</span>
@@ -682,7 +682,7 @@ export const SecurityAnalyticsDashboard: React.FC<SecurityAnalyticsDashboardProp
       </div>
 
       {/* Main D3 Chart Interactive Container */}
-      <div className="p-6 rounded-[24px] bg-[#070a17]/95 border border-cyan-500/20 shadow-xl relative overflow-hidden font-mono">
+      <div className="p-6 rounded-[24px] bg-[#070a17]/95 border-cyan-500/20 shadow-xl relative overflow-hidden font-mono">
         {/* Controls Bar: Time Range & Filters */}
         <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 pb-4 border-b border-white/10 text-xs">
           <div className="flex items-center gap-2 flex-wrap">
@@ -699,8 +699,8 @@ export const SecurityAnalyticsDashboard: React.FC<SecurityAnalyticsDashboardProp
                 }}
                 className={`px-3 py-1.5 rounded-lg font-bold transition-all cursor-pointer ${
                   timeRange === r
-                    ? 'bg-cyan-500/25 text-cyan-200 border border-cyan-400/50 shadow-sm'
-                    : 'bg-white/5 text-zinc-400 hover:text-zinc-200 border border-white/5 hover:border-white/15'
+                    ? 'bg-cyan-500/25 text-cyan-200 border-cyan-400/50 shadow-sm'
+                    : 'bg-white/5 text-zinc-400 hover:text-zinc-200 border-white/5 hover:border-white/15'
                 }`}
               >
                 {r === '30D' ? '30 Days (Full)' : r === '14D' ? '14 Days (Bi-Weekly)' : '7 Days (Weekly)'}
@@ -716,8 +716,8 @@ export const SecurityAnalyticsDashboard: React.FC<SecurityAnalyticsDashboardProp
               }}
               className={`px-3 py-1.5 rounded-lg font-bold flex items-center gap-1.5 transition-all cursor-pointer ${
                 filterSurgeOnly
-                  ? 'bg-rose-500/30 text-rose-200 border border-rose-400/60 shadow-sm'
-                  : 'bg-white/5 text-zinc-400 hover:text-zinc-200 border border-white/5 hover:border-white/15'
+                  ? 'bg-rose-500/30 text-rose-200 border-rose-400/60 shadow-sm'
+                  : 'bg-white/5 text-zinc-400 hover:text-zinc-200 border-white/5 hover:border-white/15'
               }`}
             >
               <Filter className="w-3.5 h-3.5 text-rose-400" />
@@ -748,7 +748,7 @@ export const SecurityAnalyticsDashboard: React.FC<SecurityAnalyticsDashboardProp
           {/* Floating Hover Card (D3 Pointer Tracker) */}
           {hoveredPoint && (
             <div
-              className="absolute pointer-events-none z-30 p-3 rounded-xl bg-[#090d1f]/95 border border-cyan-400/50 shadow-2xl backdrop-blur-md text-[11px] text-white font-mono min-w-[240px] transform -translate-x-1/2 -translate-y-full mb-3"
+              className="absolute pointer-events-none z-30 p-3 rounded-xl bg-[#090d1f]/95 border-cyan-400/50 shadow-2xl backdrop-blur-md text-[11px] text-white font-mono min-w-[240px] transform -translate-x-1/2 -translate-y-full mb-3"
               style={{
                 left: `${hoveredPoint.x}px`,
                 top: `${hoveredPoint.y}px`,
@@ -759,10 +759,10 @@ export const SecurityAnalyticsDashboard: React.FC<SecurityAnalyticsDashboardProp
                 <span
                   className={`px-1.5 py-0.5 rounded text-[9px] font-bold ${
                     hoveredPoint.point.riskScore >= SENTINEL_QUARANTINE_THRESHOLD
-                      ? 'bg-rose-500/30 text-rose-200 border border-rose-400/40'
+                      ? 'bg-rose-500/30 text-rose-200 border-rose-400/40'
                       : hoveredPoint.point.riskScore > 0.4
-                      ? 'bg-amber-500/30 text-amber-200 border border-amber-400/40'
-                      : 'bg-cyan-500/20 text-cyan-200 border border-cyan-400/30'
+                      ? 'bg-amber-500/30 text-amber-200 border-amber-400/40'
+                      : 'bg-cyan-500/20 text-cyan-200 border-cyan-400/30'
                   }`}
                 >
                   Risk {hoveredPoint.point.riskScore}
@@ -813,10 +813,10 @@ export const SecurityAnalyticsDashboard: React.FC<SecurityAnalyticsDashboardProp
               const target = telemetryData.find((d) => d.dayIndex === 8);
               if (target) setSelectedPoint(target);
             }}
-            className="p-4 rounded-2xl bg-[#090d1f]/90 border border-rose-500/30 hover:border-rose-400/60 shadow-md transition-all cursor-pointer group hover:bg-[#0c1228]"
+            className="p-4 rounded-2xl bg-[#090d1f]/90 border-rose-500/30 hover:border-rose-400/60 shadow-md transition-all cursor-pointer group hover:bg-[#0c1228]"
           >
             <div className="flex items-center justify-between mb-2">
-              <span className="px-2.5 py-0.5 rounded-full text-[10px] font-bold bg-rose-500/20 text-rose-300 border border-rose-500/40">
+              <span className="px-2.5 py-0.5 rounded-full text-[10px] font-bold bg-rose-500/20 text-rose-300 border-rose-500/40">
                 Days 7 - 9 • CLUSTER α
               </span>
               <span className="text-xs font-bold text-rose-400">Peak Risk: 0.94</span>
@@ -842,11 +842,11 @@ export const SecurityAnalyticsDashboard: React.FC<SecurityAnalyticsDashboardProp
               const target = telemetryData.find((d) => d.dayIndex === 17);
               if (target) setSelectedPoint(target);
             }}
-            className="p-4 rounded-2xl bg-[#090d1f]/90 border border-rose-500/40 hover:border-rose-400/70 shadow-md transition-all cursor-pointer group hover:bg-[#0c1228] relative overflow-hidden"
+            className="p-4 rounded-2xl bg-[#090d1f]/90 border-rose-500/40 hover:border-rose-400/70 shadow-md transition-all cursor-pointer group hover:bg-[#0c1228] relative overflow-hidden"
           >
             <div className="absolute top-0 right-0 w-24 h-24 bg-rose-500/10 rounded-full blur-xl pointer-events-none" />
             <div className="flex items-center justify-between mb-2">
-              <span className="px-2.5 py-0.5 rounded-full text-[10px] font-bold bg-rose-500/30 text-rose-200 border border-rose-400/50">
+              <span className="px-2.5 py-0.5 rounded-full text-[10px] font-bold bg-rose-500/30 text-rose-200 border-rose-400/50">
                 Days 16 - 19 • CLUSTER β (CRITICAL)
               </span>
               <span className="text-xs font-bold text-rose-400">Peak Risk: 0.98</span>
@@ -872,10 +872,10 @@ export const SecurityAnalyticsDashboard: React.FC<SecurityAnalyticsDashboardProp
               const target = telemetryData.find((d) => d.dayIndex === 26);
               if (target) setSelectedPoint(target);
             }}
-            className="p-4 rounded-2xl bg-[#090d1f]/90 border border-rose-500/30 hover:border-rose-400/60 shadow-md transition-all cursor-pointer group hover:bg-[#0c1228]"
+            className="p-4 rounded-2xl bg-[#090d1f]/90 border-rose-500/30 hover:border-rose-400/60 shadow-md transition-all cursor-pointer group hover:bg-[#0c1228]"
           >
             <div className="flex items-center justify-between mb-2">
-              <span className="px-2.5 py-0.5 rounded-full text-[10px] font-bold bg-rose-500/20 text-rose-300 border border-rose-500/40">
+              <span className="px-2.5 py-0.5 rounded-full text-[10px] font-bold bg-rose-500/20 text-rose-300 border-rose-500/40">
                 Days 26 - 27 • CLUSTER γ
               </span>
               <span className="text-xs font-bold text-rose-400">Peak Risk: 0.91</span>
@@ -898,14 +898,14 @@ export const SecurityAnalyticsDashboard: React.FC<SecurityAnalyticsDashboardProp
 
       {/* Selected Day Forensic Inspection Modal / Drawer */}
       {selectedPoint && (
-        <div className="p-5 rounded-2xl bg-gradient-to-br from-[#0c1126] to-[#070a18] border border-cyan-500/40 shadow-2xl font-mono animate-in fade-in slide-in-from-bottom-2">
+        <div className="p-5 rounded-2xl bg-gradient-to-br from-[#0c1126] to-[#070a18] border-cyan-500/40 shadow-2xl font-mono animate-in fade-in slide-in-from-bottom-2">
           <div className="flex items-center justify-between border-b border-white/10 pb-3 mb-4">
             <div className="flex items-center gap-3">
               <span
                 className={`p-2 rounded-xl ${
                   selectedPoint.riskScore >= SENTINEL_QUARANTINE_THRESHOLD
-                    ? 'bg-rose-500/20 text-rose-400 border border-rose-500/30'
-                    : 'bg-cyan-500/20 text-cyan-400 border border-cyan-500/30'
+                    ? 'bg-rose-500/20 text-rose-400 border-rose-500/30'
+                    : 'bg-cyan-500/20 text-cyan-400 border-cyan-500/30'
                 }`}
               >
                 {selectedPoint.riskScore >= SENTINEL_QUARANTINE_THRESHOLD ? (
@@ -933,7 +933,7 @@ export const SecurityAnalyticsDashboard: React.FC<SecurityAnalyticsDashboardProp
           </div>
 
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3 text-xs">
-            <div className="p-3 rounded-xl bg-black/40 border border-white/5">
+            <div className="p-3 rounded-xl bg-black/40 border-white/5">
               <div className="text-zinc-400 mb-1">Sentinel AI Risk Score</div>
               <div
                 className={`text-lg font-bold ${
@@ -949,7 +949,7 @@ export const SecurityAnalyticsDashboard: React.FC<SecurityAnalyticsDashboardProp
               </div>
             </div>
 
-            <div className="p-3 rounded-xl bg-black/40 border border-white/5">
+            <div className="p-3 rounded-xl bg-black/40 border-white/5">
               <div className="text-zinc-400 mb-1">Quarantined Payloads</div>
               <div className="text-lg font-bold text-white">
                 {selectedPoint.quarantinedCount} <span className="text-xs text-zinc-400">/ {selectedPoint.inspectedTransactions.toLocaleString()} tx</span>
@@ -957,7 +957,7 @@ export const SecurityAnalyticsDashboard: React.FC<SecurityAnalyticsDashboardProp
               <div className="text-[10px] text-zinc-400 mt-1">Fail-Closed Contained</div>
             </div>
 
-            <div className="p-3 rounded-xl bg-black/40 border border-white/5">
+            <div className="p-3 rounded-xl bg-black/40 border-white/5">
               <div className="text-zinc-400 mb-1">PQC Defense Scheme</div>
               <div className="text-sm font-bold text-cyan-200 truncate">
                 {selectedPoint.pqcScheme}
@@ -965,7 +965,7 @@ export const SecurityAnalyticsDashboard: React.FC<SecurityAnalyticsDashboardProp
               <div className="text-[10px] text-zinc-400 mt-1">FIPS 204 Standard</div>
             </div>
 
-            <div className="p-3 rounded-xl bg-black/40 border border-white/5">
+            <div className="p-3 rounded-xl bg-black/40 border-white/5">
               <div className="text-zinc-400 mb-1">Statutory Basis</div>
               <div className="text-sm font-bold text-amber-200">
                 {selectedPoint.statuteRef}
@@ -975,7 +975,7 @@ export const SecurityAnalyticsDashboard: React.FC<SecurityAnalyticsDashboardProp
           </div>
 
           {/* Evidence Digest & Action */}
-          <div className="mt-3 p-3 rounded-xl bg-black/50 border border-white/10 flex flex-col sm:flex-row sm:items-center justify-between gap-3 text-xs">
+          <div className="mt-3 p-3 rounded-xl bg-black/50 border-white/10 flex flex-col sm:flex-row sm:items-center justify-between gap-3 text-xs">
             <div className="truncate">
               <span className="text-zinc-400">Evidence Digest: </span>
               <span className="text-cyan-300 font-mono">{selectedPoint.evidenceDigest}</span>

@@ -405,22 +405,22 @@ export const ThaiLegalSearchModal: React.FC<ThaiLegalSearchModalProps> = ({
 
   return (
     <div id="thai-legal-search-modal-backdrop" className="fixed inset-0 z-50 flex items-center justify-center p-3 sm:p-4 bg-black/80 backdrop-blur-xl animate-in fade-in duration-300">
-      <div id="thai-legal-search-modal-container" className="modal-slide-in relative w-full max-w-4xl max-h-[92vh] flex flex-col rounded-[28px] bg-[#07080F] border border-white/15 shadow-[0_0_50px_rgba(6,182,212,0.15)] overflow-hidden">
+      <div id="thai-legal-search-modal-container" className="modal-slide-in relative w-full max-w-4xl max-h-[92vh] flex flex-col rounded-[28px] bg-[#07080F] border-white/15 shadow-[0_0_50px_rgba(6,182,212,0.15)] overflow-hidden">
         {/* Header */}
         <div className="stagger-1 p-5 sm:p-6 bg-[#0a0f1e] border-b border-white/8 flex items-start justify-between gap-4">
           <div className="flex items-center gap-3">
-            <div className="p-3 rounded-2xl bg-cyan-500/10 border border-cyan-500/20 text-cyan-400">
+            <div className="p-3 rounded-2xl bg-cyan-500/10 border-cyan-500/20 text-cyan-400">
               <Scale className="w-6 h-6" />
             </div>
             <div>
               <div className="flex items-center gap-2 flex-wrap">
-                <span className="px-2.5 py-0.5 rounded-full bg-cyan-500/10 text-cyan-300 border border-cyan-500/20 text-[10px] font-mono uppercase tracking-wider">
+                <span className="px-2.5 py-0.5 rounded-full bg-cyan-500/10 text-cyan-300 border-cyan-500/20 text-[10px] font-mono uppercase tracking-wider">
                   THAI LAWS ↔ CRYPTOGRAPHIC SEAL CHAIN
                 </span>
-                <span className="px-2 py-0.5 rounded-full bg-emerald-500/10 text-emerald-300 border border-emerald-500/20 text-[10px] font-mono">
+                <span className="px-2 py-0.5 rounded-full bg-emerald-500/10 text-emerald-300 border-emerald-500/20 text-[10px] font-mono">
                   ETDA & ROYAL GAZETTE GROUNDING
                 </span>
-                <span className="px-2 py-0.5 rounded-full bg-violet-500/10 text-violet-300 border border-violet-500/20 text-[10px] font-mono flex items-center gap-1">
+                <span className="px-2 py-0.5 rounded-full bg-violet-500/10 text-violet-300 border-violet-500/20 text-[10px] font-mono flex items-center gap-1">
                   <History className="w-3 h-3 text-violet-400" />
                   <span>{recentQueries.length} Recent in LocalStorage</span>
                 </span>
@@ -463,7 +463,7 @@ export const ThaiLegalSearchModal: React.FC<ThaiLegalSearchModalProps> = ({
                 playTone(400, 0.05);
                 onClose();
               }}
-              className="p-2 rounded-xl bg-white/5 hover:bg-white/10 text-zinc-400 hover:text-white border border-white/10 transition-all"
+              className="p-2 rounded-xl bg-white/5 hover:bg-white/10 text-zinc-400 hover:text-white border-white/10 transition-all"
             >
               <X className="w-5 h-5" />
             </button>
@@ -472,7 +472,7 @@ export const ThaiLegalSearchModal: React.FC<ThaiLegalSearchModalProps> = ({
 
         {/* View Mode Toggle Bar */}
         <div className="stagger-2 px-6 py-2.5 bg-[#0a0c16] border-b border-white/8 flex items-center justify-between gap-3 font-mono text-xs flex-wrap">
-          <div className="flex items-center gap-1.5 p-1 bg-black/50 rounded-xl border border-white/6">
+          <div className="flex items-center gap-1.5 p-1 bg-black/50 rounded-xl border-white/6">
             <button
               id="tab-toggle-search-oracle"
               onClick={() => {
@@ -481,7 +481,7 @@ export const ThaiLegalSearchModal: React.FC<ThaiLegalSearchModalProps> = ({
               }}
               className={`px-3.5 py-1.5 rounded-lg transition-all flex items-center gap-1.5 ${
                 activeTab === 'search'
-                  ? 'bg-cyan-500/20 text-cyan-300 font-bold border border-cyan-500/30 shadow-[0_0_12px_rgba(6,182,212,0.15)]'
+                  ? 'bg-cyan-500/20 text-cyan-300 font-bold border-cyan-500/30 shadow-[0_0_12px_rgba(6,182,212,0.15)]'
                   : 'text-zinc-400 hover:text-zinc-200'
               }`}
             >
@@ -502,7 +502,7 @@ export const ThaiLegalSearchModal: React.FC<ThaiLegalSearchModalProps> = ({
               }}
               className={`px-3.5 py-1.5 rounded-lg transition-all flex items-center gap-1.5 ${
                 activeTab === 'mapping'
-                  ? 'bg-cyan-500/20 text-cyan-300 font-bold border border-cyan-500/30 shadow-[0_0_12px_rgba(6,182,212,0.15)]'
+                  ? 'bg-cyan-500/20 text-cyan-300 font-bold border-cyan-500/30 shadow-[0_0_12px_rgba(6,182,212,0.15)]'
                   : 'text-zinc-400 hover:text-zinc-200'
               }`}
             >
@@ -585,7 +585,7 @@ export const ThaiLegalSearchModal: React.FC<ThaiLegalSearchModalProps> = ({
                       }
                     }}
                     placeholder="Search Thai laws, มาตรา 9/26/28, PDPA, NCSA, NIST FIPS 203 PQC..."
-                    className="w-full pl-11 pr-10 py-3 rounded-2xl bg-white/[0.04] border border-white/10 focus:border-cyan-500/50 focus:bg-white/[0.07] text-white font-mono text-xs sm:text-sm placeholder-zinc-500 focus:outline-none transition-all"
+                    className="w-full pl-11 pr-10 py-3 rounded-2xl bg-white/[0.04] border-white/10 focus:border-cyan-500/50 focus:bg-white/[0.07] text-white font-mono text-xs sm:text-sm placeholder-zinc-500 focus:outline-none transition-all"
                     autoFocus
                   />
                   {query && (
@@ -606,7 +606,7 @@ export const ThaiLegalSearchModal: React.FC<ThaiLegalSearchModalProps> = ({
                   {isInputFocused && recentQueries.length > 0 && (
                     <div
                       id="search-recent-queries-focus-dropdown"
-                      className="absolute left-0 right-0 top-full mt-1.5 z-50 rounded-2xl bg-[#090b14] border border-cyan-500/30 shadow-[0_12px_40px_rgba(0,0,0,0.85)] backdrop-blur-2xl overflow-hidden animate-in fade-in slide-in-from-top-2 duration-150"
+                      className="absolute left-0 right-0 top-full mt-1.5 z-50 rounded-2xl bg-[#090b14] border-cyan-500/30 shadow-[0_12px_40px_rgba(0,0,0,0.85)] backdrop-blur-2xl overflow-hidden animate-in fade-in slide-in-from-top-2 duration-150"
                     >
                       <div className="px-4 py-2.5 bg-white/[0.03] border-b border-white/8 flex items-center justify-between text-[11px] font-mono">
                         <div className="flex items-center gap-1.5 text-violet-300 font-semibold">
@@ -677,7 +677,7 @@ export const ThaiLegalSearchModal: React.FC<ThaiLegalSearchModalProps> = ({
 
                               <div className="flex items-center gap-1 shrink-0">
                                 {isHighlighted && (
-                                  <span className="hidden sm:inline px-1.5 py-0.5 rounded bg-cyan-400/20 text-cyan-300 text-[9px] font-mono border border-cyan-400/30">
+                                  <span className="hidden sm:inline px-1.5 py-0.5 rounded bg-cyan-400/20 text-cyan-300 text-[9px] font-mono border-cyan-400/30">
                                     ↵ Enter
                                   </span>
                                 )}
@@ -705,7 +705,7 @@ export const ThaiLegalSearchModal: React.FC<ThaiLegalSearchModalProps> = ({
                                     setHighlightedIndex(-1);
                                     handleSearch(item.query);
                                   }}
-                                  className="px-2 py-1 rounded-md bg-cyan-500/15 hover:bg-cyan-500/25 text-cyan-300 text-[10px] font-mono flex items-center gap-1 border border-cyan-500/20 group-hover:border-cyan-500/40"
+                                  className="px-2 py-1 rounded-md bg-cyan-500/15 hover:bg-cyan-500/25 text-cyan-300 text-[10px] font-mono flex items-center gap-1 border-cyan-500/20 group-hover:border-cyan-500/40"
                                 >
                                   <Play className="w-2.5 h-2.5 fill-cyan-400/50" />
                                   <span>Search</span>
@@ -763,7 +763,7 @@ export const ThaiLegalSearchModal: React.FC<ThaiLegalSearchModalProps> = ({
 
               {/* Notification Banner */}
               {notificationMsg && (
-                <div className="py-1 px-3 rounded-xl bg-cyan-500/10 border border-cyan-500/20 text-cyan-300 font-mono text-xs flex items-center justify-between animate-in fade-in">
+                <div className="py-1 px-3 rounded-xl bg-cyan-500/10 border-cyan-500/20 text-cyan-300 font-mono text-xs flex items-center justify-between animate-in fade-in">
                   <span className="flex items-center gap-1.5">
                     <CheckCircle2 className="w-3.5 h-3.5 text-cyan-400" />
                     {notificationMsg}
@@ -794,7 +794,7 @@ export const ThaiLegalSearchModal: React.FC<ThaiLegalSearchModalProps> = ({
                     {recentQueries.slice(0, 10).map((item) => (
                       <div
                         key={item.id}
-                        className="group flex items-center gap-1 px-2.5 py-1 rounded-xl bg-violet-500/10 hover:bg-violet-500/20 border border-violet-500/25 hover:border-violet-500/50 text-[11px] font-mono text-violet-200 hover:text-white transition-all shadow-sm"
+                        className="group flex items-center gap-1 px-2.5 py-1 rounded-xl bg-violet-500/10 hover:bg-violet-500/20 border-violet-500/25 hover:border-violet-500/50 text-[11px] font-mono text-violet-200 hover:text-white transition-all shadow-sm"
                       >
                         <button
                           type="button"
@@ -844,7 +844,7 @@ export const ThaiLegalSearchModal: React.FC<ThaiLegalSearchModalProps> = ({
                         setQuery(preset.query);
                         handleSearch(preset.query);
                       }}
-                      className="px-2.5 py-1 rounded-xl bg-white/5 hover:bg-cyan-500/15 border border-white/8 hover:border-cyan-500/30 text-[11px] font-mono text-zinc-300 hover:text-cyan-300 transition-all text-left flex items-center gap-1.5"
+                      className="px-2.5 py-1 rounded-xl bg-white/5 hover:bg-cyan-500/15 border-white/8 hover:border-cyan-500/30 text-[11px] font-mono text-zinc-300 hover:text-cyan-300 transition-all text-left flex items-center gap-1.5"
                     >
                       <Tag className="w-3 h-3 text-cyan-400" />
                       <span>{preset.title}</span>
@@ -857,7 +857,7 @@ export const ThaiLegalSearchModal: React.FC<ThaiLegalSearchModalProps> = ({
             {/* Search Results Body */}
             <div className="flex-1 p-6 overflow-y-auto space-y-6">
               {errorMsg && (
-                <div className="p-4 rounded-2xl bg-amber-500/10 border border-amber-500/20 text-amber-300 text-xs font-mono flex items-center gap-2">
+                <div className="p-4 rounded-2xl bg-amber-500/10 border-amber-500/20 text-amber-300 text-xs font-mono flex items-center gap-2">
                   <AlertCircle className="w-4 h-4 shrink-0" />
                   <span>{errorMsg}</span>
                 </div>
@@ -880,7 +880,7 @@ export const ThaiLegalSearchModal: React.FC<ThaiLegalSearchModalProps> = ({
               {!isLoading && result && (
                 <div className="space-y-5 animate-in fade-in duration-300">
                   {/* Header Info */}
-                  <div className="p-4 rounded-2xl bg-white/[0.03] border border-white/8 flex flex-col sm:flex-row sm:items-center justify-between gap-3 font-mono text-xs">
+                  <div className="p-4 rounded-2xl bg-white/[0.03] border-white/8 flex flex-col sm:flex-row sm:items-center justify-between gap-3 font-mono text-xs">
                     <div className="space-y-0.5">
                       <div className="text-zinc-400">
                         Query: <span className="text-cyan-300 font-semibold">"{result.query}"</span>
@@ -895,7 +895,7 @@ export const ThaiLegalSearchModal: React.FC<ThaiLegalSearchModalProps> = ({
                       <button
                         onClick={handleExportPdf}
                         disabled={isExportingPdf}
-                        className="px-3 py-1.5 rounded-xl bg-amber-500/10 hover:bg-amber-500/20 border border-amber-500/30 text-xs font-mono text-amber-300 hover:text-amber-200 flex items-center gap-1.5 transition-all"
+                        className="px-3 py-1.5 rounded-xl bg-amber-500/10 hover:bg-amber-500/20 border-amber-500/30 text-xs font-mono text-amber-300 hover:text-amber-200 flex items-center gap-1.5 transition-all"
                         title="Export Digital Evidence Checklist (PDF)"
                       >
                         {isExportingPdf ? (
@@ -907,7 +907,7 @@ export const ThaiLegalSearchModal: React.FC<ThaiLegalSearchModalProps> = ({
                       </button>
                       <button
                         onClick={() => handleSearch(result.query)}
-                        className="px-3 py-1.5 rounded-xl bg-cyan-500/10 hover:bg-cyan-500/20 border border-cyan-500/25 text-xs font-mono text-cyan-300 hover:text-white flex items-center gap-1.5 transition-all"
+                        className="px-3 py-1.5 rounded-xl bg-cyan-500/10 hover:bg-cyan-500/20 border-cyan-500/25 text-xs font-mono text-cyan-300 hover:text-white flex items-center gap-1.5 transition-all"
                         title="Re-execute this query"
                       >
                         <RotateCcw className="w-3.5 h-3.5 text-cyan-400" />
@@ -915,7 +915,7 @@ export const ThaiLegalSearchModal: React.FC<ThaiLegalSearchModalProps> = ({
                       </button>
                       <button
                         onClick={copyToClipboard}
-                        className="px-3 py-1.5 rounded-xl bg-white/5 hover:bg-white/10 border border-white/10 text-xs font-mono text-zinc-300 hover:text-white flex items-center gap-1.5 transition-all"
+                        className="px-3 py-1.5 rounded-xl bg-white/5 hover:bg-white/10 border-white/10 text-xs font-mono text-zinc-300 hover:text-white flex items-center gap-1.5 transition-all"
                       >
                         {copied ? (
                           <>
@@ -933,7 +933,7 @@ export const ThaiLegalSearchModal: React.FC<ThaiLegalSearchModalProps> = ({
                   </div>
 
                   {/* Answer Content */}
-                  <div className="p-5 rounded-2xl bg-black/40 border border-white/8 text-zinc-200 font-mono text-xs sm:text-sm leading-relaxed whitespace-pre-wrap select-text">
+                  <div className="p-5 rounded-2xl bg-black/40 border-white/8 text-zinc-200 font-mono text-xs sm:text-sm leading-relaxed whitespace-pre-wrap select-text">
                     {result.answer}
                   </div>
 
@@ -951,7 +951,7 @@ export const ThaiLegalSearchModal: React.FC<ThaiLegalSearchModalProps> = ({
                             href={cite.uri}
                             target="_blank"
                             rel="noreferrer noopener"
-                            className="p-3 rounded-xl bg-white/[0.03] hover:bg-cyan-500/10 border border-white/8 hover:border-cyan-500/30 text-xs font-mono text-zinc-300 hover:text-cyan-300 flex items-center justify-between gap-2 transition-all group"
+                            className="p-3 rounded-xl bg-white/[0.03] hover:bg-cyan-500/10 border-white/8 hover:border-cyan-500/30 text-xs font-mono text-zinc-300 hover:text-cyan-300 flex items-center justify-between gap-2 transition-all group"
                           >
                             <span className="truncate">{cite.title}</span>
                             <ExternalLink className="w-3.5 h-3.5 shrink-0 opacity-50 group-hover:opacity-100 transition-opacity" />
@@ -962,7 +962,7 @@ export const ThaiLegalSearchModal: React.FC<ThaiLegalSearchModalProps> = ({
                   )}
 
                   {/* Sovereign Authority Seal */}
-                  <div className="p-4 rounded-2xl bg-gradient-to-r from-amber-500/10 to-cyan-500/10 border border-amber-500/20 flex items-center gap-3">
+                  <div className="p-4 rounded-2xl bg-gradient-to-r from-amber-500/10 to-cyan-500/10 border-amber-500/20 flex items-center gap-3">
                     <ShieldCheck className="w-5 h-5 text-amber-400 shrink-0" />
                     <div className="text-[11px] font-mono text-zinc-300 leading-snug">
                       <span className="text-amber-300 font-semibold">
@@ -978,16 +978,16 @@ export const ThaiLegalSearchModal: React.FC<ThaiLegalSearchModalProps> = ({
               {!isLoading && !result && (
                 <div className="space-y-6">
                   {/* Detailed Recent Queries Panel */}
-                  <div className="p-5 rounded-2xl bg-[#090b14] border border-white/10 space-y-4">
+                  <div className="p-5 rounded-2xl bg-[#090b14] border-white/10 space-y-4">
                     <div className="flex items-center justify-between flex-wrap gap-2">
                       <div className="flex items-center gap-2">
-                        <div className="p-2 rounded-xl bg-violet-500/15 border border-violet-500/30 text-violet-300">
+                        <div className="p-2 rounded-xl bg-violet-500/15 border-violet-500/30 text-violet-300">
                           <History className="w-4 h-4" />
                         </div>
                         <div>
                           <h3 className="font-mono text-sm font-semibold text-white flex items-center gap-2">
                             <span>Recent Legal Queries</span>
-                            <span className="px-2 py-0.5 rounded-full bg-violet-500/20 border border-violet-500/30 text-[10px] text-violet-300 font-mono">
+                            <span className="px-2 py-0.5 rounded-full bg-violet-500/20 border-violet-500/30 text-[10px] text-violet-300 font-mono">
                               LocalStorage Persistence
                             </span>
                           </h3>
@@ -1000,7 +1000,7 @@ export const ThaiLegalSearchModal: React.FC<ThaiLegalSearchModalProps> = ({
                       {recentQueries.length > 0 && (
                         <button
                           onClick={clearRecentSearches}
-                          className="px-3 py-1 rounded-xl bg-rose-500/10 hover:bg-rose-500/20 border border-rose-500/20 text-rose-300 text-xs font-mono flex items-center gap-1.5 transition-all"
+                          className="px-3 py-1 rounded-xl bg-rose-500/10 hover:bg-rose-500/20 border-rose-500/20 text-rose-300 text-xs font-mono flex items-center gap-1.5 transition-all"
                         >
                           <Trash2 className="w-3.5 h-3.5" />
                           <span>Clear History</span>
@@ -1009,7 +1009,7 @@ export const ThaiLegalSearchModal: React.FC<ThaiLegalSearchModalProps> = ({
                     </div>
 
                     {recentQueries.length === 0 ? (
-                      <div className="py-8 text-center space-y-2 border border-dashed border-white/10 rounded-xl bg-black/20">
+                      <div className="py-8 text-center space-y-2 border-dashed border-white/10 rounded-xl bg-black/20">
                         <History className="w-6 h-6 text-zinc-600 mx-auto" />
                         <p className="text-xs font-mono text-zinc-400">No past search queries saved in local storage.</p>
                         <p className="text-[11px] font-mono text-zinc-500">Execute any query or preset to build your recent search history.</p>
@@ -1019,7 +1019,7 @@ export const ThaiLegalSearchModal: React.FC<ThaiLegalSearchModalProps> = ({
                         {recentQueries.map((item, index) => (
                           <div
                             key={item.id}
-                            className="p-3 rounded-xl bg-white/[0.02] hover:bg-white/[0.05] border border-white/6 hover:border-violet-500/30 transition-all flex flex-col sm:flex-row sm:items-center justify-between gap-3 group"
+                            className="p-3 rounded-xl bg-white/[0.02] hover:bg-white/[0.05] border-white/6 hover:border-violet-500/30 transition-all flex flex-col sm:flex-row sm:items-center justify-between gap-3 group"
                           >
                             <div className="flex items-start gap-3 min-w-0 flex-1">
                               <span className="mt-0.5 px-2 py-0.5 rounded-md bg-white/5 text-[10px] font-mono text-zinc-400 shrink-0">
@@ -1050,7 +1050,7 @@ export const ThaiLegalSearchModal: React.FC<ThaiLegalSearchModalProps> = ({
                             <div className="flex items-center gap-2 shrink-0 self-end sm:self-center">
                               <button
                                 onClick={() => handleUseInInput(item.query)}
-                                className="px-2.5 py-1 rounded-lg bg-white/5 hover:bg-white/10 text-zinc-300 hover:text-white border border-white/10 text-xs font-mono flex items-center gap-1 transition-all"
+                                className="px-2.5 py-1 rounded-lg bg-white/5 hover:bg-white/10 text-zinc-300 hover:text-white border-white/10 text-xs font-mono flex items-center gap-1 transition-all"
                                 title="Edit query in search box"
                               >
                                 <Edit3 className="w-3 h-3 text-zinc-400" />
@@ -1061,7 +1061,7 @@ export const ThaiLegalSearchModal: React.FC<ThaiLegalSearchModalProps> = ({
                                   setQuery(item.query);
                                   handleSearch(item.query);
                                 }}
-                                className="px-3 py-1 rounded-lg bg-cyan-500/15 hover:bg-cyan-500/25 border border-cyan-500/30 text-cyan-300 hover:text-white text-xs font-mono font-medium flex items-center gap-1.5 transition-all shadow-[0_0_10px_rgba(6,182,212,0.15)]"
+                                className="px-3 py-1 rounded-lg bg-cyan-500/15 hover:bg-cyan-500/25 border-cyan-500/30 text-cyan-300 hover:text-white text-xs font-mono font-medium flex items-center gap-1.5 transition-all shadow-[0_0_10px_rgba(6,182,212,0.15)]"
                                 title="Re-execute query now"
                               >
                                 <Play className="w-3 h-3 text-cyan-400 fill-cyan-400/50" />
@@ -1112,7 +1112,7 @@ export const ThaiLegalSearchModal: React.FC<ThaiLegalSearchModalProps> = ({
           <span>Thailand Jurisdiction • Royal Gazette, ETDA & NIST Compliance</span>
           <button
             onClick={onClose}
-            className="px-4 py-1.5 rounded-xl bg-white/5 hover:bg-white/10 text-zinc-300 hover:text-white border border-white/10 transition-all"
+            className="px-4 py-1.5 rounded-xl bg-white/5 hover:bg-white/10 text-zinc-300 hover:text-white border-white/10 transition-all"
           >
             Close Search
           </button>

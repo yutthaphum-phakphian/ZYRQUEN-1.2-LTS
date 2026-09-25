@@ -149,7 +149,7 @@ export const LeftSidebar: React.FC<LeftSidebarProps> = ({
             {/* Sidebar Top Header & Close Button */}
             <div className="p-3.5 border-b border-cyan-500/20 bg-gradient-to-r from-slate-950 via-[#070c1a] to-slate-950 flex items-center justify-between">
               <div className="flex items-center space-x-2">
-                <div className="w-7 h-7 rounded-lg bg-cyan-500/15 border border-cyan-500/30 flex items-center justify-center text-cyan-400">
+                <div className="w-7 h-7 rounded-lg bg-cyan-500/15 border-cyan-500/30 flex items-center justify-center text-cyan-400">
                   <PanelLeft className="w-4 h-4" />
                 </div>
                 <div>
@@ -168,7 +168,7 @@ export const LeftSidebar: React.FC<LeftSidebarProps> = ({
                   playTone(480, 0.05);
                   onClose();
                 }}
-                className="p-1.5 rounded-lg bg-white/5 hover:bg-white/10 border border-white/10 hover:border-cyan-500/30 text-zinc-400 hover:text-zinc-100 transition-colors"
+                className="p-1.5 rounded-lg bg-white/5 hover:bg-white/10 border-white/10 hover:border-cyan-500/30 text-zinc-400 hover:text-zinc-100 transition-colors"
                 title="Close Sidebar / ปิดเมนูข้าง (Ctrl+B or [)"
               >
                 <PanelLeftClose className="w-4 h-4" />
@@ -179,7 +179,7 @@ export const LeftSidebar: React.FC<LeftSidebarProps> = ({
             <div className="p-3.5 border-b border-slate-800/80 bg-slate-950/60">
               <div className="flex items-center justify-between text-xs mb-1">
                 <span className="text-slate-400 font-medium">Sovereign Principal</span>
-                <span className="font-mono text-[10px] px-1.5 py-0.5 rounded bg-amber-500/10 text-amber-300 border border-amber-500/30">
+                <span className="font-mono text-[10px] px-1.5 py-0.5 rounded bg-amber-500/10 text-amber-300 border-amber-500/30">
                   OMEGA-1
                 </span>
               </div>
@@ -195,7 +195,7 @@ export const LeftSidebar: React.FC<LeftSidebarProps> = ({
 
             {/* Navigation Mode Switcher: 18 Views vs 18 Chambers vs 17 Modules */}
             <div className="p-2 border-b border-slate-800/70 bg-slate-900/30">
-              <div className="flex rounded-md bg-slate-950 p-1 border border-slate-800/90 text-[11px] font-mono">
+              <div className="flex rounded-md bg-slate-950 p-1 border-slate-800/90 text-[11px] font-mono">
                 <button
                   onClick={() => {
                     playTone(520, 0.04);
@@ -203,7 +203,7 @@ export const LeftSidebar: React.FC<LeftSidebarProps> = ({
                   }}
                   className={`flex-1 py-1 rounded text-center font-medium transition-all ${
                     activeTab === 'views'
-                      ? 'bg-cyan-950 text-cyan-200 border border-cyan-800/60 shadow-sm font-bold'
+                      ? 'bg-cyan-950 text-cyan-200 border-cyan-800/60 shadow-sm font-bold'
                       : 'text-slate-400 hover:text-slate-200'
                   }`}
                 >
@@ -216,7 +216,7 @@ export const LeftSidebar: React.FC<LeftSidebarProps> = ({
                   }}
                   className={`flex-1 py-1 rounded text-center font-medium transition-all ${
                     activeTab === 'chambers'
-                      ? 'bg-cyan-950 text-cyan-200 border border-cyan-800/60 shadow-sm font-bold'
+                      ? 'bg-cyan-950 text-cyan-200 border-cyan-800/60 shadow-sm font-bold'
                       : 'text-slate-400 hover:text-slate-200'
                   }`}
                 >
@@ -229,7 +229,7 @@ export const LeftSidebar: React.FC<LeftSidebarProps> = ({
                   }}
                   className={`flex-1 py-1 rounded text-center font-medium transition-all ${
                     activeTab === 'modules'
-                      ? 'bg-cyan-950 text-cyan-200 border border-cyan-800/60 shadow-sm font-bold'
+                      ? 'bg-cyan-950 text-cyan-200 border-cyan-800/60 shadow-sm font-bold'
                       : 'text-slate-400 hover:text-slate-200'
                   }`}
                 >
@@ -251,7 +251,7 @@ export const LeftSidebar: React.FC<LeftSidebarProps> = ({
                   }
                   value={searchQuery}
                   onChange={(e) => setSearchQuery(e.target.value)}
-                  className="w-full bg-slate-950/90 border border-slate-800 rounded-lg pl-8 pr-2.5 py-1 text-xs text-slate-200 placeholder-slate-500 focus:outline-none focus:border-cyan-500/70 font-mono"
+                  className="w-full bg-slate-950/90 border-slate-800 rounded-lg pl-8 pr-2.5 py-1 text-xs text-slate-200 placeholder-slate-500 focus:outline-none focus:border-cyan-500/70 font-mono"
                 />
               </div>
             </div>
@@ -275,7 +275,7 @@ export const LeftSidebar: React.FC<LeftSidebarProps> = ({
                       <div className="flex items-center space-x-2.5 min-w-0">
                         <div
                           className={`p-1.5 rounded-lg transition-colors ${
-                            isActive ? 'bg-cyan-500/20 text-cyan-300 border border-cyan-500/40' : 'bg-slate-900 text-slate-400 group-hover:text-slate-200'
+                            isActive ? 'bg-cyan-500/20 text-cyan-300 border-cyan-500/40' : 'bg-slate-900 text-slate-400 group-hover:text-slate-200'
                           }`}
                         >
                           <Icon className="w-4 h-4" />
@@ -284,7 +284,7 @@ export const LeftSidebar: React.FC<LeftSidebarProps> = ({
                           <div className="text-xs font-semibold truncate flex items-center gap-1.5">
                             <span className={isActive ? 'text-white' : 'text-zinc-200'}>{item.labelEn}</span>
                             {item.shortcut && (
-                              <span className="text-[9px] font-mono text-zinc-500 bg-black/40 px-1 py-0.2 rounded border border-white/5">
+                              <span className="text-[9px] font-mono text-zinc-500 bg-black/40 px-1 py-0.2 rounded border-white/5">
                                 {item.shortcut}
                               </span>
                             )}
@@ -300,8 +300,8 @@ export const LeftSidebar: React.FC<LeftSidebarProps> = ({
                           <span
                             className={`text-[9px] px-1.5 py-0.2 rounded font-mono font-bold tracking-wider ${
                               isActive
-                                ? 'bg-cyan-500/20 text-cyan-300 border border-cyan-500/40'
-                                : 'bg-black/40 text-zinc-500 border border-white/5'
+                                ? 'bg-cyan-500/20 text-cyan-300 border-cyan-500/40'
+                                : 'bg-black/40 text-zinc-500 border-white/5'
                             }`}
                           >
                             {item.badge}
@@ -341,12 +341,12 @@ export const LeftSidebar: React.FC<LeftSidebarProps> = ({
                           <span
                             className={`text-[9px] px-1.5 py-0.2 rounded font-mono ${
                               chamber.status === 'LOCKED'
-                                ? 'bg-purple-950/80 text-purple-300 border border-purple-800/40'
+                                ? 'bg-purple-950/80 text-purple-300 border-purple-800/40'
                                 : chamber.status === 'SEALED'
-                                ? 'bg-blue-950/80 text-blue-300 border border-blue-800/40'
+                                ? 'bg-blue-950/80 text-blue-300 border-blue-800/40'
                                 : chamber.status === 'ENFORCED'
-                                ? 'bg-emerald-950/80 text-emerald-300 border border-emerald-800/40'
-                                : 'bg-cyan-950/80 text-cyan-300 border border-cyan-800/40'
+                                ? 'bg-emerald-950/80 text-emerald-300 border-emerald-800/40'
+                                : 'bg-cyan-950/80 text-cyan-300 border-cyan-800/40'
                             }`}
                           >
                             {chamber.status}
@@ -366,11 +366,11 @@ export const LeftSidebar: React.FC<LeftSidebarProps> = ({
                 filteredModules.map((module: OperatingModule) => (
                   <div
                     key={module.id}
-                    className="p-2.5 rounded-xl bg-slate-950/50 border border-slate-800/80 hover:border-slate-700 transition-colors"
+                    className="p-2.5 rounded-xl bg-slate-950/50 border-slate-800/80 hover:border-slate-700 transition-colors"
                   >
                     <div className="flex items-center justify-between text-xs mb-1">
                       <span className="font-mono text-cyan-400 font-bold">MOD {module.number}</span>
-                      <span className="text-[9px] px-1.5 py-0.5 rounded bg-emerald-950 text-emerald-300 font-mono border border-emerald-800/40">
+                      <span className="text-[9px] px-1.5 py-0.5 rounded bg-emerald-950 text-emerald-300 font-mono border-emerald-800/40">
                         {module.status}
                       </span>
                     </div>
@@ -393,7 +393,7 @@ export const LeftSidebar: React.FC<LeftSidebarProps> = ({
                 </span>
                 <span className="font-mono text-emerald-400 font-semibold">{liveCryo.toFixed(2)} mK</span>
               </div>
-              <div className="w-full bg-slate-900 h-1.5 rounded-full overflow-hidden border border-slate-800">
+              <div className="w-full bg-slate-900 h-1.5 rounded-full overflow-hidden border-slate-800">
                 <div
                   className="bg-gradient-to-r from-cyan-400 to-emerald-400 h-full transition-all duration-300"
                   style={{ width: `${Math.min(100, (liveCryo / 85.0) * 100)}%` }}

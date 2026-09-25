@@ -282,23 +282,23 @@ export const Room09MasterPanel: React.FC<Room09MasterPanelProps> = ({
   return (
     <div className="space-y-6 font-mono text-zinc-300">
       {/* Top Banner for Room 09 */}
-      <div className="p-6 sm:p-8 rounded-[28px] bg-gradient-to-br from-cyan-950/40 via-[#07131e]/95 to-black border border-cyan-500/40 backdrop-blur-xl relative overflow-hidden shadow-2xl">
+      <div className="p-6 sm:p-8 rounded-[28px] bg-gradient-to-br from-cyan-950/40 via-[#07131e]/95 to-black border-cyan-500/40 backdrop-blur-xl relative overflow-hidden shadow-2xl">
         <div className="absolute top-0 right-0 w-96 h-96 bg-gradient-to-bl from-cyan-500/10 via-emerald-500/5 to-transparent rounded-full blur-3xl pointer-events-none" />
 
         <div className="relative z-10 flex flex-col lg:flex-row lg:items-center justify-between gap-6">
           <div className="space-y-3">
             <div className="flex flex-wrap items-center gap-2">
-              <span className="px-3 py-1 rounded-full bg-cyan-500/15 text-cyan-300 border border-cyan-500/40 text-xs font-bold flex items-center gap-1.5 shadow-[0_0_12px_rgba(6,182,212,0.25)]">
+              <span className="px-3 py-1 rounded-full bg-cyan-500/15 text-cyan-300 border-cyan-500/40 text-xs font-bold flex items-center gap-1.5 shadow-[0_0_12px_rgba(6,182,212,0.25)]">
                 <Radio className="w-4 h-4 text-cyan-400 animate-pulse" />
                 CHAMBER 09 • DEFENSE-GRADE HIGH ASSURANCE TELEMETRY
               </span>
-              <span className="px-2.5 py-0.5 rounded-full bg-emerald-500/15 text-emerald-300 border border-emerald-500/30 text-[11px] font-bold">
+              <span className="px-2.5 py-0.5 rounded-full bg-emerald-500/15 text-emerald-300 border-emerald-500/30 text-[11px] font-bold">
                 12.4k EVENTS/M • 0.00% DROP
               </span>
-              <span className="px-2.5 py-0.5 rounded-full bg-cyan-500/15 text-cyan-300 border border-cyan-500/30 text-[11px] font-bold">
+              <span className="px-2.5 py-0.5 rounded-full bg-cyan-500/15 text-cyan-300 border-cyan-500/30 text-[11px] font-bold">
                 INV-NON-AUTH-TELEMETRY
               </span>
-              <span className="px-2.5 py-0.5 rounded-full bg-purple-500/15 text-purple-300 border border-purple-500/30 text-[11px] font-bold">
+              <span className="px-2.5 py-0.5 rounded-full bg-purple-500/15 text-purple-300 border-purple-500/30 text-[11px] font-bold">
                 PDPA 100% PII STRIPPED
               </span>
             </div>
@@ -317,7 +317,7 @@ export const Room09MasterPanel: React.FC<Room09MasterPanelProps> = ({
           <div className="flex flex-wrap lg:flex-col items-center lg:items-end gap-3 shrink-0">
             <button
               onClick={handleDownloadTelemetryJson}
-              className="px-4 py-2.5 rounded-xl bg-gradient-to-r from-cyan-600/80 to-emerald-600/80 hover:from-cyan-500 hover:to-emerald-500 text-white font-bold text-xs flex items-center gap-2 shadow-lg shadow-cyan-500/20 border border-cyan-400/40 transition-all transform hover:-translate-y-0.5"
+              className="px-4 py-2.5 rounded-xl bg-gradient-to-r from-cyan-600/80 to-emerald-600/80 hover:from-cyan-500 hover:to-emerald-500 text-white font-bold text-xs flex items-center gap-2 shadow-lg shadow-cyan-500/20 border-cyan-400/40 transition-all transform hover:-translate-y-0.5"
             >
               <Download className="w-4 h-4" />
               Download OTel Telemetry Manifest
@@ -331,22 +331,22 @@ export const Room09MasterPanel: React.FC<Room09MasterPanelProps> = ({
 
         {/* 4 Quick Stat KPIs */}
         <div className="grid grid-cols-2 sm:grid-cols-4 gap-3 mt-6 pt-6 border-t border-cyan-500/20">
-          <div className="p-3 rounded-xl bg-black/40 border border-white/5 space-y-1">
+          <div className="p-3 rounded-xl bg-black/40 border-white/5 space-y-1">
             <div className="text-[10px] text-zinc-400 uppercase tracking-wider">Ingest Rate</div>
             <div className="text-base sm:text-lg font-bold text-cyan-400">12,480 spans/m</div>
             <div className="text-[10px] text-emerald-400 font-semibold">GRPC Protobuf v1.3</div>
           </div>
-          <div className="p-3 rounded-xl bg-black/40 border border-white/5 space-y-1">
+          <div className="p-3 rounded-xl bg-black/40 border-white/5 space-y-1">
             <div className="text-[10px] text-zinc-400 uppercase tracking-wider">Span Drop Rate</div>
             <div className="text-base sm:text-lg font-bold text-emerald-400">0.0000%</div>
             <div className="text-[10px] text-zinc-500">Zero Buffer Loss</div>
           </div>
-          <div className="p-3 rounded-xl bg-black/40 border border-white/5 space-y-1">
+          <div className="p-3 rounded-xl bg-black/40 border-white/5 space-y-1">
             <div className="text-[10px] text-zinc-400 uppercase tracking-wider">PII Redaction Engine</div>
             <div className="text-base sm:text-lg font-bold text-purple-400">100% PII Masked</div>
             <div className="text-[10px] text-purple-300">PDPA Sec 9, 26, 28</div>
           </div>
-          <div className="p-3 rounded-xl bg-black/40 border border-white/5 space-y-1">
+          <div className="p-3 rounded-xl bg-black/40 border-white/5 space-y-1">
             <div className="text-[10px] text-zinc-400 uppercase tracking-wider">Cryo Telemetry State</div>
             <div className="text-base sm:text-lg font-bold text-yellow-400">14.98 mK</div>
             <div className="text-[10px] text-amber-400">Quarantine &lt; 85.0 °C</div>
@@ -355,7 +355,7 @@ export const Room09MasterPanel: React.FC<Room09MasterPanelProps> = ({
       </div>
 
       {/* Navigation Sub-Tabs */}
-      <div className="flex flex-wrap items-center gap-2 p-1.5 rounded-2xl bg-[#0a0d16] border border-cyan-500/20">
+      <div className="flex flex-wrap items-center gap-2 p-1.5 rounded-2xl bg-[#0a0d16] border-cyan-500/20">
         <button
           onClick={() => {
             playTone(600, 0.04);
@@ -363,8 +363,8 @@ export const Room09MasterPanel: React.FC<Room09MasterPanelProps> = ({
           }}
           className={`px-4 py-2 rounded-xl text-xs font-bold transition-all flex items-center gap-2 ${
             activeTab === 'otel-stream'
-              ? 'bg-cyan-500/20 text-cyan-200 border border-cyan-500/40 shadow-[0_0_12px_rgba(6,182,212,0.2)]'
-              : 'text-zinc-400 hover:text-zinc-200 bg-transparent border border-transparent'
+              ? 'bg-cyan-500/20 text-cyan-200 border-cyan-500/40 shadow-[0_0_12px_rgba(6,182,212,0.2)]'
+              : 'text-zinc-400 hover:text-zinc-200 bg-transparent border-transparent'
           }`}
         >
           <Server className="w-3.5 h-3.5" />
@@ -378,8 +378,8 @@ export const Room09MasterPanel: React.FC<Room09MasterPanelProps> = ({
           }}
           className={`px-4 py-2 rounded-xl text-xs font-bold transition-all flex items-center gap-2 ${
             activeTab === 'pii-redactor'
-              ? 'bg-purple-500/20 text-purple-200 border border-purple-500/40 shadow-[0_0_12px_rgba(168,85,247,0.2)]'
-              : 'text-zinc-400 hover:text-zinc-200 bg-transparent border border-transparent'
+              ? 'bg-purple-500/20 text-purple-200 border-purple-500/40 shadow-[0_0_12px_rgba(168,85,247,0.2)]'
+              : 'text-zinc-400 hover:text-zinc-200 bg-transparent border-transparent'
           }`}
         >
           <EyeOff className="w-3.5 h-3.5" />
@@ -393,8 +393,8 @@ export const Room09MasterPanel: React.FC<Room09MasterPanelProps> = ({
           }}
           className={`px-4 py-2 rounded-xl text-xs font-bold transition-all flex items-center gap-2 ${
             activeTab === 'entropy-telemetry'
-              ? 'bg-emerald-500/20 text-emerald-200 border border-emerald-500/40 shadow-[0_0_12px_rgba(16,185,129,0.2)]'
-              : 'text-zinc-400 hover:text-zinc-200 bg-transparent border border-transparent'
+              ? 'bg-emerald-500/20 text-emerald-200 border-emerald-500/40 shadow-[0_0_12px_rgba(16,185,129,0.2)]'
+              : 'text-zinc-400 hover:text-zinc-200 bg-transparent border-transparent'
           }`}
         >
           <Zap className="w-3.5 h-3.5" />
@@ -408,8 +408,8 @@ export const Room09MasterPanel: React.FC<Room09MasterPanelProps> = ({
           }}
           className={`px-4 py-2 rounded-xl text-xs font-bold transition-all flex items-center gap-2 ${
             activeTab === 'export-manifest'
-              ? 'bg-amber-500/20 text-amber-200 border border-amber-500/40 shadow-[0_0_12px_rgba(245,158,11,0.2)]'
-              : 'text-zinc-400 hover:text-zinc-200 bg-transparent border border-transparent'
+              ? 'bg-amber-500/20 text-amber-200 border-amber-500/40 shadow-[0_0_12px_rgba(245,158,11,0.2)]'
+              : 'text-zinc-400 hover:text-zinc-200 bg-transparent border-transparent'
           }`}
         >
           <Terminal className="w-3.5 h-3.5" />
@@ -424,14 +424,14 @@ export const Room09MasterPanel: React.FC<Room09MasterPanelProps> = ({
             {OTEL_NODES.map((node) => (
               <div
                 key={node.id}
-                className="p-5 rounded-2xl bg-[#0a0d1a]/80 border border-cyan-500/20 hover:border-cyan-500/50 transition-all space-y-3"
+                className="p-5 rounded-2xl bg-[#0a0d1a]/80 border-cyan-500/20 hover:border-cyan-500/50 transition-all space-y-3"
               >
                 <div className="flex items-center justify-between">
                   <span className="text-xs font-bold text-cyan-400 flex items-center gap-1.5">
                     <Radio className="w-3.5 h-3.5 text-cyan-400 animate-pulse" />
                     {node.name}
                   </span>
-                  <span className="px-2 py-0.5 rounded-full bg-emerald-500/20 text-emerald-300 border border-emerald-500/40 text-[10px] font-bold">
+                  <span className="px-2 py-0.5 rounded-full bg-emerald-500/20 text-emerald-300 border-emerald-500/40 text-[10px] font-bold">
                     {node.status}
                   </span>
                 </div>
@@ -461,7 +461,7 @@ export const Room09MasterPanel: React.FC<Room09MasterPanelProps> = ({
           </div>
 
           {/* Span Breakdown Chart */}
-          <div className="p-6 rounded-2xl bg-[#090c18]/90 border border-cyan-500/20 space-y-4">
+          <div className="p-6 rounded-2xl bg-[#090c18]/90 border-cyan-500/20 space-y-4">
             <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2">
               <div>
                 <h3 className="text-base font-bold text-white flex items-center gap-2">
@@ -472,7 +472,7 @@ export const Room09MasterPanel: React.FC<Room09MasterPanelProps> = ({
                   สถิติการรับส่งข้อมูล OpenTelemetry แยกตามโมดูลหลักของ Sovereign Kernel
                 </p>
               </div>
-              <div className="text-xs text-emerald-400 font-mono bg-emerald-500/10 px-3 py-1 rounded-full border border-emerald-500/20">
+              <div className="text-xs text-emerald-400 font-mono bg-emerald-500/10 px-3 py-1 rounded-full border-emerald-500/20">
                 TOTAL: 2,240 Spans/sec • Jitter &lt; 0.12ms
               </div>
             </div>
@@ -503,7 +503,7 @@ export const Room09MasterPanel: React.FC<Room09MasterPanelProps> = ({
       {/* Tab 2: PDPA PII Redactor Testbench */}
       {activeTab === 'pii-redactor' && (
         <div className="space-y-6">
-          <div className="p-5 rounded-2xl bg-purple-950/20 border border-purple-500/30 space-y-3">
+          <div className="p-5 rounded-2xl bg-purple-950/20 border-purple-500/30 space-y-3">
             <div className="flex items-center justify-between">
               <span className="text-xs font-bold text-purple-300 flex items-center gap-2">
                 <EyeOff className="w-4 h-4 text-purple-400" />
@@ -528,8 +528,8 @@ export const Room09MasterPanel: React.FC<Room09MasterPanelProps> = ({
                   onClick={() => handleSelectPreset(preset)}
                   className={`px-3 py-1.5 rounded-xl text-xs font-bold transition-all ${
                     selectedPresetId === preset.id
-                      ? 'bg-purple-500/30 text-purple-200 border border-purple-400/50 shadow-sm'
-                      : 'bg-black/40 text-zinc-400 hover:text-zinc-200 border border-white/5'
+                      ? 'bg-purple-500/30 text-purple-200 border-purple-400/50 shadow-sm'
+                      : 'bg-black/40 text-zinc-400 hover:text-zinc-200 border-white/5'
                   }`}
                 >
                   {preset.title}
@@ -541,7 +541,7 @@ export const Room09MasterPanel: React.FC<Room09MasterPanelProps> = ({
           {/* Interactive Redaction Sandbox */}
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
             {/* Input Box */}
-            <div className="p-5 rounded-2xl bg-[#0a0d1a]/90 border border-white/10 space-y-3 flex flex-col justify-between">
+            <div className="p-5 rounded-2xl bg-[#0a0d1a]/90 border-white/10 space-y-3 flex flex-col justify-between">
               <div className="space-y-1">
                 <div className="flex items-center justify-between">
                   <span className="text-xs font-bold text-zinc-300 flex items-center gap-1.5">
@@ -565,13 +565,13 @@ export const Room09MasterPanel: React.FC<Room09MasterPanelProps> = ({
                 value={customInputText}
                 onChange={(e) => setCustomInputText(e.target.value)}
                 rows={10}
-                className="w-full p-3 rounded-xl bg-black/60 border border-white/10 text-xs font-mono text-cyan-200 focus:outline-none focus:border-cyan-500/70 resize-none"
+                className="w-full p-3 rounded-xl bg-black/60 border-white/10 text-xs font-mono text-cyan-200 focus:outline-none focus:border-cyan-500/70 resize-none"
               />
 
               <button
                 onClick={handleRunRedactor}
                 disabled={isRedacting}
-                className="w-full py-2.5 rounded-xl bg-gradient-to-r from-purple-600 to-cyan-600 hover:from-purple-500 hover:to-cyan-500 text-white font-bold text-xs flex items-center justify-center gap-2 shadow-lg shadow-purple-500/20 border border-purple-400/30 transition-all"
+                className="w-full py-2.5 rounded-xl bg-gradient-to-r from-purple-600 to-cyan-600 hover:from-purple-500 hover:to-cyan-500 text-white font-bold text-xs flex items-center justify-center gap-2 shadow-lg shadow-purple-500/20 border-purple-400/30 transition-all"
               >
                 {isRedacting ? (
                   <>
@@ -588,7 +588,7 @@ export const Room09MasterPanel: React.FC<Room09MasterPanelProps> = ({
             </div>
 
             {/* Output Box */}
-            <div className="p-5 rounded-2xl bg-[#0a0d1a]/90 border border-purple-500/20 space-y-3 flex flex-col justify-between">
+            <div className="p-5 rounded-2xl bg-[#0a0d1a]/90 border-purple-500/20 space-y-3 flex flex-col justify-between">
               <div className="space-y-1">
                 <div className="flex items-center justify-between">
                   <span className="text-xs font-bold text-purple-300 flex items-center gap-1.5">
@@ -596,7 +596,7 @@ export const Room09MasterPanel: React.FC<Room09MasterPanelProps> = ({
                     SANITIZED DETERMINISTIC OTEL SPAN (100% สะอาด)
                   </span>
                   <div className="flex items-center gap-2">
-                    <span className="text-[10px] text-emerald-400 bg-emerald-500/10 px-2 py-0.5 rounded border border-emerald-500/20 font-bold">
+                    <span className="text-[10px] text-emerald-400 bg-emerald-500/10 px-2 py-0.5 rounded border-emerald-500/20 font-bold">
                       {redactionStats.strippedCount} Fields Masked ({redactionStats.latencyMs}ms)
                     </span>
                     <button
@@ -617,10 +617,10 @@ export const Room09MasterPanel: React.FC<Room09MasterPanelProps> = ({
                 readOnly
                 value={sanitizedOutput}
                 rows={10}
-                className="w-full p-3 rounded-xl bg-black/60 border border-purple-500/20 text-xs font-mono text-emerald-300 focus:outline-none resize-none"
+                className="w-full p-3 rounded-xl bg-black/60 border-purple-500/20 text-xs font-mono text-emerald-300 focus:outline-none resize-none"
               />
 
-              <div className="p-2.5 rounded-xl bg-emerald-950/30 border border-emerald-500/30 text-[11px] text-emerald-300 flex items-center justify-between">
+              <div className="p-2.5 rounded-xl bg-emerald-950/30 border-emerald-500/30 text-[11px] text-emerald-300 flex items-center justify-between">
                 <span className="flex items-center gap-1.5 font-bold">
                   <ShieldCheck className="w-4 h-4 text-emerald-400" />
                   Legal Guarantee: พระราชบัญญัติคุ้มครองข้อมูลส่วนบุคคล พ.ศ. 2562
@@ -636,19 +636,19 @@ export const Room09MasterPanel: React.FC<Room09MasterPanelProps> = ({
       {activeTab === 'entropy-telemetry' && (
         <div className="space-y-6">
           <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
-            <div className="p-4 rounded-2xl bg-[#0a0d1a] border border-cyan-500/20 space-y-2">
+            <div className="p-4 rounded-2xl bg-[#0a0d1a] border-cyan-500/20 space-y-2">
               <div className="text-xs text-zinc-400">Cryogenic Base Thermal</div>
               <div className="text-2xl font-black text-cyan-300">14.98 mK</div>
               <div className="text-[11px] text-emerald-400 font-semibold">Stabilized ±0.02 mK</div>
             </div>
 
-            <div className="p-4 rounded-2xl bg-[#0a0d1a] border border-amber-500/20 space-y-2">
+            <div className="p-4 rounded-2xl bg-[#0a0d1a] border-amber-500/20 space-y-2">
               <div className="text-xs text-zinc-400">Fail-Closed Quarantine Line</div>
               <div className="text-2xl font-black text-amber-400">85.0 °C</div>
               <div className="text-[11px] text-amber-300 font-semibold">Auto-Trigger Armed</div>
             </div>
 
-            <div className="p-4 rounded-2xl bg-[#0a0d1a] border border-emerald-500/20 space-y-2">
+            <div className="p-4 rounded-2xl bg-[#0a0d1a] border-emerald-500/20 space-y-2">
               <div className="text-xs text-zinc-400">Quantum Hardware Entropy</div>
               <div className="text-2xl font-black text-emerald-400">100.00%</div>
               <div className="text-[11px] text-emerald-300 font-semibold">NIST SP 800-90B Tested</div>
@@ -656,7 +656,7 @@ export const Room09MasterPanel: React.FC<Room09MasterPanelProps> = ({
           </div>
 
           {/* Real-time Spectrum Area Chart */}
-          <div className="p-6 rounded-2xl bg-[#090c18]/90 border border-cyan-500/20 space-y-4">
+          <div className="p-6 rounded-2xl bg-[#090c18]/90 border-cyan-500/20 space-y-4">
             <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2">
               <div>
                 <h3 className="text-base font-bold text-white flex items-center gap-2">
@@ -667,7 +667,7 @@ export const Room09MasterPanel: React.FC<Room09MasterPanelProps> = ({
                   สังเกตการณ์การแกว่งตัวของสัญญาณนาฬิกาฮาร์ดแวร์และการเก็บเกี่ยว Entropy ทางกายภาพ
                 </p>
               </div>
-              <div className="text-xs text-cyan-400 font-mono bg-cyan-500/10 px-3 py-1 rounded-full border border-cyan-500/20">
+              <div className="text-xs text-cyan-400 font-mono bg-cyan-500/10 px-3 py-1 rounded-full border-cyan-500/20">
                 CRYOGENIC STATE: NOMINAL
               </div>
             </div>
@@ -712,7 +712,7 @@ export const Room09MasterPanel: React.FC<Room09MasterPanelProps> = ({
       {/* Tab 4: OTel Manifest & Court Proof */}
       {activeTab === 'export-manifest' && (
         <div className="space-y-6">
-          <div className="p-6 rounded-2xl bg-[#0a0d1a] border border-cyan-500/20 space-y-4">
+          <div className="p-6 rounded-2xl bg-[#0a0d1a] border-cyan-500/20 space-y-4">
             <div className="flex items-center justify-between">
               <div>
                 <h3 className="text-base font-bold text-white flex items-center gap-2">
@@ -725,14 +725,14 @@ export const Room09MasterPanel: React.FC<Room09MasterPanelProps> = ({
               </div>
               <button
                 onClick={handleDownloadTelemetryJson}
-                className="px-3.5 py-2 rounded-xl bg-cyan-500/20 hover:bg-cyan-500/30 text-cyan-200 border border-cyan-500/40 text-xs font-bold flex items-center gap-2 transition-all"
+                className="px-3.5 py-2 rounded-xl bg-cyan-500/20 hover:bg-cyan-500/30 text-cyan-200 border-cyan-500/40 text-xs font-bold flex items-center gap-2 transition-all"
               >
                 <Download className="w-3.5 h-3.5" />
                 Export JSON Dump
               </button>
             </div>
 
-            <div className="p-4 rounded-xl bg-black/60 border border-white/10 font-mono text-xs text-zinc-300 space-y-2">
+            <div className="p-4 rounded-xl bg-black/60 border-white/10 font-mono text-xs text-zinc-300 space-y-2">
               <div className="text-cyan-400 font-bold">--- ZYRQUEN Ω∞ CHAMBER 09 TELEMETRY ATTESTATION ---</div>
               <div>SSoT Root Hash: <span className="text-cyan-300">{CANONICAL_MERKLE_ROOT}</span></div>
               <div>Canonical Block: <span className="text-emerald-400">#{CANONICAL_BLOCK}</span></div>
@@ -750,7 +750,7 @@ export const Room09MasterPanel: React.FC<Room09MasterPanelProps> = ({
                     playTone(680, 0.05);
                     onOpenCertificate();
                   }}
-                  className="px-4 py-2 rounded-xl bg-gradient-to-r from-amber-500/20 to-yellow-500/20 text-yellow-300 border border-yellow-500/40 hover:bg-yellow-500/30 text-xs font-bold flex items-center gap-2 transition-all"
+                  className="px-4 py-2 rounded-xl bg-gradient-to-r from-amber-500/20 to-yellow-500/20 text-yellow-300 border-yellow-500/40 hover:bg-yellow-500/30 text-xs font-bold flex items-center gap-2 transition-all"
                 >
                   <Sparkles className="w-4 h-4 text-amber-400" />
                   View Sovereign Gold Certificate (ZQ-GOLD-DEP)
@@ -763,7 +763,7 @@ export const Room09MasterPanel: React.FC<Room09MasterPanelProps> = ({
                     playTone(640, 0.05);
                     onNavigate('ledger');
                   }}
-                  className="px-4 py-2 rounded-xl bg-white/5 hover:bg-white/10 text-zinc-300 border border-white/10 text-xs font-bold flex items-center gap-2 transition-all"
+                  className="px-4 py-2 rounded-xl bg-white/5 hover:bg-white/10 text-zinc-300 border-white/10 text-xs font-bold flex items-center gap-2 transition-all"
                 >
                   <Layers className="w-4 h-4 text-cyan-400" />
                   Inspect 14,902 Merkle Ledger

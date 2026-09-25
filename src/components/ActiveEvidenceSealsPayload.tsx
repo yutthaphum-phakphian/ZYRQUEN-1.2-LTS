@@ -261,7 +261,7 @@ export const ActiveEvidenceSealsPayload: React.FC = () => {
       <input type="file" ref={fileInputRef} onChange={handleFileUpload} accept=".json" className="hidden" />
       <div className="flex-1 space-y-4 print:w-full">
         {/* Header Action Bar */}
-        <div className="flex flex-wrap items-center justify-between gap-3 bg-slate-900/80 p-3.5 rounded-2xl border border-slate-800 print:hidden">
+        <div className="flex flex-wrap items-center justify-between gap-3 bg-slate-900/80 p-3.5 rounded-2xl border-slate-800 print:hidden">
           <div>
             <h3 className="text-sm font-bold text-white flex items-center gap-2">
               <Layers className="w-4 h-4 text-cyan-400" />
@@ -276,35 +276,35 @@ export const ActiveEvidenceSealsPayload: React.FC = () => {
           <div className="flex items-center flex-wrap gap-2">
             <button
               onClick={handleDownloadPDF}
-              className="px-3 py-1.5 rounded-xl bg-cyan-500/20 hover:bg-cyan-500/30 text-cyan-300 border border-cyan-500/40 text-xs font-bold flex items-center gap-1.5 active:scale-95 shadow-[0_0_12px_rgba(6,182,212,0.2)] cursor-pointer"
+              className="px-3 py-1.5 rounded-xl bg-cyan-500/20 hover:bg-cyan-500/30 text-cyan-300 border-cyan-500/40 text-xs font-bold flex items-center gap-1.5 active:scale-95 shadow-[0_0_12px_rgba(6,182,212,0.2)] cursor-pointer"
             >
               <FileDown className="w-3.5 h-3.5" />
               <span>Download PDF</span>
             </button>
             <button
               onClick={handleExportJSON}
-              className="px-3 py-1.5 rounded-xl bg-slate-800 hover:bg-slate-700 text-slate-300 border border-slate-700 text-xs font-bold flex items-center gap-1.5 active:scale-95 cursor-pointer"
+              className="px-3 py-1.5 rounded-xl bg-slate-800 hover:bg-slate-700 text-slate-300 border-slate-700 text-xs font-bold flex items-center gap-1.5 active:scale-95 cursor-pointer"
             >
               <Download className="w-3.5 h-3.5 text-purple-400" />
               <span>Export JSON</span>
             </button>
             <button
               onClick={handleExportCSV}
-              className="px-3 py-1.5 rounded-xl bg-emerald-500/20 hover:bg-emerald-500/30 text-emerald-300 border border-emerald-500/40 text-xs font-bold flex items-center gap-1.5 active:scale-95 shadow-[0_0_12px_rgba(16,185,129,0.2)] cursor-pointer"
+              className="px-3 py-1.5 rounded-xl bg-emerald-500/20 hover:bg-emerald-500/30 text-emerald-300 border-emerald-500/40 text-xs font-bold flex items-center gap-1.5 active:scale-95 shadow-[0_0_12px_rgba(16,185,129,0.2)] cursor-pointer"
             >
               <Table className="w-3.5 h-3.5" />
               <span>Export CSV (Audit)</span>
             </button>
             <button
               onClick={() => fileInputRef.current?.click()}
-              className="px-3 py-1.5 rounded-xl bg-slate-800 hover:bg-slate-700 text-slate-300 border border-slate-700 text-xs font-bold flex items-center gap-1.5 cursor-pointer"
+              className="px-3 py-1.5 rounded-xl bg-slate-800 hover:bg-slate-700 text-slate-300 border-slate-700 text-xs font-bold flex items-center gap-1.5 cursor-pointer"
             >
               <Upload className="w-3.5 h-3.5 text-emerald-400" />
               <span>Import JSON</span>
             </button>
             <button
               onClick={() => setIsQrScannerOpen(true)}
-              className="px-3 py-1.5 rounded-xl bg-slate-800 hover:bg-slate-700 text-slate-300 border border-slate-700 text-xs font-bold flex items-center gap-1.5 cursor-pointer"
+              className="px-3 py-1.5 rounded-xl bg-slate-800 hover:bg-slate-700 text-slate-300 border-slate-700 text-xs font-bold flex items-center gap-1.5 cursor-pointer"
             >
               <QrCode className="w-3.5 h-3.5 text-amber-400" />
               <span>Scan QR</span>
@@ -325,7 +325,7 @@ export const ActiveEvidenceSealsPayload: React.FC = () => {
             </button>
             <button
               onClick={() => window.print()}
-              className="px-3 py-1.5 rounded-xl bg-slate-800 hover:bg-slate-700 text-slate-300 border border-slate-700 text-xs font-bold flex items-center gap-1.5 cursor-pointer"
+              className="px-3 py-1.5 rounded-xl bg-slate-800 hover:bg-slate-700 text-slate-300 border-slate-700 text-xs font-bold flex items-center gap-1.5 cursor-pointer"
             >
               <Printer className="w-3.5 h-3.5" />
               <span>Print QR</span>
@@ -334,7 +334,7 @@ export const ActiveEvidenceSealsPayload: React.FC = () => {
         </div>
 
         {/* Filter & Sort Bar */}
-        <div className="flex flex-wrap items-center gap-3 bg-slate-900/60 p-3 rounded-xl border border-slate-800 print:hidden">
+        <div className="flex flex-wrap items-center gap-3 bg-slate-900/60 p-3 rounded-xl border-slate-800 print:hidden">
           <div className="flex items-center gap-2 text-xs">
             <span className="text-slate-400">Filter:</span>
             {(['ALL', 'VERIFIED', 'FROZEN'] as const).map((f) => (
@@ -363,7 +363,7 @@ export const ActiveEvidenceSealsPayload: React.FC = () => {
                 value={searchQuery}
                 onChange={(e) => setSearchQuery(e.target.value)}
                 placeholder="Search sealCode / merkleRoot..."
-                className="pl-7 pr-3 py-1 rounded-lg bg-slate-950 border border-slate-800 text-[11px] text-white placeholder-slate-500 outline-none focus:border-cyan-500/60 w-52 font-mono"
+                className="pl-7 pr-3 py-1 rounded-lg bg-slate-950 border-slate-800 text-[11px] text-white placeholder-slate-500 outline-none focus:border-cyan-500/60 w-52 font-mono"
               />
             </div>
           </div>
@@ -373,7 +373,7 @@ export const ActiveEvidenceSealsPayload: React.FC = () => {
             <select
               value={sortBy}
               onChange={(e) => setSortBy(e.target.value as any)}
-              className="px-2 py-1 rounded-lg bg-slate-950 border border-slate-800 text-[11px] text-slate-300 outline-none font-mono"
+              className="px-2 py-1 rounded-lg bg-slate-950 border-slate-800 text-[11px] text-slate-300 outline-none font-mono"
             >
               <option value="timestamp">Timestamp</option>
               <option value="sealCode">Seal Code</option>
@@ -381,7 +381,7 @@ export const ActiveEvidenceSealsPayload: React.FC = () => {
             </select>
             <button
               onClick={() => setSortOrder((o) => (o === 'asc' ? 'desc' : 'asc'))}
-              className="p-1 rounded-lg bg-slate-800 border border-slate-700 text-slate-400 hover:text-white cursor-pointer"
+              className="p-1 rounded-lg bg-slate-800 border-slate-700 text-slate-400 hover:text-white cursor-pointer"
               title="Toggle Sort Direction"
             >
               <ArrowUpDown className="w-3.5 h-3.5" />
@@ -392,7 +392,7 @@ export const ActiveEvidenceSealsPayload: React.FC = () => {
                   setFilterStatus('ALL');
                   setSearchQuery('');
                 }}
-                className="px-2 py-1 rounded-lg bg-red-500/10 text-red-400 border border-red-500/30 text-[11px] cursor-pointer flex items-center gap-1"
+                className="px-2 py-1 rounded-lg bg-red-500/10 text-red-400 border-red-500/30 text-[11px] cursor-pointer flex items-center gap-1"
               >
                 <X className="w-3 h-3" />
                 <span>Clear</span>
@@ -403,7 +403,7 @@ export const ActiveEvidenceSealsPayload: React.FC = () => {
 
         {/* Copied Notification Toast */}
         {copiedNotification && (
-          <div className="p-2 rounded-xl bg-cyan-950 border border-cyan-500/40 text-cyan-300 text-xs flex items-center gap-2 animate-in fade-in">
+          <div className="p-2 rounded-xl bg-cyan-950 border-cyan-500/40 text-cyan-300 text-xs flex items-center gap-2 animate-in fade-in">
             <FileCheck className="w-4 h-4 text-emerald-400" />
             <span>คัดลอก {copiedNotification} ลงคลิปบอร์ดแล้ว</span>
           </div>
@@ -468,7 +468,7 @@ export const ActiveEvidenceSealsPayload: React.FC = () => {
                     <div className="flex items-center gap-4">
                       <div
                         onClick={() => openPreview(seal)}
-                        className="w-20 h-20 bg-white p-1 rounded-xl flex items-center justify-center shrink-0 border border-slate-300 cursor-pointer hover:scale-105 transition group relative"
+                        className="w-20 h-20 bg-white p-1 rounded-xl flex items-center justify-center shrink-0 border-slate-300 cursor-pointer hover:scale-105 transition group relative"
                         title="Click to enlarge QR Code"
                       >
                         <QRCodeSVG
@@ -525,7 +525,7 @@ export const ActiveEvidenceSealsPayload: React.FC = () => {
       {/* QR Preview Modal */}
       {isQrPreviewOpen && previewSeal && (
         <div className="fixed inset-0 z-50 flex items-center justify-center bg-slate-950/80 backdrop-blur-md p-4">
-          <div className="w-full max-w-lg bg-slate-900 border border-cyan-500/40 rounded-2xl p-6 space-y-4 shadow-[0_0_30px_rgba(6,182,212,0.25)] animate-in fade-in zoom-in-95 duration-200">
+          <div className="w-full max-w-lg bg-slate-900 border-cyan-500/40 rounded-2xl p-6 space-y-4 shadow-[0_0_30px_rgba(6,182,212,0.25)] animate-in fade-in zoom-in-95 duration-200">
             <div className="flex items-center justify-between border-b border-slate-800 pb-3">
               <div className="flex items-center gap-2 text-cyan-300">
                 <QrCode className="w-5 h-5" />
@@ -559,13 +559,13 @@ export const ActiveEvidenceSealsPayload: React.FC = () => {
               </div>
 
               <div className="grid grid-cols-2 gap-2 w-full text-[11px]">
-                <div className="p-2.5 rounded-lg bg-slate-950 border border-slate-800 min-w-0">
+                <div className="p-2.5 rounded-lg bg-slate-950 border-slate-800 min-w-0">
                   <span className="text-slate-500">Merkle Root Hash:</span>
                   <div className="text-cyan-300 truncate font-mono text-[10px] mt-0.5" title={previewSeal.merkleRoot}>
                     {previewSeal.merkleRoot}
                   </div>
                 </div>
-                <div className="p-2.5 rounded-lg bg-slate-950 border border-slate-800">
+                <div className="p-2.5 rounded-lg bg-slate-950 border-slate-800">
                   <div className="flex justify-between">
                     <span className="text-slate-500">PQC:</span>
                     <span className="text-purple-300 font-bold">{previewSeal.pqcType}</span>
@@ -583,7 +583,7 @@ export const ActiveEvidenceSealsPayload: React.FC = () => {
             <div className="flex flex-wrap items-center justify-center gap-2 pt-2 border-t border-slate-800/80">
               <button
                 onClick={handleDownloadQrPng}
-                className="px-3.5 py-1.5 rounded-xl bg-cyan-500/20 hover:bg-cyan-500/30 text-cyan-300 border border-cyan-500/40 text-xs font-bold flex items-center gap-1.5 cursor-pointer"
+                className="px-3.5 py-1.5 rounded-xl bg-cyan-500/20 hover:bg-cyan-500/30 text-cyan-300 border-cyan-500/40 text-xs font-bold flex items-center gap-1.5 cursor-pointer"
               >
                 <FileDown className="w-3.5 h-3.5" />
                 <span>Download PNG</span>
@@ -592,14 +592,14 @@ export const ActiveEvidenceSealsPayload: React.FC = () => {
                 onClick={() => {
                   handleCopyMerkle(JSON.stringify(previewSeal, null, 2), `QR Payload (${previewSeal.sealCode})`);
                 }}
-                className="px-3.5 py-1.5 rounded-xl bg-slate-800 hover:bg-slate-700 text-slate-300 border border-slate-700 text-xs font-bold flex items-center gap-1.5 cursor-pointer"
+                className="px-3.5 py-1.5 rounded-xl bg-slate-800 hover:bg-slate-700 text-slate-300 border-slate-700 text-xs font-bold flex items-center gap-1.5 cursor-pointer"
               >
                 <Copy className="w-3.5 h-3.5" />
                 <span>Copy Payload</span>
               </button>
               <button
                 onClick={handlePrintSingleQr}
-                className="px-3.5 py-1.5 rounded-xl bg-slate-800 hover:bg-slate-700 text-slate-300 border border-slate-700 text-xs font-bold flex items-center gap-1.5 cursor-pointer"
+                className="px-3.5 py-1.5 rounded-xl bg-slate-800 hover:bg-slate-700 text-slate-300 border-slate-700 text-xs font-bold flex items-center gap-1.5 cursor-pointer"
               >
                 <Printer className="w-3.5 h-3.5" />
                 <span>Print QR Graphic</span>
@@ -612,7 +612,7 @@ export const ActiveEvidenceSealsPayload: React.FC = () => {
       {/* QR Import Modal */}
       {isQrScannerOpen && (
         <div className="fixed inset-0 z-50 flex items-center justify-center bg-slate-950/80 backdrop-blur-md p-4">
-          <div className="w-full max-w-md bg-slate-900 border border-amber-500/40 rounded-2xl p-5 space-y-4 shadow-[0_0_30px_rgba(245,158,11,0.2)]">
+          <div className="w-full max-w-md bg-slate-900 border-amber-500/40 rounded-2xl p-5 space-y-4 shadow-[0_0_30px_rgba(245,158,11,0.2)]">
             <div className="flex items-center justify-between border-b border-slate-800 pb-3">
               <div className="flex items-center gap-2 text-amber-300">
                 <QrCode className="w-5 h-5" />
@@ -630,7 +630,7 @@ export const ActiveEvidenceSealsPayload: React.FC = () => {
               value={qrInputData}
               onChange={(e) => setQrInputData(e.target.value)}
               placeholder='[{"id":"SEAL-01",...}]'
-              className="w-full p-3 rounded-xl bg-slate-950 border border-slate-800 focus:border-amber-500 text-xs text-slate-200 outline-none font-mono"
+              className="w-full p-3 rounded-xl bg-slate-950 border-slate-800 focus:border-amber-500 text-xs text-slate-200 outline-none font-mono"
             />
             <div className="flex justify-end gap-2">
               <button
@@ -641,7 +641,7 @@ export const ActiveEvidenceSealsPayload: React.FC = () => {
               </button>
               <button
                 onClick={handleImportFromQR}
-                className="px-4 py-1.5 rounded-xl bg-amber-500/20 hover:bg-amber-500/30 text-amber-300 border border-amber-500/40 text-xs font-bold flex items-center gap-1.5 cursor-pointer"
+                className="px-4 py-1.5 rounded-xl bg-amber-500/20 hover:bg-amber-500/30 text-amber-300 border-amber-500/40 text-xs font-bold flex items-center gap-1.5 cursor-pointer"
               >
                 <CheckCircle2 className="w-3.5 h-3.5" />
                 ยืนยันการนำเข้า
@@ -653,13 +653,13 @@ export const ActiveEvidenceSealsPayload: React.FC = () => {
 
       {/* Comparison Sidebar */}
       {isBatchMode && selectedIds.length > 0 && (
-        <div className="w-full lg:w-80 bg-slate-950 border border-purple-500/40 rounded-2xl p-4 space-y-4 shadow-[0_0_30px_rgba(168,85,247,0.15)] animate-in fade-in slide-in-from-right-4 duration-300 print:hidden">
+        <div className="w-full lg:w-80 bg-slate-950 border-purple-500/40 rounded-2xl p-4 space-y-4 shadow-[0_0_30px_rgba(168,85,247,0.15)] animate-in fade-in slide-in-from-right-4 duration-300 print:hidden">
           <div className="flex items-center justify-between border-b border-slate-800 pb-2.5">
             <div className="flex items-center gap-2 text-purple-300">
               <FileSearch className="w-4 h-4" />
               <h4 className="text-xs font-bold uppercase">Forensic Batch Compare</h4>
             </div>
-            <span className="text-[10px] px-2 py-0.5 rounded-full bg-purple-500/20 text-purple-300 font-bold border border-purple-500/30">
+            <span className="text-[10px] px-2 py-0.5 rounded-full bg-purple-500/20 text-purple-300 font-bold border-purple-500/30">
               {selectedIds.length} Selected
             </span>
           </div>
@@ -667,7 +667,7 @@ export const ActiveEvidenceSealsPayload: React.FC = () => {
             {seals
               .filter((s) => selectedIds.includes(s.id))
               .map((s) => (
-                <div key={s.id} className="p-2.5 rounded-xl bg-slate-900 border border-slate-800 text-[11px] space-y-1">
+                <div key={s.id} className="p-2.5 rounded-xl bg-slate-900 border-slate-800 text-[11px] space-y-1">
                   <div className="flex justify-between font-bold text-slate-200">
                     <span>{s.sealCode}</span>
                     <span className="text-purple-400">{s.pqcType}</span>

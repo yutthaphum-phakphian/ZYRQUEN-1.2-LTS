@@ -83,7 +83,7 @@ export const GatekeeperStatusWidget: React.FC<{ onTriggerCheck?: () => void }> =
   };
 
   return (
-    <div id="gatekeeper-status-widget" className="w-full bg-[#0a0f1e] border border-[#06B6D4]/40 rounded-xl p-5 font-mono text-[#06B6D4] shadow-xl">
+    <div id="gatekeeper-status-widget" className="w-full bg-[#0a0f1e] border-[#06B6D4]/40 rounded-xl p-5 font-mono text-[#06B6D4] shadow-xl">
       {/* Top Header */}
       <div className="flex flex-col sm:flex-row sm:items-center justify-between pb-3 border-b border-slate-800 gap-3">
         <div className="flex items-center gap-2.5">

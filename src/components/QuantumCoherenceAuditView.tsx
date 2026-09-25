@@ -138,16 +138,16 @@ Certified by ZYRQUEN Ω Sovereign Supreme Apex Plane | ${new Date().toISOString(
   };
 
   return (
-    <div className="bg-slate-900 border border-slate-800 rounded-2xl p-6 shadow-2xl backdrop-blur space-y-6">
+    <div className="bg-slate-900 border-slate-800 rounded-2xl p-6 shadow-2xl backdrop-blur space-y-6">
       {/* Top Header */}
       <div className="flex flex-wrap items-center justify-between gap-4 border-b border-slate-800 pb-4">
         <div className="flex items-center gap-3">
-          <div className="p-2.5 bg-cyan-950/80 border border-cyan-700/60 rounded-xl text-cyan-400">
+          <div className="p-2.5 bg-cyan-950/80 border-cyan-700/60 rounded-xl text-cyan-400">
             <Zap className="w-5 h-5" />
           </div>
           <div>
             <div className="flex items-center gap-2">
-              <span className="text-[10px] font-mono font-bold px-2 py-0.5 rounded bg-cyan-950 text-cyan-300 border border-cyan-800">
+              <span className="text-[10px] font-mono font-bold px-2 py-0.5 rounded bg-cyan-950 text-cyan-300 border-cyan-800">
                 QUANTUM COHERENCE AUDIT
               </span>
               <span className="text-xs font-mono text-emerald-400 font-bold">
@@ -172,43 +172,43 @@ Certified by ZYRQUEN Ω Sovereign Supreme Apex Plane | ${new Date().toISOString(
 
       {/* Overview 7 High-Precision Metrics Cards */}
       <div className="grid grid-cols-2 sm:grid-cols-4 lg:grid-cols-7 gap-2.5 font-mono text-center">
-        <div className="bg-slate-950/80 border border-cyan-800/60 p-3 rounded-xl">
+        <div className="bg-slate-950/80 border-cyan-800/60 p-3 rounded-xl">
           <span className="text-[9px] text-slate-400 uppercase tracking-wider block">768 Qubits Index</span>
           <span className="text-base font-black text-cyan-300 mt-0.5 block">99.98%</span>
           <span className="text-[8px] text-slate-500">Resonance Aligned</span>
         </div>
 
-        <div className="bg-slate-950/80 border border-slate-800 p-3 rounded-xl">
+        <div className="bg-slate-950/80 border-slate-800 p-3 rounded-xl">
           <span className="text-[9px] text-slate-400 uppercase tracking-wider block">Surface-17 Lattice</span>
           <span className="text-base font-black text-amber-300 mt-0.5 block">99.98%</span>
           <span className="text-[8px] text-slate-500">99.978% Stability</span>
         </div>
 
-        <div className="bg-slate-950/80 border border-slate-800 p-3 rounded-xl">
+        <div className="bg-slate-950/80 border-slate-800 p-3 rounded-xl">
           <span className="text-[9px] text-slate-400 uppercase tracking-wider block">G11 Consensus</span>
           <span className="text-base font-black text-emerald-400 mt-0.5 block">99.992%</span>
           <span className="text-[8px] text-slate-500">Epoch Coherent</span>
         </div>
 
-        <div className="bg-slate-950/80 border border-slate-800 p-3 rounded-xl">
+        <div className="bg-slate-950/80 border-slate-800 p-3 rounded-xl">
           <span className="text-[9px] text-slate-400 uppercase tracking-wider block">Shannon Purity</span>
           <span className="text-base font-black text-indigo-300 mt-0.5 block">0.987</span>
           <span className="text-[8px] text-slate-500">99.9% Quantum Purity</span>
         </div>
 
-        <div className="bg-slate-950/80 border border-slate-800 p-3 rounded-xl">
+        <div className="bg-slate-950/80 border-slate-800 p-3 rounded-xl">
           <span className="text-[9px] text-slate-400 uppercase tracking-wider block">Von Neumann</span>
           <span className="text-base font-black text-slate-200 mt-0.5 block">0.0439</span>
           <span className="text-[8px] text-slate-500">Minimal Decoherence</span>
         </div>
 
-        <div className="bg-slate-950/80 border border-slate-800 p-3 rounded-xl">
+        <div className="bg-slate-950/80 border-slate-800 p-3 rounded-xl">
           <span className="text-[9px] text-slate-400 uppercase tracking-wider block">Phase Jitter</span>
           <span className="text-base font-black text-cyan-400 mt-0.5 block">1.33 fs</span>
           <span className="text-[8px] text-slate-500">Femtosecond Precision</span>
         </div>
 
-        <div className="bg-slate-950/80 border border-slate-800 p-3 rounded-xl">
+        <div className="bg-slate-950/80 border-slate-800 p-3 rounded-xl">
           <span className="text-[9px] text-slate-400 uppercase tracking-wider block">Bell Entanglements</span>
           <span className="text-base font-black text-amber-400 mt-0.5 block">46 Pairs</span>
           <span className="text-[8px] text-slate-500">Synchronized States</span>
@@ -219,7 +219,7 @@ Certified by ZYRQUEN Ω Sovereign Supreme Apex Plane | ${new Date().toISOString(
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 items-start">
         
         {/* Left 2 Cols: 18-Chamber Quantum Coherence Breakdown Table */}
-        <div className="lg:col-span-2 bg-slate-950/80 border border-slate-800 rounded-2xl p-5 space-y-3 font-mono">
+        <div className="lg:col-span-2 bg-slate-950/80 border-slate-800 rounded-2xl p-5 space-y-3 font-mono">
           <div className="flex items-center justify-between border-b border-slate-800 pb-2.5">
             <div className="flex items-center gap-2">
               <Layers className="w-4 h-4 text-cyan-400" />
@@ -274,7 +274,7 @@ Certified by ZYRQUEN Ω Sovereign Supreme Apex Plane | ${new Date().toISOString(
           </div>
 
           {/* Quick Active Chamber Status Ribbon */}
-          <div className="p-3 bg-slate-900 border border-slate-800 rounded-xl flex flex-wrap items-center justify-between gap-3 text-xs">
+          <div className="p-3 bg-slate-900 border-slate-800 rounded-xl flex flex-wrap items-center justify-between gap-3 text-xs">
             <div className="flex items-center gap-2">
               <span className="font-bold text-cyan-400">{selectedChamber.id}</span>
               <span className="text-slate-200">{selectedChamber.name}</span>
@@ -287,7 +287,7 @@ Certified by ZYRQUEN Ω Sovereign Supreme Apex Plane | ${new Date().toISOString(
         </div>
 
         {/* Right 1 Col: Dual Quantum Resilience Simulations */}
-        <div className="bg-slate-950/80 border border-slate-800 rounded-2xl p-5 space-y-4 font-mono">
+        <div className="bg-slate-950/80 border-slate-800 rounded-2xl p-5 space-y-4 font-mono">
           <div className="border-b border-slate-800 pb-2.5">
             <h4 className="text-xs font-bold text-amber-400 uppercase tracking-wider flex items-center gap-2">
               <Shield className="w-4 h-4" />
@@ -300,10 +300,10 @@ Certified by ZYRQUEN Ω Sovereign Supreme Apex Plane | ${new Date().toISOString(
 
           <div className="space-y-2.5">
             {/* Simulation 1: Global Attack Simulation */}
-            <div className="bg-slate-900 p-3 rounded-xl border border-slate-800 space-y-2">
+            <div className="bg-slate-900 p-3 rounded-xl border-slate-800 space-y-2">
               <div className="flex items-center justify-between">
                 <span className="text-xs font-bold text-slate-200">1. Global Attack Simulation</span>
-                <span className="text-[9px] px-1.5 py-0.2 rounded bg-amber-950 text-amber-400 border border-amber-800">
+                <span className="text-[9px] px-1.5 py-0.2 rounded bg-amber-950 text-amber-400 border-amber-800">
                   6-Node BFT
                 </span>
               </div>
@@ -322,10 +322,10 @@ Certified by ZYRQUEN Ω Sovereign Supreme Apex Plane | ${new Date().toISOString(
             </div>
 
             {/* Simulation 2: Timeline Seal vs Supercomputer */}
-            <div className="bg-slate-900 p-3 rounded-xl border border-slate-800 space-y-2">
+            <div className="bg-slate-900 p-3 rounded-xl border-slate-800 space-y-2">
               <div className="flex items-center justify-between">
                 <span className="text-xs font-bold text-slate-200">2. Timeline Seal vs Supercomputer</span>
-                <span className="text-[9px] px-1.5 py-0.2 rounded bg-indigo-950 text-indigo-400 border border-indigo-800">
+                <span className="text-[9px] px-1.5 py-0.2 rounded bg-indigo-950 text-indigo-400 border-indigo-800">
                   PQC 2^256
                 </span>
               </div>
@@ -346,7 +346,7 @@ Certified by ZYRQUEN Ω Sovereign Supreme Apex Plane | ${new Date().toISOString(
 
           {/* Simulation Output Log Box */}
           {simulationLog && (
-            <div className="p-3 bg-slate-950 rounded-xl border border-slate-800 text-[10px] text-emerald-400 whitespace-pre-line leading-relaxed h-32 overflow-y-auto font-mono">
+            <div className="p-3 bg-slate-950 rounded-xl border-slate-800 text-[10px] text-emerald-400 whitespace-pre-line leading-relaxed h-32 overflow-y-auto font-mono">
               {simulationLog}
             </div>
           )}
@@ -355,7 +355,7 @@ Certified by ZYRQUEN Ω Sovereign Supreme Apex Plane | ${new Date().toISOString(
       </div>
 
       {/* Bottom Sovereign Statement */}
-      <div className="p-4 bg-gradient-to-r from-amber-950/40 via-cyan-950/40 to-slate-950 border border-amber-800/40 rounded-xl flex flex-wrap items-center justify-between gap-3 text-xs font-mono">
+      <div className="p-4 bg-gradient-to-r from-amber-950/40 via-cyan-950/40 to-slate-950 border-amber-800/40 rounded-xl flex flex-wrap items-center justify-between gap-3 text-xs font-mono">
         <div className="flex items-center gap-2">
           <span className="text-amber-400 text-sm">⚡</span>
           <span className="text-slate-300 italic">

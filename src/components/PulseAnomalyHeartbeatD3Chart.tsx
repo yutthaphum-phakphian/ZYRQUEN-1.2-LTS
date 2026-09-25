@@ -656,19 +656,19 @@ export const PulseAnomalyHeartbeatD3Chart: React.FC<PulseAnomalyHeartbeatD3Chart
   return (
     <div
       id="pulse-anomaly-heartbeat-d3-container"
-      className="p-6 rounded-[28px] bg-[#070a12] border border-[#06B6D4]/30 backdrop-blur-xl space-y-5 shadow-2xl relative overflow-hidden"
+      className="p-6 rounded-[28px] bg-[#070a12] border-[#06B6D4]/30 backdrop-blur-xl space-y-5 shadow-2xl relative overflow-hidden"
     >
       {/* Header Section */}
       <div className="flex flex-col lg:flex-row lg:items-center justify-between gap-4">
         <div>
           <div className="flex flex-wrap items-center gap-2">
-            <span className="px-2.5 py-0.5 rounded-full bg-[#06B6D4]/15 text-[#06B6D4] border border-[#06B6D4]/30 text-[10px] font-mono font-bold">
+            <span className="px-2.5 py-0.5 rounded-full bg-[#06B6D4]/15 text-[#06B6D4] border-[#06B6D4]/30 text-[10px] font-mono font-bold">
               D3.JS FORENSIC OVERLAY
             </span>
-            <span className="px-2.5 py-0.5 rounded-full bg-[#D4AF37]/15 text-[#D4AF37] border border-[#D4AF37]/30 text-[10px] font-mono font-bold">
+            <span className="px-2.5 py-0.5 rounded-full bg-[#D4AF37]/15 text-[#D4AF37] border-[#D4AF37]/30 text-[10px] font-mono font-bold">
               SSoT Δ0.00% LOCKED
             </span>
-            <span className="px-2.5 py-0.5 rounded-full bg-emerald-950 text-emerald-300 border border-emerald-700/50 text-[10px] font-mono">
+            <span className="px-2.5 py-0.5 rounded-full bg-emerald-950 text-emerald-300 border-emerald-700/50 text-[10px] font-mono">
               Ω600_1000 BOUNDARY
             </span>
           </div>
@@ -736,7 +736,7 @@ export const PulseAnomalyHeartbeatD3Chart: React.FC<PulseAnomalyHeartbeatD3Chart
 
       {/* KPI Stats Bar */}
       <div className="grid grid-cols-2 sm:grid-cols-4 gap-3 font-mono text-xs">
-        <div className="p-3.5 rounded-2xl bg-[#0a0f1e] border border-[#06B6D4]/30">
+        <div className="p-3.5 rounded-2xl bg-[#0a0f1e] border-[#06B6D4]/30">
           <div className="text-zinc-500 text-[10px]">SOVEREIGN HEARTBEAT</div>
           <div className="text-base font-bold text-[#06B6D4] mt-0.5 flex items-center gap-1.5">
             <span>1.00 Hz</span>
@@ -744,7 +744,7 @@ export const PulseAnomalyHeartbeatD3Chart: React.FC<PulseAnomalyHeartbeatD3Chart
           </div>
         </div>
 
-        <div className="p-3.5 rounded-2xl bg-[#0a0f1e] border border-rose-500/40">
+        <div className="p-3.5 rounded-2xl bg-[#0a0f1e] border-rose-500/40">
           <div className="text-rose-400 text-[10px] font-bold">DETECTED ANOMALIES</div>
           <div className="text-base font-bold text-rose-300 mt-0.5 flex items-center gap-1.5">
             <span>{detectedAnomalies.length} Outliers</span>
@@ -754,14 +754,14 @@ export const PulseAnomalyHeartbeatD3Chart: React.FC<PulseAnomalyHeartbeatD3Chart
           </div>
         </div>
 
-        <div className="p-3.5 rounded-2xl bg-[#0a0f1e] border border-[#D4AF37]/40">
+        <div className="p-3.5 rounded-2xl bg-[#0a0f1e] border-[#D4AF37]/40">
           <div className="text-[#D4AF37] text-[10px] font-bold">PEAK OUTLIER FREQUENCY</div>
           <div className="text-base font-bold text-[#D4AF37] mt-0.5">
             {dataset.length > 0 ? `${Math.max(...dataset.map((d) => d.outlierFrequencyPct))}%` : '0.0%'}
           </div>
         </div>
 
-        <div className="p-3.5 rounded-2xl bg-[#0a0f1e] border border-emerald-500/30">
+        <div className="p-3.5 rounded-2xl bg-[#0a0f1e] border-emerald-500/30">
           <div className="text-emerald-400 text-[10px] font-bold">CARRIER STABILITY</div>
           <div className="text-base font-bold text-emerald-300 mt-0.5 flex items-center gap-1.5">
             <span>99.98%</span>
@@ -771,7 +771,7 @@ export const PulseAnomalyHeartbeatD3Chart: React.FC<PulseAnomalyHeartbeatD3Chart
       </div>
 
       {/* Interactive Controls & Filter Strip */}
-      <div className="p-4 rounded-2xl bg-[#0a0f1e] border border-white/10 flex flex-wrap items-center justify-between gap-3 font-mono text-xs">
+      <div className="p-4 rounded-2xl bg-[#0a0f1e] border-white/10 flex flex-wrap items-center justify-between gap-3 font-mono text-xs">
         {/* Outlier Type Filter */}
         <div className="flex items-center gap-2">
           <span className="text-zinc-400 flex items-center gap-1 text-[11px]">
@@ -784,7 +784,7 @@ export const PulseAnomalyHeartbeatD3Chart: React.FC<PulseAnomalyHeartbeatD3Chart
               playTone(600, 0.03);
               setSelectedTypeFilter(e.target.value);
             }}
-            className="bg-[#070a12] border border-white/20 rounded-xl px-2.5 py-1 text-xs text-zinc-200 focus:border-[#06B6D4] focus:outline-none"
+            className="bg-[#070a12] border-white/20 rounded-xl px-2.5 py-1 text-xs text-zinc-200 focus:border-[#06B6D4] focus:outline-none"
           >
             <option value="ALL">All Hardware Metrics</option>
             <option value="THERMAL_OUTLIER">Thermal / CPU Load Outliers</option>
@@ -809,7 +809,7 @@ export const PulseAnomalyHeartbeatD3Chart: React.FC<PulseAnomalyHeartbeatD3Chart
             onChange={(e) => setZScoreThreshold(parseFloat(e.target.value))}
             className="w-24 accent-[#D4AF37] cursor-pointer"
           />
-          <span className="px-2 py-0.5 rounded bg-[#D4AF37]/15 text-[#D4AF37] border border-[#D4AF37]/30 text-[10px] font-bold">
+          <span className="px-2 py-0.5 rounded bg-[#D4AF37]/15 text-[#D4AF37] border-[#D4AF37]/30 text-[10px] font-bold">
             |Z| ≥ {zScoreThreshold.toFixed(1)}σ
           </span>
         </div>
@@ -820,7 +820,7 @@ export const PulseAnomalyHeartbeatD3Chart: React.FC<PulseAnomalyHeartbeatD3Chart
           <select
             value={rollingWindowSize}
             onChange={(e) => setRollingWindowSize(parseInt(e.target.value, 10))}
-            className="bg-[#070a12] border border-white/20 rounded-xl px-2 py-1 text-xs text-zinc-200 focus:border-[#06B6D4] focus:outline-none"
+            className="bg-[#070a12] border-white/20 rounded-xl px-2 py-1 text-xs text-zinc-200 focus:border-[#06B6D4] focus:outline-none"
           >
             <option value="3">3 Snapshots</option>
             <option value="5">5 Snapshots (Nominal)</option>
@@ -834,7 +834,7 @@ export const PulseAnomalyHeartbeatD3Chart: React.FC<PulseAnomalyHeartbeatD3Chart
           <span className="text-zinc-500 text-[10px]">Test Outlier:</span>
           <button
             onClick={() => handleInjectOutlier('thermal')}
-            className="px-2 py-1 rounded-lg bg-rose-950/70 hover:bg-rose-900/70 text-rose-300 border border-rose-700/50 text-[10px] flex items-center gap-1 transition-all"
+            className="px-2 py-1 rounded-lg bg-rose-950/70 hover:bg-rose-900/70 text-rose-300 border-rose-700/50 text-[10px] flex items-center gap-1 transition-all"
             title="Inject Thermal Outlier (>55°C) and trigger low-frequency alert chime"
           >
             <Flame className="w-3 h-3 text-rose-400" />
@@ -842,7 +842,7 @@ export const PulseAnomalyHeartbeatD3Chart: React.FC<PulseAnomalyHeartbeatD3Chart
           </button>
           <button
             onClick={() => handleInjectOutlier('cryo')}
-            className="px-2 py-1 rounded-lg bg-cyan-950/70 hover:bg-cyan-900/70 text-cyan-300 border border-cyan-700/50 text-[10px] flex items-center gap-1 transition-all"
+            className="px-2 py-1 rounded-lg bg-cyan-950/70 hover:bg-cyan-900/70 text-cyan-300 border-cyan-700/50 text-[10px] flex items-center gap-1 transition-all"
             title="Inject Cryo Drift (>25 mK) and trigger low-frequency alert chime"
           >
             <Snowflake className="w-3 h-3 text-cyan-400" />
@@ -850,7 +850,7 @@ export const PulseAnomalyHeartbeatD3Chart: React.FC<PulseAnomalyHeartbeatD3Chart
           </button>
           <button
             onClick={() => handleInjectOutlier('voltage')}
-            className="px-2 py-1 rounded-lg bg-amber-950/70 hover:bg-amber-900/70 text-amber-300 border border-amber-700/50 text-[10px] flex items-center gap-1 transition-all"
+            className="px-2 py-1 rounded-lg bg-amber-950/70 hover:bg-amber-900/70 text-amber-300 border-amber-700/50 text-[10px] flex items-center gap-1 transition-all"
             title="Inject Voltage Drop (<99.5%) and trigger low-frequency alert chime"
           >
             <Gauge className="w-3 h-3 text-amber-400" />
@@ -858,7 +858,7 @@ export const PulseAnomalyHeartbeatD3Chart: React.FC<PulseAnomalyHeartbeatD3Chart
           </button>
           <button
             onClick={() => handleInjectOutlier('qops')}
-            className="px-2 py-1 rounded-lg bg-violet-950/70 hover:bg-violet-900/70 text-violet-300 border border-violet-700/50 text-[10px] flex items-center gap-1 transition-all"
+            className="px-2 py-1 rounded-lg bg-violet-950/70 hover:bg-violet-900/70 text-violet-300 border-violet-700/50 text-[10px] flex items-center gap-1 transition-all"
             title="Inject QOps Deviation and trigger low-frequency alert chime"
           >
             <TrendingDown className="w-3 h-3 text-violet-400" />
@@ -870,7 +870,7 @@ export const PulseAnomalyHeartbeatD3Chart: React.FC<PulseAnomalyHeartbeatD3Chart
         <div className="flex items-center gap-2">
           <button
             onClick={handleExportSvg}
-            className="px-2.5 py-1 rounded-xl bg-[#06B6D4]/15 hover:bg-[#06B6D4]/25 text-[#06B6D4] border border-[#06B6D4]/30 text-[11px] font-bold flex items-center gap-1 transition"
+            className="px-2.5 py-1 rounded-xl bg-[#06B6D4]/15 hover:bg-[#06B6D4]/25 text-[#06B6D4] border-[#06B6D4]/30 text-[11px] font-bold flex items-center gap-1 transition"
             title="Export D3 Chart as SVG"
           >
             <Download className="w-3 h-3 text-[#06B6D4]" />
@@ -878,7 +878,7 @@ export const PulseAnomalyHeartbeatD3Chart: React.FC<PulseAnomalyHeartbeatD3Chart
           </button>
           <button
             onClick={handleExportCsv}
-            className="px-2.5 py-1 rounded-xl bg-emerald-500/15 hover:bg-emerald-500/25 text-emerald-300 border border-emerald-500/30 text-[11px] font-bold flex items-center gap-1 transition"
+            className="px-2.5 py-1 rounded-xl bg-emerald-500/15 hover:bg-emerald-500/25 text-emerald-300 border-emerald-500/30 text-[11px] font-bold flex items-center gap-1 transition"
             title="Export Timeline Data to CSV"
           >
             <Download className="w-3 h-3 text-emerald-400" />
@@ -888,13 +888,13 @@ export const PulseAnomalyHeartbeatD3Chart: React.FC<PulseAnomalyHeartbeatD3Chart
       </div>
 
       {/* D3 Visual Canvas Container */}
-      <div ref={containerRef} className="relative w-full rounded-2xl bg-[#070a12] border border-white/5 overflow-hidden">
+      <div ref={containerRef} className="relative w-full rounded-2xl bg-[#070a12] border-white/5 overflow-hidden">
         <svg ref={svgRef} className="w-full block" />
 
         {/* Floating Tooltip */}
         {hoveredPoint && tooltipPos && (
           <div
-            className="absolute z-30 pointer-events-none p-3.5 rounded-2xl bg-[#0a0f1e] border border-[#06B6D4]/50 shadow-2xl font-mono text-xs text-white max-w-sm"
+            className="absolute z-30 pointer-events-none p-3.5 rounded-2xl bg-[#0a0f1e] border-[#06B6D4]/50 shadow-2xl font-mono text-xs text-white max-w-sm"
             style={{
               left: Math.min(tooltipPos.x + 15, (containerRef.current?.clientWidth || 500) - 280),
               top: Math.max(10, tooltipPos.y - 80),
@@ -965,7 +965,7 @@ export const PulseAnomalyHeartbeatD3Chart: React.FC<PulseAnomalyHeartbeatD3Chart
             <span className="text-[#D4AF37] font-bold">Outlier Event Frequency (%)</span>
           </div>
           <div className="flex items-center gap-1.5">
-            <span className="w-2.5 h-2.5 rounded-full bg-rose-500 border border-white" />
+            <span className="w-2.5 h-2.5 rounded-full bg-rose-500 border-white" />
             <span className="text-rose-300">Flagged Hardware Anomaly (Alert Chime 147Hz)</span>
           </div>
         </div>

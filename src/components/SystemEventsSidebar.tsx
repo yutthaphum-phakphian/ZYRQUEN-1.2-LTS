@@ -697,13 +697,13 @@ export const SystemEventsSidebar: React.FC<SystemEventsSidebarProps> = ({
       {/* Sidebar Header */}
       <div className="p-4 sm:p-5 border-b border-white/8 bg-gradient-to-b from-[#0e1222] to-transparent flex items-center justify-between">
         <div className="flex items-center gap-3">
-          <div className="w-9 h-9 rounded-2xl bg-cyan-500/15 border border-cyan-500/30 flex items-center justify-center text-cyan-300">
+          <div className="w-9 h-9 rounded-2xl bg-cyan-500/15 border-cyan-500/30 flex items-center justify-center text-cyan-300">
             <Bell className="w-4 h-4" />
           </div>
           <div>
             <div className="flex items-center gap-2">
               <h2 className="text-sm font-bold text-white uppercase tracking-wider">System Events Activity Feed</h2>
-              <span className="text-[10px] px-2 py-0.5 rounded-full bg-cyan-500/15 text-cyan-300 border border-cyan-500/30 font-bold">
+              <span className="text-[10px] px-2 py-0.5 rounded-full bg-cyan-500/15 text-cyan-300 border-cyan-500/30 font-bold">
                 {events.length}
               </span>
             </div>
@@ -716,7 +716,7 @@ export const SystemEventsSidebar: React.FC<SystemEventsSidebarProps> = ({
           <button
             id="btn-export-batch-csv"
             onClick={() => handleBatchExportCsv(false)}
-            className="px-2.5 py-1.5 rounded-xl bg-emerald-950/60 hover:bg-emerald-500/20 border border-emerald-500/40 text-emerald-300 hover:text-white transition-all flex items-center gap-1.5 shadow-[0_0_10px_rgba(16,185,129,0.15)] active:scale-95 cursor-pointer"
+            className="px-2.5 py-1.5 rounded-xl bg-emerald-950/60 hover:bg-emerald-500/20 border-emerald-500/40 text-emerald-300 hover:text-white transition-all flex items-center gap-1.5 shadow-[0_0_10px_rgba(16,185,129,0.15)] active:scale-95 cursor-pointer"
             title="Batch export system logs as signed CSV with SHA-256 Merkle chain and PQC signatures for statutory compliance"
           >
             <FileSpreadsheet className="w-3.5 h-3.5 text-emerald-400" />
@@ -727,7 +727,7 @@ export const SystemEventsSidebar: React.FC<SystemEventsSidebarProps> = ({
           <button
             id="btn-export-batch-json"
             onClick={() => handleBatchExportJson(false)}
-            className="px-2.5 py-1.5 rounded-xl bg-cyan-950/60 hover:bg-cyan-500/20 border border-cyan-500/40 text-cyan-300 hover:text-white transition-all flex items-center gap-1.5 shadow-[0_0_10px_rgba(6,182,212,0.15)] active:scale-95 cursor-pointer"
+            className="px-2.5 py-1.5 rounded-xl bg-cyan-950/60 hover:bg-cyan-500/20 border-cyan-500/40 text-cyan-300 hover:text-white transition-all flex items-center gap-1.5 shadow-[0_0_10px_rgba(6,182,212,0.15)] active:scale-95 cursor-pointer"
             title="Batch export system logs as signed JSON with full cryptographic hash verification signatures"
           >
             <Download className="w-3.5 h-3.5 text-cyan-400" />
@@ -793,7 +793,7 @@ export const SystemEventsSidebar: React.FC<SystemEventsSidebarProps> = ({
               <ShieldCheck className="w-4 h-4 text-emerald-400" />
               <span>CRYPTOGRAPHIC {batchVerificationResult.format} BATCH EXPORTED</span>
             </span>
-            <span className="text-[10px] px-2 py-0.5 rounded-full bg-emerald-500/20 text-emerald-300 border border-emerald-500/40">
+            <span className="text-[10px] px-2 py-0.5 rounded-full bg-emerald-500/20 text-emerald-300 border-emerald-500/40">
               Δ0.00% VERIFIED
             </span>
           </div>
@@ -806,7 +806,7 @@ export const SystemEventsSidebar: React.FC<SystemEventsSidebarProps> = ({
 
       {/* Sovereign Notification Service Layer Panel */}
       {isNotificationPanelOpen && (
-        <div className="mx-4 mt-3 p-3.5 rounded-2xl bg-[#090d1c] border border-amber-500/40 text-xs font-mono space-y-3 shadow-[0_0_20px_rgba(245,158,11,0.15)] animate-in fade-in slide-in-from-top-2">
+        <div className="mx-4 mt-3 p-3.5 rounded-2xl bg-[#090d1c] border-amber-500/40 text-xs font-mono space-y-3 shadow-[0_0_20px_rgba(245,158,11,0.15)] animate-in fade-in slide-in-from-top-2">
           <div className="flex items-center justify-between border-b border-white/10 pb-2">
             <div className="flex items-center gap-2">
               <RadioTower className="w-4 h-4 text-amber-400 animate-pulse" />
@@ -814,7 +814,7 @@ export const SystemEventsSidebar: React.FC<SystemEventsSidebarProps> = ({
                 Sovereign Notification Layer (v1.2 LTS)
               </span>
             </div>
-            <span className="px-2 py-0.5 rounded-full bg-amber-500/15 text-amber-300 border border-amber-500/30 text-[9px]">
+            <span className="px-2 py-0.5 rounded-full bg-amber-500/15 text-amber-300 border-amber-500/30 text-[9px]">
               WS + Socket.IO
             </span>
           </div>
@@ -826,7 +826,7 @@ export const SystemEventsSidebar: React.FC<SystemEventsSidebarProps> = ({
             <button
               onClick={triggerSecurityAlertTest}
               disabled={notificationSending !== null}
-              className="p-2 rounded-xl bg-rose-500/15 hover:bg-rose-500/25 border border-rose-500/40 text-rose-300 text-[10px] font-bold text-left transition-all active:scale-95 disabled:opacity-50"
+              className="p-2 rounded-xl bg-rose-500/15 hover:bg-rose-500/25 border-rose-500/40 text-rose-300 text-[10px] font-bold text-left transition-all active:scale-95 disabled:opacity-50"
             >
               <div className="text-white flex items-center justify-between">
                 <span>🛡️ Security</span>
@@ -838,7 +838,7 @@ export const SystemEventsSidebar: React.FC<SystemEventsSidebarProps> = ({
             <button
               onClick={triggerTelemetryAlertTest}
               disabled={notificationSending !== null}
-              className="p-2 rounded-xl bg-cyan-500/15 hover:bg-cyan-500/25 border border-cyan-500/40 text-cyan-300 text-[10px] font-bold text-left transition-all active:scale-95 disabled:opacity-50"
+              className="p-2 rounded-xl bg-cyan-500/15 hover:bg-cyan-500/25 border-cyan-500/40 text-cyan-300 text-[10px] font-bold text-left transition-all active:scale-95 disabled:opacity-50"
             >
               <div className="text-white flex items-center justify-between">
                 <span>❄️ Telemetry</span>
@@ -850,7 +850,7 @@ export const SystemEventsSidebar: React.FC<SystemEventsSidebarProps> = ({
             <button
               onClick={triggerComplianceUpdateTest}
               disabled={notificationSending !== null}
-              className="p-2 rounded-xl bg-emerald-500/15 hover:bg-emerald-500/25 border border-emerald-500/40 text-emerald-300 text-[10px] font-bold text-left transition-all active:scale-95 disabled:opacity-50"
+              className="p-2 rounded-xl bg-emerald-500/15 hover:bg-emerald-500/25 border-emerald-500/40 text-emerald-300 text-[10px] font-bold text-left transition-all active:scale-95 disabled:opacity-50"
             >
               <div className="text-white flex items-center justify-between">
                 <span>⚖️ Compliance</span>
@@ -861,7 +861,7 @@ export const SystemEventsSidebar: React.FC<SystemEventsSidebarProps> = ({
           </div>
 
           {lastNotificationStatus && (
-            <div className="p-2 rounded-lg bg-black/60 border border-amber-500/30 text-[10px] text-amber-200">
+            <div className="p-2 rounded-lg bg-black/60 border-amber-500/30 text-[10px] text-amber-200">
               ⚡ {lastNotificationStatus}
             </div>
           )}
@@ -877,7 +877,7 @@ export const SystemEventsSidebar: React.FC<SystemEventsSidebarProps> = ({
           <div className="flex items-center gap-2">
             <span className="w-2 h-2 rounded-full bg-cyan-400 animate-ping" />
             <span className="text-[11px] font-bold text-zinc-200">Event Ingress Frequency</span>
-            <span className="text-[9px] px-1.5 py-0.5 rounded bg-cyan-500/15 text-cyan-300 border border-cyan-500/30">
+            <span className="text-[9px] px-1.5 py-0.5 rounded bg-cyan-500/15 text-cyan-300 border-cyan-500/30">
               Last 60s
             </span>
           </div>
@@ -888,7 +888,7 @@ export const SystemEventsSidebar: React.FC<SystemEventsSidebarProps> = ({
         </div>
 
         {/* SVG Sparkline visualization */}
-        <div className="w-full h-12 bg-black/50 rounded-xl border border-white/5 p-1 relative overflow-hidden flex flex-col justify-end">
+        <div className="w-full h-12 bg-black/50 rounded-xl border-white/5 p-1 relative overflow-hidden flex flex-col justify-end">
           <svg className="w-full h-9 overflow-visible" viewBox="0 0 280 36" preserveAspectRatio="none">
             <defs>
               <linearGradient id="sidebar-sparkline-grad" x1="0%" y1="0%" x2="0%" y2="100%">
@@ -1022,7 +1022,7 @@ export const SystemEventsSidebar: React.FC<SystemEventsSidebarProps> = ({
             </span>
           </div>
 
-          <div className="w-full h-2 bg-black/60 rounded-full overflow-hidden border border-white/8 p-0.5">
+          <div className="w-full h-2 bg-black/60 rounded-full overflow-hidden border-white/8 p-0.5">
             <div
               className="h-full bg-gradient-to-r from-cyan-500 via-sky-400 to-emerald-400 rounded-full transition-all duration-300 shadow-[0_0_10px_rgba(6,182,212,0.5)]"
               style={{ width: `${backupState.progressPct}%` }}
@@ -1045,7 +1045,7 @@ export const SystemEventsSidebar: React.FC<SystemEventsSidebarProps> = ({
             onMouseEnter={() => setHoveredActionTooltip('captureNow')}
             onMouseLeave={() => setHoveredActionTooltip(null)}
             onClick={handleTriggerManualSnapshot}
-            className="px-3 py-1.5 rounded-xl bg-cyan-500/15 hover:bg-cyan-500/25 border border-cyan-500/35 hover:border-cyan-400 text-cyan-200 hover:text-white font-bold transition-all flex items-center gap-1.5 shadow-[0_0_10px_rgba(6,182,212,0.15)]"
+            className="px-3 py-1.5 rounded-xl bg-cyan-500/15 hover:bg-cyan-500/25 border-cyan-500/35 hover:border-cyan-400 text-cyan-200 hover:text-white font-bold transition-all flex items-center gap-1.5 shadow-[0_0_10px_rgba(6,182,212,0.15)]"
             title="Execute instantaneous full system snapshot & Merkle state verification"
           >
             <Zap className="w-3 h-3 text-cyan-300" />
@@ -1068,7 +1068,7 @@ export const SystemEventsSidebar: React.FC<SystemEventsSidebarProps> = ({
               playTone(580, 0.04);
               onSimulateComplianceDrift();
             }}
-            className="px-2.5 py-1 rounded-lg bg-amber-500/15 hover:bg-amber-500/25 border border-amber-500/30 text-amber-200 text-[10px] font-bold transition-all flex items-center gap-1"
+            className="px-2.5 py-1 rounded-lg bg-amber-500/15 hover:bg-amber-500/25 border-amber-500/30 text-amber-200 text-[10px] font-bold transition-all flex items-center gap-1"
             title="Probe Sovereign Kernel for invariant deviations & trigger compliance drift alert"
           >
             <span>Probe Compliance Drift</span>
@@ -1130,7 +1130,7 @@ export const SystemEventsSidebar: React.FC<SystemEventsSidebarProps> = ({
                 <span>Download Full Audit Report (Signed PDF)</span>
               </button>
               {auditDownloadedToast && (
-                <div className="p-1.5 rounded-lg bg-emerald-500/15 border border-emerald-500/30 text-[10px] text-emerald-300 text-center font-mono flex items-center justify-center gap-1 animate-in fade-in">
+                <div className="p-1.5 rounded-lg bg-emerald-500/15 border-emerald-500/30 text-[10px] text-emerald-300 text-center font-mono flex items-center justify-center gap-1 animate-in fade-in">
                   <Check className="w-3 h-3" />
                   <span>Audit report downloaded & signed via Dilithium-5</span>
                 </div>
@@ -1150,7 +1150,7 @@ export const SystemEventsSidebar: React.FC<SystemEventsSidebarProps> = ({
               <span>Search Audit Logs:</span>
             </label>
             {searchQuery && (
-              <span className="text-[10px] font-mono text-cyan-300 bg-cyan-950/60 px-2 py-0.5 rounded border border-cyan-500/30">
+              <span className="text-[10px] font-mono text-cyan-300 bg-cyan-950/60 px-2 py-0.5 rounded border-cyan-500/30">
                 {filteredEvents.length} {filteredEvents.length === 1 ? 'match' : 'matches'}
               </span>
             )}
@@ -1164,7 +1164,7 @@ export const SystemEventsSidebar: React.FC<SystemEventsSidebarProps> = ({
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
               placeholder="Search by title or statute (e.g. ETDA Sec 26, PDPA, Quorum)..."
-              className="w-full pl-9 pr-8 py-1.5 rounded-xl bg-[#0e1428] border border-cyan-500/30 hover:border-cyan-500/50 focus:border-cyan-400 text-xs font-mono text-zinc-200 placeholder:text-zinc-500 focus:outline-none focus:ring-1 focus:ring-cyan-400/40 transition-all shadow-inner"
+              className="w-full pl-9 pr-8 py-1.5 rounded-xl bg-[#0e1428] border-cyan-500/30 hover:border-cyan-500/50 focus:border-cyan-400 text-xs font-mono text-zinc-200 placeholder:text-zinc-500 focus:outline-none focus:ring-1 focus:ring-cyan-400/40 transition-all shadow-inner"
             />
             {searchQuery && (
               <button
@@ -1215,7 +1215,7 @@ export const SystemEventsSidebar: React.FC<SystemEventsSidebarProps> = ({
               <button
                 type="button"
                 onClick={() => setSearchQuery('')}
-                className="px-1.5 py-0.5 rounded-md text-[9px] text-rose-300 hover:text-rose-200 bg-rose-500/10 border border-rose-500/20 shrink-0 cursor-pointer"
+                className="px-1.5 py-0.5 rounded-md text-[9px] text-rose-300 hover:text-rose-200 bg-rose-500/10 border-rose-500/20 shrink-0 cursor-pointer"
               >
                 Clear
               </button>
@@ -1239,7 +1239,7 @@ export const SystemEventsSidebar: React.FC<SystemEventsSidebarProps> = ({
               playTone(560, 0.03);
               setFilter(e.target.value as SystemEventFilterType);
             }}
-            className="px-2.5 py-1 rounded-xl bg-[#0e1428] border border-cyan-500/40 text-cyan-200 text-xs font-mono font-medium focus:outline-none focus:border-cyan-300 transition-colors cursor-pointer shadow-sm"
+            className="px-2.5 py-1 rounded-xl bg-[#0e1428] border-cyan-500/40 text-cyan-200 text-xs font-mono font-medium focus:outline-none focus:border-cyan-300 transition-colors cursor-pointer shadow-sm"
           >
             <option value="ALL">All Categories ({filterCounts.ALL})</option>
             <option value="COMPLIANCE">⚖️ COMPLIANCE & Legal Drift ({filterCounts.COMPLIANCE})</option>
@@ -1264,8 +1264,8 @@ export const SystemEventsSidebar: React.FC<SystemEventsSidebarProps> = ({
               }}
               className={`px-2.5 py-1 rounded-lg transition-all whitespace-nowrap text-[10px] font-mono flex items-center gap-1 ${
                 filter === f
-                  ? 'bg-cyan-500/20 text-cyan-200 font-bold border border-cyan-500/40 shadow-[0_0_8px_rgba(6,182,212,0.2)]'
-                  : 'text-zinc-400 hover:text-zinc-200 bg-white/5 border border-transparent'
+                  ? 'bg-cyan-500/20 text-cyan-200 font-bold border-cyan-500/40 shadow-[0_0_8px_rgba(6,182,212,0.2)]'
+                  : 'text-zinc-400 hover:text-zinc-200 bg-white/5 border-transparent'
               }`}
             >
               <span>
@@ -1325,7 +1325,7 @@ export const SystemEventsSidebar: React.FC<SystemEventsSidebarProps> = ({
                   onMouseEnter={() => setHoveredActionTooltip('bulkAffirmSelected')}
                   onMouseLeave={() => setHoveredActionTooltip(null)}
                   onClick={() => handleBulkAffirm(true)}
-                  className="px-2 py-1 rounded-lg bg-emerald-500/20 hover:bg-emerald-500/30 border border-emerald-400 text-emerald-200 text-[10px] font-bold flex items-center gap-1 transition-all shadow-[0_0_10px_rgba(16,185,129,0.3)]"
+                  className="px-2 py-1 rounded-lg bg-emerald-500/20 hover:bg-emerald-500/30 border-emerald-400 text-emerald-200 text-[10px] font-bold flex items-center gap-1 transition-all shadow-[0_0_10px_rgba(16,185,129,0.3)]"
                   title="Bulk affirm selected events under ETDA Sec 26 & 28 Safe Harbor"
                 >
                   <CheckCircle2 className="w-3 h-3 text-emerald-300" />
@@ -1336,7 +1336,7 @@ export const SystemEventsSidebar: React.FC<SystemEventsSidebarProps> = ({
                   onMouseEnter={() => setHoveredActionTooltip('bulkExportSelectedCsv')}
                   onMouseLeave={() => setHoveredActionTooltip(null)}
                   onClick={() => handleBatchExportCsv(true)}
-                  className="px-2 py-1 rounded-lg bg-emerald-500/20 hover:bg-emerald-500/30 border border-emerald-400 text-emerald-200 text-[10px] font-bold flex items-center gap-1 transition-all shadow-[0_0_10px_rgba(16,185,129,0.3)]"
+                  className="px-2 py-1 rounded-lg bg-emerald-500/20 hover:bg-emerald-500/30 border-emerald-400 text-emerald-200 text-[10px] font-bold flex items-center gap-1 transition-all shadow-[0_0_10px_rgba(16,185,129,0.3)]"
                   title="Export selected events as court-admissible signed CSV with SHA-256 Merkle chain"
                 >
                   <FileSpreadsheet className="w-3 h-3 text-emerald-300" />
@@ -1347,7 +1347,7 @@ export const SystemEventsSidebar: React.FC<SystemEventsSidebarProps> = ({
                   onMouseEnter={() => setHoveredActionTooltip('bulkExportSelected')}
                   onMouseLeave={() => setHoveredActionTooltip(null)}
                   onClick={() => handleBatchExportJson(true)}
-                  className="px-2 py-1 rounded-lg bg-cyan-500/20 hover:bg-cyan-500/30 border border-cyan-400 text-cyan-200 text-[10px] font-bold flex items-center gap-1 transition-all shadow-[0_0_10px_rgba(6,182,212,0.3)]"
+                  className="px-2 py-1 rounded-lg bg-cyan-500/20 hover:bg-cyan-500/30 border-cyan-400 text-cyan-200 text-[10px] font-bold flex items-center gap-1 transition-all shadow-[0_0_10px_rgba(6,182,212,0.3)]"
                   title="Export selected events as court-admissible signed JSON with PQC signature"
                 >
                   <Download className="w-3 h-3 text-cyan-300" />
@@ -1363,7 +1363,7 @@ export const SystemEventsSidebar: React.FC<SystemEventsSidebarProps> = ({
                     onClearEvents();
                     setSelectedIds(new Set());
                   }}
-                  className="px-2 py-1 rounded-lg bg-rose-500/20 hover:bg-rose-500/30 border border-rose-500/50 text-rose-200 text-[10px] font-bold flex items-center gap-1 transition-all"
+                  className="px-2 py-1 rounded-lg bg-rose-500/20 hover:bg-rose-500/30 border-rose-500/50 text-rose-200 text-[10px] font-bold flex items-center gap-1 transition-all"
                   title="Purge selected events under PDPA data minimization"
                 >
                   <Trash2 className="w-3 h-3 text-rose-300" />
@@ -1391,7 +1391,7 @@ export const SystemEventsSidebar: React.FC<SystemEventsSidebarProps> = ({
                   onMouseEnter={() => setHoveredActionTooltip('bulkExportCsv')}
                   onMouseLeave={() => setHoveredActionTooltip(null)}
                   onClick={() => handleBatchExportCsv(false)}
-                  className="px-2 py-1 rounded-lg bg-emerald-500/15 hover:bg-emerald-500/25 border border-emerald-500/30 text-emerald-300 text-[10px] font-bold flex items-center gap-1 transition-all"
+                  className="px-2 py-1 rounded-lg bg-emerald-500/15 hover:bg-emerald-500/25 border-emerald-500/30 text-emerald-300 text-[10px] font-bold flex items-center gap-1 transition-all"
                   title="Export full event buffer as signed CSV with cryptographic verification signatures"
                 >
                   <FileSpreadsheet className="w-3 h-3 text-emerald-400" />
@@ -1402,7 +1402,7 @@ export const SystemEventsSidebar: React.FC<SystemEventsSidebarProps> = ({
                   onMouseEnter={() => setHoveredActionTooltip('bulkExport')}
                   onMouseLeave={() => setHoveredActionTooltip(null)}
                   onClick={() => handleBatchExportJson(false)}
-                  className="px-2 py-1 rounded-lg bg-cyan-500/15 hover:bg-cyan-500/25 border border-cyan-500/30 text-cyan-300 text-[10px] font-bold flex items-center gap-1 transition-all"
+                  className="px-2 py-1 rounded-lg bg-cyan-500/15 hover:bg-cyan-500/25 border-cyan-500/30 text-cyan-300 text-[10px] font-bold flex items-center gap-1 transition-all"
                   title="Export full event buffer as signed JSON with cryptographic verification signatures"
                 >
                   <Download className="w-3 h-3 text-cyan-400" />
@@ -1417,7 +1417,7 @@ export const SystemEventsSidebar: React.FC<SystemEventsSidebarProps> = ({
                     onClearEvents();
                     setSelectedIds(new Set());
                   }}
-                  className="px-2 py-1 rounded-lg bg-rose-500/15 hover:bg-rose-500/25 border border-rose-500/30 text-rose-300 text-[10px] font-bold flex items-center gap-1 transition-all"
+                  className="px-2 py-1 rounded-lg bg-rose-500/15 hover:bg-rose-500/25 border-rose-500/30 text-rose-300 text-[10px] font-bold flex items-center gap-1 transition-all"
                   title="Purge ephemeral buffer memory under PDPA data minimization"
                 >
                   <Trash2 className="w-3 h-3" />
@@ -1439,14 +1439,14 @@ export const SystemEventsSidebar: React.FC<SystemEventsSidebarProps> = ({
                 {BULK_ACTION_TOOLTIPS[hoveredActionTooltip].title}
               </strong>
             </div>
-            <span className="text-[10px] text-amber-300 font-bold bg-amber-500/15 px-2.5 py-0.5 rounded-full border border-amber-500/30">
+            <span className="text-[10px] text-amber-300 font-bold bg-amber-500/15 px-2.5 py-0.5 rounded-full border-amber-500/30">
               {BULK_ACTION_TOOLTIPS[hoveredActionTooltip].statute}
             </span>
           </div>
 
           <div className="space-y-2 text-[11px] leading-relaxed">
             {/* Specific PDPA & ETDA Statutory Citations */}
-            <div className="grid grid-cols-1 sm:grid-cols-2 gap-1.5 p-2 rounded-xl bg-black/50 border border-white/5 text-[10px]">
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-1.5 p-2 rounded-xl bg-black/50 border-white/5 text-[10px]">
               <div className="space-y-0.5">
                 <span className="text-amber-300 font-bold flex items-center gap-1">
                   <span>⚖️</span>
@@ -1501,7 +1501,7 @@ export const SystemEventsSidebar: React.FC<SystemEventsSidebarProps> = ({
                     playTone(480, 0.03);
                     setSearchQuery('');
                   }}
-                  className="px-3 py-1 rounded-lg bg-cyan-500/10 border border-cyan-500/30 text-cyan-300 text-xs font-mono hover:bg-cyan-500/20 transition-all cursor-pointer"
+                  className="px-3 py-1 rounded-lg bg-cyan-500/10 border-cyan-500/30 text-cyan-300 text-xs font-mono hover:bg-cyan-500/20 transition-all cursor-pointer"
                 >
                   Clear Search Filter
                 </button>
@@ -1573,7 +1573,7 @@ export const SystemEventsSidebar: React.FC<SystemEventsSidebarProps> = ({
 
                 {/* BINDING_STATUS Indicator for COMPLIANCE-type events */}
                 {ev.type === 'COMPLIANCE' && (
-                  <div className="p-2.5 rounded-xl bg-[#070b16] border border-cyan-500/30 flex items-center justify-between text-[11px] font-mono">
+                  <div className="p-2.5 rounded-xl bg-[#070b16] border-cyan-500/30 flex items-center justify-between text-[11px] font-mono">
                     <div className="flex items-center gap-2">
                       <div className="flex items-center gap-1 text-emerald-300 font-bold">
                         <Link className="w-3.5 h-3.5 text-emerald-400" />
@@ -1625,7 +1625,7 @@ export const SystemEventsSidebar: React.FC<SystemEventsSidebarProps> = ({
                 )}
 
                 {ev.metaHash && !ev.statuteRef && !ev.isComplianceDrift && (
-                  <div className="p-2 rounded-xl bg-black/50 border border-white/5 text-[10px] text-cyan-300/80 truncate select-all flex items-center justify-between">
+                  <div className="p-2 rounded-xl bg-black/50 border-white/5 text-[10px] text-cyan-300/80 truncate select-all flex items-center justify-between">
                     <span className="truncate">{ev.metaHash}</span>
                   </div>
                 )}

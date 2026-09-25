@@ -130,12 +130,12 @@ export const ResilienceHeatmap: React.FC = () => {
   return (
     <div
       id="chamber-resilience-heatmap-widget"
-      className="bg-slate-950/90 border border-cyan-500/30 rounded-xl p-5 text-cyan-400 font-mono shadow-2xl backdrop-blur-md transition-all duration-300 hover:border-cyan-500/50 my-4"
+      className="bg-slate-950/90 border-cyan-500/30 rounded-xl p-5 text-cyan-400 font-mono shadow-2xl backdrop-blur-md transition-all duration-300 hover:border-cyan-500/50 my-4"
     >
       {/* Header & Action Controls */}
       <div className="flex flex-wrap items-center justify-between gap-3 border-b border-cyan-500/20 pb-3 mb-4">
         <div className="flex items-center gap-2.5">
-          <div className="p-2 bg-cyan-950/80 border border-cyan-500/40 rounded-lg">
+          <div className="p-2 bg-cyan-950/80 border-cyan-500/40 rounded-lg">
             <Layers className="w-5 h-5 text-cyan-300 animate-pulse" />
           </div>
           <div>
@@ -161,7 +161,7 @@ export const ResilienceHeatmap: React.FC = () => {
             id="resilience-heatmap-force-heal-btn"
             onClick={triggerForceHeal}
             disabled={autoHealTrigger}
-            className="flex items-center gap-1.5 px-3 py-1.5 bg-gradient-to-r from-cyan-600/30 to-violet-600/30 hover:from-cyan-600/50 hover:to-violet-600/50 border border-cyan-400/50 rounded-lg text-xs text-white font-semibold shadow-sm transition-all cursor-pointer disabled:opacity-50"
+            className="flex items-center gap-1.5 px-3 py-1.5 bg-gradient-to-r from-cyan-600/30 to-violet-600/30 hover:from-cyan-600/50 hover:to-violet-600/50 border-cyan-400/50 rounded-lg text-xs text-white font-semibold shadow-sm transition-all cursor-pointer disabled:opacity-50"
           >
             <RefreshCw className={`w-3.5 h-3.5 ${autoHealTrigger ? 'animate-spin text-cyan-300' : 'text-violet-400'}`} />
             <span>{autoHealTrigger ? 'Self-Healing...' : 'Trigger Auto-Purge & Heal'}</span>
@@ -171,21 +171,21 @@ export const ResilienceHeatmap: React.FC = () => {
 
       {/* Aggregate Metrics Bar */}
       <div className="grid grid-cols-2 sm:grid-cols-4 gap-2.5 mb-4">
-        <div className="bg-slate-900/80 border border-cyan-500/20 rounded-lg p-2.5">
+        <div className="bg-slate-900/80 border-cyan-500/20 rounded-lg p-2.5">
           <div className="text-[11px] text-slate-400 flex items-center gap-1">
             <Activity className="w-3 h-3 text-cyan-400" />
             MEAN RESILIENCE
           </div>
           <div className="text-lg font-bold text-cyan-300">{avgResilience}%</div>
         </div>
-        <div className="bg-slate-900/80 border border-cyan-500/20 rounded-lg p-2.5">
+        <div className="bg-slate-900/80 border-cyan-500/20 rounded-lg p-2.5">
           <div className="text-[11px] text-slate-400 flex items-center gap-1">
             <ShieldCheck className="w-3 h-3 text-emerald-400" />
             TOTAL MONITORED
           </div>
           <div className="text-lg font-bold text-emerald-400">{chambers.length} Chambers</div>
         </div>
-        <div className="bg-slate-900/80 border border-cyan-500/20 rounded-lg p-2.5">
+        <div className="bg-slate-900/80 border-cyan-500/20 rounded-lg p-2.5">
           <div className="text-[11px] text-slate-400 flex items-center gap-1">
             <CheckCircle2 className="w-3 h-3 text-emerald-400" />
             OPTIMAL RATIO
@@ -194,7 +194,7 @@ export const ResilienceHeatmap: React.FC = () => {
             {chambers.filter(c => c.status === 'OPTIMAL').length}/{chambers.length}
           </div>
         </div>
-        <div className="bg-slate-900/80 border border-cyan-500/20 rounded-lg p-2.5">
+        <div className="bg-slate-900/80 border-cyan-500/20 rounded-lg p-2.5">
           <div className="text-[11px] text-slate-400 flex items-center gap-1">
             <Zap className="w-3 h-3 text-amber-400" />
             SELF-HEAL LATENCY
@@ -212,7 +212,7 @@ export const ResilienceHeatmap: React.FC = () => {
             onClick={() => setFilter(f)}
             className={`px-2.5 py-0.5 rounded text-[11px] transition-colors cursor-pointer ${
               filter === f
-                ? 'bg-cyan-500/20 text-cyan-200 border border-cyan-500/50 font-bold'
+                ? 'bg-cyan-500/20 text-cyan-200 border-cyan-500/50 font-bold'
                 : 'text-slate-400 hover:text-cyan-300'
             }`}
           >

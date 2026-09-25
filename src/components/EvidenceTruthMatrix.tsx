@@ -184,7 +184,7 @@ export const EvidenceTruthMatrix: React.FC = () => {
       {/* Top Header */}
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 border-b border-purple-500/20 pb-4">
         <div className="flex items-center gap-3">
-          <div className="w-10 h-10 rounded-xl bg-purple-500/15 border border-purple-500/30 text-purple-300 flex items-center justify-center shrink-0">
+          <div className="w-10 h-10 rounded-xl bg-purple-500/15 border-purple-500/30 text-purple-300 flex items-center justify-center shrink-0">
             <Layers className="w-5 h-5" />
           </div>
           <div>
@@ -192,7 +192,7 @@ export const EvidenceTruthMatrix: React.FC = () => {
               <h3 className="text-base font-bold text-purple-100 font-serif">
                 Evidence Truth Layer & Telemetry Truth Guard
               </h3>
-              <span className="text-[10px] px-2 py-0.5 rounded-full bg-purple-500/20 text-purple-300 border border-purple-500/40 font-bold">
+              <span className="text-[10px] px-2 py-0.5 rounded-full bg-purple-500/20 text-purple-300 border-purple-500/40 font-bold">
                 EVIDENCE CLASSIFICATION ACTIVE
               </span>
             </div>
@@ -204,7 +204,7 @@ export const EvidenceTruthMatrix: React.FC = () => {
 
         {/* Multi-Sig Boundary State Indicator */}
         <div className="flex items-center gap-2 text-xs">
-          <span className="px-3 py-1 rounded-xl bg-black/60 border border-purple-500/30 text-purple-300 font-bold">
+          <span className="px-3 py-1 rounded-xl bg-black/60 border-purple-500/30 text-purple-300 font-bold">
             Multi-Sig Boundary: {custodianProofs}/10 WAITING REAL SIGNATURES
           </span>
         </div>
@@ -265,12 +265,12 @@ export const EvidenceTruthMatrix: React.FC = () => {
         {filteredClaims.map((claim) => (
           <div
             key={claim.id}
-            className="p-4 rounded-2xl bg-black/60 border border-white/8 hover:border-purple-500/30 transition-all space-y-2 text-xs"
+            className="p-4 rounded-2xl bg-black/60 border-white/8 hover:border-purple-500/30 transition-all space-y-2 text-xs"
           >
             <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2 border-b border-white/5 pb-2">
               <div className="flex items-center gap-2">
                 <span className="font-bold text-white text-sm font-serif">{claim.metric}</span>
-                <span className="text-purple-300 font-bold px-2 py-0.5 rounded bg-purple-500/10 border border-purple-500/20">
+                <span className="text-purple-300 font-bold px-2 py-0.5 rounded bg-purple-500/10 border-purple-500/20">
                   {claim.claimedValue}
                 </span>
               </div>
@@ -301,21 +301,21 @@ export const EvidenceTruthMatrix: React.FC = () => {
       </div>
 
       {/* Multi-Sig Boundary Explanation */}
-      <div className="p-4 rounded-2xl bg-gradient-to-r from-black/90 via-[#13081e] to-black/90 border border-purple-500/30 space-y-2 text-xs">
+      <div className="p-4 rounded-2xl bg-gradient-to-r from-black/90 via-[#13081e] to-black/90 border-purple-500/30 space-y-2 text-xs">
         <div className="font-bold text-purple-200 font-serif flex items-center justify-between">
           <span>GOVERNANCE HARDENING: MULTI-SIG BOUNDARY PROTOCOL</span>
           <span className="text-[10px] text-amber-300">NO SELF-SEAL • NO FORCE 10/10 BUTTON</span>
         </div>
         <div className="flex flex-wrap items-center gap-2 text-[10px] text-zinc-300 font-mono">
-          <span className="px-2 py-1 rounded bg-amber-500/20 text-amber-300 border border-amber-500/40">{custodianProofs}/10 THAI CUSTODIANS SIGNED</span>
+          <span className="px-2 py-1 rounded bg-amber-500/20 text-amber-300 border-amber-500/40">{custodianProofs}/10 THAI CUSTODIANS SIGNED</span>
           <span>➔</span>
-          <span className="px-2 py-1 rounded bg-zinc-800 text-zinc-400 border border-zinc-700">WAITING REAL SIGNATURES ({custodianProofs + 1}..9)</span>
+          <span className="px-2 py-1 rounded bg-zinc-800 text-zinc-400 border-zinc-700">WAITING REAL SIGNATURES ({custodianProofs + 1}..9)</span>
           <span>➔</span>
-          <span className="px-2 py-1 rounded bg-zinc-800 text-zinc-400 border border-zinc-700">10/10 VERIFIED</span>
+          <span className="px-2 py-1 rounded bg-zinc-800 text-zinc-400 border-zinc-700">10/10 VERIFIED</span>
           <span>➔</span>
-          <span className="px-2 py-1 rounded bg-zinc-800 text-zinc-400 border border-zinc-700">CATHEDRAL GATE</span>
+          <span className="px-2 py-1 rounded bg-zinc-800 text-zinc-400 border-zinc-700">CATHEDRAL GATE</span>
           <span>➔</span>
-          <span className="px-2 py-1 rounded bg-zinc-800 text-zinc-400 border border-zinc-700">EXPLICIT PROMOTION</span>
+          <span className="px-2 py-1 rounded bg-zinc-800 text-zinc-400 border-zinc-700">EXPLICIT PROMOTION</span>
         </div>
         <p className="text-[11px] text-zinc-400 font-sans mt-1">
           ระบบไม่อนุญาตให้กดปุ่มจำลองการลงนามครบ 10/10 หรือ Self-Seal ด้วยตนเอง การเลื่อนสถานะจาก Candidate สู่ Canonical ต้องเกิดจากการลงนามทางกายภาพด้วย Dilithium-5 Hardware Token ของผู้พิทักษ์ครบทุกท่าน

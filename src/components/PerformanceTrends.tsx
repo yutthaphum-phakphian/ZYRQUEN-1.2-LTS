@@ -128,7 +128,7 @@ export const PerformanceTrends: React.FC = () => {
   };
 
   return (
-    <div id="performance-trends-component" className="w-full bg-[#070a12] border border-[#D4AF37]/30 rounded-xl p-6 font-mono text-[#06B6D4] shadow-2xl space-y-4">
+    <div id="performance-trends-component" className="w-full bg-[#070a12] border-[#D4AF37]/30 rounded-xl p-6 font-mono text-[#06B6D4] shadow-2xl space-y-4">
       {/* Header */}
       <div className="flex flex-col md:flex-row md:items-center justify-between pb-3 border-b border-[#0a0f1e] gap-3">
         <div>
@@ -160,7 +160,7 @@ export const PerformanceTrends: React.FC = () => {
           </button>
 
           {/* Chart Type Toggle */}
-          <div className="flex bg-[#0a0f1e] border border-slate-800 rounded p-0.5">
+          <div className="flex bg-[#0a0f1e] border-slate-800 rounded p-0.5">
             <button
               onClick={() => setChartType('line')}
               className={`px-2 py-0.5 text-[11px] rounded ${chartType === 'line' ? 'bg-[#06B6D4] text-black font-bold' : 'text-slate-400'}`}
@@ -210,7 +210,7 @@ export const PerformanceTrends: React.FC = () => {
       </div>
 
       {/* Recharts Historical Trends Visualization */}
-      <div className="p-4 bg-[#0a0f1e] border border-[#06B6D4]/30 rounded-lg">
+      <div className="p-4 bg-[#0a0f1e] border-[#06B6D4]/30 rounded-lg">
         <div className="h-64 w-full">
           <ResponsiveContainer width="100%" height="100%">
             {chartType === 'line' ? (
@@ -310,14 +310,14 @@ export const PerformanceTrends: React.FC = () => {
       </div>
 
       {/* 14,902 Seals Sentinel Footnote */}
-      <div className="p-3 bg-[#0a0f1e] border border-[#D4AF37]/30 rounded-lg flex flex-col sm:flex-row sm:items-center justify-between gap-2 text-xs">
+      <div className="p-3 bg-[#0a0f1e] border-[#D4AF37]/30 rounded-lg flex flex-col sm:flex-row sm:items-center justify-between gap-2 text-xs">
         <div className="flex items-center gap-2">
           <span className="text-base">🛡️</span>
           <span className="text-slate-300">
             <strong>14,902 Seals Verification:</strong> <span className="text-emerald-400 font-bold">100% AUDITED &amp; BOUND</span> under Block #849202 (SSoT Δ0.00%)
           </span>
         </div>
-        <span className="text-purple-300 font-bold bg-[#070a12] px-2.5 py-1 rounded border border-purple-500/40">
+        <span className="text-purple-300 font-bold bg-[#070a12] px-2.5 py-1 rounded border-purple-500/40">
           Quorum: 10/10 REAL_HSM FIPS 140-3 L4
         </span>
       </div>

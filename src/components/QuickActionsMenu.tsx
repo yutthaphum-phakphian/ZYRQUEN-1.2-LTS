@@ -46,21 +46,21 @@ export const QuickActionsMenu: React.FC<QuickActionsMenuProps> = ({ onToggleFore
               >
                 <button
                   onClick={() => handleAction('backup')}
-                  className="w-full min-h-[44px] flex items-center gap-3 px-4 py-3 bg-[#0a0f1e]/90 border border-emerald-500/30 hover:bg-[#0a0f1e] hover:border-emerald-400 rounded-xl text-xs font-mono font-bold text-emerald-300 transition-all backdrop-blur-md shadow-lg"
+                  className="w-full min-h-[44px] flex items-center gap-3 px-4 py-3 bg-[#0a0f1e]/90 border-emerald-500/30 hover:bg-[#0a0f1e] hover:border-emerald-400 rounded-xl text-xs font-mono font-bold text-emerald-300 transition-all backdrop-blur-md shadow-lg"
                 >
                   <HardDrive className="w-4 h-4" />
                   Trigger Backup
                 </button>
                 <button
                   onClick={() => handleAction('clear')}
-                  className="w-full min-h-[44px] flex items-center gap-3 px-4 py-3 bg-[#0a0f1e]/90 border border-amber-500/30 hover:bg-[#0a0f1e] hover:border-amber-400 rounded-xl text-xs font-mono font-bold text-amber-300 transition-all backdrop-blur-md shadow-lg"
+                  className="w-full min-h-[44px] flex items-center gap-3 px-4 py-3 bg-[#0a0f1e]/90 border-amber-500/30 hover:bg-[#0a0f1e] hover:border-amber-400 rounded-xl text-xs font-mono font-bold text-amber-300 transition-all backdrop-blur-md shadow-lg"
                 >
                   <Trash2 className="w-4 h-4" />
                   Clear Cache
                 </button>
                 <button
                   onClick={() => handleAction('audit')}
-                  className="w-full min-h-[44px] flex items-center gap-3 px-4 py-3 bg-[#0a0f1e]/90 border border-rose-500/30 hover:bg-[#0a0f1e] hover:border-rose-400 rounded-xl text-xs font-mono font-bold text-rose-300 transition-all backdrop-blur-md shadow-lg"
+                  className="w-full min-h-[44px] flex items-center gap-3 px-4 py-3 bg-[#0a0f1e]/90 border-rose-500/30 hover:bg-[#0a0f1e] hover:border-rose-400 rounded-xl text-xs font-mono font-bold text-rose-300 transition-all backdrop-blur-md shadow-lg"
                 >
                   <ShieldAlert className="w-4 h-4" />
                   Toggle Forensic Audit
@@ -91,7 +91,7 @@ export const QuickActionsMenu: React.FC<QuickActionsMenuProps> = ({ onToggleFore
             initial={{ opacity: 0, y: 50, x: '-50%' }}
             animate={{ opacity: 1, y: 0, x: '-50%' }}
             exit={{ opacity: 0, y: 50, x: '-50%' }}
-            className="fixed bottom-24 left-1/2 z-[60] px-6 py-3 bg-cyan-950/90 border border-cyan-500/50 text-cyan-100 text-xs font-mono font-bold rounded-xl shadow-[0_0_20px_rgba(6,182,212,0.3)] backdrop-blur-md"
+            className="fixed bottom-24 left-1/2 z-[60] px-6 py-3 bg-cyan-950/90 border-cyan-500/50 text-cyan-100 text-xs font-mono font-bold rounded-xl shadow-[0_0_20px_rgba(6,182,212,0.3)] backdrop-blur-md"
           >
             {toast}
           </motion.div>

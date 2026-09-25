@@ -16,17 +16,17 @@ export const MasterReportHeader: React.FC<MasterReportHeaderProps> = ({
   onExportCsv,
 }) => {
   return (
-    <header className="w-full bg-gray-950 border border-gray-800 p-3 rounded-lg space-y-3">
+    <header className="w-full bg-gray-950 border-gray-800 p-3 rounded-lg space-y-3">
       {/* Title Bar & Status Badge */}
       <div className="flex flex-wrap items-center justify-between gap-2 border-b border-gray-800/80 pb-2">
         <div className="flex items-center gap-2">
-          <span className="p-1 bg-amber-500/20 text-amber-400 rounded border border-amber-500/30 text-xs">
+          <span className="p-1 bg-amber-500/20 text-amber-400 rounded border-amber-500/30 text-xs">
             🛡️
           </span>
           <h1 className="text-xs sm:text-sm font-bold text-gray-100 font-mono tracking-tight">
             GOLD MASTER CERTIFICATE &amp; DEPLOYMENT GATE
           </h1>
-          <span className="px-1.5 py-0.5 text-[10px] font-mono bg-emerald-950 text-emerald-400 border border-emerald-800 rounded">
+          <span className="px-1.5 py-0.5 text-[10px] font-mono bg-emerald-950 text-emerald-400 border-emerald-800 rounded">
             100% VERIFIED
           </span>
         </div>

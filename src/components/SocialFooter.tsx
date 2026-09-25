@@ -10,7 +10,7 @@ export const SocialFooter: React.FC = () => {
         href={GITHUB_REPO_URL}
         target="_blank"
         rel="noopener noreferrer"
-        className="group inline-flex items-center space-x-2 px-3 py-1.5 text-xs font-mono text-slate-400 hover:text-emerald-400 bg-slate-900/80 hover:bg-slate-900 border border-slate-800 hover:border-emerald-500/40 rounded-full transition-all duration-200"
+        className="group inline-flex items-center space-x-2 px-3 py-1.5 text-xs font-mono text-slate-400 hover:text-emerald-400 bg-slate-900/80 hover:bg-slate-900 border-slate-800 hover:border-emerald-500/40 rounded-full transition-all duration-200"
       >
         <Github className="w-4 h-4 text-slate-400 group-hover:text-emerald-400 transition-colors" />
         <span className="font-medium">GitHub Repository</span>

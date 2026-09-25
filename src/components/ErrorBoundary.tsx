@@ -28,9 +28,9 @@ export class ErrorBoundary extends Component<Props, State> {
   public render() {
     if (this.state.hasError) {
       return (
-        <div className="min-h-[400px] bg-[#070a12] text-white flex items-center justify-center p-6 font-mono rounded-2xl border border-amber-500/30">
-          <div className="max-w-xl w-full p-8 rounded-2xl bg-[#0a0f1e] border border-amber-500/40 shadow-2xl space-y-6 text-center">
-            <div className="w-16 h-16 mx-auto rounded-2xl bg-amber-500/20 border border-amber-500/50 flex items-center justify-center text-amber-400 text-3xl">
+        <div className="min-h-[400px] bg-[#070a12] text-white flex items-center justify-center p-6 font-mono rounded-2xl border-amber-500/30">
+          <div className="max-w-xl w-full p-8 rounded-2xl bg-[#0a0f1e] border-amber-500/40 shadow-2xl space-y-6 text-center">
+            <div className="w-16 h-16 mx-auto rounded-2xl bg-amber-500/20 border-amber-500/50 flex items-center justify-center text-amber-400 text-3xl">
               🛡️
             </div>
             
@@ -46,7 +46,7 @@ export class ErrorBoundary extends Component<Props, State> {
             </div>
 
             {this.state.error && (
-              <div className="p-4 rounded-xl bg-black/60 border border-white/10 text-left text-xs text-rose-300 font-mono break-all max-h-40 overflow-y-auto">
+              <div className="p-4 rounded-xl bg-black/60 border-white/10 text-left text-xs text-rose-300 font-mono break-all max-h-40 overflow-y-auto">
                 {this.state.error.message || String(this.state.error)}
               </div>
             )}
@@ -58,7 +58,7 @@ export class ErrorBoundary extends Component<Props, State> {
                     this.setState({ hasError: false, error: null });
                     this.props.onResetToHome?.();
                   }}
-                  className="px-5 py-2.5 rounded-xl bg-cyan-500/20 hover:bg-cyan-500/30 text-cyan-300 border border-cyan-500/50 text-xs font-bold transition-all"
+                  className="px-5 py-2.5 rounded-xl bg-cyan-500/20 hover:bg-cyan-500/30 text-cyan-300 border-cyan-500/50 text-xs font-bold transition-all"
                 >
                   🏠 กลับหน้าหลัก (Dashboard)
                 </button>
@@ -68,7 +68,7 @@ export class ErrorBoundary extends Component<Props, State> {
                   this.setState({ hasError: false, error: null });
                   window.location.reload();
                 }}
-                className="px-5 py-2.5 rounded-xl bg-amber-500/20 hover:bg-amber-500/30 text-amber-300 border border-amber-500/50 text-xs font-bold transition-all"
+                className="px-5 py-2.5 rounded-xl bg-amber-500/20 hover:bg-amber-500/30 text-amber-300 border-amber-500/50 text-xs font-bold transition-all"
               >
                 🔄 รีโหลดระบบ (Reload)
               </button>
@@ -82,7 +82,7 @@ export class ErrorBoundary extends Component<Props, State> {
                     window.location.reload();
                   }
                 }}
-                className="px-5 py-2.5 rounded-xl bg-white/5 hover:bg-white/10 text-zinc-300 border border-white/10 text-xs transition-all"
+                className="px-5 py-2.5 rounded-xl bg-white/5 hover:bg-white/10 text-zinc-300 border-white/10 text-xs transition-all"
               >
                 🧹 ล้างแคช (Reset)
               </button>

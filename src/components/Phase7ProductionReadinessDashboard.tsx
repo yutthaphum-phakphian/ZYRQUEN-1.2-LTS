@@ -272,7 +272,7 @@ export const Phase7ProductionReadinessDashboard: React.FC = () => {
       {/* Header */}
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 border-b border-cyan-500/20 pb-4">
         <div className="flex items-center gap-3">
-          <div className="w-11 h-11 rounded-2xl bg-cyan-500/20 border border-cyan-400 text-cyan-300 flex items-center justify-center shrink-0 shadow-[0_0_20px_rgba(6,182,212,0.3)]">
+          <div className="w-11 h-11 rounded-2xl bg-cyan-500/20 border-cyan-400 text-cyan-300 flex items-center justify-center shrink-0 shadow-[0_0_20px_rgba(6,182,212,0.3)]">
             <Activity className="w-5 h-5" />
           </div>
           <div>
@@ -280,7 +280,7 @@ export const Phase7ProductionReadinessDashboard: React.FC = () => {
               <h3 className="text-base font-bold text-cyan-100 font-serif">
                 PHASE 7 — PRODUCTION READINESS &amp; OBSERVABILITY HARDENING
               </h3>
-              <span className="text-[10px] px-2.5 py-0.5 rounded bg-emerald-500/20 text-emerald-300 border border-emerald-500/50 font-bold">
+              <span className="text-[10px] px-2.5 py-0.5 rounded bg-emerald-500/20 text-emerald-300 border-emerald-500/50 font-bold">
                 OPERATIONAL READY
               </span>
             </div>
@@ -311,7 +311,7 @@ export const Phase7ProductionReadinessDashboard: React.FC = () => {
           }}
           className={`px-3.5 py-2 rounded-xl text-xs font-bold transition-all flex items-center gap-2 ${
             activeTab === 'HEALTH'
-              ? 'bg-cyan-600/30 text-cyan-100 border border-cyan-400 shadow-[0_0_12px_rgba(6,182,212,0.3)]'
+              ? 'bg-cyan-600/30 text-cyan-100 border-cyan-400 shadow-[0_0_12px_rgba(6,182,212,0.3)]'
               : 'text-zinc-400 hover:text-white'
           }`}
         >
@@ -326,7 +326,7 @@ export const Phase7ProductionReadinessDashboard: React.FC = () => {
           }}
           className={`px-3.5 py-2 rounded-xl text-xs font-bold transition-all flex items-center gap-2 ${
             activeTab === 'TELEMETRY'
-              ? 'bg-cyan-600/30 text-cyan-100 border border-cyan-400 shadow-[0_0_12px_rgba(6,182,212,0.3)]'
+              ? 'bg-cyan-600/30 text-cyan-100 border-cyan-400 shadow-[0_0_12px_rgba(6,182,212,0.3)]'
               : 'text-zinc-400 hover:text-white'
           }`}
         >
@@ -341,7 +341,7 @@ export const Phase7ProductionReadinessDashboard: React.FC = () => {
           }}
           className={`px-3.5 py-2 rounded-xl text-xs font-bold transition-all flex items-center gap-2 ${
             activeTab === 'ALERTS'
-              ? 'bg-cyan-600/30 text-cyan-100 border border-cyan-400 shadow-[0_0_12px_rgba(6,182,212,0.3)]'
+              ? 'bg-cyan-600/30 text-cyan-100 border-cyan-400 shadow-[0_0_12px_rgba(6,182,212,0.3)]'
               : 'text-zinc-400 hover:text-white'
           }`}
         >
@@ -359,7 +359,7 @@ export const Phase7ProductionReadinessDashboard: React.FC = () => {
           }}
           className={`px-3.5 py-2 rounded-xl text-xs font-bold transition-all flex items-center gap-2 ${
             activeTab === 'DEPLOY_GATE'
-              ? 'bg-cyan-600/30 text-cyan-100 border border-cyan-400 shadow-[0_0_12px_rgba(6,182,212,0.3)]'
+              ? 'bg-cyan-600/30 text-cyan-100 border-cyan-400 shadow-[0_0_12px_rgba(6,182,212,0.3)]'
               : 'text-zinc-400 hover:text-white'
           }`}
         >
@@ -374,7 +374,7 @@ export const Phase7ProductionReadinessDashboard: React.FC = () => {
           }}
           className={`px-3.5 py-2 rounded-xl text-xs font-bold transition-all flex items-center gap-2 ${
             activeTab === 'MANIFEST'
-              ? 'bg-cyan-600/30 text-cyan-100 border border-cyan-400 shadow-[0_0_12px_rgba(6,182,212,0.3)]'
+              ? 'bg-cyan-600/30 text-cyan-100 border-cyan-400 shadow-[0_0_12px_rgba(6,182,212,0.3)]'
               : 'text-zinc-400 hover:text-white'
           }`}
         >
@@ -390,11 +390,11 @@ export const Phase7ProductionReadinessDashboard: React.FC = () => {
             {planeSignals.map((plane) => (
               <div
                 key={plane.planeId}
-                className="p-4 rounded-2xl bg-black/60 border border-cyan-500/20 space-y-2 hover:border-cyan-400/40 transition-all"
+                className="p-4 rounded-2xl bg-black/60 border-cyan-500/20 space-y-2 hover:border-cyan-400/40 transition-all"
               >
                 <div className="flex items-center justify-between">
                   <span className="text-[10px] font-mono text-zinc-400">{plane.planeId}</span>
-                  <span className="px-2 py-0.5 rounded bg-emerald-500/20 text-emerald-300 border border-emerald-500/40 text-[9px] font-bold">
+                  <span className="px-2 py-0.5 rounded bg-emerald-500/20 text-emerald-300 border-emerald-500/40 text-[9px] font-bold">
                     {plane.healthState}
                   </span>
                 </div>
@@ -417,7 +417,7 @@ export const Phase7ProductionReadinessDashboard: React.FC = () => {
             ))}
           </div>
 
-          <div className="p-3.5 rounded-xl bg-black/80 border border-emerald-500/30 flex items-center justify-between text-xs text-zinc-300">
+          <div className="p-3.5 rounded-xl bg-black/80 border-emerald-500/30 flex items-center justify-between text-xs text-zinc-300">
             <div className="flex items-center gap-2">
               <CheckCircle2 className="w-4 h-4 text-emerald-400" />
               <span>
@@ -433,29 +433,29 @@ export const Phase7ProductionReadinessDashboard: React.FC = () => {
       {activeTab === 'TELEMETRY' && (
         <div className="space-y-4">
           <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-            <div className="p-4 rounded-2xl bg-black/60 border border-cyan-500/30 space-y-1">
+            <div className="p-4 rounded-2xl bg-black/60 border-cyan-500/30 space-y-1">
               <span className="text-zinc-400 text-xs">Global P95 Verification Latency</span>
               <div className="text-2xl font-bold font-mono text-cyan-300">3.4 ms</div>
               <p className="text-[10px] text-zinc-400">Target SLO: &lt; 25.0 ms &bull; Status: OPTIMAL</p>
             </div>
-            <div className="p-4 rounded-2xl bg-black/60 border border-emerald-500/30 space-y-1">
+            <div className="p-4 rounded-2xl bg-black/60 border-emerald-500/30 space-y-1">
               <span className="text-zinc-400 text-xs">Total Sovereign Operations / Sec</span>
               <div className="text-2xl font-bold font-mono text-emerald-300">12,890 ops/s</div>
               <p className="text-[10px] text-zinc-400">Across 8 isolated extension pipelines</p>
             </div>
-            <div className="p-4 rounded-2xl bg-black/60 border border-amber-500/30 space-y-1">
+            <div className="p-4 rounded-2xl bg-black/60 border-amber-500/30 space-y-1">
               <span className="text-zinc-400 text-xs">Audit Append Latency (Chained Ledger)</span>
               <div className="text-2xl font-bold font-mono text-amber-300">0.9 ms</div>
               <p className="text-[10px] text-zinc-400">Immutable SHA-256 event chaining with 0 mutations</p>
             </div>
           </div>
 
-          <div className="p-4 rounded-2xl bg-black/70 border border-white/10 space-y-2">
+          <div className="p-4 rounded-2xl bg-black/70 border-white/10 space-y-2">
             <div className="text-xs font-bold text-white flex items-center gap-2">
               <Terminal className="w-4 h-4 text-cyan-400" />
               <span>OpenTelemetry Trace Buffer (Redacted Sanitized Format)</span>
             </div>
-            <pre className="p-3.5 rounded-xl bg-black font-mono text-[11px] text-cyan-300/90 overflow-x-auto leading-relaxed border border-white/5 max-h-[220px]">
+            <pre className="p-3.5 rounded-xl bg-black font-mono text-[11px] text-cyan-300/90 overflow-x-auto leading-relaxed border-white/5 max-h-[220px]">
 {`[OTEL-SPAN-01] trace_id="TRACE-P7-8849-01" span_id="SP-001" op="PROMOTION_EVALUATE" target="FROZEN_CORE" result="FAIL_CLOSED_BLOCKED" duration="1.1ms" mutation_delta=0
 [OTEL-SPAN-02] trace_id="TRACE-P7-8849-02" span_id="SP-002" op="TENANT_CROSS_READ" tenant="TNT-TH-001" target_ns="TNT-TH-002" result="DENIED" duration="0.8ms" mutation_delta=0
 [OTEL-SPAN-03] trace_id="TRACE-P7-8849-03" span_id="SP-003" op="SHA256_BYTE_VERIFY" artifact="TNT-TH-001" result="VERIFIED" duration="2.3ms" mutation_delta=0
@@ -471,18 +471,18 @@ export const Phase7ProductionReadinessDashboard: React.FC = () => {
           {incidents.map((inc) => (
             <div
               key={inc.incidentId}
-              className="p-4 rounded-2xl bg-black/70 border border-rose-500/30 space-y-2"
+              className="p-4 rounded-2xl bg-black/70 border-rose-500/30 space-y-2"
             >
               <div className="flex flex-wrap items-center justify-between gap-2 border-b border-white/5 pb-2">
                 <div className="flex items-center gap-2">
                   <span className="text-xs font-mono font-bold text-rose-400">{inc.incidentId}</span>
-                  <span className="text-[10px] px-2 py-0.5 rounded bg-rose-500/20 text-rose-300 font-bold border border-rose-500/40">
+                  <span className="text-[10px] px-2 py-0.5 rounded bg-rose-500/20 text-rose-300 font-bold border-rose-500/40">
                     {inc.severity}
                   </span>
                   <span className="text-xs font-mono text-zinc-400">[{inc.affectedPlane}]</span>
                 </div>
                 <div className="flex items-center gap-2 text-[10px] font-mono">
-                  <span className="px-2 py-0.5 rounded bg-emerald-500/10 text-emerald-400 border border-emerald-500/30 font-bold">
+                  <span className="px-2 py-0.5 rounded bg-emerald-500/10 text-emerald-400 border-emerald-500/30 font-bold">
                     SSoT Mutation: {inc.ssotMutationDelta}
                   </span>
                   <span className="text-zinc-500">{inc.firstSeen}</span>
@@ -510,7 +510,7 @@ export const Phase7ProductionReadinessDashboard: React.FC = () => {
       {/* Tab 4: Recovery & Deployment Gate */}
       {activeTab === 'DEPLOY_GATE' && (
         <div className="space-y-4">
-          <div className="p-5 rounded-2xl bg-black/70 border border-emerald-500/30 space-y-3">
+          <div className="p-5 rounded-2xl bg-black/70 border-emerald-500/30 space-y-3">
             <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2">
               <div>
                 <h4 className="text-sm font-bold text-white flex items-center gap-2">
@@ -533,14 +533,14 @@ export const Phase7ProductionReadinessDashboard: React.FC = () => {
             </div>
 
             {recoveryLog && (
-              <div className="p-3.5 rounded-xl bg-emerald-950/40 border border-emerald-500/40 text-xs text-emerald-300 font-mono animate-in fade-in duration-200">
+              <div className="p-3.5 rounded-xl bg-emerald-950/40 border-emerald-500/40 text-xs text-emerald-300 font-mono animate-in fade-in duration-200">
                 {recoveryLog}
               </div>
             )}
           </div>
 
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4 text-xs font-mono">
-            <div className="p-4 rounded-2xl bg-black/60 border border-white/10 space-y-2">
+            <div className="p-4 rounded-2xl bg-black/60 border-white/10 space-y-2">
               <span className="text-cyan-400 font-bold">Extension Recovery Boundaries:</span>
               <ul className="space-y-1 text-zinc-300 text-[11px] list-disc list-inside">
                 <li>Policy engine digests are snapshot-restored.</li>
@@ -550,7 +550,7 @@ export const Phase7ProductionReadinessDashboard: React.FC = () => {
               </ul>
             </div>
 
-            <div className="p-4 rounded-2xl bg-black/60 border border-white/10 space-y-2">
+            <div className="p-4 rounded-2xl bg-black/60 border-white/10 space-y-2">
               <span className="text-amber-400 font-bold">Inviolable Core Contract:</span>
               <ul className="space-y-1 text-zinc-300 text-[11px] list-disc list-inside">
                 <li>Frozen Core is NEVER a recovery target.</li>
@@ -577,7 +577,7 @@ export const Phase7ProductionReadinessDashboard: React.FC = () => {
             </button>
           </div>
 
-          <pre className="p-4 rounded-2xl bg-black/90 border border-cyan-500/30 text-cyan-300/90 font-mono text-[11px] overflow-x-auto leading-relaxed max-h-[380px]">
+          <pre className="p-4 rounded-2xl bg-black/90 border-cyan-500/30 text-cyan-300/90 font-mono text-[11px] overflow-x-auto leading-relaxed max-h-[380px]">
             {JSON.stringify(generatePhase7Manifest(), null, 2)}
           </pre>
         </div>

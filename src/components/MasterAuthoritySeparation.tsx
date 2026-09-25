@@ -3,7 +3,7 @@ import { MASTER_STATE_SEPARATION } from '../data/sovereignData';
 
 export const MasterAuthoritySeparation: React.FC = () => {
   return (
-    <section id="authority-separation-section" className="bg-[#0a0f1e] border border-[#17233f] p-4 mb-8">
+    <section id="authority-separation-section" className="bg-[#0a0f1e] border-[#17233f] p-4 mb-8">
       <div className="flex items-center justify-between border-b border-[#17233f] pb-3 mb-4">
         <div>
           <h2 className="text-sm font-bold text-[#D4AF37] flex items-center gap-2">
@@ -13,7 +13,7 @@ export const MasterAuthoritySeparation: React.FC = () => {
             การแยกสิทธิ์สถานะเด็ดขาด — ป้องกันการอนุมานสิทธิ์ข้ามมิติในระบอบอธิปไตยดิจิทัล
           </p>
         </div>
-        <span className="text-[10px] font-mono px-2 py-0.5 bg-[#070a12] text-[#06B6D4] border border-[#17233f]">
+        <span className="text-[10px] font-mono px-2 py-0.5 bg-[#070a12] text-[#06B6D4] border-[#17233f]">
           FAIL-CLOSED ARMED
         </span>
       </div>
@@ -23,7 +23,7 @@ export const MasterAuthoritySeparation: React.FC = () => {
           <div
             key={index}
             id={`separation-rule-${index}`}
-            className="p-3 bg-[#070a12] border border-[#17233f] hover:border-[#D4AF37] transition-colors"
+            className="p-3 bg-[#070a12] border-[#17233f] hover:border-[#D4AF37] transition-colors"
           >
             <div className="flex items-center justify-between font-bold mb-1">
               <span className="text-[#06B6D4] text-[11px] truncate max-w-[45%]">
@@ -43,7 +43,7 @@ export const MasterAuthoritySeparation: React.FC = () => {
         ))}
       </div>
 
-      <div className="mt-4 p-2 bg-[#070a12] border border-[#10B981] flex flex-wrap items-center justify-between text-xs font-mono text-[#F3F4F6]">
+      <div className="mt-4 p-2 bg-[#070a12] border-[#10B981] flex flex-wrap items-center justify-between text-xs font-mono text-[#F3F4F6]">
         <div className="flex items-center gap-2">
           <span className="text-[#10B981]">✅ INVARIANT AUDIT:</span>
           <span>Δ0.00% ZERO DRIFT</span>

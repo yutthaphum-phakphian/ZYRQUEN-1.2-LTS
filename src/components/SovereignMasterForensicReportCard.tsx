@@ -58,7 +58,7 @@ export const SovereignMasterForensicReportCard: React.FC = () => {
       {/* Header Banner */}
       <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 border-b border-emerald-500/20 pb-5">
         <div className="flex items-start gap-3.5">
-          <div className="w-12 h-12 rounded-2xl bg-emerald-500/15 border border-emerald-500/40 flex items-center justify-center text-xl shrink-0 shadow-[0_0_15px_rgba(16,185,129,0.25)]">
+          <div className="w-12 h-12 rounded-2xl bg-emerald-500/15 border-emerald-500/40 flex items-center justify-center text-xl shrink-0 shadow-[0_0_15px_rgba(16,185,129,0.25)]">
             🏆
           </div>
           <div>
@@ -66,7 +66,7 @@ export const SovereignMasterForensicReportCard: React.FC = () => {
               <span className="font-bold text-base text-white tracking-wide">
                 {GOLD_MASTER_FORENSIC_REPORT.reportType}
               </span>
-              <span className="px-2.5 py-0.5 rounded-full text-[10px] font-bold bg-emerald-500/20 text-emerald-300 border border-emerald-500/40">
+              <span className="px-2.5 py-0.5 rounded-full text-[10px] font-bold bg-emerald-500/20 text-emerald-300 border-emerald-500/40">
                 {GOLD_MASTER_FORENSIC_REPORT.auditStatus}
               </span>
             </div>
@@ -83,14 +83,14 @@ export const SovereignMasterForensicReportCard: React.FC = () => {
         <div className="flex items-center gap-2 flex-wrap">
           <button
             onClick={handleCopyJsonLd}
-            className="px-3 py-1.5 rounded-xl bg-white/5 hover:bg-white/10 border border-white/10 text-[11px] text-zinc-200 flex items-center gap-1.5 transition cursor-pointer"
+            className="px-3 py-1.5 rounded-xl bg-white/5 hover:bg-white/10 border-white/10 text-[11px] text-zinc-200 flex items-center gap-1.5 transition cursor-pointer"
           >
             {copiedField === 'jsonld' ? <Check className="w-3.5 h-3.5 text-emerald-400" /> : <Copy className="w-3.5 h-3.5 text-zinc-400" />}
             <span>{copiedField === 'jsonld' ? 'JSON-LD Copied' : 'Copy JSON-LD'}</span>
           </button>
           <button
             onClick={handleDownloadPdf}
-            className="px-3 py-1.5 rounded-xl bg-emerald-500/20 hover:bg-emerald-500/30 border border-emerald-500/40 text-[11px] text-emerald-300 font-bold flex items-center gap-1.5 transition cursor-pointer shadow-[0_0_10px_rgba(16,185,129,0.2)]"
+            className="px-3 py-1.5 rounded-xl bg-emerald-500/20 hover:bg-emerald-500/30 border-emerald-500/40 text-[11px] text-emerald-300 font-bold flex items-center gap-1.5 transition cursor-pointer shadow-[0_0_10px_rgba(16,185,129,0.2)]"
           >
             <Download className="w-3.5 h-3.5" />
             <span>Download Audit PDF</span>
@@ -100,7 +100,7 @@ export const SovereignMasterForensicReportCard: React.FC = () => {
               playTone(isExpanded ? 480 : 640, 0.04);
               setIsExpanded(!isExpanded);
             }}
-            className="p-2 rounded-xl bg-white/5 hover:bg-white/10 border border-white/10 text-zinc-300 transition cursor-pointer"
+            className="p-2 rounded-xl bg-white/5 hover:bg-white/10 border-white/10 text-zinc-300 transition cursor-pointer"
             title={isExpanded ? 'Collapse Report' : 'Expand Report'}
           >
             {isExpanded ? <ChevronUp className="w-4 h-4" /> : <ChevronDown className="w-4 h-4" />}
@@ -112,37 +112,37 @@ export const SovereignMasterForensicReportCard: React.FC = () => {
         <div className="space-y-6 animate-in fade-in duration-200">
           {/* Executive Summary Grid */}
           <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-3">
-            <div className="p-3 bg-[#0a0f1e] rounded-2xl border border-white/10 space-y-0.5">
+            <div className="p-3 bg-[#0a0f1e] rounded-2xl border-white/10 space-y-0.5">
               <div className="text-[10px] text-zinc-500">SOVEREIGN PRINCIPAL</div>
               <div className="text-xs font-bold text-white truncate">{executiveSummary.sovereignPrincipal}</div>
               <div className="text-[9px] text-[#D4AF37]">{executiveSummary.clearance}</div>
             </div>
 
-            <div className="p-3 bg-[#0a0f1e] rounded-2xl border border-white/10 space-y-0.5">
+            <div className="p-3 bg-[#0a0f1e] rounded-2xl border-white/10 space-y-0.5">
               <div className="text-[10px] text-zinc-500">MUTATION DELTA</div>
               <div className="text-xs font-bold text-emerald-400">{executiveSummary.canonicalCoreMutationDelta}</div>
               <div className="text-[9px] text-zinc-400">Zero Invariant Safe</div>
             </div>
 
-            <div className="p-3 bg-[#0a0f1e] rounded-2xl border border-white/10 space-y-0.5">
+            <div className="p-3 bg-[#0a0f1e] rounded-2xl border-white/10 space-y-0.5">
               <div className="text-[10px] text-zinc-500">GENESIS BLOCK</div>
               <div className="text-xs font-bold text-cyan-300">{executiveSummary.genesisBlockHeight}</div>
               <div className="text-[9px] text-zinc-400">Frozen Epoch Anchor</div>
             </div>
 
-            <div className="p-3 bg-[#0a0f1e] rounded-2xl border border-white/10 space-y-0.5">
+            <div className="p-3 bg-[#0a0f1e] rounded-2xl border-white/10 space-y-0.5">
               <div className="text-[10px] text-zinc-500">CANONICAL SEALS</div>
               <div className="text-xs font-bold text-emerald-300">{executiveSummary.canonicalSealsCount.toLocaleString()}</div>
               <div className="text-[9px] text-zinc-400">100% Inviolable</div>
             </div>
 
-            <div className="p-3 bg-[#0a0f1e] rounded-2xl border border-white/10 space-y-0.5">
+            <div className="p-3 bg-[#0a0f1e] rounded-2xl border-white/10 space-y-0.5">
               <div className="text-[10px] text-zinc-500">QUARANTINE ISOLATION</div>
               <div className="text-xs font-bold text-amber-300">{executiveSummary.forensicQuarantineRange}</div>
               <div className="text-[9px] text-zinc-400">{executiveSummary.quarantineIsolation}</div>
             </div>
 
-            <div className="p-3 bg-[#0a0f1e] rounded-2xl border border-white/10 space-y-0.5">
+            <div className="p-3 bg-[#0a0f1e] rounded-2xl border-white/10 space-y-0.5">
               <div className="text-[10px] text-zinc-500">QUORUM ATTESTED</div>
               <div className="text-xs font-bold text-emerald-400">10/10 Gold Master</div>
               <div className="text-[9px] text-zinc-400">{executiveSummary.reconciliationStatus}</div>
@@ -150,7 +150,7 @@ export const SovereignMasterForensicReportCard: React.FC = () => {
           </div>
 
           {/* Merkle Root Verification Strip */}
-          <div className="p-3.5 rounded-2xl bg-black/60 border border-white/10 flex flex-col sm:flex-row sm:items-center justify-between gap-3 text-xs">
+          <div className="p-3.5 rounded-2xl bg-black/60 border-white/10 flex flex-col sm:flex-row sm:items-center justify-between gap-3 text-xs">
             <div className="flex items-center gap-2">
               <Hash className="w-4 h-4 text-emerald-400 shrink-0" />
               <span className="text-zinc-400">GENESIS MERKLE ROOT:</span>
@@ -179,16 +179,16 @@ export const SovereignMasterForensicReportCard: React.FC = () => {
               {passportsMatrix.map((passport) => (
                 <div
                   key={passport.id}
-                  className="p-3.5 rounded-2xl bg-[#0a0f1e] border border-white/10 space-y-2 hover:border-emerald-500/40 transition"
+                  className="p-3.5 rounded-2xl bg-[#0a0f1e] border-white/10 space-y-2 hover:border-emerald-500/40 transition"
                 >
                   <div className="flex items-center justify-between text-xs">
                     <div className="flex items-center gap-2">
-                      <span className="px-2 py-0.5 rounded bg-emerald-500/20 text-emerald-300 font-bold text-[10px] border border-emerald-500/30">
+                      <span className="px-2 py-0.5 rounded bg-emerald-500/20 text-emerald-300 font-bold text-[10px] border-emerald-500/30">
                         {passport.id}
                       </span>
                       <span className="font-bold text-white truncate max-w-[200px]">{passport.name}</span>
                     </div>
-                    <span className="px-2 py-0.5 rounded-full bg-emerald-500/20 text-emerald-300 text-[9px] font-bold border border-emerald-500/40 flex items-center gap-1">
+                    <span className="px-2 py-0.5 rounded-full bg-emerald-500/20 text-emerald-300 text-[9px] font-bold border-emerald-500/40 flex items-center gap-1">
                       <CheckCircle2 className="w-2.5 h-2.5" />
                       {passport.status}
                     </span>
@@ -216,7 +216,7 @@ export const SovereignMasterForensicReportCard: React.FC = () => {
           {/* Compliance Framework & Post-Quantum Proof */}
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
             {/* Thai Legal Compliance */}
-            <div className="p-4 rounded-2xl bg-black/50 border border-white/10 space-y-2.5">
+            <div className="p-4 rounded-2xl bg-black/50 border-white/10 space-y-2.5">
               <div className="flex items-center gap-2 font-bold text-white text-xs">
                 <Scale className="w-4 h-4 text-[#D4AF37]" />
                 <span>THAI LEGAL STATUTORY FRAMEWORK</span>
@@ -242,7 +242,7 @@ export const SovereignMasterForensicReportCard: React.FC = () => {
             </div>
 
             {/* Post-Quantum Master Proof */}
-            <div className="p-4 rounded-2xl bg-black/50 border border-white/10 space-y-2.5">
+            <div className="p-4 rounded-2xl bg-black/50 border-white/10 space-y-2.5">
               <div className="flex items-center justify-between">
                 <div className="flex items-center gap-2 font-bold text-white text-xs">
                   <Cpu className="w-4 h-4 text-emerald-400" />
@@ -257,7 +257,7 @@ export const SovereignMasterForensicReportCard: React.FC = () => {
                 </button>
               </div>
 
-              <div className="p-2.5 rounded-xl bg-black/80 border border-white/5 space-y-1 text-[10px] text-zinc-400 font-mono">
+              <div className="p-2.5 rounded-xl bg-black/80 border-white/5 space-y-1 text-[10px] text-zinc-400 font-mono">
                 <div><span className="text-zinc-500">type:</span> <span className="text-emerald-300">{masterProof.type}</span></div>
                 <div><span className="text-zinc-500">method:</span> <span className="text-cyan-300">{masterProof.verificationMethod}</span></div>
                 <div className="truncate"><span className="text-zinc-500">jws:</span> <span className="text-zinc-300">{masterProof.jws}</span></div>
@@ -271,11 +271,11 @@ export const SovereignMasterForensicReportCard: React.FC = () => {
           </div>
 
           {/* Source Files Strip */}
-          <div className="p-3.5 rounded-2xl bg-[#0a0f1e] border border-white/10 space-y-1.5">
+          <div className="p-3.5 rounded-2xl bg-[#0a0f1e] border-white/10 space-y-1.5">
             <div className="text-[10px] text-zinc-500 font-bold">FORENSIC ARTIFACT SOURCE FILES (7 FILES INCLUDED IN QUORUM)</div>
             <div className="flex flex-wrap gap-2 text-[10px]">
               {sourceFiles.map((file, idx) => (
-                <span key={idx} className="px-2 py-0.5 rounded bg-black/50 text-zinc-300 border border-white/10">
+                <span key={idx} className="px-2 py-0.5 rounded bg-black/50 text-zinc-300 border-white/10">
                   {file}
                 </span>
               ))}

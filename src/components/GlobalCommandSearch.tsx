@@ -617,7 +617,7 @@ export const GlobalCommandSearch: React.FC<GlobalCommandSearchProps> = ({
       onClick={handleClose}
     >
       <div
-        className="w-full max-w-2xl transform rounded-3xl bg-[#090d18] bg-theme-card border border-cyan-500/40 border-theme shadow-[0_0_60px_var(--shadow-glow,rgba(6,182,212,0.25))] overflow-hidden flex flex-col max-h-[85vh] transition-all animate-in fade-in-0 slide-in-from-top-6 duration-300 ease-out text-theme"
+        className="w-full max-w-2xl transform rounded-3xl bg-[#090d18] bg-theme-card border-cyan-500/40 border-theme shadow-[0_0_60px_var(--shadow-glow,rgba(6,182,212,0.25))] overflow-hidden flex flex-col max-h-[85vh] transition-all animate-in fade-in-0 slide-in-from-top-6 duration-300 ease-out text-theme"
         onClick={(e) => e.stopPropagation()}
       >
         {/* Top Header Bar */}
@@ -625,15 +625,15 @@ export const GlobalCommandSearch: React.FC<GlobalCommandSearchProps> = ({
           <div className="flex items-center gap-2 text-xs font-bold text-cyan-400">
             <Terminal className="w-4 h-4 text-cyan-400" />
             <span className="tracking-wide">ZYRQUEN Ω∞ GLOBAL COMMAND SEARCH</span>
-            <span className="text-[10px] px-2 py-0.5 rounded-full bg-cyan-500/20 text-cyan-300 border border-cyan-500/30">
+            <span className="text-[10px] px-2 py-0.5 rounded-full bg-cyan-500/20 text-cyan-300 border-cyan-500/30">
               FROZEN v1.2
             </span>
           </div>
           <div className="flex items-center gap-2">
             <span className="hidden sm:inline text-[10px] text-zinc-500">
-              <kbd className="px-1.5 py-0.5 rounded bg-zinc-800 text-zinc-400 border border-zinc-700">↑</kbd>
-              <kbd className="px-1.5 py-0.5 rounded bg-zinc-800 text-zinc-400 border border-zinc-700 ml-1">↓</kbd> นำทาง
-              <kbd className="px-1.5 py-0.5 rounded bg-zinc-800 text-zinc-400 border border-zinc-700 ml-2">↵</kbd> เลือก
+              <kbd className="px-1.5 py-0.5 rounded bg-zinc-800 text-zinc-400 border-zinc-700">↑</kbd>
+              <kbd className="px-1.5 py-0.5 rounded bg-zinc-800 text-zinc-400 border-zinc-700 ml-1">↓</kbd> นำทาง
+              <kbd className="px-1.5 py-0.5 rounded bg-zinc-800 text-zinc-400 border-zinc-700 ml-2">↵</kbd> เลือก
             </span>
             <button
               id="btn-close-command-search"
@@ -670,7 +670,7 @@ export const GlobalCommandSearch: React.FC<GlobalCommandSearchProps> = ({
               <X className="w-4 h-4" />
             </button>
           )}
-          <span className="text-[10px] px-2 py-0.5 rounded bg-zinc-800 text-zinc-400 border border-zinc-700 hidden sm:inline">
+          <span className="text-[10px] px-2 py-0.5 rounded bg-zinc-800 text-zinc-400 border-zinc-700 hidden sm:inline">
             ESC
           </span>
         </div>
@@ -747,7 +747,7 @@ export const GlobalCommandSearch: React.FC<GlobalCommandSearchProps> = ({
                   key={chip}
                   type="button"
                   onClick={() => setQuery(chip)}
-                  className="px-2 py-0.5 rounded-lg bg-zinc-900/60 hover:bg-cyan-500/10 text-[10px] text-zinc-400 hover:text-cyan-300 border border-zinc-800 hover:border-cyan-500/30 transition-all shrink-0 cursor-pointer"
+                  className="px-2 py-0.5 rounded-lg bg-zinc-900/60 hover:bg-cyan-500/10 text-[10px] text-zinc-400 hover:text-cyan-300 border-zinc-800 hover:border-cyan-500/30 transition-all shrink-0 cursor-pointer"
                 >
                   {chip}
                 </button>
@@ -795,8 +795,8 @@ export const GlobalCommandSearch: React.FC<GlobalCommandSearchProps> = ({
                       <div
                         className={`p-2.5 rounded-xl shrink-0 transition-colors ${
                           isSelected
-                            ? 'bg-cyan-500/20 text-cyan-300 border border-cyan-500/40'
-                            : 'bg-zinc-800/70 text-zinc-400 border border-zinc-700/40'
+                            ? 'bg-cyan-500/20 text-cyan-300 border-cyan-500/40'
+                            : 'bg-zinc-800/70 text-zinc-400 border-zinc-700/40'
                         }`}
                       >
                         <Icon className="w-4 h-4" />
@@ -823,7 +823,7 @@ export const GlobalCommandSearch: React.FC<GlobalCommandSearchProps> = ({
 
                         <div className="flex items-center gap-2 text-[10px] text-zinc-500">
                           {cmd.status && (
-                            <span className="px-1.5 py-0.2 rounded bg-black/40 text-zinc-400 border border-zinc-800">
+                            <span className="px-1.5 py-0.2 rounded bg-black/40 text-zinc-400 border-zinc-800">
                               {cmd.status}
                             </span>
                           )}
@@ -866,7 +866,7 @@ export const GlobalCommandSearch: React.FC<GlobalCommandSearchProps> = ({
                     setQuery('');
                     setActiveCategory('all');
                   }}
-                  className="px-3 py-1.5 rounded-xl bg-cyan-500/10 hover:bg-cyan-500/20 text-cyan-300 border border-cyan-500/30 text-xs font-bold transition cursor-pointer"
+                  className="px-3 py-1.5 rounded-xl bg-cyan-500/10 hover:bg-cyan-500/20 text-cyan-300 border-cyan-500/30 text-xs font-bold transition cursor-pointer"
                 >
                   ล้างตัวกรองทั้งหมด
                 </button>
@@ -898,7 +898,7 @@ export const GlobalCommandSearch: React.FC<GlobalCommandSearchProps> = ({
                 </div>
 
                 {inspectedItem.statuteRef && (
-                  <div className="p-2.5 rounded-xl bg-purple-950/30 border border-purple-500/30 text-purple-200 text-xs space-y-1">
+                  <div className="p-2.5 rounded-xl bg-purple-950/30 border-purple-500/30 text-purple-200 text-xs space-y-1">
                     <div className="text-[10px] font-bold text-purple-300">STATUTORY COMPLIANCE:</div>
                     <div className="font-mono text-[11px]">{inspectedItem.statuteRef}</div>
                   </div>
@@ -966,7 +966,7 @@ export const GlobalCommandSearch: React.FC<GlobalCommandSearchProps> = ({
           </div>
 
           <div className="flex items-center gap-2">
-            <span className="text-[10px] px-2 py-0.5 rounded bg-emerald-500/10 text-emerald-300 border border-emerald-500/30 font-bold">
+            <span className="text-[10px] px-2 py-0.5 rounded bg-emerald-500/10 text-emerald-300 border-emerald-500/30 font-bold">
               100% PURE GREEN
             </span>
           </div>

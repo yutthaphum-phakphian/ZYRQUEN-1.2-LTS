@@ -144,11 +144,11 @@ export const ThaiLegalSovereignMapping: React.FC = () => {
   };
 
   return (
-    <div className="p-6 sm:p-8 rounded-[28px] bg-[#0b0e1a]/85 border border-white/8 backdrop-blur-xl space-y-6 shadow-2xl">
+    <div className="p-6 sm:p-8 rounded-[28px] bg-[#0b0e1a]/85 border-white/8 backdrop-blur-xl space-y-6 shadow-2xl">
       {/* Header */}
       <div className="flex flex-col lg:flex-row lg:items-center justify-between gap-4 border-b border-white/8 pb-5">
         <div className="flex items-center gap-3.5">
-          <div className="w-12 h-12 rounded-2xl bg-cyan-500/15 border border-cyan-500/30 flex items-center justify-center text-cyan-300 shadow-[0_0_20px_rgba(6,182,212,0.15)] shrink-0">
+          <div className="w-12 h-12 rounded-2xl bg-cyan-500/15 border-cyan-500/30 flex items-center justify-center text-cyan-300 shadow-[0_0_20px_rgba(6,182,212,0.15)] shrink-0">
             <Scale className="w-6 h-6" />
           </div>
           <div>
@@ -156,7 +156,7 @@ export const ThaiLegalSovereignMapping: React.FC = () => {
               <h2 className="text-base sm:text-lg font-mono font-bold text-white tracking-wide">
                 Thai Electronic Transactions Act ↔ Sovereign Seal Chain Mapping
               </h2>
-              <span className="text-[10px] px-2.5 py-0.5 rounded-full bg-emerald-500/15 text-emerald-300 border border-emerald-500/30 font-mono font-bold">
+              <span className="text-[10px] px-2.5 py-0.5 rounded-full bg-emerald-500/15 text-emerald-300 border-emerald-500/30 font-mono font-bold">
                 ETDA LEVEL 3+ COMPLIANT
               </span>
             </div>
@@ -182,7 +182,7 @@ export const ThaiLegalSovereignMapping: React.FC = () => {
 
           <button
             onClick={copyMappingSummary}
-            className="px-3.5 py-2 rounded-2xl bg-white/5 hover:bg-white/10 border border-white/10 text-zinc-300 font-mono text-xs flex items-center gap-1.5 transition-all"
+            className="px-3.5 py-2 rounded-2xl bg-white/5 hover:bg-white/10 border-white/10 text-zinc-300 font-mono text-xs flex items-center gap-1.5 transition-all"
           >
             {copiedCode ? <CheckCircle2 className="w-3.5 h-3.5 text-emerald-400" /> : <Copy className="w-3.5 h-3.5 text-zinc-400" />}
             <span>{copiedCode ? 'Copied' : 'Copy Spec'}</span>
@@ -254,7 +254,7 @@ export const ThaiLegalSovereignMapping: React.FC = () => {
                 {/* Flow Mapping Steps */}
                 <div className="space-y-2 text-xs font-mono">
                   {/* Legal Step */}
-                  <div className="p-2.5 rounded-xl bg-white/[0.02] border border-white/5 space-y-0.5">
+                  <div className="p-2.5 rounded-xl bg-white/[0.02] border-white/5 space-y-0.5">
                     <span className="text-[10px] text-zinc-500 block">1. หลักการทางกฎหมาย (Legal Statute)</span>
                     <div className="text-zinc-200 font-medium text-[11px] leading-snug">{node.sectionTitleTh}</div>
                   </div>
@@ -265,7 +265,7 @@ export const ThaiLegalSovereignMapping: React.FC = () => {
                   </div>
 
                   {/* Sovereign Architecture Layer */}
-                  <div className="p-2.5 rounded-xl bg-white/[0.02] border border-white/5 space-y-0.5">
+                  <div className="p-2.5 rounded-xl bg-white/[0.02] border-white/5 space-y-0.5">
                     <span className="text-[10px] text-zinc-500 block">2. Sovereign Layer</span>
                     <div className="text-cyan-300 font-semibold text-[11px]">{node.sovereignLayer}</div>
                   </div>
@@ -276,7 +276,7 @@ export const ThaiLegalSovereignMapping: React.FC = () => {
                   </div>
 
                   {/* Cryptographic Enforcement */}
-                  <div className="p-2.5 rounded-xl bg-white/[0.02] border border-white/5 space-y-0.5">
+                  <div className="p-2.5 rounded-xl bg-white/[0.02] border-white/5 space-y-0.5">
                     <span className="text-[10px] text-zinc-500 block">3. Cryptographic Enforcement</span>
                     <div className="text-emerald-400 font-medium text-[11px] line-clamp-2">
                       {node.cryptographicEnforcementTh}
@@ -299,7 +299,7 @@ export const ThaiLegalSovereignMapping: React.FC = () => {
       </div>
 
       {/* Deep-Dive Inspection Panel for the Selected Section */}
-      <div className="p-5 sm:p-6 rounded-2xl bg-black/60 border border-white/10 space-y-5 font-mono">
+      <div className="p-5 sm:p-6 rounded-2xl bg-black/60 border-white/10 space-y-5 font-mono">
         <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 border-b border-white/8 pb-4">
           <div className="flex items-center gap-3">
             <div
@@ -335,7 +335,7 @@ export const ThaiLegalSovereignMapping: React.FC = () => {
         {/* 2-Column Comparison Grid */}
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-4 text-xs">
           {/* Left: Thai Statutory Legal Foundation */}
-          <div className="p-4 rounded-xl bg-white/[0.02] border border-white/6 space-y-2.5">
+          <div className="p-4 rounded-xl bg-white/[0.02] border-white/6 space-y-2.5">
             <div className="flex items-center gap-2 text-cyan-300 font-bold border-b border-white/5 pb-2">
               <BookOpen className="w-4 h-4" />
               <span>หลักการทางกฎหมายตามพระราชบัญญัติ (Legal Foundation)</span>
@@ -353,7 +353,7 @@ export const ThaiLegalSovereignMapping: React.FC = () => {
           </div>
 
           {/* Right: ZYRQUEN Ω∞ Cryptographic Sovereign Enforcement */}
-          <div className="p-4 rounded-xl bg-white/[0.02] border border-white/6 space-y-2.5">
+          <div className="p-4 rounded-xl bg-white/[0.02] border-white/6 space-y-2.5">
             <div className="flex items-center gap-2 text-emerald-300 font-bold border-b border-white/5 pb-2">
               <Cpu className="w-4 h-4" />
               <span>การบังคับใช้เชิงเทคนิคและคริปโตกราฟิก (Cryptographic Runtime)</span>
@@ -361,7 +361,7 @@ export const ThaiLegalSovereignMapping: React.FC = () => {
             <p className="text-zinc-200 font-sans text-xs sm:text-sm leading-relaxed">
               {currentNode.cryptographicEnforcementTh}
             </p>
-            <div className="p-2.5 rounded-lg bg-black/40 border border-white/5 space-y-1 font-mono text-[11px]">
+            <div className="p-2.5 rounded-lg bg-black/40 border-white/5 space-y-1 font-mono text-[11px]">
               <div className="text-zinc-400">
                 <span className="text-zinc-500">PROVEN RUNTIME INVARIANT:</span>
               </div>
@@ -373,7 +373,7 @@ export const ThaiLegalSovereignMapping: React.FC = () => {
 
         {/* Section 28 Thai Sovereign Custodian Anchor */}
         {selectedSection === 'sec28' && (
-          <div className="p-4 rounded-xl bg-gradient-to-r from-amber-500/10 via-amber-500/5 to-transparent border border-amber-500/25 flex flex-col sm:flex-row sm:items-center justify-between gap-3">
+          <div className="p-4 rounded-xl bg-gradient-to-r from-amber-500/10 via-amber-500/5 to-transparent border-amber-500/25 flex flex-col sm:flex-row sm:items-center justify-between gap-3">
             <div className="flex items-center gap-3">
               <Award className="w-6 h-6 text-amber-400 shrink-0" />
               <div>
@@ -385,7 +385,7 @@ export const ThaiLegalSovereignMapping: React.FC = () => {
                 </p>
               </div>
             </div>
-            <span className="px-2.5 py-1 rounded-full bg-amber-500/20 text-amber-300 text-[10px] font-bold border border-amber-500/30 whitespace-nowrap self-start sm:self-auto">
+            <span className="px-2.5 py-1 rounded-full bg-amber-500/20 text-amber-300 text-[10px] font-bold border-amber-500/30 whitespace-nowrap self-start sm:self-auto">
               OMEGA CLEARANCE
             </span>
           </div>
@@ -393,7 +393,7 @@ export const ThaiLegalSovereignMapping: React.FC = () => {
       </div>
 
       {/* Comprehensive Mapping Summary Table */}
-      <div className="p-5 rounded-2xl bg-black/40 border border-white/8 space-y-3 font-mono text-xs">
+      <div className="p-5 rounded-2xl bg-black/40 border-white/8 space-y-3 font-mono text-xs">
         <div className="flex items-center justify-between border-b border-white/6 pb-2.5">
           <span className="font-bold text-zinc-200 uppercase tracking-wider flex items-center gap-2">
             <span>🧩</span>

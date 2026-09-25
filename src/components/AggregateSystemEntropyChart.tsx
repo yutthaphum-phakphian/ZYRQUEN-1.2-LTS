@@ -143,10 +143,10 @@ export const AggregateSystemEntropyChart: React.FC = () => {
   const currentEntropy = data.length > 0 ? Math.round(data[data.length - 1].value) : 52;
 
   return (
-    <div className="w-full rounded-[24px] bg-gradient-to-br from-[#0a0d1c]/95 via-[#080b18]/90 to-[#050712]/95 border border-cyan-500/25 shadow-[0_8px_30px_-10px_rgba(6,182,212,0.15)] backdrop-blur-2xl p-4 sm:p-5 flex flex-col space-y-3 transition-all">
+    <div className="w-full rounded-[24px] bg-gradient-to-br from-[#0a0d1c]/95 via-[#080b18]/90 to-[#050712]/95 border-cyan-500/25 shadow-[0_8px_30px_-10px_rgba(6,182,212,0.15)] backdrop-blur-2xl p-4 sm:p-5 flex flex-col space-y-3 transition-all">
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2 pb-1 border-b border-white/5">
         <div className="flex items-center gap-2.5">
-          <div className="w-8 h-8 rounded-xl bg-cyan-500/10 border border-cyan-500/30 flex items-center justify-center text-cyan-400 shrink-0 shadow-[0_0_12px_rgba(6,182,212,0.2)]">
+          <div className="w-8 h-8 rounded-xl bg-cyan-500/10 border-cyan-500/30 flex items-center justify-center text-cyan-400 shrink-0 shadow-[0_0_12px_rgba(6,182,212,0.2)]">
             <Activity className="w-4 h-4" />
           </div>
           <div>
@@ -162,17 +162,17 @@ export const AggregateSystemEntropyChart: React.FC = () => {
         </div>
 
         <div className="flex items-center gap-2 self-end sm:self-auto text-[10px] font-mono">
-          <span className="text-cyan-300 bg-cyan-950/70 px-2 py-0.5 rounded-full border border-cyan-500/30 font-bold">
+          <span className="text-cyan-300 bg-cyan-950/70 px-2 py-0.5 rounded-full border-cyan-500/30 font-bold">
             D3 LINE SERIES
           </span>
-          <span className="text-zinc-400 bg-white/5 px-2 py-0.5 rounded-full border border-white/10">
+          <span className="text-zinc-400 bg-white/5 px-2 py-0.5 rounded-full border-white/10">
             1.0s REFRESH
           </span>
         </div>
       </div>
 
       {/* Strictly Capped Height Container (Zero Overflow) */}
-      <div ref={containerRef} className="w-full h-[180px] sm:h-[190px] relative overflow-hidden rounded-xl bg-black/40 border border-white/5 p-1">
+      <div ref={containerRef} className="w-full h-[180px] sm:h-[190px] relative overflow-hidden rounded-xl bg-black/40 border-white/5 p-1">
         <svg ref={svgRef} className="w-full h-full block" />
       </div>
     </div>

@@ -148,7 +148,7 @@ export const FederationMeshVisualizer: React.FC = () => {
   const activeNode = selectedNode || nodes[0];
 
   return (
-    <div id="federation-mesh-visualizer" className="w-full bg-[#070a12] border border-[#06B6D4]/40 rounded-xl p-6 font-mono text-[#06B6D4] shadow-2xl space-y-5">
+    <div id="federation-mesh-visualizer" className="w-full bg-[#070a12] border-[#06B6D4]/40 rounded-xl p-6 font-mono text-[#06B6D4] shadow-2xl space-y-5">
       {/* Header */}
       <div className="flex flex-col md:flex-row md:items-center justify-between pb-4 border-b border-[#0a0f1e] gap-3">
         <div>
@@ -177,7 +177,7 @@ export const FederationMeshVisualizer: React.FC = () => {
           >
             {isSimulating ? '⚡ Mesh Pulse Active' : '⏸️ Mesh Paused'}
           </button>
-          <span className="px-3 py-1.5 bg-[#0a0f1e] border border-[#D4AF37] text-[#D4AF37] text-xs font-bold rounded">
+          <span className="px-3 py-1.5 bg-[#0a0f1e] border-[#D4AF37] text-[#D4AF37] text-xs font-bold rounded">
             Δ0.00% Zero Drift
           </span>
         </div>
@@ -186,7 +186,7 @@ export const FederationMeshVisualizer: React.FC = () => {
       {/* Main Node Graph Viewport */}
       <div className="grid grid-cols-1 lg:grid-cols-12 gap-5">
         {/* SVG Node Graph */}
-        <div className="lg:col-span-8 bg-[#0a0f1e] border border-[#06B6D4]/30 rounded-xl p-4 flex flex-col items-center justify-center relative min-h-[460px]">
+        <div className="lg:col-span-8 bg-[#0a0f1e] border-[#06B6D4]/30 rounded-xl p-4 flex flex-col items-center justify-center relative min-h-[460px]">
           <svg viewBox="0 0 600 520" className="w-full max-w-[560px] h-[440px]">
             {/* Background Mesh Rings */}
             <circle cx="300" cy="260" r="180" fill="none" stroke="#070a12" strokeWidth="2" strokeDasharray="6 6" />
@@ -288,7 +288,7 @@ export const FederationMeshVisualizer: React.FC = () => {
         </div>
 
         {/* Selected Node Inspector Panel */}
-        <div className="lg:col-span-4 bg-[#0a0f1e] border border-[#D4AF37]/30 rounded-xl p-5 space-y-4 text-xs">
+        <div className="lg:col-span-4 bg-[#0a0f1e] border-[#D4AF37]/30 rounded-xl p-5 space-y-4 text-xs">
           <div className="flex items-center justify-between border-b border-slate-800 pb-2.5">
             <div className="flex items-center gap-2">
               <span className="text-2xl">{activeNode.emoji}</span>
@@ -297,47 +297,47 @@ export const FederationMeshVisualizer: React.FC = () => {
                 <h3 className="font-bold text-[#D4AF37] text-sm">{activeNode.name}</h3>
               </div>
             </div>
-            <span className="px-2 py-0.5 rounded text-[10px] font-bold bg-emerald-950/60 border border-emerald-500 text-emerald-400">
+            <span className="px-2 py-0.5 rounded text-[10px] font-bold bg-emerald-950/60 border-emerald-500 text-emerald-400">
               {activeNode.status}
             </span>
           </div>
 
           <div className="space-y-2.5">
-            <div className="p-2.5 bg-[#070a12] border border-slate-800 rounded space-y-1">
+            <div className="p-2.5 bg-[#070a12] border-slate-800 rounded space-y-1">
               <span className="text-slate-500 text-[10px] block">Role &amp; Jurisdiction</span>
               <div className="text-slate-200 font-bold">{activeNode.role}</div>
             </div>
 
             <div className="grid grid-cols-2 gap-2">
-              <div className="p-2.5 bg-[#070a12] border border-slate-800 rounded">
+              <div className="p-2.5 bg-[#070a12] border-slate-800 rounded">
                 <span className="text-slate-500 text-[10px] block">Round-Trip Latency</span>
                 <span className="text-emerald-400 font-bold">{activeNode.latency} ms</span>
               </div>
-              <div className="p-2.5 bg-[#070a12] border border-slate-800 rounded">
+              <div className="p-2.5 bg-[#070a12] border-slate-800 rounded">
                 <span className="text-slate-500 text-[10px] block">Heartbeat Frequency</span>
                 <span className="text-cyan-400 font-bold">{activeNode.heartbeat} Hz</span>
               </div>
             </div>
 
             <div className="grid grid-cols-2 gap-2">
-              <div className="p-2.5 bg-[#070a12] border border-slate-800 rounded">
+              <div className="p-2.5 bg-[#070a12] border-slate-800 rounded">
                 <span className="text-slate-500 text-[10px] block">Packets Processed</span>
                 <span className="text-purple-300 font-bold">{activeNode.packetsSent.toLocaleString()}</span>
               </div>
-              <div className="p-2.5 bg-[#070a12] border border-slate-800 rounded">
+              <div className="p-2.5 bg-[#070a12] border-slate-800 rounded">
                 <span className="text-slate-500 text-[10px] block">Quorum Consent</span>
                 <span className="text-[#D4AF37] font-bold">10/10 REAL_HSM</span>
               </div>
             </div>
 
-            <div className="p-2.5 bg-[#070a12] border border-slate-800 rounded space-y-1">
+            <div className="p-2.5 bg-[#070a12] border-slate-800 rounded space-y-1">
               <span className="text-slate-500 text-[10px] block">Bound API Endpoint</span>
               <code className="text-[#06B6D4] text-[11px] block break-all">
                 {activeNode.endpoint}
               </code>
             </div>
 
-            <div className="p-2.5 bg-[#070a12] border border-[#D4AF37]/30 rounded flex items-center justify-between text-[11px]">
+            <div className="p-2.5 bg-[#070a12] border-[#D4AF37]/30 rounded flex items-center justify-between text-[11px]">
               <span className="text-slate-400">Boundary Multi-Tenant:</span>
               <span className="text-[#D4AF37] font-bold">Ω600_1000 (400 Locked)</span>
             </div>

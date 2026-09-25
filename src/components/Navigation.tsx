@@ -284,7 +284,7 @@ export const Navigation: React.FC<NavigationProps> = ({
             </span>
           </button>
 
-          <div className="relative flex items-center justify-center w-10 h-10 sm:w-11 sm:h-11 rounded-2xl bg-[#0a0f1e] border border-cyan-500/30 shadow-[0_0_20px_rgba(6,182,212,0.25)] group cursor-default shrink-0">
+          <div className="relative flex items-center justify-center w-10 h-10 sm:w-11 sm:h-11 rounded-2xl bg-[#0a0f1e] border-cyan-500/30 shadow-[0_0_20px_rgba(6,182,212,0.25)] group cursor-default shrink-0">
             <div className="absolute inset-0 rounded-2xl bg-cyan-400/10 opacity-0 group-hover:opacity-100 transition-opacity" />
             <Sparkles className="w-5 h-5 text-cyan-400 animate-pulse relative z-10" />
             <span className="absolute -bottom-1 -right-1 w-2.5 h-2.5 sm:w-3 sm:h-3 rounded-full bg-emerald-500 border-2 border-[#070914] shadow-[0_0_8px_#10B981]" />
@@ -294,10 +294,10 @@ export const Navigation: React.FC<NavigationProps> = ({
               <span className="font-mono font-bold text-xs sm:text-base tracking-widest text-white uppercase whitespace-nowrap">
                 ZYRQUEN <span className="text-cyan-400">Ω∞</span>
               </span>
-              <span className="hidden md:inline-flex px-2 py-0.5 text-[10px] font-mono rounded-full bg-cyan-950/60 text-cyan-300 border border-cyan-500/40 shadow-sm shrink-0">
+              <span className="hidden md:inline-flex px-2 py-0.5 text-[10px] font-mono rounded-full bg-cyan-950/60 text-cyan-300 border-cyan-500/40 shadow-sm shrink-0">
                 FROZEN v1.2 LTS
               </span>
-              <span className="hidden 2xl:inline-flex px-2 py-0.5 text-[10px] font-mono rounded-full bg-emerald-950/60 text-emerald-300 border border-emerald-500/40 shadow-sm items-center gap-1.5 shrink-0">
+              <span className="hidden 2xl:inline-flex px-2 py-0.5 text-[10px] font-mono rounded-full bg-emerald-950/60 text-emerald-300 border-emerald-500/40 shadow-sm items-center gap-1.5 shrink-0">
                 <span className="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse" />
                 SSoT MUTATION = 0
               </span>
@@ -312,7 +312,7 @@ export const Navigation: React.FC<NavigationProps> = ({
                 title="Trigger Sovereign Quantum Login & Warp Ingress Loader"
               >
                 <span className="truncate">🇹🇭 นายยุทธภูมิ พากเพียร (#EP-SOVEREIGN-01)</span>
-                <span className="hidden sm:inline-block px-1.5 py-0.2 rounded bg-cyan-950 border border-cyan-500/40 text-[9px] text-cyan-300 shrink-0">
+                <span className="hidden sm:inline-block px-1.5 py-0.2 rounded bg-cyan-950 border-cyan-500/40 text-[9px] text-cyan-300 shrink-0">
                   LOGIN/WARP
                 </span>
               </button>
@@ -323,7 +323,7 @@ export const Navigation: React.FC<NavigationProps> = ({
         </div>
 
         {/* Center Live Telemetry Gauges with Progressive Green Highlight on Snapshot */}
-        <div className="hidden 2xl:flex items-center gap-4 bg-[#0a0f1e] border border-cyan-500/20 px-5 py-2 rounded-2xl shadow-inner backdrop-blur-md shrink-0">
+        <div className="hidden 2xl:flex items-center gap-4 bg-[#0a0f1e] border-cyan-500/20 px-5 py-2 rounded-2xl shadow-inner backdrop-blur-md shrink-0">
           <div className="flex items-center gap-2">
             <span className="w-2 h-2 rounded-full bg-cyan-400 animate-ping" />
             <span className="text-[11px] font-mono text-zinc-500">QOps:</span>
@@ -358,7 +358,7 @@ export const Navigation: React.FC<NavigationProps> = ({
               duration: 0.5,
               ease: 'easeOut',
             }}
-            className="flex items-center gap-2 px-2.5 py-1 rounded-xl border border-transparent transition-colors relative overflow-hidden"
+            className="flex items-center gap-2 px-2.5 py-1 rounded-xl border-transparent transition-colors relative overflow-hidden"
           >
             {isSealHighlighting && (
               <motion.div
@@ -408,7 +408,7 @@ export const Navigation: React.FC<NavigationProps> = ({
                 playTone(640, 0.06);
                 onOpenGitHubPwa();
               }}
-              className="flex items-center gap-1.5 px-2.5 py-1.5 rounded-xl bg-slate-900/90 hover:bg-slate-800 text-zinc-300 hover:text-white border border-slate-700/60 hover:border-cyan-500/40 transition-all font-mono text-xs cursor-pointer active:scale-95 shadow-sm"
+              className="flex items-center gap-1.5 px-2.5 py-1.5 rounded-xl bg-slate-900/90 hover:bg-slate-800 text-zinc-300 hover:text-white border-slate-700/60 hover:border-cyan-500/40 transition-all font-mono text-xs cursor-pointer active:scale-95 shadow-sm"
               title="GitHub Push & PWA Setup Guide"
             >
               <Github className="w-3.5 h-3.5 text-cyan-400" />
@@ -458,12 +458,12 @@ export const Navigation: React.FC<NavigationProps> = ({
                 onOpenLegalSearch();
               }
             }}
-            className="group flex items-center gap-1.5 px-2.5 py-1.5 rounded-xl bg-cyan-950/50 hover:bg-cyan-500/20 border border-cyan-500/40 hover:border-cyan-400/60 text-cyan-300 hover:text-cyan-100 font-mono text-xs transition-all shadow-sm cursor-pointer active:scale-95"
+            className="group flex items-center gap-1.5 px-2.5 py-1.5 rounded-xl bg-cyan-950/50 hover:bg-cyan-500/20 border-cyan-500/40 hover:border-cyan-400/60 text-cyan-300 hover:text-cyan-100 font-mono text-xs transition-all shadow-sm cursor-pointer active:scale-95"
             title="Global Command Search (System Events, Legal Triggers, Views) [⌘K / Ctrl+K]"
           >
             <Terminal className="w-3.5 h-3.5 text-cyan-400 group-hover:scale-110 transition-transform" />
             <span className="hidden xl:inline font-bold">Commands</span>
-            <kbd className="hidden sm:inline px-1.5 py-0.2 text-[9px] rounded bg-cyan-500/20 text-cyan-300 font-mono border border-cyan-500/30">⌘K</kbd>
+            <kbd className="hidden sm:inline px-1.5 py-0.2 text-[9px] rounded bg-cyan-500/20 text-cyan-300 font-mono border-cyan-500/30">⌘K</kbd>
           </button>
 
           {/* Dedicated Legal & PQC Search Trigger Button with Search Icon */}
@@ -473,7 +473,7 @@ export const Navigation: React.FC<NavigationProps> = ({
               playTone(680, 0.08);
               onOpenLegalSearch();
             }}
-            className="group flex items-center gap-1.5 px-2.5 py-1.5 rounded-xl bg-slate-900/90 hover:bg-slate-800 border border-slate-700/60 hover:border-cyan-500/40 text-zinc-300 hover:text-white font-mono text-xs transition-all shadow-sm cursor-pointer active:scale-95"
+            className="group flex items-center gap-1.5 px-2.5 py-1.5 rounded-xl bg-slate-900/90 hover:bg-slate-800 border-slate-700/60 hover:border-cyan-500/40 text-zinc-300 hover:text-white font-mono text-xs transition-all shadow-sm cursor-pointer active:scale-95"
             title="Search Thai Laws & Cryptographic Standards"
           >
             <Search className="w-3.5 h-3.5 text-zinc-400 group-hover:text-cyan-400 group-hover:scale-110 transition-transform" />
@@ -486,12 +486,12 @@ export const Navigation: React.FC<NavigationProps> = ({
               playTone(620, 0.06);
               onOpenShortcuts();
             }}
-            className="flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-black/30 hover:bg-white/10 border border-white/10 hover:border-white/20 text-zinc-400 hover:text-white font-mono text-xs transition-colors shadow-sm"
+            className="flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-black/30 hover:bg-white/10 border-white/10 hover:border-white/20 text-zinc-400 hover:text-white font-mono text-xs transition-colors shadow-sm"
             title="Global Keyboard Shortcuts & Fast Navigator (? or Ctrl+/)"
           >
             <Keyboard className="w-4 h-4 text-zinc-400" />
             <span className="hidden lg:inline text-[11px] font-medium">Shortcuts</span>
-            <kbd className="hidden sm:inline px-1.5 py-0.5 text-[10px] rounded bg-white/10 text-zinc-300 font-mono border border-white/10">?</kbd>
+            <kbd className="hidden sm:inline px-1.5 py-0.5 text-[10px] rounded bg-white/10 text-zinc-300 font-mono border-white/10">?</kbd>
           </button>
 
           {/* System Events Sidebar Trigger */}
@@ -501,7 +501,7 @@ export const Navigation: React.FC<NavigationProps> = ({
                 playTone(640, 0.05);
                 onOpenEventsSidebar();
               }}
-              className="relative p-2 rounded-xl bg-black/30 hover:bg-white/10 border border-white/10 hover:border-white/20 text-zinc-300 hover:text-white font-mono text-xs transition-colors flex items-center gap-1.5 shadow-sm"
+              className="relative p-2 rounded-xl bg-black/30 hover:bg-white/10 border-white/10 hover:border-white/20 text-zinc-300 hover:text-white font-mono text-xs transition-colors flex items-center gap-1.5 shadow-sm"
               title="Toggle System Events Activity Feed (Shift+E)"
             >
               <Bell className="w-4 h-4 text-cyan-400" />
@@ -517,7 +517,7 @@ export const Navigation: React.FC<NavigationProps> = ({
           {onCaptureSnapshot && (
             <button
               onClick={handleCaptureSnapshotWithAnimation}
-              className="flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-emerald-950/40 hover:bg-emerald-500/20 border border-emerald-500/30 hover:border-emerald-400/50 text-emerald-300 font-mono text-xs transition-all shadow-[0_0_12px_rgba(16,185,129,0.15)] active:scale-95"
+              className="flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-emerald-950/40 hover:bg-emerald-500/20 border-emerald-500/30 hover:border-emerald-400/50 text-emerald-300 font-mono text-xs transition-all shadow-[0_0_12px_rgba(16,185,129,0.15)] active:scale-95"
               title="Capture Hardware Telemetry Snapshot (Increments Verified Seals with Progressive Green Highlight)"
             >
               <Camera className="w-3.5 h-3.5 text-emerald-400" />
@@ -657,12 +657,12 @@ export const Navigation: React.FC<NavigationProps> = ({
                 playTone(760, 0.08);
                 onOpenChecklist();
               }}
-              className="group flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-gradient-to-r from-emerald-500/20 via-teal-500/15 to-cyan-500/20 border border-emerald-500/40 text-emerald-300 hover:text-emerald-100 font-mono text-xs hover:border-emerald-400/60 transition-all shadow-[0_0_15px_rgba(16,185,129,0.2)] hover:shadow-[0_0_20px_rgba(16,185,129,0.35)] active:scale-95 cursor-pointer ml-1"
+              className="group flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-gradient-to-r from-emerald-500/20 via-teal-500/15 to-cyan-500/20 border-emerald-500/40 text-emerald-300 hover:text-emerald-100 font-mono text-xs hover:border-emerald-400/60 transition-all shadow-[0_0_15px_rgba(16,185,129,0.2)] hover:shadow-[0_0_20px_rgba(16,185,129,0.35)] active:scale-95 cursor-pointer ml-1"
               title="เปิดระบบตรวจเช็คระบบและพยานหลักฐานดิจิทัลทีละขั้นตอน (System Check-Up & Step-by-Step Stepper)"
             >
               <FileCheck2 className="w-4 h-4 text-emerald-400 group-hover:scale-110 transition-transform" />
               <span className="font-bold tracking-wide">Check-Up</span>
-              <span className="hidden sm:inline-block px-1.5 py-0.2 rounded-full bg-emerald-500/25 text-[9px] text-emerald-300 border border-emerald-500/30">16 ขั้น</span>
+              <span className="hidden sm:inline-block px-1.5 py-0.2 rounded-full bg-emerald-500/25 text-[9px] text-emerald-300 border-emerald-500/30">16 ขั้น</span>
             </button>
           )}
 
@@ -671,7 +671,7 @@ export const Navigation: React.FC<NavigationProps> = ({
               playTone(720, 0.1);
               onOpenCertificate();
             }}
-            className="group flex items-center gap-2 px-3.5 py-1.5 rounded-xl bg-gradient-to-r from-amber-500/20 via-violet-500/15 to-cyan-500/20 border border-amber-500/40 text-amber-300 hover:text-amber-100 font-mono text-xs hover:border-amber-400/60 transition-all shadow-[0_0_15px_rgba(245,158,11,0.15)] hover:shadow-[0_0_20px_rgba(245,158,11,0.25)] ml-1"
+            className="group flex items-center gap-2 px-3.5 py-1.5 rounded-xl bg-gradient-to-r from-amber-500/20 via-violet-500/15 to-cyan-500/20 border-amber-500/40 text-amber-300 hover:text-amber-100 font-mono text-xs hover:border-amber-400/60 transition-all shadow-[0_0_15px_rgba(245,158,11,0.15)] hover:shadow-[0_0_20px_rgba(245,158,11,0.25)] ml-1"
           >
             <Award className="w-4 h-4 text-amber-400 group-hover:scale-110 transition-transform" />
             <span className="font-bold tracking-wide">Gold Master</span>
@@ -685,7 +685,7 @@ export const Navigation: React.FC<NavigationProps> = ({
         <button
           type="button"
           onClick={() => scrollTabs('left')}
-          className="hidden sm:flex items-center justify-center w-7 h-8 rounded-lg bg-[#0a0f1e] hover:bg-cyan-950 border border-cyan-500/30 text-cyan-400 hover:text-cyan-200 transition-all shrink-0 cursor-pointer shadow-sm z-20"
+          className="hidden sm:flex items-center justify-center w-7 h-8 rounded-lg bg-[#0a0f1e] hover:bg-cyan-950 border-cyan-500/30 text-cyan-400 hover:text-cyan-200 transition-all shrink-0 cursor-pointer shadow-sm z-20"
           title="Scroll tabs left"
           aria-label="Scroll tabs left"
         >
@@ -714,8 +714,8 @@ export const Navigation: React.FC<NavigationProps> = ({
                   }}
                   className={`relative shrink-0 px-3 sm:px-3.5 py-2 rounded-xl font-mono text-xs flex items-center gap-2 whitespace-nowrap transition-all duration-200 select-none cursor-pointer ${
                     isActive
-                      ? 'bg-[#0a0f1e] text-white border border-cyan-400 shadow-[0_0_15px_rgba(6,182,212,0.25)] font-bold'
-                      : 'bg-transparent text-zinc-400 hover:text-zinc-100 hover:bg-white/[0.06] border border-white/5 hover:border-cyan-500/30'
+                      ? 'bg-[#0a0f1e] text-white border-cyan-400 shadow-[0_0_15px_rgba(6,182,212,0.25)] font-bold'
+                      : 'bg-transparent text-zinc-400 hover:text-zinc-100 hover:bg-white/[0.06] border-white/5 hover:border-cyan-500/30'
                   }`}
                 >
                   {isActive && (
@@ -733,14 +733,14 @@ export const Navigation: React.FC<NavigationProps> = ({
                   {item.badge && (
                     <span
                       className={`text-[9px] px-1.5 py-0.5 rounded font-mono font-bold tracking-wider shrink-0 ${
-                        isActive ? 'bg-cyan-950 border border-cyan-400 text-cyan-300' : 'bg-[#0a0f1e] text-zinc-500 border border-white/10 group-hover:text-zinc-400'
+                        isActive ? 'bg-cyan-950 border-cyan-400 text-cyan-300' : 'bg-[#0a0f1e] text-zinc-500 border-white/10 group-hover:text-zinc-400'
                       }`}
                     >
                       {item.badge}
                     </span>
                   )}
                   {item.shortcut && (
-                    <span className="hidden lg:group-hover:inline-block text-[8px] font-mono text-zinc-500 bg-black/50 px-1.5 py-0.5 rounded border border-white/10 ml-1 shrink-0">
+                    <span className="hidden lg:group-hover:inline-block text-[8px] font-mono text-zinc-500 bg-black/50 px-1.5 py-0.5 rounded border-white/10 ml-1 shrink-0">
                       {item.shortcut}
                     </span>
                   )}
@@ -757,7 +757,7 @@ export const Navigation: React.FC<NavigationProps> = ({
         <button
           type="button"
           onClick={() => scrollTabs('right')}
-          className="hidden sm:flex items-center justify-center w-7 h-8 rounded-lg bg-[#0a0f1e] hover:bg-cyan-950 border border-cyan-500/30 text-cyan-400 hover:text-cyan-200 transition-all shrink-0 cursor-pointer shadow-sm z-20"
+          className="hidden sm:flex items-center justify-center w-7 h-8 rounded-lg bg-[#0a0f1e] hover:bg-cyan-950 border-cyan-500/30 text-cyan-400 hover:text-cyan-200 transition-all shrink-0 cursor-pointer shadow-sm z-20"
           title="Scroll tabs right"
           aria-label="Scroll tabs right"
         >

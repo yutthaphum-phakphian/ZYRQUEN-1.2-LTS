@@ -342,11 +342,11 @@ export const SystemResourceGrid: React.FC = () => {
   };
 
   return (
-    <div className="w-full rounded-[24px] bg-gradient-to-br from-[#0a0d1c]/95 via-[#080b18]/90 to-[#050712]/95 border border-cyan-500/25 shadow-[0_8px_30px_-10px_rgba(6,182,212,0.15)] backdrop-blur-2xl p-4 sm:p-5 flex flex-col space-y-3.5 transition-all">
+    <div className="w-full rounded-[24px] bg-gradient-to-br from-[#0a0d1c]/95 via-[#080b18]/90 to-[#050712]/95 border-cyan-500/25 shadow-[0_8px_30px_-10px_rgba(6,182,212,0.15)] backdrop-blur-2xl p-4 sm:p-5 flex flex-col space-y-3.5 transition-all">
       {/* Header Bar */}
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 pb-1 border-b border-white/5">
         <div className="flex items-center gap-2.5">
-          <div className="w-8 h-8 rounded-xl bg-cyan-500/10 border border-cyan-500/30 flex items-center justify-center text-cyan-400 shrink-0 shadow-[0_0_12px_rgba(6,182,212,0.2)]">
+          <div className="w-8 h-8 rounded-xl bg-cyan-500/10 border-cyan-500/30 flex items-center justify-center text-cyan-400 shrink-0 shadow-[0_0_12px_rgba(6,182,212,0.2)]">
             <Cpu className="w-4 h-4" />
           </div>
           <div>
@@ -354,7 +354,7 @@ export const SystemResourceGrid: React.FC = () => {
               <h3 className="text-xs sm:text-sm font-bold text-white font-mono tracking-wider">
                 SYSTEM RESOURCE GRID
               </h3>
-              <span className="text-[9px] font-mono font-bold bg-cyan-950/80 text-cyan-300 px-2 py-0.5 rounded-full border border-cyan-500/30">
+              <span className="text-[9px] font-mono font-bold bg-cyan-950/80 text-cyan-300 px-2 py-0.5 rounded-full border-cyan-500/30">
                 10 BLADES
               </span>
             </div>
@@ -370,7 +370,7 @@ export const SystemResourceGrid: React.FC = () => {
 
         {/* View Mode & Calibration Buttons */}
         <div className="flex items-center gap-1.5 self-end sm:self-auto">
-          <div className="flex rounded-xl bg-black/60 border border-white/10 p-0.5 font-mono text-[11px]">
+          <div className="flex rounded-xl bg-black/60 border-white/10 p-0.5 font-mono text-[11px]">
             <button
               onClick={() => {
                 playTone(600, 0.03);
@@ -378,7 +378,7 @@ export const SystemResourceGrid: React.FC = () => {
               }}
               className={`flex items-center gap-1 px-2.5 py-1 rounded-lg transition-all ${
                 activeTab === 'treemap'
-                  ? 'bg-cyan-500/25 text-cyan-200 font-bold border border-cyan-500/30 shadow-[0_0_10px_rgba(6,182,212,0.2)]'
+                  ? 'bg-cyan-500/25 text-cyan-200 font-bold border-cyan-500/30 shadow-[0_0_10px_rgba(6,182,212,0.2)]'
                   : 'text-zinc-400 hover:text-white'
               }`}
               title="D3 Cybernetic Treemap Matrix"
@@ -393,7 +393,7 @@ export const SystemResourceGrid: React.FC = () => {
               }}
               className={`flex items-center gap-1 px-2.5 py-1 rounded-lg transition-all ${
                 activeTab === 'rack'
-                  ? 'bg-violet-500/25 text-violet-200 font-bold border border-violet-500/30 shadow-[0_0_10px_rgba(139,92,246,0.2)]'
+                  ? 'bg-violet-500/25 text-violet-200 font-bold border-violet-500/30 shadow-[0_0_10px_rgba(139,92,246,0.2)]'
                   : 'text-zinc-400 hover:text-white'
               }`}
               title="Hardware Blade Rack View"
@@ -408,7 +408,7 @@ export const SystemResourceGrid: React.FC = () => {
               }}
               className={`flex items-center gap-1 px-2.5 py-1 rounded-lg transition-all ${
                 activeTab === 'summary'
-                  ? 'bg-emerald-500/25 text-emerald-200 font-bold border border-emerald-500/30 shadow-[0_0_10px_rgba(16,185,129,0.2)]'
+                  ? 'bg-emerald-500/25 text-emerald-200 font-bold border-emerald-500/30 shadow-[0_0_10px_rgba(16,185,129,0.2)]'
                   : 'text-zinc-400 hover:text-white'
               }`}
               title="Cluster Telemetry Meters"
@@ -421,7 +421,7 @@ export const SystemResourceGrid: React.FC = () => {
           <button
             onClick={handleCalibrate}
             disabled={isCalibrating}
-            className="p-1.5 rounded-xl bg-cyan-500/10 hover:bg-cyan-500/20 border border-cyan-500/30 text-cyan-300 hover:text-white transition-all"
+            className="p-1.5 rounded-xl bg-cyan-500/10 hover:bg-cyan-500/20 border-cyan-500/30 text-cyan-300 hover:text-white transition-all"
             title="Recalibrate Cluster Load Distribution"
           >
             <RefreshCw className={`w-3.5 h-3.5 ${isCalibrating ? 'animate-spin text-cyan-400' : ''}`} />
@@ -442,7 +442,7 @@ export const SystemResourceGrid: React.FC = () => {
               }}
               className={`px-2 py-0.5 rounded-md transition-all uppercase font-semibold ${
                 filterSubsystem === filter
-                  ? 'bg-white/15 text-white border border-white/20'
+                  ? 'bg-white/15 text-white border-white/20'
                   : 'text-zinc-500 hover:text-zinc-300 bg-white/[0.02]'
               }`}
             >
@@ -458,7 +458,7 @@ export const SystemResourceGrid: React.FC = () => {
       </div>
 
       {/* Main Visual Stage with Strictly Constrained Height (Prevent Vertical Ballooning) */}
-      <div className="w-full h-[220px] sm:h-[240px] relative overflow-hidden rounded-xl bg-black/40 border border-white/5 flex items-center justify-center">
+      <div className="w-full h-[220px] sm:h-[240px] relative overflow-hidden rounded-xl bg-black/40 border-white/5 flex items-center justify-center">
         {/* VIEW 1: D3 TREEMAP */}
         {activeTab === 'treemap' && (
           <div ref={containerRef} className="w-full h-full p-1 relative">
@@ -539,7 +539,7 @@ export const SystemResourceGrid: React.FC = () => {
         {activeTab === 'summary' && (
           <div className="w-full h-full p-4 grid grid-cols-3 gap-3 items-center justify-center font-mono">
             {/* CPU Dial */}
-            <div className="flex flex-col items-center justify-center p-3 rounded-xl bg-black/40 border border-cyan-500/20 text-center space-y-1">
+            <div className="flex flex-col items-center justify-center p-3 rounded-xl bg-black/40 border-cyan-500/20 text-center space-y-1">
               <div className="w-9 h-9 rounded-full border-2 border-cyan-400 flex items-center justify-center shadow-[0_0_12px_rgba(6,182,212,0.3)]">
                 <Cpu className="w-4 h-4 text-cyan-400" />
               </div>
@@ -549,7 +549,7 @@ export const SystemResourceGrid: React.FC = () => {
             </div>
 
             {/* HBM3 Dial */}
-            <div className="flex flex-col items-center justify-center p-3 rounded-xl bg-black/40 border border-violet-500/20 text-center space-y-1">
+            <div className="flex flex-col items-center justify-center p-3 rounded-xl bg-black/40 border-violet-500/20 text-center space-y-1">
               <div className="w-9 h-9 rounded-full border-2 border-violet-400 flex items-center justify-center shadow-[0_0_12px_rgba(139,92,246,0.3)]">
                 <HardDrive className="w-4 h-4 text-violet-400" />
               </div>
@@ -559,7 +559,7 @@ export const SystemResourceGrid: React.FC = () => {
             </div>
 
             {/* Cryo Thermal Dial */}
-            <div className="flex flex-col items-center justify-center p-3 rounded-xl bg-black/40 border border-emerald-500/20 text-center space-y-1">
+            <div className="flex flex-col items-center justify-center p-3 rounded-xl bg-black/40 border-emerald-500/20 text-center space-y-1">
               <div className="w-9 h-9 rounded-full border-2 border-emerald-400 flex items-center justify-center shadow-[0_0_12px_rgba(16,185,129,0.3)]">
                 <Thermometer className="w-4 h-4 text-emerald-400" />
               </div>
@@ -572,7 +572,7 @@ export const SystemResourceGrid: React.FC = () => {
       </div>
 
       {/* Selected Blade Telemetry Strip (Sleek Compact Inspector) */}
-      <div className="p-2.5 rounded-xl bg-black/40 border border-white/8 flex flex-col sm:flex-row sm:items-center justify-between gap-2 text-xs font-mono">
+      <div className="p-2.5 rounded-xl bg-black/40 border-white/8 flex flex-col sm:flex-row sm:items-center justify-between gap-2 text-xs font-mono">
         <div className="flex items-center gap-2">
           <span className="w-2 h-2 rounded-full bg-cyan-400 shadow-[0_0_8px_#06b6d4]" />
           <span className="font-bold text-white text-[11px]">{selectedNode.name}</span>
@@ -582,7 +582,7 @@ export const SystemResourceGrid: React.FC = () => {
         <div className="flex items-center gap-3 text-[10px] text-zinc-400">
           <span>Load: <strong className="text-cyan-300">{selectedNode.value}{selectedNode.unit}</strong></span>
           <span>Temp: <strong className="text-zinc-200">{selectedNode.temp > 0 ? `${selectedNode.temp}°C` : `${selectedNode.value} mK`}</strong></span>
-          <span className="px-1.5 py-0.5 rounded bg-emerald-500/10 text-emerald-300 border border-emerald-500/20 font-bold">
+          <span className="px-1.5 py-0.5 rounded bg-emerald-500/10 text-emerald-300 border-emerald-500/20 font-bold">
             FIPS 204
           </span>
         </div>

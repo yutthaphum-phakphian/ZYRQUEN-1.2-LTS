@@ -136,11 +136,11 @@ export const ComplianceBlueprintWidget: React.FC = () => {
   };
 
   return (
-    <div className="rounded-[28px] bg-[#07080F]/95 border border-white/8 backdrop-blur-2xl p-6 sm:p-8 space-y-6 shadow-2xl font-mono">
+    <div className="rounded-[28px] bg-[#07080F]/95 border-white/8 backdrop-blur-2xl p-6 sm:p-8 space-y-6 shadow-2xl font-mono">
       {/* Header */}
       <div className="flex flex-col lg:flex-row lg:items-center justify-between gap-4 border-b border-white/8 pb-6">
         <div className="flex items-center gap-3.5">
-          <div className="w-12 h-12 rounded-2xl bg-gradient-to-br from-cyan-500/20 via-violet-500/20 to-amber-500/20 border border-cyan-500/30 flex items-center justify-center text-cyan-300 shadow-[0_0_25px_rgba(6,182,212,0.2)] shrink-0">
+          <div className="w-12 h-12 rounded-2xl bg-gradient-to-br from-cyan-500/20 via-violet-500/20 to-amber-500/20 border-cyan-500/30 flex items-center justify-center text-cyan-300 shadow-[0_0_25px_rgba(6,182,212,0.2)] shrink-0">
             <Layers className="w-6 h-6" />
           </div>
           <div>
@@ -148,7 +148,7 @@ export const ComplianceBlueprintWidget: React.FC = () => {
               <h3 className="text-base sm:text-lg font-bold text-white tracking-wide">
                 Compliance Blueprint v1.2 — 4-Tier Sovereign Matrix
               </h3>
-              <span className="text-[10px] px-2.5 py-0.5 rounded-full bg-gradient-to-r from-cyan-500/20 to-amber-500/20 text-cyan-200 border border-cyan-500/40 font-bold">
+              <span className="text-[10px] px-2.5 py-0.5 rounded-full bg-gradient-to-r from-cyan-500/20 to-amber-500/20 text-cyan-200 border-cyan-500/40 font-bold">
                 ETDA LEVEL 3+ • NIST FIPS 203-205
               </span>
             </div>
@@ -162,7 +162,7 @@ export const ComplianceBlueprintWidget: React.FC = () => {
         <button
           onClick={handleDownloadPdf}
           disabled={isExporting}
-          className="px-4 py-2.5 rounded-2xl text-xs font-bold bg-gradient-to-r from-amber-500/20 via-cyan-500/20 to-emerald-500/20 hover:from-amber-500/30 hover:to-emerald-500/30 text-amber-200 hover:text-white border border-amber-500/40 flex items-center gap-2 transition-all shadow-[0_0_20px_rgba(245,158,11,0.2)] hover:scale-[1.02] shrink-0"
+          className="px-4 py-2.5 rounded-2xl text-xs font-bold bg-gradient-to-r from-amber-500/20 via-cyan-500/20 to-emerald-500/20 hover:from-amber-500/30 hover:to-emerald-500/30 text-amber-200 hover:text-white border-amber-500/40 flex items-center gap-2 transition-all shadow-[0_0_20px_rgba(245,158,11,0.2)] hover:scale-[1.02] shrink-0"
         >
           <Download className="w-4 h-4 text-amber-300" />
           <span>{isExporting ? 'Compiling Blueprint PDF...' : 'Download Blueprint v1.2 (PDF)'}</span>
@@ -171,7 +171,7 @@ export const ComplianceBlueprintWidget: React.FC = () => {
 
       {/* Toast Notification */}
       {toastMessage && (
-        <div className="p-4 rounded-2xl bg-amber-500/10 border border-amber-500/30 text-amber-200 text-xs flex items-center justify-between gap-3 animate-in fade-in duration-200">
+        <div className="p-4 rounded-2xl bg-amber-500/10 border-amber-500/30 text-amber-200 text-xs flex items-center justify-between gap-3 animate-in fade-in duration-200">
           <div className="flex items-center gap-2">
             <CheckCircle2 className="w-4 h-4 text-amber-400 shrink-0" />
             <span>
@@ -248,7 +248,7 @@ export const ComplianceBlueprintWidget: React.FC = () => {
                 <div className="px-5 pb-5 pt-2 border-t border-white/8 space-y-4 text-xs font-mono animate-in fade-in duration-200">
                   <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                     {/* Core Architectural Components */}
-                    <div className="p-4 rounded-xl bg-white/[0.02] border border-white/5 space-y-2">
+                    <div className="p-4 rounded-xl bg-white/[0.02] border-white/5 space-y-2">
                       <span className="text-zinc-300 font-bold flex items-center gap-1.5">
                         <Cpu className="w-3.5 h-3.5 text-cyan-400" />
                         <span>สถาปัตยกรรมและโมดูลรันไทม์ (Active Runtime Components):</span>
@@ -267,13 +267,13 @@ export const ComplianceBlueprintWidget: React.FC = () => {
                     </div>
 
                     {/* Cryptographic Proof & Statutory Guarantee */}
-                    <div className="p-4 rounded-xl bg-white/[0.02] border border-white/5 space-y-2">
+                    <div className="p-4 rounded-xl bg-white/[0.02] border-white/5 space-y-2">
                       <span className="text-zinc-300 font-bold flex items-center gap-1.5">
                         <Scale className="w-3.5 h-3.5 text-amber-400" />
                         <span>การรับรองผลและการบังคับใช้ (Statutory Enforcement Proof):</span>
                       </span>
                       <p className="text-zinc-300 font-sans text-xs leading-relaxed">{layer.proofDescription}</p>
-                      <div className="p-2 rounded-lg bg-black/60 border border-white/5 text-[10px] text-emerald-400 truncate select-all">
+                      <div className="p-2 rounded-lg bg-black/60 border-white/5 text-[10px] text-emerald-400 truncate select-all">
                         Proof Root: {layer.proofHash}
                       </div>
                     </div>

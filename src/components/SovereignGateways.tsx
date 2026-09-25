@@ -35,20 +35,20 @@ interface SovereignGatewaysProps {
 }
 
 export const SovereignGateways: React.FC<SovereignGatewaysProps> = ({ alertLevel = 'NOMINAL' }) => (
-  <section className="bg-cyber-800/80 border border-cyan-500/30 rounded-2xl p-6 backdrop-blur-md shadow-xl text-gray-100 max-w-4xl mx-auto font-sans">
+  <section className="bg-cyber-800/80 border-cyan-500/30 rounded-2xl p-6 backdrop-blur-md shadow-xl text-gray-100 max-w-4xl mx-auto font-sans">
     <div className="flex flex-col sm:flex-row justify-between gap-3 pb-4 border-b border-cyber-700">
       <div>
         <h2 className="text-lg font-bold text-cyan-300 font-mono">Sovereign Gateway Mesh</h2>
         <p className="text-xs text-gray-400 mt-1">Fail-closed API surface anchored to {SOVEREIGN_CONFIG.genesisBlockHeight}</p>
       </div>
-      <span className="self-start text-xs font-mono text-emerald-400 border border-emerald-500/40 rounded-lg px-3 py-1.5">
+      <span className="self-start text-xs font-mono text-emerald-400 border-emerald-500/40 rounded-lg px-3 py-1.5">
         SSoT Δ{SOVEREIGN_CONFIG.baselineSystemDriftPercent.toFixed(2)}%
       </span>
     </div>
 
     <div className="grid grid-cols-1 md:grid-cols-2 gap-3 mt-5">
       {GATEWAYS.map((gateway) => (
-        <article key={gateway.endpoint} className="bg-cyber-900/70 border border-cyber-700 rounded-xl p-4">
+        <article key={gateway.endpoint} className="bg-cyber-900/70 border-cyber-700 rounded-xl p-4">
           <div className="flex items-center justify-between gap-3">
             <h3 className="text-sm font-semibold text-gray-100">{gateway.name}</h3>
             <span className={`text-[10px] font-mono ${alertLevel === 'CRITICAL' ? 'text-rose-400' : 'text-emerald-400'}`}>

@@ -140,20 +140,20 @@ export const Room05MasterPanel: React.FC<Room05MasterPanelProps> = ({
   return (
     <div className="space-y-6 font-mono text-zinc-300">
       {/* Top Banner for Room 05 */}
-      <div className="p-6 sm:p-8 rounded-[28px] bg-gradient-to-br from-violet-950/40 via-[#0d0a1a]/95 to-black border border-violet-500/40 backdrop-blur-xl relative overflow-hidden shadow-2xl">
+      <div className="p-6 sm:p-8 rounded-[28px] bg-gradient-to-br from-violet-950/40 via-[#0d0a1a]/95 to-black border-violet-500/40 backdrop-blur-xl relative overflow-hidden shadow-2xl">
         <div className="absolute top-0 right-0 w-96 h-96 bg-gradient-to-bl from-violet-500/10 via-fuchsia-500/5 to-transparent rounded-full blur-3xl pointer-events-none" />
 
         <div className="relative z-10 flex flex-col lg:flex-row lg:items-center justify-between gap-6">
           <div className="space-y-3">
             <div className="flex flex-wrap items-center gap-2">
-              <span className="px-3 py-1 rounded-full bg-violet-500/15 text-violet-300 border border-violet-500/40 text-xs font-bold flex items-center gap-1.5 shadow-[0_0_12px_rgba(139,92,246,0.25)]">
+              <span className="px-3 py-1 rounded-full bg-violet-500/15 text-violet-300 border-violet-500/40 text-xs font-bold flex items-center gap-1.5 shadow-[0_0_12px_rgba(139,92,246,0.25)]">
                 <Layers className="w-4 h-4 text-violet-400 animate-pulse" />
                 CHAMBER 05 • MASTER GATES 22/22 VERIFICATION
               </span>
-              <span className="px-2.5 py-0.5 rounded-full bg-emerald-500/15 text-emerald-300 border border-emerald-500/30 text-[11px] font-bold">
+              <span className="px-2.5 py-0.5 rounded-full bg-emerald-500/15 text-emerald-300 border-emerald-500/30 text-[11px] font-bold">
                 22/22 GATES PASSED (100%)
               </span>
-              <span className="px-2.5 py-0.5 rounded-full bg-cyan-500/15 text-cyan-300 border border-cyan-500/30 text-[11px] font-bold">
+              <span className="px-2.5 py-0.5 rounded-full bg-cyan-500/15 text-cyan-300 border-cyan-500/30 text-[11px] font-bold">
                 CLEARANCE: LEVEL 20 SRE
               </span>
             </div>
@@ -169,19 +169,19 @@ export const Room05MasterPanel: React.FC<Room05MasterPanelProps> = ({
 
             {/* Quick Metrics Bar */}
             <div className="flex flex-wrap items-center gap-4 pt-2 text-xs">
-              <div className="px-3 py-1.5 rounded-xl bg-white/5 border border-white/10 flex items-center gap-2">
+              <div className="px-3 py-1.5 rounded-xl bg-white/5 border-white/10 flex items-center gap-2">
                 <span className="text-zinc-500">Passed:</span>
                 <span className="text-emerald-300 font-bold">22/22 Unanimous</span>
               </div>
-              <div className="px-3 py-1.5 rounded-xl bg-white/5 border border-white/10 flex items-center gap-2">
+              <div className="px-3 py-1.5 rounded-xl bg-white/5 border-white/10 flex items-center gap-2">
                 <span className="text-zinc-500">Avg Latency:</span>
                 <span className="text-cyan-300 font-bold">1.82 ms/Gate</span>
               </div>
-              <div className="px-3 py-1.5 rounded-xl bg-white/5 border border-white/10 flex items-center gap-2">
+              <div className="px-3 py-1.5 rounded-xl bg-white/5 border-white/10 flex items-center gap-2">
                 <span className="text-zinc-500">Audit Ref:</span>
                 <span className="text-violet-300 font-bold">GATE-849202-ALL</span>
               </div>
-              <div className="px-3 py-1.5 rounded-xl bg-white/5 border border-white/10 flex items-center gap-2">
+              <div className="px-3 py-1.5 rounded-xl bg-white/5 border-white/10 flex items-center gap-2">
                 <span className="text-zinc-500">Court Admissible:</span>
                 <span className="text-amber-300 font-bold">100% Ready</span>
               </div>
@@ -212,7 +212,7 @@ export const Room05MasterPanel: React.FC<Room05MasterPanelProps> = ({
                 playTone(720, 0.04);
                 if (onOpenCertificate) onOpenCertificate();
               }}
-              className="px-4 py-2.5 rounded-xl bg-white/5 hover:bg-white/10 border border-white/10 text-white font-bold text-xs transition-all flex items-center justify-center gap-2"
+              className="px-4 py-2.5 rounded-xl bg-white/5 hover:bg-white/10 border-white/10 text-white font-bold text-xs transition-all flex items-center justify-center gap-2"
             >
               <FileCheck2 className="w-4 h-4 text-violet-400" />
               <span>Evidence Ledger</span>
@@ -222,7 +222,7 @@ export const Room05MasterPanel: React.FC<Room05MasterPanelProps> = ({
       </div>
 
       {/* Tier Filter Bar */}
-      <div className="flex flex-wrap items-center gap-2 p-1.5 rounded-2xl bg-black/50 border border-white/10 text-xs font-bold">
+      <div className="flex flex-wrap items-center gap-2 p-1.5 rounded-2xl bg-black/50 border-white/10 text-xs font-bold">
         {(['ALL', 'Pre-Flight', 'Lattice PQC', 'Memory Ring', 'Judicial ETDA'] as const).map((tier) => (
           <button
             key={tier}
@@ -232,8 +232,8 @@ export const Room05MasterPanel: React.FC<Room05MasterPanelProps> = ({
             }}
             className={`px-3.5 py-2 rounded-xl transition-all flex items-center gap-1.5 ${
               activeTier === tier
-                ? 'bg-violet-500/20 text-violet-200 border border-violet-500/40 shadow-[0_0_12px_rgba(139,92,246,0.2)]'
-                : 'text-zinc-400 hover:text-zinc-200 bg-white/5 border border-transparent'
+                ? 'bg-violet-500/20 text-violet-200 border-violet-500/40 shadow-[0_0_12px_rgba(139,92,246,0.2)]'
+                : 'text-zinc-400 hover:text-zinc-200 bg-white/5 border-transparent'
             }`}
           >
             <span>{tier === 'ALL' ? 'All 22 Gates' : tier}</span>
@@ -244,7 +244,7 @@ export const Room05MasterPanel: React.FC<Room05MasterPanelProps> = ({
       {/* Search & Latency Graph */}
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-4">
         {/* Latency by Tier Bar Chart */}
-        <div className="lg:col-span-1 p-5 rounded-2xl bg-black/60 border border-white/10 space-y-3">
+        <div className="lg:col-span-1 p-5 rounded-2xl bg-black/60 border-white/10 space-y-3">
           <h3 className="text-xs font-bold text-white flex items-center gap-2">
             <Activity className="w-4 h-4 text-violet-400" />
             Gate Execution Latency by Tier (ms)
@@ -267,7 +267,7 @@ export const Room05MasterPanel: React.FC<Room05MasterPanelProps> = ({
 
         {/* Search & Quick Stats */}
         <div className="lg:col-span-2 space-y-3">
-          <div className="flex items-center gap-3 p-3 rounded-2xl bg-black/60 border border-white/10">
+          <div className="flex items-center gap-3 p-3 rounded-2xl bg-black/60 border-white/10">
             <Search className="w-4 h-4 text-zinc-400 shrink-0" />
             <input
               type="text"
@@ -278,7 +278,7 @@ export const Room05MasterPanel: React.FC<Room05MasterPanelProps> = ({
             />
           </div>
 
-          <div className="p-4 rounded-2xl bg-black/40 border border-white/10 flex flex-wrap items-center justify-between gap-3 text-xs">
+          <div className="p-4 rounded-2xl bg-black/40 border-white/10 flex flex-wrap items-center justify-between gap-3 text-xs">
             <div className="text-zinc-400">
               Showing <strong className="text-white">{filteredGates.length}</strong> of 22 Master Verification Gates
             </div>
@@ -311,7 +311,7 @@ export const Room05MasterPanel: React.FC<Room05MasterPanelProps> = ({
             >
               <div className="flex items-start justify-between gap-2 mb-2">
                 <div className="flex items-center gap-1.5">
-                  <span className="px-2 py-0.5 rounded bg-violet-500/20 text-violet-300 font-bold text-[10px] border border-violet-500/30">
+                  <span className="px-2 py-0.5 rounded bg-violet-500/20 text-violet-300 font-bold text-[10px] border-violet-500/30">
                     GATE {gate.gateNumber}
                   </span>
                   <span className="text-[10px] text-zinc-400 font-mono">

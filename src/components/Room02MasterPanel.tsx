@@ -148,20 +148,20 @@ export const Room02MasterPanel: React.FC<Room02MasterPanelProps> = ({
   return (
     <div className="space-y-6 font-mono text-zinc-300">
       {/* Top Banner for Room 02 */}
-      <div className="p-6 sm:p-8 rounded-[28px] bg-gradient-to-br from-amber-950/40 via-[#0e101a]/95 to-black border border-amber-500/40 backdrop-blur-xl relative overflow-hidden shadow-2xl">
+      <div className="p-6 sm:p-8 rounded-[28px] bg-gradient-to-br from-amber-950/40 via-[#0e101a]/95 to-black border-amber-500/40 backdrop-blur-xl relative overflow-hidden shadow-2xl">
         <div className="absolute top-0 right-0 w-96 h-96 bg-gradient-to-bl from-amber-500/10 via-rose-500/5 to-transparent rounded-full blur-3xl pointer-events-none" />
 
         <div className="relative z-10 flex flex-col lg:flex-row lg:items-center justify-between gap-6">
           <div className="space-y-3">
             <div className="flex flex-wrap items-center gap-2">
-              <span className="px-3 py-1 rounded-full bg-amber-500/15 text-amber-300 border border-amber-500/40 text-xs font-bold flex items-center gap-1.5 shadow-[0_0_12px_rgba(245,158,11,0.25)]">
+              <span className="px-3 py-1 rounded-full bg-amber-500/15 text-amber-300 border-amber-500/40 text-xs font-bold flex items-center gap-1.5 shadow-[0_0_12px_rgba(245,158,11,0.25)]">
                 <ShieldAlert className="w-4 h-4 text-amber-400 animate-pulse" />
                 CHAMBER 02 • FORENSICS & QUARANTINE BUFFER
               </span>
-              <span className="px-2.5 py-0.5 rounded-full bg-rose-500/15 text-rose-300 border border-rose-500/30 text-[11px] font-bold">
+              <span className="px-2.5 py-0.5 rounded-full bg-rose-500/15 text-rose-300 border-rose-500/30 text-[11px] font-bold">
                 SSoT MUTATION = 0 (LOCKED)
               </span>
-              <span className="px-2.5 py-0.5 rounded-full bg-cyan-500/15 text-cyan-300 border border-cyan-500/30 text-[11px] font-bold">
+              <span className="px-2.5 py-0.5 rounded-full bg-cyan-500/15 text-cyan-300 border-cyan-500/30 text-[11px] font-bold">
                 PATCH ZYR-03: ACTIVE
               </span>
             </div>
@@ -177,19 +177,19 @@ export const Room02MasterPanel: React.FC<Room02MasterPanelProps> = ({
 
             {/* Quick Metrics Bar */}
             <div className="flex flex-wrap items-center gap-4 pt-2 text-xs">
-              <div className="px-3 py-1.5 rounded-xl bg-white/5 border border-white/10 flex items-center gap-2">
+              <div className="px-3 py-1.5 rounded-xl bg-white/5 border-white/10 flex items-center gap-2">
                 <span className="text-zinc-500">Quarantined:</span>
                 <span className="text-amber-300 font-bold">80 Isolated Seals</span>
               </div>
-              <div className="px-3 py-1.5 rounded-xl bg-white/5 border border-white/10 flex items-center gap-2">
+              <div className="px-3 py-1.5 rounded-xl bg-white/5 border-white/10 flex items-center gap-2">
                 <span className="text-zinc-500">Trace Replay:</span>
                 <span className="text-emerald-300 font-bold">142ms (12/12 Verified)</span>
               </div>
-              <div className="px-3 py-1.5 rounded-xl bg-white/5 border border-white/10 flex items-center gap-2">
+              <div className="px-3 py-1.5 rounded-xl bg-white/5 border-white/10 flex items-center gap-2">
                 <span className="text-zinc-500">Cryo Temp:</span>
                 <span className="text-cyan-300 font-bold">15.45 mK</span>
               </div>
-              <div className="px-3 py-1.5 rounded-xl bg-white/5 border border-white/10 flex items-center gap-2">
+              <div className="px-3 py-1.5 rounded-xl bg-white/5 border-white/10 flex items-center gap-2">
                 <span className="text-zinc-500">Leakage Rate:</span>
                 <span className="text-emerald-400 font-bold">0.00% Zero Leak</span>
               </div>
@@ -217,7 +217,7 @@ export const Room02MasterPanel: React.FC<Room02MasterPanelProps> = ({
 
             <button
               onClick={handleExportPdf}
-              className="px-4 py-2.5 rounded-xl bg-white/5 hover:bg-white/10 border border-white/10 text-white font-bold text-xs transition-all flex items-center justify-center gap-2"
+              className="px-4 py-2.5 rounded-xl bg-white/5 hover:bg-white/10 border-white/10 text-white font-bold text-xs transition-all flex items-center justify-center gap-2"
             >
               <FileText className="w-4 h-4 text-cyan-400" />
               <span>Export Forensic PDF</span>
@@ -227,7 +227,7 @@ export const Room02MasterPanel: React.FC<Room02MasterPanelProps> = ({
       </div>
 
       {/* Tabs Navigation */}
-      <div className="flex flex-wrap items-center gap-2 p-1.5 rounded-2xl bg-black/50 border border-white/10 text-xs font-bold">
+      <div className="flex flex-wrap items-center gap-2 p-1.5 rounded-2xl bg-black/50 border-white/10 text-xs font-bold">
         <button
           onClick={() => {
             playTone(600, 0.03);
@@ -235,8 +235,8 @@ export const Room02MasterPanel: React.FC<Room02MasterPanelProps> = ({
           }}
           className={`px-4 py-2 rounded-xl transition-all flex items-center gap-2 ${
             activeTab === 'replay'
-              ? 'bg-amber-500/20 text-amber-200 border border-amber-500/40 shadow-[0_0_12px_rgba(245,158,11,0.2)]'
-              : 'text-zinc-400 hover:text-zinc-200 bg-white/5 border border-transparent'
+              ? 'bg-amber-500/20 text-amber-200 border-amber-500/40 shadow-[0_0_12px_rgba(245,158,11,0.2)]'
+              : 'text-zinc-400 hover:text-zinc-200 bg-white/5 border-transparent'
           }`}
         >
           <Workflow className="w-4 h-4" />
@@ -250,8 +250,8 @@ export const Room02MasterPanel: React.FC<Room02MasterPanelProps> = ({
           }}
           className={`px-4 py-2 rounded-xl transition-all flex items-center gap-2 ${
             activeTab === 'quarantine'
-              ? 'bg-amber-500/20 text-amber-200 border border-amber-500/40 shadow-[0_0_12px_rgba(245,158,11,0.2)]'
-              : 'text-zinc-400 hover:text-zinc-200 bg-white/5 border border-transparent'
+              ? 'bg-amber-500/20 text-amber-200 border-amber-500/40 shadow-[0_0_12px_rgba(245,158,11,0.2)]'
+              : 'text-zinc-400 hover:text-zinc-200 bg-white/5 border-transparent'
           }`}
         >
           <ShieldAlert className="w-4 h-4" />
@@ -265,8 +265,8 @@ export const Room02MasterPanel: React.FC<Room02MasterPanelProps> = ({
           }}
           className={`px-4 py-2 rounded-xl transition-all flex items-center gap-2 ${
             activeTab === 'forensics'
-              ? 'bg-amber-500/20 text-amber-200 border border-amber-500/40 shadow-[0_0_12px_rgba(245,158,11,0.2)]'
-              : 'text-zinc-400 hover:text-zinc-200 bg-white/5 border border-transparent'
+              ? 'bg-amber-500/20 text-amber-200 border-amber-500/40 shadow-[0_0_12px_rgba(245,158,11,0.2)]'
+              : 'text-zinc-400 hover:text-zinc-200 bg-white/5 border-transparent'
           }`}
         >
           <Scale className="w-4 h-4" />
@@ -280,8 +280,8 @@ export const Room02MasterPanel: React.FC<Room02MasterPanelProps> = ({
           }}
           className={`px-4 py-2 rounded-xl transition-all flex items-center gap-2 ${
             activeTab === 'security'
-              ? 'bg-amber-500/20 text-amber-200 border border-amber-500/40 shadow-[0_0_12px_rgba(245,158,11,0.2)]'
-              : 'text-zinc-400 hover:text-zinc-200 bg-white/5 border border-transparent'
+              ? 'bg-amber-500/20 text-amber-200 border-amber-500/40 shadow-[0_0_12px_rgba(245,158,11,0.2)]'
+              : 'text-zinc-400 hover:text-zinc-200 bg-white/5 border-transparent'
           }`}
         >
           <Lock className="w-4 h-4" />
@@ -293,7 +293,7 @@ export const Room02MasterPanel: React.FC<Room02MasterPanelProps> = ({
       {activeTab === 'replay' && (
         <div className="space-y-6 animate-in fade-in duration-200">
           {/* Replay Visualization Timeline Graph */}
-          <div className="p-5 rounded-2xl bg-black/60 border border-white/10 space-y-4">
+          <div className="p-5 rounded-2xl bg-black/60 border-white/10 space-y-4">
             <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
               <div>
                 <h3 className="text-sm font-bold text-white flex items-center gap-2">
@@ -304,7 +304,7 @@ export const Room02MasterPanel: React.FC<Room02MasterPanelProps> = ({
                   Bit-for-bit forensic determinism across all 12 stages from SENSE to REPLAY
                 </p>
               </div>
-              <span className="px-3 py-1 rounded-full bg-emerald-500/15 text-emerald-300 border border-emerald-500/30 text-xs font-bold">
+              <span className="px-3 py-1 rounded-full bg-emerald-500/15 text-emerald-300 border-emerald-500/30 text-xs font-bold">
                 12/12 STAGES BIT-FOR-BIT VERIFIED
               </span>
             </div>
@@ -380,7 +380,7 @@ export const Room02MasterPanel: React.FC<Room02MasterPanelProps> = ({
       {/* TAB 2: Quarantine Registry */}
       {activeTab === 'quarantine' && (
         <div className="space-y-6 animate-in fade-in duration-200">
-          <div className="p-5 rounded-2xl bg-black/60 border border-amber-500/30 flex flex-col md:flex-row md:items-center justify-between gap-4">
+          <div className="p-5 rounded-2xl bg-black/60 border-amber-500/30 flex flex-col md:flex-row md:items-center justify-between gap-4">
             <div>
               <h3 className="text-sm font-bold text-white flex items-center gap-2">
                 <ShieldAlert className="w-4 h-4 text-amber-400" />
@@ -393,7 +393,7 @@ export const Room02MasterPanel: React.FC<Room02MasterPanelProps> = ({
 
             <button
               onClick={() => handleTestFirewall('canonicalSeals', '14907')}
-              className="px-3.5 py-2 rounded-xl bg-rose-500/20 hover:bg-rose-500/30 border border-rose-500/40 text-rose-200 font-bold text-xs flex items-center justify-center gap-2 shadow-[0_0_10px_rgba(244,63,94,0.2)]"
+              className="px-3.5 py-2 rounded-xl bg-rose-500/20 hover:bg-rose-500/30 border-rose-500/40 text-rose-200 font-bold text-xs flex items-center justify-center gap-2 shadow-[0_0_10px_rgba(244,63,94,0.2)]"
             >
               <Lock className="w-3.5 h-3.5" />
               <span>Probe Write Firewall</span>
@@ -402,7 +402,7 @@ export const Room02MasterPanel: React.FC<Room02MasterPanelProps> = ({
 
           {/* Firewall Alert Output */}
           {firewallTestOutput && (
-            <div className="p-4 rounded-2xl bg-rose-950/60 border border-rose-500/50 text-rose-200 text-xs flex flex-col sm:flex-row sm:items-center justify-between gap-3 animate-in fade-in duration-200 shadow-2xl">
+            <div className="p-4 rounded-2xl bg-rose-950/60 border-rose-500/50 text-rose-200 text-xs flex flex-col sm:flex-row sm:items-center justify-between gap-3 animate-in fade-in duration-200 shadow-2xl">
               <div className="flex items-start sm:items-center gap-2.5">
                 <AlertTriangle className="w-5 h-5 text-rose-400 shrink-0 mt-0.5 sm:mt-0" />
                 <div>
@@ -413,7 +413,7 @@ export const Room02MasterPanel: React.FC<Room02MasterPanelProps> = ({
                   </div>
                 </div>
               </div>
-              <span className="px-2.5 py-1 rounded bg-rose-500/30 text-rose-100 border border-rose-400/40 font-bold text-[10px] shrink-0">
+              <span className="px-2.5 py-1 rounded bg-rose-500/30 text-rose-100 border-rose-400/40 font-bold text-[10px] shrink-0">
                 BLOCKED (FAIL-CLOSED)
               </span>
             </div>
@@ -421,7 +421,7 @@ export const Room02MasterPanel: React.FC<Room02MasterPanelProps> = ({
 
           {/* Selected Quarantine Details */}
           {selectedQuarantine && (
-            <div className="p-5 rounded-2xl bg-black/70 border border-white/10 space-y-4">
+            <div className="p-5 rounded-2xl bg-black/70 border-white/10 space-y-4">
               <div className="flex flex-wrap items-center justify-between gap-3">
                 <div className="flex items-center gap-2">
                   <span className="px-2.5 py-1 rounded bg-amber-500/20 text-amber-300 font-bold text-xs">
@@ -437,15 +437,15 @@ export const Room02MasterPanel: React.FC<Room02MasterPanelProps> = ({
               </div>
 
               <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3 text-xs">
-                <div className="p-3 rounded-xl bg-white/5 border border-white/5">
+                <div className="p-3 rounded-xl bg-white/5 border-white/5">
                   <span className="text-zinc-500 block text-[10px]">Notes & Classification:</span>
                   <span className="text-zinc-200 font-semibold">{selectedQuarantine.notes} ({selectedQuarantine.classification})</span>
                 </div>
-                <div className="p-3 rounded-xl bg-white/5 border border-white/5">
+                <div className="p-3 rounded-xl bg-white/5 border-white/5">
                   <span className="text-zinc-500 block text-[10px]">Source & Observer:</span>
                   <span className="text-amber-300 font-semibold">{selectedQuarantine.source} ({selectedQuarantine.observerIdentity})</span>
                 </div>
-                <div className="p-3 rounded-xl bg-white/5 border border-white/5 sm:col-span-2 lg:col-span-1">
+                <div className="p-3 rounded-xl bg-white/5 border-white/5 sm:col-span-2 lg:col-span-1">
                   <span className="text-zinc-500 block text-[10px]">Artifact Digest:</span>
                   <div className="flex items-center justify-between gap-2 mt-0.5">
                     <code className="text-zinc-300 font-mono text-[10px] truncate">{selectedQuarantine.artifactDigest}</code>
@@ -467,7 +467,7 @@ export const Room02MasterPanel: React.FC<Room02MasterPanelProps> = ({
       {activeTab === 'forensics' && (
         <div className="space-y-6 animate-in fade-in duration-200">
           <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-            <div className="p-5 rounded-2xl bg-black/60 border border-white/10 space-y-2">
+            <div className="p-5 rounded-2xl bg-black/60 border-white/10 space-y-2">
               <div className="flex items-center gap-2 text-amber-300 font-bold text-xs">
                 <Scale className="w-4 h-4" />
                 ETDA ม.๙, ๒๖, ๒๘
@@ -478,7 +478,7 @@ export const Room02MasterPanel: React.FC<Room02MasterPanelProps> = ({
               <div className="pt-2 text-[10px] text-emerald-400 font-bold">100% ADMISSIBLE</div>
             </div>
 
-            <div className="p-5 rounded-2xl bg-black/60 border border-white/10 space-y-2">
+            <div className="p-5 rounded-2xl bg-black/60 border-white/10 space-y-2">
               <div className="flex items-center gap-2 text-cyan-300 font-bold text-xs">
                 <FileCheck2 className="w-4 h-4" />
                 ISO/IEC 27037 FORENSICS
@@ -489,7 +489,7 @@ export const Room02MasterPanel: React.FC<Room02MasterPanelProps> = ({
               <div className="pt-2 text-[10px] text-cyan-400 font-bold">BIT-FOR-BIT INTACT</div>
             </div>
 
-            <div className="p-5 rounded-2xl bg-black/60 border border-white/10 space-y-2">
+            <div className="p-5 rounded-2xl bg-black/60 border-white/10 space-y-2">
               <div className="flex items-center gap-2 text-rose-300 font-bold text-xs">
                 <Shield className="w-4 h-4" />
                 PDPA พ.ร.บ. คุ้มครองข้อมูล
@@ -505,7 +505,7 @@ export const Room02MasterPanel: React.FC<Room02MasterPanelProps> = ({
 
       {/* TAB 4: Write Firewall & ZYR-03 Patch */}
       {activeTab === 'security' && (
-        <div className="p-6 rounded-2xl bg-black/60 border border-white/10 space-y-4 animate-in fade-in duration-200">
+        <div className="p-6 rounded-2xl bg-black/60 border-white/10 space-y-4 animate-in fade-in duration-200">
           <div className="flex items-center gap-2.5">
             <ShieldAlert className="w-5 h-5 text-amber-400" />
             <h3 className="text-sm font-bold text-white">Smart Contract Security Hardening: Patch ZYR-03</h3>
@@ -515,7 +515,7 @@ export const Room02MasterPanel: React.FC<Room02MasterPanelProps> = ({
             ในเวอร์ชัน Smart Contract v1.2 ฟังก์ชัน <code className="text-amber-300">quarantineSeal</code> เปิดเป็น Public โดยไม่มี Modifier ป้องกัน ทำให้บุคคลภายนอกสามารถฉีดซีลหลอกเพื่อบิดเบือนสถิติได้ ในเวอร์ชัน v2 จึงได้ติดตั้งตัวคุมสิทธิ์ <strong>`onlyAuthorizedOracle`</strong> เพื่อจำกัดเฉพาะ Sentinel-Ledger AI Interceptor และกระเป๋าอธิปไตยของบอส (#EP-SOVEREIGN-01) เท่านั้น
           </p>
 
-          <div className="p-4 rounded-xl bg-white/5 border border-white/10 space-y-2 font-mono text-[11px]">
+          <div className="p-4 rounded-xl bg-white/5 border-white/10 space-y-2 font-mono text-[11px]">
             <div className="text-zinc-500">// Smart Contract v2 Code Snippet:</div>
             <pre className="text-emerald-300 overflow-x-auto">
 {`function quarantineSeal(uint256 sealId, bytes32 reasonDigest) external onlyAuthorizedOracle {

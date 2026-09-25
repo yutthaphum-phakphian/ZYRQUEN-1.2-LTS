@@ -92,7 +92,7 @@ export const ExpertWitnessCourtSuite: React.FC = () => {
   };
 
   return (
-    <div className="p-6 sm:p-7 rounded-[26px] bg-[#070a12] border border-amber-500/30 shadow-[0_10px_40px_-10px_rgba(245,158,11,0.15)] font-mono space-y-6 relative overflow-hidden">
+    <div className="p-6 sm:p-7 rounded-[26px] bg-[#070a12] border-amber-500/30 shadow-[0_10px_40px_-10px_rgba(245,158,11,0.15)] font-mono space-y-6 relative overflow-hidden">
       {/* Background Ambience */}
       <div className="absolute top-0 right-0 w-80 h-80 bg-amber-500/5 rounded-full blur-3xl pointer-events-none" />
       <div className="absolute bottom-0 left-0 w-80 h-80 bg-cyan-500/5 rounded-full blur-3xl pointer-events-none" />
@@ -100,7 +100,7 @@ export const ExpertWitnessCourtSuite: React.FC = () => {
       {/* Header Banner */}
       <div className="flex flex-col lg:flex-row lg:items-center justify-between gap-4 pb-5 border-b border-white/10 relative z-10">
         <div className="flex items-center gap-3.5">
-          <div className="w-12 h-12 rounded-2xl bg-amber-500/15 border border-amber-500/40 flex items-center justify-center text-amber-400 shadow-[0_0_20px_rgba(245,158,11,0.2)] shrink-0">
+          <div className="w-12 h-12 rounded-2xl bg-amber-500/15 border-amber-500/40 flex items-center justify-center text-amber-400 shadow-[0_0_20px_rgba(245,158,11,0.2)] shrink-0">
             <Scale className="w-6 h-6" />
           </div>
           <div>
@@ -108,10 +108,10 @@ export const ExpertWitnessCourtSuite: React.FC = () => {
               <h3 className="text-base sm:text-lg font-bold text-white tracking-wide">
                 ระบบคำเบิกความพยานผู้เชี่ยวชาญและการพิสูจน์พยานหลักฐานชั้นศาล
               </h3>
-              <span className="px-2.5 py-0.5 rounded-full bg-amber-500/15 border border-amber-500/30 text-amber-300 text-[10px] font-bold">
+              <span className="px-2.5 py-0.5 rounded-full bg-amber-500/15 border-amber-500/30 text-amber-300 text-[10px] font-bold">
                 ETDA SEC 28 QUALIFIED
               </span>
-              <span className="px-2.5 py-0.5 rounded-full bg-emerald-500/15 border border-emerald-500/30 text-emerald-300 text-[10px] font-bold">
+              <span className="px-2.5 py-0.5 rounded-full bg-emerald-500/15 border-emerald-500/30 text-emerald-300 text-[10px] font-bold">
                 ISO/IEC 27037 FORENSIC
               </span>
             </div>
@@ -126,7 +126,7 @@ export const ExpertWitnessCourtSuite: React.FC = () => {
           <button
             onClick={handleExportAffidavitPdf}
             disabled={isExporting}
-            className="px-4 py-2 rounded-xl text-xs font-bold bg-amber-500/20 hover:bg-amber-500/30 text-amber-200 border border-amber-500/40 transition-all flex items-center gap-2 shadow-[0_0_15px_rgba(245,158,11,0.2)]"
+            className="px-4 py-2 rounded-xl text-xs font-bold bg-amber-500/20 hover:bg-amber-500/30 text-amber-200 border-amber-500/40 transition-all flex items-center gap-2 shadow-[0_0_15px_rgba(245,158,11,0.2)]"
           >
             <Download className={`w-3.5 h-3.5 text-amber-300 ${isExporting ? 'animate-bounce' : ''}`} />
             <span>{isExporting ? 'Generating PDF...' : 'ส่งออกคำเบิกความพยาน (PDF)'}</span>
@@ -162,7 +162,7 @@ export const ExpertWitnessCourtSuite: React.FC = () => {
       {/* Tab 1: Expert Witness Affidavit */}
       {activeTab === 'affidavit' && (
         <div className="space-y-4">
-          <div className="p-5 rounded-2xl bg-[#0a0f1e] border border-white/10 space-y-4">
+          <div className="p-5 rounded-2xl bg-[#0a0f1e] border-white/10 space-y-4">
             <div className="flex items-center justify-between pb-3 border-b border-white/10">
               <div className="flex items-center gap-2">
                 <FileCheck className="w-5 h-5 text-amber-400" />
@@ -172,7 +172,7 @@ export const ExpertWitnessCourtSuite: React.FC = () => {
               </div>
               <button
                 onClick={() => handleCopy('affidavit-text', `ข้าพเจ้า ${SYSTEM_METADATA.sovereignPrincipal} ในฐานะผู้ตรวจพิสูจน์ ขอเบิกความว่า พยานหลักฐานดิจิทัลชุดนี้ได้รับการจัดเก็บตามมาตรฐาน ISO/IEC 27037 และลงนามปิดผนึกด้วยลายเซ็นอิเล็กทรอนิกส์ปลอดภัยสูงตาม พ.ร.บ. ธุรกรรมฯ ม.๒๖ และได้รับข้อสันนิษฐานความถูกต้องตาม ม.๒๘ อย่างสมบูรณ์ ค่า Genesis Merkle Root คือ ${CANONICAL_MERKLE_ROOT}`)}
-                className="px-2.5 py-1 rounded-lg bg-white/5 hover:bg-white/10 text-zinc-300 border border-white/10 text-xs flex items-center gap-1"
+                className="px-2.5 py-1 rounded-lg bg-white/5 hover:bg-white/10 text-zinc-300 border-white/10 text-xs flex items-center gap-1"
               >
                 {copiedKey === 'affidavit-text' ? <Check className="w-3.5 h-3.5 text-emerald-400" /> : <Copy className="w-3.5 h-3.5" />}
                 <span>{copiedKey === 'affidavit-text' ? 'คัดลอกแล้ว' : 'คัดลอกข้อความนำสืบ'}</span>
@@ -192,19 +192,19 @@ export const ExpertWitnessCourtSuite: React.FC = () => {
             </div>
 
             <div className="pt-3 border-t border-white/10 grid grid-cols-1 sm:grid-cols-3 gap-3 text-xs">
-              <div className="p-3 rounded-xl bg-black/40 border border-white/5 space-y-1">
+              <div className="p-3 rounded-xl bg-black/40 border-white/5 space-y-1">
                 <span className="text-[10px] text-zinc-400 block">Genesis Merkle Root</span>
                 <code className="text-[11px] text-amber-300 break-all font-mono">
                   {CANONICAL_MERKLE_ROOT}
                 </code>
               </div>
-              <div className="p-3 rounded-xl bg-black/40 border border-white/5 space-y-1">
+              <div className="p-3 rounded-xl bg-black/40 border-white/5 space-y-1">
                 <span className="text-[10px] text-zinc-400 block">Certificate ID</span>
                 <span className="text-xs font-bold text-cyan-300 font-mono">
                   ZQ-GOLD-DEP-849202-3908
                 </span>
               </div>
-              <div className="p-3 rounded-xl bg-black/40 border border-white/5 space-y-1">
+              <div className="p-3 rounded-xl bg-black/40 border-white/5 space-y-1">
                 <span className="text-[10px] text-zinc-400 block">Quorum Verification</span>
                 <span className="text-xs font-bold text-emerald-400 font-mono">
                   10/10 REAL_HSM (100% UNANIMOUS)
@@ -217,7 +217,7 @@ export const ExpertWitnessCourtSuite: React.FC = () => {
 
       {/* Tab 2: Safety Stress Test & Circuit Breaker Simulation */}
       {activeTab === 'stress-test' && (
-        <div className="p-5 rounded-2xl bg-[#0a0f1e] border border-white/10 space-y-4">
+        <div className="p-5 rounded-2xl bg-[#0a0f1e] border-white/10 space-y-4">
           <div className="flex items-center justify-between pb-3 border-b border-white/10">
             <div className="flex items-center gap-2">
               <Zap className="w-5 h-5 text-amber-400" />
@@ -235,7 +235,7 @@ export const ExpertWitnessCourtSuite: React.FC = () => {
           <div className="grid grid-cols-2 sm:grid-cols-4 gap-2.5">
             <button
               onClick={() => handleRunStressSimulation(11264)}
-              className="p-3 rounded-xl bg-black/50 hover:bg-black/70 border border-emerald-500/30 text-left transition-all space-y-1"
+              className="p-3 rounded-xl bg-black/50 hover:bg-black/70 border-emerald-500/30 text-left transition-all space-y-1"
             >
               <div className="text-[11px] font-bold text-emerald-300">1. Baseline Normal</div>
               <div className="text-xs text-white font-bold font-mono">11,264 KBps</div>
@@ -244,7 +244,7 @@ export const ExpertWitnessCourtSuite: React.FC = () => {
 
             <button
               onClick={() => handleRunStressSimulation(13500)}
-              className="p-3 rounded-xl bg-black/50 hover:bg-black/70 border border-cyan-500/30 text-left transition-all space-y-1"
+              className="p-3 rounded-xl bg-black/50 hover:bg-black/70 border-cyan-500/30 text-left transition-all space-y-1"
             >
               <div className="text-[11px] font-bold text-cyan-300">2. Minor Traffic Spike</div>
               <div className="text-xs text-white font-bold font-mono">13,500 KBps</div>
@@ -253,7 +253,7 @@ export const ExpertWitnessCourtSuite: React.FC = () => {
 
             <button
               onClick={() => handleRunStressSimulation(14500)}
-              className="p-3 rounded-xl bg-black/50 hover:bg-black/70 border border-amber-500/30 text-left transition-all space-y-1"
+              className="p-3 rounded-xl bg-black/50 hover:bg-black/70 border-amber-500/30 text-left transition-all space-y-1"
             >
               <div className="text-[11px] font-bold text-amber-300">3. TRNG Reseed Pass</div>
               <div className="text-xs text-white font-bold font-mono">14,500 KBps</div>
@@ -262,7 +262,7 @@ export const ExpertWitnessCourtSuite: React.FC = () => {
 
             <button
               onClick={() => handleRunStressSimulation(16200)}
-              className="p-3 rounded-xl bg-black/50 hover:bg-black/70 border border-rose-500/30 text-left transition-all space-y-1"
+              className="p-3 rounded-xl bg-black/50 hover:bg-black/70 border-rose-500/30 text-left transition-all space-y-1"
             >
               <div className="text-[11px] font-bold text-rose-300">4. Critical Attack Spike</div>
               <div className="text-xs text-white font-bold font-mono">16,200 KBps</div>
@@ -271,7 +271,7 @@ export const ExpertWitnessCourtSuite: React.FC = () => {
           </div>
 
           {stressResult && (
-            <div className="p-4 rounded-xl bg-black/60 border border-amber-500/30 text-xs text-zinc-200 leading-relaxed animate-in fade-in">
+            <div className="p-4 rounded-xl bg-black/60 border-amber-500/30 text-xs text-zinc-200 leading-relaxed animate-in fade-in">
               {stressResult}
             </div>
           )}
@@ -280,7 +280,7 @@ export const ExpertWitnessCourtSuite: React.FC = () => {
 
       {/* Tab 3: BFT Mesh 6 Nodes Consensus */}
       {activeTab === 'bft-mesh' && (
-        <div className="p-5 rounded-2xl bg-[#0a0f1e] border border-white/10 space-y-4">
+        <div className="p-5 rounded-2xl bg-[#0a0f1e] border-white/10 space-y-4">
           <div className="flex items-center justify-between pb-3 border-b border-white/10">
             <div className="flex items-center gap-2">
               <Radio className="w-5 h-5 text-amber-400" />
@@ -298,7 +298,7 @@ export const ExpertWitnessCourtSuite: React.FC = () => {
             {bftNodes.map((node) => (
               <div
                 key={node.id}
-                className="p-3.5 rounded-xl bg-black/50 border border-white/10 space-y-2"
+                className="p-3.5 rounded-xl bg-black/50 border-white/10 space-y-2"
               >
                 <div className="flex items-center justify-between text-xs">
                   <span className="px-2 py-0.5 rounded bg-white/5 text-amber-300 font-bold font-mono">
@@ -322,7 +322,7 @@ export const ExpertWitnessCourtSuite: React.FC = () => {
 
       {/* Tab 4: Evidence Certification & QR */}
       {activeTab === 'evidence-cert' && (
-        <div className="p-5 rounded-2xl bg-[#0a0f1e] border border-white/10 space-y-4">
+        <div className="p-5 rounded-2xl bg-[#0a0f1e] border-white/10 space-y-4">
           <div className="flex items-center justify-between pb-3 border-b border-white/10">
             <div className="flex items-center gap-2">
               <Award className="w-5 h-5 text-amber-400" />
@@ -334,7 +334,7 @@ export const ExpertWitnessCourtSuite: React.FC = () => {
           </div>
 
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-            <div className="p-4 rounded-xl bg-black/40 border border-white/10 space-y-3">
+            <div className="p-4 rounded-xl bg-black/40 border-white/10 space-y-3">
               <div className="text-xs font-bold text-white flex items-center gap-2">
                 <QrCode className="w-4 h-4 text-amber-400" />
                 <span>จำลองการสแกนตรวจสอบพยานหลักฐานในชั้นศาล (Courtroom QR Verification)</span>
@@ -342,12 +342,12 @@ export const ExpertWitnessCourtSuite: React.FC = () => {
               <p className="text-xs text-zinc-400 leading-relaxed">
                 เจ้าหน้าที่ศาลหรือคู่ความสามารถสแกนตราดิจิทัลเพื่อตรวจสอบความตรงกันของ Merkle Root และลายเซ็น FIPS 204 ได้ทันทีโดยไม่ต้องผ่านเซิร์ฟเวอร์กลาง
               </p>
-              <div className="p-3 rounded-lg bg-amber-500/10 border border-amber-500/30 text-amber-300 text-xs font-mono break-all">
+              <div className="p-3 rounded-lg bg-amber-500/10 border-amber-500/30 text-amber-300 text-xs font-mono break-all">
                 VERIFY://SOVEREIGN.ETH/849202?ROOT={CANONICAL_MERKLE_ROOT.slice(0, 24)}...
               </div>
             </div>
 
-            <div className="p-4 rounded-xl bg-black/40 border border-white/10 space-y-3">
+            <div className="p-4 rounded-xl bg-black/40 border-white/10 space-y-3">
               <div className="text-xs font-bold text-white flex items-center gap-2">
                 <Fingerprint className="w-4 h-4 text-emerald-400" />
                 <span>ห่วงโซ่แห่งหลักฐาน (Chain of Custody Timeline)</span>

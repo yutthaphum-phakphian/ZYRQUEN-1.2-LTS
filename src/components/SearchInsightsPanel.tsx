@@ -92,11 +92,11 @@ export const SearchInsightsPanel: React.FC = () => {
   const [activeTab, setActiveTab] = useState<'TREND' | 'RANKING'>('TREND');
 
   return (
-    <div className="p-6 rounded-[28px] bg-[#0b0e1a]/75 border border-white/8 backdrop-blur-xl space-y-6 font-mono text-xs select-text">
+    <div className="p-6 rounded-[28px] bg-[#0b0e1a]/75 border-white/8 backdrop-blur-xl space-y-6 font-mono text-xs select-text">
       {/* Header Bar */}
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 border-b border-white/8 pb-4">
         <div className="flex items-center gap-3">
-          <div className="w-10 h-10 rounded-2xl bg-cyan-500/15 border border-cyan-500/30 flex items-center justify-center text-cyan-300">
+          <div className="w-10 h-10 rounded-2xl bg-cyan-500/15 border-cyan-500/30 flex items-center justify-center text-cyan-300">
             <Scale className="w-5 h-5" />
           </div>
           <div>
@@ -104,7 +104,7 @@ export const SearchInsightsPanel: React.FC = () => {
               <span className="font-bold text-white uppercase text-sm tracking-wide">
                 Thai Legal Search & PQC Query Insights
               </span>
-              <span className="text-[10px] px-2 py-0.5 rounded-full bg-cyan-500/15 text-cyan-300 border border-cyan-500/30 font-semibold">
+              <span className="text-[10px] px-2 py-0.5 rounded-full bg-cyan-500/15 text-cyan-300 border-cyan-500/30 font-semibold">
                 7-DAY ROLLING
               </span>
             </div>
@@ -115,7 +115,7 @@ export const SearchInsightsPanel: React.FC = () => {
         </div>
 
         {/* View Switcher */}
-        <div className="flex items-center bg-black/40 border border-white/10 rounded-2xl p-1 text-xs">
+        <div className="flex items-center bg-black/40 border-white/10 rounded-2xl p-1 text-xs">
           <button
             onClick={() => {
               playTone(550, 0.03);
@@ -123,7 +123,7 @@ export const SearchInsightsPanel: React.FC = () => {
             }}
             className={`px-3 py-1.5 rounded-xl flex items-center gap-1.5 transition-all ${
               activeTab === 'TREND'
-                ? 'bg-cyan-500/20 text-cyan-300 border border-cyan-500/30 font-bold shadow-sm'
+                ? 'bg-cyan-500/20 text-cyan-300 border-cyan-500/30 font-bold shadow-sm'
                 : 'text-zinc-400 hover:text-zinc-200'
             }`}
           >
@@ -137,7 +137,7 @@ export const SearchInsightsPanel: React.FC = () => {
             }}
             className={`px-3 py-1.5 rounded-xl flex items-center gap-1.5 transition-all ${
               activeTab === 'RANKING'
-                ? 'bg-cyan-500/20 text-cyan-300 border border-cyan-500/30 font-bold shadow-sm'
+                ? 'bg-cyan-500/20 text-cyan-300 border-cyan-500/30 font-bold shadow-sm'
                 : 'text-zinc-400 hover:text-zinc-200'
             }`}
           >
@@ -149,28 +149,28 @@ export const SearchInsightsPanel: React.FC = () => {
 
       {/* Summary KPI Cards */}
       <div className="grid grid-cols-2 lg:grid-cols-4 gap-3">
-        <div className="p-3.5 rounded-2xl bg-black/40 border border-white/5 space-y-1">
+        <div className="p-3.5 rounded-2xl bg-black/40 border-white/5 space-y-1">
           <span className="text-[10px] text-zinc-500 uppercase tracking-wider block">7-Day Total Queries</span>
           <div className="text-lg font-bold text-white flex items-baseline gap-2">
             <span>1,482</span>
             <span className="text-[10px] text-emerald-400 font-normal">+24.8% WoW</span>
           </div>
         </div>
-        <div className="p-3.5 rounded-2xl bg-black/40 border border-white/5 space-y-1">
+        <div className="p-3.5 rounded-2xl bg-black/40 border-white/5 space-y-1">
           <span className="text-[10px] text-zinc-500 uppercase tracking-wider block">Avg Grounding Accuracy</span>
           <div className="text-lg font-bold text-cyan-300 flex items-baseline gap-2">
             <span>99.8%</span>
             <span className="text-[10px] text-zinc-400 font-normal">Google Oracle</span>
           </div>
         </div>
-        <div className="p-3.5 rounded-2xl bg-black/40 border border-white/5 space-y-1">
+        <div className="p-3.5 rounded-2xl bg-black/40 border-white/5 space-y-1">
           <span className="text-[10px] text-zinc-500 uppercase tracking-wider block">Avg Response Latency</span>
           <div className="text-lg font-bold text-emerald-300 flex items-baseline gap-2">
             <span>142 ms</span>
             <span className="text-[10px] text-zinc-400 font-normal">Sub-Second</span>
           </div>
         </div>
-        <div className="p-3.5 rounded-2xl bg-black/40 border border-white/5 space-y-1">
+        <div className="p-3.5 rounded-2xl bg-black/40 border-white/5 space-y-1">
           <span className="text-[10px] text-zinc-500 uppercase tracking-wider block">PQC Alignment Rate</span>
           <div className="text-lg font-bold text-violet-300 flex items-baseline gap-2">
             <span>100%</span>
@@ -187,7 +187,7 @@ export const SearchInsightsPanel: React.FC = () => {
             <span className="text-cyan-400">Peak: 302 Queries/Day</span>
           </div>
 
-          <div className="h-[260px] w-full bg-black/30 rounded-2xl p-2 border border-white/5">
+          <div className="h-[260px] w-full bg-black/30 rounded-2xl p-2 border-white/5">
             <ResponsiveContainer width="100%" height="100%">
               <AreaChart data={WEEKLY_SEARCH_TREND} margin={{ top: 10, right: 10, left: -20, bottom: 0 }}>
                 <defs>
@@ -243,7 +243,7 @@ export const SearchInsightsPanel: React.FC = () => {
       ) : (
         /* Top Topic Rankings Bar Chart & List */
         <div className="space-y-4">
-          <div className="h-[240px] w-full bg-black/30 rounded-2xl p-2 border border-white/5">
+          <div className="h-[240px] w-full bg-black/30 rounded-2xl p-2 border-white/5">
             <ResponsiveContainer width="100%" height="100%">
               <BarChart data={TOP_QUERY_TOPICS} layout="vertical" margin={{ top: 5, right: 30, left: 30, bottom: 5 }}>
                 <CartesianGrid strokeDasharray="3 3" stroke="#ffffff10" horizontal={false} />
@@ -272,10 +272,10 @@ export const SearchInsightsPanel: React.FC = () => {
             {TOP_QUERY_TOPICS.map((t, idx) => (
               <div
                 key={t.topic}
-                className="p-3 rounded-2xl bg-black/40 border border-white/5 flex items-center justify-between gap-3 text-xs"
+                className="p-3 rounded-2xl bg-black/40 border-white/5 flex items-center justify-between gap-3 text-xs"
               >
                 <div className="flex items-center gap-2.5">
-                  <span className="w-5 h-5 rounded-lg bg-white/5 border border-white/10 flex items-center justify-center font-bold text-[10px] text-zinc-400">
+                  <span className="w-5 h-5 rounded-lg bg-white/5 border-white/10 flex items-center justify-center font-bold text-[10px] text-zinc-400">
                     {idx + 1}
                   </span>
                   <div>
@@ -286,7 +286,7 @@ export const SearchInsightsPanel: React.FC = () => {
 
                 <div className="flex items-center gap-3 shrink-0">
                   <span className="text-zinc-300 font-bold">{t.queries} queries</span>
-                  <span className="text-[10px] px-2 py-0.5 rounded bg-emerald-500/10 text-emerald-300 border border-emerald-500/20">
+                  <span className="text-[10px] px-2 py-0.5 rounded bg-emerald-500/10 text-emerald-300 border-emerald-500/20">
                     {t.growth}
                   </span>
                 </div>

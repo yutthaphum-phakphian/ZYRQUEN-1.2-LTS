@@ -34,7 +34,7 @@ export const PolarThreatDisplay360: React.FC = () => {
   }, []);
 
   return (
-    <div className="bg-[#050814] border border-cyan-500/30 rounded-xl p-6 text-cyan-400 font-mono shadow-2xl">
+    <div className="bg-[#050814] border-cyan-500/30 rounded-xl p-6 text-cyan-400 font-mono shadow-2xl">
       <div className="flex items-center justify-between pb-4 border-b border-cyan-500/20 mb-6">
         <div className="flex items-center gap-3">
           <Radio className="w-6 h-6 text-cyan-400 animate-pulse" />
@@ -43,7 +43,7 @@ export const PolarThreatDisplay360: React.FC = () => {
             <p className="text-xs text-cyan-500/80">Continuous Quantum Perimeter & Tamper Surveillance</p>
           </div>
         </div>
-        <div className="flex items-center gap-2 px-3 py-1 bg-cyan-950/60 border border-cyan-500/40 rounded-full text-xs">
+        <div className="flex items-center gap-2 px-3 py-1 bg-cyan-950/60 border-cyan-500/40 rounded-full text-xs">
           <Lock className="w-3.5 h-3.5 text-cyan-400" />
           <span>FIPS 140-3 LEVEL 4</span>
         </div>
@@ -53,10 +53,10 @@ export const PolarThreatDisplay360: React.FC = () => {
         {/* Polar Canvas Visualizer */}
         <div className="relative w-full aspect-square max-w-[340px] mx-auto flex items-center justify-center">
           {/* Radar Circles */}
-          <div className="absolute inset-0 rounded-full border border-cyan-500/20" />
-          <div className="absolute inset-[15%] rounded-full border border-cyan-500/25" />
-          <div className="absolute inset-[30%] rounded-full border border-cyan-500/30" />
-          <div className="absolute inset-[45%] rounded-full border border-cyan-500/40" />
+          <div className="absolute inset-0 rounded-full border-cyan-500/20" />
+          <div className="absolute inset-[15%] rounded-full border-cyan-500/25" />
+          <div className="absolute inset-[30%] rounded-full border-cyan-500/30" />
+          <div className="absolute inset-[45%] rounded-full border-cyan-500/40" />
 
           {/* Crosshairs */}
           <div className="absolute w-full h-[1px] bg-cyan-500/20" />
@@ -105,17 +105,17 @@ export const PolarThreatDisplay360: React.FC = () => {
           {vectors.map((vec) => (
             <div
               key={vec.id}
-              className="p-3 bg-cyan-950/30 border border-cyan-500/20 rounded-lg hover:border-cyan-500/50 transition-colors"
+              className="p-3 bg-cyan-950/30 border-cyan-500/20 rounded-lg hover:border-cyan-500/50 transition-colors"
             >
               <div className="flex items-center justify-between text-xs mb-1">
                 <span className="font-bold text-cyan-200">{vec.id} • {vec.name}</span>
                 <span
                   className={`px-2 py-0.5 rounded text-[10px] font-bold ${
                     vec.severity === 'CRITICAL'
-                      ? 'bg-rose-950 text-rose-300 border border-rose-500/40'
+                      ? 'bg-rose-950 text-rose-300 border-rose-500/40'
                       : vec.severity === 'WARNING'
-                      ? 'bg-amber-950 text-amber-300 border border-amber-500/40'
-                      : 'bg-emerald-950 text-emerald-300 border border-emerald-500/40'
+                      ? 'bg-amber-950 text-amber-300 border-amber-500/40'
+                      : 'bg-emerald-950 text-emerald-300 border-emerald-500/40'
                   }`}
                 >
                   {vec.severity}

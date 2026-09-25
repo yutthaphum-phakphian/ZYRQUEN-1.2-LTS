@@ -37,7 +37,7 @@ export const QuantumResilienceDashboard: React.FC = () => {
   return (
     <div
       id="quantum-resilience-dashboard-widget"
-      className="bg-slate-950/90 border border-cyan-500/30 rounded-xl p-5 text-cyan-400 font-mono shadow-2xl backdrop-blur-md transition-all duration-300 hover:border-cyan-500/50 my-4"
+      className="bg-slate-950/90 border-cyan-500/30 rounded-xl p-5 text-cyan-400 font-mono shadow-2xl backdrop-blur-md transition-all duration-300 hover:border-cyan-500/50 my-4"
     >
       <div className="flex flex-wrap items-center justify-between gap-2 border-b border-cyan-500/20 pb-3 mb-4">
         <div className="flex items-center gap-2">
@@ -55,7 +55,7 @@ export const QuantumResilienceDashboard: React.FC = () => {
       </div>
 
       <div className="grid grid-cols-2 md:grid-cols-4 gap-3">
-        <div className="bg-slate-900/80 border border-cyan-500/20 rounded-lg p-3 hover:border-cyan-500/40 transition-colors">
+        <div className="bg-slate-900/80 border-cyan-500/20 rounded-lg p-3 hover:border-cyan-500/40 transition-colors">
           <div className="flex items-center justify-between text-xs text-slate-400 mb-1">
             <span>ERROR-RATE (24H)</span>
             <AlertCircle className="w-3.5 h-3.5 text-emerald-400" />
@@ -64,7 +64,7 @@ export const QuantumResilienceDashboard: React.FC = () => {
           <div className="text-[10px] text-slate-500 mt-1">Zero Presentation Crash</div>
         </div>
 
-        <div className="bg-slate-900/80 border border-cyan-500/20 rounded-lg p-3 hover:border-cyan-500/40 transition-colors">
+        <div className="bg-slate-900/80 border-cyan-500/20 rounded-lg p-3 hover:border-cyan-500/40 transition-colors">
           <div className="flex items-center justify-between text-xs text-slate-400 mb-1">
             <span>SELF-HEAL SUCCESS</span>
             <RefreshCw className="w-3.5 h-3.5 text-cyan-400" />
@@ -73,7 +73,7 @@ export const QuantumResilienceDashboard: React.FC = () => {
           <div className="text-[10px] text-slate-500 mt-1">Auto-Purge & Recover</div>
         </div>
 
-        <div className="bg-slate-900/80 border border-cyan-500/20 rounded-lg p-3 hover:border-cyan-500/40 transition-colors">
+        <div className="bg-slate-900/80 border-cyan-500/20 rounded-lg p-3 hover:border-cyan-500/40 transition-colors">
           <div className="flex items-center justify-between text-xs text-slate-400 mb-1">
             <span>QUANTUM RESILIENCE</span>
             <Zap className="w-3.5 h-3.5 text-amber-400" />
@@ -82,7 +82,7 @@ export const QuantumResilienceDashboard: React.FC = () => {
           <div className="text-[10px] text-slate-500 mt-1">Δ0.00% Zero Drift</div>
         </div>
 
-        <div className="bg-slate-900/80 border border-cyan-500/20 rounded-lg p-3 hover:border-cyan-500/40 transition-colors">
+        <div className="bg-slate-900/80 border-cyan-500/20 rounded-lg p-3 hover:border-cyan-500/40 transition-colors">
           <div className="flex items-center justify-between text-xs text-slate-400 mb-1">
             <span>OBSERVER STATUS</span>
             <Activity className="w-3.5 h-3.5 text-cyan-400" />

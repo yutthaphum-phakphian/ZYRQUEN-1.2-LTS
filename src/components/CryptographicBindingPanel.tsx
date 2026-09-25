@@ -90,7 +90,7 @@ export const CryptographicBindingPanel: React.FC = () => {
       {/* Header */}
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 border-b border-amber-500/20 pb-4">
         <div className="flex items-center gap-3">
-          <div className="w-10 h-10 rounded-xl bg-amber-500/15 border border-amber-500/30 text-amber-300 flex items-center justify-center shrink-0">
+          <div className="w-10 h-10 rounded-xl bg-amber-500/15 border-amber-500/30 text-amber-300 flex items-center justify-center shrink-0">
             <Link2 className="w-5 h-5" />
           </div>
           <div>
@@ -98,7 +98,7 @@ export const CryptographicBindingPanel: React.FC = () => {
               <h3 className="text-base font-bold text-amber-100 font-serif">
                 Cryptographic Binding Panel (การผูกมัดทางรหัสวิทยา ๕ ขั้น)
               </h3>
-              <span className="text-[10px] px-2 py-0.5 rounded-full bg-emerald-500/20 text-emerald-300 border border-emerald-500/40 font-bold">
+              <span className="text-[10px] px-2 py-0.5 rounded-full bg-emerald-500/20 text-emerald-300 border-emerald-500/40 font-bold">
                 5-TIER BINDING LOCKED
               </span>
             </div>
@@ -109,7 +109,7 @@ export const CryptographicBindingPanel: React.FC = () => {
         </div>
 
         <div className="flex items-center gap-2 text-xs">
-          <span className="px-3 py-1 rounded-xl bg-black/60 border border-emerald-500/30 text-emerald-300 font-bold flex items-center gap-1.5">
+          <span className="px-3 py-1 rounded-xl bg-black/60 border-emerald-500/30 text-emerald-300 font-bold flex items-center gap-1.5">
             <ShieldCheck className="w-3.5 h-3.5" />
             <span>ALL BINDINGS VERIFIED</span>
           </span>
@@ -117,7 +117,7 @@ export const CryptographicBindingPanel: React.FC = () => {
       </div>
 
       {/* 5-Tier Binding Flow Architecture Visualizer */}
-      <div className="p-5 rounded-2xl bg-black/60 border border-white/8 space-y-4">
+      <div className="p-5 rounded-2xl bg-black/60 border-white/8 space-y-4">
         <div className="text-xs font-bold text-zinc-300 uppercase tracking-wider flex items-center justify-between">
           <span>INVIOLABLE 5-STAGE CRYPTOGRAPHIC PROVENANCE FLOW</span>
           <span className="text-[10px] text-amber-400">UNBROKEN ROOT OF TRUST</span>
@@ -188,7 +188,7 @@ export const CryptographicBindingPanel: React.FC = () => {
       {/* Artifact Binding Selector & Detailed Inspector */}
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-4">
         {/* Left: Artifact List */}
-        <div className="p-4 rounded-2xl bg-black/60 border border-white/8 space-y-2 lg:col-span-1">
+        <div className="p-4 rounded-2xl bg-black/60 border-white/8 space-y-2 lg:col-span-1">
           <div className="text-xs font-bold text-zinc-400 uppercase tracking-wider pb-1">
             CANONICAL ARTIFACTS
           </div>
@@ -217,19 +217,19 @@ export const CryptographicBindingPanel: React.FC = () => {
         </div>
 
         {/* Right: Full Proof Drilldown */}
-        <div className="p-5 rounded-2xl bg-black/70 border border-amber-500/30 space-y-4 lg:col-span-2">
+        <div className="p-5 rounded-2xl bg-black/70 border-amber-500/30 space-y-4 lg:col-span-2">
           <div className="flex items-center justify-between border-b border-white/5 pb-2">
             <span className="text-xs font-bold text-amber-200 font-serif">
               BOUND PROOF ATTESTATION: {selectedBinding.artifactName}
             </span>
-            <span className="text-[10px] px-2 py-0.5 rounded bg-emerald-500/20 text-emerald-300 font-bold border border-emerald-500/30">
+            <span className="text-[10px] px-2 py-0.5 rounded bg-emerald-500/20 text-emerald-300 font-bold border-emerald-500/30">
               IMMUTABLE VALIDATED
             </span>
           </div>
 
           <div className="space-y-3 text-xs">
             {/* Artifact Digest */}
-            <div className="p-3 rounded-xl bg-white/[0.02] border border-white/5 space-y-1">
+            <div className="p-3 rounded-xl bg-white/[0.02] border-white/5 space-y-1">
               <div className="text-[10px] text-zinc-500 flex items-center justify-between">
                 <span>ARTIFACT BINARY SHA-256 DIGEST:</span>
                 <button
@@ -245,13 +245,13 @@ export const CryptographicBindingPanel: React.FC = () => {
 
             {/* Merkle Root & Block */}
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
-              <div className="p-3 rounded-xl bg-white/[0.02] border border-white/5 space-y-1">
+              <div className="p-3 rounded-xl bg-white/[0.02] border-white/5 space-y-1">
                 <div className="text-[10px] text-zinc-500">MERKLE ROOT ANCHOR:</div>
                 <div className="font-mono text-amber-300 text-[11px] font-bold truncate">
                   {selectedBinding.merkleRoot}
                 </div>
               </div>
-              <div className="p-3 rounded-xl bg-white/[0.02] border border-white/5 space-y-1">
+              <div className="p-3 rounded-xl bg-white/[0.02] border-white/5 space-y-1">
                 <div className="text-[10px] text-zinc-500">SEAL BLOCK HEIGHT:</div>
                 <div className="font-mono text-purple-300 text-sm font-bold">
                   #{selectedBinding.blockHeight.toLocaleString()}
@@ -260,7 +260,7 @@ export const CryptographicBindingPanel: React.FC = () => {
             </div>
 
             {/* Post-Quantum Signature */}
-            <div className="p-3 rounded-xl bg-white/[0.02] border border-white/5 space-y-1">
+            <div className="p-3 rounded-xl bg-white/[0.02] border-white/5 space-y-1">
               <div className="text-[10px] text-zinc-500 flex items-center justify-between">
                 <span>POST-QUANTUM DILITHIUM-5 SIGNATURE SEAL:</span>
                 <span className="text-[10px] text-emerald-400 font-bold">NIST FIPS 204 PASS</span>
@@ -269,13 +269,13 @@ export const CryptographicBindingPanel: React.FC = () => {
             </div>
 
             {/* Signer Details */}
-            <div className="p-3 rounded-xl bg-amber-500/[0.05] border border-amber-500/20 flex flex-col sm:flex-row sm:items-center justify-between gap-2">
+            <div className="p-3 rounded-xl bg-amber-500/[0.05] border-amber-500/20 flex flex-col sm:flex-row sm:items-center justify-between gap-2">
               <div>
                 <div className="text-[10px] text-amber-400/90 font-bold">AUTHORITATIVE SIGNER PASSPORT:</div>
                 <div className="text-white font-bold text-xs mt-0.5">{selectedBinding.signerName}</div>
               </div>
               <div className="text-right">
-                <span className="font-mono text-amber-300 font-bold text-xs bg-amber-500/20 px-2 py-0.5 rounded border border-amber-500/40">
+                <span className="font-mono text-amber-300 font-bold text-xs bg-amber-500/20 px-2 py-0.5 rounded border-amber-500/40">
                   {selectedBinding.signerPassport}
                 </span>
                 <div className="text-[9px] text-zinc-500 mt-0.5">{selectedBinding.verifiedAt}</div>

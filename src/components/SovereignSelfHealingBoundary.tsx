@@ -59,7 +59,7 @@ export class SovereignSelfHealingBoundary extends Component<Props, State> {
           id="sovereign-self-healing-fallback"
           className="min-h-screen w-full bg-slate-950 text-cyan-400 p-8 flex flex-col justify-center items-center text-center font-mono border-4 border-rose-500/40 relative z-[999999]"
         >
-          <div className="max-w-2xl w-full bg-slate-900/90 border border-cyan-500/30 rounded-xl p-8 shadow-2xl backdrop-blur-md">
+          <div className="max-w-2xl w-full bg-slate-900/90 border-cyan-500/30 rounded-xl p-8 shadow-2xl backdrop-blur-md">
             <div className="flex items-center justify-center gap-3 mb-4">
               <span className="text-3xl">🛡️</span>
               <h2 className="text-2xl font-bold text-rose-400 tracking-wide">
@@ -74,7 +74,7 @@ export class SovereignSelfHealingBoundary extends Component<Props, State> {
               🔒 Core Kernel SSoT Δ0.00% & Anchor Block #849202 ได้รับการปกป้องอย่างสมบูรณ์
             </p>
 
-            <div className="bg-slate-950/80 border border-slate-800 rounded-lg p-4 mb-6 text-left overflow-x-auto max-h-48 text-xs text-rose-300">
+            <div className="bg-slate-950/80 border-slate-800 rounded-lg p-4 mb-6 text-left overflow-x-auto max-h-48 text-xs text-rose-300">
               <div className="font-bold text-slate-400 mb-1">Diagnostic Log:</div>
               <code>{this.state.error?.toString() || 'Unknown Presentation Anomaly'}</code>
               {this.state.errorInfo?.componentStack && (
@@ -96,7 +96,7 @@ export class SovereignSelfHealingBoundary extends Component<Props, State> {
               <button
                 id="btn-self-healing-hard-reload"
                 onClick={this.handleHardReload}
-                className="px-6 py-3 bg-slate-800 hover:bg-slate-700 text-slate-200 border border-slate-600 font-semibold rounded-lg transition-all duration-200 cursor-pointer text-sm"
+                className="px-6 py-3 bg-slate-800 hover:bg-slate-700 text-slate-200 border-slate-600 font-semibold rounded-lg transition-all duration-200 cursor-pointer text-sm"
               >
                 ล้างแคชและเริ่มใหม่ (Hard Purge)
               </button>

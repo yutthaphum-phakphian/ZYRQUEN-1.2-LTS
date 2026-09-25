@@ -278,9 +278,9 @@ export const QuantumEntropyGraph: React.FC = () => {
   return (
     <div className="space-y-4 font-mono select-text">
       {/* Top Controls Bar */}
-      <div className="p-4 rounded-2xl bg-gradient-to-r from-[#100d24]/90 via-[#0b0e1a]/85 to-[#07080F] border border-violet-500/30 backdrop-blur-xl flex flex-col md:flex-row md:items-center justify-between gap-4">
+      <div className="p-4 rounded-2xl bg-gradient-to-r from-[#100d24]/90 via-[#0b0e1a]/85 to-[#07080F] border-violet-500/30 backdrop-blur-xl flex flex-col md:flex-row md:items-center justify-between gap-4">
         <div className="flex items-center gap-3">
-          <div className="w-10 h-10 rounded-2xl bg-violet-500/15 border border-violet-500/30 flex items-center justify-center text-violet-300 shrink-0 shadow-[0_0_15px_rgba(139,92,246,0.2)]">
+          <div className="w-10 h-10 rounded-2xl bg-violet-500/15 border-violet-500/30 flex items-center justify-center text-violet-300 shrink-0 shadow-[0_0_15px_rgba(139,92,246,0.2)]">
             <Orbit className="w-5 h-5 animate-spin" style={{ animationDuration: '12s' }} />
           </div>
           <div>
@@ -289,7 +289,7 @@ export const QuantumEntropyGraph: React.FC = () => {
                 <Sparkles className="w-3.5 h-3.5 text-violet-400" />
                 Real-Time D3 Quantum Entropy & Coherence Force Graph
               </span>
-              <span className="px-2 py-0.2 rounded-full bg-violet-500/20 text-violet-300 border border-violet-500/30 text-[9px] font-bold">
+              <span className="px-2 py-0.2 rounded-full bg-violet-500/20 text-violet-300 border-violet-500/30 text-[9px] font-bold">
                 PHYSICS FLUX LIVE
               </span>
             </div>
@@ -302,7 +302,7 @@ export const QuantumEntropyGraph: React.FC = () => {
         <div className="flex flex-wrap items-center gap-2">
           <button
             onClick={triggerResonancePulse}
-            className="px-3 py-1.5 rounded-xl bg-violet-500/20 hover:bg-violet-500/30 text-violet-300 hover:text-violet-200 border border-violet-500/40 text-xs font-bold flex items-center gap-1.5 transition-all shadow-[0_0_12px_rgba(139,92,246,0.2)]"
+            className="px-3 py-1.5 rounded-xl bg-violet-500/20 hover:bg-violet-500/30 text-violet-300 hover:text-violet-200 border-violet-500/40 text-xs font-bold flex items-center gap-1.5 transition-all shadow-[0_0_12px_rgba(139,92,246,0.2)]"
           >
             <RefreshCw className="w-3.5 h-3.5 text-violet-400" />
             <span>PULSE RESONANCE</span>
@@ -312,31 +312,31 @@ export const QuantumEntropyGraph: React.FC = () => {
 
       {/* Top 4 Quantum Entropy Metrics */}
       <div className="grid grid-cols-2 sm:grid-cols-5 gap-3 text-xs">
-        <div className="p-3 rounded-2xl bg-black/40 border border-white/8 space-y-1">
+        <div className="p-3 rounded-2xl bg-black/40 border-white/8 space-y-1">
           <span className="text-[10px] text-zinc-400 block uppercase">Von Neumann Entropy</span>
           <span className="text-base font-bold text-violet-300 font-mono">{entropyFlux.vonNeumannEntropy} S(ρ)</span>
           <div className="text-[9px] text-emerald-400">Minimal Decoherence</div>
         </div>
 
-        <div className="p-3 rounded-2xl bg-black/40 border border-white/8 space-y-1">
+        <div className="p-3 rounded-2xl bg-black/40 border-white/8 space-y-1">
           <span className="text-[10px] text-zinc-400 block uppercase">Shannon Purity</span>
           <span className="text-base font-bold text-cyan-300 font-mono">{entropyFlux.shannonEntropy}</span>
           <div className="text-[9px] text-zinc-500">99.9% Quantum Purity</div>
         </div>
 
-        <div className="p-3 rounded-2xl bg-black/40 border border-white/8 space-y-1">
+        <div className="p-3 rounded-2xl bg-black/40 border-white/8 space-y-1">
           <span className="text-[10px] text-zinc-400 block uppercase">Phase Jitter</span>
           <span className="text-base font-bold text-amber-300 font-mono">{entropyFlux.phaseJitterFs} fs</span>
           <div className="text-[9px] text-zinc-500">Femtosecond Jitter</div>
         </div>
 
-        <div className="p-3 rounded-2xl bg-black/40 border border-white/8 space-y-1">
+        <div className="p-3 rounded-2xl bg-black/40 border-white/8 space-y-1">
           <span className="text-[10px] text-zinc-400 block uppercase">Active Entanglements</span>
           <span className="text-base font-bold text-emerald-300 font-mono">{entropyFlux.activeEntanglements} Pairs</span>
           <div className="text-[9px] text-emerald-400">Bell States Synchronized</div>
         </div>
 
-        <div className="p-3 rounded-2xl bg-black/40 border border-white/8 space-y-1 col-span-2 sm:col-span-1">
+        <div className="p-3 rounded-2xl bg-black/40 border-white/8 space-y-1 col-span-2 sm:col-span-1">
           <span className="text-[10px] text-zinc-400 block uppercase">Stability Index</span>
           <span className="text-base font-bold text-white font-mono">{entropyFlux.coherenceStability}%</span>
           <div className="text-[9px] text-violet-400">Surface-17 Locked</div>
@@ -348,12 +348,12 @@ export const QuantumEntropyGraph: React.FC = () => {
         {/* Left 8-9 Cols: Interactive D3 Graph Canvas */}
         <div
           ref={containerRef}
-          className="lg:col-span-8 xl:col-span-9 relative rounded-[28px] bg-[#07080F] border border-white/10 overflow-hidden shadow-2xl min-h-[480px] flex items-center justify-center"
+          className="lg:col-span-8 xl:col-span-9 relative rounded-[28px] bg-[#07080F] border-white/10 overflow-hidden shadow-2xl min-h-[480px] flex items-center justify-center"
         >
           <svg ref={svgRef} className="w-full h-[480px] select-none" />
 
           {/* Floating Graph Legend Overlay */}
-          <div className="absolute bottom-3 left-3 bg-black/70 backdrop-blur-md border border-white/10 p-2.5 rounded-xl text-[10px] space-y-1">
+          <div className="absolute bottom-3 left-3 bg-black/70 backdrop-blur-md border-white/10 p-2.5 rounded-xl text-[10px] space-y-1">
             <div className="text-zinc-400 font-bold uppercase text-[9px] mb-1">Topology Clusters:</div>
             <div className="flex items-center gap-2">
               <span className="w-2 h-2 rounded-full bg-[#8b5cf6]" />
@@ -373,21 +373,21 @@ export const QuantumEntropyGraph: React.FC = () => {
             </div>
           </div>
 
-          <div className="absolute top-3 right-3 bg-black/60 backdrop-blur-md border border-white/10 px-2.5 py-1 rounded-xl text-[10px] text-zinc-400">
+          <div className="absolute top-3 right-3 bg-black/60 backdrop-blur-md border-white/10 px-2.5 py-1 rounded-xl text-[10px] text-zinc-400">
             Interactive: Click & Drag Qubit Nodes
           </div>
         </div>
 
         {/* Right 3-4 Cols: Selected Qubit Inspector & State Matrices */}
         <div className="lg:col-span-4 xl:col-span-3 space-y-4">
-          <div className="p-5 rounded-[28px] bg-[#0b0e1a]/85 border border-white/8 backdrop-blur-xl space-y-4 h-full flex flex-col justify-between">
+          <div className="p-5 rounded-[28px] bg-[#0b0e1a]/85 border-white/8 backdrop-blur-xl space-y-4 h-full flex flex-col justify-between">
             <div className="space-y-3">
               <div className="flex items-center justify-between border-b border-white/10 pb-3">
                 <span className="text-xs font-bold text-white uppercase flex items-center gap-1.5">
                   <Activity className="w-4 h-4 text-violet-400" />
                   Qubit Node Inspector
                 </span>
-                <span className="text-[10px] px-2 py-0.5 rounded bg-violet-500/20 text-violet-300 border border-violet-500/30">
+                <span className="text-[10px] px-2 py-0.5 rounded bg-violet-500/20 text-violet-300 border-violet-500/30">
                   {selectedNode ? selectedNode.id : 'READY'}
                 </span>
               </div>
@@ -400,17 +400,17 @@ export const QuantumEntropyGraph: React.FC = () => {
                   </div>
 
                   <div className="grid grid-cols-2 gap-2 text-xs">
-                    <div className="p-2.5 rounded-xl bg-black/40 border border-white/5">
+                    <div className="p-2.5 rounded-xl bg-black/40 border-white/5">
                       <span className="text-zinc-500 text-[10px] block">COHERENCE</span>
                       <span className="text-cyan-300 font-bold">{selectedNode.coherence}%</span>
                     </div>
-                    <div className="p-2.5 rounded-xl bg-black/40 border border-white/5">
+                    <div className="p-2.5 rounded-xl bg-black/40 border-white/5">
                       <span className="text-zinc-500 text-[10px] block">PHASE (θ)</span>
                       <span className="text-violet-300 font-bold">{selectedNode.phase} rad</span>
                     </div>
                   </div>
 
-                  <div className="p-2.5 rounded-xl bg-black/40 border border-white/5 space-y-1">
+                  <div className="p-2.5 rounded-xl bg-black/40 border-white/5 space-y-1">
                     <div className="flex justify-between text-[11px]">
                       <span className="text-zinc-400">Local Entropy:</span>
                       <span className="text-amber-300 font-bold">{selectedNode.entropy}</span>
@@ -426,14 +426,14 @@ export const QuantumEntropyGraph: React.FC = () => {
                   </div>
                 </div>
               ) : (
-                <div className="p-6 rounded-2xl bg-black/30 border border-dashed border-white/10 text-center text-zinc-500 text-xs space-y-2">
+                <div className="p-6 rounded-2xl bg-black/30 border-dashed border-white/10 text-center text-zinc-500 text-xs space-y-2">
                   <Sparkles className="w-6 h-6 text-violet-400/50 mx-auto" />
                   <p>Click any Qubit node in the force simulation to inspect instantaneous state vectors and coupling matrices.</p>
                 </div>
               )}
             </div>
 
-            <div className="p-3 rounded-2xl bg-violet-950/20 border border-violet-500/20 text-[11px] text-zinc-300 space-y-1.5">
+            <div className="p-3 rounded-2xl bg-violet-950/20 border-violet-500/20 text-[11px] text-zinc-300 space-y-1.5">
               <div className="text-violet-300 font-bold text-xs">Topological Invariant:</div>
               <p className="text-[10px] text-zinc-400 font-sans leading-relaxed">
                 Braided anyons in this cluster maintain fault-tolerant non-abelian geometric phase shifts immune to thermal noise.

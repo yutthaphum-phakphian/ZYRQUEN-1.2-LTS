@@ -135,11 +135,11 @@ export const CustodianTraceMap: React.FC = () => {
   const activeBindings = bindings.filter((b) => b.custodianId === selectedCustodianId);
 
   return (
-    <div className="rounded-[28px] bg-[#07080F]/95 border border-white/8 backdrop-blur-2xl p-6 sm:p-8 space-y-6 shadow-2xl font-mono">
+    <div className="rounded-[28px] bg-[#07080F]/95 border-white/8 backdrop-blur-2xl p-6 sm:p-8 space-y-6 shadow-2xl font-mono">
       {/* Header */}
       <div className="flex flex-col lg:flex-row lg:items-center justify-between gap-4 border-b border-white/8 pb-6">
         <div className="flex items-center gap-3.5">
-          <div className="w-12 h-12 rounded-2xl bg-cyan-500/15 border border-cyan-500/30 flex items-center justify-center text-cyan-300 shadow-[0_0_25px_rgba(6,182,212,0.2)] shrink-0">
+          <div className="w-12 h-12 rounded-2xl bg-cyan-500/15 border-cyan-500/30 flex items-center justify-center text-cyan-300 shadow-[0_0_25px_rgba(6,182,212,0.2)] shrink-0">
             <Users className="w-6 h-6" />
           </div>
           <div>
@@ -147,7 +147,7 @@ export const CustodianTraceMap: React.FC = () => {
               <h3 className="text-base sm:text-lg font-bold text-white tracking-wide">
                 Custodian Trace Map — Sovereign Registry $\leftrightarrow$ Omega Pipeline
               </h3>
-              <span className="text-[10px] px-2.5 py-0.5 rounded-full bg-cyan-500/15 text-cyan-300 border border-cyan-500/30 font-bold">
+              <span className="text-[10px] px-2.5 py-0.5 rounded-full bg-cyan-500/15 text-cyan-300 border-cyan-500/30 font-bold">
                 DYNAMIC SVG BINDING GRAPH
               </span>
             </div>
@@ -175,7 +175,7 @@ export const CustodianTraceMap: React.FC = () => {
       </div>
 
       {/* SVG Interactive Canvas */}
-      <div className="relative w-full overflow-x-auto rounded-2xl bg-black/60 border border-white/5 p-4 flex items-center justify-center">
+      <div className="relative w-full overflow-x-auto rounded-2xl bg-black/60 border-white/5 p-4 flex items-center justify-center">
         <svg viewBox="0 0 880 400" className="w-full max-w-5xl h-auto min-w-[760px] select-none">
           <defs>
             <filter id="traceGlow" x="-20%" y="-20%" width="140%" height="140%">
@@ -375,10 +375,10 @@ export const CustodianTraceMap: React.FC = () => {
       </div>
 
       {/* Selected Custodian Binding Details */}
-      <div className="p-5 sm:p-6 rounded-2xl bg-black/80 border border-white/10 space-y-4 shadow-xl">
+      <div className="p-5 sm:p-6 rounded-2xl bg-black/80 border-white/10 space-y-4 shadow-xl">
         <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 border-b border-white/8 pb-4">
           <div className="flex items-center gap-3.5">
-            <div className="w-10 h-10 rounded-2xl bg-cyan-500/20 border border-cyan-500/40 text-cyan-300 flex items-center justify-center font-bold text-sm shrink-0">
+            <div className="w-10 h-10 rounded-2xl bg-cyan-500/20 border-cyan-500/40 text-cyan-300 flex items-center justify-center font-bold text-sm shrink-0">
               {selectedCustodian.id.slice(-2)}
             </div>
             <div>
@@ -394,7 +394,7 @@ export const CustodianTraceMap: React.FC = () => {
             </div>
           </div>
 
-          <span className="px-3 py-1 rounded-xl text-xs font-bold bg-emerald-500/15 text-emerald-300 border border-emerald-500/30 self-start sm:self-auto">
+          <span className="px-3 py-1 rounded-xl text-xs font-bold bg-emerald-500/15 text-emerald-300 border-emerald-500/30 self-start sm:self-auto">
             {activeBindings.length} ACTIVE STATUTORY BINDINGS
           </span>
         </div>
@@ -407,7 +407,7 @@ export const CustodianTraceMap: React.FC = () => {
             return (
               <div
                 key={`${b.custodianId}-${b.phaseId}`}
-                className="p-3.5 rounded-xl bg-white/[0.02] border border-white/5 space-y-2"
+                className="p-3.5 rounded-xl bg-white/[0.02] border-white/5 space-y-2"
               >
                 <div className="flex items-center justify-between">
                   <span

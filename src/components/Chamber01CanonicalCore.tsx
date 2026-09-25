@@ -23,14 +23,14 @@ export function G11CanonicalCore() {
   return (
     <div className="space-y-6 font-mono text-xs animate-in fade-in duration-500">
       {/* Header Banner */}
-      <div className="rounded-[20px] bg-[#080a0f]/90 border border-[#D4AF37]/40 p-6 backdrop-blur-xl relative overflow-hidden shadow-[0_0_30px_rgba(212,175,55,0.15)]">
+      <div className="rounded-[20px] bg-[#080a0f]/90 border-[#D4AF37]/40 p-6 backdrop-blur-xl relative overflow-hidden shadow-[0_0_30px_rgba(212,175,55,0.15)]">
         <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-4 border-b border-white/10 pb-4">
           <div>
             <div className="flex items-center gap-2 mb-1">
-              <span className="px-2 py-0.5 rounded bg-[#D4AF37]/20 text-[#D4AF37] font-bold border border-[#D4AF37]/40 text-[10px]">
+              <span className="px-2 py-0.5 rounded bg-[#D4AF37]/20 text-[#D4AF37] font-bold border-[#D4AF37]/40 text-[10px]">
                 G11 CANONICAL CORE
               </span>
-              <span className="px-2 py-0.5 rounded bg-emerald-500/10 text-emerald-400 font-bold border border-emerald-500/30 text-[10px]">
+              <span className="px-2 py-0.5 rounded bg-emerald-500/10 text-emerald-400 font-bold border-emerald-500/30 text-[10px]">
                 100% INVIOLABLE
               </span>
             </div>
@@ -45,19 +45,19 @@ export function G11CanonicalCore() {
 
         {/* Status Indicators */}
         <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mt-4">
-          <div className="bg-black/40 rounded-xl p-3 border border-white/5">
+          <div className="bg-black/40 rounded-xl p-3 border-white/5">
             <span className="text-slate-400 text-[10px] block">Block Height</span>
             <span className="text-lg font-bold text-amber-400">#{CANONICAL_BLOCK}</span>
           </div>
-          <div className="bg-black/40 rounded-xl p-3 border border-white/5">
+          <div className="bg-black/40 rounded-xl p-3 border-white/5">
             <span className="text-slate-400 text-[10px] block">Canonical Seals</span>
             <span className="text-lg font-bold text-emerald-400">{CANONICAL_SEAL_COUNT.toLocaleString()}</span>
           </div>
-          <div className="bg-black/40 rounded-xl p-3 border border-white/5">
+          <div className="bg-black/40 rounded-xl p-3 border-white/5">
             <span className="text-slate-400 text-[10px] block">State Delta</span>
             <span className="text-lg font-bold text-cyan-400">SSoT Δ0</span>
           </div>
-          <div className="bg-black/40 rounded-xl p-3 border border-white/5">
+          <div className="bg-black/40 rounded-xl p-3 border-white/5">
             <span className="text-slate-400 text-[10px] block">Baseline Drift</span>
             <span className="text-lg font-bold text-purple-400">0.00%</span>
           </div>
@@ -72,17 +72,17 @@ export function G11CanonicalCore() {
         </h3>
         <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
           {invariants.map((inv) => (
-            <div key={inv.code} className="bg-[#050814]/80 border border-white/10 rounded-xl p-3 flex items-start justify-between hover:border-[#D4AF37]/30 transition-all">
+            <div key={inv.code} className="bg-[#050814]/80 border-white/10 rounded-xl p-3 flex items-start justify-between hover:border-[#D4AF37]/30 transition-all">
               <div>
                 <div className="flex items-center gap-2 mb-1">
-                  <span className="text-[10px] font-bold text-[#D4AF37] px-1.5 py-0.5 rounded bg-[#D4AF37]/10 border border-[#D4AF37]/20">
+                  <span className="text-[10px] font-bold text-[#D4AF37] px-1.5 py-0.5 rounded bg-[#D4AF37]/10 border-[#D4AF37]/20">
                     {inv.code}
                   </span>
                   <span className="font-bold text-slate-200">{inv.name}</span>
                 </div>
                 <p className="text-slate-400 text-[11px]">{inv.desc}</p>
               </div>
-              <span className="px-2 py-0.5 rounded bg-emerald-500/20 text-emerald-300 font-bold border border-emerald-500/40 text-[10px] flex items-center gap-1">
+              <span className="px-2 py-0.5 rounded bg-emerald-500/20 text-emerald-300 font-bold border-emerald-500/40 text-[10px] flex items-center gap-1">
                 <CheckCircle2 className="w-3 h-3 text-emerald-400" />
                 {inv.status}
               </span>

@@ -211,13 +211,13 @@ export const ThemeSwitcher: React.FC<ThemeSwitcherProps> = ({
               className="fixed inset-0 z-40"
               onClick={() => setIsOpen(false)}
             />
-            <div className="absolute right-0 top-full mt-2 z-50 w-72 p-2 rounded-2xl bg-[#090d16]/95 border border-zinc-700/60 shadow-2xl backdrop-blur-2xl font-mono animate-in fade-in zoom-in-95 duration-150">
+            <div className="absolute right-0 top-full mt-2 z-50 w-72 p-2 rounded-2xl bg-[#090d16]/95 border-zinc-700/60 shadow-2xl backdrop-blur-2xl font-mono animate-in fade-in zoom-in-95 duration-150">
               <div className="px-3 py-2 border-b border-zinc-800 text-[11px] font-bold text-zinc-400 flex items-center justify-between">
                 <span className="flex items-center gap-1.5">
                   <Palette className="w-3.5 h-3.5 text-cyan-400" />
                   HIGH-CONTRAST THEME SELECTOR
                 </span>
-                <span className="text-[9px] px-1.5 py-0.5 rounded bg-zinc-800 text-zinc-400 border border-zinc-700">SSoT</span>
+                <span className="text-[9px] px-1.5 py-0.5 rounded bg-zinc-800 text-zinc-400 border-zinc-700">SSoT</span>
               </div>
               <div className="py-1 space-y-1">
                 {THEME_OPTIONS.map((opt) => {
@@ -267,7 +267,7 @@ export const ThemeSwitcher: React.FC<ThemeSwitcherProps> = ({
   return (
     <div
       id="theme-switcher"
-      className={`p-1.5 rounded-2xl bg-[#090d16]/90 border border-zinc-700/60 backdrop-blur-xl shadow-lg font-mono flex items-center gap-1.5 ${className}`}
+      className={`p-1.5 rounded-2xl bg-[#090d16]/90 border-zinc-700/60 backdrop-blur-xl shadow-lg font-mono flex items-center gap-1.5 ${className}`}
     >
       <div className="px-2.5 py-1 text-[11px] font-bold text-zinc-400 flex items-center gap-1.5 hidden md:flex">
         <Palette className="w-3.5 h-3.5 text-cyan-400" />

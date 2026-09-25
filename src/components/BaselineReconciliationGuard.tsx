@@ -181,13 +181,13 @@ export const BaselineReconciliationGuard: React.FC<BaselineReconciliationGuardPr
 
       {/* Discrepancy / Drift Warning Box (Shown when Fail-Closed) */}
       {!isLocked && (
-        <div className="mt-4 p-3.5 rounded-xl bg-red-950/60 border border-red-500/40 text-xs text-red-200 space-y-2">
+        <div className="mt-4 p-3.5 rounded-xl bg-red-950/60 border-red-500/40 text-xs text-red-200 space-y-2">
           <div className="flex items-center justify-between font-bold text-red-300">
             <span className="flex items-center gap-2">
               <AlertOctagon className="w-4 h-4 text-red-400" />
               <span>[LIVE] OBSERVED — NOT CANONICAL / BASELINE MISMATCH (+5 SEALS DETECTED)</span>
             </span>
-            <span className="text-[10px] bg-red-500/30 px-2 py-0.5 rounded border border-red-500/50">
+            <span className="text-[10px] bg-red-500/30 px-2 py-0.5 rounded border-red-500/50">
               CANONICAL PROMOTION: BLOCKED 🔒
             </span>
           </div>
@@ -203,7 +203,7 @@ export const BaselineReconciliationGuard: React.FC<BaselineReconciliationGuardPr
       {/* 4-Vector Comparison Grid */}
       <div className="mt-4 pt-4 border-t border-white/10 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3 text-xs">
         {/* 1. Merkle Root Match */}
-        <div className="p-3 rounded-xl bg-black/60 border border-white/5 space-y-1">
+        <div className="p-3 rounded-xl bg-black/60 border-white/5 space-y-1">
           <div className="flex items-center justify-between text-[10px] text-zinc-500">
             <span>MERKLE ROOT ANCHOR</span>
             {merkleMatch ? (
@@ -221,7 +221,7 @@ export const BaselineReconciliationGuard: React.FC<BaselineReconciliationGuardPr
         </div>
 
         {/* 2. Block Height */}
-        <div className="p-3 rounded-xl bg-black/60 border border-white/5 space-y-1">
+        <div className="p-3 rounded-xl bg-black/60 border-white/5 space-y-1">
           <div className="flex items-center justify-between text-[10px] text-zinc-500">
             <span>BLOCK HEIGHT</span>
             {blockMatch ? (
@@ -259,7 +259,7 @@ export const BaselineReconciliationGuard: React.FC<BaselineReconciliationGuardPr
         </div>
 
         {/* 4. Write Firewall / Mutation Count */}
-        <div className="p-3 rounded-xl bg-black/60 border border-white/5 space-y-1">
+        <div className="p-3 rounded-xl bg-black/60 border-white/5 space-y-1">
           <div className="flex items-center justify-between text-[10px] text-zinc-500">
             <span>MUTATION COUNT</span>
             {zeroMutation ? (

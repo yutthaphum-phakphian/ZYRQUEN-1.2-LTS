@@ -286,12 +286,12 @@ export const CourtEvidenceInfographic: React.FC = () => {
   };
 
   return (
-    <div id="court-evidence-infographic-root" className="w-full bg-gray-950 text-gray-100 p-6 rounded-xl border border-gray-800 space-y-6">
+    <div id="court-evidence-infographic-root" className="w-full bg-gray-950 text-gray-100 p-6 rounded-xl border-gray-800 space-y-6">
       {/* Header */}
       <div className="flex flex-col md:flex-row justify-between items-start md:items-center border-b border-gray-800 pb-4 gap-4">
         <div>
           <div className="flex items-center gap-2 flex-wrap">
-            <span className="bg-amber-500/20 text-amber-400 border border-amber-500/40 text-xs font-semibold px-2.5 py-0.5 rounded flex items-center gap-1.5">
+            <span className="bg-amber-500/20 text-amber-400 border-amber-500/40 text-xs font-semibold px-2.5 py-0.5 rounded flex items-center gap-1.5">
               <Scale className="w-3.5 h-3.5" />
               JUDICIAL EVIDENCE DECK
             </span>
@@ -307,7 +307,7 @@ export const CourtEvidenceInfographic: React.FC = () => {
           </p>
         </div>
         <div className="flex items-center gap-2 flex-wrap">
-          <div className="flex bg-gray-900 border border-gray-800 rounded-lg p-0.5">
+          <div className="flex bg-gray-900 border-gray-800 rounded-lg p-0.5">
             <button
               type="button"
               onClick={() => setViewMode('single')}
@@ -347,7 +347,7 @@ export const CourtEvidenceInfographic: React.FC = () => {
       </div>
 
       {/* Judicial Rapid Scan-to-Verify Bar */}
-      <div className="p-4 bg-slate-900/90 border border-slate-800 rounded-xl space-y-3">
+      <div className="p-4 bg-slate-900/90 border-slate-800 rounded-xl space-y-3">
         <div className="flex items-center justify-between flex-wrap gap-2">
           <span className="text-xs font-mono text-cyan-400 flex items-center gap-1.5">
             <Scan className="w-4 h-4 text-amber-400" />
@@ -369,7 +369,7 @@ export const CourtEvidenceInfographic: React.FC = () => {
                 setScannerInput(e.target.value);
                 handleVerifyScan(e.target.value);
               }}
-              className="w-full bg-slate-950 border border-slate-700 rounded-lg pl-9 pr-4 py-2 text-xs font-mono text-cyan-200 placeholder-slate-500 focus:outline-none focus:border-cyan-500"
+              className="w-full bg-slate-950 border-slate-700 rounded-lg pl-9 pr-4 py-2 text-xs font-mono text-cyan-200 placeholder-slate-500 focus:outline-none focus:border-cyan-500"
             />
           </div>
           {scannerInput && (
@@ -433,7 +433,7 @@ export const CourtEvidenceInfographic: React.FC = () => {
                 >
                   <div className="flex items-center justify-between mb-1.5">
                     <div className="flex items-center gap-2">
-                      <span className="font-mono text-xs font-bold px-2.5 py-0.5 rounded bg-amber-950 text-amber-300 border border-amber-800">
+                      <span className="font-mono text-xs font-bold px-2.5 py-0.5 rounded bg-amber-950 text-amber-300 border-amber-800">
                         {exhibit.id}
                       </span>
                       <span className="text-xs text-gray-400 font-medium">
@@ -441,7 +441,7 @@ export const CourtEvidenceInfographic: React.FC = () => {
                       </span>
                     </div>
                     <div className="flex items-center gap-2">
-                      <span className="text-[10px] font-mono text-emerald-400 bg-emerald-950/60 border border-emerald-800/80 px-2 py-0.5 rounded">
+                      <span className="text-[10px] font-mono text-emerald-400 bg-emerald-950/60 border-emerald-800/80 px-2 py-0.5 rounded">
                         {exhibit.status}
                       </span>
                       <span className="p-1 rounded bg-slate-800 text-amber-400 group-hover:bg-amber-500 group-hover:text-slate-950 transition">
@@ -457,7 +457,7 @@ export const CourtEvidenceInfographic: React.FC = () => {
           </div>
 
           {/* Selected Exhibit Deep-Dive Panel with QR Generation */}
-          <div id="exhibit-deep-dive-panel" className="lg:col-span-6 bg-gray-900 p-5 rounded-xl border border-gray-800 flex flex-col justify-between space-y-4">
+          <div id="exhibit-deep-dive-panel" className="lg:col-span-6 bg-gray-900 p-5 rounded-xl border-gray-800 flex flex-col justify-between space-y-4">
             <div>
               <div className="border-b border-gray-800 pb-3 mb-4 flex items-start justify-between">
                 <div>
@@ -481,7 +481,7 @@ export const CourtEvidenceInfographic: React.FC = () => {
               </div>
 
               {/* QR Code & Verification Tag Section */}
-              <div className="grid grid-cols-1 sm:grid-cols-12 gap-4 p-4 bg-slate-950 border border-slate-800 rounded-xl mb-4 items-center">
+              <div className="grid grid-cols-1 sm:grid-cols-12 gap-4 p-4 bg-slate-950 border-slate-800 rounded-xl mb-4 items-center">
                 {/* QR Code Container */}
                 <div className="sm:col-span-5 flex flex-col items-center justify-center">
                   <div 
@@ -552,7 +552,7 @@ export const CourtEvidenceInfographic: React.FC = () => {
                     <span>{copiedHash ? 'Copied' : 'Copy'}</span>
                   </button>
                 </div>
-                <div className="p-2.5 bg-black/60 rounded border border-gray-800 font-mono text-[11px] text-cyan-300 break-all select-all">
+                <div className="p-2.5 bg-black/60 rounded border-gray-800 font-mono text-[11px] text-cyan-300 break-all select-all">
                   {activeExhibit.merkleRootOrHash}
                 </div>
               </div>
@@ -573,7 +573,7 @@ export const CourtEvidenceInfographic: React.FC = () => {
                 <CheckCircle2 className="w-3.5 h-3.5" />
                 CERTIFIED COURT-ADMISSIBLE
               </span>
-              <span className="bg-emerald-950/80 px-2 py-0.5 rounded border border-emerald-800/60">
+              <span className="bg-emerald-950/80 px-2 py-0.5 rounded border-emerald-800/60">
                 ZERO-DRIFT VERIFIED (Δ 0.00%)
               </span>
             </div>
@@ -589,14 +589,14 @@ export const CourtEvidenceInfographic: React.FC = () => {
             return (
               <div
                 key={exhibit.id}
-                className="bg-gray-900/90 border border-gray-800 rounded-xl p-4 flex flex-col justify-between hover:border-amber-500/50 transition space-y-3"
+                className="bg-gray-900/90 border-gray-800 rounded-xl p-4 flex flex-col justify-between hover:border-amber-500/50 transition space-y-3"
               >
                 <div>
                   <div className="flex items-center justify-between mb-2">
-                    <span className="font-mono text-xs font-bold px-2 py-0.5 rounded bg-amber-950 text-amber-300 border border-amber-800">
+                    <span className="font-mono text-xs font-bold px-2 py-0.5 rounded bg-amber-950 text-amber-300 border-amber-800">
                       {exhibit.id}
                     </span>
-                    <span className="text-[10px] font-mono text-emerald-400 bg-emerald-950/60 border border-emerald-800/80 px-1.5 py-0.5 rounded">
+                    <span className="text-[10px] font-mono text-emerald-400 bg-emerald-950/60 border-emerald-800/80 px-1.5 py-0.5 rounded">
                       {exhibit.status}
                     </span>
                   </div>
@@ -605,7 +605,7 @@ export const CourtEvidenceInfographic: React.FC = () => {
                 </div>
 
                 {/* Centered QR */}
-                <div className="flex flex-col items-center justify-center p-3 bg-slate-950 border border-slate-800/80 rounded-lg">
+                <div className="flex flex-col items-center justify-center p-3 bg-slate-950 border-slate-800/80 rounded-lg">
                   <div className="p-2 bg-white rounded shadow">
                     <QRCodeSVG
                       id={qrDomId}
@@ -651,13 +651,13 @@ export const CourtEvidenceInfographic: React.FC = () => {
       {isModalOpen && (
         <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-950/85 backdrop-blur-md animate-fadeIn">
           <div
-            className="relative w-full max-w-3xl bg-slate-900 border border-slate-800 rounded-2xl shadow-2xl overflow-hidden font-sans text-slate-100"
+            className="relative w-full max-w-3xl bg-slate-900 border-slate-800 rounded-2xl shadow-2xl overflow-hidden font-sans text-slate-100"
             onClick={(e) => e.stopPropagation()}
           >
             {/* Modal Header */}
             <div className="flex items-center justify-between p-4 sm:p-5 border-b border-slate-800 bg-slate-950/60">
               <div className="flex items-center gap-2.5">
-                <div className="p-2 rounded-xl bg-amber-500/10 border border-amber-500/30 text-amber-400">
+                <div className="p-2 rounded-xl bg-amber-500/10 border-amber-500/30 text-amber-400">
                   <Scale className="w-5 h-5" />
                 </div>
                 <div>
@@ -681,7 +681,7 @@ export const CourtEvidenceInfographic: React.FC = () => {
             {/* Modal Body */}
             <div className="p-5 sm:p-6 grid grid-cols-1 md:grid-cols-12 gap-6 items-center">
               {/* High-Resolution QR Container */}
-              <div className="md:col-span-5 flex flex-col items-center justify-center p-5 bg-slate-950 border border-slate-800 rounded-xl">
+              <div className="md:col-span-5 flex flex-col items-center justify-center p-5 bg-slate-950 border-slate-800 rounded-xl">
                 <div className="p-3.5 bg-white rounded-xl shadow-2xl">
                   <QRCodeSVG
                     id={`modal-qr-${activeExhibit.id}`}
@@ -710,18 +710,18 @@ export const CourtEvidenceInfographic: React.FC = () => {
                   <button
                     type="button"
                     onClick={handleCopyPayload}
-                    className="text-xs font-mono px-2.5 py-1 rounded-lg bg-slate-800 hover:bg-slate-700 text-slate-300 flex items-center gap-1.5 transition border border-slate-700 active:scale-95 cursor-pointer"
+                    className="text-xs font-mono px-2.5 py-1 rounded-lg bg-slate-800 hover:bg-slate-700 text-slate-300 flex items-center gap-1.5 transition border-slate-700 active:scale-95 cursor-pointer"
                   >
                     {copiedPayload ? <Check className="w-3.5 h-3.5 text-emerald-400" /> : <Copy className="w-3.5 h-3.5 text-cyan-400" />}
                     <span>{copiedPayload ? 'Copied!' : 'Copy Raw JSON'}</span>
                   </button>
                 </div>
 
-                <div className="p-3 bg-slate-950 border border-slate-800 rounded-xl max-h-56 overflow-y-auto font-mono text-xs text-cyan-300">
+                <div className="p-3 bg-slate-950 border-slate-800 rounded-xl max-h-56 overflow-y-auto font-mono text-xs text-cyan-300">
                   <pre className="whitespace-pre-wrap break-all leading-relaxed">{activePayloadJson}</pre>
                 </div>
 
-                <div className="p-3 rounded-xl bg-slate-800/40 border border-slate-800 text-[11px] font-mono text-slate-400 space-y-1">
+                <div className="p-3 rounded-xl bg-slate-800/40 border-slate-800 text-[11px] font-mono text-slate-400 space-y-1">
                   <div className="flex justify-between">
                     <span>Statute Ref:</span>
                     <span className="text-amber-300 font-bold">{activeExhibit.statutoryBasis}</span>

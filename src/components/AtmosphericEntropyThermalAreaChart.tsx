@@ -158,7 +158,7 @@ export const AtmosphericEntropyThermalAreaChart: React.FC<AtmosphericEntropyTher
   return (
     <div
       id="atmospheric-entropy-thermal-areachart-card"
-      className="p-6 rounded-[28px] bg-gradient-to-br from-[#0c1424]/90 via-[#070b14]/85 to-[#04060b] border border-cyan-500/25 backdrop-blur-xl space-y-5 shadow-2xl relative overflow-hidden"
+      className="p-6 rounded-[28px] bg-gradient-to-br from-[#0c1424]/90 via-[#070b14]/85 to-[#04060b] border-cyan-500/25 backdrop-blur-xl space-y-5 shadow-2xl relative overflow-hidden"
     >
       {/* Background Radial Glow */}
       <div className="absolute top-0 right-0 w-96 h-96 bg-cyan-500/5 rounded-full blur-3xl pointer-events-none" />
@@ -167,7 +167,7 @@ export const AtmosphericEntropyThermalAreaChart: React.FC<AtmosphericEntropyTher
       {/* Header Toolbar */}
       <div className="flex flex-col lg:flex-row lg:items-center justify-between gap-4 relative z-10">
         <div className="flex items-center gap-3">
-          <div className="w-10 h-10 rounded-2xl bg-gradient-to-br from-cyan-500/20 to-rose-500/20 border border-cyan-500/30 flex items-center justify-center shrink-0 shadow-[0_0_15px_rgba(6,182,212,0.25)]">
+          <div className="w-10 h-10 rounded-2xl bg-gradient-to-br from-cyan-500/20 to-rose-500/20 border-cyan-500/30 flex items-center justify-center shrink-0 shadow-[0_0_15px_rgba(6,182,212,0.25)]">
             <Activity className="w-5 h-5 text-cyan-300" />
           </div>
           <div>
@@ -197,7 +197,7 @@ export const AtmosphericEntropyThermalAreaChart: React.FC<AtmosphericEntropyTher
         {/* Action Controls */}
         <div className="flex items-center gap-2 flex-wrap font-mono text-xs">
           {/* Series filter */}
-          <div className="flex items-center bg-black/50 border border-white/10 rounded-xl p-1">
+          <div className="flex items-center bg-black/50 border-white/10 rounded-xl p-1">
             {[
               { id: 'all', label: 'Overlay' },
               { id: 'entropy', label: 'Entropy (Atm)', color: 'text-cyan-400' },
@@ -239,7 +239,7 @@ export const AtmosphericEntropyThermalAreaChart: React.FC<AtmosphericEntropyTher
           {/* Export CSV */}
           <button
             onClick={exportChartDataCsv}
-            className="p-1.5 rounded-xl bg-white/5 hover:bg-white/10 border border-white/10 text-zinc-300 transition-all"
+            className="p-1.5 rounded-xl bg-white/5 hover:bg-white/10 border-white/10 text-zinc-300 transition-all"
             title="Export AreaChart telemetry as CSV"
           >
             <Download className="w-4 h-4 text-cyan-400" />
@@ -249,7 +249,7 @@ export const AtmosphericEntropyThermalAreaChart: React.FC<AtmosphericEntropyTher
 
       {/* Real-time Forensic Stat Strip */}
       <div className="grid grid-cols-2 sm:grid-cols-4 gap-3 relative z-10 font-mono text-xs">
-        <div className="p-3 rounded-2xl bg-cyan-950/20 border border-cyan-500/20 flex flex-col justify-between">
+        <div className="p-3 rounded-2xl bg-cyan-950/20 border-cyan-500/20 flex flex-col justify-between">
           <span className="text-[11px] text-zinc-400 flex items-center gap-1.5">
             <Wind className="w-3.5 h-3.5 text-cyan-400" />
             Atmospheric Entropy Rate
@@ -261,7 +261,7 @@ export const AtmosphericEntropyThermalAreaChart: React.FC<AtmosphericEntropyTher
           <span className="text-[9px] text-cyan-400/80 mt-0.5">TRNG Shannon: 7.994 bits/byte</span>
         </div>
 
-        <div className="p-3 rounded-2xl bg-rose-950/20 border border-rose-500/20 flex flex-col justify-between">
+        <div className="p-3 rounded-2xl bg-rose-950/20 border-rose-500/20 flex flex-col justify-between">
           <span className="text-[11px] text-zinc-400 flex items-center gap-1.5">
             <Flame className="w-3.5 h-3.5 text-rose-400" />
             CPU Thermal Variance (ΔT)
@@ -273,7 +273,7 @@ export const AtmosphericEntropyThermalAreaChart: React.FC<AtmosphericEntropyTher
           <span className="text-[9px] text-rose-400/80 mt-0.5">Ceiling: 55.0°C • Δ0 Invariant</span>
         </div>
 
-        <div className="p-3 rounded-2xl bg-violet-950/20 border border-violet-500/20 flex flex-col justify-between">
+        <div className="p-3 rounded-2xl bg-violet-950/20 border-violet-500/20 flex flex-col justify-between">
           <span className="text-[11px] text-zinc-400 flex items-center gap-1.5">
             <Gauge className="w-3.5 h-3.5 text-violet-400" />
             Chaotic Stability Score
@@ -285,7 +285,7 @@ export const AtmosphericEntropyThermalAreaChart: React.FC<AtmosphericEntropyTher
           <span className="text-[9px] text-violet-400/80 mt-0.5">Attractor Limit: &gt;95.0%</span>
         </div>
 
-        <div className="p-3 rounded-2xl bg-emerald-950/20 border border-emerald-500/20 flex flex-col justify-between">
+        <div className="p-3 rounded-2xl bg-emerald-950/20 border-emerald-500/20 flex flex-col justify-between">
           <span className="text-[11px] text-zinc-400 flex items-center gap-1.5">
             <ShieldCheck className="w-3.5 h-3.5 text-emerald-400" />
             Lyapunov Exponent (&lambda;)
@@ -351,7 +351,7 @@ export const AtmosphericEntropyThermalAreaChart: React.FC<AtmosphericEntropyTher
                 if (active && payload && payload.length) {
                   const pt = payload[0].payload as EntropyThermalDataPoint;
                   return (
-                    <div className="p-3.5 rounded-2xl bg-[#090d16]/95 border border-cyan-500/40 backdrop-blur-xl shadow-2xl font-mono text-xs space-y-2 min-w-[240px]">
+                    <div className="p-3.5 rounded-2xl bg-[#090d16]/95 border-cyan-500/40 backdrop-blur-xl shadow-2xl font-mono text-xs space-y-2 min-w-[240px]">
                       <div className="flex items-center justify-between border-b border-white/10 pb-1.5 text-[11px]">
                         <span className="text-zinc-400 font-bold">TIMESTEP: {label}</span>
                         <span className="text-cyan-300 font-bold">CHAOTIC OBSERVER</span>
@@ -450,7 +450,7 @@ export const AtmosphericEntropyThermalAreaChart: React.FC<AtmosphericEntropyTher
       </div>
 
       {/* Chaotic Stability Equilibrium Footer Banner */}
-      <div className="p-3 rounded-2xl bg-black/40 border border-white/8 flex flex-col sm:flex-row sm:items-center justify-between gap-3 text-xs font-mono text-zinc-400">
+      <div className="p-3 rounded-2xl bg-black/40 border-white/8 flex flex-col sm:flex-row sm:items-center justify-between gap-3 text-xs font-mono text-zinc-400">
         <div className="flex items-center gap-2">
           <Sparkles className="w-3.5 h-3.5 text-cyan-400" />
           <span>Chaotic Stability Matrix:</span>

@@ -123,11 +123,11 @@ export const CryogenicTelemetryVisualizer: React.FC<{ className?: string }> = ({
   }, []);
 
   return (
-    <div className={`w-full rounded-[24px] bg-[#070A16] border border-cyan-500/30 p-5 sm:p-6 shadow-2xl text-white font-mono space-y-6 ${className}`}>
+    <div className={`w-full rounded-[24px] bg-[#070A16] border-cyan-500/30 p-5 sm:p-6 shadow-2xl text-white font-mono space-y-6 ${className}`}>
       {/* Header & Status Ribbon */}
       <div className="flex flex-col lg:flex-row lg:items-center justify-between gap-4 border-b border-white/10 pb-5">
         <div className="flex items-center gap-3.5">
-          <div className="w-12 h-12 rounded-2xl bg-gradient-to-br from-cyan-500/20 via-fuchsia-500/20 to-amber-500/20 border border-cyan-500/40 flex items-center justify-center shadow-[0_0_20px_rgba(6,182,212,0.35)] shrink-0">
+          <div className="w-12 h-12 rounded-2xl bg-gradient-to-br from-cyan-500/20 via-fuchsia-500/20 to-amber-500/20 border-cyan-500/40 flex items-center justify-center shadow-[0_0_20px_rgba(6,182,212,0.35)] shrink-0">
             <Snowflake className="w-6 h-6 text-cyan-400 animate-pulse" />
           </div>
           <div>
@@ -135,7 +135,7 @@ export const CryogenicTelemetryVisualizer: React.FC<{ className?: string }> = ({
               <h2 className="text-base sm:text-lg font-bold tracking-wider text-white uppercase">
                 Cryogenic Telemetry Visualizer & Anomaly Predictor
               </h2>
-              <span className="text-[10px] font-semibold text-cyan-300 bg-cyan-950/80 px-2.5 py-0.5 rounded-full border border-cyan-500/40">
+              <span className="text-[10px] font-semibold text-cyan-300 bg-cyan-950/80 px-2.5 py-0.5 rounded-full border-cyan-500/40">
                 +60s Horizon AI
               </span>
             </div>
@@ -151,7 +151,7 @@ export const CryogenicTelemetryVisualizer: React.FC<{ className?: string }> = ({
 
         {/* Live Metrics Quad */}
         <div className="grid grid-cols-2 sm:grid-cols-4 gap-2 text-xs">
-          <div className="bg-black/60 border border-cyan-500/30 p-2.5 rounded-xl shadow-inner">
+          <div className="bg-black/60 border-cyan-500/30 p-2.5 rounded-xl shadow-inner">
             <div className="text-[10px] text-zinc-500 uppercase flex items-center gap-1">
               <Activity className="w-3 h-3 text-cyan-400" />
               <span>Real QOps</span>
@@ -159,7 +159,7 @@ export const CryogenicTelemetryVisualizer: React.FC<{ className?: string }> = ({
             <div className="text-sm font-bold text-cyan-300 mt-0.5">{latestReal.qopsReal?.toFixed(1)} <span className="text-[10px] font-normal text-zinc-400">QOps/s</span></div>
           </div>
 
-          <div className="bg-black/60 border border-amber-500/30 p-2.5 rounded-xl shadow-inner">
+          <div className="bg-black/60 border-amber-500/30 p-2.5 rounded-xl shadow-inner">
             <div className="text-[10px] text-zinc-500 uppercase flex items-center gap-1">
               <Snowflake className="w-3 h-3 text-amber-400" />
               <span>Cryo He-4</span>
@@ -167,7 +167,7 @@ export const CryogenicTelemetryVisualizer: React.FC<{ className?: string }> = ({
             <div className="text-sm font-bold text-amber-300 mt-0.5">{latestReal.cryoTempReal?.toFixed(2)} <span className="text-[10px] font-normal text-zinc-400">mK</span></div>
           </div>
 
-          <div className="bg-black/60 border border-emerald-500/30 p-2.5 rounded-xl shadow-inner">
+          <div className="bg-black/60 border-emerald-500/30 p-2.5 rounded-xl shadow-inner">
             <div className="text-[10px] text-zinc-500 uppercase flex items-center gap-1">
               <ShieldCheck className="w-3 h-3 text-emerald-400" />
               <span>Coherence</span>
@@ -175,7 +175,7 @@ export const CryogenicTelemetryVisualizer: React.FC<{ className?: string }> = ({
             <div className="text-sm font-bold text-emerald-300 mt-0.5">{latestReal.coherence}%</div>
           </div>
 
-          <div className="bg-black/60 border border-fuchsia-500/30 p-2.5 rounded-xl shadow-inner">
+          <div className="bg-black/60 border-fuchsia-500/30 p-2.5 rounded-xl shadow-inner">
             <div className="text-[10px] text-zinc-500 uppercase flex items-center gap-1">
               <Clock className="w-3 h-3 text-fuchsia-400" />
               <span>Risk Window</span>
@@ -186,15 +186,15 @@ export const CryogenicTelemetryVisualizer: React.FC<{ className?: string }> = ({
       </div>
 
       {/* Anomaly Prediction Warning Banner */}
-      <div className="p-4 rounded-2xl bg-gradient-to-r from-fuchsia-950/40 via-amber-950/30 to-black/60 border border-fuchsia-500/40 flex flex-col sm:flex-row sm:items-center justify-between gap-3 shadow-lg">
+      <div className="p-4 rounded-2xl bg-gradient-to-r from-fuchsia-950/40 via-amber-950/30 to-black/60 border-fuchsia-500/40 flex flex-col sm:flex-row sm:items-center justify-between gap-3 shadow-lg">
         <div className="flex items-start sm:items-center gap-3">
-          <div className="p-2 rounded-xl bg-fuchsia-500/20 border border-fuchsia-500/40 text-fuchsia-400 shrink-0 mt-0.5 sm:mt-0">
+          <div className="p-2 rounded-xl bg-fuchsia-500/20 border-fuchsia-500/40 text-fuchsia-400 shrink-0 mt-0.5 sm:mt-0">
             <AlertTriangle className="w-5 h-5 animate-pulse" />
           </div>
           <div>
             <div className="text-xs font-bold text-fuchsia-300 flex items-center gap-2">
               <span>PREDICTIVE ANOMALY OVERLAY (+60s HORIZON)</span>
-              <span className="text-[10px] bg-fuchsia-900/80 px-2 py-0.5 rounded text-fuchsia-200 border border-fuchsia-500/40">
+              <span className="text-[10px] bg-fuchsia-900/80 px-2 py-0.5 rounded text-fuchsia-200 border-fuchsia-500/40">
                 ACTIVE INFERENCE
               </span>
             </div>
@@ -227,7 +227,7 @@ export const CryogenicTelemetryVisualizer: React.FC<{ className?: string }> = ({
         <div className="flex items-center justify-between flex-wrap gap-2">
           <div className="flex items-center gap-2">
             <span className="text-xs font-semibold text-zinc-400">TELEMETRY DISPLAY MODE:</span>
-            <div className="flex items-center bg-black/60 p-1 rounded-xl border border-white/10 text-xs">
+            <div className="flex items-center bg-black/60 p-1 rounded-xl border-white/10 text-xs">
               <button
                 onClick={() => {
                   setActiveTab('combined');
@@ -235,7 +235,7 @@ export const CryogenicTelemetryVisualizer: React.FC<{ className?: string }> = ({
                 }}
                 className={`px-2.5 py-1 rounded-lg transition-all ${
                   activeTab === 'combined'
-                    ? 'bg-cyan-500/30 text-white font-bold border border-cyan-500/50'
+                    ? 'bg-cyan-500/30 text-white font-bold border-cyan-500/50'
                     : 'text-zinc-400 hover:text-zinc-200'
                 }`}
               >
@@ -248,7 +248,7 @@ export const CryogenicTelemetryVisualizer: React.FC<{ className?: string }> = ({
                 }}
                 className={`px-2.5 py-1 rounded-lg transition-all ${
                   activeTab === 'qops'
-                    ? 'bg-cyan-500/30 text-white font-bold border border-cyan-500/50'
+                    ? 'bg-cyan-500/30 text-white font-bold border-cyan-500/50'
                     : 'text-zinc-400 hover:text-zinc-200'
                 }`}
               >
@@ -261,7 +261,7 @@ export const CryogenicTelemetryVisualizer: React.FC<{ className?: string }> = ({
                 }}
                 className={`px-2.5 py-1 rounded-lg transition-all ${
                   activeTab === 'cryo'
-                    ? 'bg-amber-500/30 text-white font-bold border border-amber-500/50'
+                    ? 'bg-amber-500/30 text-white font-bold border-amber-500/50'
                     : 'text-zinc-400 hover:text-zinc-200'
                 }`}
               >
@@ -287,7 +287,7 @@ export const CryogenicTelemetryVisualizer: React.FC<{ className?: string }> = ({
         </div>
 
         {/* Recharts Canvas */}
-        <div className="w-full h-[320px] bg-[#050711] rounded-2xl border border-white/5 p-3 relative overflow-hidden shadow-inner">
+        <div className="w-full h-[320px] bg-[#050711] rounded-2xl border-white/5 p-3 relative overflow-hidden shadow-inner">
           <ResponsiveContainer width="100%" height="100%">
             <ComposedChart data={data} margin={{ top: 15, right: 30, left: 10, bottom: 5 }}>
               <CartesianGrid stroke="#1E293B" strokeDasharray="3 3" opacity={0.5} />
@@ -410,7 +410,7 @@ export const CryogenicTelemetryVisualizer: React.FC<{ className?: string }> = ({
       </div>
 
       {/* Anomaly Response Console & Fail-Closed Quarantine Controls */}
-      <div className="p-4 rounded-2xl bg-black/50 border border-white/10 space-y-3">
+      <div className="p-4 rounded-2xl bg-black/50 border-white/10 space-y-3">
         <div className="flex items-center justify-between flex-wrap gap-2">
           <div className="flex items-center gap-2">
             <ShieldAlert className="w-4 h-4 text-amber-400" />
@@ -419,7 +419,7 @@ export const CryogenicTelemetryVisualizer: React.FC<{ className?: string }> = ({
             </h3>
           </div>
           {failClosedLockdown && (
-            <span className="text-[10px] font-bold text-red-400 bg-red-950/80 px-2.5 py-0.5 rounded-full border border-red-500/50 animate-pulse">
+            <span className="text-[10px] font-bold text-red-400 bg-red-950/80 px-2.5 py-0.5 rounded-full border-red-500/50 animate-pulse">
               LOCKDOWN ACTIVE: SSoT PROTECTED
             </span>
           )}
@@ -453,7 +453,7 @@ export const CryogenicTelemetryVisualizer: React.FC<{ className?: string }> = ({
 
           <button
             onClick={handleResetLockdown}
-            className="p-3 rounded-xl bg-emerald-950/40 border border-emerald-500/40 text-emerald-300 hover:bg-emerald-900/50 text-xs font-semibold flex items-center justify-center gap-2 transition-all"
+            className="p-3 rounded-xl bg-emerald-950/40 border-emerald-500/40 text-emerald-300 hover:bg-emerald-900/50 text-xs font-semibold flex items-center justify-center gap-2 transition-all"
           >
             <RefreshCw className="w-4 h-4" />
             <span>Reconcile Cryo He-4 & Clear State</span>

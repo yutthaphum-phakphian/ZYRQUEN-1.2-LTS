@@ -100,7 +100,7 @@ export const EvidenceDetailModal: React.FC<EvidenceDetailModalProps> = ({
         {/* Header with Title & Read-Only Badge */}
         <div className="flex items-center justify-between border-b border-emerald-500/20 pb-4">
           <div className="flex items-center gap-3">
-            <div className="w-10 h-10 rounded-2xl bg-emerald-500/20 border border-emerald-500/40 flex items-center justify-center text-emerald-400 shrink-0">
+            <div className="w-10 h-10 rounded-2xl bg-emerald-500/20 border-emerald-500/40 flex items-center justify-center text-emerald-400 shrink-0">
               <ShieldCheck className="w-5 h-5" />
             </div>
             <div>
@@ -108,10 +108,10 @@ export const EvidenceDetailModal: React.FC<EvidenceDetailModalProps> = ({
                 <span className="text-white font-bold text-sm tracking-wide">
                   REAL HSM EVIDENCE PACKET &bull; SLOT #{evidenceData.slotId.toString().padStart(2, '0')}
                 </span>
-                <span className="px-2 py-0.5 rounded-full text-[10px] font-bold bg-emerald-500/20 text-emerald-300 border border-emerald-500/40">
+                <span className="px-2 py-0.5 rounded-full text-[10px] font-bold bg-emerald-500/20 text-emerald-300 border-emerald-500/40">
                   REAL_HSM_SIGNED
                 </span>
-                <span className="px-2 py-0.5 rounded-full text-[10px] font-bold bg-black/60 text-zinc-400 border border-white/10 flex items-center gap-1">
+                <span className="px-2 py-0.5 rounded-full text-[10px] font-bold bg-black/60 text-zinc-400 border-white/10 flex items-center gap-1">
                   <Lock className="w-2.5 h-2.5 text-amber-400" />
                   READ-ONLY LOCKED
                 </span>
@@ -124,7 +124,7 @@ export const EvidenceDetailModal: React.FC<EvidenceDetailModalProps> = ({
           <button
             id="close-evidence-detail-modal-btn"
             onClick={onClose}
-            className="w-8 h-8 rounded-full bg-white/5 hover:bg-white/10 text-zinc-400 hover:text-white flex items-center justify-center cursor-pointer transition-colors border border-white/10"
+            className="w-8 h-8 rounded-full bg-white/5 hover:bg-white/10 text-zinc-400 hover:text-white flex items-center justify-center cursor-pointer transition-colors border-white/10"
             title="Close Evidence Detail Modal"
           >
             <X className="w-4 h-4" />
@@ -132,7 +132,7 @@ export const EvidenceDetailModal: React.FC<EvidenceDetailModalProps> = ({
         </div>
 
         {/* Read-Only Banner / Attestation Status */}
-        <div className="p-3.5 rounded-2xl bg-emerald-950/30 border border-emerald-500/40 flex items-center justify-between gap-3">
+        <div className="p-3.5 rounded-2xl bg-emerald-950/30 border-emerald-500/40 flex items-center justify-between gap-3">
           <div className="flex items-center gap-2.5">
             <CheckCircle2 className="w-4 h-4 text-emerald-400 shrink-0" />
             <div className="text-[11px]">
@@ -143,14 +143,14 @@ export const EvidenceDetailModal: React.FC<EvidenceDetailModalProps> = ({
             </div>
           </div>
           <div className="text-right shrink-0">
-            <span className="px-2.5 py-1 rounded-lg bg-black/70 border border-emerald-500/30 text-emerald-300 font-bold text-[10px]">
+            <span className="px-2.5 py-1 rounded-lg bg-black/70 border-emerald-500/30 text-emerald-300 font-bold text-[10px]">
               SSoT Mutation: 0
             </span>
           </div>
         </div>
 
         {/* Forensic Truth Verification Notice */}
-        <div className="p-2.5 rounded-xl bg-amber-950/20 border border-amber-500/30 flex items-center justify-between text-[10px] text-amber-300 font-mono">
+        <div className="p-2.5 rounded-xl bg-amber-950/20 border-amber-500/30 flex items-center justify-between text-[10px] text-amber-300 font-mono">
           <span>⚠️ CLAIMED ≠ VERIFIED</span>
           <span>🔒 BUILD VERIFIED ≠ RUNTIME EXECUTED</span>
         </div>
@@ -158,7 +158,7 @@ export const EvidenceDetailModal: React.FC<EvidenceDetailModalProps> = ({
         {/* Non-Editable Metadata Fields Grid */}
         <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
           {/* Statutory Role */}
-          <div className="p-3 bg-black/60 rounded-xl border border-white/10 space-y-1">
+          <div className="p-3 bg-black/60 rounded-xl border-white/10 space-y-1">
             <div className="text-zinc-500 text-[10px] flex items-center gap-1.5">
               <Cpu className="w-3.5 h-3.5 text-zinc-400" />
               <span>STATUTORY AUTHORITY / ROLE</span>
@@ -168,7 +168,7 @@ export const EvidenceDetailModal: React.FC<EvidenceDetailModalProps> = ({
           </div>
 
           {/* Evidence ID & Attestation Timestamp */}
-          <div className="p-3 bg-black/60 rounded-xl border border-white/10 space-y-1">
+          <div className="p-3 bg-black/60 rounded-xl border-white/10 space-y-1">
             <div className="text-zinc-500 text-[10px] flex items-center gap-1.5">
               <Clock className="w-3.5 h-3.5 text-cyan-400" />
               <span>ATTESTATION TIMESTAMP</span>
@@ -178,7 +178,7 @@ export const EvidenceDetailModal: React.FC<EvidenceDetailModalProps> = ({
           </div>
 
           {/* Hardware Token */}
-          <div className="p-3 bg-black/60 rounded-xl border border-white/10 space-y-1">
+          <div className="p-3 bg-black/60 rounded-xl border-white/10 space-y-1">
             <div className="text-zinc-500 text-[10px] flex items-center gap-1.5">
               <Key className="w-3.5 h-3.5 text-amber-400" />
               <span>AUTHENTICATED HARDWARE TOKEN</span>
@@ -188,7 +188,7 @@ export const EvidenceDetailModal: React.FC<EvidenceDetailModalProps> = ({
           </div>
 
           {/* NIST Post-Quantum Algorithm */}
-          <div className="p-3 bg-black/60 rounded-xl border border-white/10 space-y-1">
+          <div className="p-3 bg-black/60 rounded-xl border-white/10 space-y-1">
             <div className="text-zinc-500 text-[10px] flex items-center gap-1.5">
               <Fingerprint className="w-3.5 h-3.5 text-emerald-400" />
               <span>NIST PQC ALGORITHM</span>
@@ -199,7 +199,7 @@ export const EvidenceDetailModal: React.FC<EvidenceDetailModalProps> = ({
         </div>
 
         {/* 6-Point Cryptographic Proof Invariant Checklist */}
-        <div className="p-3.5 rounded-2xl bg-black/70 border border-white/10 space-y-2.5">
+        <div className="p-3.5 rounded-2xl bg-black/70 border-white/10 space-y-2.5">
           <div className="text-zinc-400 text-[10px] font-bold tracking-wider flex items-center justify-between border-b border-white/5 pb-1.5">
             <span className="flex items-center gap-1.5">
               <FileCheck2 className="w-3.5 h-3.5 text-emerald-400" />
@@ -209,7 +209,7 @@ export const EvidenceDetailModal: React.FC<EvidenceDetailModalProps> = ({
           </div>
 
           <div className="grid grid-cols-2 sm:grid-cols-3 gap-2 text-[10px]">
-            <div className="p-2 rounded-lg bg-black/50 border border-white/5 flex items-center gap-2">
+            <div className="p-2 rounded-lg bg-black/50 border-white/5 flex items-center gap-2">
               <CheckCircle2 className="w-3.5 h-3.5 text-emerald-400 shrink-0" />
               <div>
                 <div className="text-zinc-400 text-[9px]">Identity Match</div>
@@ -217,7 +217,7 @@ export const EvidenceDetailModal: React.FC<EvidenceDetailModalProps> = ({
               </div>
             </div>
 
-            <div className="p-2 rounded-lg bg-black/50 border border-white/5 flex items-center gap-2">
+            <div className="p-2 rounded-lg bg-black/50 border-white/5 flex items-center gap-2">
               <CheckCircle2 className="w-3.5 h-3.5 text-emerald-400 shrink-0" />
               <div>
                 <div className="text-zinc-400 text-[9px]">Enclave Attest</div>
@@ -225,7 +225,7 @@ export const EvidenceDetailModal: React.FC<EvidenceDetailModalProps> = ({
               </div>
             </div>
 
-            <div className="p-2 rounded-lg bg-black/50 border border-white/5 flex items-center gap-2">
+            <div className="p-2 rounded-lg bg-black/50 border-white/5 flex items-center gap-2">
               <CheckCircle2 className="w-3.5 h-3.5 text-emerald-400 shrink-0" />
               <div>
                 <div className="text-zinc-400 text-[9px]">PQC Signature</div>
@@ -233,7 +233,7 @@ export const EvidenceDetailModal: React.FC<EvidenceDetailModalProps> = ({
               </div>
             </div>
 
-            <div className="p-2 rounded-lg bg-black/50 border border-white/5 flex items-center gap-2">
+            <div className="p-2 rounded-lg bg-black/50 border-white/5 flex items-center gap-2">
               <CheckCircle2 className="w-3.5 h-3.5 text-emerald-400 shrink-0" />
               <div>
                 <div className="text-zinc-400 text-[9px]">Genesis Lineage</div>
@@ -241,7 +241,7 @@ export const EvidenceDetailModal: React.FC<EvidenceDetailModalProps> = ({
               </div>
             </div>
 
-            <div className="p-2 rounded-lg bg-black/50 border border-white/5 flex items-center gap-2">
+            <div className="p-2 rounded-lg bg-black/50 border-white/5 flex items-center gap-2">
               <CheckCircle2 className="w-3.5 h-3.5 text-emerald-400 shrink-0" />
               <div>
                 <div className="text-zinc-400 text-[9px]">Replay Nonce</div>
@@ -249,7 +249,7 @@ export const EvidenceDetailModal: React.FC<EvidenceDetailModalProps> = ({
               </div>
             </div>
 
-            <div className="p-2 rounded-lg bg-black/50 border border-white/5 flex items-center gap-2">
+            <div className="p-2 rounded-lg bg-black/50 border-white/5 flex items-center gap-2">
               <CheckCircle2 className="w-3.5 h-3.5 text-emerald-400 shrink-0" />
               <div>
                 <div className="text-zinc-400 text-[9px]">Quorum Weight</div>
@@ -262,7 +262,7 @@ export const EvidenceDetailModal: React.FC<EvidenceDetailModalProps> = ({
         {/* Cryptographic Hash & Signatures (Non-Editable / Locked) */}
         <div className="space-y-2.5">
           {/* Public Key Fingerprint (Cryptographic Hash) */}
-          <div className="p-3 bg-black/70 rounded-xl border border-white/5 space-y-1">
+          <div className="p-3 bg-black/70 rounded-xl border-white/5 space-y-1">
             <div className="flex items-center justify-between">
               <span className="text-zinc-400 text-[10px] flex items-center gap-1">
                 <Hash className="w-3 h-3 text-amber-400" />
@@ -280,13 +280,13 @@ export const EvidenceDetailModal: React.FC<EvidenceDetailModalProps> = ({
                 <span>{copiedField === 'fingerprint' ? 'Copied' : 'Copy'}</span>
               </button>
             </div>
-            <div className="text-amber-300 font-mono text-[10px] break-all bg-black/90 p-2 rounded-lg border border-white/5 select-all">
+            <div className="text-amber-300 font-mono text-[10px] break-all bg-black/90 p-2 rounded-lg border-white/5 select-all">
               {cryptographicHash}
             </div>
           </div>
 
           {/* Post-Quantum Signature Digest */}
-          <div className="p-3 bg-black/70 rounded-xl border border-white/5 space-y-1">
+          <div className="p-3 bg-black/70 rounded-xl border-white/5 space-y-1">
             <div className="flex items-center justify-between">
               <span className="text-zinc-400 text-[10px] flex items-center gap-1">
                 <FileCheck2 className="w-3 h-3 text-cyan-400" />
@@ -304,14 +304,14 @@ export const EvidenceDetailModal: React.FC<EvidenceDetailModalProps> = ({
                 <span>{copiedField === 'sig' ? 'Copied' : 'Copy'}</span>
               </button>
             </div>
-            <div className="text-cyan-300 font-mono text-[10px] break-all bg-black/90 p-2 rounded-lg border border-white/5 select-all">
+            <div className="text-cyan-300 font-mono text-[10px] break-all bg-black/90 p-2 rounded-lg border-white/5 select-all">
               {evidenceData.signatureSnippet || 'N/A'}
             </div>
           </div>
 
           {/* Raw Attestation Payload */}
           {evidenceData.rawAttestationPayload && (
-            <div className="p-3 bg-black/70 rounded-xl border border-white/5 space-y-1">
+            <div className="p-3 bg-black/70 rounded-xl border-white/5 space-y-1">
               <div className="flex items-center justify-between">
                 <span className="text-zinc-400 text-[10px] flex items-center gap-1">
                   <Cpu className="w-3 h-3 text-emerald-400" />
@@ -329,7 +329,7 @@ export const EvidenceDetailModal: React.FC<EvidenceDetailModalProps> = ({
                   <span>{copiedField === 'payload' ? 'Copied' : 'Copy'}</span>
                 </button>
               </div>
-              <div className="text-zinc-300 font-mono text-[9px] break-all bg-black/90 p-2 rounded-lg border border-white/5 select-all max-h-20 overflow-y-auto">
+              <div className="text-zinc-300 font-mono text-[9px] break-all bg-black/90 p-2 rounded-lg border-white/5 select-all max-h-20 overflow-y-auto">
                 {evidenceData.rawAttestationPayload}
               </div>
             </div>
@@ -337,7 +337,7 @@ export const EvidenceDetailModal: React.FC<EvidenceDetailModalProps> = ({
         </div>
 
         {/* Read-Only Constraint Enforcement Footer */}
-        <div className="p-3 rounded-2xl bg-[#060810] border border-emerald-500/20 text-[10px] text-zinc-400 flex items-center justify-between flex-wrap gap-2">
+        <div className="p-3 rounded-2xl bg-[#060810] border-emerald-500/20 text-[10px] text-zinc-400 flex items-center justify-between flex-wrap gap-2">
           <div className="flex items-center gap-2">
             <Lock className="w-3.5 h-3.5 text-emerald-400" />
             <span>

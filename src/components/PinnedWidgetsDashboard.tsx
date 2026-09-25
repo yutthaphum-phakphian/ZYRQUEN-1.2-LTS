@@ -432,40 +432,40 @@ export const PinnedWidgetsDashboard: React.FC<PinnedWidgetsDashboardProps> = ({ 
     switch (id) {
       case 'entropy_graph':
         return (
-          <div className="p-4 rounded-2xl bg-black/40 border border-white/5">
+          <div className="p-4 rounded-2xl bg-black/40 border-white/5">
             <QuantumEntropyGraph />
           </div>
         );
 
       case 'hardware_grid':
         return (
-          <div className="p-4 rounded-2xl bg-black/40 border border-white/5">
+          <div className="p-4 rounded-2xl bg-black/40 border-white/5">
             <ConsoleHardwareTelemetryGrid />
           </div>
         );
 
       case 'crypto_stream':
         return (
-          <div className="p-4 rounded-2xl bg-black/40 border border-white/5 max-h-[380px] overflow-y-auto">
+          <div className="p-4 rounded-2xl bg-black/40 border-white/5 max-h-[380px] overflow-y-auto">
             <CryptographyStream />
           </div>
         );
 
       case 'forensic_pipeline':
         return (
-          <div className="p-5 rounded-2xl bg-black/40 border border-white/5 space-y-4 font-mono text-xs">
+          <div className="p-5 rounded-2xl bg-black/40 border-white/5 space-y-4 font-mono text-xs">
             <div className="flex flex-wrap items-center justify-between gap-2">
               <div>
                 <span className="text-zinc-200 font-bold">{AUDIT_TRACE_TX.txId}</span>
                 <p className="text-[11px] text-zinc-400 mt-0.5">{AUDIT_TRACE_TX.title}</p>
               </div>
-              <span className="px-2.5 py-1 rounded-full bg-emerald-500/15 text-emerald-300 border border-emerald-500/30 text-[10px] font-bold">
+              <span className="px-2.5 py-1 rounded-full bg-emerald-500/15 text-emerald-300 border-emerald-500/30 text-[10px] font-bold">
                 12/12 ATTESTED
               </span>
             </div>
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-2">
               {AUDIT_TRACE_TX.stages.slice(0, 6).map((st) => (
-                <div key={st.id} className="p-3 rounded-xl bg-white/[0.02] border border-white/5 space-y-1">
+                <div key={st.id} className="p-3 rounded-xl bg-white/[0.02] border-white/5 space-y-1">
                   <div className="flex items-center justify-between text-[11px]">
                     <span className="text-cyan-300 font-bold">Stage {st.stageNumber}</span>
                     <span className="text-zinc-500">{st.durationMs}ms</span>
@@ -490,7 +490,7 @@ export const PinnedWidgetsDashboard: React.FC<PinnedWidgetsDashboardProps> = ({ 
 
       case 'pulse_telemetry_chart':
         return (
-          <div className="p-5 rounded-2xl bg-black/40 border border-white/5 space-y-4 font-mono text-xs">
+          <div className="p-5 rounded-2xl bg-black/40 border-white/5 space-y-4 font-mono text-xs">
             <div className="flex items-center justify-between">
               <div className="flex items-center gap-2">
                 <span className="w-2 h-2 rounded-full bg-cyan-400 animate-pulse" />
@@ -533,15 +533,15 @@ export const PinnedWidgetsDashboard: React.FC<PinnedWidgetsDashboardProps> = ({ 
             </div>
 
             <div className="grid grid-cols-3 gap-2 pt-2 border-t border-white/5 text-center">
-              <div className="p-2 rounded-xl bg-white/[0.02] border border-white/5">
+              <div className="p-2 rounded-xl bg-white/[0.02] border-white/5">
                 <span className="text-[10px] text-zinc-500 block">THROUGHPUT</span>
                 <span className="text-cyan-300 font-bold text-xs">{SYSTEM_METADATA.qOpsTelemetry} QOps/s</span>
               </div>
-              <div className="p-2 rounded-xl bg-white/[0.02] border border-white/5">
+              <div className="p-2 rounded-xl bg-white/[0.02] border-white/5">
                 <span className="text-[10px] text-zinc-500 block">COHERENCE</span>
                 <span className="text-violet-300 font-bold text-xs">{SYSTEM_METADATA.coherence}</span>
               </div>
-              <div className="p-2 rounded-xl bg-white/[0.02] border border-white/5">
+              <div className="p-2 rounded-xl bg-white/[0.02] border-white/5">
                 <span className="text-[10px] text-zinc-500 block">CRYO TEMP</span>
                 <span className="text-amber-300 font-bold text-xs">{SYSTEM_METADATA.cryoTemp}</span>
               </div>
@@ -559,7 +559,7 @@ export const PinnedWidgetsDashboard: React.FC<PinnedWidgetsDashboardProps> = ({ 
         ];
 
         return (
-          <div className="p-5 rounded-2xl bg-black/40 border border-white/5 space-y-4 font-mono text-xs">
+          <div className="p-5 rounded-2xl bg-black/40 border-white/5 space-y-4 font-mono text-xs">
             <div className="flex items-center justify-between">
               <div>
                 <span className="text-zinc-200 font-bold">5-Step Phoenix Healing Workflow</span>
@@ -570,8 +570,8 @@ export const PinnedWidgetsDashboard: React.FC<PinnedWidgetsDashboardProps> = ({ 
                 disabled={isDagRunning}
                 className={`px-3.5 py-1.5 rounded-xl font-bold transition-all flex items-center gap-1.5 ${
                   isDagRunning
-                    ? 'bg-amber-500/20 text-amber-300 border border-amber-500/40 animate-pulse'
-                    : 'bg-amber-500/15 hover:bg-amber-500/25 text-amber-300 border border-amber-500/30'
+                    ? 'bg-amber-500/20 text-amber-300 border-amber-500/40 animate-pulse'
+                    : 'bg-amber-500/15 hover:bg-amber-500/25 text-amber-300 border-amber-500/30'
                 }`}
               >
                 <Play className={`w-3.5 h-3.5 ${isDagRunning ? 'animate-spin' : ''}`} />
@@ -629,7 +629,7 @@ export const PinnedWidgetsDashboard: React.FC<PinnedWidgetsDashboardProps> = ({ 
         ];
 
         return (
-          <div className="p-5 rounded-2xl bg-black/40 border border-white/5 space-y-4 font-mono text-xs">
+          <div className="p-5 rounded-2xl bg-black/40 border-white/5 space-y-4 font-mono text-xs">
             <div className="flex items-center justify-between">
               <div>
                 <span className="text-zinc-200 font-bold">Parallel Digital Twin Simulations</span>
@@ -677,7 +677,7 @@ export const PinnedWidgetsDashboard: React.FC<PinnedWidgetsDashboardProps> = ({ 
             </div>
 
             {monteCarloResult && (
-              <div className="p-2.5 rounded-xl bg-purple-500/10 border border-purple-500/20 text-purple-300 text-[11px] animate-in fade-in">
+              <div className="p-2.5 rounded-xl bg-purple-500/10 border-purple-500/20 text-purple-300 text-[11px] animate-in fade-in">
                 {monteCarloResult}
               </div>
             )}
@@ -686,14 +686,14 @@ export const PinnedWidgetsDashboard: React.FC<PinnedWidgetsDashboardProps> = ({ 
 
       case 'custodian_registry':
         return (
-          <div className="p-5 rounded-2xl bg-black/40 border border-white/5 space-y-3 font-mono text-xs">
+          <div className="p-5 rounded-2xl bg-black/40 border-white/5 space-y-3 font-mono text-xs">
             <div className="flex items-center justify-between border-b border-white/5 pb-2">
               <span className="text-zinc-200 font-bold">Thai Sovereign Executive Passports</span>
               <span className="text-emerald-400 text-[11px]">4 Registered Passports</span>
             </div>
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-2.5">
               {THAI_CUSTODIANS.slice(0, 2).map((c) => (
-                <div key={c.id} className="p-3 rounded-xl bg-white/[0.02] border border-white/5 space-y-1.5">
+                <div key={c.id} className="p-3 rounded-xl bg-white/[0.02] border-white/5 space-y-1.5">
                   <div className="flex items-center justify-between">
                     <span className="font-bold text-white flex items-center gap-1.5">
                       <span>🇹🇭</span>
@@ -740,13 +740,13 @@ export const PinnedWidgetsDashboard: React.FC<PinnedWidgetsDashboardProps> = ({ 
         ];
 
         return (
-          <div className="p-5 rounded-2xl bg-black/40 border border-white/5 space-y-3 font-mono text-xs">
+          <div className="p-5 rounded-2xl bg-black/40 border-white/5 space-y-3 font-mono text-xs">
             <div className="flex items-center justify-between border-b border-white/5 pb-2">
               <div>
                 <span className="text-zinc-200 font-bold">Thai Electronic Transactions Act ↔ Sovereign Chain Flow</span>
                 <p className="text-[11px] text-zinc-400 mt-0.5">Statute Section 9, 26, 28 → Sovereign Architecture Layer → Cryptographic Enforcement</p>
               </div>
-              <span className="text-cyan-400 text-[10px] px-2 py-0.5 rounded-full bg-cyan-500/10 border border-cyan-500/20 font-bold">
+              <span className="text-cyan-400 text-[10px] px-2 py-0.5 rounded-full bg-cyan-500/10 border-cyan-500/20 font-bold">
                 ETDA COMPLIANT
               </span>
             </div>
@@ -769,7 +769,7 @@ export const PinnedWidgetsDashboard: React.FC<PinnedWidgetsDashboardProps> = ({ 
               ))}
             </div>
 
-            <div className="p-2.5 rounded-xl bg-white/[0.02] border border-white/5 flex items-center justify-between text-[11px] text-zinc-400">
+            <div className="p-2.5 rounded-xl bg-white/[0.02] border-white/5 flex items-center justify-between text-[11px] text-zinc-400">
               <span className="flex items-center gap-1.5">
                 <FileCheck className="w-3.5 h-3.5 text-emerald-400" />
                 <span>Certified under Sovereign Principal: {SYSTEM_METADATA.sovereignPrincipal}</span>
@@ -793,7 +793,7 @@ export const PinnedWidgetsDashboard: React.FC<PinnedWidgetsDashboardProps> = ({ 
         ];
 
         return (
-          <div className="p-5 rounded-2xl bg-black/40 border border-white/5 space-y-3 font-mono text-xs">
+          <div className="p-5 rounded-2xl bg-black/40 border-white/5 space-y-3 font-mono text-xs">
             <div className="flex items-center justify-between">
               <div>
                 <span className="text-zinc-200 font-bold">Adversarial Vector Interdiction</span>
@@ -815,12 +815,12 @@ export const PinnedWidgetsDashboard: React.FC<PinnedWidgetsDashboardProps> = ({ 
 
             <div className="space-y-1.5">
               {sampleVectors.map((v) => (
-                <div key={v.id} className="p-2.5 rounded-xl bg-white/[0.02] border border-white/5 flex items-center justify-between">
+                <div key={v.id} className="p-2.5 rounded-xl bg-white/[0.02] border-white/5 flex items-center justify-between">
                   <div>
                     <span className="text-zinc-200 font-medium">{v.name}</span>
                     <span className="text-[10px] text-zinc-500 block">Defense: {v.defense}</span>
                   </div>
-                  <span className="px-2 py-0.5 rounded bg-emerald-500/15 text-emerald-300 border border-emerald-500/20 text-[10px] font-bold">
+                  <span className="px-2 py-0.5 rounded bg-emerald-500/15 text-emerald-300 border-emerald-500/20 text-[10px] font-bold">
                     {v.status}
                   </span>
                 </div>
@@ -828,7 +828,7 @@ export const PinnedWidgetsDashboard: React.FC<PinnedWidgetsDashboardProps> = ({ 
             </div>
 
             {shieldScanResult && (
-              <div className="p-2.5 rounded-xl bg-emerald-500/10 border border-emerald-500/20 text-emerald-300 text-[11px] animate-in fade-in">
+              <div className="p-2.5 rounded-xl bg-emerald-500/10 border-emerald-500/20 text-emerald-300 text-[11px] animate-in fade-in">
                 {shieldScanResult}
               </div>
             )}
@@ -843,7 +843,7 @@ export const PinnedWidgetsDashboard: React.FC<PinnedWidgetsDashboardProps> = ({ 
         ];
 
         return (
-          <div className="p-5 rounded-2xl bg-black/40 border border-white/5 space-y-3 font-mono text-xs">
+          <div className="p-5 rounded-2xl bg-black/40 border-white/5 space-y-3 font-mono text-xs">
             <div className="flex items-center justify-between border-b border-white/5 pb-2">
               <span className="text-zinc-200 font-bold">Regional OTLP Node Mesh</span>
               <span className="text-cyan-400 text-[11px]">100% Synced</span>
@@ -876,14 +876,14 @@ export const PinnedWidgetsDashboard: React.FC<PinnedWidgetsDashboardProps> = ({ 
 
       case 'citadel_3d':
         return (
-          <div className="relative w-full h-[320px] rounded-2xl bg-black/40 border border-white/5 overflow-hidden flex items-center justify-center">
+          <div className="relative w-full h-[320px] rounded-2xl bg-black/40 border-white/5 overflow-hidden flex items-center justify-center">
             <CitadelCanvas speedMultiplier={1.2} highlightColor="#06B6D4" />
           </div>
         );
 
       case 'topology_view':
         return (
-          <div className="relative w-full h-[320px] rounded-2xl bg-black/40 border border-white/5 overflow-hidden flex items-center justify-center">
+          <div className="relative w-full h-[320px] rounded-2xl bg-black/40 border-white/5 overflow-hidden flex items-center justify-center">
             <TopologyCanvas />
           </div>
         );
@@ -894,14 +894,14 @@ export const PinnedWidgetsDashboard: React.FC<PinnedWidgetsDashboardProps> = ({ 
   };
 
   return (
-    <div className="p-6 sm:p-8 rounded-[28px] bg-gradient-to-b from-[#0c1022]/90 via-[#0a0d1c]/80 to-[#070914]/90 border border-cyan-500/20 backdrop-blur-2xl space-y-6 shadow-[0_0_50px_-15px_rgba(6,182,212,0.15)] relative overflow-hidden group">
+    <div className="p-6 sm:p-8 rounded-[28px] bg-gradient-to-b from-[#0c1022]/90 via-[#0a0d1c]/80 to-[#070914]/90 border-cyan-500/20 backdrop-blur-2xl space-y-6 shadow-[0_0_50px_-15px_rgba(6,182,212,0.15)] relative overflow-hidden group">
       {/* Ambient glow */}
       <div className="absolute top-0 right-0 w-64 h-64 bg-cyan-500/5 rounded-full blur-3xl pointer-events-none" />
       
       {/* Unified Header & Controls */}
       <div className="relative z-10 flex flex-col sm:flex-row sm:items-center justify-between gap-4 border-b border-white/8 pb-4">
         <div className="flex items-center gap-3">
-          <div className="w-10 h-10 rounded-2xl bg-cyan-500/15 border border-cyan-500/30 flex items-center justify-center text-cyan-300 shadow-[0_0_20px_rgba(6,182,212,0.15)]">
+          <div className="w-10 h-10 rounded-2xl bg-cyan-500/15 border-cyan-500/30 flex items-center justify-center text-cyan-300 shadow-[0_0_20px_rgba(6,182,212,0.15)]">
             <Layout className="w-5 h-5" />
           </div>
           <div>
@@ -909,7 +909,7 @@ export const PinnedWidgetsDashboard: React.FC<PinnedWidgetsDashboardProps> = ({ 
               <h2 className="text-sm sm:text-base font-mono font-bold text-white uppercase tracking-wider">
                 Pinned Widgets Dashboard
               </h2>
-              <span className="text-[10px] px-2.5 py-0.5 rounded-full bg-cyan-500/15 text-cyan-300 border border-cyan-500/30 font-mono font-bold shadow-[0_0_12px_rgba(6,182,212,0.25)]">
+              <span className="text-[10px] px-2.5 py-0.5 rounded-full bg-cyan-500/15 text-cyan-300 border-cyan-500/30 font-mono font-bold shadow-[0_0_12px_rgba(6,182,212,0.25)]">
                 {pinnedWidgets.length} Active Modules
               </span>
             </div>
@@ -925,7 +925,7 @@ export const PinnedWidgetsDashboard: React.FC<PinnedWidgetsDashboardProps> = ({ 
               playTone(600, 0.04);
               setShowCatalogModal(!showCatalogModal);
             }}
-            className="px-3.5 py-2 rounded-2xl bg-cyan-500/15 hover:bg-cyan-500/25 border border-cyan-500/30 text-cyan-200 font-mono text-xs font-semibold flex items-center gap-2 transition-all shadow-[0_0_12px_rgba(6,182,212,0.1)] hover:shadow-[0_0_16px_rgba(6,182,212,0.2)]"
+            className="px-3.5 py-2 rounded-2xl bg-cyan-500/15 hover:bg-cyan-500/25 border-cyan-500/30 text-cyan-200 font-mono text-xs font-semibold flex items-center gap-2 transition-all shadow-[0_0_12px_rgba(6,182,212,0.1)] hover:shadow-[0_0_16px_rgba(6,182,212,0.2)]"
           >
             <Plus className="w-3.5 h-3.5" />
             <span>Customize Sub-Panels</span>
@@ -933,7 +933,7 @@ export const PinnedWidgetsDashboard: React.FC<PinnedWidgetsDashboardProps> = ({ 
           
           <button
             onClick={resetDefaultWidgets}
-            className="px-3 py-2 rounded-2xl bg-white/5 hover:bg-white/10 border border-white/10 text-zinc-400 hover:text-white font-mono text-xs font-semibold flex items-center gap-1.5 transition-all shadow-sm"
+            className="px-3 py-2 rounded-2xl bg-white/5 hover:bg-white/10 border-white/10 text-zinc-400 hover:text-white font-mono text-xs font-semibold flex items-center gap-1.5 transition-all shadow-sm"
             title="Reset to default pinned layout"
           >
             <RefreshCw className="w-3.5 h-3.5" />
@@ -944,7 +944,7 @@ export const PinnedWidgetsDashboard: React.FC<PinnedWidgetsDashboardProps> = ({ 
 
       {/* Widget Catalog Drawer / Selector Modal */}
       {showCatalogModal && (
-        <div className="p-5 rounded-[24px] bg-[#0c0f1c]/95 border border-cyan-500/30 space-y-4 animate-in fade-in slide-in-from-top-2 duration-200 shadow-2xl backdrop-blur-xl">
+        <div className="p-5 rounded-[24px] bg-[#0c0f1c]/95 border-cyan-500/30 space-y-4 animate-in fade-in slide-in-from-top-2 duration-200 shadow-2xl backdrop-blur-xl">
           <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 border-b border-white/5 pb-3">
             <div className="flex items-center gap-2">
               <Pin className="w-4 h-4 text-cyan-400" />
@@ -961,7 +961,7 @@ export const PinnedWidgetsDashboard: React.FC<PinnedWidgetsDashboardProps> = ({ 
                   value={searchQuery}
                   onChange={(e) => setSearchQuery(e.target.value)}
                   placeholder="Search sub-panels..."
-                  className="px-3 py-1.5 pl-8 text-xs font-mono rounded-xl bg-black/40 border border-white/10 text-white placeholder-zinc-500 focus:outline-none focus:border-cyan-500/50 transition-colors w-full sm:w-auto"
+                  className="px-3 py-1.5 pl-8 text-xs font-mono rounded-xl bg-black/40 border-white/10 text-white placeholder-zinc-500 focus:outline-none focus:border-cyan-500/50 transition-colors w-full sm:w-auto"
                 />
                 <Layout className="w-3.5 h-3.5 text-zinc-500 absolute left-2.5 top-2 pointer-events-none" />
               </div>
@@ -975,8 +975,8 @@ export const PinnedWidgetsDashboard: React.FC<PinnedWidgetsDashboardProps> = ({ 
                     }}
                     className={`px-2.5 py-1 text-[10px] font-mono rounded-lg transition-all ${
                       filterCategory === cat
-                        ? 'bg-cyan-500/20 text-cyan-300 border border-cyan-500/40 font-bold shadow-[0_0_10px_rgba(6,182,212,0.2)]'
-                        : 'bg-white/5 text-zinc-400 hover:text-zinc-200 border border-transparent hover:bg-white/10'
+                        ? 'bg-cyan-500/20 text-cyan-300 border-cyan-500/40 font-bold shadow-[0_0_10px_rgba(6,182,212,0.2)]'
+                        : 'bg-white/5 text-zinc-400 hover:text-zinc-200 border-transparent hover:bg-white/10'
                     }`}
                   >
                     {cat}
@@ -1032,7 +1032,7 @@ export const PinnedWidgetsDashboard: React.FC<PinnedWidgetsDashboardProps> = ({ 
       {/* Pinned Widgets List with Drag & Drop */}
       <div className="relative z-10 space-y-6">
         {pinnedWidgets.length === 0 ? (
-          <div className="h-48 rounded-[24px] border border-dashed border-cyan-500/30 flex flex-col items-center justify-center text-center p-6 text-zinc-500 space-y-3 font-mono bg-cyan-950/10">
+          <div className="h-48 rounded-[24px] border-dashed border-cyan-500/30 flex flex-col items-center justify-center text-center p-6 text-zinc-500 space-y-3 font-mono bg-cyan-950/10">
             <PinOff className="w-8 h-8 text-cyan-600/50 animate-pulse" />
             <p className="text-xs text-zinc-400">No sub-panels currently pinned to the workspace.</p>
             <button
@@ -1040,7 +1040,7 @@ export const PinnedWidgetsDashboard: React.FC<PinnedWidgetsDashboardProps> = ({ 
                 playTone(600, 0.04);
                 setShowCatalogModal(true);
               }}
-              className="px-4 py-2 rounded-xl bg-cyan-500/15 border border-cyan-500/30 text-cyan-300 text-xs font-bold hover:bg-cyan-500/25 transition-all shadow-sm"
+              className="px-4 py-2 rounded-xl bg-cyan-500/15 border-cyan-500/30 text-cyan-300 text-xs font-bold hover:bg-cyan-500/25 transition-all shadow-sm"
             >
               Open Catalog to Add Sub-Panels
             </button>
@@ -1079,14 +1079,14 @@ export const PinnedWidgetsDashboard: React.FC<PinnedWidgetsDashboardProps> = ({ 
                       <GripVertical className="w-4 h-4" />
                     </div>
 
-                    <div className="p-2 rounded-xl bg-white/5 border border-white/10 text-zinc-300 shadow-inner">
+                    <div className="p-2 rounded-xl bg-white/5 border-white/10 text-zinc-300 shadow-inner">
                       {meta.icon}
                     </div>
 
                     <div>
                       <div className="flex items-center gap-2 flex-wrap">
                         <h3 className="text-xs sm:text-sm font-bold text-white tracking-wide">{meta.title}</h3>
-                        <span className="text-[10px] px-2 py-0.5 rounded-full bg-white/5 text-zinc-400 border border-white/10 font-medium">
+                        <span className="text-[10px] px-2 py-0.5 rounded-full bg-white/5 text-zinc-400 border-white/10 font-medium">
                           {meta.badge}
                         </span>
                       </div>
@@ -1126,7 +1126,7 @@ export const PinnedWidgetsDashboard: React.FC<PinnedWidgetsDashboardProps> = ({ 
 
                     <button
                       onClick={() => toggleCollapse(widgetId)}
-                      className="p-1.5 rounded-lg text-zinc-400 hover:text-cyan-300 hover:bg-cyan-500/10 border border-white/5 hover:border-cyan-500/20 transition-all"
+                      className="p-1.5 rounded-lg text-zinc-400 hover:text-cyan-300 hover:bg-cyan-500/10 border-white/5 hover:border-cyan-500/20 transition-all"
                       title={isCollapsed ? 'Expand Panel' : 'Collapse Panel'}
                     >
                       {isCollapsed ? <Eye className="w-3.5 h-3.5" /> : <ChevronUp className="w-3.5 h-3.5" />}
@@ -1137,7 +1137,7 @@ export const PinnedWidgetsDashboard: React.FC<PinnedWidgetsDashboardProps> = ({ 
                         playTone(550, 0.04);
                         onNavigate(meta.sourceView);
                       }}
-                      className="px-2.5 py-1.5 rounded-lg text-[11px] bg-cyan-500/10 hover:bg-cyan-500/20 text-cyan-300 border border-cyan-500/20 hover:border-cyan-500/40 transition-all flex items-center gap-1.5 shadow-sm ml-1"
+                      className="px-2.5 py-1.5 rounded-lg text-[11px] bg-cyan-500/10 hover:bg-cyan-500/20 text-cyan-300 border-cyan-500/20 hover:border-cyan-500/40 transition-all flex items-center gap-1.5 shadow-sm ml-1"
                       title={`Navigate to full ${meta.sourceView} view`}
                     >
                       <span className="font-semibold tracking-wide">OPEN</span>
@@ -1146,7 +1146,7 @@ export const PinnedWidgetsDashboard: React.FC<PinnedWidgetsDashboardProps> = ({ 
 
                     <button
                       onClick={() => togglePinWidget(widgetId)}
-                      className="p-1.5 rounded-lg text-zinc-500 hover:text-rose-400 hover:bg-rose-500/10 border border-transparent hover:border-rose-500/20 transition-all ml-1"
+                      className="p-1.5 rounded-lg text-zinc-500 hover:text-rose-400 hover:bg-rose-500/10 border-transparent hover:border-rose-500/20 transition-all ml-1"
                       title="Unpin sub-panel from workspace"
                     >
                       <PinOff className="w-4 h-4" />

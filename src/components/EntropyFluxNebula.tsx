@@ -97,7 +97,7 @@ export const EntropyFluxNebula: React.FC = () => {
   }, [entropyLevel]);
 
   return (
-    <div className="w-full h-full min-h-[350px] bg-gradient-to-br from-[#070914]/90 via-[#0b0e1e]/80 to-[#070914]/90 border border-cyan-500/20 shadow-[0_8px_30px_-10px_rgba(6,182,212,0.15)] backdrop-blur-2xl rounded-[28px] p-6 flex flex-col relative overflow-hidden">
+    <div className="w-full h-full min-h-[350px] bg-gradient-to-br from-[#070914]/90 via-[#0b0e1e]/80 to-[#070914]/90 border-cyan-500/20 shadow-[0_8px_30px_-10px_rgba(6,182,212,0.15)] backdrop-blur-2xl rounded-[28px] p-6 flex flex-col relative overflow-hidden">
       <div className="relative z-10 flex items-center justify-between mb-4 pointer-events-none">
         <h3 className="text-sm font-bold text-transparent bg-clip-text bg-gradient-to-r from-cyan-200 to-indigo-300 font-mono tracking-wider flex items-center gap-2">
           <Sparkles className="w-4 h-4 text-cyan-400" />
@@ -107,7 +107,7 @@ export const EntropyFluxNebula: React.FC = () => {
           <span className="text-[10px] font-mono text-cyan-300">
             FLUX RATE: {(entropyLevel * 10).toFixed(0)} E/s
           </span>
-          <span className="text-[10px] font-mono bg-indigo-500/20 text-indigo-300 px-2 py-1 rounded-full border border-indigo-500/30">
+          <span className="text-[10px] font-mono bg-indigo-500/20 text-indigo-300 px-2 py-1 rounded-full border-indigo-500/30">
             PROCEDURAL D3
           </span>
         </div>
@@ -116,7 +116,7 @@ export const EntropyFluxNebula: React.FC = () => {
         <canvas ref={canvasRef} className="absolute inset-0 z-0 pointer-events-none" style={{ mixBlendMode: 'screen' }} />
       </div>
       
-      <div className="absolute bottom-6 right-6 z-10 p-4 rounded-2xl bg-[#070914]/80 border border-white/10 backdrop-blur-md pointer-events-none w-64 shadow-2xl">
+      <div className="absolute bottom-6 right-6 z-10 p-4 rounded-2xl bg-[#070914]/80 border-white/10 backdrop-blur-md pointer-events-none w-64 shadow-2xl">
         <div className="flex justify-between items-end mb-2">
            <span className="text-xs text-zinc-400 font-mono">Sub-Kelvin State</span>
            <span className="text-sm font-bold text-white font-mono">{entropyLevel.toFixed(1)}%</span>

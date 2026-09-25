@@ -22,7 +22,7 @@ export const ThreatSparkline: React.FC<ThreatSparklineProps> = ({ data }) => {
         <span>24h Threat Index History</span>
         <span className="text-emerald-400 font-semibold">Peak: {max.toFixed(2)}</span>
       </div>
-      <div className="p-2 rounded-lg bg-slate-950 border border-slate-800/80">
+      <div className="p-2 rounded-lg bg-slate-950 border-slate-800/80">
         <svg viewBox={`0 0 ${width} ${height}`} className="w-full h-10 overflow-visible">
           <defs>
             <linearGradient id="threatGradient" x1="0" y1="0" x2="0" y2="1">

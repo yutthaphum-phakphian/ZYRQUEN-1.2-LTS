@@ -89,7 +89,7 @@ export const FrozenIntegrityReconciliationGate: React.FC = () => {
       {/* Top Header */}
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 border-b border-cyan-500/20 pb-4">
         <div className="flex items-center gap-3">
-          <div className="w-10 h-10 rounded-xl bg-cyan-500/15 border border-cyan-500/30 text-cyan-300 flex items-center justify-center shrink-0">
+          <div className="w-10 h-10 rounded-xl bg-cyan-500/15 border-cyan-500/30 text-cyan-300 flex items-center justify-center shrink-0">
             <Lock className="w-5 h-5" />
           </div>
           <div>
@@ -97,7 +97,7 @@ export const FrozenIntegrityReconciliationGate: React.FC = () => {
               <h3 className="text-base font-bold text-cyan-100 font-serif">
                 Frozen Integrity Guard & Baseline Reconciliation Gate
               </h3>
-              <span className="text-[10px] px-2 py-0.5 rounded-full bg-cyan-500/20 text-cyan-300 border border-cyan-500/40 font-bold">
+              <span className="text-[10px] px-2 py-0.5 rounded-full bg-cyan-500/20 text-cyan-300 border-cyan-500/40 font-bold">
                 FROZEN v1.2 LTS
               </span>
             </div>
@@ -111,7 +111,7 @@ export const FrozenIntegrityReconciliationGate: React.FC = () => {
           <button
             onClick={handleRunReconciliation}
             disabled={isReconciling}
-            className="px-3.5 py-2 rounded-xl bg-cyan-500/20 hover:bg-cyan-500/30 border border-cyan-400/50 text-cyan-100 text-xs font-bold flex items-center gap-2 transition-all disabled:opacity-50"
+            className="px-3.5 py-2 rounded-xl bg-cyan-500/20 hover:bg-cyan-500/30 border-cyan-400/50 text-cyan-100 text-xs font-bold flex items-center gap-2 transition-all disabled:opacity-50"
           >
             <RefreshCw className={`w-3.5 h-3.5 ${isReconciling ? 'animate-spin text-cyan-300' : 'text-cyan-400'}`} />
             <span>{isReconciling ? 'Reconciling...' : 'Run Baseline Reconciliation'}</span>
@@ -185,7 +185,7 @@ export const FrozenIntegrityReconciliationGate: React.FC = () => {
           >
             <QrCode className="w-4 h-4" />
           </button>
-          <span className="text-[10px] px-2.5 py-1 rounded-lg bg-black/60 border border-white/10 font-bold">
+          <span className="text-[10px] px-2.5 py-1 rounded-lg bg-black/60 border-white/10 font-bold">
             Read-Only: ENFORCED
           </span>
           <span
@@ -203,7 +203,7 @@ export const FrozenIntegrityReconciliationGate: React.FC = () => {
       {/* Immutable Reference vs Runtime Comparison Grid */}
       <div className="grid grid-cols-1 md:grid-cols-3 gap-4 text-xs">
         {/* Metric 1: Merkle Root */}
-        <div className="p-4 rounded-xl bg-black/60 border border-white/10 space-y-2">
+        <div className="p-4 rounded-xl bg-black/60 border-white/10 space-y-2">
           <div className="flex items-center justify-between text-zinc-400 text-[11px]">
             <span className="flex items-center gap-1.5">
               <Hash className="w-3.5 h-3.5 text-cyan-400" />
@@ -238,7 +238,7 @@ export const FrozenIntegrityReconciliationGate: React.FC = () => {
         </div>
 
         {/* Metric 2: Sealed Block Height */}
-        <div className="p-4 rounded-xl bg-black/60 border border-white/10 space-y-2">
+        <div className="p-4 rounded-xl bg-black/60 border-white/10 space-y-2">
           <div className="flex items-center justify-between text-zinc-400 text-[11px]">
             <span className="flex items-center gap-1.5">
               <Layers className="w-3.5 h-3.5 text-amber-400" />
@@ -269,7 +269,7 @@ export const FrozenIntegrityReconciliationGate: React.FC = () => {
         </div>
 
         {/* Metric 3: Verified Seals Total */}
-        <div className="p-4 rounded-xl bg-black/60 border border-white/10 space-y-2">
+        <div className="p-4 rounded-xl bg-black/60 border-white/10 space-y-2">
           <div className="flex items-center justify-between text-zinc-400 text-[11px]">
             <span className="flex items-center gap-1.5">
               <Database className="w-3.5 h-3.5 text-purple-400" />
@@ -301,7 +301,7 @@ export const FrozenIntegrityReconciliationGate: React.FC = () => {
       </div>
 
       {/* Control-Plane Rules & Boundaries */}
-      <div className="p-4 rounded-2xl bg-white/[0.02] border border-white/8 space-y-2 text-xs">
+      <div className="p-4 rounded-2xl bg-white/[0.02] border-white/8 space-y-2 text-xs">
         <div className="font-bold text-zinc-300 text-[11px] uppercase tracking-wider flex items-center gap-2">
           <Eye className="w-3.5 h-3.5 text-cyan-400" />
           <span>FROZEN v1.2 LTS INTEGRITY INVARIANTS</span>

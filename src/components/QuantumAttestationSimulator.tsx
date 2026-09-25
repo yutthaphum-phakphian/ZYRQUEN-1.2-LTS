@@ -250,11 +250,11 @@ export const QuantumAttestationSimulator: React.FC = () => {
   };
 
   return (
-    <div className="p-6 sm:p-8 rounded-[28px] bg-[#07080F]/95 border border-white/8 backdrop-blur-2xl space-y-6 shadow-2xl font-mono">
+    <div className="p-6 sm:p-8 rounded-[28px] bg-[#07080F]/95 border-white/8 backdrop-blur-2xl space-y-6 shadow-2xl font-mono">
       {/* Top Header */}
       <div className="flex flex-col lg:flex-row lg:items-center justify-between gap-4 border-b border-white/8 pb-4">
         <div className="flex items-center gap-3.5">
-          <div className="w-12 h-12 rounded-2xl bg-violet-500/15 border border-violet-500/30 flex items-center justify-center text-violet-300 shadow-[0_0_25px_rgba(139,92,246,0.25)] shrink-0">
+          <div className="w-12 h-12 rounded-2xl bg-violet-500/15 border-violet-500/30 flex items-center justify-center text-violet-300 shadow-[0_0_25px_rgba(139,92,246,0.25)] shrink-0">
             <Zap className="w-6 h-6" />
           </div>
           <div>
@@ -262,7 +262,7 @@ export const QuantumAttestationSimulator: React.FC = () => {
               <h3 className="text-base sm:text-lg font-bold text-white tracking-wide">
                 Quantum Attestation Simulator (Omega Sequence #EP-SOVEREIGN-01)
               </h3>
-              <span className="text-[10px] px-2.5 py-0.5 rounded-full bg-violet-500/15 text-violet-300 border border-violet-500/30 font-bold">
+              <span className="text-[10px] px-2.5 py-0.5 rounded-full bg-violet-500/15 text-violet-300 border-violet-500/30 font-bold">
                 PQC LATTICE + THAI LAW
               </span>
             </div>
@@ -336,11 +336,11 @@ export const QuantumAttestationSimulator: React.FC = () => {
       </div>
 
       {/* Selected Phase Dual-Status Monitor Card */}
-      <div className="p-6 rounded-2xl bg-black/80 border border-white/10 space-y-5 shadow-2xl">
+      <div className="p-6 rounded-2xl bg-black/80 border-white/10 space-y-5 shadow-2xl">
         {/* Phase Title Bar */}
         <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 border-b border-white/8 pb-4">
           <div className="flex items-center gap-3.5">
-            <div className="w-12 h-12 rounded-2xl bg-violet-500/20 border border-violet-500/40 text-violet-300 flex items-center justify-center font-bold text-lg shrink-0">
+            <div className="w-12 h-12 rounded-2xl bg-violet-500/20 border-violet-500/40 text-violet-300 flex items-center justify-center font-bold text-lg shrink-0">
               Φ{selectedPhase.phase}
             </div>
             <div>
@@ -360,13 +360,13 @@ export const QuantumAttestationSimulator: React.FC = () => {
             <button
               onClick={() => handleTriggerPhase(selectedPhaseIndex)}
               disabled={isSimulatingAll || activeTransmuteIndex === selectedPhaseIndex}
-              className="px-3.5 py-1.5 rounded-xl bg-violet-500/20 hover:bg-violet-500/30 border border-violet-500/40 text-violet-200 text-xs font-bold transition-all flex items-center gap-1.5"
+              className="px-3.5 py-1.5 rounded-xl bg-violet-500/20 hover:bg-violet-500/30 border-violet-500/40 text-violet-200 text-xs font-bold transition-all flex items-center gap-1.5"
             >
               <Zap className="w-3.5 h-3.5 text-cyan-300" />
               <span>Attest Phase Φ{selectedPhase.phase}</span>
             </button>
 
-            <span className="px-3 py-1.5 rounded-xl text-xs font-bold bg-emerald-500/15 text-emerald-300 border border-emerald-500/30">
+            <span className="px-3 py-1.5 rounded-xl text-xs font-bold bg-emerald-500/15 text-emerald-300 border-emerald-500/30">
               {selectedPhase.status}
             </span>
           </div>
@@ -375,34 +375,34 @@ export const QuantumAttestationSimulator: React.FC = () => {
         {/* Dual Panels: Quantum Lattice vs Legal Compliance */}
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
           {/* Left Panel: Quantum Lattice State & Invariant Integrity */}
-          <div className="p-5 rounded-2xl bg-gradient-to-br from-violet-950/30 to-black/60 border border-violet-500/30 space-y-3">
+          <div className="p-5 rounded-2xl bg-gradient-to-br from-violet-950/30 to-black/60 border-violet-500/30 space-y-3">
             <div className="flex items-center justify-between">
               <span className="text-xs font-bold text-violet-300 flex items-center gap-2">
                 <Cpu className="w-4 h-4 text-violet-400" />
                 <span>QUANTUM RUNTIME INTEGRITY</span>
               </span>
-              <span className="text-[11px] font-mono text-emerald-400 bg-emerald-500/10 px-2 py-0.5 rounded-full border border-emerald-500/20">
+              <span className="text-[11px] font-mono text-emerald-400 bg-emerald-500/10 px-2 py-0.5 rounded-full border-emerald-500/20">
                 LATTICE SYNCHRONIZED
               </span>
             </div>
 
             <div className="space-y-2 text-xs">
-              <div className="p-3 bg-black/40 rounded-xl border border-white/5 space-y-1">
+              <div className="p-3 bg-black/40 rounded-xl border-white/5 space-y-1">
                 <span className="text-[10px] text-zinc-400 block">LATTICE STATE VECTOR:</span>
                 <span className="text-zinc-100 font-bold">{selectedPhase.quantumLatticeState}</span>
               </div>
 
-              <div className="p-3 bg-black/40 rounded-xl border border-white/5 space-y-1">
+              <div className="p-3 bg-black/40 rounded-xl border-white/5 space-y-1">
                 <span className="text-[10px] text-zinc-400 block">SOVEREIGN INVARIANT INTEGRITY:</span>
                 <span className="text-cyan-300 font-mono">{selectedPhase.runtimeIntegrity}</span>
               </div>
 
               <div className="grid grid-cols-2 gap-2 text-[11px] pt-1">
-                <div className="p-2 rounded-lg bg-white/[0.02] border border-white/5">
+                <div className="p-2 rounded-lg bg-white/[0.02] border-white/5">
                   <span className="text-zinc-500 block text-[10px]">COHERENCE</span>
                   <span className="text-emerald-400 font-bold">{selectedPhase.coherenceScore}%</span>
                 </div>
-                <div className="p-2 rounded-lg bg-white/[0.02] border border-white/5">
+                <div className="p-2 rounded-lg bg-white/[0.02] border-white/5">
                   <span className="text-zinc-500 block text-[10px]">DRIFT VARIANCE</span>
                   <span className="text-cyan-300 font-bold">0.0000% (Zero-Drift)</span>
                 </div>
@@ -411,31 +411,31 @@ export const QuantumAttestationSimulator: React.FC = () => {
           </div>
 
           {/* Right Panel: Thai Legal Compliance & Statutory Grounding */}
-          <div className="p-5 rounded-2xl bg-gradient-to-br from-cyan-950/30 to-black/60 border border-cyan-500/30 space-y-3">
+          <div className="p-5 rounded-2xl bg-gradient-to-br from-cyan-950/30 to-black/60 border-cyan-500/30 space-y-3">
             <div className="flex items-center justify-between">
               <span className="text-xs font-bold text-cyan-300 flex items-center gap-2">
                 <Scale className="w-4 h-4 text-cyan-400" />
                 <span>THAI STATUTORY COMPLIANCE</span>
               </span>
-              <span className="text-[11px] font-mono text-cyan-300 bg-cyan-500/10 px-2 py-0.5 rounded-full border border-cyan-500/20">
+              <span className="text-[11px] font-mono text-cyan-300 bg-cyan-500/10 px-2 py-0.5 rounded-full border-cyan-500/20">
                 ETDA LEVEL 3+ ENFORCED
               </span>
             </div>
 
             <div className="space-y-2 text-xs">
-              <div className="p-3 bg-black/40 rounded-xl border border-white/5 space-y-1">
+              <div className="p-3 bg-black/40 rounded-xl border-white/5 space-y-1">
                 <span className="text-[10px] text-zinc-400 block">THAI STATUTE / JURISDICTIONAL MANDATE:</span>
                 <span className="text-emerald-300 font-bold leading-relaxed">{selectedPhase.legalStatus}</span>
               </div>
 
-              <div className="p-3 bg-black/40 rounded-xl border border-white/5 space-y-1">
+              <div className="p-3 bg-black/40 rounded-xl border-white/5 space-y-1">
                 <span className="text-[10px] text-zinc-400 block">EXECUTIVE CUSTODY MANDATE:</span>
                 <span className="text-zinc-200">
                   Anchored to Passport <strong className="text-amber-400">#EP-SOVEREIGN-01</strong> ({SYSTEM_METADATA.sovereignPrincipal})
                 </span>
               </div>
 
-              <div className="p-2 rounded-lg bg-white/[0.02] border border-white/5 text-[10px] text-zinc-400 flex items-center justify-between">
+              <div className="p-2 rounded-lg bg-white/[0.02] border-white/5 text-[10px] text-zinc-400 flex items-center justify-between">
                 <span>EVIDENTIARY STANDING:</span>
                 <span className="text-emerald-400 font-bold">Admissible in Thai Courts (Section 9/26/28)</span>
               </div>

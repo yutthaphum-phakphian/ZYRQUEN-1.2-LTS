@@ -273,14 +273,14 @@ export const PulseHardwareGrid: React.FC<PulseHardwareGridProps> = ({
     switch (status) {
       case 'CRITICAL':
         return (
-          <span className="px-2 py-0.5 rounded-full bg-rose-500/20 text-rose-300 border border-rose-500/40 text-[10px] font-mono font-bold flex items-center gap-1 animate-pulse">
+          <span className="px-2 py-0.5 rounded-full bg-rose-500/20 text-rose-300 border-rose-500/40 text-[10px] font-mono font-bold flex items-center gap-1 animate-pulse">
             <AlertTriangle className="w-3 h-3" />
             CRITICAL
           </span>
         );
       case 'ELEVATED':
         return (
-          <span className="px-2 py-0.5 rounded-full bg-amber-500/20 text-amber-300 border border-amber-500/40 text-[10px] font-mono font-bold flex items-center gap-1">
+          <span className="px-2 py-0.5 rounded-full bg-amber-500/20 text-amber-300 border-amber-500/40 text-[10px] font-mono font-bold flex items-center gap-1">
             <AlertTriangle className="w-3 h-3" />
             ELEVATED
           </span>
@@ -288,7 +288,7 @@ export const PulseHardwareGrid: React.FC<PulseHardwareGridProps> = ({
       case 'NOMINAL':
       default:
         return (
-          <span className="px-2 py-0.5 rounded-full bg-emerald-500/15 text-emerald-300 border border-emerald-500/30 text-[10px] font-mono font-bold flex items-center gap-1">
+          <span className="px-2 py-0.5 rounded-full bg-emerald-500/15 text-emerald-300 border-emerald-500/30 text-[10px] font-mono font-bold flex items-center gap-1">
             <CheckCircle2 className="w-3 h-3" />
             NOMINAL
           </span>
@@ -310,7 +310,7 @@ export const PulseHardwareGrid: React.FC<PulseHardwareGridProps> = ({
   };
 
   return (
-    <div id="pulse-hardware-grid" className="p-6 rounded-[28px] bg-[#0b0e1a]/85 border border-cyan-500/20 backdrop-blur-xl space-y-6 shadow-2xl relative overflow-hidden">
+    <div id="pulse-hardware-grid" className="p-6 rounded-[28px] bg-[#0b0e1a]/85 border-cyan-500/20 backdrop-blur-xl space-y-6 shadow-2xl relative overflow-hidden">
       {/* Background ambient gradient glow */}
       <div className="absolute top-0 right-0 w-96 h-96 bg-cyan-500/5 rounded-full blur-3xl pointer-events-none" />
       <div className="absolute bottom-0 left-0 w-96 h-96 bg-violet-500/5 rounded-full blur-3xl pointer-events-none" />
@@ -319,7 +319,7 @@ export const PulseHardwareGrid: React.FC<PulseHardwareGridProps> = ({
       <div className="flex flex-col lg:flex-row lg:items-center justify-between gap-4 relative z-10">
         <div>
           <div className="flex items-center gap-2.5">
-            <div className="p-2 rounded-xl bg-cyan-500/10 text-cyan-300 border border-cyan-500/30 shrink-0">
+            <div className="p-2 rounded-xl bg-cyan-500/10 text-cyan-300 border-cyan-500/30 shrink-0">
               <Cpu className="w-5 h-5" />
             </div>
             <div>
@@ -327,10 +327,10 @@ export const PulseHardwareGrid: React.FC<PulseHardwareGridProps> = ({
                 <h3 className="text-base sm:text-lg font-mono font-bold text-white tracking-wide">
                   Hardware Health & CPU/Memory Matrix
                 </h3>
-                <span className="px-2 py-0.5 rounded-full bg-cyan-500/10 text-cyan-300 border border-cyan-500/30 text-[10px] font-mono">
+                <span className="px-2 py-0.5 rounded-full bg-cyan-500/10 text-cyan-300 border-cyan-500/30 text-[10px] font-mono">
                   12 HARDWARE MODULES
                 </span>
-                <span className="px-2 py-0.5 rounded-full bg-emerald-500/10 text-emerald-300 border border-emerald-500/20 text-[10px] font-mono">
+                <span className="px-2 py-0.5 rounded-full bg-emerald-500/10 text-emerald-300 border-emerald-500/20 text-[10px] font-mono">
                   ZERO DRIFT
                 </span>
               </div>
@@ -344,7 +344,7 @@ export const PulseHardwareGrid: React.FC<PulseHardwareGridProps> = ({
         {/* Snapshot Selector & Filter Pills */}
         <div className="flex flex-wrap items-center gap-2.5 font-mono text-xs">
           {/* Snapshot selector */}
-          <div className="flex items-center gap-1.5 p-1 bg-black/50 border border-white/10 rounded-2xl">
+          <div className="flex items-center gap-1.5 p-1 bg-black/50 border-white/10 rounded-2xl">
             <span className="text-[11px] text-zinc-400 px-2 flex items-center gap-1">
               <Clock className="w-3.5 h-3.5 text-cyan-400" />
               Snapshot:
@@ -358,7 +358,7 @@ export const PulseHardwareGrid: React.FC<PulseHardwareGridProps> = ({
                 }}
                 className={`px-2.5 py-1 rounded-xl text-[10px] transition-all font-bold ${
                   selectedSnapshotIndex === idx
-                    ? 'bg-cyan-500/20 text-cyan-300 border border-cyan-500/50 shadow-[0_0_10px_rgba(6,182,212,0.25)]'
+                    ? 'bg-cyan-500/20 text-cyan-300 border-cyan-500/50 shadow-[0_0_10px_rgba(6,182,212,0.25)]'
                     : 'text-zinc-400 hover:text-zinc-200 hover:bg-white/5'
                 }`}
                 title={`View Telemetry Snapshot #${snap.snapshotNumber} (${snap.id})`}
@@ -375,7 +375,7 @@ export const PulseHardwareGrid: React.FC<PulseHardwareGridProps> = ({
               playTone(720, 0.04);
               exportHardwareSnapshotJson(activeSnapshot);
             }}
-            className="px-2.5 py-1 rounded-2xl text-[10px] font-bold bg-cyan-500/15 hover:bg-cyan-500/25 border border-cyan-500/40 text-cyan-300 hover:text-white flex items-center gap-1.5 transition-all shadow-[0_0_10px_rgba(6,182,212,0.15)]"
+            className="px-2.5 py-1 rounded-2xl text-[10px] font-bold bg-cyan-500/15 hover:bg-cyan-500/25 border-cyan-500/40 text-cyan-300 hover:text-white flex items-center gap-1.5 transition-all shadow-[0_0_10px_rgba(6,182,212,0.15)]"
             title={`Download Hardware Snapshot #${activeSnapshot.snapshotNumber} (${activeSnapshot.id}) as JSON`}
           >
             <Download className="w-3 h-3 text-cyan-400" />
@@ -389,7 +389,7 @@ export const PulseHardwareGrid: React.FC<PulseHardwareGridProps> = ({
               playTone(740, 0.04);
               exportAllHardwareSnapshotsCsv(snapshots);
             }}
-            className="px-2.5 py-1 rounded-2xl text-[10px] font-bold bg-emerald-500/15 hover:bg-emerald-500/25 border border-emerald-500/40 text-emerald-300 hover:text-white flex items-center gap-1.5 transition-all shadow-[0_0_10px_rgba(16,185,129,0.15)]"
+            className="px-2.5 py-1 rounded-2xl text-[10px] font-bold bg-emerald-500/15 hover:bg-emerald-500/25 border-emerald-500/40 text-emerald-300 hover:text-white flex items-center gap-1.5 transition-all shadow-[0_0_10px_rgba(16,185,129,0.15)]"
             title="Export all hardware snapshots as a CSV spreadsheet"
           >
             <Download className="w-3 h-3 text-emerald-400" />
@@ -397,7 +397,7 @@ export const PulseHardwareGrid: React.FC<PulseHardwareGridProps> = ({
           </button>
 
           {/* Density toggle */}
-          <div className="flex items-center p-1 bg-black/50 border border-white/10 rounded-2xl">
+          <div className="flex items-center p-1 bg-black/50 border-white/10 rounded-2xl">
             <button
               onClick={() => {
                 setViewDensity(viewDensity === 'comfort' ? 'compact' : 'comfort');
@@ -551,7 +551,7 @@ export const PulseHardwareGrid: React.FC<PulseHardwareGridProps> = ({
 
       {/* Selected Module Detail Modal / Drawer */}
       {selectedModule && (
-        <div className="p-5 rounded-2xl bg-black/70 border border-cyan-500/40 font-mono text-xs space-y-4 animate-in fade-in duration-200 relative z-10 shadow-2xl">
+        <div className="p-5 rounded-2xl bg-black/70 border-cyan-500/40 font-mono text-xs space-y-4 animate-in fade-in duration-200 relative z-10 shadow-2xl">
           <div className="flex flex-wrap items-center justify-between gap-3 border-b border-white/10 pb-3">
             <div className="flex items-center gap-2.5">
               <div className="p-2 rounded-lg bg-cyan-500/20 text-cyan-300">
@@ -578,29 +578,29 @@ export const PulseHardwareGrid: React.FC<PulseHardwareGridProps> = ({
           </div>
 
           <div className="grid grid-cols-1 md:grid-cols-4 gap-3 text-[11px]">
-            <div className="p-3 rounded-xl bg-white/5 border border-white/5 space-y-1">
+            <div className="p-3 rounded-xl bg-white/5 border-white/5 space-y-1">
               <span className="text-zinc-400">Current Workload</span>
               <div className="text-base font-bold text-cyan-300">{selectedModule.loadPct}%</div>
               <p className="text-[10px] text-zinc-500">Nominal load envelope</p>
             </div>
-            <div className="p-3 rounded-xl bg-white/5 border border-white/5 space-y-1">
+            <div className="p-3 rounded-xl bg-white/5 border-white/5 space-y-1">
               <span className="text-zinc-400">Thermal Junction</span>
               <div className="text-base font-bold text-amber-300">{selectedModule.tempC}°C</div>
               <p className="text-[10px] text-zinc-500">Below 85°C throttle limit</p>
             </div>
-            <div className="p-3 rounded-xl bg-white/5 border border-white/5 space-y-1">
+            <div className="p-3 rounded-xl bg-white/5 border-white/5 space-y-1">
               <span className="text-zinc-400">Access Latency</span>
               <div className="text-base font-bold text-violet-300">{selectedModule.latencyNs || 1.2} ns</div>
               <p className="text-[10px] text-zinc-500">Direct bus routing</p>
             </div>
-            <div className="p-3 rounded-xl bg-white/5 border border-white/5 space-y-1">
+            <div className="p-3 rounded-xl bg-white/5 border-white/5 space-y-1">
               <span className="text-zinc-400">Integrity Health</span>
               <div className="text-base font-bold text-emerald-300">{selectedModule.healthScore}%</div>
               <p className="text-[10px] text-zinc-500">Zero ECC error count</p>
             </div>
           </div>
 
-          <div className="p-3 rounded-xl bg-white/5 border border-white/5 space-y-1 text-[11px]">
+          <div className="p-3 rounded-xl bg-white/5 border-white/5 space-y-1 text-[11px]">
             <span className="text-zinc-400 font-bold uppercase tracking-wider text-[10px]">Architectural Description & Role:</span>
             <p className="text-zinc-200">{selectedModule.notes}</p>
             <div className="pt-2 flex flex-wrap items-center justify-between gap-2 text-[10px] text-zinc-500 border-t border-white/5">
@@ -613,7 +613,7 @@ export const PulseHardwareGrid: React.FC<PulseHardwareGridProps> = ({
                   playTone(720, 0.04);
                   exportHardwareSnapshotJson(activeSnapshot);
                 }}
-                className="px-2 py-0.5 rounded bg-cyan-500/15 hover:bg-cyan-500/25 border border-cyan-500/30 text-cyan-300 hover:text-white flex items-center gap-1 transition-all"
+                className="px-2 py-0.5 rounded bg-cyan-500/15 hover:bg-cyan-500/25 border-cyan-500/30 text-cyan-300 hover:text-white flex items-center gap-1 transition-all"
                 title={`Download Snapshot #${activeSnapshot.snapshotNumber} JSON`}
               >
                 <Download className="w-3 h-3 text-cyan-400" />

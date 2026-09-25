@@ -152,7 +152,7 @@ Platform Boundary: ${CANONICAL_CONSTANTS.PLATFORM_BOUNDARY}`,
 
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/80 backdrop-blur-sm p-4 select-none">
-      <div className="w-full max-w-3xl h-[520px] bg-[#050912] border border-cyan-500/40 rounded-xl shadow-[0_0_50px_rgba(6,182,212,0.15)] flex flex-col overflow-hidden font-mono-code">
+      <div className="w-full max-w-3xl h-[520px] bg-[#050912] border-cyan-500/40 rounded-xl shadow-[0_0_50px_rgba(6,182,212,0.15)] flex flex-col overflow-hidden font-mono-code">
         {/* Terminal Header Bar */}
         <div className="p-3 bg-slate-950 border-b border-slate-800 flex items-center justify-between">
           <div className="flex items-center space-x-2">

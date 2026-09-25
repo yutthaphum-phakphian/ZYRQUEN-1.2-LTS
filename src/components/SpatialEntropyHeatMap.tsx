@@ -345,11 +345,11 @@ export const SpatialEntropyHeatMap: React.FC = () => {
   }, [nodes, selectedNode, showMeshLinks, isPinging]);
 
   return (
-    <div className="p-6 rounded-[28px] bg-gradient-to-br from-[#070914]/90 via-[#0b0e1e]/85 to-[#070914]/90 border border-cyan-500/25 shadow-[0_8px_30px_-10px_rgba(6,182,212,0.15)] backdrop-blur-2xl space-y-6">
+    <div className="p-6 rounded-[28px] bg-gradient-to-br from-[#070914]/90 via-[#0b0e1e]/85 to-[#070914]/90 border-cyan-500/25 shadow-[0_8px_30px_-10px_rgba(6,182,212,0.15)] backdrop-blur-2xl space-y-6">
       {/* Header & Controls Bar */}
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 border-b border-white/8 pb-4">
         <div className="flex items-center gap-3">
-          <div className="w-10 h-10 rounded-2xl bg-cyan-500/15 border border-cyan-500/30 flex items-center justify-center text-cyan-300 shadow-[0_0_20px_rgba(6,182,212,0.2)]">
+          <div className="w-10 h-10 rounded-2xl bg-cyan-500/15 border-cyan-500/30 flex items-center justify-center text-cyan-300 shadow-[0_0_20px_rgba(6,182,212,0.2)]">
             <Compass className="w-5 h-5 text-cyan-400" />
           </div>
           <div>
@@ -357,7 +357,7 @@ export const SpatialEntropyHeatMap: React.FC = () => {
               <h3 className="text-sm font-mono font-bold text-white uppercase tracking-wider">
                 2D Spatial Entropy Heat Map & Topological Coordinates
               </h3>
-              <span className="text-[10px] font-mono bg-cyan-500/15 text-cyan-300 px-2.5 py-0.5 rounded-full border border-cyan-500/30 font-semibold">
+              <span className="text-[10px] font-mono bg-cyan-500/15 text-cyan-300 px-2.5 py-0.5 rounded-full border-cyan-500/30 font-semibold">
                 D3 SPATIAL GRID
               </span>
             </div>
@@ -384,12 +384,12 @@ export const SpatialEntropyHeatMap: React.FC = () => {
           </button>
 
           {/* Metric Selector */}
-          <div className="flex rounded-xl bg-black/50 border border-white/10 p-0.5 font-mono text-xs">
+          <div className="flex rounded-xl bg-black/50 border-white/10 p-0.5 font-mono text-xs">
             <button
               onClick={() => setMetricMode('ENTROPY')}
               className={`px-2.5 py-1 rounded-lg transition-all ${
                 metricMode === 'ENTROPY'
-                  ? 'bg-cyan-500/25 text-cyan-200 font-bold border border-cyan-500/30'
+                  ? 'bg-cyan-500/25 text-cyan-200 font-bold border-cyan-500/30'
                   : 'text-zinc-400 hover:text-white'
               }`}
             >
@@ -399,7 +399,7 @@ export const SpatialEntropyHeatMap: React.FC = () => {
               onClick={() => setMetricMode('THERMAL')}
               className={`px-2.5 py-1 rounded-lg transition-all ${
                 metricMode === 'THERMAL'
-                  ? 'bg-cyan-500/25 text-cyan-200 font-bold border border-cyan-500/30'
+                  ? 'bg-cyan-500/25 text-cyan-200 font-bold border-cyan-500/30'
                   : 'text-zinc-400 hover:text-white'
               }`}
             >
@@ -409,7 +409,7 @@ export const SpatialEntropyHeatMap: React.FC = () => {
               onClick={() => setMetricMode('BANDWIDTH')}
               className={`px-2.5 py-1 rounded-lg transition-all ${
                 metricMode === 'BANDWIDTH'
-                  ? 'bg-cyan-500/25 text-cyan-200 font-bold border border-cyan-500/30'
+                  ? 'bg-cyan-500/25 text-cyan-200 font-bold border-cyan-500/30'
                   : 'text-zinc-400 hover:text-white'
               }`}
             >
@@ -421,7 +421,7 @@ export const SpatialEntropyHeatMap: React.FC = () => {
           <button
             onClick={handlePingNodes}
             disabled={isPinging}
-            className="px-3.5 py-1.5 rounded-xl bg-cyan-500/20 hover:bg-cyan-500/30 border border-cyan-500/40 text-cyan-100 font-mono text-xs font-bold transition-all shadow-[0_0_15px_rgba(6,182,212,0.2)] flex items-center gap-1.5"
+            className="px-3.5 py-1.5 rounded-xl bg-cyan-500/20 hover:bg-cyan-500/30 border-cyan-500/40 text-cyan-100 font-mono text-xs font-bold transition-all shadow-[0_0_15px_rgba(6,182,212,0.2)] flex items-center gap-1.5"
           >
             <Radio className={`w-3.5 h-3.5 ${isPinging ? 'animate-ping text-cyan-400' : ''}`} />
             <span>Ping Grid</span>
@@ -432,13 +432,13 @@ export const SpatialEntropyHeatMap: React.FC = () => {
       {/* Main Heat Map Stage & Detail Inspection Split View */}
       <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 items-start">
         {/* Left: D3 Topological Canvas */}
-        <div className="lg:col-span-8 relative bg-black/50 border border-white/8 rounded-2xl p-4 overflow-hidden min-h-[440px] flex flex-col items-center justify-center">
+        <div className="lg:col-span-8 relative bg-black/50 border-white/8 rounded-2xl p-4 overflow-hidden min-h-[440px] flex flex-col items-center justify-center">
           <div ref={containerRef} className="w-full h-[400px] relative">
             <svg ref={svgRef} className="w-full h-full" />
           </div>
 
           {/* Map Legend Overlay */}
-          <div className="absolute bottom-3 left-3 bg-[#070914]/85 border border-white/10 backdrop-blur-md rounded-xl px-3 py-1.5 flex items-center gap-3 text-[10px] font-mono text-zinc-400 pointer-events-none">
+          <div className="absolute bottom-3 left-3 bg-[#070914]/85 border-white/10 backdrop-blur-md rounded-xl px-3 py-1.5 flex items-center gap-3 text-[10px] font-mono text-zinc-400 pointer-events-none">
             <span className="flex items-center gap-1">
               <span className="w-2 h-2 rounded-full bg-[#06b6d4]"></span> Low (&lt;0.25)
             </span>
@@ -454,7 +454,7 @@ export const SpatialEntropyHeatMap: React.FC = () => {
           </div>
 
           {/* Coordinate indicator */}
-          <div className="absolute top-3 right-3 bg-[#070914]/85 border border-white/10 backdrop-blur-md rounded-xl px-3 py-1 text-[10px] font-mono text-zinc-400 pointer-events-none">
+          <div className="absolute top-3 right-3 bg-[#070914]/85 border-white/10 backdrop-blur-md rounded-xl px-3 py-1 text-[10px] font-mono text-zinc-400 pointer-events-none">
             CARTESIAN BOUNDS: [-100, +100]²
           </div>
         </div>
@@ -462,10 +462,10 @@ export const SpatialEntropyHeatMap: React.FC = () => {
         {/* Right: Selected Node Telemetry Card */}
         <div className="lg:col-span-4 space-y-4">
           {selectedNode ? (
-            <div className="p-5 rounded-2xl bg-black/60 border border-cyan-500/30 space-y-4 shadow-xl animate-in fade-in">
+            <div className="p-5 rounded-2xl bg-black/60 border-cyan-500/30 space-y-4 shadow-xl animate-in fade-in">
               <div className="flex items-start justify-between">
                 <div>
-                  <span className="text-[10px] font-mono px-2 py-0.5 rounded bg-cyan-500/15 text-cyan-300 border border-cyan-500/30 font-bold uppercase">
+                  <span className="text-[10px] font-mono px-2 py-0.5 rounded bg-cyan-500/15 text-cyan-300 border-cyan-500/30 font-bold uppercase">
                     {selectedNode.chamberId}
                   </span>
                   <h4 className="text-sm font-mono font-bold text-white mt-1.5">
@@ -486,7 +486,7 @@ export const SpatialEntropyHeatMap: React.FC = () => {
               </div>
 
               {/* Spatial Coordinates Box */}
-              <div className="grid grid-cols-2 gap-2 bg-white/[0.02] border border-white/8 rounded-xl p-3 text-center font-mono">
+              <div className="grid grid-cols-2 gap-2 bg-white/[0.02] border-white/8 rounded-xl p-3 text-center font-mono">
                 <div>
                   <span className="text-[10px] text-zinc-400 uppercase block">Coord X</span>
                   <span className="text-sm font-bold text-cyan-300">
@@ -512,7 +512,7 @@ export const SpatialEntropyHeatMap: React.FC = () => {
                     {(selectedNode.entropy * 100).toFixed(1)}% ({selectedNode.entropy.toFixed(3)})
                   </span>
                 </div>
-                <div className="w-full h-2 bg-zinc-900 rounded-full overflow-hidden border border-white/10">
+                <div className="w-full h-2 bg-zinc-900 rounded-full overflow-hidden border-white/10">
                   <div
                     className="h-full transition-all duration-300"
                     style={{
@@ -554,20 +554,20 @@ export const SpatialEntropyHeatMap: React.FC = () => {
                     )
                   );
                 }}
-                className="w-full py-2 rounded-xl bg-cyan-500/20 hover:bg-cyan-500/30 border border-cyan-500/40 text-cyan-200 font-mono text-xs font-bold transition-all shadow-[0_0_15px_rgba(6,182,212,0.15)] flex items-center justify-center gap-2"
+                className="w-full py-2 rounded-xl bg-cyan-500/20 hover:bg-cyan-500/30 border-cyan-500/40 text-cyan-200 font-mono text-xs font-bold transition-all shadow-[0_0_15px_rgba(6,182,212,0.15)] flex items-center justify-center gap-2"
               >
                 <Zap className="w-3.5 h-3.5 text-cyan-300" />
                 <span>Re-calibrate Node Entropy</span>
               </button>
             </div>
           ) : (
-            <div className="p-8 rounded-2xl bg-black/40 border border-white/8 text-center text-zinc-500 font-mono text-xs">
+            <div className="p-8 rounded-2xl bg-black/40 border-white/8 text-center text-zinc-500 font-mono text-xs">
               Select a node on the 2D topological map to inspect hardware metrics.
             </div>
           )}
 
           {/* Quick Chambers Summary Pill Box */}
-          <div className="p-4 rounded-2xl bg-black/40 border border-white/8 space-y-2 font-mono text-[11px]">
+          <div className="p-4 rounded-2xl bg-black/40 border-white/8 space-y-2 font-mono text-[11px]">
             <div className="flex items-center justify-between text-zinc-400">
               <span>ACTIVE HARDWARE NODES</span>
               <span className="text-cyan-300 font-bold">18 / 18 ONLINE</span>

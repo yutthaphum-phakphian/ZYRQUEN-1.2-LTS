@@ -103,11 +103,11 @@ export const SovereignAuditMasterDashboard: React.FC<{ className?: string }> = (
   }, []);
 
   return (
-    <div className={`w-full rounded-[24px] bg-[#070A16] border border-amber-500/30 p-5 sm:p-6 shadow-2xl text-white font-mono space-y-6 ${className}`}>
+    <div className={`w-full rounded-[24px] bg-[#070A16] border-amber-500/30 p-5 sm:p-6 shadow-2xl text-white font-mono space-y-6 ${className}`}>
       {/* Header Banner */}
       <div className="flex flex-col lg:flex-row lg:items-center justify-between gap-4 border-b border-white/10 pb-5">
         <div className="flex items-center gap-3.5">
-          <div className="w-12 h-12 rounded-2xl bg-gradient-to-br from-amber-500/20 via-cyan-500/20 to-emerald-500/20 border border-amber-500/40 flex items-center justify-center shadow-[0_0_20px_rgba(245,158,11,0.35)] shrink-0">
+          <div className="w-12 h-12 rounded-2xl bg-gradient-to-br from-amber-500/20 via-cyan-500/20 to-emerald-500/20 border-amber-500/40 flex items-center justify-center shadow-[0_0_20px_rgba(245,158,11,0.35)] shrink-0">
             <Scale className="w-6 h-6 text-amber-400" />
           </div>
           <div>
@@ -115,7 +115,7 @@ export const SovereignAuditMasterDashboard: React.FC<{ className?: string }> = (
               <h2 className="text-base sm:text-lg font-bold tracking-wider text-white uppercase">
                 Sovereign Post-Patch Audit & Compliance Master Deck
               </h2>
-              <span className="text-[10px] font-semibold text-emerald-300 bg-emerald-950/80 px-2.5 py-0.5 rounded-full border border-emerald-500/40">
+              <span className="text-[10px] font-semibold text-emerald-300 bg-emerald-950/80 px-2.5 py-0.5 rounded-full border-emerald-500/40">
                 LOCKED_FROZEN v1.2 LTS
               </span>
             </div>
@@ -134,7 +134,7 @@ export const SovereignAuditMasterDashboard: React.FC<{ className?: string }> = (
           <button
             onClick={handleAuditAllChambers}
             disabled={isAuditingAll}
-            className="px-4 py-2 rounded-xl bg-gradient-to-r from-amber-500/30 via-emerald-500/20 to-cyan-500/30 border border-amber-500/50 hover:border-amber-400 text-xs font-bold text-amber-200 flex items-center gap-2 transition-all shadow-[0_0_15px_rgba(245,158,11,0.25)]"
+            className="px-4 py-2 rounded-xl bg-gradient-to-r from-amber-500/30 via-emerald-500/20 to-cyan-500/30 border-amber-500/50 hover:border-amber-400 text-xs font-bold text-amber-200 flex items-center gap-2 transition-all shadow-[0_0_15px_rgba(245,158,11,0.25)]"
           >
             <RefreshCw className={`w-3.5 h-3.5 ${isAuditingAll ? 'animate-spin' : ''}`} />
             <span>{isAuditingAll ? 'Verifying 18 Chambers...' : 'Run Full System Audit'}</span>
@@ -151,7 +151,7 @@ export const SovereignAuditMasterDashboard: React.FC<{ className?: string }> = (
           }}
           className={`px-3.5 py-2 rounded-xl transition-all flex items-center gap-2 whitespace-nowrap ${
             activeTab === 'overview'
-              ? 'bg-amber-500/20 text-amber-300 font-bold border border-amber-500/40'
+              ? 'bg-amber-500/20 text-amber-300 font-bold border-amber-500/40'
               : 'text-zinc-400 hover:text-white'
           }`}
         >
@@ -166,7 +166,7 @@ export const SovereignAuditMasterDashboard: React.FC<{ className?: string }> = (
           }}
           className={`px-3.5 py-2 rounded-xl transition-all flex items-center gap-2 whitespace-nowrap ${
             activeTab === 'patches'
-              ? 'bg-amber-500/20 text-amber-300 font-bold border border-amber-500/40'
+              ? 'bg-amber-500/20 text-amber-300 font-bold border-amber-500/40'
               : 'text-zinc-400 hover:text-white'
           }`}
         >
@@ -181,7 +181,7 @@ export const SovereignAuditMasterDashboard: React.FC<{ className?: string }> = (
           }}
           className={`px-3.5 py-2 rounded-xl transition-all flex items-center gap-2 whitespace-nowrap ${
             activeTab === 'gas_ledger'
-              ? 'bg-amber-500/20 text-amber-300 font-bold border border-amber-500/40'
+              ? 'bg-amber-500/20 text-amber-300 font-bold border-amber-500/40'
               : 'text-zinc-400 hover:text-white'
           }`}
         >
@@ -196,7 +196,7 @@ export const SovereignAuditMasterDashboard: React.FC<{ className?: string }> = (
           }}
           className={`px-3.5 py-2 rounded-xl transition-all flex items-center gap-2 whitespace-nowrap ${
             activeTab === 'legal_audit'
-              ? 'bg-amber-500/20 text-amber-300 font-bold border border-amber-500/40'
+              ? 'bg-amber-500/20 text-amber-300 font-bold border-amber-500/40'
               : 'text-zinc-400 hover:text-white'
           }`}
         >
@@ -211,7 +211,7 @@ export const SovereignAuditMasterDashboard: React.FC<{ className?: string }> = (
           }}
           className={`px-3.5 py-2 rounded-xl transition-all flex items-center gap-2 whitespace-nowrap ${
             activeTab === 'chamber_sim'
-              ? 'bg-amber-500/20 text-amber-300 font-bold border border-amber-500/40'
+              ? 'bg-amber-500/20 text-amber-300 font-bold border-amber-500/40'
               : 'text-zinc-400 hover:text-white'
           }`}
         >
@@ -224,7 +224,7 @@ export const SovereignAuditMasterDashboard: React.FC<{ className?: string }> = (
       {activeTab === 'overview' && (
         <div className="space-y-5 animate-in fade-in duration-200">
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-3.5">
-            <div className="p-4 rounded-2xl bg-black/60 border border-emerald-500/30 space-y-2 shadow-inner">
+            <div className="p-4 rounded-2xl bg-black/60 border-emerald-500/30 space-y-2 shadow-inner">
               <div className="flex items-center justify-between text-xs text-zinc-400">
                 <span>Security Patch Matrix</span>
                 <ShieldCheck className="w-4 h-4 text-emerald-400" />
@@ -233,7 +233,7 @@ export const SovereignAuditMasterDashboard: React.FC<{ className?: string }> = (
               <div className="text-[11px] text-zinc-400">ZYR-01, ZYR-02, ZYR-03 Verified</div>
             </div>
 
-            <div className="p-4 rounded-2xl bg-black/60 border border-cyan-500/30 space-y-2 shadow-inner">
+            <div className="p-4 rounded-2xl bg-black/60 border-cyan-500/30 space-y-2 shadow-inner">
               <div className="flex items-center justify-between text-xs text-zinc-400">
                 <span>FIOS Treasury Anchor</span>
                 <DollarSign className="w-4 h-4 text-cyan-400" />
@@ -242,7 +242,7 @@ export const SovereignAuditMasterDashboard: React.FC<{ className?: string }> = (
               <div className="text-[11px] text-emerald-400">Zero Drift: 0.00% (Exact Anchor)</div>
             </div>
 
-            <div className="p-4 rounded-2xl bg-black/60 border border-amber-500/30 space-y-2 shadow-inner">
+            <div className="p-4 rounded-2xl bg-black/60 border-amber-500/30 space-y-2 shadow-inner">
               <div className="flex items-center justify-between text-xs text-zinc-400">
                 <span>Deca-Key Quorum</span>
                 <Lock className="w-4 h-4 text-amber-400" />
@@ -251,7 +251,7 @@ export const SovereignAuditMasterDashboard: React.FC<{ className?: string }> = (
               <div className="text-[11px] text-zinc-400">FIPS 140-3 Level 4 Compliant</div>
             </div>
 
-            <div className="p-4 rounded-2xl bg-black/60 border border-fuchsia-500/30 space-y-2 shadow-inner">
+            <div className="p-4 rounded-2xl bg-black/60 border-fuchsia-500/30 space-y-2 shadow-inner">
               <div className="flex items-center justify-between text-xs text-zinc-400">
                 <span>Trace Replay & SLA</span>
                 <Activity className="w-4 h-4 text-fuchsia-400" />
@@ -262,12 +262,12 @@ export const SovereignAuditMasterDashboard: React.FC<{ className?: string }> = (
           </div>
 
           {/* SSoT Proof Card */}
-          <div className="p-4 rounded-2xl bg-black/70 border border-white/10 space-y-2">
+          <div className="p-4 rounded-2xl bg-black/70 border-white/10 space-y-2">
             <div className="flex items-center justify-between text-xs font-bold text-amber-400">
               <span>GENESIS MERKLE ROOT & SSoT Δ0 INVARIANT</span>
               <span className="text-[10px] text-zinc-400">BLOCK #849202</span>
             </div>
-            <div className="p-3 bg-black/80 rounded-xl border border-amber-500/20 text-xs font-mono break-all text-amber-300">
+            <div className="p-3 bg-black/80 rounded-xl border-amber-500/20 text-xs font-mono break-all text-amber-300">
               909ab814479844d8a14816bed34cdbb07528e18501da86fc4691763a43fa4c68
             </div>
             <div className="flex flex-wrap items-center justify-between text-[10px] text-zinc-400 pt-1">
@@ -289,17 +289,17 @@ export const SovereignAuditMasterDashboard: React.FC<{ className?: string }> = (
             {PATCH_AUDIT_DATA.map((patch) => (
               <div
                 key={patch.id}
-                className="p-4 rounded-2xl bg-black/60 border border-emerald-500/30 space-y-3 shadow-lg"
+                className="p-4 rounded-2xl bg-black/60 border-emerald-500/30 space-y-3 shadow-lg"
               >
                 <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2 border-b border-white/5 pb-2.5">
                   <div className="flex items-center gap-2.5">
-                    <span className="px-2.5 py-0.5 rounded-lg bg-emerald-500/20 text-emerald-300 border border-emerald-500/40 text-xs font-bold">
+                    <span className="px-2.5 py-0.5 rounded-lg bg-emerald-500/20 text-emerald-300 border-emerald-500/40 text-xs font-bold">
                       {patch.id}
                     </span>
                     <span className="text-sm font-bold text-white">{patch.name}</span>
                   </div>
                   <div className="flex items-center gap-2">
-                    <span className="text-[10px] font-semibold text-zinc-400 bg-black/60 px-2 py-0.5 rounded border border-white/10">
+                    <span className="text-[10px] font-semibold text-zinc-400 bg-black/60 px-2 py-0.5 rounded border-white/10">
                       {patch.statuteRef}
                     </span>
                     <span className="text-xs font-bold text-emerald-400 flex items-center gap-1">
@@ -314,7 +314,7 @@ export const SovereignAuditMasterDashboard: React.FC<{ className?: string }> = (
                   <div className="text-[11px] text-zinc-500">{patch.descriptionEn}</div>
                 </div>
 
-                <div className="p-2 rounded-xl bg-black/80 border border-white/5 text-[10px] text-zinc-400 truncate">
+                <div className="p-2 rounded-xl bg-black/80 border-white/5 text-[10px] text-zinc-400 truncate">
                   <span className="text-zinc-500">PATCH COMMIT HASH: </span>
                   <span className="text-cyan-300 font-mono">{patch.patchHash}</span>
                 </div>
@@ -327,33 +327,33 @@ export const SovereignAuditMasterDashboard: React.FC<{ className?: string }> = (
       {/* Tab 3: FIOS Gas & Treasury Ledger */}
       {activeTab === 'gas_ledger' && (
         <div className="space-y-4 animate-in fade-in duration-200">
-          <div className="p-5 rounded-2xl bg-black/60 border border-cyan-500/30 space-y-4">
+          <div className="p-5 rounded-2xl bg-black/60 border-cyan-500/30 space-y-4">
             <div className="flex items-center justify-between flex-wrap gap-2 border-b border-white/10 pb-3">
               <div>
                 <h3 className="text-sm font-bold text-white uppercase">Chamber 07 — FIOS Treasury Gas Integrity Ledger</h3>
                 <div className="text-xs text-zinc-400">การจัดสรรงบประมาณโทรมาตรดาวเทียมและดิจิทัลทวิน</div>
               </div>
-              <span className="text-xs font-bold text-emerald-300 bg-emerald-950/80 px-3 py-1 rounded-xl border border-emerald-500/40">
+              <span className="text-xs font-bold text-emerald-300 bg-emerald-950/80 px-3 py-1 rounded-xl border-emerald-500/40">
                 ZERO DRIFT (0.00%)
               </span>
             </div>
 
             <div className="grid grid-cols-1 sm:grid-cols-3 gap-3 text-xs">
-              <div className="p-3 bg-black/50 rounded-xl border border-white/5 space-y-1">
+              <div className="p-3 bg-black/50 rounded-xl border-white/5 space-y-1">
                 <div className="text-[10px] text-zinc-500 uppercase">Allocated Budget</div>
                 <div className="text-base font-bold text-amber-300">฿12,500,000.00 THB</div>
               </div>
-              <div className="p-3 bg-black/50 rounded-xl border border-white/5 space-y-1">
+              <div className="p-3 bg-black/50 rounded-xl border-white/5 space-y-1">
                 <div className="text-[10px] text-zinc-500 uppercase">Settled Execution Gas</div>
                 <div className="text-base font-bold text-cyan-300">฿12,500,000.00 THB</div>
               </div>
-              <div className="p-3 bg-black/50 rounded-xl border border-white/5 space-y-1">
+              <div className="p-3 bg-black/50 rounded-xl border-white/5 space-y-1">
                 <div className="text-[10px] text-zinc-500 uppercase">Reconciliation Variance</div>
                 <div className="text-base font-bold text-emerald-400">0.00000000 THB (Exact)</div>
               </div>
             </div>
 
-            <div className="text-xs text-zinc-300 leading-relaxed bg-black/40 p-3.5 rounded-xl border border-white/5">
+            <div className="text-xs text-zinc-300 leading-relaxed bg-black/40 p-3.5 rounded-xl border-white/5">
               งบประมาณ ฿12.5 ล้านบาท ของ Chamber 07 ได้รับการประทับตรา Merkle Tree ยึดโยงกับ Genesis Block #849202 ตามมาตรฐานสถาปัตยกรรมบัญชีแยกประเภทอธิปไตยดิจิทัล (Sovereign Accounting Ledger) ไม่มีความคลาดเคลื่อนของค่าแก๊สและพร้อมเปิดให้องค์กรอิสระตรวจสอบ Bit-for-Bit
             </div>
           </div>
@@ -364,7 +364,7 @@ export const SovereignAuditMasterDashboard: React.FC<{ className?: string }> = (
       {activeTab === 'legal_audit' && (
         <div className="space-y-4 animate-in fade-in duration-200">
           <div className="grid grid-cols-1 md:grid-cols-3 gap-3.5">
-            <div className="p-4 rounded-2xl bg-black/60 border border-amber-500/30 space-y-2">
+            <div className="p-4 rounded-2xl bg-black/60 border-amber-500/30 space-y-2">
               <div className="text-xs font-bold text-amber-400">พ.ร.บ. ธุรกรรมฯ มาตรา ๙</div>
               <div className="text-xs text-zinc-300">
                 ลายมือชื่ออิเล็กทรอนิกส์ (Electronic Signature) รับรองด้วย Dilithium-5 Post-Quantum
@@ -375,7 +375,7 @@ export const SovereignAuditMasterDashboard: React.FC<{ className?: string }> = (
               </div>
             </div>
 
-            <div className="p-4 rounded-2xl bg-black/60 border border-amber-500/30 space-y-2">
+            <div className="p-4 rounded-2xl bg-black/60 border-amber-500/30 space-y-2">
               <div className="text-xs font-bold text-amber-400">พ.ร.บ. ธุรกรรมฯ มาตรา ๒๖</div>
               <div className="text-xs text-zinc-300">
                 ลายมือชื่ออิเล็กทรอนิกส์ที่เชื่อถือได้ (Reliable E-Signature) ด้วย Quorum 10/10 HSM
@@ -386,7 +386,7 @@ export const SovereignAuditMasterDashboard: React.FC<{ className?: string }> = (
               </div>
             </div>
 
-            <div className="p-4 rounded-2xl bg-black/60 border border-amber-500/30 space-y-2">
+            <div className="p-4 rounded-2xl bg-black/60 border-amber-500/30 space-y-2">
               <div className="text-xs font-bold text-amber-400">พ.ร.บ. ธุรกรรมฯ มาตรา ๒๘</div>
               <div className="text-xs text-zinc-300">
                 หน้าที่ความรับผิดชอบของผู้ให้บริการออกใบรับรอง (Certification Authority Integrity)
@@ -398,7 +398,7 @@ export const SovereignAuditMasterDashboard: React.FC<{ className?: string }> = (
             </div>
           </div>
 
-          <div className="p-4 rounded-2xl bg-black/70 border border-emerald-500/30 flex items-center justify-between gap-3">
+          <div className="p-4 rounded-2xl bg-black/70 border-emerald-500/30 flex items-center justify-between gap-3">
             <div className="flex items-center gap-3">
               <ShieldCheck className="w-6 h-6 text-emerald-400" />
               <div>
@@ -406,7 +406,7 @@ export const SovereignAuditMasterDashboard: React.FC<{ className?: string }> = (
                 <div className="text-[11px] text-zinc-400">Chamber 08 ควบคุมการเข้ารหัสข้อมูลส่วนบุคคลด้วย Zero-Knowledge Isolation</div>
               </div>
             </div>
-            <span className="text-xs font-bold text-emerald-300 bg-emerald-950/80 px-3 py-1 rounded-xl border border-emerald-500/40">
+            <span className="text-xs font-bold text-emerald-300 bg-emerald-950/80 px-3 py-1 rounded-xl border-emerald-500/40">
               AUDIT PASSED
             </span>
           </div>
@@ -451,7 +451,7 @@ export const SovereignAuditMasterDashboard: React.FC<{ className?: string }> = (
             })}
           </div>
 
-          <div className="p-4 rounded-2xl bg-black/80 border border-cyan-500/30 space-y-2">
+          <div className="p-4 rounded-2xl bg-black/80 border-cyan-500/30 space-y-2">
             <div className="flex items-center justify-between text-xs font-bold text-cyan-300">
               <span>CHAMBER {selectedChamber < 10 ? `0${selectedChamber}` : selectedChamber} COMPLIANCE CERTIFICATE</span>
               <span className="text-emerald-400 text-[10px]">10/10 HSM ATTESTED</span>

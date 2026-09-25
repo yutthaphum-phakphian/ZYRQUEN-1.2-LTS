@@ -1,1 +1,1 @@
-import React from 'react'; export const ImmutableAuditTimeline: React.FC<any> = (props) => <div className="p-4 border border-zinc-800 rounded bg-black text-xs text-zinc-500">ImmutableAuditTimeline Placeholder</div>;
+import React from 'react'; export const ImmutableAuditTimeline: React.FC<any> = (props) => <div className="p-4 border-zinc-800 rounded bg-black text-xs text-zinc-500">ImmutableAuditTimeline Placeholder</div>;

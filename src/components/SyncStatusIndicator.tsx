@@ -158,8 +158,8 @@ export const SyncStatusIndicator: React.FC<SyncStatusIndicatorProps> = ({
             <span
               className={`text-[9px] px-1.5 py-0.5 rounded-full font-semibold ${
                 isMultiNode
-                  ? 'bg-emerald-500/20 text-emerald-200 border border-emerald-500/30'
-                  : 'bg-cyan-500/20 text-cyan-200 border border-cyan-500/30'
+                  ? 'bg-emerald-500/20 text-emerald-200 border-emerald-500/30'
+                  : 'bg-cyan-500/20 text-cyan-200 border-cyan-500/30'
               }`}
             >
               {isMultiNode ? `${syncStatus.roundTripLatencyMs}ms` : 'SSoT Δ0'}
@@ -177,7 +177,7 @@ export const SyncStatusIndicator: React.FC<SyncStatusIndicatorProps> = ({
               animate={{ opacity: 1, scale: 1, y: 0 }}
               exit={{ opacity: 0, scale: 0.95, y: 15 }}
               transition={{ duration: 0.2 }}
-              className="w-full max-w-2xl bg-[#080b16] border border-cyan-500/30 rounded-3xl p-6 sm:p-7 shadow-[0_20px_70px_rgba(6,182,212,0.2)] text-zinc-200 font-mono relative overflow-hidden"
+              className="w-full max-w-2xl bg-[#080b16] border-cyan-500/30 rounded-3xl p-6 sm:p-7 shadow-[0_20px_70px_rgba(6,182,212,0.2)] text-zinc-200 font-mono relative overflow-hidden"
             >
               {/* Background ambient glow */}
               <div className="absolute top-0 right-0 w-80 h-80 bg-cyan-500/10 rounded-full blur-[90px] pointer-events-none" />
@@ -186,7 +186,7 @@ export const SyncStatusIndicator: React.FC<SyncStatusIndicatorProps> = ({
               {/* Modal Header */}
               <div className="flex items-start justify-between gap-4 border-b border-zinc-800/80 pb-5 relative z-10">
                 <div className="flex items-center gap-3">
-                  <div className="w-10 h-10 rounded-2xl bg-cyan-500/10 border border-cyan-500/30 flex items-center justify-center text-cyan-400 shadow-[0_0_15px_rgba(6,182,212,0.2)]">
+                  <div className="w-10 h-10 rounded-2xl bg-cyan-500/10 border-cyan-500/30 flex items-center justify-center text-cyan-400 shadow-[0_0_15px_rgba(6,182,212,0.2)]">
                     <Radio className="w-5 h-5 animate-pulse" />
                   </div>
                   <div>
@@ -194,7 +194,7 @@ export const SyncStatusIndicator: React.FC<SyncStatusIndicatorProps> = ({
                       <h3 className="text-base sm:text-lg font-bold text-white tracking-tight">
                         Sovereign Enclave Real-Time Synchronizer
                       </h3>
-                      <span className="px-2 py-0.5 rounded-full text-[10px] font-bold bg-emerald-500/20 text-emerald-300 border border-emerald-500/30">
+                      <span className="px-2 py-0.5 rounded-full text-[10px] font-bold bg-emerald-500/20 text-emerald-300 border-emerald-500/30">
                         v25 SSoT
                       </span>
                     </div>
@@ -218,7 +218,7 @@ export const SyncStatusIndicator: React.FC<SyncStatusIndicatorProps> = ({
 
               {/* Status Overview Grid */}
               <div className="grid grid-cols-2 sm:grid-cols-4 gap-3 my-5 relative z-10">
-                <div className="p-3 rounded-2xl bg-black/40 border border-zinc-800">
+                <div className="p-3 rounded-2xl bg-black/40 border-zinc-800">
                   <span className="text-[10px] text-zinc-500 block uppercase tracking-wider">
                     Sync State
                   </span>
@@ -234,7 +234,7 @@ export const SyncStatusIndicator: React.FC<SyncStatusIndicatorProps> = ({
                   </div>
                 </div>
 
-                <div className="p-3 rounded-2xl bg-black/40 border border-zinc-800">
+                <div className="p-3 rounded-2xl bg-black/40 border-zinc-800">
                   <span className="text-[10px] text-zinc-500 block uppercase tracking-wider">
                     Active Nodes
                   </span>
@@ -244,7 +244,7 @@ export const SyncStatusIndicator: React.FC<SyncStatusIndicatorProps> = ({
                   </div>
                 </div>
 
-                <div className="p-3 rounded-2xl bg-black/40 border border-zinc-800">
+                <div className="p-3 rounded-2xl bg-black/40 border-zinc-800">
                   <span className="text-[10px] text-zinc-500 block uppercase tracking-wider">
                     Round-Trip Ping
                   </span>
@@ -254,7 +254,7 @@ export const SyncStatusIndicator: React.FC<SyncStatusIndicatorProps> = ({
                   </div>
                 </div>
 
-                <div className="p-3 rounded-2xl bg-black/40 border border-zinc-800">
+                <div className="p-3 rounded-2xl bg-black/40 border-zinc-800">
                   <span className="text-[10px] text-zinc-500 block uppercase tracking-wider">
                     Last Heartbeat
                   </span>
@@ -267,7 +267,7 @@ export const SyncStatusIndicator: React.FC<SyncStatusIndicatorProps> = ({
 
               {/* Notification Banner */}
               {pingMessage && (
-                <div className="mb-4 px-4 py-2.5 rounded-2xl bg-cyan-950/40 border border-cyan-500/40 text-cyan-200 text-xs flex items-center gap-2 animate-in fade-in">
+                <div className="mb-4 px-4 py-2.5 rounded-2xl bg-cyan-950/40 border-cyan-500/40 text-cyan-200 text-xs flex items-center gap-2 animate-in fade-in">
                   <Activity className="w-4 h-4 text-cyan-400 animate-spin" />
                   <span>{pingMessage}</span>
                 </div>
@@ -296,8 +296,8 @@ export const SyncStatusIndicator: React.FC<SyncStatusIndicatorProps> = ({
                         <div
                           className={`w-8 h-8 rounded-xl flex items-center justify-center text-xs font-bold ${
                             node.isSelf
-                              ? 'bg-cyan-500/20 text-cyan-300 border border-cyan-500/40'
-                              : 'bg-emerald-500/20 text-emerald-300 border border-emerald-500/40'
+                              ? 'bg-cyan-500/20 text-cyan-300 border-cyan-500/40'
+                              : 'bg-emerald-500/20 text-emerald-300 border-emerald-500/40'
                           }`}
                         >
                           <Cpu className="w-4 h-4" />
@@ -306,11 +306,11 @@ export const SyncStatusIndicator: React.FC<SyncStatusIndicatorProps> = ({
                           <div className="flex items-center gap-2">
                             <span className="text-xs font-bold text-white">{node.label}</span>
                             {node.isSelf ? (
-                              <span className="text-[9px] px-2 py-0.5 rounded-full bg-cyan-500/20 text-cyan-300 border border-cyan-500/30 font-bold">
+                              <span className="text-[9px] px-2 py-0.5 rounded-full bg-cyan-500/20 text-cyan-300 border-cyan-500/30 font-bold">
                                 THIS TAB (PRIMARY)
                               </span>
                             ) : (
-                              <span className="text-[9px] px-2 py-0.5 rounded-full bg-emerald-500/20 text-emerald-300 border border-emerald-500/30 font-bold">
+                              <span className="text-[9px] px-2 py-0.5 rounded-full bg-emerald-500/20 text-emerald-300 border-emerald-500/30 font-bold">
                                 PEER ENCLAVE NODE
                               </span>
                             )}
@@ -344,7 +344,7 @@ export const SyncStatusIndicator: React.FC<SyncStatusIndicatorProps> = ({
                     type="button"
                     onClick={handleManualPing}
                     disabled={isPinging}
-                    className="px-4 py-2 rounded-2xl bg-cyan-500/20 hover:bg-cyan-500/30 border border-cyan-500/40 text-cyan-200 text-xs font-bold flex items-center gap-2 transition-all disabled:opacity-50"
+                    className="px-4 py-2 rounded-2xl bg-cyan-500/20 hover:bg-cyan-500/30 border-cyan-500/40 text-cyan-200 text-xs font-bold flex items-center gap-2 transition-all disabled:opacity-50"
                   >
                     <RefreshCw className={`w-3.5 h-3.5 ${isPinging ? 'animate-spin' : ''}`} />
                     <span>Ping Enclave Nodes</span>
@@ -353,7 +353,7 @@ export const SyncStatusIndicator: React.FC<SyncStatusIndicatorProps> = ({
                   <button
                     type="button"
                     onClick={handleOpenPeerTab}
-                    className="px-4 py-2 rounded-2xl bg-emerald-500/20 hover:bg-emerald-500/30 border border-emerald-500/40 text-emerald-200 text-xs font-bold flex items-center gap-2 transition-all"
+                    className="px-4 py-2 rounded-2xl bg-emerald-500/20 hover:bg-emerald-500/30 border-emerald-500/40 text-emerald-200 text-xs font-bold flex items-center gap-2 transition-all"
                     title="Open a second tab to test real-time peer discovery and synchronization"
                   >
                     <ExternalLink className="w-3.5 h-3.5" />

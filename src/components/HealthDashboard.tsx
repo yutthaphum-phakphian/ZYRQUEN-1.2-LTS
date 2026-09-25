@@ -95,17 +95,17 @@ export const HealthDashboard: React.FC<HealthDashboardProps> = ({
   };
 
   return (
-    <div className={`p-4 sm:p-6 bg-slate-900/95 rounded-2xl border border-slate-800 shadow-xl text-white backdrop-blur-xl ${className}`}>
+    <div className={`p-4 sm:p-6 bg-slate-900/95 rounded-2xl border-slate-800 shadow-xl text-white backdrop-blur-xl ${className}`}>
       {/* Header with KPI overview pills */}
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 mb-5 border-b border-slate-800 pb-4">
         <div className="flex items-center gap-3">
-          <div className="p-2.5 rounded-xl bg-cyan-950/80 border border-cyan-500/40 text-cyan-400">
+          <div className="p-2.5 rounded-xl bg-cyan-950/80 border-cyan-500/40 text-cyan-400">
             <Activity className="w-5 h-5 animate-pulse" />
           </div>
           <div>
             <h2 className="text-lg sm:text-xl font-bold font-mono text-cyan-400 flex items-center gap-2">
               <span>{title}</span>
-              <span className="text-[10px] px-2 py-0.5 rounded-full bg-emerald-950 text-emerald-300 border border-emerald-500/40 font-normal">
+              <span className="text-[10px] px-2 py-0.5 rounded-full bg-emerald-950 text-emerald-300 border-emerald-500/40 font-normal">
                 LIVE TELEMETRY
               </span>
             </h2>
@@ -116,17 +116,17 @@ export const HealthDashboard: React.FC<HealthDashboardProps> = ({
         </div>
 
         <div className="flex items-center gap-2 text-xs font-mono">
-          <div className="flex items-center gap-1.5 px-2.5 py-1 rounded-lg bg-rose-950/60 border border-rose-500/30 text-rose-300">
+          <div className="flex items-center gap-1.5 px-2.5 py-1 rounded-lg bg-rose-950/60 border-rose-500/30 text-rose-300">
             <Cpu className="w-3.5 h-3.5 text-rose-400" />
             <span>CPU: <strong className="text-white">{latestPoint.cpuUsage}%</strong></span>
           </div>
 
-          <div className="flex items-center gap-1.5 px-2.5 py-1 rounded-lg bg-blue-950/60 border border-blue-500/30 text-blue-300">
+          <div className="flex items-center gap-1.5 px-2.5 py-1 rounded-lg bg-blue-950/60 border-blue-500/30 text-blue-300">
             <HardDrive className="w-3.5 h-3.5 text-blue-400" />
             <span>RAM: <strong className="text-white">{latestPoint.memoryUsage}%</strong></span>
           </div>
 
-          <div className="flex items-center gap-1.5 px-2.5 py-1 rounded-lg bg-emerald-950/60 border border-emerald-500/30 text-emerald-300">
+          <div className="flex items-center gap-1.5 px-2.5 py-1 rounded-lg bg-emerald-950/60 border-emerald-500/30 text-emerald-300">
             <Thermometer className="w-3.5 h-3.5 text-emerald-400" />
             <span>Cryo: <strong className="text-white">{latestPoint.cryostatTemp} K</strong></span>
           </div>

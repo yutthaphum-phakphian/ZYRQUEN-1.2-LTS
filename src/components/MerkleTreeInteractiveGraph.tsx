@@ -596,17 +596,17 @@ export const MerkleTreeInteractiveGraph: React.FC<MerkleTreeInteractiveGraphProp
   return (
     <div className="space-y-5 animate-in fade-in duration-300">
       {/* Top Header Card */}
-      <div className="p-5 sm:p-6 rounded-[28px] bg-gradient-to-br from-[#070914]/95 via-[#0b0e1e]/90 to-[#070914]/95 border border-cyan-500/25 shadow-[0_10px_40px_-10px_rgba(6,182,212,0.15)] backdrop-blur-3xl flex flex-col md:flex-row md:items-center justify-between gap-4">
+      <div className="p-5 sm:p-6 rounded-[28px] bg-gradient-to-br from-[#070914]/95 via-[#0b0e1e]/90 to-[#070914]/95 border-cyan-500/25 shadow-[0_10px_40px_-10px_rgba(6,182,212,0.15)] backdrop-blur-3xl flex flex-col md:flex-row md:items-center justify-between gap-4">
         <div>
           <div className="flex items-center gap-2 flex-wrap mb-1.5">
-            <span className="px-2.5 py-0.5 rounded-full bg-cyan-500/15 text-cyan-300 border border-cyan-500/30 text-[10px] font-mono font-bold tracking-wide flex items-center gap-1.5">
+            <span className="px-2.5 py-0.5 rounded-full bg-cyan-500/15 text-cyan-300 border-cyan-500/30 text-[10px] font-mono font-bold tracking-wide flex items-center gap-1.5">
               <GitFork className="w-3 h-3 text-cyan-400" />
               INTERACTIVE MERKLE TREE GRAPH
             </span>
-            <span className="px-2.5 py-0.5 rounded-full bg-emerald-500/15 text-emerald-300 border border-emerald-500/30 text-[10px] font-mono font-bold">
+            <span className="px-2.5 py-0.5 rounded-full bg-emerald-500/15 text-emerald-300 border-emerald-500/30 text-[10px] font-mono font-bold">
               100% POST-QUANTUM INTEGRITY
             </span>
-            <span className="px-2.5 py-0.5 rounded-full bg-violet-500/15 text-violet-300 border border-violet-500/30 text-[10px] font-mono font-bold">
+            <span className="px-2.5 py-0.5 rounded-full bg-violet-500/15 text-violet-300 border-violet-500/30 text-[10px] font-mono font-bold">
               NIST FIPS 204 (ML-DSA-87)
             </span>
           </div>
@@ -620,7 +620,7 @@ export const MerkleTreeInteractiveGraph: React.FC<MerkleTreeInteractiveGraphProp
 
         {/* Controls: Zoom & Reset */}
         <div className="flex items-center gap-2 self-start md:self-center">
-          <div className="flex items-center bg-black/50 border border-white/10 rounded-xl p-1 text-xs font-mono">
+          <div className="flex items-center bg-black/50 border-white/10 rounded-xl p-1 text-xs font-mono">
             <button
               onClick={() => setZoomLevel((z) => Math.max(0.75, z - 0.1))}
               className="p-1.5 rounded-lg text-zinc-400 hover:text-white hover:bg-white/10 transition-all"
@@ -648,10 +648,10 @@ export const MerkleTreeInteractiveGraph: React.FC<MerkleTreeInteractiveGraphProp
       </div>
 
       {/* Interactive Historical Block Merkle Traversal Engine */}
-      <div className="p-5 rounded-[24px] bg-gradient-to-br from-[#0c1424]/90 via-[#070b14]/85 to-[#04060b] border border-cyan-500/30 backdrop-blur-xl shadow-2xl font-mono text-xs space-y-4">
+      <div className="p-5 rounded-[24px] bg-gradient-to-br from-[#0c1424]/90 via-[#070b14]/85 to-[#04060b] border-cyan-500/30 backdrop-blur-xl shadow-2xl font-mono text-xs space-y-4">
         <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 border-b border-white/10 pb-3">
           <div className="flex items-center gap-2.5">
-            <div className="p-2 rounded-xl bg-cyan-500/20 text-cyan-300 border border-cyan-500/40">
+            <div className="p-2 rounded-xl bg-cyan-500/20 text-cyan-300 border-cyan-500/40">
               <Sparkles className="w-4 h-4 text-cyan-300" />
             </div>
             <div>
@@ -688,7 +688,7 @@ export const MerkleTreeInteractiveGraph: React.FC<MerkleTreeInteractiveGraphProp
         {activeBlock && (
           <div className="grid grid-cols-1 lg:grid-cols-12 gap-4">
             {/* Left 4 Cols: Block Metadata */}
-            <div className="lg:col-span-4 p-4 rounded-2xl bg-black/50 border border-cyan-500/20 space-y-2">
+            <div className="lg:col-span-4 p-4 rounded-2xl bg-black/50 border-cyan-500/20 space-y-2">
               <div className="flex items-center justify-between">
                 <span className="font-bold text-white text-xs">{activeBlock.name}</span>
                 <span className="px-2 py-0.5 rounded bg-emerald-500/20 text-emerald-300 text-[10px] font-bold">
@@ -716,7 +716,7 @@ export const MerkleTreeInteractiveGraph: React.FC<MerkleTreeInteractiveGraphProp
               </div>
               <div className="grid grid-cols-1 sm:grid-cols-3 gap-2">
                 {activeBlock.traversalSteps.map((step, sIdx) => (
-                  <div key={sIdx} className="p-3 rounded-xl bg-black/40 border border-white/10 space-y-1.5 relative overflow-hidden">
+                  <div key={sIdx} className="p-3 rounded-xl bg-black/40 border-white/10 space-y-1.5 relative overflow-hidden">
                     <div className="flex items-center justify-between text-[10px]">
                       <span className="font-bold text-cyan-300">{step.level}</span>
                       <span className="px-1.5 py-0.2 rounded bg-emerald-500/20 text-emerald-300 text-[9px] font-bold">
@@ -738,7 +738,7 @@ export const MerkleTreeInteractiveGraph: React.FC<MerkleTreeInteractiveGraphProp
       </div>
 
       {/* Filter and Search Bar */}
-      <div className="flex flex-col sm:flex-row items-stretch sm:items-center justify-between gap-3 bg-[#070914]/85 border border-cyan-500/20 rounded-2xl p-2.5 font-mono text-xs shadow-inner">
+      <div className="flex flex-col sm:flex-row items-stretch sm:items-center justify-between gap-3 bg-[#070914]/85 border-cyan-500/20 rounded-2xl p-2.5 font-mono text-xs shadow-inner">
         {/* Branch Filter Tabs */}
         <div className="flex items-center gap-1.5 overflow-x-auto pb-1 sm:pb-0">
           <button
@@ -748,7 +748,7 @@ export const MerkleTreeInteractiveGraph: React.FC<MerkleTreeInteractiveGraphProp
             }}
             className={`px-3 py-1.5 rounded-xl font-bold transition-all whitespace-nowrap ${
               branchFilter === 'all'
-                ? 'bg-cyan-500/25 text-cyan-100 border border-cyan-500/40 shadow-[0_0_12px_rgba(6,182,212,0.3)]'
+                ? 'bg-cyan-500/25 text-cyan-100 border-cyan-500/40 shadow-[0_0_12px_rgba(6,182,212,0.3)]'
                 : 'text-zinc-400 hover:text-zinc-200'
             }`}
           >
@@ -761,7 +761,7 @@ export const MerkleTreeInteractiveGraph: React.FC<MerkleTreeInteractiveGraphProp
             }}
             className={`px-3 py-1.5 rounded-xl font-bold transition-all whitespace-nowrap flex items-center gap-1.5 ${
               branchFilter === 'deca'
-                ? 'bg-emerald-500/25 text-emerald-100 border border-emerald-500/40 shadow-[0_0_12px_rgba(16,185,129,0.3)]'
+                ? 'bg-emerald-500/25 text-emerald-100 border-emerald-500/40 shadow-[0_0_12px_rgba(16,185,129,0.3)]'
                 : 'text-zinc-400 hover:text-emerald-300'
             }`}
           >
@@ -775,7 +775,7 @@ export const MerkleTreeInteractiveGraph: React.FC<MerkleTreeInteractiveGraphProp
             }}
             className={`px-3 py-1.5 rounded-xl font-bold transition-all whitespace-nowrap flex items-center gap-1.5 ${
               branchFilter === 'seals'
-                ? 'bg-violet-500/25 text-violet-100 border border-violet-500/40 shadow-[0_0_12px_rgba(139,92,246,0.3)]'
+                ? 'bg-violet-500/25 text-violet-100 border-violet-500/40 shadow-[0_0_12px_rgba(139,92,246,0.3)]'
                 : 'text-zinc-400 hover:text-violet-300'
             }`}
           >
@@ -789,7 +789,7 @@ export const MerkleTreeInteractiveGraph: React.FC<MerkleTreeInteractiveGraphProp
             }}
             className={`px-3 py-1.5 rounded-xl font-bold transition-all whitespace-nowrap flex items-center gap-1.5 ${
               branchFilter === 'snapshots'
-                ? 'bg-cyan-500/25 text-cyan-100 border border-cyan-500/40 shadow-[0_0_12px_rgba(6,182,212,0.3)]'
+                ? 'bg-cyan-500/25 text-cyan-100 border-cyan-500/40 shadow-[0_0_12px_rgba(6,182,212,0.3)]'
                 : 'text-zinc-400 hover:text-cyan-300'
             }`}
           >
@@ -803,7 +803,7 @@ export const MerkleTreeInteractiveGraph: React.FC<MerkleTreeInteractiveGraphProp
             }}
             className={`px-3 py-1.5 rounded-xl font-bold transition-all whitespace-nowrap flex items-center gap-1.5 ${
               branchFilter === 'stages'
-                ? 'bg-indigo-500/25 text-indigo-100 border border-indigo-500/40 shadow-[0_0_12px_rgba(99,102,241,0.3)]'
+                ? 'bg-indigo-500/25 text-indigo-100 border-indigo-500/40 shadow-[0_0_12px_rgba(99,102,241,0.3)]'
                 : 'text-zinc-400 hover:text-indigo-300'
             }`}
           >
@@ -817,7 +817,7 @@ export const MerkleTreeInteractiveGraph: React.FC<MerkleTreeInteractiveGraphProp
             }}
             className={`px-3 py-1.5 rounded-xl font-bold transition-all whitespace-nowrap flex items-center gap-1.5 ${
               branchFilter === 'quarantine'
-                ? 'bg-amber-500/25 text-amber-100 border border-amber-500/40 shadow-[0_0_12px_rgba(245,158,11,0.3)]'
+                ? 'bg-amber-500/25 text-amber-100 border-amber-500/40 shadow-[0_0_12px_rgba(245,158,11,0.3)]'
                 : 'text-zinc-400 hover:text-amber-300'
             }`}
           >
@@ -834,7 +834,7 @@ export const MerkleTreeInteractiveGraph: React.FC<MerkleTreeInteractiveGraphProp
             value={searchQuery}
             onChange={(e) => setSearchQuery(e.target.value)}
             placeholder="Search seal name, hash prefix..."
-            className="w-full bg-black/60 border border-white/10 rounded-xl pl-9 pr-3 py-1.5 text-xs text-white placeholder-zinc-500 focus:outline-none focus:border-cyan-500/50 transition-colors"
+            className="w-full bg-black/60 border-white/10 rounded-xl pl-9 pr-3 py-1.5 text-xs text-white placeholder-zinc-500 focus:outline-none focus:border-cyan-500/50 transition-colors"
           />
         </div>
       </div>
@@ -842,7 +842,7 @@ export const MerkleTreeInteractiveGraph: React.FC<MerkleTreeInteractiveGraphProp
       {/* Main Visualizer Stage & Hover/Inspector Sidebar */}
       <div className="grid grid-cols-1 lg:grid-cols-12 gap-6">
         {/* Left 8 Cols: Interactive SVG Node-Link Canvas */}
-        <div className="lg:col-span-8 p-4 rounded-[28px] bg-[#070914]/90 border border-cyan-500/20 shadow-2xl relative overflow-hidden flex flex-col min-h-[460px]">
+        <div className="lg:col-span-8 p-4 rounded-[28px] bg-[#070914]/90 border-cyan-500/20 shadow-2xl relative overflow-hidden flex flex-col min-h-[460px]">
           {/* Subtle Grid Background */}
           <div className="absolute inset-0 bg-[radial-gradient(#06b6d4_1px,transparent_1px)] [background-size:24px_24px] opacity-10 pointer-events-none" />
 
@@ -1034,7 +1034,7 @@ export const MerkleTreeInteractiveGraph: React.FC<MerkleTreeInteractiveGraphProp
         {/* Right 4 Cols: Live Metadata & Hash Inspector Panel */}
         <div className="lg:col-span-4 space-y-4">
           {/* Active Node Details Card */}
-          <div className="p-5 rounded-[28px] bg-gradient-to-br from-[#0c1020]/95 to-[#070914]/95 border border-cyan-500/30 backdrop-blur-2xl shadow-xl space-y-4 font-mono text-xs">
+          <div className="p-5 rounded-[28px] bg-gradient-to-br from-[#0c1020]/95 to-[#070914]/95 border-cyan-500/30 backdrop-blur-2xl shadow-xl space-y-4 font-mono text-xs">
             <div className="flex items-center justify-between border-b border-white/10 pb-3">
               <div className="flex items-center gap-2">
                 <span
@@ -1050,7 +1050,7 @@ export const MerkleTreeInteractiveGraph: React.FC<MerkleTreeInteractiveGraphProp
                   {selectedNode.type.replace('_', ' ')} INSPECTION
                 </span>
               </div>
-              <span className="text-[10px] px-2 py-0.5 rounded-full bg-cyan-500/10 text-cyan-300 border border-cyan-500/20 font-bold">
+              <span className="text-[10px] px-2 py-0.5 rounded-full bg-cyan-500/10 text-cyan-300 border-cyan-500/20 font-bold">
                 DEPTH: L{selectedNode.depth}
               </span>
             </div>
@@ -1064,7 +1064,7 @@ export const MerkleTreeInteractiveGraph: React.FC<MerkleTreeInteractiveGraphProp
             </div>
 
             {/* Cryptographic Hash Inspector with Copy */}
-            <div className="p-3 bg-black/60 rounded-xl border border-white/10 space-y-1.5">
+            <div className="p-3 bg-black/60 rounded-xl border-white/10 space-y-1.5">
               <div className="flex items-center justify-between text-[11px] text-zinc-400">
                 <span>Cryptographic Digest (SHA-256 / Post-Quantum)</span>
                 <button
@@ -1096,7 +1096,7 @@ export const MerkleTreeInteractiveGraph: React.FC<MerkleTreeInteractiveGraphProp
                   playTone(550, 0.04);
                   setSelectedNodeId(selectedNode.parentHash!);
                 }}
-                className="p-2.5 bg-black/40 hover:bg-white/5 rounded-xl border border-white/5 cursor-pointer transition-all flex items-center justify-between"
+                className="p-2.5 bg-black/40 hover:bg-white/5 rounded-xl border-white/5 cursor-pointer transition-all flex items-center justify-between"
               >
                 <div>
                   <span className="text-[10px] text-zinc-500 block">Parent Merkle Branch</span>
@@ -1130,13 +1130,13 @@ export const MerkleTreeInteractiveGraph: React.FC<MerkleTreeInteractiveGraphProp
 
             {/* Telemetry Metrics if present */}
             {selectedNode.metadata.metrics && (
-              <div className="p-3 bg-black/40 rounded-xl border border-cyan-500/20 space-y-1.5">
+              <div className="p-3 bg-black/40 rounded-xl border-cyan-500/20 space-y-1.5">
                 <span className="text-[10px] text-cyan-400 font-bold uppercase tracking-wider block">
                   Snapshot Hardware Metrics
                 </span>
                 <div className="grid grid-cols-2 gap-2 text-[11px]">
                   {Object.entries(selectedNode.metadata.metrics).map(([k, v]) => (
-                    <div key={k} className="p-1.5 rounded-lg bg-black/30 border border-white/5">
+                    <div key={k} className="p-1.5 rounded-lg bg-black/30 border-white/5">
                       <span className="text-zinc-500 text-[10px] block">{k}</span>
                       <span className="text-white font-bold">{v}</span>
                     </div>
@@ -1148,7 +1148,7 @@ export const MerkleTreeInteractiveGraph: React.FC<MerkleTreeInteractiveGraphProp
 
           {/* Quick Hover Tooltip Preview Card */}
           {hoveredNode && hoveredNode.id !== selectedNode.id && (
-            <div className="p-3.5 rounded-2xl bg-[#0e1424]/90 border border-cyan-500/40 backdrop-blur-xl animate-in fade-in duration-150 font-mono text-xs shadow-lg">
+            <div className="p-3.5 rounded-2xl bg-[#0e1424]/90 border-cyan-500/40 backdrop-blur-xl animate-in fade-in duration-150 font-mono text-xs shadow-lg">
               <div className="flex items-center justify-between text-[10px] text-zinc-400 mb-1">
                 <span>Hovered Seal:</span>
                 <span className="text-cyan-400 font-bold">{hoveredNode.type.toUpperCase()}</span>

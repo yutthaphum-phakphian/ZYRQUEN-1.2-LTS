@@ -143,11 +143,11 @@ export const CryptographyStream: React.FC = () => {
   };
 
   return (
-    <div className="p-6 rounded-[28px] bg-[#0b0e1a]/75 border border-white/8 backdrop-blur-xl space-y-4 font-mono text-xs">
+    <div className="p-6 rounded-[28px] bg-[#0b0e1a]/75 border-white/8 backdrop-blur-xl space-y-4 font-mono text-xs">
       {/* Header Bar */}
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 border-b border-white/8 pb-3">
         <div className="flex items-center gap-2.5">
-          <div className="w-8 h-8 rounded-xl bg-violet-500/20 border border-violet-500/40 flex items-center justify-center text-violet-300">
+          <div className="w-8 h-8 rounded-xl bg-violet-500/20 border-violet-500/40 flex items-center justify-center text-violet-300">
             <Binary className="w-4 h-4" />
           </div>
           <div>
@@ -155,7 +155,7 @@ export const CryptographyStream: React.FC = () => {
               <span className="font-bold text-white uppercase text-xs sm:text-sm tracking-wide">
                 Cryptography & Merkle Proof Stream
               </span>
-              <span className="text-[10px] px-2 py-0.5 rounded-full bg-violet-500/15 text-violet-300 border border-violet-500/30 font-semibold">
+              <span className="text-[10px] px-2 py-0.5 rounded-full bg-violet-500/15 text-violet-300 border-violet-500/30 font-semibold">
                 CRYPTO-ENGINE V25
               </span>
             </div>
@@ -167,7 +167,7 @@ export const CryptographyStream: React.FC = () => {
 
         {/* Stream Controls */}
         <div className="flex items-center gap-2 self-start sm:self-auto">
-          <div className="flex items-center bg-black/40 border border-white/10 rounded-xl p-1 text-[10px]">
+          <div className="flex items-center bg-black/40 border-white/10 rounded-xl p-1 text-[10px]">
             <button
               onClick={() => setStreamSpeed(3000)}
               className={`px-2 py-0.5 rounded-lg transition-all ${
@@ -213,19 +213,19 @@ export const CryptographyStream: React.FC = () => {
 
       {/* Proof Stream Stats Bar */}
       <div className="grid grid-cols-2 sm:grid-cols-4 gap-2.5 text-[11px]">
-        <div className="p-2.5 rounded-xl bg-black/40 border border-white/5 space-y-0.5">
+        <div className="p-2.5 rounded-xl bg-black/40 border-white/5 space-y-0.5">
           <span className="text-[10px] text-zinc-500 block uppercase">Merkle Root</span>
           <span className="text-cyan-300 font-bold truncate block">{SYSTEM_METADATA.merkleRoot.slice(0, 18)}...</span>
         </div>
-        <div className="p-2.5 rounded-xl bg-black/40 border border-white/5 space-y-0.5">
+        <div className="p-2.5 rounded-xl bg-black/40 border-white/5 space-y-0.5">
           <span className="text-[10px] text-zinc-500 block uppercase">Total Verified Proofs</span>
           <span className="text-emerald-400 font-bold block">{verifiedCount.toLocaleString()} SEALS</span>
         </div>
-        <div className="p-2.5 rounded-xl bg-black/40 border border-white/5 space-y-0.5">
+        <div className="p-2.5 rounded-xl bg-black/40 border-white/5 space-y-0.5">
           <span className="text-[10px] text-zinc-500 block uppercase">PQC Security Level</span>
           <span className="text-violet-300 font-bold block">NIST Level 5 (Kyber-1024)</span>
         </div>
-        <div className="p-2.5 rounded-xl bg-black/40 border border-white/5 space-y-0.5">
+        <div className="p-2.5 rounded-xl bg-black/40 border-white/5 space-y-0.5">
           <span className="text-[10px] text-zinc-500 block uppercase">Avg Verification Latency</span>
           <span className="text-amber-300 font-bold block">48.2 μs (Sub-Millisecond)</span>
         </div>
@@ -279,7 +279,7 @@ export const CryptographyStream: React.FC = () => {
             <div className="flex items-center gap-3 self-end md:self-auto shrink-0">
               <span className="text-[10px] text-zinc-400">{p.latencyMicros} μs</span>
 
-              <span className="px-2 py-0.5 rounded bg-emerald-500/10 text-emerald-300 border border-emerald-500/20 text-[10px] font-bold">
+              <span className="px-2 py-0.5 rounded bg-emerald-500/10 text-emerald-300 border-emerald-500/20 text-[10px] font-bold">
                 {p.proofValidity}
               </span>
 

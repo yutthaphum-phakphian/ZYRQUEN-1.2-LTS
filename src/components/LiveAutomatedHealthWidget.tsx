@@ -57,7 +57,7 @@ export const LiveAutomatedHealthWidget: React.FC = () => {
   const isHealthy = lastCheck?.status === 'PASS' || !lastCheck;
 
   return (
-    <div className="p-5 rounded-[24px] bg-gradient-to-br from-[#0c1424]/90 via-[#070b14]/85 to-[#04060b] border border-cyan-500/25 backdrop-blur-xl shadow-2xl font-mono relative overflow-hidden">
+    <div className="p-5 rounded-[24px] bg-gradient-to-br from-[#0c1424]/90 via-[#070b14]/85 to-[#04060b] border-cyan-500/25 backdrop-blur-xl shadow-2xl font-mono relative overflow-hidden">
       {/* Background ambient glow */}
       <div className="absolute top-0 right-0 w-64 h-64 bg-cyan-500/10 rounded-full blur-3xl pointer-events-none" />
 
@@ -65,7 +65,7 @@ export const LiveAutomatedHealthWidget: React.FC = () => {
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 border-b border-white/10 pb-3">
         <div className="flex items-center gap-3">
           <div className="relative">
-            <div className="w-9 h-9 rounded-xl bg-cyan-500/20 border border-cyan-500/40 flex items-center justify-center text-cyan-300">
+            <div className="w-9 h-9 rounded-xl bg-cyan-500/20 border-cyan-500/40 flex items-center justify-center text-cyan-300">
               <Activity className="w-5 h-5 animate-pulse text-cyan-300" />
             </div>
             <span className="absolute -top-1 -right-1 flex h-3 w-3">
@@ -79,7 +79,7 @@ export const LiveAutomatedHealthWidget: React.FC = () => {
               <span className="text-xs font-bold text-white tracking-wide">
                 AUTOMATED 60S INTEGRITY HEALTH MONITOR
               </span>
-              <span className="px-2 py-0.5 rounded-full bg-emerald-500/20 text-emerald-300 border border-emerald-500/40 text-[9px] font-bold">
+              <span className="px-2 py-0.5 rounded-full bg-emerald-500/20 text-emerald-300 border-emerald-500/40 text-[9px] font-bold">
                 SSoT &Delta;0 ZERO DRIFT
               </span>
             </div>
@@ -92,7 +92,7 @@ export const LiveAutomatedHealthWidget: React.FC = () => {
         {/* Quick Controls & Timer */}
         <div className="flex items-center gap-2">
           {/* 60s Countdown Timer Badge */}
-          <div className="px-3 py-1.5 rounded-xl bg-black/50 border border-cyan-500/30 flex items-center gap-2 text-xs">
+          <div className="px-3 py-1.5 rounded-xl bg-black/50 border-cyan-500/30 flex items-center gap-2 text-xs">
             <Clock className="w-3.5 h-3.5 text-cyan-400" />
             <span className="text-zinc-400 text-[11px]">Next check:</span>
             <strong className="text-cyan-300 font-bold">
@@ -104,7 +104,7 @@ export const LiveAutomatedHealthWidget: React.FC = () => {
           <button
             onClick={handleRunManualVerification}
             disabled={isVerifyingNow}
-            className="px-3 py-1.5 rounded-xl bg-cyan-500/20 hover:bg-cyan-500/30 border border-cyan-500/40 text-cyan-200 text-xs font-semibold flex items-center gap-1.5 transition-all shadow-[0_0_15px_rgba(6,182,212,0.2)] disabled:opacity-50"
+            className="px-3 py-1.5 rounded-xl bg-cyan-500/20 hover:bg-cyan-500/30 border-cyan-500/40 text-cyan-200 text-xs font-semibold flex items-center gap-1.5 transition-all shadow-[0_0_15px_rgba(6,182,212,0.2)] disabled:opacity-50"
             title="Execute Instant Merkle Ledger Verification"
           >
             <RotateCw className={`w-3.5 h-3.5 ${isVerifyingNow ? 'animate-spin text-cyan-300' : ''}`} />
@@ -116,7 +116,7 @@ export const LiveAutomatedHealthWidget: React.FC = () => {
       {/* Primary Status Metric Grid */}
       <div className="grid grid-cols-2 lg:grid-cols-4 gap-3 mt-4">
         {/* Metric 1: Verified Merkle Root */}
-        <div className="p-3 rounded-xl bg-black/40 border border-white/8 space-y-1">
+        <div className="p-3 rounded-xl bg-black/40 border-white/8 space-y-1">
           <div className="text-[10px] text-zinc-400 uppercase font-medium flex items-center justify-between">
             <span>Genesis Merkle Root</span>
             <ShieldCheck className="w-3 h-3 text-emerald-400" />
@@ -139,7 +139,7 @@ export const LiveAutomatedHealthWidget: React.FC = () => {
         </div>
 
         {/* Metric 2: Canonical Seals Count */}
-        <div className="p-3 rounded-xl bg-black/40 border border-white/8 space-y-1">
+        <div className="p-3 rounded-xl bg-black/40 border-white/8 space-y-1">
           <div className="text-[10px] text-zinc-400 uppercase font-medium flex items-center justify-between">
             <span>Canonical Seals</span>
             <Lock className="w-3 h-3 text-cyan-400" />
@@ -153,7 +153,7 @@ export const LiveAutomatedHealthWidget: React.FC = () => {
         </div>
 
         {/* Metric 3: Total Checks Passed */}
-        <div className="p-3 rounded-xl bg-black/40 border border-white/8 space-y-1">
+        <div className="p-3 rounded-xl bg-black/40 border-white/8 space-y-1">
           <div className="text-[10px] text-zinc-400 uppercase font-medium flex items-center justify-between">
             <span>Health Checks Completed</span>
             <CheckCircle2 className="w-3 h-3 text-emerald-400" />
@@ -167,7 +167,7 @@ export const LiveAutomatedHealthWidget: React.FC = () => {
         </div>
 
         {/* Metric 4: Mutation Authority Invariant */}
-        <div className="p-3 rounded-xl bg-black/40 border border-white/8 space-y-1">
+        <div className="p-3 rounded-xl bg-black/40 border-white/8 space-y-1">
           <div className="text-[10px] text-zinc-400 uppercase font-medium flex items-center justify-between">
             <span>Mutation Authority</span>
             <Zap className="w-3 h-3 text-amber-400" />
@@ -183,7 +183,7 @@ export const LiveAutomatedHealthWidget: React.FC = () => {
 
       {/* Bottom Live Pulse Confirmation */}
       {recentVerification && (
-        <div className="mt-3 p-2.5 rounded-xl bg-emerald-500/10 border border-emerald-500/30 text-emerald-300 text-[11px] flex items-center justify-between animate-in fade-in">
+        <div className="mt-3 p-2.5 rounded-xl bg-emerald-500/10 border-emerald-500/30 text-emerald-300 text-[11px] flex items-center justify-between animate-in fade-in">
           <div className="flex items-center gap-2">
             <CheckCircle2 className="w-3.5 h-3.5 text-emerald-400 shrink-0" />
             <span>

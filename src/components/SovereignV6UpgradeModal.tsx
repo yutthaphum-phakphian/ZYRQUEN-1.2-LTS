@@ -230,19 +230,19 @@ export const SovereignV6UpgradeModal: React.FC<SovereignV6UpgradeModalProps> = (
           animate={{ opacity: 1, scale: 1, y: 0 }}
           exit={{ opacity: 0, scale: 0.96, y: 15 }}
           transition={{ duration: 0.2, ease: 'easeOut' }}
-          className="relative w-full max-w-6xl max-h-[92vh] bg-[#070b14] border border-cyan-500/40 rounded-3xl shadow-[0_25px_70px_rgba(0,0,0,0.85)] flex flex-col overflow-hidden text-slate-100"
+          className="relative w-full max-w-6xl max-h-[92vh] bg-[#070b14] border-cyan-500/40 rounded-3xl shadow-[0_25px_70px_rgba(0,0,0,0.85)] flex flex-col overflow-hidden text-slate-100"
         >
           {/* Top Bar Header */}
           <div className="p-4 sm:p-6 border-b border-white/10 bg-gradient-to-r from-cyan-950/40 via-blue-950/30 to-purple-950/40 flex flex-col sm:flex-row sm:items-center justify-between gap-4">
             <div className="space-y-1">
               <div className="flex items-center gap-2 flex-wrap text-[11px] font-mono">
-                <span className="px-2.5 py-0.5 rounded-full bg-emerald-500/20 text-emerald-300 border border-emerald-500/40 font-bold uppercase tracking-wider">
+                <span className="px-2.5 py-0.5 rounded-full bg-emerald-500/20 text-emerald-300 border-emerald-500/40 font-bold uppercase tracking-wider">
                   VERSION: 6.0-LTS
                 </span>
-                <span className="px-2.5 py-0.5 rounded-full bg-cyan-500/20 text-cyan-300 border border-cyan-500/40 font-bold">
+                <span className="px-2.5 py-0.5 rounded-full bg-cyan-500/20 text-cyan-300 border-cyan-500/40 font-bold">
                   FEDERATED ASSURANCE & SWARM RECOVERY
                 </span>
-                <span className="px-2 py-0.5 rounded-full bg-purple-950/60 text-purple-300 border border-purple-500/40 font-bold">
+                <span className="px-2 py-0.5 rounded-full bg-purple-950/60 text-purple-300 border-purple-500/40 font-bold">
                   SHA3-512: 909ab814...fa4c68
                 </span>
               </div>
@@ -267,7 +267,7 @@ export const SovereignV6UpgradeModal: React.FC<SovereignV6UpgradeModalProps> = (
                     MANIFEST_YAML
                   )
                 }
-                className="flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-cyan-500/20 hover:bg-cyan-500/30 border border-cyan-500/40 text-cyan-200 text-xs font-mono font-bold transition-all cursor-pointer"
+                className="flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-cyan-500/20 hover:bg-cyan-500/30 border-cyan-500/40 text-cyan-200 text-xs font-mono font-bold transition-all cursor-pointer"
                 title="Download zyrquen_v6_manifest.yaml"
               >
                 <Download className="w-3.5 h-3.5" />
@@ -305,8 +305,8 @@ export const SovereignV6UpgradeModal: React.FC<SovereignV6UpgradeModalProps> = (
                   }}
                   className={`flex items-center gap-2 px-3.5 py-2 rounded-xl transition-all whitespace-nowrap cursor-pointer ${
                     isActive
-                      ? 'bg-cyan-500/20 text-cyan-200 border border-cyan-500/50 shadow-[0_0_10px_rgba(6,182,212,0.2)] font-bold'
-                      : 'text-zinc-400 hover:text-zinc-200 hover:bg-white/5 border border-transparent'
+                      ? 'bg-cyan-500/20 text-cyan-200 border-cyan-500/50 shadow-[0_0_10px_rgba(6,182,212,0.2)] font-bold'
+                      : 'text-zinc-400 hover:text-zinc-200 hover:bg-white/5 border-transparent'
                   }`}
                 >
                   <Icon className="w-3.5 h-3.5" />
@@ -364,7 +364,7 @@ export const SovereignV6UpgradeModal: React.FC<SovereignV6UpgradeModalProps> = (
                   </div>
                 </div>
 
-                <div className="relative rounded-2xl bg-[#04070f] border border-white/10 p-4 font-mono text-xs text-cyan-300 overflow-x-auto shadow-inner leading-relaxed">
+                <div className="relative rounded-2xl bg-[#04070f] border-white/10 p-4 font-mono text-xs text-cyan-300 overflow-x-auto shadow-inner leading-relaxed">
                   <pre>{MANIFEST_YAML}</pre>
                 </div>
               </div>
@@ -433,7 +433,7 @@ export const SovereignV6UpgradeModal: React.FC<SovereignV6UpgradeModalProps> = (
                         }`}
                       >
                         <div className="flex items-center justify-between mb-2">
-                          <span className="text-xs font-mono font-bold uppercase px-2 py-0.5 rounded bg-black/40 border border-white/10">
+                          <span className="text-xs font-mono font-bold uppercase px-2 py-0.5 rounded bg-black/40 border-white/10">
                             Phase {step.phase}
                           </span>
                           {isDone ? (
@@ -453,7 +453,7 @@ export const SovereignV6UpgradeModal: React.FC<SovereignV6UpgradeModalProps> = (
                 </div>
 
                 {/* Console Log Feed */}
-                <div className="rounded-2xl bg-[#03060c] border border-white/10 p-4 font-mono text-xs space-y-1.5 shadow-inner">
+                <div className="rounded-2xl bg-[#03060c] border-white/10 p-4 font-mono text-xs space-y-1.5 shadow-inner">
                   <div className="text-zinc-500 text-[11px] pb-1 border-b border-white/5 flex items-center justify-between">
                     <span>LIVE PIPELINE CONSOLE LOG</span>
                     <span className="text-emerald-400">READY</span>
@@ -481,7 +481,7 @@ export const SovereignV6UpgradeModal: React.FC<SovereignV6UpgradeModalProps> = (
               <div className="space-y-6">
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                   {/* Layer 1 */}
-                  <div className="p-5 rounded-2xl bg-zinc-900/50 border border-cyan-500/30 space-y-3">
+                  <div className="p-5 rounded-2xl bg-zinc-900/50 border-cyan-500/30 space-y-3">
                     <div className="flex items-center gap-2 text-cyan-400 font-bold font-mono text-sm">
                       <Globe className="w-4 h-4" />
                       <span>LAYER 1: CONTROL PLANE</span>
@@ -494,7 +494,7 @@ export const SovereignV6UpgradeModal: React.FC<SovereignV6UpgradeModalProps> = (
                   </div>
 
                   {/* Layer 2 */}
-                  <div className="p-5 rounded-2xl bg-zinc-900/50 border border-emerald-500/30 space-y-3">
+                  <div className="p-5 rounded-2xl bg-zinc-900/50 border-emerald-500/30 space-y-3">
                     <div className="flex items-center gap-2 text-emerald-400 font-bold font-mono text-sm">
                       <Layers className="w-4 h-4" />
                       <span>LAYER 2: SWARM CONSENSUS</span>
@@ -507,7 +507,7 @@ export const SovereignV6UpgradeModal: React.FC<SovereignV6UpgradeModalProps> = (
                   </div>
 
                   {/* Layer 3 */}
-                  <div className="p-5 rounded-2xl bg-zinc-900/50 border border-purple-500/30 space-y-3">
+                  <div className="p-5 rounded-2xl bg-zinc-900/50 border-purple-500/30 space-y-3">
                     <div className="flex items-center gap-2 text-purple-400 font-bold font-mono text-sm">
                       <Lock className="w-4 h-4" />
                       <span>LAYER 3: FEDERATED LEARNING & DP</span>
@@ -520,7 +520,7 @@ export const SovereignV6UpgradeModal: React.FC<SovereignV6UpgradeModalProps> = (
                   </div>
 
                   {/* Layer 4 */}
-                  <div className="p-5 rounded-2xl bg-zinc-900/50 border border-amber-500/30 space-y-3">
+                  <div className="p-5 rounded-2xl bg-zinc-900/50 border-amber-500/30 space-y-3">
                     <div className="flex items-center gap-2 text-amber-400 font-bold font-mono text-sm">
                       <Zap className="w-4 h-4" />
                       <span>LAYER 4: CRYPTOGRAPHIC INTEGRITY</span>
@@ -548,7 +548,7 @@ export const SovereignV6UpgradeModal: React.FC<SovereignV6UpgradeModalProps> = (
                   </p>
                 </div>
 
-                <div className="rounded-2xl border border-white/10 overflow-hidden bg-black/40">
+                <div className="rounded-2xl border-white/10 overflow-hidden bg-black/40">
                   <table className="w-full text-left font-mono text-xs">
                     <thead>
                       <tr className="bg-white/5 text-zinc-400 border-b border-white/10">
@@ -573,7 +573,7 @@ export const SovereignV6UpgradeModal: React.FC<SovereignV6UpgradeModalProps> = (
                           <td className="p-3 text-zinc-400">{row.target}</td>
                           <td className="p-3 text-cyan-300 font-semibold">{row.measured}</td>
                           <td className="p-3">
-                            <span className="px-2 py-0.5 rounded-full bg-emerald-500/20 text-emerald-300 border border-emerald-500/40 text-[10px] font-bold">
+                            <span className="px-2 py-0.5 rounded-full bg-emerald-500/20 text-emerald-300 border-emerald-500/40 text-[10px] font-bold">
                               ✅ {row.verdict}
                             </span>
                           </td>
@@ -616,7 +616,7 @@ export const SovereignV6UpgradeModal: React.FC<SovereignV6UpgradeModalProps> = (
                   </button>
                 </div>
 
-                <div className="rounded-2xl bg-[#04070f] border border-white/10 p-4 font-mono text-xs text-emerald-300 overflow-x-auto shadow-inner leading-relaxed">
+                <div className="rounded-2xl bg-[#04070f] border-white/10 p-4 font-mono text-xs text-emerald-300 overflow-x-auto shadow-inner leading-relaxed">
                   <pre>{REPO_TREE}</pre>
                 </div>
               </div>
@@ -646,7 +646,7 @@ export const SovereignV6UpgradeModal: React.FC<SovereignV6UpgradeModalProps> = (
                   </a>
                 </div>
 
-                <div className="rounded-2xl border border-cyan-500/30 overflow-hidden bg-black flex justify-center items-center p-2 shadow-2xl">
+                <div className="rounded-2xl border-cyan-500/30 overflow-hidden bg-black flex justify-center items-center p-2 shadow-2xl">
                   <img
                     src="./demo.gif"
                     alt="ZYRQUEN Ω∞ ERIODEN Sovereign OS v6.0 LTS Runtime Overview"

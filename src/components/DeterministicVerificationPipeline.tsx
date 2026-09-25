@@ -224,7 +224,7 @@ export const DeterministicVerificationPipeline: React.FC = () => {
       {/* Header */}
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 border-b border-indigo-500/20 pb-4">
         <div className="flex items-center gap-3">
-          <div className="w-11 h-11 rounded-2xl bg-indigo-500/20 border border-indigo-400 text-indigo-300 flex items-center justify-center shrink-0 shadow-[0_0_20px_rgba(99,102,241,0.3)]">
+          <div className="w-11 h-11 rounded-2xl bg-indigo-500/20 border-indigo-400 text-indigo-300 flex items-center justify-center shrink-0 shadow-[0_0_20px_rgba(99,102,241,0.3)]">
             <Cpu className="w-5 h-5" />
           </div>
           <div>
@@ -232,7 +232,7 @@ export const DeterministicVerificationPipeline: React.FC = () => {
               <h3 className="text-base font-bold text-indigo-100 font-serif">
                 MODULE 1: DETERMINISTIC CRYPTOGRAPHIC VERIFICATION GATE
               </h3>
-              <span className="text-[10px] px-2 py-0.5 rounded bg-indigo-500/20 text-indigo-300 border border-indigo-400/40 font-bold">
+              <span className="text-[10px] px-2 py-0.5 rounded bg-indigo-500/20 text-indigo-300 border-indigo-400/40 font-bold">
                 WEBCRYPTO SHA-256
               </span>
             </div>
@@ -247,9 +247,9 @@ export const DeterministicVerificationPipeline: React.FC = () => {
           disabled={isVerifyingAll || allVerified}
           className={`px-4 py-2 rounded-xl text-xs font-bold flex items-center gap-2 transition-all shadow-lg ${
             allVerified
-              ? 'bg-emerald-500/20 text-emerald-300 border border-emerald-500/50 cursor-default'
+              ? 'bg-emerald-500/20 text-emerald-300 border-emerald-500/50 cursor-default'
               : isVerifyingAll
-              ? 'bg-indigo-600/50 text-indigo-200 border border-indigo-400/50 animate-pulse'
+              ? 'bg-indigo-600/50 text-indigo-200 border-indigo-400/50 animate-pulse'
               : 'bg-indigo-600 hover:bg-indigo-500 text-white shadow-[0_0_20px_rgba(99,102,241,0.4)]'
           }`}
         >
@@ -294,7 +294,7 @@ export const DeterministicVerificationPipeline: React.FC = () => {
                 <div>
                   <div className="flex items-center gap-2">
                     <span className="text-sm font-bold text-white font-serif">{art.id}</span>
-                    <span className="text-[10px] px-2 py-0.5 rounded bg-zinc-800 text-zinc-300 font-bold border border-white/10">
+                    <span className="text-[10px] px-2 py-0.5 rounded bg-zinc-800 text-zinc-300 font-bold border-white/10">
                       {art.sourceType}
                     </span>
                   </div>
@@ -332,7 +332,7 @@ export const DeterministicVerificationPipeline: React.FC = () => {
               </div>
 
               {/* Real Digest Calculation Display */}
-              <div className="p-3 rounded-xl bg-zinc-900/80 border border-white/5 space-y-2 text-xs">
+              <div className="p-3 rounded-xl bg-zinc-900/80 border-white/5 space-y-2 text-xs">
                 <div className="flex justify-between items-center text-[10px] text-zinc-400 font-bold">
                   <span className="flex items-center gap-1">
                     <Hash className="w-3 h-3 text-indigo-400" />
@@ -341,7 +341,7 @@ export const DeterministicVerificationPipeline: React.FC = () => {
                   <span>{art.byteSize} BYTES</span>
                 </div>
 
-                <div className="p-2 rounded-lg bg-black/80 border border-white/10 font-mono text-[11px] flex items-center justify-between gap-2">
+                <div className="p-2 rounded-lg bg-black/80 border-white/10 font-mono text-[11px] flex items-center justify-between gap-2">
                   <span
                     className={`truncate font-bold ${
                       isVerified ? 'text-emerald-400' : 'text-zinc-500 italic'
@@ -381,12 +381,12 @@ export const DeterministicVerificationPipeline: React.FC = () => {
 
               {/* Action Button & Invariant Badge */}
               <div className="flex items-center justify-between pt-1">
-                <span className="text-[9px] px-2 py-0.5 rounded bg-rose-500/20 text-rose-300 border border-rose-500/40 font-bold">
+                <span className="text-[9px] px-2 py-0.5 rounded bg-rose-500/20 text-rose-300 border-rose-500/40 font-bold">
                   CANONICAL WRITE: BLOCKED (0 MUTATIONS)
                 </span>
 
                 {isVerified ? (
-                  <span className="text-[10px] px-2.5 py-1 rounded-lg bg-emerald-950/80 text-emerald-300 border border-emerald-500/50 font-bold flex items-center gap-1.5 shadow-[0_0_10px_rgba(16,185,129,0.2)]">
+                  <span className="text-[10px] px-2.5 py-1 rounded-lg bg-emerald-950/80 text-emerald-300 border-emerald-500/50 font-bold flex items-center gap-1.5 shadow-[0_0_10px_rgba(16,185,129,0.2)]">
                     <span>🔒</span>
                     <span>TERMINAL: UPLOADED (LOCKED)</span>
                   </span>
@@ -394,7 +394,7 @@ export const DeterministicVerificationPipeline: React.FC = () => {
                   <button
                     onClick={() => handleVerifySingle(art.id)}
                     disabled={isVerifying}
-                    className="px-3 py-1.5 rounded-lg bg-indigo-500/20 hover:bg-indigo-500/30 border border-indigo-400/40 text-indigo-200 text-xs font-bold flex items-center gap-1.5 transition-all"
+                    className="px-3 py-1.5 rounded-lg bg-indigo-500/20 hover:bg-indigo-500/30 border-indigo-400/40 text-indigo-200 text-xs font-bold flex items-center gap-1.5 transition-all"
                   >
                     <Fingerprint className="w-3.5 h-3.5" />
                     <span>Compute Digest</span>

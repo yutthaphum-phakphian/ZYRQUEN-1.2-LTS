@@ -111,11 +111,11 @@ export const ChaosFaultInjector: React.FC<ChaosFaultInjectorProps> = ({
   };
 
   return (
-    <div className="p-5 bg-zinc-900 border border-zinc-800 rounded-2xl font-mono text-zinc-100 shadow-xl space-y-4">
+    <div className="p-5 bg-zinc-900 border-zinc-800 rounded-2xl font-mono text-zinc-100 shadow-xl space-y-4">
       {/* Engine Header */}
       <div className="flex items-center justify-between border-b border-zinc-800 pb-3">
         <div className="flex items-center gap-2.5">
-          <div className="p-2 bg-rose-950/80 border border-rose-800/60 rounded-xl text-rose-400">
+          <div className="p-2 bg-rose-950/80 border-rose-800/60 rounded-xl text-rose-400">
             <Flame className="w-5 h-5 animate-pulse" />
           </div>
           <div>
@@ -146,7 +146,7 @@ export const ChaosFaultInjector: React.FC<ChaosFaultInjectorProps> = ({
         <button
           type="button"
           onClick={handleTriggerDecoherence}
-          className="flex items-center gap-2.5 p-3 rounded-xl bg-zinc-950 border border-amber-800/60 text-amber-300 hover:bg-amber-950/40 text-xs font-bold transition cursor-pointer"
+          className="flex items-center gap-2.5 p-3 rounded-xl bg-zinc-950 border-amber-800/60 text-amber-300 hover:bg-amber-950/40 text-xs font-bold transition cursor-pointer"
         >
           <Zap className="w-4 h-4 text-amber-400 shrink-0" />
           <div className="text-left">
@@ -159,7 +159,7 @@ export const ChaosFaultInjector: React.FC<ChaosFaultInjectorProps> = ({
         <button
           type="button"
           onClick={handleTriggerPqcAttack}
-          className="flex items-center gap-2.5 p-3 rounded-xl bg-zinc-950 border border-rose-800/60 text-rose-300 hover:bg-rose-950/40 text-xs font-bold transition cursor-pointer"
+          className="flex items-center gap-2.5 p-3 rounded-xl bg-zinc-950 border-rose-800/60 text-rose-300 hover:bg-rose-950/40 text-xs font-bold transition cursor-pointer"
         >
           <ShieldAlert className="w-4 h-4 text-rose-400 shrink-0" />
           <div className="text-left">
@@ -172,7 +172,7 @@ export const ChaosFaultInjector: React.FC<ChaosFaultInjectorProps> = ({
         <button
           type="button"
           onClick={handleTriggerHardwareTamper}
-          className="flex items-center gap-2.5 p-3 rounded-xl bg-zinc-950 border border-purple-800/60 text-purple-300 hover:bg-purple-950/40 text-xs font-bold transition cursor-pointer"
+          className="flex items-center gap-2.5 p-3 rounded-xl bg-zinc-950 border-purple-800/60 text-purple-300 hover:bg-purple-950/40 text-xs font-bold transition cursor-pointer"
         >
           <AlertOctagon className="w-4 h-4 text-purple-400 shrink-0" />
           <div className="text-left">
@@ -185,7 +185,7 @@ export const ChaosFaultInjector: React.FC<ChaosFaultInjectorProps> = ({
         <button
           type="button"
           onClick={handleAutoHealingReset}
-          className="flex items-center gap-2.5 p-3 rounded-xl bg-emerald-950/80 border border-emerald-700/80 text-emerald-300 hover:bg-emerald-900 text-xs font-bold transition cursor-pointer"
+          className="flex items-center gap-2.5 p-3 rounded-xl bg-emerald-950/80 border-emerald-700/80 text-emerald-300 hover:bg-emerald-900 text-xs font-bold transition cursor-pointer"
         >
           <RefreshCw className="w-4 h-4 text-emerald-400 shrink-0" />
           <div className="text-left">
@@ -197,7 +197,7 @@ export const ChaosFaultInjector: React.FC<ChaosFaultInjectorProps> = ({
 
       {/* Live Active Simulation Indicator */}
       {activeSimulation && (
-        <div className="p-3 bg-zinc-950 border border-zinc-800 rounded-xl flex items-center justify-between text-xs">
+        <div className="p-3 bg-zinc-950 border-zinc-800 rounded-xl flex items-center justify-between text-xs">
           <div className="flex items-center gap-2">
             <Radio className="w-4 h-4 text-cyan-400 animate-ping" />
             <span className="text-zinc-400">Active Simulation:</span>

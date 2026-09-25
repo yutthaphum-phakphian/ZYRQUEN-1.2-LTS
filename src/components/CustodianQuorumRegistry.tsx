@@ -245,8 +245,8 @@ export const CustodianQuorumRegistry: React.FC<CustodianQuorumRegistryProps> = (
             onClick={() => setActiveViewMode('REGISTRY')}
             className={`px-3.5 py-1.5 rounded-xl font-bold flex items-center gap-1.5 transition-all cursor-pointer ${
               activeViewMode === 'REGISTRY'
-                ? 'bg-amber-500/20 text-amber-300 border border-amber-500/40 shadow-md shadow-amber-500/10'
-                : 'bg-black/40 text-zinc-400 border border-white/5 hover:text-white'
+                ? 'bg-amber-500/20 text-amber-300 border-amber-500/40 shadow-md shadow-amber-500/10'
+                : 'bg-black/40 text-zinc-400 border-white/5 hover:text-white'
             }`}
           >
             <Layers className="w-3.5 h-3.5" />
@@ -257,8 +257,8 @@ export const CustodianQuorumRegistry: React.FC<CustodianQuorumRegistryProps> = (
             onClick={() => setActiveViewMode('PHYSICAL_ATTESTATION')}
             className={`px-3.5 py-1.5 rounded-xl font-bold flex items-center gap-1.5 transition-all cursor-pointer ${
               activeViewMode === 'PHYSICAL_ATTESTATION'
-                ? 'bg-amber-500/20 text-amber-300 border border-amber-500/40 shadow-md shadow-amber-500/10'
-                : 'bg-black/40 text-zinc-400 border border-white/5 hover:text-white'
+                ? 'bg-amber-500/20 text-amber-300 border-amber-500/40 shadow-md shadow-amber-500/10'
+                : 'bg-black/40 text-zinc-400 border-white/5 hover:text-white'
             }`}
           >
             <ShieldCheck className="w-3.5 h-3.5 text-amber-400" />
@@ -272,8 +272,8 @@ export const CustodianQuorumRegistry: React.FC<CustodianQuorumRegistryProps> = (
             onClick={() => setActiveViewMode('INTAKE_CONSOLE')}
             className={`px-3.5 py-1.5 rounded-xl font-bold flex items-center gap-1.5 transition-all cursor-pointer ${
               activeViewMode === 'INTAKE_CONSOLE'
-                ? 'bg-cyan-500/20 text-cyan-300 border border-cyan-500/40 shadow-md shadow-cyan-500/10'
-                : 'bg-black/40 text-zinc-400 border border-white/5 hover:text-white'
+                ? 'bg-cyan-500/20 text-cyan-300 border-cyan-500/40 shadow-md shadow-cyan-500/10'
+                : 'bg-black/40 text-zinc-400 border-white/5 hover:text-white'
             }`}
           >
             <Terminal className="w-3.5 h-3.5 text-cyan-400" />
@@ -287,7 +287,7 @@ export const CustodianQuorumRegistry: React.FC<CustodianQuorumRegistryProps> = (
 
           <button
             onClick={handleComplete10of10Quorum}
-            className="px-3.5 py-1.5 rounded-xl font-bold bg-gradient-to-r from-emerald-600/30 to-amber-600/30 hover:from-emerald-600/50 hover:to-amber-600/50 border border-emerald-500/60 text-emerald-200 text-[11px] flex items-center gap-1.5 transition-all shadow-[0_0_15px_rgba(16,185,129,0.2)] cursor-pointer"
+            className="px-3.5 py-1.5 rounded-xl font-bold bg-gradient-to-r from-emerald-600/30 to-amber-600/30 hover:from-emerald-600/50 hover:to-amber-600/50 border-emerald-500/60 text-emerald-200 text-[11px] flex items-center gap-1.5 transition-all shadow-[0_0_15px_rgba(16,185,129,0.2)] cursor-pointer"
           >
             <CheckCircle2 className="w-3.5 h-3.5 text-emerald-400" />
             <span>⚡ Complete 10/10 Quorum (Omega Lock)</span>
@@ -300,7 +300,7 @@ export const CustodianQuorumRegistry: React.FC<CustodianQuorumRegistryProps> = (
       </div>
 
       {feedback && (
-        <div className="p-3 rounded-xl bg-black/80 border border-amber-500/40 text-amber-200 text-xs flex items-center gap-2">
+        <div className="p-3 rounded-xl bg-black/80 border-amber-500/40 text-amber-200 text-xs flex items-center gap-2">
           <Info className="w-4 h-4 text-amber-400 shrink-0" />
           <span>{feedback}</span>
         </div>
@@ -436,7 +436,7 @@ export const CustodianQuorumRegistry: React.FC<CustodianQuorumRegistryProps> = (
                                 e.stopPropagation();
                                 handleSelectSlotEvidence?.();
                               }}
-                              className="px-2.5 py-1 rounded-lg bg-emerald-500/20 hover:bg-emerald-500/35 text-emerald-200 border border-emerald-500/50 text-[10px] font-bold transition-all cursor-pointer flex items-center gap-1 shadow-sm shadow-emerald-500/10"
+                              className="px-2.5 py-1 rounded-lg bg-emerald-500/20 hover:bg-emerald-500/35 text-emerald-200 border-emerald-500/50 text-[10px] font-bold transition-all cursor-pointer flex items-center gap-1 shadow-sm shadow-emerald-500/10"
                               title="View immutable cryptographic proof metadata"
                             >
                               <ShieldAlert className="w-3 h-3 text-emerald-400" />
@@ -473,7 +473,7 @@ export const CustodianQuorumRegistry: React.FC<CustodianQuorumRegistryProps> = (
           </div>
 
           {/* Quorum Progress Bottom Summary */}
-          <div className="p-4 rounded-2xl bg-black/60 border border-white/10 flex flex-col sm:flex-row sm:items-center justify-between gap-3">
+          <div className="p-4 rounded-2xl bg-black/60 border-white/10 flex flex-col sm:flex-row sm:items-center justify-between gap-3">
             <div className="text-[11px] text-zinc-400">
               SSoT Quorum Requirement: <strong className="text-white">&ge; 8 of 10 Physical HSM Keyholders</strong> required.
               (Current Real: <strong className={quorumStats.isQuorumSatisfied ? 'text-emerald-400' : 'text-amber-400'}>{quorumStats.realHsmSignedCount}/10</strong>)
@@ -491,7 +491,7 @@ export const CustodianQuorumRegistry: React.FC<CustodianQuorumRegistryProps> = (
                         ? 'bg-purple-500 text-white'
                         : slot.classification === 'INVALID_REJECTED'
                         ? 'bg-rose-500 text-white'
-                        : 'bg-amber-900/50 text-amber-400 border border-amber-500/30'
+                        : 'bg-amber-900/50 text-amber-400 border-amber-500/30'
                     }`}
                   >
                     {slot.slotId}
@@ -545,7 +545,7 @@ export const CustodianQuorumRegistry: React.FC<CustodianQuorumRegistryProps> = (
               </button>
             </div>
 
-            <div className="space-y-2 p-3.5 bg-black/50 rounded-2xl border border-white/5">
+            <div className="space-y-2 p-3.5 bg-black/50 rounded-2xl border-white/5">
               <div className="flex justify-between items-start">
                 <div>
                   <div className="text-white font-bold text-sm">{activeSlotModal.custodianTitle}</div>
@@ -581,7 +581,7 @@ export const CustodianQuorumRegistry: React.FC<CustodianQuorumRegistryProps> = (
             </div>
 
             {/* Anti-Fraud Cryptographic Pipeline overview */}
-            <div className="p-3 rounded-xl bg-[#070b14] border border-cyan-500/20 text-[10px] text-zinc-400 space-y-1.5 font-sans">
+            <div className="p-3 rounded-xl bg-[#070b14] border-cyan-500/20 text-[10px] text-zinc-400 space-y-1.5 font-sans">
               <div className="font-bold text-cyan-300 font-mono">ANTI-FRAUD INVARIANT PIPELINE:</div>
               <div className="text-[10px] text-zinc-300 flex items-center gap-1.5 flex-wrap">
                 <span>Physical HSM Key</span>
@@ -613,7 +613,7 @@ export const CustodianQuorumRegistry: React.FC<CustodianQuorumRegistryProps> = (
               <button
                 onClick={() => handleModalMockTest(activeSlotModal)}
                 disabled={verifyingSlotId !== null}
-                className="w-full py-2.5 rounded-xl bg-purple-500/20 hover:bg-purple-500/30 text-purple-300 border border-purple-500/40 font-bold text-xs flex items-center justify-center gap-2 cursor-pointer transition-all"
+                className="w-full py-2.5 rounded-xl bg-purple-500/20 hover:bg-purple-500/30 text-purple-300 border-purple-500/40 font-bold text-xs flex items-center justify-center gap-2 cursor-pointer transition-all"
               >
                 <AlertTriangle className="w-4 h-4 text-purple-400" />
                 <span>TEST SIMULATED/MOCK PROOF (WILL BE FLAGGED &bull; 0 QUORUM)</span>

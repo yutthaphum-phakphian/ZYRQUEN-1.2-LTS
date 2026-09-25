@@ -147,7 +147,7 @@ export const FiosFactorIntelligence: React.FC = () => {
       <div className="p-6 rounded-[28px] bg-gradient-to-r from-[#0d1527]/95 via-[#0c1220]/90 to-[#070b14] border-2 border-cyan-500/40 shadow-2xl backdrop-blur-2xl">
         <div className="flex flex-col lg:flex-row lg:items-center justify-between gap-4 border-b border-cyan-500/20 pb-4">
           <div className="flex items-center gap-3.5">
-            <div className="w-12 h-12 rounded-2xl bg-cyan-500/20 border border-cyan-400 text-cyan-300 flex items-center justify-center shrink-0 shadow-[0_0_20px_rgba(6,182,212,0.3)]">
+            <div className="w-12 h-12 rounded-2xl bg-cyan-500/20 border-cyan-400 text-cyan-300 flex items-center justify-center shrink-0 shadow-[0_0_20px_rgba(6,182,212,0.3)]">
               <TrendingUp className="w-6 h-6" />
             </div>
             <div>
@@ -155,10 +155,10 @@ export const FiosFactorIntelligence: React.FC = () => {
                 <h2 className="text-base sm:text-lg font-bold text-cyan-100 font-serif">
                   {dataset.manifesto}
                 </h2>
-                <span className="text-[10px] px-2.5 py-0.5 rounded-full bg-cyan-500/20 text-cyan-300 border border-cyan-400/40 font-bold">
+                <span className="text-[10px] px-2.5 py-0.5 rounded-full bg-cyan-500/20 text-cyan-300 border-cyan-400/40 font-bold">
                   {dataset.datasetId}
                 </span>
-                <span className="text-[10px] px-2.5 py-0.5 rounded bg-emerald-500/20 text-emerald-300 border border-emerald-500/40 font-bold">
+                <span className="text-[10px] px-2.5 py-0.5 rounded bg-emerald-500/20 text-emerald-300 border-emerald-500/40 font-bold">
                   FIDUCIARY CONTROL: PASS
                 </span>
               </div>
@@ -172,7 +172,7 @@ export const FiosFactorIntelligence: React.FC = () => {
             <button
               onClick={handleExportJson}
               disabled={isExporting}
-              className="px-4 py-2 rounded-xl bg-cyan-500/20 hover:bg-cyan-500/30 border border-cyan-400/50 text-cyan-200 text-xs font-bold flex items-center gap-2 transition-all shadow-[0_0_15px_rgba(6,182,212,0.25)]"
+              className="px-4 py-2 rounded-xl bg-cyan-500/20 hover:bg-cyan-500/30 border-cyan-400/50 text-cyan-200 text-xs font-bold flex items-center gap-2 transition-all shadow-[0_0_15px_rgba(6,182,212,0.25)]"
             >
               <Download className="w-3.5 h-3.5" />
               <span>{isExporting ? 'EXPORTING...' : 'EXPORT FIOS DATASET (JSON)'}</span>
@@ -182,7 +182,7 @@ export const FiosFactorIntelligence: React.FC = () => {
 
         {/* 4-Key Performance KPI Cards */}
         <div className="mt-4 grid grid-cols-2 sm:grid-cols-4 gap-3 text-xs">
-          <div className="p-3 rounded-xl bg-black/60 border border-emerald-500/30 space-y-1">
+          <div className="p-3 rounded-xl bg-black/60 border-emerald-500/30 space-y-1">
             <div className="text-[10px] text-zinc-400 flex items-center justify-between">
               <span>TRAILING 30D RETURN</span>
               <ArrowUpRight className="w-3 h-3 text-emerald-400" />
@@ -193,7 +193,7 @@ export const FiosFactorIntelligence: React.FC = () => {
             <div className="text-[9px] text-emerald-400 font-bold">High Alpha Performance</div>
           </div>
 
-          <div className="p-3 rounded-xl bg-black/60 border border-cyan-500/30 space-y-1">
+          <div className="p-3 rounded-xl bg-black/60 border-cyan-500/30 space-y-1">
             <div className="text-[10px] text-zinc-400 flex items-center justify-between">
               <span>ANNUALIZED SHARPE</span>
               <Activity className="w-3 h-3 text-cyan-400" />
@@ -204,7 +204,7 @@ export const FiosFactorIntelligence: React.FC = () => {
             <div className="text-[9px] text-cyan-400 font-bold">Institutional Risk-Adjusted</div>
           </div>
 
-          <div className="p-3 rounded-xl bg-black/60 border border-amber-500/30 space-y-1">
+          <div className="p-3 rounded-xl bg-black/60 border-amber-500/30 space-y-1">
             <div className="text-[10px] text-zinc-400 flex items-center justify-between">
               <span>MAX DRAWDOWN</span>
               <ArrowDownRight className="w-3 h-3 text-amber-400" />
@@ -215,7 +215,7 @@ export const FiosFactorIntelligence: React.FC = () => {
             <div className="text-[9px] text-zinc-400">Strict Tail-Risk Bounds</div>
           </div>
 
-          <div className="p-3 rounded-xl bg-black/60 border border-purple-500/30 space-y-1">
+          <div className="p-3 rounded-xl bg-black/60 border-purple-500/30 space-y-1">
             <div className="text-[10px] text-zinc-400 flex items-center justify-between">
               <span>WEIGHTED ALPHA</span>
               <Sparkles className="w-3 h-3 text-purple-400" />
@@ -231,7 +231,7 @@ export const FiosFactorIntelligence: React.FC = () => {
       {/* Factor Breakdown Grid & Factor Details */}
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
         {/* Left: Factor Cards */}
-        <div className="lg:col-span-2 p-6 rounded-[28px] bg-[#090d18] border border-cyan-500/30 space-y-4 shadow-xl">
+        <div className="lg:col-span-2 p-6 rounded-[28px] bg-[#090d18] border-cyan-500/30 space-y-4 shadow-xl">
           <div className="flex items-center justify-between border-b border-white/10 pb-3">
             <div className="flex items-center gap-2">
               <BarChart3 className="w-4 h-4 text-cyan-400" />
@@ -262,7 +262,7 @@ export const FiosFactorIntelligence: React.FC = () => {
                 >
                   <div className="flex items-center justify-between mb-2">
                     <span className="font-bold text-sm text-zinc-100">{m.factor}</span>
-                    <span className="text-[10px] px-2 py-0.5 rounded bg-black/60 text-cyan-300 font-mono font-bold border border-cyan-500/30">
+                    <span className="text-[10px] px-2 py-0.5 rounded bg-black/60 text-cyan-300 font-mono font-bold border-cyan-500/30">
                       {(m.weight * 100).toFixed(0)}% Weight
                     </span>
                   </div>
@@ -292,7 +292,7 @@ export const FiosFactorIntelligence: React.FC = () => {
             })}
           </div>
 
-          <div className="p-3.5 rounded-xl bg-black/80 border border-white/5 text-xs text-zinc-300 space-y-1">
+          <div className="p-3.5 rounded-xl bg-black/80 border-white/5 text-xs text-zinc-300 space-y-1">
             <div className="font-bold text-cyan-300 text-xs">
               Selected Factor Dossier: {currentFactor.factor}
             </div>
@@ -307,7 +307,7 @@ export const FiosFactorIntelligence: React.FC = () => {
         </div>
 
         {/* Right: Provenance & Fiduciary Governance Panel */}
-        <div className="p-6 rounded-[28px] bg-[#090d18] border border-cyan-500/30 space-y-4 shadow-xl flex flex-col justify-between">
+        <div className="p-6 rounded-[28px] bg-[#090d18] border-cyan-500/30 space-y-4 shadow-xl flex flex-col justify-between">
           <div className="space-y-4">
             <div className="flex items-center gap-2 border-b border-white/10 pb-3">
               <ShieldCheck className="w-4 h-4 text-emerald-400" />
@@ -317,29 +317,29 @@ export const FiosFactorIntelligence: React.FC = () => {
             </div>
 
             <div className="space-y-2.5 text-xs font-mono">
-              <div className="p-2.5 rounded-xl bg-black/60 border border-white/5 space-y-1">
+              <div className="p-2.5 rounded-xl bg-black/60 border-white/5 space-y-1">
                 <div className="text-[10px] text-zinc-500">TIMESTAMP (UTC):</div>
                 <div className="text-zinc-300 text-[11px]">{dataset.generatedAt}</div>
               </div>
 
-              <div className="p-2.5 rounded-xl bg-black/60 border border-white/5 space-y-1">
+              <div className="p-2.5 rounded-xl bg-black/60 border-white/5 space-y-1">
                 <div className="text-[10px] text-zinc-500">UPTIME SLA COMPLIANCE:</div>
                 <div className="text-emerald-400 font-bold">{dataset.backtestPerformance.uptimeSlaCompliancePct}%</div>
               </div>
 
-              <div className="p-2.5 rounded-xl bg-black/60 border border-white/5 space-y-1">
+              <div className="p-2.5 rounded-xl bg-black/60 border-white/5 space-y-1">
                 <div className="text-[10px] text-zinc-500">DATASET DIGEST:</div>
                 <div className="text-cyan-300 text-[10px] truncate">{dataset.provenance.hash}</div>
               </div>
 
-              <div className="p-2.5 rounded-xl bg-black/60 border border-white/5 space-y-1">
+              <div className="p-2.5 rounded-xl bg-black/60 border-white/5 space-y-1">
                 <div className="text-[10px] text-zinc-500">BINDING COMPATIBILITY:</div>
                 <div className="text-emerald-300 text-[10px] font-bold">{dataset.provenance.bindingStatus}</div>
               </div>
             </div>
           </div>
 
-          <div className="p-3 rounded-xl bg-emerald-500/10 border border-emerald-500/30 text-[10px] text-emerald-200 leading-relaxed font-mono">
+          <div className="p-3 rounded-xl bg-emerald-500/10 border-emerald-500/30 text-[10px] text-emerald-200 leading-relaxed font-mono">
             <strong>Immutable Fiduciary Guarantee:</strong> Ingested as read-only sovereign quantitative dataset. Preserves Frozen Baseline v1.2 LTS and SSoT Mutation = 0.
           </div>
         </div>

@@ -201,16 +201,16 @@ Certified by ZYRQUEN Ω Sovereign Supreme Apex Plane | ${new Date().toISOString(
   };
 
   return (
-    <div className="bg-slate-900 border border-slate-800 rounded-2xl p-6 shadow-2xl backdrop-blur space-y-6">
+    <div className="bg-slate-900 border-slate-800 rounded-2xl p-6 shadow-2xl backdrop-blur space-y-6">
       {/* Header */}
       <div className="flex flex-wrap items-center justify-between gap-4 border-b border-slate-800 pb-4">
         <div className="flex items-center gap-3">
-          <div className="p-2.5 bg-cyan-950/80 border border-cyan-700/60 rounded-xl text-cyan-400">
+          <div className="p-2.5 bg-cyan-950/80 border-cyan-700/60 rounded-xl text-cyan-400">
             <Scale className="w-5 h-5" />
           </div>
           <div>
             <div className="flex items-center gap-2">
-              <span className="text-[10px] font-mono font-bold px-2 py-0.5 rounded bg-amber-950 text-amber-300 border border-amber-800">
+              <span className="text-[10px] font-mono font-bold px-2 py-0.5 rounded bg-amber-950 text-amber-300 border-amber-800">
                 JUDICIAL ETDA TIER (GATES 15–22)
               </span>
               <span className="text-xs font-mono text-emerald-400 font-bold">
@@ -262,7 +262,7 @@ Certified by ZYRQUEN Ω Sovereign Supreme Apex Plane | ${new Date().toISOString(
                     {gate.thaiName}
                   </h4>
                 </div>
-                <span className="px-1.5 py-0.5 rounded text-[10px] font-bold bg-emerald-950 text-emerald-300 border border-emerald-800">
+                <span className="px-1.5 py-0.5 rounded text-[10px] font-bold bg-emerald-950 text-emerald-300 border-emerald-800">
                   PASS
                 </span>
               </div>
@@ -271,13 +271,13 @@ Certified by ZYRQUEN Ω Sovereign Supreme Apex Plane | ${new Date().toISOString(
         </div>
 
         {/* Right 2 Columns: Detailed Gate Dossier & Simulator */}
-        <div className="lg:col-span-2 bg-slate-950/80 border border-slate-800 rounded-2xl p-6 flex flex-col justify-between space-y-5">
+        <div className="lg:col-span-2 bg-slate-950/80 border-slate-800 rounded-2xl p-6 flex flex-col justify-between space-y-5">
           <div>
             {/* Gate Title & Metadata */}
             <div className="flex flex-wrap items-center justify-between gap-3 border-b border-slate-800 pb-3 mb-4">
               <div>
                 <div className="flex items-center gap-2">
-                  <span className="px-2 py-0.5 rounded bg-cyan-950 text-cyan-400 font-mono text-xs font-bold border border-cyan-800">
+                  <span className="px-2 py-0.5 rounded bg-cyan-950 text-cyan-400 font-mono text-xs font-bold border-cyan-800">
                     {selectedGate.id}
                   </span>
                   <span className="text-xs font-mono text-slate-400">Latency: {selectedGate.latency}</span>
@@ -290,7 +290,7 @@ Certified by ZYRQUEN Ω Sovereign Supreme Apex Plane | ${new Date().toISOString(
                 </p>
               </div>
 
-              <div className="px-3 py-1 rounded-xl bg-emerald-950/90 border border-emerald-800 text-emerald-300 font-mono text-xs font-bold flex items-center gap-1.5">
+              <div className="px-3 py-1 rounded-xl bg-emerald-950/90 border-emerald-800 text-emerald-300 font-mono text-xs font-bold flex items-center gap-1.5">
                 <CheckCircle2 className="w-4 h-4" />
                 <span>UNANIMOUS PASS</span>
               </div>
@@ -298,7 +298,7 @@ Certified by ZYRQUEN Ω Sovereign Supreme Apex Plane | ${new Date().toISOString(
 
             {/* Legal Foundation & Statutory Base Cards */}
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 mb-4">
-              <div className="bg-slate-900/80 border border-slate-800 p-3.5 rounded-xl">
+              <div className="bg-slate-900/80 border-slate-800 p-3.5 rounded-xl">
                 <span className="text-[10px] font-mono text-slate-400 uppercase tracking-wider block">
                   ฐานกฎหมายไทยที่รองรับ
                 </span>
@@ -307,7 +307,7 @@ Certified by ZYRQUEN Ω Sovereign Supreme Apex Plane | ${new Date().toISOString(
                 </p>
               </div>
 
-              <div className="bg-slate-900/80 border border-slate-800 p-3.5 rounded-xl">
+              <div className="bg-slate-900/80 border-slate-800 p-3.5 rounded-xl">
                 <span className="text-[10px] font-mono text-slate-400 uppercase tracking-wider block">
                   มาตรฐานสากลอ้างอิง
                 </span>
@@ -319,17 +319,17 @@ Certified by ZYRQUEN Ω Sovereign Supreme Apex Plane | ${new Date().toISOString(
 
             {/* Description & Court Weight */}
             <div className="space-y-3 font-sans text-xs">
-              <div className="bg-slate-900/60 border border-slate-800/80 p-3.5 rounded-xl">
+              <div className="bg-slate-900/60 border-slate-800/80 p-3.5 rounded-xl">
                 <span className="font-bold text-slate-300 block mb-1">กลไกและหน้าที่ของด่านตรวจสอบ:</span>
                 <p className="text-slate-400 leading-relaxed">{selectedGate.description}</p>
               </div>
 
-              <div className="bg-slate-900/60 border border-slate-800/80 p-3.5 rounded-xl">
+              <div className="bg-slate-900/60 border-slate-800/80 p-3.5 rounded-xl">
                 <span className="font-bold text-cyan-300 block mb-1">หลักฐานทางนิติวิทยาศาสตร์ (Forensic Proof):</span>
                 <p className="font-mono text-slate-300 text-[11px]">{selectedGate.forensicProof}</p>
               </div>
 
-              <div className="bg-slate-900/60 border border-emerald-900/40 p-3.5 rounded-xl">
+              <div className="bg-slate-900/60 border-emerald-900/40 p-3.5 rounded-xl">
                 <span className="font-bold text-emerald-300 block mb-1">น้ำหนักการรับฟังในชั้นศาล (Court Admissibility):</span>
                 <p className="text-slate-300 leading-relaxed">{selectedGate.courtAdmissibility}</p>
               </div>
@@ -363,7 +363,7 @@ Certified by ZYRQUEN Ω Sovereign Supreme Apex Plane | ${new Date().toISOString(
             </div>
 
             {verificationResult && (
-              <div className="p-3 bg-emerald-950/70 border border-emerald-800/80 rounded-xl font-mono text-xs text-emerald-300 whitespace-pre-line animate-fadeIn">
+              <div className="p-3 bg-emerald-950/70 border-emerald-800/80 rounded-xl font-mono text-xs text-emerald-300 whitespace-pre-line animate-fadeIn">
                 {verificationResult}
               </div>
             )}
@@ -373,7 +373,7 @@ Certified by ZYRQUEN Ω Sovereign Supreme Apex Plane | ${new Date().toISOString(
       </div>
 
       {/* Statutory Legal Matrix Bar */}
-      <div className="bg-slate-950/90 border border-slate-800 p-4 rounded-xl flex flex-wrap items-center justify-between gap-4 text-xs font-mono">
+      <div className="bg-slate-950/90 border-slate-800 p-4 rounded-xl flex flex-wrap items-center justify-between gap-4 text-xs font-mono">
         <div className="flex items-center gap-3">
           <FileCheck className="w-4 h-4 text-cyan-400" />
           <span className="text-slate-300">

@@ -147,11 +147,11 @@ export const MerkleRootQrCodeModal: React.FC<MerkleRootQrCodeModalProps> = ({
 
   return (
     <div className="fixed inset-0 z-[100] flex items-center justify-center bg-black/85 backdrop-blur-md p-4 animate-in fade-in duration-200">
-      <div className="relative w-full max-w-2xl bg-[#080914] border border-cyan-500/40 rounded-3xl shadow-[0_0_60px_rgba(6,182,212,0.25)] overflow-hidden flex flex-col max-h-[92vh]">
+      <div className="relative w-full max-w-2xl bg-[#080914] border-cyan-500/40 rounded-3xl shadow-[0_0_60px_rgba(6,182,212,0.25)] overflow-hidden flex flex-col max-h-[92vh]">
         {/* Modal Header */}
         <div className="px-6 py-4 border-b border-cyan-500/20 bg-gradient-to-r from-cyan-950/60 via-indigo-950/40 to-transparent flex items-center justify-between">
           <div className="flex items-center gap-3">
-            <div className="w-9 h-9 rounded-xl bg-cyan-500/20 border border-cyan-400/40 flex items-center justify-center text-cyan-300 shadow-[0_0_15px_rgba(6,182,212,0.3)]">
+            <div className="w-9 h-9 rounded-xl bg-cyan-500/20 border-cyan-400/40 flex items-center justify-center text-cyan-300 shadow-[0_0_15px_rgba(6,182,212,0.3)]">
               <QrCode className="w-5 h-5 animate-pulse" />
             </div>
             <div>
@@ -159,7 +159,7 @@ export const MerkleRootQrCodeModal: React.FC<MerkleRootQrCodeModalProps> = ({
                 <h3 className="text-sm font-mono font-bold text-white tracking-wide">
                   SOVEREIGN MERKLE ROOT QR AUDIT TRAIL
                 </h3>
-                <span className="px-2 py-0.5 rounded-full text-[10px] font-mono font-semibold bg-emerald-500/20 text-emerald-300 border border-emerald-500/30">
+                <span className="px-2 py-0.5 rounded-full text-[10px] font-mono font-semibold bg-emerald-500/20 text-emerald-300 border-emerald-500/30">
                   COURT ADMISSIBLE
                 </span>
               </div>
@@ -183,12 +183,12 @@ export const MerkleRootQrCodeModal: React.FC<MerkleRootQrCodeModalProps> = ({
         {/* Modal Body */}
         <div className="p-6 overflow-y-auto space-y-6">
           {/* Payload Selection Tabs */}
-          <div className="flex flex-wrap gap-2 p-1.5 rounded-2xl bg-[#0D0F1F] border border-white/10 text-xs font-mono">
+          <div className="flex flex-wrap gap-2 p-1.5 rounded-2xl bg-[#0D0F1F] border-white/10 text-xs font-mono">
             <button
               onClick={() => setQrPayloadType('AUDIT_URL')}
               className={`flex-1 min-w-[130px] py-2 px-3 rounded-xl transition font-semibold text-center flex items-center justify-center gap-1.5 ${
                 qrPayloadType === 'AUDIT_URL'
-                  ? 'bg-cyan-500/20 text-cyan-200 border border-cyan-500/40 shadow-sm shadow-cyan-500/20'
+                  ? 'bg-cyan-500/20 text-cyan-200 border-cyan-500/40 shadow-sm shadow-cyan-500/20'
                   : 'text-zinc-400 hover:text-white'
               }`}
             >
@@ -199,7 +199,7 @@ export const MerkleRootQrCodeModal: React.FC<MerkleRootQrCodeModalProps> = ({
               onClick={() => setQrPayloadType('CRYPTOGRAPHIC_MANIFEST')}
               className={`flex-1 min-w-[150px] py-2 px-3 rounded-xl transition font-semibold text-center flex items-center justify-center gap-1.5 ${
                 qrPayloadType === 'CRYPTOGRAPHIC_MANIFEST'
-                  ? 'bg-cyan-500/20 text-cyan-200 border border-cyan-500/40 shadow-sm shadow-cyan-500/20'
+                  ? 'bg-cyan-500/20 text-cyan-200 border-cyan-500/40 shadow-sm shadow-cyan-500/20'
                   : 'text-zinc-400 hover:text-white'
               }`}
             >
@@ -210,7 +210,7 @@ export const MerkleRootQrCodeModal: React.FC<MerkleRootQrCodeModalProps> = ({
               onClick={() => setQrPayloadType('RAW_MERKLE_ROOT')}
               className={`flex-1 min-w-[120px] py-2 px-3 rounded-xl transition font-semibold text-center flex items-center justify-center gap-1.5 ${
                 qrPayloadType === 'RAW_MERKLE_ROOT'
-                  ? 'bg-cyan-500/20 text-cyan-200 border border-cyan-500/40 shadow-sm shadow-cyan-500/20'
+                  ? 'bg-cyan-500/20 text-cyan-200 border-cyan-500/40 shadow-sm shadow-cyan-500/20'
                   : 'text-zinc-400 hover:text-white'
               }`}
             >
@@ -221,16 +221,16 @@ export const MerkleRootQrCodeModal: React.FC<MerkleRootQrCodeModalProps> = ({
 
           <div className="flex items-center gap-2">
             <span className="text-[10px] text-zinc-400 font-mono tracking-wide uppercase">Encoding Format:</span>
-            <div className="flex rounded-lg bg-[#0D0F1F] p-0.5 border border-white/10 text-[10px] font-mono">
+            <div className="flex rounded-lg bg-[#0D0F1F] p-0.5 border-white/10 text-[10px] font-mono">
               <button
                 onClick={() => setEncodingFormat('RAW')}
-                className={`px-3 py-1 rounded-md transition ${encodingFormat === 'RAW' ? 'bg-cyan-500/20 text-cyan-300 border border-cyan-500/30' : 'text-zinc-500 hover:text-zinc-300'}`}
+                className={`px-3 py-1 rounded-md transition ${encodingFormat === 'RAW' ? 'bg-cyan-500/20 text-cyan-300 border-cyan-500/30' : 'text-zinc-500 hover:text-zinc-300'}`}
               >
                 Raw Text
               </button>
               <button
                 onClick={() => setEncodingFormat('BASE64')}
-                className={`px-3 py-1 rounded-md transition ${encodingFormat === 'BASE64' ? 'bg-cyan-500/20 text-cyan-300 border border-cyan-500/30' : 'text-zinc-500 hover:text-zinc-300'}`}
+                className={`px-3 py-1 rounded-md transition ${encodingFormat === 'BASE64' ? 'bg-cyan-500/20 text-cyan-300 border-cyan-500/30' : 'text-zinc-500 hover:text-zinc-300'}`}
               >
                 Base64
               </button>
@@ -254,7 +254,7 @@ export const MerkleRootQrCodeModal: React.FC<MerkleRootQrCodeModalProps> = ({
                   <img
                     src={qrDataUrl}
                     alt="Sovereign Merkle Root QR Code"
-                    className="w-64 h-64 rounded-2xl border border-cyan-500/30 object-contain shadow-inner"
+                    className="w-64 h-64 rounded-2xl border-cyan-500/30 object-contain shadow-inner"
                   />
                 ) : null}
 
@@ -268,21 +268,21 @@ export const MerkleRootQrCodeModal: React.FC<MerkleRootQrCodeModalProps> = ({
               <div className="flex items-center gap-2.5 mt-4">
                 <button
                   onClick={handleDownloadPng}
-                  className="px-3.5 py-1.5 rounded-xl bg-cyan-500/15 hover:bg-cyan-500/25 border border-cyan-500/30 text-cyan-200 font-mono text-xs flex items-center gap-1.5 transition"
+                  className="px-3.5 py-1.5 rounded-xl bg-cyan-500/15 hover:bg-cyan-500/25 border-cyan-500/30 text-cyan-200 font-mono text-xs flex items-center gap-1.5 transition"
                 >
                   <Download className="w-3.5 h-3.5" />
                   <span>PNG</span>
                 </button>
                 <button
                   onClick={handleDownloadSvg}
-                  className="px-3.5 py-1.5 rounded-xl bg-indigo-500/15 hover:bg-indigo-500/25 border border-indigo-500/30 text-indigo-200 font-mono text-xs flex items-center gap-1.5 transition"
+                  className="px-3.5 py-1.5 rounded-xl bg-indigo-500/15 hover:bg-indigo-500/25 border-indigo-500/30 text-indigo-200 font-mono text-xs flex items-center gap-1.5 transition"
                 >
                   <Download className="w-3.5 h-3.5" />
                   <span>SVG (Vector)</span>
                 </button>
                 <button
                   onClick={() => handleCopy(activePayload, 'PAYLOAD')}
-                  className="px-3.5 py-1.5 rounded-xl bg-white/10 hover:bg-white/15 border border-white/20 text-white font-mono text-xs flex items-center gap-1.5 transition"
+                  className="px-3.5 py-1.5 rounded-xl bg-white/10 hover:bg-white/15 border-white/20 text-white font-mono text-xs flex items-center gap-1.5 transition"
                 >
                   {copiedField === 'PAYLOAD' ? <Check className="w-3.5 h-3.5 text-emerald-400" /> : <Copy className="w-3.5 h-3.5" />}
                   <span>{copiedField === 'PAYLOAD' ? 'Copied' : 'Copy'}</span>
@@ -292,13 +292,13 @@ export const MerkleRootQrCodeModal: React.FC<MerkleRootQrCodeModalProps> = ({
 
             {/* Verification Metadata Details */}
             <div className="md:col-span-6 space-y-3.5 font-mono text-xs">
-              <div className="p-3.5 rounded-2xl bg-[#0D0F1F] border border-white/10 space-y-2">
+              <div className="p-3.5 rounded-2xl bg-[#0D0F1F] border-white/10 space-y-2">
                 <div className="flex items-center justify-between text-zinc-400 text-[11px]">
                   <span className="font-semibold tracking-wider text-zinc-300">GENESIS MERKLE ROOT</span>
                   <span className="text-[10px] text-cyan-400/80 font-mono">SHA-256 SSoT Anchor</span>
                 </div>
                 <div className="flex flex-col sm:flex-row items-stretch gap-2">
-                  <div className="flex-1 p-2.5 rounded-xl bg-black/70 border border-cyan-500/30 font-mono text-[11px] text-cyan-200 break-all select-all flex items-center">
+                  <div className="flex-1 p-2.5 rounded-xl bg-black/70 border-cyan-500/30 font-mono text-[11px] text-cyan-200 break-all select-all flex items-center">
                     {merkleRootHash}
                   </div>
                   <button
@@ -308,8 +308,8 @@ export const MerkleRootQrCodeModal: React.FC<MerkleRootQrCodeModalProps> = ({
                     title="Copy Merkle Root hash to clipboard for forensic sharing"
                     className={`px-3.5 py-2 rounded-xl font-mono text-xs font-semibold flex items-center justify-center gap-1.5 transition-all shrink-0 cursor-pointer shadow-sm ${
                       copiedField === 'MERKLE_ROOT'
-                        ? 'bg-emerald-500/25 border border-emerald-500/50 text-emerald-200 shadow-[0_0_12px_rgba(16,185,129,0.3)]'
-                        : 'bg-cyan-500/20 hover:bg-cyan-500/30 border border-cyan-500/40 text-cyan-200 hover:text-white shadow-[0_0_12px_rgba(6,182,212,0.2)]'
+                        ? 'bg-emerald-500/25 border-emerald-500/50 text-emerald-200 shadow-[0_0_12px_rgba(16,185,129,0.3)]'
+                        : 'bg-cyan-500/20 hover:bg-cyan-500/30 border-cyan-500/40 text-cyan-200 hover:text-white shadow-[0_0_12px_rgba(6,182,212,0.2)]'
                     }`}
                   >
                     {copiedField === 'MERKLE_ROOT' ? (
@@ -328,17 +328,17 @@ export const MerkleRootQrCodeModal: React.FC<MerkleRootQrCodeModalProps> = ({
               </div>
 
               <div className="grid grid-cols-2 gap-2.5">
-                <div className="p-3 rounded-xl bg-[#0D0F1F] border border-white/10">
+                <div className="p-3 rounded-xl bg-[#0D0F1F] border-white/10">
                   <div className="text-[10px] text-zinc-400">BLOCK HEIGHT</div>
                   <div className="text-sm font-bold text-white">#{currentBlockHeight.toLocaleString()}</div>
                 </div>
-                <div className="p-3 rounded-xl bg-[#0D0F1F] border border-white/10">
+                <div className="p-3 rounded-xl bg-[#0D0F1F] border-white/10">
                   <div className="text-[10px] text-zinc-400">CANONICAL SEALS</div>
                   <div className="text-sm font-bold text-emerald-300">{CANONICAL_SEALS.toLocaleString()} Verified</div>
                 </div>
               </div>
 
-              <div className="p-3 rounded-xl bg-[#0D0F1F] border border-white/10 space-y-1">
+              <div className="p-3 rounded-xl bg-[#0D0F1F] border-white/10 space-y-1">
                 <div className="text-[10px] text-zinc-400">PHYSICAL AUDIT INSTRUCTIONS</div>
                 <p className="text-[11px] text-zinc-300 leading-relaxed">
                   Point any standard mobile camera or optical scanner at this QR code to immediately verify the
@@ -347,7 +347,7 @@ export const MerkleRootQrCodeModal: React.FC<MerkleRootQrCodeModalProps> = ({
                 </p>
               </div>
 
-              <div className="p-3 rounded-xl bg-gradient-to-r from-emerald-950/40 to-cyan-950/30 border border-emerald-500/30 flex items-center justify-between">
+              <div className="p-3 rounded-xl bg-gradient-to-r from-emerald-950/40 to-cyan-950/30 border-emerald-500/30 flex items-center justify-between">
                 <div className="flex items-center gap-2">
                   <ShieldCheck className="w-4 h-4 text-emerald-400 shrink-0" />
                   <span className="text-[11px] text-emerald-200 font-semibold">ETDA Sec 9/26/28 Compliant</span>

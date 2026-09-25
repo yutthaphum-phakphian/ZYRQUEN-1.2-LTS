@@ -463,21 +463,21 @@ export const MultiversePathProjectionD3Graph: React.FC<MultiversePathProjectionD
 
   return (
     <div
-      className={`rounded-[28px] bg-gradient-to-br from-[#0c0d18] via-[#090a14] to-[#05060b] border border-white/8 backdrop-blur-xl p-5 space-y-4 ${className}`}
+      className={`rounded-[28px] bg-gradient-to-br from-[#0c0d18] via-[#090a14] to-[#05060b] border-white/8 backdrop-blur-xl p-5 space-y-4 ${className}`}
     >
       {/* Header & Sub-Bar */}
       <div className="flex flex-col lg:flex-row lg:items-center justify-between gap-4 pb-4 border-b border-white/5">
         <div>
           <div className="flex flex-wrap items-center gap-2">
-            <span className="px-2.5 py-0.5 rounded-full bg-violet-500/10 text-violet-300 border border-violet-500/20 text-xs font-mono flex items-center gap-1.5">
+            <span className="px-2.5 py-0.5 rounded-full bg-violet-500/10 text-violet-300 border-violet-500/20 text-xs font-mono flex items-center gap-1.5">
               <Compass className="w-3.5 h-3.5 text-violet-400" />
               PATH PROJECTION VECTOR ENGINE
             </span>
-            <span className="px-2.5 py-0.5 rounded-full bg-emerald-500/10 text-emerald-300 border border-emerald-500/20 text-xs font-mono flex items-center gap-1.5">
+            <span className="px-2.5 py-0.5 rounded-full bg-emerald-500/10 text-emerald-300 border-emerald-500/20 text-xs font-mono flex items-center gap-1.5">
               <Radio className="w-3.5 h-3.5 text-emerald-400 animate-pulse" />
               TELEMETRY ENTROPY PREDICTOR
             </span>
-            <span className="px-2 py-0.5 rounded-full bg-cyan-500/10 text-cyan-300 border border-cyan-500/20 text-[10px] font-mono">
+            <span className="px-2 py-0.5 rounded-full bg-cyan-500/10 text-cyan-300 border-cyan-500/20 text-[10px] font-mono">
               LYAPUNOV: {projection?.lyapunovExponent ?? -0.0384} (STABLE)
             </span>
           </div>
@@ -507,7 +507,7 @@ export const MultiversePathProjectionD3Graph: React.FC<MultiversePathProjectionD
       </div>
 
       {/* Filter Tabs & Entropy Slider Controls */}
-      <div className="flex flex-col md:flex-row md:items-center justify-between gap-3 p-3 rounded-2xl bg-black/40 border border-white/5">
+      <div className="flex flex-col md:flex-row md:items-center justify-between gap-3 p-3 rounded-2xl bg-black/40 border-white/5">
         {/* Branch Filters */}
         <div className="flex flex-wrap items-center gap-1.5">
           <span className="text-[11px] font-mono text-zinc-400 mr-1 flex items-center gap-1">
@@ -521,8 +521,8 @@ export const MultiversePathProjectionD3Graph: React.FC<MultiversePathProjectionD
             }}
             className={`px-2.5 py-1 rounded-lg text-xs font-mono transition-all ${
               activeBranch === 'all'
-                ? 'bg-white/15 text-white font-bold border border-white/20'
-                : 'text-zinc-400 hover:text-white bg-white/5 border border-transparent'
+                ? 'bg-white/15 text-white font-bold border-white/20'
+                : 'text-zinc-400 hover:text-white bg-white/5 border-transparent'
             }`}
           >
             All Trajectories
@@ -537,7 +537,7 @@ export const MultiversePathProjectionD3Graph: React.FC<MultiversePathProjectionD
               className={`px-2.5 py-1 rounded-lg text-xs font-mono flex items-center gap-1.5 transition-all ${
                 activeBranch === key
                   ? `${cfg.bgBadge} font-bold border`
-                  : 'text-zinc-400 hover:text-white bg-white/5 border border-transparent'
+                  : 'text-zinc-400 hover:text-white bg-white/5 border-transparent'
               }`}
             >
               <span className="w-2 h-2 rounded-full" style={{ backgroundColor: cfg.color }} />
@@ -560,7 +560,7 @@ export const MultiversePathProjectionD3Graph: React.FC<MultiversePathProjectionD
                   }}
                   className={`px-2 py-0.5 rounded text-[11px] font-mono ${
                     horizonHorizonLimit === h
-                      ? 'bg-violet-500/20 text-violet-300 border border-violet-500/40 font-bold'
+                      ? 'bg-violet-500/20 text-violet-300 border-violet-500/40 font-bold'
                       : 'bg-white/5 text-zinc-400 hover:text-zinc-200'
                   }`}
                 >
@@ -600,12 +600,12 @@ export const MultiversePathProjectionD3Graph: React.FC<MultiversePathProjectionD
         {/* D3 Vector Graph Canvas */}
         <div
           ref={containerRef}
-          className="lg:col-span-8 relative h-[480px] rounded-2xl bg-black/60 border border-white/8 overflow-hidden shadow-inner flex items-center justify-center"
+          className="lg:col-span-8 relative h-[480px] rounded-2xl bg-black/60 border-white/8 overflow-hidden shadow-inner flex items-center justify-center"
         >
           <svg ref={svgRef} className="w-full h-full" />
 
           {/* Canvas Floating Overlay Controls */}
-          <div className="absolute top-3 left-3 flex items-center gap-1.5 bg-[#0B0E1A]/80 backdrop-blur-md p-1.5 rounded-xl border border-white/10 z-10">
+          <div className="absolute top-3 left-3 flex items-center gap-1.5 bg-[#0B0E1A]/80 backdrop-blur-md p-1.5 rounded-xl border-white/10 z-10">
             <button
               onClick={handleZoomIn}
               className="p-1.5 rounded-lg hover:bg-white/10 text-zinc-300 hover:text-white transition-colors"
@@ -633,7 +633,7 @@ export const MultiversePathProjectionD3Graph: React.FC<MultiversePathProjectionD
           </div>
 
           {/* Trajectory Target Compass in Top Right */}
-          <div className="absolute top-3 right-3 bg-[#0B0E1A]/80 backdrop-blur-md px-3 py-1.5 rounded-xl border border-white/10 z-10 flex items-center gap-2">
+          <div className="absolute top-3 right-3 bg-[#0B0E1A]/80 backdrop-blur-md px-3 py-1.5 rounded-xl border-white/10 z-10 flex items-center gap-2">
             <div className="w-2 h-2 rounded-full bg-emerald-400 animate-ping" />
             <span className="text-[10px] font-mono text-zinc-300">
               {navState.currentSector} ──► {navState.destination}
@@ -641,7 +641,7 @@ export const MultiversePathProjectionD3Graph: React.FC<MultiversePathProjectionD
           </div>
 
           {/* Quick Legend at bottom left */}
-          <div className="absolute bottom-3 left-3 flex flex-wrap items-center gap-2 bg-[#0B0E1A]/85 backdrop-blur-md px-3 py-1.5 rounded-xl border border-white/10 text-[10px] font-mono text-zinc-300 z-10">
+          <div className="absolute bottom-3 left-3 flex flex-wrap items-center gap-2 bg-[#0B0E1A]/85 backdrop-blur-md px-3 py-1.5 rounded-xl border-white/10 text-[10px] font-mono text-zinc-300 z-10">
             <div className="flex items-center gap-1">
               <span className="w-2 h-2 rounded-full bg-emerald-400" />
               <span>SSoT</span>
@@ -664,7 +664,7 @@ export const MultiversePathProjectionD3Graph: React.FC<MultiversePathProjectionD
         {/* Node Deep Inspector HUD Card */}
         <div className="lg:col-span-4 space-y-3">
           {selectedNode ? (
-            <div className="p-4 rounded-2xl bg-[#0e101f]/90 border border-white/10 backdrop-blur-md space-y-4">
+            <div className="p-4 rounded-2xl bg-[#0e101f]/90 border-white/10 backdrop-blur-md space-y-4">
               {/* Header */}
               <div className="flex items-start justify-between gap-2 pb-3 border-b border-white/5">
                 <div>
@@ -700,7 +700,7 @@ export const MultiversePathProjectionD3Graph: React.FC<MultiversePathProjectionD
 
               {/* Telemetry Metrics Grid */}
               <div className="grid grid-cols-2 gap-2 text-xs font-mono">
-                <div className="p-2.5 rounded-xl bg-black/40 border border-white/5 space-y-0.5">
+                <div className="p-2.5 rounded-xl bg-black/40 border-white/5 space-y-0.5">
                   <span className="text-[10px] text-zinc-500 uppercase">PROJECTED ENTROPY</span>
                   <div className="text-emerald-400 font-bold flex items-center gap-1">
                     <Activity className="w-3 h-3" />
@@ -708,21 +708,21 @@ export const MultiversePathProjectionD3Graph: React.FC<MultiversePathProjectionD
                   </div>
                 </div>
 
-                <div className="p-2.5 rounded-xl bg-black/40 border border-white/5 space-y-0.5">
+                <div className="p-2.5 rounded-xl bg-black/40 border-white/5 space-y-0.5">
                   <span className="text-[10px] text-zinc-500 uppercase">STABILITY INDEX</span>
                   <div className="text-cyan-400 font-bold">
                     {selectedNode.stabilityIndexPct}%
                   </div>
                 </div>
 
-                <div className="p-2.5 rounded-xl bg-black/40 border border-white/5 space-y-0.5">
+                <div className="p-2.5 rounded-xl bg-black/40 border-white/5 space-y-0.5">
                   <span className="text-[10px] text-zinc-500 uppercase">THERMAL VARIANCE</span>
                   <div className="text-amber-400 font-bold">
                     +{selectedNode.thermalVarianceDeltaC}°C ΔT
                   </div>
                 </div>
 
-                <div className="p-2.5 rounded-xl bg-black/40 border border-white/5 space-y-0.5">
+                <div className="p-2.5 rounded-xl bg-black/40 border-white/5 space-y-0.5">
                   <span className="text-[10px] text-zinc-500 uppercase">CONFIDENCE CONE</span>
                   <div className="text-violet-400 font-bold">
                     {selectedNode.confidenceScorePct}% (±{selectedNode.divergenceVector.driftRadius}px)
@@ -731,7 +731,7 @@ export const MultiversePathProjectionD3Graph: React.FC<MultiversePathProjectionD
               </div>
 
               {/* Coordinates & Hop Info */}
-              <div className="p-3 rounded-xl bg-black/50 border border-white/5 space-y-2 text-xs font-mono">
+              <div className="p-3 rounded-xl bg-black/50 border-white/5 space-y-2 text-xs font-mono">
                 <div className="flex justify-between items-center text-[11px]">
                   <span className="text-zinc-500">Sector Address:</span>
                   <span className="text-zinc-200 font-bold">{selectedNode.sector}</span>
@@ -751,7 +751,7 @@ export const MultiversePathProjectionD3Graph: React.FC<MultiversePathProjectionD
               </div>
 
               {/* Dilithium-5 Attestation Seal */}
-              <div className="p-3 rounded-xl bg-violet-950/20 border border-violet-500/20 space-y-1.5 text-xs font-mono">
+              <div className="p-3 rounded-xl bg-violet-950/20 border-violet-500/20 space-y-1.5 text-xs font-mono">
                 <div className="flex items-center justify-between">
                   <span className="text-[10px] text-violet-300 font-bold uppercase flex items-center gap-1">
                     <Key className="w-3 h-3 text-violet-400" />
@@ -775,13 +775,13 @@ export const MultiversePathProjectionD3Graph: React.FC<MultiversePathProjectionD
               </div>
             </div>
           ) : (
-            <div className="p-6 rounded-2xl bg-black/40 border border-white/5 text-center text-xs font-mono text-zinc-500">
+            <div className="p-6 rounded-2xl bg-black/40 border-white/5 text-center text-xs font-mono text-zinc-500">
               Select any node in the vector graph to view projected telemetry metrics.
             </div>
           )}
 
           {/* Historical Telemetry Summary Banner */}
-          <div className="p-3.5 rounded-2xl bg-black/40 border border-white/5 space-y-2 text-xs font-mono">
+          <div className="p-3.5 rounded-2xl bg-black/40 border-white/5 space-y-2 text-xs font-mono">
             <div className="flex items-center justify-between text-zinc-400 text-[11px]">
               <span className="flex items-center gap-1.5">
                 <Cpu className="w-3.5 h-3.5 text-cyan-400" />

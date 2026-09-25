@@ -90,7 +90,7 @@ export const SentinelRemediation: React.FC<SentinelRemediationProps> = ({
   }, [isShieldActive, monitoringIntervalMs, onAlertLevelChange]);
 
   return (
-    <div className="bg-cyber-800/80 border border-cyan-500/30 rounded-2xl p-6 backdrop-blur-md shadow-xl text-gray-100 max-w-4xl mx-auto font-sans">
+    <div className="bg-cyber-800/80 border-cyan-500/30 rounded-2xl p-6 backdrop-blur-md shadow-xl text-gray-100 max-w-4xl mx-auto font-sans">
       <div className="flex flex-col md:flex-row justify-between items-start md:items-center pb-4 border-b border-cyber-700 gap-3">
         <div>
           <div className="flex items-center space-x-2">
@@ -102,15 +102,15 @@ export const SentinelRemediation: React.FC<SentinelRemediationProps> = ({
           </p>
         </div>
         <div className="flex items-center space-x-3">
-          <div className="bg-cyber-900 border border-cyber-600 px-3 py-1.5 rounded-lg text-xs font-mono">
+          <div className="bg-cyber-900 border-cyber-600 px-3 py-1.5 rounded-lg text-xs font-mono">
             Remediations: <span className="text-emerald-400 font-bold">{remediationCount}</span>
           </div>
           <button
             type="button"
             onClick={() => setIsShieldActive((active) => !active)}
             className={`px-3 py-1.5 rounded-lg text-xs font-semibold transition-all ${isShieldActive
-              ? 'bg-emerald-500/20 text-emerald-400 border border-emerald-500/40 hover:bg-emerald-500/30'
-              : 'bg-rose-500/20 text-rose-400 border border-rose-500/40 hover:bg-rose-500/30'}`}
+              ? 'bg-emerald-500/20 text-emerald-400 border-emerald-500/40 hover:bg-emerald-500/30'
+              : 'bg-rose-500/20 text-rose-400 border-rose-500/40 hover:bg-rose-500/30'}`}
           >
             {isShieldActive ? 'SHIELD: ACTIVE' : 'SHIELD: PAUSED'}
           </button>
@@ -118,17 +118,17 @@ export const SentinelRemediation: React.FC<SentinelRemediationProps> = ({
       </div>
 
       <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 my-6">
-        <div className="bg-cyber-900/70 border border-cyber-700 p-4 rounded-xl">
+        <div className="bg-cyber-900/70 border-cyber-700 p-4 rounded-xl">
           <span className="text-xs text-gray-400 block">CI/CD Auto-Patch Status</span>
           <span className="text-sm font-mono text-cyan-400 font-bold mt-1 block truncate">{ciCdStatus}</span>
           <span className="text-[10px] text-emerald-400">Zero-Downtime Pipeline Ready</span>
         </div>
-        <div className="bg-cyber-900/70 border border-cyber-700 p-4 rounded-xl">
+        <div className="bg-cyber-900/70 border-cyber-700 p-4 rounded-xl">
           <span className="text-xs text-gray-400 block">Interceptor Threshold</span>
           <span className="text-xl font-mono text-amber-400 font-bold mt-1 block">Risk ≥ 0.85</span>
           <span className="text-[10px] text-gray-400">HTTP 423 Locked Quarantine</span>
         </div>
-        <div className="bg-cyber-900/70 border border-cyber-700 p-4 rounded-xl">
+        <div className="bg-cyber-900/70 border-cyber-700 p-4 rounded-xl">
           <span className="text-xs text-gray-400 block">PQC Crypto &amp; ZK-Audit</span>
           <span className="text-xs font-mono text-cyan-300 font-semibold mt-1 block truncate">{activePqcMode}</span>
           <span className="text-[10px] text-emerald-400">ETDA &amp; PDPA Non-Repudiation OK</span>
@@ -139,9 +139,9 @@ export const SentinelRemediation: React.FC<SentinelRemediationProps> = ({
         <h3 className="text-xs font-mono font-bold text-gray-300 uppercase tracking-wider mb-3">
           Live AI Sentinel Autonomous Remediation Stream (ISO 8601 &amp; ZK-Proof Verified)
         </h3>
-        <div className="bg-cyber-900 border border-cyber-700 rounded-xl p-3 space-y-2 max-h-64 overflow-y-auto font-mono text-xs">
+        <div className="bg-cyber-900 border-cyber-700 rounded-xl p-3 space-y-2 max-h-64 overflow-y-auto font-mono text-xs">
           {anomalies.map((item) => (
-            <div key={item.id} className="bg-cyber-800/70 border border-cyber-700/60 p-2.5 rounded-lg flex flex-col sm:flex-row justify-between items-start sm:items-center gap-2">
+            <div key={item.id} className="bg-cyber-800/70 border-cyber-700/60 p-2.5 rounded-lg flex flex-col sm:flex-row justify-between items-start sm:items-center gap-2">
               <div>
                 <div className="flex items-center space-x-2">
                   <span className="text-cyan-400 font-bold">{item.id}</span>
@@ -154,7 +154,7 @@ export const SentinelRemediation: React.FC<SentinelRemediationProps> = ({
                 </div>
               </div>
               <div className="flex items-center space-x-2 self-end sm:self-center">
-                <span className="text-[10px] px-2 py-0.5 bg-emerald-950 text-emerald-400 border border-emerald-800 rounded">
+                <span className="text-[10px] px-2 py-0.5 bg-emerald-950 text-emerald-400 border-emerald-800 rounded">
                   {item.status}
                 </span>
                 <span className="text-[10px] text-gray-500">{new Date(item.timestamp).toLocaleTimeString()}</span>

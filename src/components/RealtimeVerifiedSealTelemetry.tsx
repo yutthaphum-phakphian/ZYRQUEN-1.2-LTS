@@ -164,7 +164,7 @@ export const RealtimeVerifiedSealTelemetry: React.FC<RealtimeVerifiedSealTelemet
             layout
             initial={{ opacity: 0, scale: 0.8, x: -5 }}
             animate={{ opacity: 1, scale: 1, x: 0 }}
-            className="px-2 py-0.5 rounded-lg text-[10px] font-mono font-bold bg-emerald-500/20 text-emerald-300 border border-emerald-500/35 ml-auto flex items-center gap-1 shadow-[0_0_15px_rgba(16,185,129,0.35)] relative z-10"
+            className="px-2 py-0.5 rounded-lg text-[10px] font-mono font-bold bg-emerald-500/20 text-emerald-300 border-emerald-500/35 ml-auto flex items-center gap-1 shadow-[0_0_15px_rgba(16,185,129,0.35)] relative z-10"
           >
             <Lock className="w-3 h-3 text-emerald-400" />
             <span>+{deltaFromBase} SEALED</span>
@@ -174,7 +174,7 @@ export const RealtimeVerifiedSealTelemetry: React.FC<RealtimeVerifiedSealTelemet
 
       {/* Live Verification Gate Anchors Status */}
       <div className="pt-2 border-t border-white/8 grid grid-cols-2 gap-2 text-[11px] font-mono">
-        <div className="p-2 rounded-xl bg-white/[0.02] border border-white/5 space-y-0.5">
+        <div className="p-2 rounded-xl bg-white/[0.02] border-white/5 space-y-0.5">
           <div className="text-[10px] text-zinc-500 uppercase flex items-center gap-1">
             <CheckCircle2 className="w-3 h-3 text-emerald-400" />
             <span>Compliance Anchors</span>
@@ -182,7 +182,7 @@ export const RealtimeVerifiedSealTelemetry: React.FC<RealtimeVerifiedSealTelemet
           <div className="text-emerald-300 font-bold text-xs">{complianceEventCount} Active</div>
         </div>
 
-        <div className="p-2 rounded-xl bg-white/[0.02] border border-white/5 space-y-0.5">
+        <div className="p-2 rounded-xl bg-white/[0.02] border-white/5 space-y-0.5">
           <div className="text-[10px] text-zinc-500 uppercase flex items-center gap-1">
             <Layers className="w-3 h-3 text-cyan-400" />
             <span>Consensus Drift</span>

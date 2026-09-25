@@ -169,7 +169,7 @@ E28F89B28B7A44F0A992BC9098711425667102E3B0C44298FC1C149AFBF4C899
   return (
     <div
       id="zyrquen-manifesto-card"
-      className={`rounded-[28px] bg-[#050811] border border-cyan-500/40 p-5 sm:p-7 shadow-2xl relative overflow-hidden font-mono transition-all duration-300 ${
+      className={`rounded-[28px] bg-[#050811] border-cyan-500/40 p-5 sm:p-7 shadow-2xl relative overflow-hidden font-mono transition-all duration-300 ${
         terminalExpanded ? 'ring-2 ring-cyan-400/80 shadow-[0_0_80px_rgba(6,182,212,0.25)]' : ''
       }`}
     >
@@ -190,9 +190,9 @@ E28F89B28B7A44F0A992BC9098711425667102E3B0C44298FC1C149AFBF4C899
         {/* Terminal Window Controls & Identity */}
         <div className="flex items-center gap-3">
           <div className="flex items-center gap-1.5">
-            <span className="w-3 h-3 rounded-full bg-rose-500/80 border border-rose-400/60 shadow-[0_0_8px_rgba(244,63,94,0.5)]" />
-            <span className="w-3 h-3 rounded-full bg-amber-500/80 border border-amber-400/60 shadow-[0_0_8px_rgba(245,158,11,0.5)]" />
-            <span className="w-3 h-3 rounded-full bg-emerald-500/80 border border-emerald-400/60 shadow-[0_0_8px_rgba(16,185,129,0.5)]" />
+            <span className="w-3 h-3 rounded-full bg-rose-500/80 border-rose-400/60 shadow-[0_0_8px_rgba(244,63,94,0.5)]" />
+            <span className="w-3 h-3 rounded-full bg-amber-500/80 border-amber-400/60 shadow-[0_0_8px_rgba(245,158,11,0.5)]" />
+            <span className="w-3 h-3 rounded-full bg-emerald-500/80 border-emerald-400/60 shadow-[0_0_8px_rgba(16,185,129,0.5)]" />
           </div>
 
           <div className="h-4 w-px bg-white/10" />
@@ -204,7 +204,7 @@ E28F89B28B7A44F0A992BC9098711425667102E3B0C44298FC1C149AFBF4C899
             </span>
           </div>
 
-          <span className="hidden sm:inline-flex px-2 py-0.5 rounded-full bg-cyan-500/10 border border-cyan-500/30 text-[10px] text-cyan-300 font-bold">
+          <span className="hidden sm:inline-flex px-2 py-0.5 rounded-full bg-cyan-500/10 border-cyan-500/30 text-[10px] text-cyan-300 font-bold">
             OMEGA-1 AUTHORIZED
           </span>
         </div>
@@ -229,7 +229,7 @@ E28F89B28B7A44F0A992BC9098711425667102E3B0C44298FC1C149AFBF4C899
           {/* Copy Manifesto */}
           <button
             onClick={handleCopy}
-            className="px-2.5 py-1 rounded-lg bg-black/40 hover:bg-white/10 border border-white/10 text-zinc-300 hover:text-white text-[10px] font-bold transition flex items-center gap-1.5"
+            className="px-2.5 py-1 rounded-lg bg-black/40 hover:bg-white/10 border-white/10 text-zinc-300 hover:text-white text-[10px] font-bold transition flex items-center gap-1.5"
             title="คัดลอกแถลงการณ์ลงในคลิปบอร์ด"
           >
             {copied ? <Check className="w-3 h-3 text-emerald-400" /> : <Copy className="w-3 h-3 text-cyan-400" />}
@@ -240,7 +240,7 @@ E28F89B28B7A44F0A992BC9098711425667102E3B0C44298FC1C149AFBF4C899
           <button
             onClick={handleVerifySignature}
             disabled={isVerifying}
-            className="px-2.5 py-1 rounded-lg bg-cyan-500/15 hover:bg-cyan-500/30 border border-cyan-500/40 text-cyan-200 text-[10px] font-bold transition flex items-center gap-1.5"
+            className="px-2.5 py-1 rounded-lg bg-cyan-500/15 hover:bg-cyan-500/30 border-cyan-500/40 text-cyan-200 text-[10px] font-bold transition flex items-center gap-1.5"
             title="ตรวจสอบความถูกต้องของลายเซ็น Dilithium-5"
           >
             <ShieldCheck className={`w-3 h-3 text-cyan-400 ${isVerifying ? 'animate-spin' : ''}`} />
@@ -250,7 +250,7 @@ E28F89B28B7A44F0A992BC9098711425667102E3B0C44298FC1C149AFBF4C899
           {/* Download .asc */}
           <button
             onClick={handleDownloadAscii}
-            className="px-2.5 py-1 rounded-lg bg-black/40 hover:bg-white/10 border border-white/10 text-zinc-300 hover:text-white text-[10px] font-bold transition flex items-center gap-1.5"
+            className="px-2.5 py-1 rounded-lg bg-black/40 hover:bg-white/10 border-white/10 text-zinc-300 hover:text-white text-[10px] font-bold transition flex items-center gap-1.5"
             title="ดาวน์โหลดไฟล์ .asc (ASCII Armor)"
           >
             <Download className="w-3 h-3 text-amber-400" />
@@ -260,7 +260,7 @@ E28F89B28B7A44F0A992BC9098711425667102E3B0C44298FC1C149AFBF4C899
           {/* Toggle Expand / Collapse */}
           <button
             onClick={() => setTerminalExpanded(!terminalExpanded)}
-            className="p-1 rounded-lg bg-black/40 hover:bg-white/10 border border-white/10 text-zinc-400 hover:text-white transition"
+            className="p-1 rounded-lg bg-black/40 hover:bg-white/10 border-white/10 text-zinc-400 hover:text-white transition"
             title={terminalExpanded ? 'ย่อส่วนการแสดงผล' : 'ขยายส่วนการแสดงผล'}
           >
             {terminalExpanded ? <Minimize2 className="w-3.5 h-3.5" /> : <Maximize2 className="w-3.5 h-3.5" />}
@@ -270,14 +270,14 @@ E28F89B28B7A44F0A992BC9098711425667102E3B0C44298FC1C149AFBF4C899
 
       {/* Verification Flash Alert Banner */}
       {verificationSuccess && (
-        <div className="relative z-30 mt-3 p-3 rounded-xl bg-emerald-500/15 border border-emerald-500/40 text-emerald-200 text-xs flex items-center justify-between gap-2 animate-in fade-in">
+        <div className="relative z-30 mt-3 p-3 rounded-xl bg-emerald-500/15 border-emerald-500/40 text-emerald-200 text-xs flex items-center justify-between gap-2 animate-in fade-in">
           <div className="flex items-center gap-2">
             <CheckCircle2 className="w-4 h-4 text-emerald-400 shrink-0" />
             <span>
               <strong>VALIDATED:</strong> Post-Quantum Dilithium-5 ML-DSA signature confirmed against Genesis Merkle Root 909ab814... (SSoT Delta: 0.00%)
             </span>
           </div>
-          <span className="px-2 py-0.5 rounded bg-emerald-400/20 text-[10px] font-bold border border-emerald-400/30">
+          <span className="px-2 py-0.5 rounded bg-emerald-400/20 text-[10px] font-bold border-emerald-400/30">
             10/10 REAL_HSM
           </span>
         </div>
@@ -299,7 +299,7 @@ E28F89B28B7A44F0A992BC9098711425667102E3B0C44298FC1C149AFBF4C899
               <span className="font-bold text-white tracking-wide">
                 ZYRQUEN Ω∞ SOVEREIGN MANIFESTO & TRUTH MATRIX
               </span>
-              <span className="px-2 py-0.5 rounded bg-amber-500/20 text-amber-300 border border-amber-500/40 text-[10px] font-bold">
+              <span className="px-2 py-0.5 rounded bg-amber-500/20 text-amber-300 border-amber-500/40 text-[10px] font-bold">
                 {METADATA.edition}
               </span>
             </div>
@@ -307,21 +307,21 @@ E28F89B28B7A44F0A992BC9098711425667102E3B0C44298FC1C149AFBF4C899
 
           {/* Quick Metrics Badge Strip */}
           <div className="grid grid-cols-2 sm:grid-cols-4 xl:grid-cols-2 gap-2 text-[10px] shrink-0">
-            <div className="p-2 rounded-xl bg-black/50 border border-white/5">
+            <div className="p-2 rounded-xl bg-black/50 border-white/5">
               <span className="text-zinc-500 block">CANONICAL SEALS</span>
               <span className="text-emerald-400 font-bold text-xs">{METADATA.canonicalSeals.toLocaleString()} Verified</span>
             </div>
-            <div className="p-2 rounded-xl bg-black/50 border border-white/5">
+            <div className="p-2 rounded-xl bg-black/50 border-white/5">
               <span className="text-zinc-500 block">MERKLE ROOT HASH</span>
               <span className="text-cyan-300 font-bold font-mono text-[10px] truncate max-w-[120px] block" title={METADATA.merkleRoot}>
                 {METADATA.merkleRoot.slice(0, 12)}...
               </span>
             </div>
-            <div className="p-2 rounded-xl bg-black/50 border border-white/5">
+            <div className="p-2 rounded-xl bg-black/50 border-white/5">
               <span className="text-zinc-500 block">BASELINE DRIFT</span>
               <span className="text-amber-300 font-bold text-xs">{METADATA.baselineDrift} (Δ0)</span>
             </div>
-            <div className="p-2 rounded-xl bg-black/50 border border-white/5">
+            <div className="p-2 rounded-xl bg-black/50 border-white/5">
               <span className="text-zinc-500 block">CUSTODIAN QUORUM</span>
               <span className="text-violet-300 font-bold text-xs">10/10 REAL_HSM</span>
             </div>
@@ -411,7 +411,7 @@ E28F89B28B7A44F0A992BC9098711425667102E3B0C44298FC1C149AFBF4C899
       {activeTab === 'MANIFESTO' && (
         <div className="relative z-30 space-y-4 text-xs animate-in fade-in">
           {/* Executive Overview Box */}
-          <div className="p-4 rounded-2xl bg-[#090d1c]/80 border border-cyan-500/20 space-y-2">
+          <div className="p-4 rounded-2xl bg-[#090d1c]/80 border-cyan-500/20 space-y-2">
             <div className="flex items-center justify-between">
               <span className="text-cyan-400 font-bold uppercase text-[11px] flex items-center gap-1.5">
                 <Sparkles className="w-4 h-4" />
@@ -429,19 +429,19 @@ E28F89B28B7A44F0A992BC9098711425667102E3B0C44298FC1C149AFBF4C899
             </p>
 
             <div className="grid grid-cols-2 sm:grid-cols-4 gap-2 pt-2 text-[11px]">
-              <div className="p-2 rounded-lg bg-black/40 border border-white/5">
+              <div className="p-2 rounded-lg bg-black/40 border-white/5">
                 <span className="text-zinc-500 block text-[9px]">MUTATION DELTA</span>
                 <span className="text-emerald-400 font-bold">Δ = 0 (Strict Frozen)</span>
               </div>
-              <div className="p-2 rounded-lg bg-black/40 border border-white/5">
+              <div className="p-2 rounded-lg bg-black/40 border-white/5">
                 <span className="text-zinc-500 block text-[9px]">BASELINE DRIFT</span>
                 <span className="text-cyan-400 font-bold">0.00% Zero Drift</span>
               </div>
-              <div className="p-2 rounded-lg bg-black/40 border border-white/5">
+              <div className="p-2 rounded-lg bg-black/40 border-white/5">
                 <span className="text-zinc-500 block text-[9px]">FAIL-CLOSED GUARD</span>
                 <span className="text-rose-400 font-bold">Chamber 02 Quarantine</span>
               </div>
-              <div className="p-2 rounded-lg bg-black/40 border border-white/5">
+              <div className="p-2 rounded-lg bg-black/40 border-white/5">
                 <span className="text-zinc-500 block text-[9px]">PQC SECURED</span>
                 <span className="text-amber-400 font-bold">Dilithium-5 / Kyber-1024</span>
               </div>
@@ -450,7 +450,7 @@ E28F89B28B7A44F0A992BC9098711425667102E3B0C44298FC1C149AFBF4C899
 
           {/* 4 Sovereign Governance Invariants (Articles of Faith) */}
           <div className="grid grid-cols-1 md:grid-cols-2 gap-3 text-xs">
-            <div className="p-3.5 rounded-xl bg-black/40 border border-white/8 space-y-1">
+            <div className="p-3.5 rounded-xl bg-black/40 border-white/8 space-y-1">
               <div className="flex items-center gap-1.5 text-amber-400 font-bold text-[11px]">
                 <Lock className="w-3.5 h-3.5" />
                 <span>หมวด ๑: ความสัจจริงเชิงเดี่ยวอันมิอาจล่วงละเมิด (Inviolable SSoT)</span>
@@ -460,7 +460,7 @@ E28F89B28B7A44F0A992BC9098711425667102E3B0C44298FC1C149AFBF4C899
               </p>
             </div>
 
-            <div className="p-3.5 rounded-xl bg-black/40 border border-white/8 space-y-1">
+            <div className="p-3.5 rounded-xl bg-black/40 border-white/8 space-y-1">
               <div className="flex items-center gap-1.5 text-violet-400 font-bold text-[11px]">
                 <ShieldCheck className="w-3.5 h-3.5" />
                 <span>หมวด ๒: การคุ้มครองหลังยุคควอนตัม (NIST PQC Suite)</span>
@@ -470,7 +470,7 @@ E28F89B28B7A44F0A992BC9098711425667102E3B0C44298FC1C149AFBF4C899
               </p>
             </div>
 
-            <div className="p-3.5 rounded-xl bg-black/40 border border-white/8 space-y-1">
+            <div className="p-3.5 rounded-xl bg-black/40 border-white/8 space-y-1">
               <div className="flex items-center gap-1.5 text-emerald-400 font-bold text-[11px]">
                 <Award className="w-3.5 h-3.5" />
                 <span>หมวด ๓: การรับรองและผลผูกพันทางกฎหมายไทย (ETDA & PDPA)</span>
@@ -480,7 +480,7 @@ E28F89B28B7A44F0A992BC9098711425667102E3B0C44298FC1C149AFBF4C899
               </p>
             </div>
 
-            <div className="p-3.5 rounded-xl bg-black/40 border border-white/8 space-y-1">
+            <div className="p-3.5 rounded-xl bg-black/40 border-white/8 space-y-1">
               <div className="flex items-center gap-1.5 text-cyan-400 font-bold text-[11px]">
                 <Zap className="w-3.5 h-3.5" />
                 <span>หมวด ๔: ฟีนิกซ์ฮีลลิ่งอัตโนมัติ ๑๔๒ มิลลิวินาที (Phoenix Resilience)</span>
@@ -496,12 +496,12 @@ E28F89B28B7A44F0A992BC9098711425667102E3B0C44298FC1C149AFBF4C899
       {/* Tab 2: Canonical Contract — Frozen Baseline */}
       {activeTab === 'BASELINE' && (
         <div className="relative z-30 space-y-3 text-xs animate-in fade-in">
-          <div className="flex items-center justify-between p-3 rounded-xl bg-black/50 border border-white/10">
+          <div className="flex items-center justify-between p-3 rounded-xl bg-black/50 border-white/10">
             <span className="text-amber-400 font-bold">Canonical Contract — Frozen Baseline</span>
             <span className="text-zinc-400 text-[11px]">Single Source of Trust Anchor</span>
           </div>
 
-          <div className="overflow-x-auto rounded-xl border border-white/8 bg-black/40">
+          <div className="overflow-x-auto rounded-xl border-white/8 bg-black/40">
             <table className="w-full text-left text-[11px]">
               <thead className="bg-white/5 text-zinc-400 uppercase text-[10px] border-b border-white/10">
                 <tr>
@@ -572,7 +572,7 @@ E28F89B28B7A44F0A992BC9098711425667102E3B0C44298FC1C149AFBF4C899
         <div className="relative z-30 space-y-4 text-xs animate-in fade-in">
           {/* G11-G13 Gates */}
           <div className="grid grid-cols-1 md:grid-cols-3 gap-3">
-            <div className="p-3.5 rounded-xl bg-black/40 border border-emerald-500/30 space-y-1">
+            <div className="p-3.5 rounded-xl bg-black/40 border-emerald-500/30 space-y-1">
               <div className="flex items-center justify-between">
                 <span className="text-emerald-400 font-bold text-xs">G11 — Custodian Quorum</span>
                 <span className="text-[10px] px-1.5 py-0.5 rounded bg-emerald-500/20 text-emerald-300 font-bold">PASS</span>
@@ -583,7 +583,7 @@ E28F89B28B7A44F0A992BC9098711425667102E3B0C44298FC1C149AFBF4C899
               </p>
             </div>
 
-            <div className="p-3.5 rounded-xl bg-black/40 border border-cyan-500/30 space-y-1">
+            <div className="p-3.5 rounded-xl bg-black/40 border-cyan-500/30 space-y-1">
               <div className="flex items-center justify-between">
                 <span className="text-cyan-400 font-bold text-xs">G12 — Root Provenance</span>
                 <span className="text-[10px] px-1.5 py-0.5 rounded bg-cyan-500/20 text-cyan-300 font-bold">VALID</span>
@@ -593,7 +593,7 @@ E28F89B28B7A44F0A992BC9098711425667102E3B0C44298FC1C149AFBF4C899
               </p>
             </div>
 
-            <div className="p-3.5 rounded-xl bg-black/40 border border-amber-500/30 space-y-1">
+            <div className="p-3.5 rounded-xl bg-black/40 border-amber-500/30 space-y-1">
               <div className="flex items-center justify-between">
                 <span className="text-amber-400 font-bold text-xs">G13 — Composite Promotion</span>
                 <span className="text-[10px] px-1.5 py-0.5 rounded bg-amber-500/20 text-amber-300 font-bold">AUTHORIZED</span>
@@ -605,7 +605,7 @@ E28F89B28B7A44F0A992BC9098711425667102E3B0C44298FC1C149AFBF4C899
           </div>
 
           {/* 10 Invariant Laws (10/10 GREEN) */}
-          <div className="p-4 rounded-xl bg-black/50 border border-white/8 space-y-2">
+          <div className="p-4 rounded-xl bg-black/50 border-white/8 space-y-2">
             <div className="flex items-center justify-between border-b border-white/5 pb-2">
               <span className="text-xs font-bold text-white flex items-center gap-1.5">
                 <ShieldCheck className="w-4 h-4 text-emerald-400" />
@@ -662,7 +662,7 @@ E28F89B28B7A44F0A992BC9098711425667102E3B0C44298FC1C149AFBF4C899
       {/* Tab 4: 40 Phases Verification — ALL GREEN 40/40 PASS */}
       {activeTab === 'PHASES_40' && (
         <div className="relative z-30 space-y-3 text-xs animate-in fade-in">
-          <div className="flex items-center justify-between p-3 rounded-xl bg-black/50 border border-white/10">
+          <div className="flex items-center justify-between p-3 rounded-xl bg-black/50 border-white/10">
             <div>
               <span className="text-emerald-400 font-bold text-xs block">
                 40 Phases Verification — ALL GREEN 40/40 PASS
@@ -671,12 +671,12 @@ E28F89B28B7A44F0A992BC9098711425667102E3B0C44298FC1C149AFBF4C899
                 Foundation (P01-P10) • Governance (P11-P20) • Operations (P21-P30) • Extension (P31-P40)
               </span>
             </div>
-            <span className="px-2.5 py-1 rounded-lg bg-emerald-500/20 text-emerald-300 border border-emerald-500/50 font-bold text-[10px]">
+            <span className="px-2.5 py-1 rounded-lg bg-emerald-500/20 text-emerald-300 border-emerald-500/50 font-bold text-[10px]">
               100% GREEN (14,902 SEALS)
             </span>
           </div>
 
-          <div className="max-h-60 overflow-y-auto pr-1 space-y-1 rounded-xl border border-white/5 bg-black/40 p-2 font-mono text-[10px]">
+          <div className="max-h-60 overflow-y-auto pr-1 space-y-1 rounded-xl border-white/5 bg-black/40 p-2 font-mono text-[10px]">
             <div className="grid grid-cols-12 gap-1 text-zinc-500 uppercase px-2 py-1 border-b border-white/5 font-bold">
               <span className="col-span-1">ID</span>
               <span className="col-span-6">Phase Name</span>
@@ -743,22 +743,22 @@ E28F89B28B7A44F0A992BC9098711425667102E3B0C44298FC1C149AFBF4C899
       {activeTab === 'TREASURY' && (
         <div className="relative z-30 space-y-4 text-xs animate-in fade-in">
           {/* Treasury Table */}
-          <div className="p-3.5 rounded-xl bg-black/40 border border-white/8 space-y-2">
+          <div className="p-3.5 rounded-xl bg-black/40 border-white/8 space-y-2">
             <span className="text-amber-400 font-bold text-xs uppercase block">
               Fiduciary Treasury & RWA Tokenization (Total Valuation: ฿4,230,000,000.00)
             </span>
             <div className="grid grid-cols-1 sm:grid-cols-3 gap-2.5">
-              <div className="p-3 rounded-xl bg-black/50 border border-white/5">
+              <div className="p-3 rounded-xl bg-black/50 border-white/5">
                 <span className="text-[10px] text-zinc-400 block">THB-SOV</span>
                 <span className="text-emerald-400 font-bold text-sm block mt-0.5">฿1,490,200,000.00</span>
                 <span className="text-[10px] text-zinc-500">100% Thai Treasury Guaranteed</span>
               </div>
-              <div className="p-3 rounded-xl bg-black/50 border border-white/5">
+              <div className="p-3 rounded-xl bg-black/50 border-white/5">
                 <span className="text-[10px] text-zinc-400 block">XAU-PHYS (Gold Reserve)</span>
                 <span className="text-amber-300 font-bold text-sm block mt-0.5">14,902.00 oz</span>
                 <span className="text-[10px] text-zinc-500">LBMA 99.99% Audited Vault</span>
               </div>
-              <div className="p-3 rounded-xl bg-black/50 border border-white/5">
+              <div className="p-3 rounded-xl bg-black/50 border-white/5">
                 <span className="text-[10px] text-zinc-400 block">RWA-INFRA (Fiber & Sat)</span>
                 <span className="text-cyan-300 font-bold text-sm block mt-0.5">400 Tenants</span>
                 <span className="text-[10px] text-zinc-500">Platform Ω601–Ω1000 Bound</span>
@@ -767,7 +767,7 @@ E28F89B28B7A44F0A992BC9098711425667102E3B0C44298FC1C149AFBF4C899
           </div>
 
           {/* 6 Global Sovereign Nodes */}
-          <div className="p-3.5 rounded-xl bg-black/40 border border-white/8 space-y-2">
+          <div className="p-3.5 rounded-xl bg-black/40 border-white/8 space-y-2">
             <div className="flex items-center justify-between">
               <span className="text-cyan-400 font-bold text-xs uppercase">
                 Global Satellite Mesh — 6 Sovereign Nodes (QKD Active)
@@ -775,27 +775,27 @@ E28F89B28B7A44F0A992BC9098711425667102E3B0C44298FC1C149AFBF4C899
               <span className="text-[10px] text-emerald-400 font-bold">100% QKD ACTIVE</span>
             </div>
             <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-2 text-[10px] font-mono">
-              <div className="p-2 rounded-lg bg-black/50 border border-cyan-500/20">
+              <div className="p-2 rounded-lg bg-black/50 border-cyan-500/20">
                 <span className="text-white font-bold block">BK01 Bangkok</span>
                 <span className="text-cyan-400">0.8ms PRIMARY</span>
               </div>
-              <div className="p-2 rounded-lg bg-black/50 border border-white/5">
+              <div className="p-2 rounded-lg bg-black/50 border-white/5">
                 <span className="text-white font-bold block">SG02 Singapore</span>
                 <span className="text-zinc-400">8.2ms RELAY</span>
               </div>
-              <div className="p-2 rounded-lg bg-black/50 border border-white/5">
+              <div className="p-2 rounded-lg bg-black/50 border-white/5">
                 <span className="text-white font-bold block">TY03 Tokyo</span>
                 <span className="text-zinc-400">24.1ms VAULT</span>
               </div>
-              <div className="p-2 rounded-lg bg-black/50 border border-white/5">
+              <div className="p-2 rounded-lg bg-black/50 border-white/5">
                 <span className="text-white font-bold block">ZH04 Zurich</span>
                 <span className="text-zinc-400">112.5ms BOUNDARY</span>
               </div>
-              <div className="p-2 rounded-lg bg-black/50 border border-white/5">
+              <div className="p-2 rounded-lg bg-black/50 border-white/5">
                 <span className="text-white font-bold block">SV05 Silicon Valley</span>
                 <span className="text-zinc-400">142.0ms GATEWAY</span>
               </div>
-              <div className="p-2 rounded-lg bg-black/50 border border-white/5">
+              <div className="p-2 rounded-lg bg-black/50 border-white/5">
                 <span className="text-white font-bold block">LD06 London</span>
                 <span className="text-zinc-400">128.4ms CUSTODIAN</span>
               </div>

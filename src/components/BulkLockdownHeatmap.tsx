@@ -177,7 +177,7 @@ export const BulkLockdownHeatmap: React.FC = () => {
   };
 
   return (
-    <div className="bg-slate-900 border border-slate-800 p-6 rounded-2xl space-y-4 shadow-xl">
+    <div className="bg-slate-900 border-slate-800 p-6 rounded-2xl space-y-4 shadow-xl">
       <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
         <div>
           <h2 className="text-xl font-bold text-white flex items-center gap-2">
@@ -240,7 +240,7 @@ export const BulkLockdownHeatmap: React.FC = () => {
 
       {show2FADialog && (
         <div className="fixed inset-0 bg-black/80 backdrop-blur-sm flex items-center justify-center z-50 p-4">
-          <div className="bg-slate-900 border border-slate-700 rounded-2xl p-6 max-w-md w-full space-y-4 shadow-2xl animate-in fade-in zoom-in-95 duration-150">
+          <div className="bg-slate-900 border-slate-700 rounded-2xl p-6 max-w-md w-full space-y-4 shadow-2xl animate-in fade-in zoom-in-95 duration-150">
             <div className="flex justify-between items-start">
               <div>
                 <h3 className="text-lg font-bold text-white flex items-center gap-2">
@@ -260,7 +260,7 @@ export const BulkLockdownHeatmap: React.FC = () => {
             </div>
 
             {errorMessage && (
-              <div className="p-2.5 bg-red-950/80 border border-red-500/50 rounded-xl text-xs text-red-300">
+              <div className="p-2.5 bg-red-950/80 border-red-500/50 rounded-xl text-xs text-red-300">
                 {errorMessage}
               </div>
             )}
@@ -272,7 +272,7 @@ export const BulkLockdownHeatmap: React.FC = () => {
                 value={reason}
                 onChange={e => setReason(e.target.value)}
                 placeholder="e.g. SENTINEL_ANOMALY detected in CH-03, CH-11"
-                className="w-full mt-1 bg-slate-950 border border-slate-800 focus:border-cyan-500 rounded-xl p-2.5 text-sm text-slate-200 outline-none"
+                className="w-full mt-1 bg-slate-950 border-slate-800 focus:border-cyan-500 rounded-xl p-2.5 text-sm text-slate-200 outline-none"
               />
             </div>
 
@@ -283,7 +283,7 @@ export const BulkLockdownHeatmap: React.FC = () => {
                 onChange={e => setAdminNote(e.target.value)}
                 placeholder="Explain lockdown justification, reference PDPA Sec 37, ETDA Sec 26..."
                 rows={3}
-                className="w-full mt-1 bg-slate-950 border border-slate-800 focus:border-cyan-500 rounded-xl p-2.5 text-sm text-slate-200 outline-none"
+                className="w-full mt-1 bg-slate-950 border-slate-800 focus:border-cyan-500 rounded-xl p-2.5 text-sm text-slate-200 outline-none"
               />
             </div>
 
@@ -298,7 +298,7 @@ export const BulkLockdownHeatmap: React.FC = () => {
                 }}
                 placeholder="123456"
                 maxLength={6}
-                className="w-full mt-1 bg-slate-950 border border-amber-500/50 focus:border-amber-400 rounded-xl p-2.5 text-sm text-amber-300 font-mono font-bold tracking-widest text-center outline-none"
+                className="w-full mt-1 bg-slate-950 border-amber-500/50 focus:border-amber-400 rounded-xl p-2.5 text-sm text-amber-300 font-mono font-bold tracking-widest text-center outline-none"
               />
             </div>
 

@@ -223,7 +223,7 @@ export const CryptoVerificationCenter: React.FC = () => {
       {/* Top Header */}
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 border-b border-cyan-500/20 pb-4">
         <div className="flex items-center gap-3">
-          <div className="w-11 h-11 rounded-2xl bg-cyan-500/20 border border-cyan-400 text-cyan-300 flex items-center justify-center shrink-0 shadow-[0_0_20px_rgba(6,182,212,0.3)]">
+          <div className="w-11 h-11 rounded-2xl bg-cyan-500/20 border-cyan-400 text-cyan-300 flex items-center justify-center shrink-0 shadow-[0_0_20px_rgba(6,182,212,0.3)]">
             <Fingerprint className="w-5 h-5" />
           </div>
           <div>
@@ -231,7 +231,7 @@ export const CryptoVerificationCenter: React.FC = () => {
               <h3 className="text-base font-bold text-cyan-100 font-serif">
                 CRYPTOGRAPHIC VERIFICATION CENTER
               </h3>
-              <span className="text-[10px] px-2.5 py-0.5 rounded bg-cyan-500/20 text-cyan-300 border border-cyan-400/50 font-bold">
+              <span className="text-[10px] px-2.5 py-0.5 rounded bg-cyan-500/20 text-cyan-300 border-cyan-400/50 font-bold">
                 WEBCRYPTO SHA-256 ENGINE
               </span>
             </div>
@@ -286,7 +286,7 @@ export const CryptoVerificationCenter: React.FC = () => {
       </div>
 
       {/* Selected Artifact Inspection Grid */}
-      <div className="p-5 rounded-2xl bg-black/60 border border-cyan-500/30 space-y-4">
+      <div className="p-5 rounded-2xl bg-black/60 border-cyan-500/30 space-y-4">
         <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2 border-b border-cyan-500/20 pb-3">
           <div>
             <div className="text-sm font-bold text-white flex items-center gap-2">
@@ -303,7 +303,7 @@ export const CryptoVerificationCenter: React.FC = () => {
           <div className="flex items-center gap-2">
             <button
               onClick={() => handleTamperPayload(selectedArtifact.id)}
-              className="px-3 py-1.5 rounded-lg bg-rose-500/20 hover:bg-rose-500/30 border border-rose-500/40 text-rose-300 text-xs font-bold transition-all"
+              className="px-3 py-1.5 rounded-lg bg-rose-500/20 hover:bg-rose-500/30 border-rose-500/40 text-rose-300 text-xs font-bold transition-all"
             >
               Inject Tamper Test
             </button>
@@ -319,7 +319,7 @@ export const CryptoVerificationCenter: React.FC = () => {
 
         {/* Verification Status Banner Cards */}
         <div className="grid grid-cols-1 md:grid-cols-3 gap-3 text-xs">
-          <div className="p-3 rounded-xl bg-black/70 border border-white/10 space-y-1">
+          <div className="p-3 rounded-xl bg-black/70 border-white/10 space-y-1">
             <span className="text-zinc-400 text-[10px]">Verification State:</span>
             <div className="font-bold flex items-center gap-1.5">
               {selectedArtifact.status === 'VERIFIED' ? (
@@ -341,7 +341,7 @@ export const CryptoVerificationCenter: React.FC = () => {
             </div>
           </div>
 
-          <div className="p-3 rounded-xl bg-black/70 border border-white/10 space-y-1">
+          <div className="p-3 rounded-xl bg-black/70 border-white/10 space-y-1">
             <span className="text-zinc-400 text-[10px]">Ed25519 Sovereign Signature:</span>
             <div className="font-bold flex items-center gap-1.5">
               <Shield className="w-4 h-4 text-cyan-400" />
@@ -349,7 +349,7 @@ export const CryptoVerificationCenter: React.FC = () => {
             </div>
           </div>
 
-          <div className="p-3 rounded-xl bg-black/70 border border-white/10 space-y-1">
+          <div className="p-3 rounded-xl bg-black/70 border-white/10 space-y-1">
             <span className="text-zinc-400 text-[10px]">Hardware Sovereign Slot:</span>
             <div className="font-bold flex items-center gap-1.5">
               <Cpu className="w-4 h-4 text-amber-400" />
@@ -360,7 +360,7 @@ export const CryptoVerificationCenter: React.FC = () => {
 
         {/* Digest Comparison Display */}
         <div className="space-y-3 pt-2">
-          <div className="p-3.5 rounded-xl bg-black/80 border border-cyan-500/30 space-y-2">
+          <div className="p-3.5 rounded-xl bg-black/80 border-cyan-500/30 space-y-2">
             <div className="flex items-center justify-between text-xs text-cyan-300 font-bold">
               <span className="flex items-center gap-1.5">
                 <Hash className="w-4 h-4 text-cyan-400" />
@@ -377,12 +377,12 @@ export const CryptoVerificationCenter: React.FC = () => {
               )}
             </div>
 
-            <div className="p-3 rounded-xl bg-black font-mono text-xs text-cyan-300 break-all border border-cyan-500/20">
+            <div className="p-3 rounded-xl bg-black font-mono text-xs text-cyan-300 break-all border-cyan-500/20">
               {selectedArtifact.computedDigest || '0xNOT_COMPUTED — Click "Compute & Verify SHA-256" to generate'}
             </div>
           </div>
 
-          <div className="p-3.5 rounded-xl bg-black/80 border border-white/10 space-y-2">
+          <div className="p-3.5 rounded-xl bg-black/80 border-white/10 space-y-2">
             <div className="flex items-center justify-between text-xs text-zinc-300 font-bold">
               <span className="flex items-center gap-1.5">
                 <Lock className="w-4 h-4 text-amber-400" />
@@ -397,7 +397,7 @@ export const CryptoVerificationCenter: React.FC = () => {
               </button>
             </div>
 
-            <div className="p-3 rounded-xl bg-black font-mono text-xs text-emerald-400/90 break-all border border-white/10">
+            <div className="p-3 rounded-xl bg-black font-mono text-xs text-emerald-400/90 break-all border-white/10">
               {selectedArtifact.expectedDigest}
             </div>
           </div>
@@ -412,7 +412,7 @@ export const CryptoVerificationCenter: React.FC = () => {
             </span>
             <span className="text-[10px] text-emerald-400 font-bold">SSoT Mutation Delta: 0</span>
           </div>
-          <pre className="p-4 rounded-xl bg-black/90 border border-white/10 text-zinc-300 font-mono text-[11px] overflow-x-auto leading-relaxed max-h-[220px]">
+          <pre className="p-4 rounded-xl bg-black/90 border-white/10 text-zinc-300 font-mono text-[11px] overflow-x-auto leading-relaxed max-h-[220px]">
             {selectedArtifact.claimedPayload}
           </pre>
         </div>

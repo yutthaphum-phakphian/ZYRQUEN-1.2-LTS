@@ -199,7 +199,7 @@ export const ForensicTimelineGraph: React.FC<ForensicTimelineGraphProps> = ({
   return (
     <div className="space-y-5 animate-in fade-in duration-200">
       {/* 1. Header Banner */}
-      <div className="p-5 rounded-2xl bg-[#0a0f1e] border border-[#06B6D4]/60 shadow-xl space-y-4">
+      <div className="p-5 rounded-2xl bg-[#0a0f1e] border-[#06B6D4]/60 shadow-xl space-y-4">
         <div className="flex flex-col md:flex-row md:items-center justify-between gap-3 border-b border-zinc-800 pb-4">
           <div className="space-y-1">
             <div className="flex items-center gap-2 flex-wrap">
@@ -207,10 +207,10 @@ export const ForensicTimelineGraph: React.FC<ForensicTimelineGraphProps> = ({
               <h3 className="text-lg font-bold text-white tracking-wide">
                 Forensic Evidence Timeline Graph
               </h3>
-              <span className="px-2.5 py-0.5 rounded-full text-xs font-black bg-[#06B6D4]/20 text-[#06B6D4] border border-[#06B6D4] tracking-wider">
+              <span className="px-2.5 py-0.5 rounded-full text-xs font-black bg-[#06B6D4]/20 text-[#06B6D4] border-[#06B6D4] tracking-wider">
                 IMMUTABLE LEDGER V25
               </span>
-              <span className="px-2.5 py-0.5 rounded-full text-xs font-bold bg-[#D4AF37]/20 text-[#D4AF37] border border-[#D4AF37] tracking-wider">
+              <span className="px-2.5 py-0.5 rounded-full text-xs font-bold bg-[#D4AF37]/20 text-[#D4AF37] border-[#D4AF37] tracking-wider">
                 COURT-READY
               </span>
             </div>
@@ -230,7 +230,7 @@ export const ForensicTimelineGraph: React.FC<ForensicTimelineGraphProps> = ({
                   playTone(600, 0.03);
                   onSwitchToCustodyViewer();
                 }}
-                className="px-3 py-1.5 rounded-xl bg-[#070a12] hover:bg-yellow-950/40 text-[#D4AF37] border border-[#D4AF37]/60 text-xs font-bold flex items-center gap-1.5 transition cursor-pointer"
+                className="px-3 py-1.5 rounded-xl bg-[#070a12] hover:bg-yellow-950/40 text-[#D4AF37] border-[#D4AF37]/60 text-xs font-bold flex items-center gap-1.5 transition cursor-pointer"
               >
                 <span>🛡️</span>
                 <span>Custody Chain Viewer</span>
@@ -240,7 +240,7 @@ export const ForensicTimelineGraph: React.FC<ForensicTimelineGraphProps> = ({
             {onExportBundleJson && (
               <button
                 onClick={onExportBundleJson}
-                className="px-3 py-1.5 rounded-xl bg-[#06B6D4]/15 hover:bg-[#06B6D4]/25 text-[#06B6D4] border border-[#06B6D4]/50 text-xs font-bold flex items-center gap-1.5 transition cursor-pointer"
+                className="px-3 py-1.5 rounded-xl bg-[#06B6D4]/15 hover:bg-[#06B6D4]/25 text-[#06B6D4] border-[#06B6D4]/50 text-xs font-bold flex items-center gap-1.5 transition cursor-pointer"
               >
                 <span>📑</span>
                 <span>Export Bundle JSON</span>
@@ -253,7 +253,7 @@ export const ForensicTimelineGraph: React.FC<ForensicTimelineGraphProps> = ({
                   playTone(720, 0.03);
                   onViewCertificate();
                 }}
-                className="px-3 py-1.5 rounded-xl bg-white/5 hover:bg-white/10 text-zinc-200 border border-white/15 text-xs font-bold flex items-center gap-1.5 transition cursor-pointer"
+                className="px-3 py-1.5 rounded-xl bg-white/5 hover:bg-white/10 text-zinc-200 border-white/15 text-xs font-bold flex items-center gap-1.5 transition cursor-pointer"
               >
                 <span>⚖️</span>
                 <span>View Certificate</span>
@@ -264,7 +264,7 @@ export const ForensicTimelineGraph: React.FC<ForensicTimelineGraphProps> = ({
 
         {/* Overview Timeline Summary Chips */}
         <div className="grid grid-cols-1 sm:grid-cols-3 gap-3 pt-1">
-          <div className="p-3 rounded-xl bg-[#070a12] border border-amber-500/30 flex items-center gap-3">
+          <div className="p-3 rounded-xl bg-[#070a12] border-amber-500/30 flex items-center gap-3">
             <span className="text-2xl">🕐</span>
             <div className="text-xs">
               <div className="text-amber-400 font-bold">Phase 1: Evidence Intake</div>
@@ -272,7 +272,7 @@ export const ForensicTimelineGraph: React.FC<ForensicTimelineGraphProps> = ({
             </div>
           </div>
 
-          <div className="p-3 rounded-xl bg-[#070a12] border border-cyan-500/30 flex items-center gap-3">
+          <div className="p-3 rounded-xl bg-[#070a12] border-cyan-500/30 flex items-center gap-3">
             <span className="text-2xl">🧩</span>
             <div className="text-xs">
               <div className="text-cyan-400 font-bold">Phase 2: Attestation &amp; Unlock</div>
@@ -280,7 +280,7 @@ export const ForensicTimelineGraph: React.FC<ForensicTimelineGraphProps> = ({
             </div>
           </div>
 
-          <div className="p-3 rounded-xl bg-[#070a12] border border-[#D4AF37]/40 flex items-center gap-3">
+          <div className="p-3 rounded-xl bg-[#070a12] border-[#D4AF37]/40 flex items-center gap-3">
             <span className="text-2xl">⚖️</span>
             <div className="text-xs">
               <div className="text-[#D4AF37] font-bold">Phase 3: Court-Ready Bundle</div>
@@ -291,7 +291,7 @@ export const ForensicTimelineGraph: React.FC<ForensicTimelineGraphProps> = ({
       </div>
 
       {/* 2. Visual Interactive Timeline Graph */}
-      <div className="p-5 rounded-2xl bg-[#0a0f1e] border border-zinc-800 space-y-4">
+      <div className="p-5 rounded-2xl bg-[#0a0f1e] border-zinc-800 space-y-4">
         <div className="flex items-center justify-between border-b border-zinc-800 pb-3">
           <div>
             <h4 className="text-sm font-bold text-white flex items-center gap-2">
@@ -322,7 +322,7 @@ export const ForensicTimelineGraph: React.FC<ForensicTimelineGraphProps> = ({
                     className={`w-11 h-11 rounded-full flex items-center justify-center font-bold text-xs transition cursor-pointer ${
                       isSelected
                         ? 'bg-[#070a12] text-white border-2 border-[#06B6D4] shadow-[0_0_16px_rgba(6,182,212,0.6)] scale-115'
-                        : 'bg-[#070a12] text-zinc-300 border border-zinc-700 hover:border-zinc-500'
+                        : 'bg-[#070a12] text-zinc-300 border-zinc-700 hover:border-zinc-500'
                     }`}
                   >
                     {node.status === 'PASSED' || node.status === 'SIGNED' || node.status === 'UNLOCKED' ? (
@@ -366,11 +366,11 @@ export const ForensicTimelineGraph: React.FC<ForensicTimelineGraphProps> = ({
         </div>
 
         {/* 3. Selected Node Deep Inspection Box */}
-        <div className="p-4 sm:p-5 rounded-xl bg-[#070a12] border border-[#06B6D4]/40 space-y-4">
+        <div className="p-4 sm:p-5 rounded-xl bg-[#070a12] border-[#06B6D4]/40 space-y-4">
           <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2 border-b border-zinc-800 pb-3">
             <div className="space-y-1">
               <div className="flex items-center gap-2 flex-wrap">
-                <span className="px-2 py-0.5 rounded bg-cyan-950 text-cyan-300 border border-cyan-500/50 text-xs font-bold">
+                <span className="px-2 py-0.5 rounded bg-cyan-950 text-cyan-300 border-cyan-500/50 text-xs font-bold">
                   Step #{selectedNode.id} of 7
                 </span>
                 <span className="text-xs text-[#D4AF37] font-bold">{selectedNode.phaseName}</span>
@@ -392,7 +392,7 @@ export const ForensicTimelineGraph: React.FC<ForensicTimelineGraphProps> = ({
 
           {/* Details Table */}
           <div className="overflow-x-auto">
-            <table className="w-full text-left text-xs font-mono border border-zinc-800">
+            <table className="w-full text-left text-xs font-mono border-zinc-800">
               <thead className="bg-[#0a0f1e] text-zinc-400 border-b border-zinc-800">
                 <tr>
                   <th className="p-2 border-r border-zinc-800 w-1/3">มิติการตรวจสอบ (Dimension)</th>
@@ -416,7 +416,7 @@ export const ForensicTimelineGraph: React.FC<ForensicTimelineGraphProps> = ({
                         </code>
                         <button
                           onClick={() => handleCopy(selectedNode.digestOrSignature!, `node_${selectedNode.id}`)}
-                          className="px-2 py-1 rounded bg-white/5 hover:bg-white/10 text-zinc-300 text-[10px] font-bold border border-white/10 cursor-pointer"
+                          className="px-2 py-1 rounded bg-white/5 hover:bg-white/10 text-zinc-300 text-[10px] font-bold border-white/10 cursor-pointer"
                         >
                           {copiedKey === `node_${selectedNode.id}` ? 'Copied' : 'Copy'}
                         </button>
@@ -430,7 +430,7 @@ export const ForensicTimelineGraph: React.FC<ForensicTimelineGraphProps> = ({
         </div>
 
         {/* 4. Official Punchline Block */}
-        <div className="p-4 rounded-xl bg-[#070a12] border border-[#D4AF37]/60 space-y-2">
+        <div className="p-4 rounded-xl bg-[#070a12] border-[#D4AF37]/60 space-y-2">
           <div className="flex items-center gap-2 text-[#D4AF37] font-bold text-xs">
             <span>🌌</span>
             <span>Forensic Timeline Punchline</span>

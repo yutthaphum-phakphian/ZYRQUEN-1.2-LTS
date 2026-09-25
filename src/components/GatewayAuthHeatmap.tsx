@@ -366,7 +366,7 @@ export const GatewayAuthHeatmap: React.FC = () => {
     if (!data) return null;
 
     return (
-      <div className="p-4 rounded-2xl bg-zinc-950/95 border border-red-500/40 backdrop-blur-xl shadow-[0_0_25px_rgba(239,68,68,0.3)] font-mono text-xs max-w-sm space-y-2.5 z-50 pointer-events-none">
+      <div className="p-4 rounded-2xl bg-zinc-950/95 border-red-500/40 backdrop-blur-xl shadow-[0_0_25px_rgba(239,68,68,0.3)] font-mono text-xs max-w-sm space-y-2.5 z-50 pointer-events-none">
         <div className="flex items-center justify-between gap-3 border-b border-white/10 pb-2">
           <div className="flex items-center gap-2">
             <span className="text-lg">{data.flag}</span>
@@ -433,28 +433,28 @@ export const GatewayAuthHeatmap: React.FC = () => {
   return (
     <div className="space-y-6 font-sans">
       {/* 1. Header Banner */}
-      <div className="p-6 sm:p-7 rounded-[28px] bg-gradient-to-br from-[#1b0a0a]/95 via-[#0f0b14]/90 to-[#07080F] border border-rose-500/30 backdrop-blur-2xl shadow-[0_0_50px_rgba(244,63,94,0.12)] relative overflow-hidden space-y-4">
+      <div className="p-6 sm:p-7 rounded-[28px] bg-gradient-to-br from-[#1b0a0a]/95 via-[#0f0b14]/90 to-[#07080F] border-rose-500/30 backdrop-blur-2xl shadow-[0_0_50px_rgba(244,63,94,0.12)] relative overflow-hidden space-y-4">
         {/* Subtle Background Circuit Texture */}
         <div className="absolute top-0 right-0 w-96 h-96 bg-rose-500/5 rounded-full blur-3xl pointer-events-none -mr-20 -mt-20" />
 
         <div className="flex flex-col lg:flex-row lg:items-center justify-between gap-5 relative z-10">
           <div>
             <div className="flex items-center gap-2 flex-wrap mb-2">
-              <span className="px-3 py-0.5 rounded-full bg-rose-500/15 text-rose-300 border border-rose-500/30 text-xs font-mono font-bold flex items-center gap-1.5">
+              <span className="px-3 py-0.5 rounded-full bg-rose-500/15 text-rose-300 border-rose-500/30 text-xs font-mono font-bold flex items-center gap-1.5">
                 <ShieldAlert className="w-3.5 h-3.5 text-rose-400" />
                 SOVEREIGN GATEWAY INGRESS DEFENSE
               </span>
-              <span className="px-3 py-0.5 rounded-full bg-amber-500/15 text-amber-200 border border-amber-500/30 text-xs font-mono font-bold">
+              <span className="px-3 py-0.5 rounded-full bg-amber-500/15 text-amber-200 border-amber-500/30 text-xs font-mono font-bold">
                 NIST FIPS 204 ML-DSA-87 ENFORCED
               </span>
-              <span className="px-3 py-0.5 rounded-full bg-emerald-500/15 text-emerald-300 border border-emerald-500/30 text-xs font-mono font-bold">
+              <span className="px-3 py-0.5 rounded-full bg-emerald-500/15 text-emerald-300 border-emerald-500/30 text-xs font-mono font-bold">
                 100% FAIL-CLOSED • 0 BREACHES
               </span>
             </div>
 
             <h2 className="text-xl sm:text-2xl font-bold font-mono text-white flex items-center gap-2.5">
               <span>Sovereign Gateway Auth Ingress Heatmap</span>
-              <span className="text-xs px-2.5 py-0.5 rounded-lg bg-white/10 text-zinc-300 border border-white/10 font-normal">
+              <span className="text-xs px-2.5 py-0.5 rounded-lg bg-white/10 text-zinc-300 border-white/10 font-normal">
                 Recharts Geo-Telemetry
               </span>
             </h2>
@@ -466,13 +466,13 @@ export const GatewayAuthHeatmap: React.FC = () => {
 
           {/* Quick Stats Grid in Banner */}
           <div className="grid grid-cols-2 sm:grid-cols-3 gap-3 font-mono shrink-0">
-            <div className="p-3 rounded-2xl bg-black/50 border border-white/10 space-y-0.5">
+            <div className="p-3 rounded-2xl bg-black/50 border-white/10 space-y-0.5">
               <span className="text-[11px] text-zinc-400 block">Total Interceptions</span>
               <span className="text-lg font-bold text-rose-400">{totalBlockedAttempts.toLocaleString()}</span>
               <span className="text-[10px] text-zinc-500 block">Fail-closed dropped</span>
             </div>
 
-            <div className="p-3 rounded-2xl bg-black/50 border border-white/10 space-y-0.5">
+            <div className="p-3 rounded-2xl bg-black/50 border-white/10 space-y-0.5">
               <span className="text-[11px] text-zinc-400 block">Top Threat Origin</span>
               <span className="text-sm font-bold text-amber-300 truncate block">
                 {topOriginRegion.region.flag} {topOriginRegion.region.code}
@@ -480,7 +480,7 @@ export const GatewayAuthHeatmap: React.FC = () => {
               <span className="text-[10px] text-zinc-500 block">{topOriginRegion.total.toLocaleString()} probes</span>
             </div>
 
-            <div className="p-3 rounded-2xl bg-black/50 border border-white/10 space-y-0.5 col-span-2 sm:col-span-1">
+            <div className="p-3 rounded-2xl bg-black/50 border-white/10 space-y-0.5 col-span-2 sm:col-span-1">
               <span className="text-[11px] text-zinc-400 block">Active CIDR Blocks</span>
               <span className="text-lg font-bold text-cyan-300">72 Subnets</span>
               <span className="text-[10px] text-emerald-400 block">Zero Pass-Through</span>
@@ -492,7 +492,7 @@ export const GatewayAuthHeatmap: React.FC = () => {
         <div className="flex flex-wrap items-center justify-between gap-3 pt-3 border-t border-white/10 font-mono text-xs relative z-10">
           <div className="flex items-center gap-2 flex-wrap">
             {/* Gateway Selector */}
-            <div className="flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-black/40 border border-white/10 text-zinc-300">
+            <div className="flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-black/40 border-white/10 text-zinc-300">
               <Lock className="w-3.5 h-3.5 text-rose-400" />
               <span className="text-zinc-500 text-[11px]">Gateway:</span>
               <select
@@ -513,7 +513,7 @@ export const GatewayAuthHeatmap: React.FC = () => {
             </div>
 
             {/* Time Window Buttons */}
-            <div className="flex items-center bg-black/40 border border-white/10 rounded-xl p-1">
+            <div className="flex items-center bg-black/40 border-white/10 rounded-xl p-1">
               {(['1h', '6h', '24h', '7d'] as const).map((w) => (
                 <button
                   key={w}
@@ -522,7 +522,7 @@ export const GatewayAuthHeatmap: React.FC = () => {
                     playTone(560, 0.03);
                   }}
                   className={`px-2.5 py-1 rounded-lg transition-all ${
-                    timeWindow === w ? 'bg-rose-500/20 text-rose-200 font-bold border border-rose-500/40' : 'text-zinc-400 hover:text-white'
+                    timeWindow === w ? 'bg-rose-500/20 text-rose-200 font-bold border-rose-500/40' : 'text-zinc-400 hover:text-white'
                   }`}
                 >
                   {w.toUpperCase()}
@@ -531,7 +531,7 @@ export const GatewayAuthHeatmap: React.FC = () => {
             </div>
 
             {/* View Tab Switcher */}
-            <div className="flex items-center bg-black/40 border border-white/10 rounded-xl p-1">
+            <div className="flex items-center bg-black/40 border-white/10 rounded-xl p-1">
               <button
                 onClick={() => {
                   setActiveTab('matrix');
@@ -591,7 +591,7 @@ export const GatewayAuthHeatmap: React.FC = () => {
 
             <button
               onClick={handleResetBaseline}
-              className="p-1.5 rounded-xl bg-white/5 hover:bg-white/10 border border-white/10 text-zinc-400 hover:text-white transition-all"
+              className="p-1.5 rounded-xl bg-white/5 hover:bg-white/10 border-white/10 text-zinc-400 hover:text-white transition-all"
               title="Reset heatmap data to baseline"
             >
               <RefreshCw className="w-3.5 h-3.5" />
@@ -599,7 +599,7 @@ export const GatewayAuthHeatmap: React.FC = () => {
 
             <button
               onClick={handleExportJson}
-              className="px-3 py-1.5 rounded-xl bg-white/5 hover:bg-white/10 border border-white/10 text-zinc-300 hover:text-white flex items-center gap-1.5 transition-all"
+              className="px-3 py-1.5 rounded-xl bg-white/5 hover:bg-white/10 border-white/10 text-zinc-300 hover:text-white flex items-center gap-1.5 transition-all"
               title="Download full failed authentication telemetry as JSON"
             >
               <Download className="w-3.5 h-3.5 text-zinc-400" />
@@ -611,7 +611,7 @@ export const GatewayAuthHeatmap: React.FC = () => {
 
       {/* Toast Notification */}
       {toastMessage && (
-        <div className="p-3.5 rounded-2xl bg-zinc-900/95 border border-rose-500/50 text-rose-200 font-mono text-xs flex items-center justify-between gap-3 shadow-2xl animate-in slide-in-from-top duration-300">
+        <div className="p-3.5 rounded-2xl bg-zinc-900/95 border-rose-500/50 text-rose-200 font-mono text-xs flex items-center justify-between gap-3 shadow-2xl animate-in slide-in-from-top duration-300">
           <div className="flex items-center gap-2">
             <ShieldAlert className="w-4 h-4 text-rose-400 shrink-0" />
             <span>{toastMessage}</span>
@@ -626,7 +626,7 @@ export const GatewayAuthHeatmap: React.FC = () => {
       )}
 
       {/* Filter and Search Sub-bar */}
-      <div className="flex flex-wrap items-center justify-between gap-3 p-3.5 rounded-2xl bg-zinc-950/80 border border-white/10 font-mono text-xs">
+      <div className="flex flex-wrap items-center justify-between gap-3 p-3.5 rounded-2xl bg-zinc-950/80 border-white/10 font-mono text-xs">
         <div className="flex items-center gap-2 flex-wrap">
           <div className="flex items-center gap-1 text-zinc-400">
             <Filter className="w-3.5 h-3.5 text-zinc-500" />
@@ -634,7 +634,7 @@ export const GatewayAuthHeatmap: React.FC = () => {
           </div>
 
           {/* Severity Filter */}
-          <div className="flex items-center bg-black/40 border border-white/10 rounded-xl p-1">
+          <div className="flex items-center bg-black/40 border-white/10 rounded-xl p-1">
             {(['ALL', 'CRITICAL', 'HIGH', 'MEDIUM'] as const).map((sev) => (
               <button
                 key={sev}
@@ -644,7 +644,7 @@ export const GatewayAuthHeatmap: React.FC = () => {
                 }}
                 className={`px-2.5 py-0.5 rounded-lg transition-all ${
                   selectedSeverity === sev
-                    ? 'bg-rose-500/20 text-rose-200 font-bold border border-rose-500/40'
+                    ? 'bg-rose-500/20 text-rose-200 font-bold border-rose-500/40'
                     : 'text-zinc-400 hover:text-zinc-200'
                 }`}
               >
@@ -660,7 +660,7 @@ export const GatewayAuthHeatmap: React.FC = () => {
               setSelectedVectorFilter(e.target.value);
               playTone(600, 0.02);
             }}
-            className="px-3 py-1 rounded-xl bg-black/40 border border-white/10 text-zinc-300 focus:outline-none cursor-pointer"
+            className="px-3 py-1 rounded-xl bg-black/40 border-white/10 text-zinc-300 focus:outline-none cursor-pointer"
           >
             <option value="ALL">All 6 Attack Vectors</option>
             {ATTACK_VECTORS.map((v) => (
@@ -679,14 +679,14 @@ export const GatewayAuthHeatmap: React.FC = () => {
             value={searchQuery}
             onChange={(e) => setSearchQuery(e.target.value)}
             placeholder="Search country, IP, ASN, vector..."
-            className="w-full pl-9 pr-3 py-1.5 rounded-xl bg-black/40 border border-white/10 text-white placeholder:text-zinc-600 focus:outline-none focus:border-rose-500/40 text-xs"
+            className="w-full pl-9 pr-3 py-1.5 rounded-xl bg-black/40 border-white/10 text-white placeholder:text-zinc-600 focus:outline-none focus:border-rose-500/40 text-xs"
           />
         </div>
       </div>
 
       {/* 2. Main Visualization: TAB 1 - Recharts Heat Matrix */}
       {activeTab === 'matrix' && (
-        <div className="p-6 rounded-[28px] bg-zinc-950/90 border border-white/10 backdrop-blur-xl space-y-6">
+        <div className="p-6 rounded-[28px] bg-zinc-950/90 border-white/10 backdrop-blur-xl space-y-6">
           <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
             <div>
               <div className="flex items-center gap-2">
@@ -727,7 +727,7 @@ export const GatewayAuthHeatmap: React.FC = () => {
           </div>
 
           {/* Recharts ScatterChart Heatmap */}
-          <div className="w-full h-[420px] bg-black/40 rounded-2xl border border-white/5 p-2 pt-6">
+          <div className="w-full h-[420px] bg-black/40 rounded-2xl border-white/5 p-2 pt-6">
             <ResponsiveContainer width="100%" height="100%">
               <ScatterChart margin={{ top: 20, right: 30, bottom: 40, left: 160 }}>
                 <CartesianGrid strokeDasharray="3 3" stroke="#27272a" />
@@ -790,7 +790,7 @@ export const GatewayAuthHeatmap: React.FC = () => {
 
           {/* Selected Cell Telemetry Inspector Drawer */}
           {selectedCell && (
-            <div className="p-4 rounded-2xl bg-gradient-to-r from-zinc-950 via-black to-zinc-950 border border-rose-500/40 space-y-3 font-mono text-xs animate-in fade-in duration-200">
+            <div className="p-4 rounded-2xl bg-gradient-to-r from-zinc-950 via-black to-zinc-950 border-rose-500/40 space-y-3 font-mono text-xs animate-in fade-in duration-200">
               <div className="flex items-center justify-between gap-3 border-b border-white/10 pb-2">
                 <div className="flex items-center gap-2">
                   <span className="text-xl">{selectedCell.flag}</span>
@@ -813,25 +813,25 @@ export const GatewayAuthHeatmap: React.FC = () => {
               </div>
 
               <div className="grid grid-cols-1 sm:grid-cols-4 gap-3">
-                <div className="p-3 rounded-xl bg-black/40 border border-white/5">
+                <div className="p-3 rounded-xl bg-black/40 border-white/5">
                   <span className="text-[10px] text-zinc-500 block">Attacking Ingress Vector</span>
                   <span className="text-amber-400 font-bold block truncate">{selectedCell.vectorName}</span>
                   <span className="text-[10px] text-cyan-400">Target Port {selectedCell.port}</span>
                 </div>
 
-                <div className="p-3 rounded-xl bg-black/40 border border-white/5">
+                <div className="p-3 rounded-xl bg-black/40 border-white/5">
                   <span className="text-[10px] text-zinc-500 block">Blocked Volume</span>
                   <span className="text-rose-400 font-bold text-base block">{selectedCell.count.toLocaleString()} attempts</span>
                   <span className="text-[10px] text-emerald-400">100% Intercepted</span>
                 </div>
 
-                <div className="p-3 rounded-xl bg-black/40 border border-white/5">
+                <div className="p-3 rounded-xl bg-black/40 border-white/5">
                   <span className="text-[10px] text-zinc-500 block">Primary Subnet & Hash</span>
                   <span className="text-zinc-200 font-mono block truncate">{selectedCell.primarySubnet}</span>
                   <span className="text-[10px] text-zinc-500 font-mono block truncate">{selectedCell.samplePacketHash}</span>
                 </div>
 
-                <div className="p-3 rounded-xl bg-black/40 border border-white/5">
+                <div className="p-3 rounded-xl bg-black/40 border-white/5">
                   <span className="text-[10px] text-zinc-500 block">Active Defense Enforcement</span>
                   <span className="text-emerald-300 font-bold block truncate">{selectedCell.defenseGate}</span>
                   <span className="text-[10px] text-rose-400">STATUS: FAIL_CLOSED_DROPPED</span>
@@ -842,7 +842,7 @@ export const GatewayAuthHeatmap: React.FC = () => {
 
           {/* Bottom Footnote Matrix Guide */}
           <div className="grid grid-cols-1 md:grid-cols-3 gap-3 font-mono text-xs">
-            <div className="p-3.5 rounded-2xl bg-black/40 border border-white/5 flex items-center gap-2.5">
+            <div className="p-3.5 rounded-2xl bg-black/40 border-white/5 flex items-center gap-2.5">
               <ShieldAlert className="w-4 h-4 text-rose-400 shrink-0" />
               <div>
                 <span className="text-white font-bold block">Fail-Closed Boundary</span>
@@ -852,7 +852,7 @@ export const GatewayAuthHeatmap: React.FC = () => {
               </div>
             </div>
 
-            <div className="p-3.5 rounded-2xl bg-black/40 border border-white/5 flex items-center gap-2.5">
+            <div className="p-3.5 rounded-2xl bg-black/40 border-white/5 flex items-center gap-2.5">
               <Globe className="w-4 h-4 text-cyan-400 shrink-0" />
               <div>
                 <span className="text-white font-bold block">12 Edge Ingress Points</span>
@@ -862,7 +862,7 @@ export const GatewayAuthHeatmap: React.FC = () => {
               </div>
             </div>
 
-            <div className="p-3.5 rounded-2xl bg-black/40 border border-white/5 flex items-center gap-2.5">
+            <div className="p-3.5 rounded-2xl bg-black/40 border-white/5 flex items-center gap-2.5">
               <Activity className="w-4 h-4 text-emerald-400 shrink-0" />
               <div>
                 <span className="text-white font-bold block">Continuous Nonce Verification</span>
@@ -877,7 +877,7 @@ export const GatewayAuthHeatmap: React.FC = () => {
 
       {/* 3. Visualization: TAB 2 - 24-Hour Temporal Trend (Recharts Area / Bar Chart) */}
       {activeTab === 'hourly' && (
-        <div className="p-6 rounded-[28px] bg-zinc-950/90 border border-white/10 backdrop-blur-xl space-y-6">
+        <div className="p-6 rounded-[28px] bg-zinc-950/90 border-white/10 backdrop-blur-xl space-y-6">
           <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
             <div>
               <div className="flex items-center gap-2">
@@ -891,12 +891,12 @@ export const GatewayAuthHeatmap: React.FC = () => {
               </p>
             </div>
 
-            <span className="text-xs font-mono text-cyan-400 px-3 py-1 rounded-xl bg-cyan-500/10 border border-cyan-500/20">
+            <span className="text-xs font-mono text-cyan-400 px-3 py-1 rounded-xl bg-cyan-500/10 border-cyan-500/20">
               Peak: 20:00 UTC (882 Blocked/hr)
             </span>
           </div>
 
-          <div className="w-full h-[360px] bg-black/40 rounded-2xl border border-white/5 p-3 pt-6">
+          <div className="w-full h-[360px] bg-black/40 rounded-2xl border-white/5 p-3 pt-6">
             <ResponsiveContainer width="100%" height="100%">
               <AreaChart data={hourlyTrend} margin={{ top: 10, right: 30, left: 10, bottom: 20 }}>
                 <defs>
@@ -936,7 +936,7 @@ export const GatewayAuthHeatmap: React.FC = () => {
 
       {/* 4. Visualization: TAB 3 - Region Registry Table */}
       {activeTab === 'regions' && (
-        <div className="p-6 rounded-[28px] bg-zinc-950/90 border border-white/10 backdrop-blur-xl space-y-4">
+        <div className="p-6 rounded-[28px] bg-zinc-950/90 border-white/10 backdrop-blur-xl space-y-4">
           <div className="flex items-center justify-between gap-3">
             <div>
               <h3 className="text-sm font-mono font-bold text-white uppercase tracking-wider flex items-center gap-2">
@@ -984,7 +984,7 @@ export const GatewayAuthHeatmap: React.FC = () => {
                         {regAttempts.toLocaleString()}
                       </td>
                       <td className="py-3 px-3 text-right">
-                        <span className="px-2.5 py-0.5 rounded-full bg-emerald-500/15 text-emerald-300 border border-emerald-500/30 text-[10px] font-bold">
+                        <span className="px-2.5 py-0.5 rounded-full bg-emerald-500/15 text-emerald-300 border-emerald-500/30 text-[10px] font-bold">
                           BLOCKED
                         </span>
                       </td>

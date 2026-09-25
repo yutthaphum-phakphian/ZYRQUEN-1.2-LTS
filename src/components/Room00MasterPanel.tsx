@@ -690,20 +690,20 @@ export const Room00MasterPanel: React.FC<Room00Props> = ({
   return (
     <div className="space-y-6 animate-in fade-in duration-300 font-mono">
       {/* ROOM 00 TOP GOLD SEAL HEADER BANNER */}
-      <div className="p-6 sm:p-8 rounded-[28px] bg-gradient-to-br from-[#121008] via-[#0e0c06] to-[#07080F] border border-amber-500/30 backdrop-blur-xl relative overflow-hidden shadow-[0_0_50px_-15px_rgba(245,158,11,0.2)]">
+      <div className="p-6 sm:p-8 rounded-[28px] bg-gradient-to-br from-[#121008] via-[#0e0c06] to-[#07080F] border-amber-500/30 backdrop-blur-xl relative overflow-hidden shadow-[0_0_50px_-15px_rgba(245,158,11,0.2)]">
         <div className="absolute top-0 right-0 w-96 h-96 bg-gradient-to-bl from-amber-500/10 via-yellow-500/5 to-transparent rounded-full blur-3xl pointer-events-none" />
 
         <div className="relative z-10 flex flex-col lg:flex-row lg:items-center justify-between gap-6">
           <div className="space-y-2">
             <div className="flex flex-wrap items-center gap-2">
-              <span className="px-3 py-1 rounded-full bg-amber-500/15 text-amber-300 border border-amber-500/30 text-xs font-bold flex items-center gap-1.5 shadow-[0_0_12px_rgba(245,158,11,0.25)]">
+              <span className="px-3 py-1 rounded-full bg-amber-500/15 text-amber-300 border-amber-500/30 text-xs font-bold flex items-center gap-1.5 shadow-[0_0_12px_rgba(245,158,11,0.25)]">
                 <Award className="w-4 h-4 text-amber-400" />
                 ROOM 00: GOLD MASTER SSoT AUTO-COLLECTOR &amp; ROOT
               </span>
-              <span className="px-2.5 py-1 rounded-full bg-emerald-500/10 text-emerald-300 border border-emerald-500/20 text-xs font-mono">
+              <span className="px-2.5 py-1 rounded-full bg-emerald-500/10 text-emerald-300 border-emerald-500/20 text-xs font-mono">
                 CANONICAL CHECKPOINT: 14,902 SEALS (FROZEN)
               </span>
-              <span className="px-2.5 py-1 rounded-full bg-cyan-500/10 text-cyan-300 border border-cyan-500/20 text-xs font-mono">
+              <span className="px-2.5 py-1 rounded-full bg-cyan-500/10 text-cyan-300 border-cyan-500/20 text-xs font-mono">
                 BLOCK #{CANONICAL_BLOCK}
               </span>
             </div>
@@ -722,7 +722,7 @@ export const Room00MasterPanel: React.FC<Room00Props> = ({
             {/* Download Root Evidence File */}
             <button
               onClick={handleDownloadRoom00File}
-              className="px-3.5 py-2.5 rounded-2xl bg-emerald-500/20 hover:bg-emerald-500/30 border border-emerald-500/40 text-emerald-300 text-xs font-bold flex items-center gap-2 transition-all shadow-[0_0_15px_rgba(16,185,129,0.15)] cursor-pointer"
+              className="px-3.5 py-2.5 rounded-2xl bg-emerald-500/20 hover:bg-emerald-500/30 border-emerald-500/40 text-emerald-300 text-xs font-bold flex items-center gap-2 transition-all shadow-[0_0_15px_rgba(16,185,129,0.15)] cursor-pointer"
               title="ดาวน์โหลดไฟล์ประจักษ์พยานดิจิทัล Room 00 (Download Chamber 00 Genesis Telemetry Evidence JSON)"
             >
               <Download className="w-4 h-4 text-emerald-400" />
@@ -735,7 +735,7 @@ export const Room00MasterPanel: React.FC<Room00Props> = ({
                 playTone(740, 0.04);
                 setShowFileModal(true);
               }}
-              className="px-3.5 py-2.5 rounded-2xl bg-cyan-500/20 hover:bg-cyan-500/30 border border-cyan-500/40 text-cyan-300 text-xs font-bold flex items-center gap-2 transition-all shadow-[0_0_15px_rgba(6,182,212,0.15)] cursor-pointer"
+              className="px-3.5 py-2.5 rounded-2xl bg-cyan-500/20 hover:bg-cyan-500/30 border-cyan-500/40 text-cyan-300 text-xs font-bold flex items-center gap-2 transition-all shadow-[0_0_15px_rgba(6,182,212,0.15)] cursor-pointer"
               title="เปิดระบบตรวจสอบและวิเคราะห์โครงสร้างไฟล์ดิจิทัล (SSoT File Inspector)"
             >
               <FileCheck className="w-4 h-4 text-cyan-400" />
@@ -748,14 +748,14 @@ export const Room00MasterPanel: React.FC<Room00Props> = ({
                   playTone(680, 0.05);
                   onOpenCertificate();
                 }}
-                className="px-4 py-2.5 rounded-2xl bg-gradient-to-r from-amber-500/20 via-yellow-500/20 to-amber-600/20 hover:from-amber-500/30 hover:to-yellow-500/30 border border-amber-500/40 text-amber-300 text-xs font-bold flex items-center gap-2 transition-all shadow-[0_0_20px_rgba(245,158,11,0.15)] cursor-pointer"
+                className="px-4 py-2.5 rounded-2xl bg-gradient-to-r from-amber-500/20 via-yellow-500/20 to-amber-600/20 hover:from-amber-500/30 hover:to-yellow-500/30 border-amber-500/40 text-amber-300 text-xs font-bold flex items-center gap-2 transition-all shadow-[0_0_20px_rgba(245,158,11,0.15)] cursor-pointer"
               >
                 <Award className="w-4 h-4 text-amber-400" />
                 <span>Certificate</span>
               </button>
             )}
 
-            <div className="px-3.5 py-2 rounded-2xl bg-white/5 border border-white/10 text-zinc-300 text-xs flex items-center gap-2">
+            <div className="px-3.5 py-2 rounded-2xl bg-white/5 border-white/10 text-zinc-300 text-xs flex items-center gap-2">
               <span className="w-2 h-2 rounded-full bg-emerald-400 animate-pulse" />
               <span>{persistenceStatus.label}</span>
             </div>
@@ -764,7 +764,7 @@ export const Room00MasterPanel: React.FC<Room00Props> = ({
 
         {/* Canonical Fingerprint Bar */}
         <div className="mt-6 pt-4 border-t border-amber-500/20 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 text-xs">
-          <div className="p-3 rounded-xl bg-black/40 border border-amber-500/20">
+          <div className="p-3 rounded-xl bg-black/40 border-amber-500/20">
             <span className="text-[10px] text-amber-400/80 block uppercase tracking-wider font-semibold">Genesis Merkle Root</span>
             <div className="text-zinc-200 text-xs font-mono truncate mt-1 flex items-center justify-between">
               <span>{CANONICAL_MERKLE_ROOT.substring(0, 18)}...{CANONICAL_MERKLE_ROOT.substring(CANONICAL_MERKLE_ROOT.length - 8)}</span>
@@ -777,7 +777,7 @@ export const Room00MasterPanel: React.FC<Room00Props> = ({
             </div>
           </div>
 
-          <div className="p-3 rounded-xl bg-black/40 border border-amber-500/20">
+          <div className="p-3 rounded-xl bg-black/40 border-amber-500/20">
             <span className="text-[10px] text-amber-400/80 block uppercase tracking-wider font-semibold">Certificate ID</span>
             <div className="text-zinc-200 text-xs font-mono truncate mt-1 flex items-center justify-between">
               <span>{CANONICAL_CERT}</span>
@@ -790,14 +790,14 @@ export const Room00MasterPanel: React.FC<Room00Props> = ({
             </div>
           </div>
 
-          <div className="p-3 rounded-xl bg-black/40 border border-amber-500/20">
+          <div className="p-3 rounded-xl bg-black/40 border-amber-500/20">
             <span className="text-[10px] text-emerald-400/80 block uppercase tracking-wider font-semibold">Canonical SSoT Status</span>
             <div className="text-emerald-300 text-xs font-mono font-bold mt-1">
               FROZEN v1.2 LTS (14,902 SEALS)
             </div>
           </div>
 
-          <div className="p-3 rounded-xl bg-black/40 border border-amber-500/20">
+          <div className="p-3 rounded-xl bg-black/40 border-amber-500/20">
             <span className="text-[10px] text-cyan-400/80 block uppercase tracking-wider font-semibold">Post-Quantum Cryptography</span>
             <div className="text-cyan-300 text-xs font-mono mt-1 truncate">
               NIST FIPS 204 (ML-DSA-87)
@@ -807,10 +807,10 @@ export const Room00MasterPanel: React.FC<Room00Props> = ({
       </div>
 
       {/* 2. WARP PATH NETWORK VISUALIZATION */}
-      <div className="p-6 rounded-[28px] bg-[#0b0e1a]/80 border border-cyan-500/20 backdrop-blur-xl space-y-4">
+      <div className="p-6 rounded-[28px] bg-[#0b0e1a]/80 border-cyan-500/20 backdrop-blur-xl space-y-4">
         <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
           <div className="flex items-center gap-2.5">
-            <div className="w-8 h-8 rounded-xl bg-cyan-500/10 border border-cyan-500/30 flex items-center justify-center text-cyan-400">
+            <div className="w-8 h-8 rounded-xl bg-cyan-500/10 border-cyan-500/30 flex items-center justify-center text-cyan-400">
               <Layers className="w-4 h-4" />
             </div>
             <div>
@@ -824,10 +824,10 @@ export const Room00MasterPanel: React.FC<Room00Props> = ({
           </div>
 
           <div className="flex items-center gap-2">
-            <span className="px-2.5 py-1 rounded-full bg-cyan-500/10 text-cyan-300 text-[10px] border border-cyan-500/30">
+            <span className="px-2.5 py-1 rounded-full bg-cyan-500/10 text-cyan-300 text-[10px] border-cyan-500/30">
               GRAPH_OWNER = ROOM_00
             </span>
-            <span className="px-2.5 py-1 rounded-full bg-emerald-500/10 text-emerald-300 text-[10px] border border-emerald-500/30">
+            <span className="px-2.5 py-1 rounded-full bg-emerald-500/10 text-emerald-300 text-[10px] border-emerald-500/30">
               GATE 100% PASS ONLY
             </span>
           </div>
@@ -862,7 +862,7 @@ export const Room00MasterPanel: React.FC<Room00Props> = ({
       </div>
 
       {/* 3. AUDIT LOG VISUALIZER v4.16 — ROOM 00 (CANVAS & REAL ACCUMULATION GRAPH) */}
-      <section id="audit-visualizer" className="p-6 rounded-[28px] bg-[#0a0a0f] border border-cyan-500/20 backdrop-blur-xl space-y-6">
+      <section id="audit-visualizer" className="p-6 rounded-[28px] bg-[#0a0a0f] border-cyan-500/20 backdrop-blur-xl space-y-6">
         <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 pb-3 border-b border-white/8">
           <div>
             <h3 className="text-lg sm:text-xl font-bold text-cyan-400 tracking-tight flex items-center gap-2">
@@ -880,7 +880,7 @@ export const Room00MasterPanel: React.FC<Room00Props> = ({
             <button
               onClick={handleDownloadAutoCollectorEvidence}
               disabled={isExportingAutoCollector}
-              className="px-3.5 py-1.5 rounded-xl bg-emerald-500/20 hover:bg-emerald-500/30 border border-emerald-500/40 text-emerald-300 text-xs font-bold flex items-center gap-1.5 transition shadow-[0_0_15px_rgba(16,185,129,0.2)] cursor-pointer"
+              className="px-3.5 py-1.5 rounded-xl bg-emerald-500/20 hover:bg-emerald-500/30 border-emerald-500/40 text-emerald-300 text-xs font-bold flex items-center gap-1.5 transition shadow-[0_0_15px_rgba(16,185,129,0.2)] cursor-pointer"
               title="ดาวน์โหลดไฟล์ประจักษ์พยานดิจิทัล Auto-Collector (JSON Manifest & Canonical Seal Index)"
             >
               <Download className={`w-3.5 h-3.5 text-emerald-400 ${isExportingAutoCollector ? 'animate-bounce' : ''}`} />
@@ -904,21 +904,21 @@ export const Room00MasterPanel: React.FC<Room00Props> = ({
 
             <button
               onClick={handleManualSealTick}
-              className="px-3 py-1.5 rounded-xl bg-cyan-500/15 hover:bg-cyan-500/25 border border-cyan-500/35 text-cyan-300 text-xs font-bold flex items-center gap-1.5 transition cursor-pointer"
+              className="px-3 py-1.5 rounded-xl bg-cyan-500/15 hover:bg-cyan-500/25 border-cyan-500/35 text-cyan-300 text-xs font-bold flex items-center gap-1.5 transition cursor-pointer"
               title="Manually verify evidence and append real seal"
             >
               <RotateCw className="w-3.5 h-3.5" />
               <span>Verify &amp; Append Seal</span>
             </button>
 
-            <div className="flex items-center rounded-xl bg-black/40 border border-white/10 p-0.5 text-xs">
+            <div className="flex items-center rounded-xl bg-black/40 border-white/10 p-0.5 text-xs">
               <button
                 onClick={() => {
                   setGraphMode('CANVAS');
                   playTone(600, 0.03);
                 }}
                 className={`px-2.5 py-1 rounded-lg text-[10px] font-bold transition cursor-pointer ${
-                  graphMode === 'CANVAS' ? 'bg-cyan-500/20 text-cyan-300 border border-cyan-500/40' : 'text-zinc-400'
+                  graphMode === 'CANVAS' ? 'bg-cyan-500/20 text-cyan-300 border-cyan-500/40' : 'text-zinc-400'
                 }`}
               >
                 Canvas Graph
@@ -929,7 +929,7 @@ export const Room00MasterPanel: React.FC<Room00Props> = ({
                   playTone(600, 0.03);
                 }}
                 className={`px-2.5 py-1 rounded-lg text-[10px] font-bold transition cursor-pointer ${
-                  graphMode === 'CHART' ? 'bg-cyan-500/20 text-cyan-300 border border-cyan-500/40' : 'text-zinc-400'
+                  graphMode === 'CHART' ? 'bg-cyan-500/20 text-cyan-300 border-cyan-500/40' : 'text-zinc-400'
                 }`}
               >
                 Area Chart
@@ -939,13 +939,13 @@ export const Room00MasterPanel: React.FC<Room00Props> = ({
         </div>
 
         {/* Seal Accumulation Graph Container */}
-        <div id="seal-graph-container" className="text-center space-y-3 bg-[#111116] p-4 sm:p-5 rounded-2xl border border-white/8">
+        <div id="seal-graph-container" className="text-center space-y-3 bg-[#111116] p-4 sm:p-5 rounded-2xl border-white/8">
           <div className="flex items-center justify-between text-xs px-1">
             <span className="text-cyan-400 font-bold uppercase tracking-wider flex items-center gap-1.5">
               <Activity className="w-4 h-4" />
               Seal Accumulation Graph (Live Stream)
             </span>
-            <span id="sealCounter" className="px-2.5 py-0.5 rounded-full bg-emerald-500/15 text-emerald-300 border border-emerald-500/30 text-[11px] font-bold">
+            <span id="sealCounter" className="px-2.5 py-0.5 rounded-full bg-emerald-500/15 text-emerald-300 border-emerald-500/30 text-[11px] font-bold">
               Seals: {liveAutoSeals.toLocaleString()} (PASS / VERIFIED)
             </span>
           </div>
@@ -955,11 +955,11 @@ export const Room00MasterPanel: React.FC<Room00Props> = ({
               <canvas
                 id="sealGraph"
                 ref={canvasRef}
-                className="w-full max-w-4xl h-[220px] rounded-xl border border-white/10 bg-[#0a0a0f] shadow-inner"
+                className="w-full max-w-4xl h-[220px] rounded-xl border-white/10 bg-[#0a0a0f] shadow-inner"
               />
             </div>
           ) : (
-            <div className="h-64 w-full bg-[#070914] rounded-2xl border border-white/5 p-3">
+            <div className="h-64 w-full bg-[#070914] rounded-2xl border-white/5 p-3">
               <ResponsiveContainer width="100%" height="100%">
                 <AreaChart data={accumulationPoints} margin={{ top: 10, right: 20, left: 0, bottom: 0 }}>
                   <defs>
@@ -986,7 +986,7 @@ export const Room00MasterPanel: React.FC<Room00Props> = ({
                       if (active && payload && payload.length) {
                         const data = payload[0].payload as RealSealAccumulationPoint;
                         return (
-                          <div className="p-3 rounded-xl bg-[#0e1224] border border-cyan-500/30 text-xs font-mono space-y-1 shadow-xl">
+                          <div className="p-3 rounded-xl bg-[#0e1224] border-cyan-500/30 text-xs font-mono space-y-1 shadow-xl">
                             <div className="text-cyan-400 font-bold">{data.sealId}</div>
                             <div className="text-zinc-200">Total Seals: <span className="font-bold text-white">{data.sealCount.toLocaleString()}</span></div>
                             <div className="text-zinc-400 text-[10px]">Source: {data.source}</div>
@@ -1028,7 +1028,7 @@ export const Room00MasterPanel: React.FC<Room00Props> = ({
             </span>
           </div>
 
-          <div className="overflow-x-auto rounded-2xl border border-white/10 bg-[#111116]">
+          <div className="overflow-x-auto rounded-2xl border-white/10 bg-[#111116]">
             <table id="logstream-table" className="w-full text-left border-collapse font-mono text-xs">
               <thead>
                 <tr className="bg-[#1a1f33] text-cyan-300 border-b border-white/10">
@@ -1052,7 +1052,7 @@ export const Room00MasterPanel: React.FC<Room00Props> = ({
                     <td className="p-3 text-zinc-200 border-r border-white/5 font-semibold whitespace-nowrap">{ev.source}</td>
                     <td className="p-3 text-white border-r border-white/5 font-medium">{ev.event}</td>
                     <td className="p-3 border-r border-white/5 whitespace-nowrap">
-                      <span className="px-2 py-0.5 rounded-full text-[10px] font-bold bg-emerald-500/15 text-emerald-300 border border-emerald-500/30">
+                      <span className="px-2 py-0.5 rounded-full text-[10px] font-bold bg-emerald-500/15 text-emerald-300 border-emerald-500/30">
                         {ev.status}
                       </span>
                     </td>
@@ -1067,10 +1067,10 @@ export const Room00MasterPanel: React.FC<Room00Props> = ({
       </section>
 
       {/* 4. LEGAL HUB — ROOM 00 (ETDA / RATCHAKITCHA / NIST / NCSA / PDPC) */}
-      <div className="p-6 rounded-[28px] bg-gradient-to-br from-[#0c1220]/90 to-[#070914]/90 border border-blue-500/30 backdrop-blur-xl space-y-4 shadow-[0_0_40px_-15px_rgba(59,130,246,0.15)]">
+      <div className="p-6 rounded-[28px] bg-gradient-to-br from-[#0c1220]/90 to-[#070914]/90 border-blue-500/30 backdrop-blur-xl space-y-4 shadow-[0_0_40px_-15px_rgba(59,130,246,0.15)]">
         <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
           <div className="flex items-center gap-2.5">
-            <div className="w-8 h-8 rounded-xl bg-blue-500/10 border border-blue-500/30 flex items-center justify-center text-blue-400">
+            <div className="w-8 h-8 rounded-xl bg-blue-500/10 border-blue-500/30 flex items-center justify-center text-blue-400">
               <Scale className="w-4 h-4" />
             </div>
             <div>
@@ -1083,7 +1083,7 @@ export const Room00MasterPanel: React.FC<Room00Props> = ({
             </div>
           </div>
 
-          <span className="px-3 py-1 rounded-full bg-blue-500/10 text-blue-300 text-xs border border-blue-500/30 font-bold self-start sm:self-auto">
+          <span className="px-3 py-1 rounded-full bg-blue-500/10 text-blue-300 text-xs border-blue-500/30 font-bold self-start sm:self-auto">
             100% STATUTORY COMPLIANT
           </span>
         </div>
@@ -1093,18 +1093,18 @@ export const Room00MasterPanel: React.FC<Room00Props> = ({
           {LEGAL_REGULATORY_RECORDS.map((item) => (
             <div
               key={item.id}
-              className="p-4 rounded-2xl bg-black/40 border border-white/8 hover:border-blue-500/40 transition-all space-y-3 flex flex-col justify-between"
+              className="p-4 rounded-2xl bg-black/40 border-white/8 hover:border-blue-500/40 transition-all space-y-3 flex flex-col justify-between"
             >
               <div className="space-y-1.5">
                 <div className="flex items-center justify-between">
-                  <span className="px-2 py-0.5 rounded bg-blue-500/10 text-blue-300 text-[10px] font-bold border border-blue-500/20">
+                  <span className="px-2 py-0.5 rounded bg-blue-500/10 text-blue-300 text-[10px] font-bold border-blue-500/20">
                     {item.badge}
                   </span>
                   <span className="text-[9px] text-zinc-400">{item.status}</span>
                 </div>
                 <h4 className="text-xs font-bold text-zinc-100">{item.nameTh}</h4>
                 <div className="text-[10px] text-zinc-400 line-clamp-1">{item.nameEn}</div>
-                <div className="text-[10px] text-zinc-300 bg-white/[0.02] p-2 rounded-xl border border-white/5 mt-1">
+                <div className="text-[10px] text-zinc-300 bg-white/[0.02] p-2 rounded-xl border-white/5 mt-1">
                   {item.statute}
                 </div>
               </div>
@@ -1116,7 +1116,7 @@ export const Room00MasterPanel: React.FC<Room00Props> = ({
                   target="_blank"
                   rel="noopener noreferrer"
                   onClick={() => playTone(720, 0.03)}
-                  className="px-2.5 py-1 rounded-lg bg-blue-500/20 hover:bg-blue-500/30 text-blue-300 text-[10px] font-bold flex items-center gap-1 border border-blue-500/40 transition cursor-pointer shrink-0"
+                  className="px-2.5 py-1 rounded-lg bg-blue-500/20 hover:bg-blue-500/30 text-blue-300 text-[10px] font-bold flex items-center gap-1 border-blue-500/40 transition cursor-pointer shrink-0"
                 >
                   <span>OPEN OFFICIAL SOURCE</span>
                   <ExternalLink className="w-3 h-3" />
@@ -1130,16 +1130,16 @@ export const Room00MasterPanel: React.FC<Room00Props> = ({
       {/* 4. ROOM 00 FILE INSPECTION & VERIFICATION MODAL */}
       {showFileModal && (
         <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/85 backdrop-blur-md">
-          <div className="bg-zinc-950 border border-amber-500/40 rounded-3xl max-w-2xl w-full p-6 space-y-5 shadow-[0_0_50px_rgba(245,158,11,0.2)] relative">
+          <div className="bg-zinc-950 border-amber-500/40 rounded-3xl max-w-2xl w-full p-6 space-y-5 shadow-[0_0_50px_rgba(245,158,11,0.2)] relative">
             <div className="flex items-center justify-between border-b border-zinc-800 pb-4">
               <div className="flex items-center gap-2.5">
-                <div className="w-10 h-10 rounded-2xl bg-amber-500/10 border border-amber-500/30 flex items-center justify-center text-amber-400 shadow-[0_0_15px_rgba(245,158,11,0.2)]">
+                <div className="w-10 h-10 rounded-2xl bg-amber-500/10 border-amber-500/30 flex items-center justify-center text-amber-400 shadow-[0_0_15px_rgba(245,158,11,0.2)]">
                   <FileCheck className="w-5 h-5" />
                 </div>
                 <div>
                   <h3 className="text-base font-bold text-zinc-100 font-mono flex items-center gap-2">
                     <span>ROOM 00: GENESIS ROOT PROOF INSPECTOR</span>
-                    <span className="text-[10px] px-2 py-0.5 rounded bg-amber-500/20 text-amber-300 border border-amber-500/30">
+                    <span className="text-[10px] px-2 py-0.5 rounded bg-amber-500/20 text-amber-300 border-amber-500/30">
                       BLOCK #{CANONICAL_BLOCK}
                     </span>
                   </h3>
@@ -1150,7 +1150,7 @@ export const Room00MasterPanel: React.FC<Room00Props> = ({
               </div>
               <button
                 onClick={() => setShowFileModal(false)}
-                className="w-8 h-8 rounded-full bg-zinc-900 border border-zinc-800 text-zinc-400 hover:text-white flex items-center justify-center transition cursor-pointer"
+                className="w-8 h-8 rounded-full bg-zinc-900 border-zinc-800 text-zinc-400 hover:text-white flex items-center justify-center transition cursor-pointer"
               >
                 <X className="w-4 h-4" />
               </button>
@@ -1158,7 +1158,7 @@ export const Room00MasterPanel: React.FC<Room00Props> = ({
 
             <div className="space-y-4">
               {/* File Upload / Source Selection Bar */}
-              <div className="p-3.5 bg-zinc-900/60 rounded-2xl border border-zinc-800 flex flex-col sm:flex-row items-stretch sm:items-center justify-between gap-3">
+              <div className="p-3.5 bg-zinc-900/60 rounded-2xl border-zinc-800 flex flex-col sm:flex-row items-stretch sm:items-center justify-between gap-3">
                 <div className="space-y-0.5">
                   <div className="text-xs font-mono text-zinc-200 font-bold flex items-center gap-2">
                     <HardDrive className="w-3.5 h-3.5 text-cyan-400" />
@@ -1179,14 +1179,14 @@ export const Room00MasterPanel: React.FC<Room00Props> = ({
                   />
                   <button
                     onClick={() => fileInputRef.current?.click()}
-                    className="px-3 py-1.5 rounded-xl bg-purple-500/20 hover:bg-purple-500/30 border border-purple-500/40 text-purple-300 text-xs font-mono font-bold flex items-center gap-1.5 transition cursor-pointer"
+                    className="px-3 py-1.5 rounded-xl bg-purple-500/20 hover:bg-purple-500/30 border-purple-500/40 text-purple-300 text-xs font-mono font-bold flex items-center gap-1.5 transition cursor-pointer"
                   >
                     <Upload className="w-3.5 h-3.5" />
                     <span>อัปโหลดไฟล์</span>
                   </button>
                   <button
                     onClick={handleDownloadRoom00File}
-                    className="px-3 py-1.5 rounded-xl bg-emerald-500/20 hover:bg-emerald-500/30 border border-emerald-500/40 text-emerald-300 text-xs font-mono font-bold flex items-center gap-1.5 transition cursor-pointer"
+                    className="px-3 py-1.5 rounded-xl bg-emerald-500/20 hover:bg-emerald-500/30 border-emerald-500/40 text-emerald-300 text-xs font-mono font-bold flex items-center gap-1.5 transition cursor-pointer"
                   >
                     <Download className="w-3.5 h-3.5" />
                     <span>โหลดไฟล์แม่บท</span>
@@ -1195,7 +1195,7 @@ export const Room00MasterPanel: React.FC<Room00Props> = ({
               </div>
 
               {/* Cryptographic Baseline Details */}
-              <div className="p-3.5 bg-black/40 rounded-xl border border-zinc-800 space-y-2 text-xs font-mono">
+              <div className="p-3.5 bg-black/40 rounded-xl border-zinc-800 space-y-2 text-xs font-mono">
                 <div className="flex items-center justify-between">
                   <span className="text-zinc-400">Genesis Merkle Root:</span>
                   <span className="text-amber-400 font-mono">{CANONICAL_MERKLE_ROOT.substring(0, 24)}...{CANONICAL_MERKLE_ROOT.substring(CANONICAL_MERKLE_ROOT.length - 8)}</span>
@@ -1215,7 +1215,7 @@ export const Room00MasterPanel: React.FC<Room00Props> = ({
               </div>
 
               {/* Verification Gate Action */}
-              <div className="p-4 rounded-2xl bg-zinc-900/90 border border-zinc-800 flex items-center justify-between gap-3">
+              <div className="p-4 rounded-2xl bg-zinc-900/90 border-zinc-800 flex items-center justify-between gap-3">
                 <div className="flex items-center gap-3">
                   <div className={`w-3.5 h-3.5 rounded-full ${verifyStatus === 'PASS' ? 'bg-emerald-400 animate-pulse' : 'bg-amber-400'}`} />
                   <div>
@@ -1231,7 +1231,7 @@ export const Room00MasterPanel: React.FC<Room00Props> = ({
                 <button
                   onClick={handleRunVerifyFile}
                   disabled={isVerifyingFile}
-                  className="px-4 py-2 rounded-xl bg-cyan-500/20 hover:bg-cyan-500/30 border border-cyan-500/40 text-cyan-300 text-xs font-mono font-bold flex items-center gap-1.5 transition cursor-pointer"
+                  className="px-4 py-2 rounded-xl bg-cyan-500/20 hover:bg-cyan-500/30 border-cyan-500/40 text-cyan-300 text-xs font-mono font-bold flex items-center gap-1.5 transition cursor-pointer"
                 >
                   <RefreshCw className={`w-3.5 h-3.5 ${isVerifyingFile ? 'animate-spin' : ''}`} />
                   <span>{isVerifyingFile ? 'กำลังตรวจสอบ...' : 'รันตรวจสอบ'}</span>
@@ -1256,7 +1256,7 @@ export const Room00MasterPanel: React.FC<Room00Props> = ({
                     <span>{copiedJson ? 'คัดลอกแล้ว' : 'คัดลอก JSON'}</span>
                   </button>
                 </div>
-                <pre className="p-3 bg-black/70 rounded-xl border border-zinc-800 text-[11px] font-mono text-zinc-300 overflow-x-auto max-h-48 leading-relaxed">
+                <pre className="p-3 bg-black/70 rounded-xl border-zinc-800 text-[11px] font-mono text-zinc-300 overflow-x-auto max-h-48 leading-relaxed">
                   {loadedFileContent || JSON.stringify(generateRoom00Dossier(), null, 2)}
                 </pre>
               </div>
@@ -1269,14 +1269,14 @@ export const Room00MasterPanel: React.FC<Room00Props> = ({
               <div className="flex items-center gap-2">
                 <button
                   onClick={handleDownloadRoom00File}
-                  className="px-4 py-2 rounded-xl bg-emerald-500/20 hover:bg-emerald-500/30 border border-emerald-500/40 text-emerald-300 text-xs font-mono font-bold flex items-center gap-1.5 transition cursor-pointer"
+                  className="px-4 py-2 rounded-xl bg-emerald-500/20 hover:bg-emerald-500/30 border-emerald-500/40 text-emerald-300 text-xs font-mono font-bold flex items-center gap-1.5 transition cursor-pointer"
                 >
                   <Download className="w-3.5 h-3.5" />
                   <span>ดาวน์โหลดไฟล์</span>
                 </button>
                 <button
                   onClick={() => setShowFileModal(false)}
-                  className="px-4 py-2 rounded-xl bg-zinc-900 border border-zinc-700 text-zinc-300 hover:text-white text-xs font-mono font-bold transition cursor-pointer"
+                  className="px-4 py-2 rounded-xl bg-zinc-900 border-zinc-700 text-zinc-300 hover:text-white text-xs font-mono font-bold transition cursor-pointer"
                 >
                   ปิดหน้าต่าง
                 </button>

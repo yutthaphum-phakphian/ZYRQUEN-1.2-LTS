@@ -84,7 +84,7 @@ export const SovereignTerminal: React.FC = () => {
   };
 
   return (
-    <section id="sovereign-terminal-section" className="bg-[#0a0f1e] border border-[#17233f] p-4 mb-8">
+    <section id="sovereign-terminal-section" className="bg-[#0a0f1e] border-[#17233f] p-4 mb-8">
       <div className="flex items-center justify-between border-b border-[#17233f] pb-3 mb-4">
         <div>
           <h2 className="text-sm font-bold text-[#D4AF37] flex items-center gap-2">
@@ -101,11 +101,11 @@ export const SovereignTerminal: React.FC = () => {
               playSovereignTone('chime');
               executeCommand('sonic ping');
             }}
-            className="px-2 py-1 bg-[#070a12] border border-[#06B6D4] text-[#06B6D4] hover:bg-[#17233f]"
+            className="px-2 py-1 bg-[#070a12] border-[#06B6D4] text-[#06B6D4] hover:bg-[#17233f]"
           >
             🔊 CHIME 432Hz
           </button>
-          <span className="px-2 py-1 bg-[#070a12] border border-[#10B981] text-[#10B981]">
+          <span className="px-2 py-1 bg-[#070a12] border-[#10B981] text-[#10B981]">
             OMEGA-1 ONLINE
           </span>
         </div>
@@ -115,35 +115,35 @@ export const SovereignTerminal: React.FC = () => {
         <button
           id="cmd-btn-audit"
           onClick={() => executeCommand('audit')}
-          className="px-2.5 py-1 bg-[#070a12] border border-[#17233f] text-[#F3F4F6] hover:border-[#D4AF37]"
+          className="px-2.5 py-1 bg-[#070a12] border-[#17233f] text-[#F3F4F6] hover:border-[#D4AF37]"
         >
           🔍 Run SSoT Audit
         </button>
         <button
           id="cmd-btn-hsm"
           onClick={() => executeCommand('hsm')}
-          className="px-2.5 py-1 bg-[#070a12] border border-[#17233f] text-[#F3F4F6] hover:border-[#06B6D4]"
+          className="px-2.5 py-1 bg-[#070a12] border-[#17233f] text-[#F3F4F6] hover:border-[#06B6D4]"
         >
           🧊 Query 10/10 HSM
         </button>
         <button
           id="cmd-btn-pqc"
           onClick={() => executeCommand('pqc')}
-          className="px-2.5 py-1 bg-[#070a12] border border-[#17233f] text-[#F3F4F6] hover:border-[#D4AF37]"
+          className="px-2.5 py-1 bg-[#070a12] border-[#17233f] text-[#F3F4F6] hover:border-[#D4AF37]"
         >
           🔐 Verify PQC Keys
         </button>
         <button
           id="cmd-btn-treasury"
           onClick={() => executeCommand('treasury')}
-          className="px-2.5 py-1 bg-[#070a12] border border-[#17233f] text-[#F3F4F6] hover:border-[#10B981]"
+          className="px-2.5 py-1 bg-[#070a12] border-[#17233f] text-[#F3F4F6] hover:border-[#10B981]"
         >
           💰 Inspect Treasury 4.23B
         </button>
         <button
           id="cmd-btn-rules"
           onClick={() => executeCommand('separation rules')}
-          className="px-2.5 py-1 bg-[#070a12] border border-[#17233f] text-[#F3F4F6] hover:border-[#EF4444]"
+          className="px-2.5 py-1 bg-[#070a12] border-[#17233f] text-[#F3F4F6] hover:border-[#EF4444]"
         >
           🛡️ Authority Separation
         </button>
@@ -151,7 +151,7 @@ export const SovereignTerminal: React.FC = () => {
 
       <div
         id="terminal-logs-window"
-        className="h-64 overflow-y-auto bg-[#070a12] border border-[#17233f] p-3 font-mono text-xs space-y-3 select-text"
+        className="h-64 overflow-y-auto bg-[#070a12] border-[#17233f] p-3 font-mono text-xs space-y-3 select-text"
       >
         {logs.map((log) => (
           <div
@@ -188,7 +188,7 @@ export const SovereignTerminal: React.FC = () => {
           value={inputCommand}
           onChange={(e) => setInputCommand(e.target.value)}
           placeholder="Type command or query for OMEGA-1 Sovereign Assistant..."
-          className="flex-1 bg-[#070a12] border border-[#17233f] px-3 py-2 text-[#F3F4F6] focus:border-[#D4AF37] focus:outline-none placeholder-[#9CA3AF]"
+          className="flex-1 bg-[#070a12] border-[#17233f] px-3 py-2 text-[#F3F4F6] focus:border-[#D4AF37] focus:outline-none placeholder-[#9CA3AF]"
         />
         <button
           id="terminal-submit-btn"

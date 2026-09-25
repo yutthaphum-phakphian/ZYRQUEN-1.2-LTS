@@ -215,13 +215,13 @@ export const ChambersExplorer: React.FC<ChambersExplorerProps> = ({
       {/* ====================================================================== */}
       {/* 1. TOP HEADER & TELEMETRY STATUS BAR (High-Fidelity Match) */}
       {/* ====================================================================== */}
-      <div className="border border-cyan-900/60 p-3.5 rounded-xl space-y-2" style={{ backgroundColor: '#0a0f1e' }}>
+      <div className="border-cyan-900/60 p-3.5 rounded-xl space-y-2" style={{ backgroundColor: '#0a0f1e' }}>
         <div className="flex flex-wrap items-center justify-between gap-3 text-xs">
           <div className="flex items-center gap-2 flex-wrap">
-            <span className="px-2.5 py-1 rounded border border-cyan-800/80 text-cyan-300 font-bold bg-[#070a12]">
+            <span className="px-2.5 py-1 rounded border-cyan-800/80 text-cyan-300 font-bold bg-[#070a12]">
               Phase 01-40 (14,902 Seals All)
             </span>
-            <span className="px-2 py-0.5 rounded border border-emerald-700 bg-emerald-950/60 text-emerald-300 font-bold flex items-center gap-1">
+            <span className="px-2 py-0.5 rounded border-emerald-700 bg-emerald-950/60 text-emerald-300 font-bold flex items-center gap-1">
               <span>●</span> HEALTHY
             </span>
             <button
@@ -285,13 +285,13 @@ export const ChambersExplorer: React.FC<ChambersExplorerProps> = ({
         {/* ==================================================================== */}
         <div className="lg:col-span-4 xl:col-span-3 space-y-4">
           {/* Chamber Groups Container */}
-          <div className="border border-cyan-900/60 rounded-xl p-3 space-y-3" style={{ backgroundColor: '#0a0f1e' }}>
+          <div className="border-cyan-900/60 rounded-xl p-3 space-y-3" style={{ backgroundColor: '#0a0f1e' }}>
             {/* Header */}
             <div className="flex items-center justify-between pb-2 border-b border-cyan-950">
               <div className="flex items-center gap-1.5 text-xs font-bold text-zinc-100">
                 <span>🏛️ CHAMBERS (18)</span>
               </div>
-              <span className="text-[10px] px-2 py-0.5 rounded border border-cyan-800 bg-[#070a12] text-cyan-300 font-bold">
+              <span className="text-[10px] px-2 py-0.5 rounded border-cyan-800 bg-[#070a12] text-cyan-300 font-bold">
                 6 GROUPS
               </span>
             </div>
@@ -340,7 +340,7 @@ export const ChambersExplorer: React.FC<ChambersExplorerProps> = ({
                 if (visibleChambers.length === 0 && search.trim()) return null;
 
                 return (
-                  <div key={grp.id} className="border border-cyan-950 rounded-lg p-2 space-y-1.5 bg-[#070a12]/80">
+                  <div key={grp.id} className="border-cyan-950 rounded-lg p-2 space-y-1.5 bg-[#070a12]/80">
                     {/* Group Header */}
                     <div className="flex items-center justify-between text-[11px] font-bold text-zinc-300 pb-1 border-b border-cyan-950/60">
                       <span className="truncate">{grp.nameEn}</span>
@@ -395,7 +395,7 @@ export const ChambersExplorer: React.FC<ChambersExplorerProps> = ({
             </div>
 
             {/* Canonical Provenance Tooltip Note */}
-            <div className="p-2 rounded border border-cyan-950 bg-[#070a12] text-[10px] space-y-1 text-zinc-400">
+            <div className="p-2 rounded border-cyan-950 bg-[#070a12] text-[10px] space-y-1 text-zinc-400">
               <div className="text-cyan-300 font-bold flex items-center gap-1">
                 <span>🛡️ CANONICAL PROVENANCE</span>
               </div>
@@ -412,7 +412,7 @@ export const ChambersExplorer: React.FC<ChambersExplorerProps> = ({
           </div>
 
           {/* 17 CANONICAL MODULES SWITCH PANEL */}
-          <div className="border border-cyan-900/60 rounded-xl p-3 space-y-2.5" style={{ backgroundColor: '#0a0f1e' }}>
+          <div className="border-cyan-900/60 rounded-xl p-3 space-y-2.5" style={{ backgroundColor: '#0a0f1e' }}>
             <div className="flex items-center justify-between pb-1.5 border-b border-cyan-950 text-xs font-bold">
               <span className="text-zinc-200">17 CANONICAL MODULES</span>
               <div className="flex items-center gap-2 text-[10px]">
@@ -438,7 +438,7 @@ export const ChambersExplorer: React.FC<ChambersExplorerProps> = ({
                 return (
                   <div
                     key={mod.id}
-                    className="flex items-center justify-between p-1.5 rounded border border-zinc-800 bg-[#070a12] text-xs"
+                    className="flex items-center justify-between p-1.5 rounded border-zinc-800 bg-[#070a12] text-xs"
                   >
                     <div className="flex items-center gap-2">
                       <span className="font-bold text-zinc-400">{mod.num}</span>
@@ -446,7 +446,7 @@ export const ChambersExplorer: React.FC<ChambersExplorerProps> = ({
                     </div>
 
                     <div className="flex items-center gap-2">
-                      <span className={`text-[9px] px-1.5 py-0.2 rounded border border-zinc-800 bg-black/40 font-bold ${mod.color}`}>
+                      <span className={`text-[9px] px-1.5 py-0.2 rounded border-zinc-800 bg-black/40 font-bold ${mod.color}`}>
                         {mod.badge}
                       </span>
                       {/* Toggle Switch */}
@@ -477,7 +477,7 @@ export const ChambersExplorer: React.FC<ChambersExplorerProps> = ({
           {/* ================================================================== */}
           {/* SECTION 1: CHAMBER MATRIX (ผังห้องปฏิบัติ 00-17) & QUICK CHIPS */}
           {/* ================================================================== */}
-          <div className="border border-cyan-900/60 rounded-xl p-3.5 space-y-3" style={{ backgroundColor: '#0a0f1e' }}>
+          <div className="border-cyan-900/60 rounded-xl p-3.5 space-y-3" style={{ backgroundColor: '#0a0f1e' }}>
             {/* Title, Search, and Status */}
             <div className="flex flex-col md:flex-row md:items-center justify-between gap-3 pb-2 border-b border-cyan-950">
               <div className="flex items-center gap-2">
@@ -494,7 +494,7 @@ export const ChambersExplorer: React.FC<ChambersExplorerProps> = ({
                     value={search}
                     onChange={(e) => setSearch(e.target.value)}
                     placeholder="🔍 ค้นหาห้อง..."
-                    className="w-full bg-[#070a12] border border-cyan-900/80 rounded px-3 py-1 text-xs text-zinc-100 placeholder-zinc-500 focus:outline-none focus:border-[#06B6D4]"
+                    className="w-full bg-[#070a12] border-cyan-900/80 rounded px-3 py-1 text-xs text-zinc-100 placeholder-zinc-500 focus:outline-none focus:border-[#06B6D4]"
                   />
                   {search && (
                     <button
@@ -508,7 +508,7 @@ export const ChambersExplorer: React.FC<ChambersExplorerProps> = ({
               </div>
 
               {/* Current Status View Tag */}
-              <div className="text-xs text-cyan-300 bg-[#070a12] px-2.5 py-1 rounded border border-cyan-900">
+              <div className="text-xs text-cyan-300 bg-[#070a12] px-2.5 py-1 rounded border-cyan-900">
                 กำลังดู: <strong className="text-zinc-100">Chamber {selectedChamberNum}</strong> • {CHAMBER_METAS[selectedChamberNum]?.thaiSub}{' '}
                 <span className="text-emerald-400 font-bold">[18/18 ACTIVE]</span>
               </div>
@@ -573,14 +573,14 @@ export const ChambersExplorer: React.FC<ChambersExplorerProps> = ({
           {/* ================================================================== */}
           {/* SECTION 2: GLOBAL TRUTH & PROVENANCE CLASSIFICATION SYSTEM */}
           {/* ================================================================== */}
-          <div className="border border-cyan-900/60 rounded-xl p-3.5 space-y-2.5" style={{ backgroundColor: '#0a0f1e' }}>
+          <div className="border-cyan-900/60 rounded-xl p-3.5 space-y-2.5" style={{ backgroundColor: '#0a0f1e' }}>
             <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2 pb-2 border-b border-cyan-950">
               <div>
                 <div className="flex items-center gap-2">
                   <span className="text-xs font-bold text-cyan-300 flex items-center gap-1">
                     <span>🌐</span> GLOBAL TRUTH &amp; PROVENANCE CLASSIFICATION SYSTEM
                   </span>
-                  <span className="text-[10px] px-1.5 py-0.2 rounded border border-emerald-700 bg-emerald-950/60 text-emerald-300 font-bold">
+                  <span className="text-[10px] px-1.5 py-0.2 rounded border-emerald-700 bg-emerald-950/60 text-emerald-300 font-bold">
                     ENFORCED Δ0
                   </span>
                 </div>
@@ -594,7 +594,7 @@ export const ChambersExplorer: React.FC<ChambersExplorerProps> = ({
                   if (isSoundActive) playTone(780, 0.03);
                   setShowTruthBoundary(!showTruthBoundary);
                 }}
-                className="px-3 py-1 rounded border border-cyan-800 bg-[#070a12] text-cyan-300 text-xs font-bold hover:border-cyan-600 transition cursor-pointer self-start sm:self-auto"
+                className="px-3 py-1 rounded border-cyan-800 bg-[#070a12] text-cyan-300 text-xs font-bold hover:border-cyan-600 transition cursor-pointer self-start sm:self-auto"
               >
                 {showTruthBoundary ? 'HIDE TRUTH BOUNDARY' : 'SHOW TRUTH BOUNDARY'}
               </button>
@@ -633,21 +633,21 @@ export const ChambersExplorer: React.FC<ChambersExplorerProps> = ({
 
             {/* Truth Boundary Popup Overlay if Toggled */}
             {showTruthBoundary && (
-              <div className="p-3 rounded border border-cyan-800 bg-[#070a12] text-xs text-zinc-300 space-y-1.5 animate-in fade-in">
+              <div className="p-3 rounded border-cyan-800 bg-[#070a12] text-xs text-zinc-300 space-y-1.5 animate-in fade-in">
                 <div className="text-cyan-300 font-bold flex items-center justify-between">
                   <span>TRUTH BOUNDARY &amp; ENCLAVE VERIFICATION MESH</span>
                   <span className="text-[10px] text-zinc-500">OMEGA-1 CLEARANCE</span>
                 </div>
                 <div className="grid grid-cols-1 sm:grid-cols-3 gap-2 pt-1 text-[11px]">
-                  <div className="p-2 rounded border border-zinc-800 bg-black/40">
+                  <div className="p-2 rounded border-zinc-800 bg-black/40">
                     <span className="text-emerald-400 font-bold">CANONICAL REALM:</span>
                     <p className="text-zinc-400 mt-0.5">14,902 Seals verified at Block #849202. Zero ambient mutation.</p>
                   </div>
-                  <div className="p-2 rounded border border-zinc-800 bg-black/40">
+                  <div className="p-2 rounded border-zinc-800 bg-black/40">
                     <span className="text-cyan-400 font-bold">RUNTIME &amp; PHOENIX:</span>
                     <p className="text-zinc-400 mt-0.5">142ms deterministic auto-recovery. Safe Harbor ETDA 2544.</p>
                   </div>
-                  <div className="p-2 rounded border border-zinc-800 bg-black/40">
+                  <div className="p-2 rounded border-zinc-800 bg-black/40">
                     <span className="text-amber-400 font-bold">FAIL-CLOSED GATE:</span>
                     <p className="text-zinc-400 mt-0.5">Boundary Ω600_1000 (400 Tenants LOCKED). Zero drift Δ0.00%.</p>
                   </div>
@@ -659,22 +659,22 @@ export const ChambersExplorer: React.FC<ChambersExplorerProps> = ({
           {/* ================================================================== */}
           {/* SECTION 3: AUTHORITATIVE MASTER BASELINE (READ-ONLY) [FROZEN] */}
           {/* ================================================================== */}
-          <div className="border border-amber-900/60 rounded-xl p-3.5 space-y-2.5" style={{ backgroundColor: '#0a0f1e' }}>
+          <div className="border-amber-900/60 rounded-xl p-3.5 space-y-2.5" style={{ backgroundColor: '#0a0f1e' }}>
             <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2 pb-2 border-b border-amber-950">
               <div className="flex items-center gap-2">
                 <span className="text-xs font-bold text-[#D4AF37] flex items-center gap-1">
                   <span>🔒</span> AUTHORITATIVE MASTER BASELINE (READ-ONLY)
                 </span>
-                <span className="text-[10px] px-1.5 py-0.2 rounded border border-amber-700 bg-amber-950/60 text-[#D4AF37] font-bold">
+                <span className="text-[10px] px-1.5 py-0.2 rounded border-amber-700 bg-amber-950/60 text-[#D4AF37] font-bold">
                   FROZEN
                 </span>
               </div>
 
               <div className="flex items-center gap-2 text-xs">
-                <span className="px-2 py-0.5 rounded border border-emerald-800 bg-emerald-950/60 text-emerald-300 font-bold text-[10px]">
+                <span className="px-2 py-0.5 rounded border-emerald-800 bg-emerald-950/60 text-emerald-300 font-bold text-[10px]">
                   CANONICAL MUTATION: Δ0
                 </span>
-                <span className="px-2 py-0.5 rounded border border-cyan-800 bg-cyan-950/60 text-cyan-300 font-bold text-[10px]">
+                <span className="px-2 py-0.5 rounded border-cyan-800 bg-cyan-950/60 text-cyan-300 font-bold text-[10px]">
                   FAIL-CLOSED: ACTIVE
                 </span>
               </div>
@@ -695,7 +695,7 @@ export const ChambersExplorer: React.FC<ChambersExplorerProps> = ({
                 { label: 'CHAMBERS/MODULES', val: '18 Chambers' },
                 { label: 'SECURITY POLICY', val: 'Zero-Trust PQC' },
               ].map((item, idx) => (
-                <div key={idx} className="p-2 rounded border border-zinc-800/80 bg-[#070a12] space-y-0.5">
+                <div key={idx} className="p-2 rounded border-zinc-800/80 bg-[#070a12] space-y-0.5">
                   <div className="text-[9px] text-zinc-500 font-bold">{item.label}</div>
                   <div className={`text-[11px] font-bold truncate ${item.highlight || 'text-zinc-200'}`}>
                     {item.val}
@@ -709,12 +709,12 @@ export const ChambersExplorer: React.FC<ChambersExplorerProps> = ({
           {/* SECTION 4: ACTIVE CHAMBER CONTENT */}
           {/* (Deep specialized views for 08 Post-Quantum Crypto, 17 Audit Ledger, etc.) */}
           {/* ================================================================== */}
-          <div className="border border-cyan-900/60 rounded-xl p-4 space-y-4" style={{ backgroundColor: '#0a0f1e' }}>
+          <div className="border-cyan-900/60 rounded-xl p-4 space-y-4" style={{ backgroundColor: '#0a0f1e' }}>
             {/* Header / Breadcrumb of Selected Chamber */}
             <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 pb-3 border-b border-cyan-950">
               <div className="space-y-1">
                 <div className="flex items-center gap-2 flex-wrap text-xs">
-                  <span className="px-2 py-0.5 rounded border border-cyan-700 bg-[#070a12] text-cyan-300 font-bold">
+                  <span className="px-2 py-0.5 rounded border-cyan-700 bg-[#070a12] text-cyan-300 font-bold">
                     🔑 CHAMBER {selectedChamberNum}
                   </span>
                   <span className="text-zinc-400">•</span>
@@ -736,7 +736,7 @@ export const ChambersExplorer: React.FC<ChambersExplorerProps> = ({
               </div>
 
               <div className="flex items-center gap-2 self-start sm:self-auto">
-                <span className="px-2.5 py-1 rounded border border-emerald-600 bg-emerald-950/60 text-emerald-300 font-bold text-xs">
+                <span className="px-2.5 py-1 rounded border-emerald-600 bg-emerald-950/60 text-emerald-300 font-bold text-xs">
                   CANONICAL
                 </span>
               </div>
@@ -747,7 +747,7 @@ export const ChambersExplorer: React.FC<ChambersExplorerProps> = ({
             {/* ---------------------------------------------------------------- */}
             {selectedChamberNum === '08' && (
               <div className="space-y-3">
-                <div className="p-3 rounded border border-purple-900/60 bg-[#070a12] flex flex-col sm:flex-row sm:items-center justify-between gap-2">
+                <div className="p-3 rounded border-purple-900/60 bg-[#070a12] flex flex-col sm:flex-row sm:items-center justify-between gap-2">
                   <div>
                     <div className="text-[10px] text-purple-400 font-bold tracking-wider">
                       NEST FIPS 203 / 204 / 205 STANDARDS
@@ -756,7 +756,7 @@ export const ChambersExplorer: React.FC<ChambersExplorerProps> = ({
                       Post-Quantum Cryptography (PQC) Enclave
                     </div>
                   </div>
-                  <span className="px-2.5 py-1 rounded border border-purple-600 bg-purple-950/60 text-purple-300 font-bold text-xs">
+                  <span className="px-2.5 py-1 rounded border-purple-600 bg-purple-950/60 text-purple-300 font-bold text-xs">
                     QUANTUM-RESISTANT 100%
                   </span>
                 </div>
@@ -764,12 +764,12 @@ export const ChambersExplorer: React.FC<ChambersExplorerProps> = ({
                 {/* 4 PQC Cards Grid (2x2) */}
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
                   {/* 1. Dilithium-5 */}
-                  <div className="p-3.5 rounded-lg border border-cyan-900 bg-[#070a12] space-y-2">
+                  <div className="p-3.5 rounded-lg border-cyan-900 bg-[#070a12] space-y-2">
                     <div className="flex items-center justify-between">
                       <h4 className="text-xs font-bold text-cyan-300">
                         CRYSTALS-Dilithium-5 (ML-DSA-87)
                       </h4>
-                      <span className="text-[10px] px-1.5 py-0.2 rounded border border-cyan-800 bg-cyan-950/60 text-cyan-300 font-bold">
+                      <span className="text-[10px] px-1.5 py-0.2 rounded border-cyan-800 bg-cyan-950/60 text-cyan-300 font-bold">
                         FIPS 204
                       </span>
                     </div>
@@ -782,12 +782,12 @@ export const ChambersExplorer: React.FC<ChambersExplorerProps> = ({
                   </div>
 
                   {/* 2. Kyber-1024 */}
-                  <div className="p-3.5 rounded-lg border border-cyan-900 bg-[#070a12] space-y-2">
+                  <div className="p-3.5 rounded-lg border-cyan-900 bg-[#070a12] space-y-2">
                     <div className="flex items-center justify-between">
                       <h4 className="text-xs font-bold text-cyan-300">
                         CRYSTALS-Kyber-1024 (ML-KEM-1024)
                       </h4>
-                      <span className="text-[10px] px-1.5 py-0.2 rounded border border-cyan-800 bg-cyan-950/60 text-cyan-300 font-bold">
+                      <span className="text-[10px] px-1.5 py-0.2 rounded border-cyan-800 bg-cyan-950/60 text-cyan-300 font-bold">
                         FIPS 203
                       </span>
                     </div>
@@ -800,12 +800,12 @@ export const ChambersExplorer: React.FC<ChambersExplorerProps> = ({
                   </div>
 
                   {/* 3. FALCON-1024 */}
-                  <div className="p-3.5 rounded-lg border border-cyan-900 bg-[#070a12] space-y-2">
+                  <div className="p-3.5 rounded-lg border-cyan-900 bg-[#070a12] space-y-2">
                     <div className="flex items-center justify-between">
                       <h4 className="text-xs font-bold text-cyan-300">
                         FALCON-1024
                       </h4>
-                      <span className="text-[10px] px-1.5 py-0.2 rounded border border-amber-800 bg-amber-950/60 text-amber-300 font-bold">
+                      <span className="text-[10px] px-1.5 py-0.2 rounded border-amber-800 bg-amber-950/60 text-amber-300 font-bold">
                         NIST Round 3
                       </span>
                     </div>
@@ -818,12 +818,12 @@ export const ChambersExplorer: React.FC<ChambersExplorerProps> = ({
                   </div>
 
                   {/* 4. SPHINCS+ */}
-                  <div className="p-3.5 rounded-lg border border-cyan-900 bg-[#070a12] space-y-2">
+                  <div className="p-3.5 rounded-lg border-cyan-900 bg-[#070a12] space-y-2">
                     <div className="flex items-center justify-between">
                       <h4 className="text-xs font-bold text-cyan-300">
                         SPHINCS+ (SLH-DSA)
                       </h4>
-                      <span className="text-[10px] px-1.5 py-0.2 rounded border border-cyan-800 bg-cyan-950/60 text-cyan-300 font-bold">
+                      <span className="text-[10px] px-1.5 py-0.2 rounded border-cyan-800 bg-cyan-950/60 text-cyan-300 font-bold">
                         FIPS 205
                       </span>
                     </div>
@@ -844,7 +844,7 @@ export const ChambersExplorer: React.FC<ChambersExplorerProps> = ({
             {selectedChamberNum === '17' && (
               <div className="space-y-4">
                 {/* Chamber 17 Banner */}
-                <div className="p-3 rounded border border-cyan-900 bg-[#070a12] space-y-2">
+                <div className="p-3 rounded border-cyan-900 bg-[#070a12] space-y-2">
                   <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2">
                     <div>
                       <div className="text-sm font-bold text-zinc-100">
@@ -860,7 +860,7 @@ export const ChambersExplorer: React.FC<ChambersExplorerProps> = ({
                           if (isSoundActive) playTone(880, 0.05);
                           setIsCertificateModalOpen(true);
                         }}
-                        className="px-2.5 py-1 rounded border border-amber-600 bg-amber-950/60 text-[#D4AF37] text-xs font-bold hover:bg-amber-900/60 cursor-pointer transition flex items-center gap-1"
+                        className="px-2.5 py-1 rounded border-amber-600 bg-amber-950/60 text-[#D4AF37] text-xs font-bold hover:bg-amber-900/60 cursor-pointer transition flex items-center gap-1"
                       >
                         <span>📑</span> Download PDF Audit Report
                       </button>
@@ -870,7 +870,7 @@ export const ChambersExplorer: React.FC<ChambersExplorerProps> = ({
                           const jsonBlob = JSON.stringify(selectedChamber, null, 2);
                           copyToClipboard(jsonBlob);
                         }}
-                        className="px-2.5 py-1 rounded border border-cyan-800 bg-[#070a12] text-cyan-300 text-xs font-bold cursor-pointer transition"
+                        className="px-2.5 py-1 rounded border-cyan-800 bg-[#070a12] text-cyan-300 text-xs font-bold cursor-pointer transition"
                       >
                         JSON Manifest
                       </button>
@@ -878,7 +878,7 @@ export const ChambersExplorer: React.FC<ChambersExplorerProps> = ({
                         onClick={() => {
                           if (isSoundActive) playAuditChime();
                         }}
-                        className="px-2.5 py-1 rounded border border-emerald-800 bg-emerald-950/60 text-emerald-300 text-xs font-bold cursor-pointer transition"
+                        className="px-2.5 py-1 rounded border-emerald-800 bg-emerald-950/60 text-emerald-300 text-xs font-bold cursor-pointer transition"
                       >
                         5/5 Baseline Tests
                       </button>
@@ -887,32 +887,32 @@ export const ChambersExplorer: React.FC<ChambersExplorerProps> = ({
 
                   {/* 6 Metric Cards */}
                   <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-2 pt-2 border-t border-cyan-950">
-                    <div className="p-2 rounded border border-zinc-800 bg-black/40 space-y-0.5">
+                    <div className="p-2 rounded border-zinc-800 bg-black/40 space-y-0.5">
                       <div className="text-[10px] text-zinc-500">CANONICAL BLOCK</div>
                       <div className="text-xs font-bold text-zinc-200">#849,202</div>
                       <div className="text-[9px] text-emerald-400">Slot #12 • 00:26 UTC</div>
                     </div>
-                    <div className="p-2 rounded border border-zinc-800 bg-black/40 space-y-0.5">
+                    <div className="p-2 rounded border-zinc-800 bg-black/40 space-y-0.5">
                       <div className="text-[10px] text-zinc-500">SSoT DRIFT</div>
                       <div className="text-xs font-bold text-emerald-400">Δ0 (0.00%)</div>
                       <div className="text-[9px] text-zinc-400">Zero Drift Locked</div>
                     </div>
-                    <div className="p-2 rounded border border-zinc-800 bg-black/40 space-y-0.5">
+                    <div className="p-2 rounded border-zinc-800 bg-black/40 space-y-0.5">
                       <div className="text-[10px] text-zinc-500">HSM QUORUM</div>
                       <div className="text-xs font-bold text-[#D4AF37]">10/10 REAL_HSM</div>
                       <div className="text-[9px] text-zinc-400">Slots 01-10 Enclave</div>
                     </div>
-                    <div className="p-2 rounded border border-zinc-800 bg-black/40 space-y-0.5">
+                    <div className="p-2 rounded border-zinc-800 bg-black/40 space-y-0.5">
                       <div className="text-[10px] text-zinc-500">CRYO TEMP</div>
                       <div className="text-xs font-bold text-cyan-300">14.98 mK</div>
                       <div className="text-[9px] text-zinc-400">Helium-4 Dilution</div>
                     </div>
-                    <div className="p-2 rounded border border-zinc-800 bg-black/40 space-y-0.5">
+                    <div className="p-2 rounded border-zinc-800 bg-black/40 space-y-0.5">
                       <div className="text-[10px] text-zinc-500">TRACE REPLAY</div>
                       <div className="text-xs font-bold text-emerald-400">0.18 ms</div>
                       <div className="text-[9px] text-zinc-400">QL &lt; 0.2ms P95</div>
                     </div>
-                    <div className="p-2 rounded border border-zinc-800 bg-black/40 space-y-0.5">
+                    <div className="p-2 rounded border-zinc-800 bg-black/40 space-y-0.5">
                       <div className="text-[10px] text-zinc-500">QUARANTINE BUFFER</div>
                       <div className="text-xs font-bold text-rose-400">5 Items</div>
                       <div className="text-[9px] text-zinc-400">Chamber 02 Protected</div>
@@ -951,7 +951,7 @@ export const ChambersExplorer: React.FC<ChambersExplorerProps> = ({
 
                 {/* Tab 1: Immutable Ledger Block Explorer */}
                 {chamber17Tab === 1 && (
-                  <div className="p-3.5 rounded border border-cyan-900/80 bg-[#070a12] space-y-3">
+                  <div className="p-3.5 rounded border-cyan-900/80 bg-[#070a12] space-y-3">
                     <div className="flex items-center justify-between text-xs">
                       <span className="font-bold text-zinc-200">IMMUTABLE BLOCK CHAIN LEDGER</span>
                       <span className="text-zinc-500">Chain: ZYRQUEN-CANONICAL-P0</span>
@@ -964,7 +964,7 @@ export const ChambersExplorer: React.FC<ChambersExplorerProps> = ({
                         { block: '#849,204', name: 'FIOS_TREASURY_REIMBURSEMENT', hash: 'sha256-a909b81447...', time: '00:30 UTC', status: 'CANONICAL_LOCKED' },
                         { block: '#849,205', name: 'WARP_NAV_GRID_SYNCHRONIZATION', hash: 'sha256-c74da816be...', time: '00:32 UTC', status: 'CANONICAL_LOCKED' },
                       ].map((b, idx) => (
-                        <div key={idx} className="p-2 rounded border border-zinc-800 bg-black/40 flex items-center justify-between gap-2">
+                        <div key={idx} className="p-2 rounded border-zinc-800 bg-black/40 flex items-center justify-between gap-2">
                           <div className="flex items-center gap-3">
                             <span className="text-[#D4AF37] font-bold">{b.block}</span>
                             <span className="text-zinc-300 font-semibold">{b.name}</span>
@@ -972,7 +972,7 @@ export const ChambersExplorer: React.FC<ChambersExplorerProps> = ({
                           <div className="flex items-center gap-3 text-zinc-400 text-[11px]">
                             <span className="hidden sm:inline font-mono">{b.hash}</span>
                             <span>{b.time}</span>
-                            <span className="px-2 py-0.5 rounded border border-emerald-700 bg-emerald-950/60 text-emerald-300 font-bold text-[10px]">
+                            <span className="px-2 py-0.5 rounded border-emerald-700 bg-emerald-950/60 text-emerald-300 font-bold text-[10px]">
                               {b.status}
                             </span>
                           </div>
@@ -984,7 +984,7 @@ export const ChambersExplorer: React.FC<ChambersExplorerProps> = ({
 
                 {/* Tab 3: 12-Stage Trace Replay */}
                 {chamber17Tab === 3 && (
-                  <div className="p-3.5 rounded border border-cyan-900/80 bg-[#070a12] space-y-3">
+                  <div className="p-3.5 rounded border-cyan-900/80 bg-[#070a12] space-y-3">
                     <div className="text-xs font-bold text-zinc-200">
                       12-STAGE SUBZERO FORENSIC REPLAY PIPELINE (0.18ms)
                     </div>
@@ -993,7 +993,7 @@ export const ChambersExplorer: React.FC<ChambersExplorerProps> = ({
                         '01. INGEST', '02. DE-ANON', '03. REDACT', '04. TRNG', '05. ML-DSA', '06. KYBER',
                         '07. MERKLE', '08. HSM-VOTE', '09. IMMUTABLE', '10. ETDA-REC', '11. PDPA-SEAL', '12. REPLAY'
                       ].map((stg, idx) => (
-                        <div key={idx} className="p-2 rounded border border-emerald-900 bg-emerald-950/20 text-center space-y-1">
+                        <div key={idx} className="p-2 rounded border-emerald-900 bg-emerald-950/20 text-center space-y-1">
                           <div className="text-emerald-400 font-bold text-[10px]">{stg}</div>
                           <div className="text-[9px] text-zinc-400">0.015ms • PASS</div>
                         </div>
@@ -1004,7 +1004,7 @@ export const ChambersExplorer: React.FC<ChambersExplorerProps> = ({
 
                 {/* Tab 7: Official Audit Report & Ratification */}
                 {chamber17Tab === 7 && (
-                  <div className="p-3.5 rounded border border-amber-900 bg-[#070a12] space-y-3">
+                  <div className="p-3.5 rounded border-amber-900 bg-[#070a12] space-y-3">
                     <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
                       <div>
                         <div className="text-xs font-bold text-[#D4AF37] flex items-center gap-1.5">
@@ -1019,22 +1019,22 @@ export const ChambersExplorer: React.FC<ChambersExplorerProps> = ({
                           if (isSoundActive) playTone(880, 0.05);
                           setIsCertificateModalOpen(true);
                         }}
-                        className="px-3 py-1.5 rounded border border-amber-600 bg-amber-950/60 text-[#D4AF37] text-xs font-bold hover:bg-amber-900/60 cursor-pointer transition"
+                        className="px-3 py-1.5 rounded border-amber-600 bg-amber-950/60 text-[#D4AF37] text-xs font-bold hover:bg-amber-900/60 cursor-pointer transition"
                       >
                         ดาวน์โหลดรายงานฉบับเต็ม (Full PDF)
                       </button>
                     </div>
 
                     <div className="grid grid-cols-1 sm:grid-cols-3 gap-2 text-xs pt-2 border-t border-amber-950">
-                      <div className="p-2 rounded border border-zinc-800 bg-black/40">
+                      <div className="p-2 rounded border-zinc-800 bg-black/40">
                         <span className="text-zinc-400">SIGNATURE STANDARD:</span>
                         <div className="text-purple-300 font-bold mt-0.5">NIST FIPS 204 (Dilithium-5)</div>
                       </div>
-                      <div className="p-2 rounded border border-zinc-800 bg-black/40">
+                      <div className="p-2 rounded border-zinc-800 bg-black/40">
                         <span className="text-zinc-400">DECA-KEY QUORUM:</span>
                         <div className="text-emerald-300 font-bold mt-0.5">10/10 REAL_HSM Ratified</div>
                       </div>
-                      <div className="p-2 rounded border border-zinc-800 bg-black/40">
+                      <div className="p-2 rounded border-zinc-800 bg-black/40">
                         <span className="text-zinc-400">LEGAL RELIANCE:</span>
                         <div className="text-[#D4AF37] font-bold mt-0.5">ETDA Sec 9, 26, 28 &amp; PDPA</div>
                       </div>
@@ -1044,7 +1044,7 @@ export const ChambersExplorer: React.FC<ChambersExplorerProps> = ({
 
                 {/* Tab 8: Hardening & Key Rotation */}
                 {chamber17Tab === 8 && (
-                  <div className="p-3.5 rounded border border-cyan-900 bg-[#070a12] space-y-3">
+                  <div className="p-3.5 rounded border-cyan-900 bg-[#070a12] space-y-3">
                     <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
                       <div>
                         <div className="text-xs font-bold text-cyan-300">
@@ -1058,26 +1058,26 @@ export const ChambersExplorer: React.FC<ChambersExplorerProps> = ({
                       <button
                         onClick={handleExecuteKeyRotation}
                         disabled={isRotatingKeys}
-                        className="px-3 py-1.5 rounded border border-cyan-600 bg-cyan-950/60 text-cyan-300 text-xs font-bold hover:bg-cyan-900/60 cursor-pointer transition whitespace-nowrap"
+                        className="px-3 py-1.5 rounded border-cyan-600 bg-cyan-950/60 text-cyan-300 text-xs font-bold hover:bg-cyan-900/60 cursor-pointer transition whitespace-nowrap"
                       >
                         {isRotatingKeys ? 'กำลังหมุนเวียนกุญแจ...' : `EXECUTE 90-DAY KEY ROTATION (CYCLE #${rotationCycle})`}
                       </button>
                     </div>
 
                     <div className="grid grid-cols-2 sm:grid-cols-4 gap-2 text-xs pt-1">
-                      <div className="p-2 rounded border border-zinc-800 bg-black/40">
+                      <div className="p-2 rounded border-zinc-800 bg-black/40">
                         <div className="text-[10px] text-zinc-500">ROTATION CYCLE</div>
                         <div className="text-xs font-bold text-zinc-200">Cycle #{rotationCycle}</div>
                       </div>
-                      <div className="p-2 rounded border border-zinc-800 bg-black/40">
+                      <div className="p-2 rounded border-zinc-800 bg-black/40">
                         <div className="text-[10px] text-zinc-500">HSM QUORUM STATUS</div>
                         <div className="text-xs font-bold text-emerald-400">10/10 REAL_HSM</div>
                       </div>
-                      <div className="p-2 rounded border border-zinc-800 bg-black/40">
+                      <div className="p-2 rounded border-zinc-800 bg-black/40">
                         <div className="text-[10px] text-zinc-500">GENESIS ROOT INVARIANT</div>
                         <div className="text-xs font-bold text-cyan-300">SSoT Δ0.00%</div>
                       </div>
-                      <div className="p-2 rounded border border-zinc-800 bg-black/40">
+                      <div className="p-2 rounded border-zinc-800 bg-black/40">
                         <div className="text-[10px] text-zinc-500">ZEROIZE LATENCY SLA</div>
                         <div className="text-xs font-bold text-[#D4AF37]">&lt; 0.05 ms</div>
                       </div>
@@ -1086,7 +1086,7 @@ export const ChambersExplorer: React.FC<ChambersExplorerProps> = ({
                 )}
 
                 {/* Historical State Reliability Index Chart (As shown in video) */}
-                <div className="p-3.5 rounded border border-cyan-900 bg-[#070a12] space-y-2.5">
+                <div className="p-3.5 rounded border-cyan-900 bg-[#070a12] space-y-2.5">
                   <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2">
                     <div>
                       <div className="text-xs font-bold text-zinc-200">
@@ -1096,14 +1096,14 @@ export const ChambersExplorer: React.FC<ChambersExplorerProps> = ({
                         Coherence Rate: <span className="text-emerald-400 font-bold">99.3%</span> • State Reliability: <span className="text-cyan-300 font-bold">99.9%</span> • Cryo: <span className="text-cyan-300">14.98 mK</span> • 10/10 REAL_HSM
                       </div>
                     </div>
-                    <span className="text-[10px] px-2 py-0.5 rounded border border-emerald-800 bg-emerald-950/60 text-emerald-300 font-bold">
+                    <span className="text-[10px] px-2 py-0.5 rounded border-emerald-800 bg-emerald-950/60 text-emerald-300 font-bold">
                       Zero Drift Δ 0.0%
                     </span>
                   </div>
 
                   {/* 24-point Scrubber Timeline Bar */}
                   <div className="space-y-1 pt-1">
-                    <div className="flex items-end gap-1 h-14 w-full bg-black/40 p-1.5 rounded border border-zinc-800">
+                    <div className="flex items-end gap-1 h-14 w-full bg-black/40 p-1.5 rounded border-zinc-800">
                       {Array.from({ length: 24 }).map((_, i) => {
                         const isSelectedPoint = selectedTimelinePoint === i;
                         const heightPercent = 88 + (i % 5) * 2.2;
@@ -1154,7 +1154,7 @@ export const ChambersExplorer: React.FC<ChambersExplorerProps> = ({
               <div className="space-y-3">
                 <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
                   {selectedChamber.metrics.map((m, idx) => (
-                    <div key={idx} className="p-3 rounded border border-zinc-800 bg-[#070a12] space-y-1">
+                    <div key={idx} className="p-3 rounded border-zinc-800 bg-[#070a12] space-y-1">
                       <div className="text-[10px] text-zinc-500 font-bold">{m.label}</div>
                       <div className="text-sm font-bold text-zinc-100">{m.value}</div>
                       <div className="text-[9px] text-emerald-400 flex items-center gap-1">
@@ -1164,16 +1164,16 @@ export const ChambersExplorer: React.FC<ChambersExplorerProps> = ({
                   ))}
                 </div>
 
-                <div className="p-3 rounded border border-zinc-800 bg-[#070a12] space-y-2">
+                <div className="p-3 rounded border-zinc-800 bg-[#070a12] space-y-2">
                   <div className="text-xs font-bold text-zinc-200">
                     โมดูลย่อยและเอนจินภายใน ({selectedChamber.subModules.length})
                   </div>
                   <div className="grid grid-cols-1 sm:grid-cols-2 gap-2 text-xs">
                     {selectedChamber.subModules.map((sub, idx) => (
-                      <div key={idx} className="p-2 rounded border border-zinc-800/80 bg-black/40 space-y-1">
+                      <div key={idx} className="p-2 rounded border-zinc-800/80 bg-black/40 space-y-1">
                         <div className="flex items-center justify-between">
                           <span className="font-bold text-zinc-200">{sub.name}</span>
-                          <span className="text-[9px] px-1.5 py-0.2 rounded border border-cyan-800 bg-cyan-950/60 text-cyan-300">
+                          <span className="text-[9px] px-1.5 py-0.2 rounded border-cyan-800 bg-cyan-950/60 text-cyan-300">
                             {sub.status}
                           </span>
                         </div>
@@ -1189,7 +1189,7 @@ export const ChambersExplorer: React.FC<ChambersExplorerProps> = ({
           {/* ================================================================== */}
           {/* SECTION 5: SYSTEM REAL-TIME LOGSTREAM & AUDIT TRAIL */}
           {/* ================================================================== */}
-          <div className="border border-cyan-900/60 rounded-xl p-3.5 space-y-2.5" style={{ backgroundColor: '#0a0f1e' }}>
+          <div className="border-cyan-900/60 rounded-xl p-3.5 space-y-2.5" style={{ backgroundColor: '#0a0f1e' }}>
             <div className="flex items-center justify-between pb-2 border-b border-cyan-950">
               <span className="text-xs font-bold text-zinc-300 flex items-center gap-1.5">
                 <span>&gt;_</span> SYSTEM REAL-TIME LOGSTREAM &amp; AUDIT TRAIL
@@ -1201,7 +1201,7 @@ export const ChambersExplorer: React.FC<ChambersExplorerProps> = ({
                     if (isSoundActive) playTone(700, 0.02);
                     copyToClipboard('Phase,Block,Status,MerkleRoot\n01-40,849202,SSoT_PASS,909ab814479844d8a14816bed34cdbb07528e18501da86fc4691763a43fa4c68');
                   }}
-                  className="px-2 py-0.5 rounded border border-cyan-800 bg-[#070a12] text-cyan-300 text-[10px] hover:border-cyan-600 cursor-pointer transition"
+                  className="px-2 py-0.5 rounded border-cyan-800 bg-[#070a12] text-cyan-300 text-[10px] hover:border-cyan-600 cursor-pointer transition"
                 >
                   Export CSV
                 </button>
@@ -1210,18 +1210,18 @@ export const ChambersExplorer: React.FC<ChambersExplorerProps> = ({
                     if (isSoundActive) playTone(700, 0.02);
                     copyToClipboard('ZYRQUEN Ω∞ REAL-TIME AUDIT LOG\nBlock: #849202\n14,902 Seals Verified');
                   }}
-                  className="px-2 py-0.5 rounded border border-cyan-800 bg-[#070a12] text-cyan-300 text-[10px] hover:border-cyan-600 cursor-pointer transition"
+                  className="px-2 py-0.5 rounded border-cyan-800 bg-[#070a12] text-cyan-300 text-[10px] hover:border-cyan-600 cursor-pointer transition"
                 >
                   Export TXT
                 </button>
-                <span className="px-2 py-0.5 rounded border border-emerald-800 bg-emerald-950/60 text-emerald-300 text-[10px] font-bold">
+                <span className="px-2 py-0.5 rounded border-emerald-800 bg-emerald-950/60 text-emerald-300 text-[10px] font-bold">
                   LIVE
                 </span>
               </div>
             </div>
 
             {/* Terminal Window Box */}
-            <div className="p-3 rounded border border-zinc-800 bg-black/60 text-[11px] font-mono text-zinc-300 space-y-1 overflow-x-auto leading-relaxed max-h-48 overflow-y-auto">
+            <div className="p-3 rounded border-zinc-800 bg-black/60 text-[11px] font-mono text-zinc-300 space-y-1 overflow-x-auto leading-relaxed max-h-48 overflow-y-auto">
               <div>
                 <span className="text-amber-400 font-bold">[FROZEN]</span>{' '}
                 <span className="text-cyan-400">[Phase 01-40]</span> Master Manifest Replay Determinism Logged (SSoT Δ0)
@@ -1256,15 +1256,15 @@ export const ChambersExplorer: React.FC<ChambersExplorerProps> = ({
           {/* ================================================================== */}
           {/* SECTION 6: SUPREME SOVEREIGN GOLD MASTER SEAL */}
           {/* ================================================================== */}
-          <div className="border border-amber-900/80 rounded-xl p-4 space-y-3" style={{ backgroundColor: '#0a0f1e' }}>
+          <div className="border-amber-900/80 rounded-xl p-4 space-y-3" style={{ backgroundColor: '#0a0f1e' }}>
             <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
               <div className="flex items-center gap-3">
-                <div className="w-12 h-12 rounded-xl border border-amber-500/60 bg-[#070a12] flex items-center justify-center text-2xl shadow-[0_0_15px_rgba(212,175,55,0.2)]">
+                <div className="w-12 h-12 rounded-xl border-amber-500/60 bg-[#070a12] flex items-center justify-center text-2xl shadow-[0_0_15px_rgba(212,175,55,0.2)]">
                   👑
                 </div>
                 <div className="space-y-0.5">
                   <div className="flex items-center gap-2">
-                    <span className="px-1.5 py-0.2 rounded border border-amber-800 bg-amber-950/60 text-[#D4AF37] font-bold text-[9px]">
+                    <span className="px-1.5 py-0.2 rounded border-amber-800 bg-amber-950/60 text-[#D4AF37] font-bold text-[9px]">
                       10/10 REAL_HSM ATTESTED
                     </span>
                     <span className="text-[10px] text-zinc-500">SSoT Δ0.00%</span>
@@ -1288,7 +1288,7 @@ export const ChambersExplorer: React.FC<ChambersExplorerProps> = ({
                     setIsCertificateModalOpen(true);
                     if (onOpenCertificate) onOpenCertificate();
                   }}
-                  className="px-3.5 py-2 rounded-lg border border-amber-500 bg-[#D4AF37] text-[#070a12] font-black text-xs hover:bg-amber-400 cursor-pointer transition shadow-[0_0_12px_rgba(212,175,55,0.3)] flex items-center gap-1.5"
+                  className="px-3.5 py-2 rounded-lg border-amber-500 bg-[#D4AF37] text-[#070a12] font-black text-xs hover:bg-amber-400 cursor-pointer transition shadow-[0_0_12px_rgba(212,175,55,0.3)] flex items-center gap-1.5"
                 >
                   <span>📜</span> ดูใบรับรองทองคำ (Master Cert)
                 </button>
@@ -1297,7 +1297,7 @@ export const ChambersExplorer: React.FC<ChambersExplorerProps> = ({
                   onClick={() => {
                     if (isSoundActive) playAuditChime();
                   }}
-                  className="px-3.5 py-2 rounded-lg border border-cyan-700 bg-[#070a12] text-cyan-300 font-bold text-xs hover:border-[#06B6D4] cursor-pointer transition flex items-center gap-1.5"
+                  className="px-3.5 py-2 rounded-lg border-cyan-700 bg-[#070a12] text-cyan-300 font-bold text-xs hover:border-[#06B6D4] cursor-pointer transition flex items-center gap-1.5"
                 >
                   <span>🛡️</span> ตรวจสอบ Invariants
                 </button>

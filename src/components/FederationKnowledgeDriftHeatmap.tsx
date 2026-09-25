@@ -312,17 +312,17 @@ export const FederationKnowledgeDriftHeatmap: React.FC<{ onAddSystemEvent?: (typ
   return (
     <div className="space-y-6 animate-in fade-in duration-300">
       {/* Top Banner Header */}
-      <div className="p-6 rounded-[28px] bg-gradient-to-br from-[#0c1a24]/90 via-[#0b0e1a]/85 to-[#07080F] border border-cyan-500/20 backdrop-blur-xl flex flex-col lg:flex-row lg:items-center justify-between gap-6 shadow-[0_0_35px_rgba(6,182,212,0.12)]">
+      <div className="p-6 rounded-[28px] bg-gradient-to-br from-[#0c1a24]/90 via-[#0b0e1a]/85 to-[#07080F] border-cyan-500/20 backdrop-blur-xl flex flex-col lg:flex-row lg:items-center justify-between gap-6 shadow-[0_0_35px_rgba(6,182,212,0.12)]">
         <div>
           <div className="flex flex-wrap items-center gap-2">
-            <span className="px-2.5 py-0.5 rounded-full bg-cyan-500/15 text-cyan-300 border border-cyan-500/30 text-xs font-mono font-bold flex items-center gap-1.5">
+            <span className="px-2.5 py-0.5 rounded-full bg-cyan-500/15 text-cyan-300 border-cyan-500/30 text-xs font-mono font-bold flex items-center gap-1.5">
               <Share2 className="w-3.5 h-3.5 text-cyan-400" />
               FEDERATION INTELLIGENCE PROTOCOL (v12.3 &bull; v13 &bull; v14.0)
             </span>
-            <span className="px-2.5 py-0.5 rounded-full bg-emerald-500/15 text-emerald-300 border border-emerald-500/30 text-xs font-mono">
+            <span className="px-2.5 py-0.5 rounded-full bg-emerald-500/15 text-emerald-300 border-emerald-500/30 text-xs font-mono">
               MERKLE-ALIGNED ZERO DRIFT (&Delta;0.00%)
             </span>
-            <span className="px-2.5 py-0.5 rounded-full bg-violet-500/15 text-violet-300 border border-violet-500/30 text-xs font-mono">
+            <span className="px-2.5 py-0.5 rounded-full bg-violet-500/15 text-violet-300 border-violet-500/30 text-xs font-mono">
               NIST FIPS 204 PQC VERIFIED
             </span>
           </div>
@@ -339,7 +339,7 @@ export const FederationKnowledgeDriftHeatmap: React.FC<{ onAddSystemEvent?: (typ
           <button
             onClick={() => handlePublishKnowledgePacket()}
             disabled={syncState.isSyncing}
-            className="px-4 py-2.5 rounded-xl bg-cyan-500/20 hover:bg-cyan-500/30 text-cyan-300 border border-cyan-500/40 font-mono text-xs font-bold flex items-center gap-2 transition-all shadow-[0_0_20px_rgba(6,182,212,0.25)] hover:scale-[1.02] disabled:opacity-50"
+            className="px-4 py-2.5 rounded-xl bg-cyan-500/20 hover:bg-cyan-500/30 text-cyan-300 border-cyan-500/40 font-mono text-xs font-bold flex items-center gap-2 transition-all shadow-[0_0_20px_rgba(6,182,212,0.25)] hover:scale-[1.02] disabled:opacity-50"
           >
             <RefreshCw className={`w-4 h-4 text-cyan-400 ${syncState.isSyncing ? 'animate-spin' : ''}`} />
             <span>INGEST KNOWLEDGE SHARD</span>
@@ -348,7 +348,7 @@ export const FederationKnowledgeDriftHeatmap: React.FC<{ onAddSystemEvent?: (typ
           <button
             onClick={handleRunSelfEvolutionV13}
             disabled={isExecutingEngine}
-            className="px-4 py-2.5 rounded-xl bg-violet-500/20 hover:bg-violet-500/30 text-violet-300 border border-violet-500/40 font-mono text-xs font-bold flex items-center gap-2 transition-all shadow-[0_0_20px_rgba(139,92,246,0.25)] hover:scale-[1.02] disabled:opacity-50"
+            className="px-4 py-2.5 rounded-xl bg-violet-500/20 hover:bg-violet-500/30 text-violet-300 border-violet-500/40 font-mono text-xs font-bold flex items-center gap-2 transition-all shadow-[0_0_20px_rgba(139,92,246,0.25)] hover:scale-[1.02] disabled:opacity-50"
           >
             <Sparkles className="w-4 h-4 text-violet-400" />
             <span>RUN SELF-EVOLUTION v13</span>
@@ -357,7 +357,7 @@ export const FederationKnowledgeDriftHeatmap: React.FC<{ onAddSystemEvent?: (typ
       </div>
 
       {/* Live Active Ledger Sync Bar */}
-      <div className="p-4 rounded-2xl bg-[#090e1a]/85 border border-cyan-500/20 backdrop-blur-xl font-mono text-xs space-y-3">
+      <div className="p-4 rounded-2xl bg-[#090e1a]/85 border-cyan-500/20 backdrop-blur-xl font-mono text-xs space-y-3">
         <div className="flex flex-col md:flex-row md:items-center justify-between gap-3">
           <div className="flex items-center gap-3">
             <div className={`w-3.5 h-3.5 rounded-full ${syncState.isSyncing ? 'bg-cyan-400 animate-ping' : 'bg-emerald-500 shadow-[0_0_10px_#10b981]'}`} />
@@ -366,7 +366,7 @@ export const FederationKnowledgeDriftHeatmap: React.FC<{ onAddSystemEvent?: (typ
                 <span className="font-bold text-white uppercase tracking-wider">
                   Active Ledger Sync Status: {syncState.isSyncing ? `VERIFYING HANDSHAKE (${syncState.stage})` : 'SYNCHRONIZED (IDLE)'}
                 </span>
-                <span className="text-[10px] px-2 py-0.5 rounded bg-white/5 border border-white/10 text-cyan-300">
+                <span className="text-[10px] px-2 py-0.5 rounded bg-white/5 border-white/10 text-cyan-300">
                   {syncState.packetsProcessedCount} PACKETS VERIFIED
                 </span>
               </div>
@@ -401,7 +401,7 @@ export const FederationKnowledgeDriftHeatmap: React.FC<{ onAddSystemEvent?: (typ
       </div>
 
       {/* Navigation Sub-Tabs */}
-      <div className="flex items-center gap-2 bg-zinc-950/80 border border-zinc-800/80 p-1.5 rounded-2xl w-fit">
+      <div className="flex items-center gap-2 bg-zinc-950/80 border-zinc-800/80 p-1.5 rounded-2xl w-fit">
         <button
           onClick={() => {
             playTone(550, 0.03);
@@ -409,7 +409,7 @@ export const FederationKnowledgeDriftHeatmap: React.FC<{ onAddSystemEvent?: (typ
           }}
           className={`px-4 py-2 rounded-xl text-xs font-mono font-bold transition flex items-center gap-2 ${
             activeTab === 'drift_charts'
-              ? 'bg-cyan-950 text-cyan-300 border border-cyan-500 shadow'
+              ? 'bg-cyan-950 text-cyan-300 border-cyan-500 shadow'
               : 'text-zinc-400 hover:text-zinc-200'
           }`}
         >
@@ -424,7 +424,7 @@ export const FederationKnowledgeDriftHeatmap: React.FC<{ onAddSystemEvent?: (typ
           }}
           className={`px-4 py-2 rounded-xl text-xs font-mono font-bold transition flex items-center gap-2 ${
             activeTab === 'matrix_heatmap'
-              ? 'bg-blue-950 text-blue-300 border border-blue-500 shadow'
+              ? 'bg-blue-950 text-blue-300 border-blue-500 shadow'
               : 'text-zinc-400 hover:text-zinc-200'
           }`}
         >
@@ -439,7 +439,7 @@ export const FederationKnowledgeDriftHeatmap: React.FC<{ onAddSystemEvent?: (typ
           }}
           className={`px-4 py-2 rounded-xl text-xs font-mono font-bold transition flex items-center gap-2 ${
             activeTab === 'runtimes_v13_v14'
-              ? 'bg-violet-950 text-violet-300 border border-violet-500 shadow'
+              ? 'bg-violet-950 text-violet-300 border-violet-500 shadow'
               : 'text-zinc-400 hover:text-zinc-200'
           }`}
         >
@@ -451,7 +451,7 @@ export const FederationKnowledgeDriftHeatmap: React.FC<{ onAddSystemEvent?: (typ
       {/* 1️⃣ Tab: Recharts Knowledge Drift Heatmap */}
       {activeTab === 'drift_charts' && (
         <div className="space-y-6">
-          <div className="p-6 rounded-[28px] bg-[#0b0e1a]/80 border border-white/8 backdrop-blur-xl space-y-4">
+          <div className="p-6 rounded-[28px] bg-[#0b0e1a]/80 border-white/8 backdrop-blur-xl space-y-4">
             <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
               <div>
                 <h3 className="text-sm font-mono font-bold text-white uppercase tracking-wider flex items-center gap-2">
@@ -464,7 +464,7 @@ export const FederationKnowledgeDriftHeatmap: React.FC<{ onAddSystemEvent?: (typ
               </div>
 
               {/* Node Filter Selector */}
-              <div className="flex items-center gap-1.5 bg-black/40 border border-white/10 p-1 rounded-xl text-xs font-mono">
+              <div className="flex items-center gap-1.5 bg-black/40 border-white/10 p-1 rounded-xl text-xs font-mono">
                 {(['ALL', 'BKK', 'SIN', 'TYO', 'FRA', 'IAD'] as const).map((nodeKey) => (
                   <button
                     key={nodeKey}
@@ -474,7 +474,7 @@ export const FederationKnowledgeDriftHeatmap: React.FC<{ onAddSystemEvent?: (typ
                     }}
                     className={`px-2.5 py-1 rounded-lg transition-all ${
                       selectedNodeFilter === nodeKey
-                        ? 'bg-cyan-500/20 text-cyan-300 font-bold border border-cyan-500/30'
+                        ? 'bg-cyan-500/20 text-cyan-300 font-bold border-cyan-500/30'
                         : 'text-zinc-400 hover:text-zinc-200'
                     }`}
                   >
@@ -595,22 +595,22 @@ export const FederationKnowledgeDriftHeatmap: React.FC<{ onAddSystemEvent?: (typ
 
             {/* Quick Metrics Bar below chart */}
             <div className="grid grid-cols-2 md:grid-cols-4 gap-4 pt-4 border-t border-white/5 font-mono text-xs">
-              <div className="p-3.5 rounded-2xl bg-white/[0.02] border border-white/5">
+              <div className="p-3.5 rounded-2xl bg-white/[0.02] border-white/5">
                 <span className="text-zinc-500 block text-[10px]">ZERO-DRIFT GUARANTEE</span>
                 <span className="text-emerald-400 font-bold text-sm">100% INTACT</span>
                 <span className="text-[10px] text-zinc-500 block">&Delta;0.00% across all 18 Chambers</span>
               </div>
-              <div className="p-3.5 rounded-2xl bg-white/[0.02] border border-white/5">
+              <div className="p-3.5 rounded-2xl bg-white/[0.02] border-white/5">
                 <span className="text-zinc-500 block text-[10px]">MAX RECORDED JITTER</span>
                 <span className="text-cyan-400 font-bold text-sm">0.0033&sigma; (Pass)</span>
                 <span className="text-[10px] text-zinc-500 block">Safe threshold: &lt; 0.0500&sigma;</span>
               </div>
-              <div className="p-3.5 rounded-2xl bg-white/[0.02] border border-white/5">
+              <div className="p-3.5 rounded-2xl bg-white/[0.02] border-white/5">
                 <span className="text-zinc-500 block text-[10px]">MERKLE RECONCILIATION</span>
                 <span className="text-violet-400 font-bold text-sm">0.48 ms RTT</span>
                 <span className="text-[10px] text-zinc-500 block">14,902 Seals Validated</span>
               </div>
-              <div className="p-3.5 rounded-2xl bg-white/[0.02] border border-white/5">
+              <div className="p-3.5 rounded-2xl bg-white/[0.02] border-white/5">
                 <span className="text-zinc-500 block text-[10px]">PQC SIGNATURE ALGORITHM</span>
                 <span className="text-amber-400 font-bold text-sm">FIPS 204 (Dilithium-5)</span>
                 <span className="text-[10px] text-zinc-500 block">Post-Quantum Bound</span>
@@ -623,7 +623,7 @@ export const FederationKnowledgeDriftHeatmap: React.FC<{ onAddSystemEvent?: (typ
       {/* 2️⃣ Tab: Multi-Node Heatmap Matrix */}
       {activeTab === 'matrix_heatmap' && (
         <div className="space-y-6">
-          <div className="p-6 rounded-[28px] bg-[#0b0e1a]/80 border border-white/8 backdrop-blur-xl space-y-4">
+          <div className="p-6 rounded-[28px] bg-[#0b0e1a]/80 border-white/8 backdrop-blur-xl space-y-4">
             <div className="flex items-center justify-between">
               <div>
                 <h3 className="text-sm font-mono font-bold text-white uppercase tracking-wider flex items-center gap-2">
@@ -634,7 +634,7 @@ export const FederationKnowledgeDriftHeatmap: React.FC<{ onAddSystemEvent?: (typ
                   Pairwise latency, statistical drift coefficient, and Merkle leaf verification across global mesh.
                 </p>
               </div>
-              <span className="px-3 py-1 rounded-full bg-emerald-500/10 text-emerald-300 border border-emerald-500/20 text-xs font-mono font-bold">
+              <span className="px-3 py-1 rounded-full bg-emerald-500/10 text-emerald-300 border-emerald-500/20 text-xs font-mono font-bold">
                 8/8 PAIRWISE BRIDGES GREEN
               </span>
             </div>
@@ -643,11 +643,11 @@ export const FederationKnowledgeDriftHeatmap: React.FC<{ onAddSystemEvent?: (typ
               {MATRIX_CELLS.map((cell, idx) => (
                 <div
                   key={idx}
-                  className="p-4 rounded-2xl bg-black/40 border border-white/5 space-y-3 font-mono text-xs hover:border-cyan-500/30 transition-all"
+                  className="p-4 rounded-2xl bg-black/40 border-white/5 space-y-3 font-mono text-xs hover:border-cyan-500/30 transition-all"
                 >
                   <div className="flex items-center justify-between">
                     <span className="font-bold text-white">{cell.pair}</span>
-                    <span className="px-2 py-0.5 rounded bg-emerald-500/10 text-emerald-300 border border-emerald-500/20 text-[10px]">
+                    <span className="px-2 py-0.5 rounded bg-emerald-500/10 text-emerald-300 border-emerald-500/20 text-[10px]">
                       {cell.status}
                     </span>
                   </div>
@@ -690,13 +690,13 @@ export const FederationKnowledgeDriftHeatmap: React.FC<{ onAddSystemEvent?: (typ
         <div className="space-y-6">
           <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
             {/* 1. Civilization Self-Evolution v13 */}
-            <div className="p-6 rounded-[28px] bg-gradient-to-b from-violet-950/20 to-[#0b0e1a]/80 border border-violet-500/30 backdrop-blur-xl space-y-4 flex flex-col justify-between">
+            <div className="p-6 rounded-[28px] bg-gradient-to-b from-violet-950/20 to-[#0b0e1a]/80 border-violet-500/30 backdrop-blur-xl space-y-4 flex flex-col justify-between">
               <div className="space-y-3 font-mono">
                 <div className="flex items-center justify-between">
                   <span className="text-[11px] font-bold text-violet-400 uppercase tracking-wider">
                     PHASE 13 RUNTIME
                   </span>
-                  <span className="text-[10px] px-2 py-0.5 rounded bg-violet-500/10 text-violet-300 border border-violet-500/20">
+                  <span className="text-[10px] px-2 py-0.5 rounded bg-violet-500/10 text-violet-300 border-violet-500/20">
                     ADAPTIVE GOVERNANCE
                   </span>
                 </div>
@@ -706,7 +706,7 @@ export const FederationKnowledgeDriftHeatmap: React.FC<{ onAddSystemEvent?: (typ
                 <p className="text-xs text-zinc-400">
                   Autonomous Governance & Adaptive Intelligence Runtime. Initializes Evolution Core, synchronizes 10/10-HSM quorum nodes, and adapts constitutional laws.
                 </p>
-                <div className="p-3 rounded-xl bg-black/50 border border-white/5 text-[11px] space-y-1 text-zinc-300">
+                <div className="p-3 rounded-xl bg-black/50 border-white/5 text-[11px] space-y-1 text-zinc-300">
                   <div>&bull; Evolution ID: <span className="text-violet-300 font-bold">EVO-CIV-13</span></div>
                   <div>&bull; Base Kernel: <span className="text-cyan-300">CIK-001 (v12.3)</span></div>
                   <div>&bull; Proof Type: <span className="text-amber-300">Merkle-Adaptive-Seal</span></div>
@@ -717,7 +717,7 @@ export const FederationKnowledgeDriftHeatmap: React.FC<{ onAddSystemEvent?: (typ
               <button
                 onClick={handleRunSelfEvolutionV13}
                 disabled={isExecutingEngine}
-                className="w-full mt-4 py-2.5 rounded-xl bg-violet-500/20 hover:bg-violet-500/30 text-violet-300 border border-violet-500/40 font-mono text-xs font-bold flex items-center justify-center gap-2 transition-all shadow-[0_0_15px_rgba(139,92,246,0.2)] disabled:opacity-50"
+                className="w-full mt-4 py-2.5 rounded-xl bg-violet-500/20 hover:bg-violet-500/30 text-violet-300 border-violet-500/40 font-mono text-xs font-bold flex items-center justify-center gap-2 transition-all shadow-[0_0_15px_rgba(139,92,246,0.2)] disabled:opacity-50"
               >
                 <Play className="w-4 h-4 text-violet-400" />
                 <span>EXECUTE SELF-EVOLUTION v13</span>
@@ -725,13 +725,13 @@ export const FederationKnowledgeDriftHeatmap: React.FC<{ onAddSystemEvent?: (typ
             </div>
 
             {/* 2. Sovereign Vault Expansion v14.0 */}
-            <div className="p-6 rounded-[28px] bg-gradient-to-b from-cyan-950/20 to-[#0b0e1a]/80 border border-cyan-500/30 backdrop-blur-xl space-y-4 flex flex-col justify-between">
+            <div className="p-6 rounded-[28px] bg-gradient-to-b from-cyan-950/20 to-[#0b0e1a]/80 border-cyan-500/30 backdrop-blur-xl space-y-4 flex flex-col justify-between">
               <div className="space-y-3 font-mono">
                 <div className="flex items-center justify-between">
                   <span className="text-[11px] font-bold text-cyan-400 uppercase tracking-wider">
                     PHASE 14.0 RUNTIME
                   </span>
-                  <span className="text-[10px] px-2 py-0.5 rounded bg-cyan-500/10 text-cyan-300 border border-cyan-500/20">
+                  <span className="text-[10px] px-2 py-0.5 rounded bg-cyan-500/10 text-cyan-300 border-cyan-500/20">
                     QUANTUM EXPANSION
                   </span>
                 </div>
@@ -741,7 +741,7 @@ export const FederationKnowledgeDriftHeatmap: React.FC<{ onAddSystemEvent?: (typ
                 <p className="text-xs text-zinc-400">
                   Quantum-Resilient Storage & Multi-Node Synchronization. Allocates 1,024 TB Quantum Storage with FIPS 203 ML-KEM-1024 encryption and 14,902 Merkle proofs.
                 </p>
-                <div className="p-3 rounded-xl bg-black/50 border border-white/5 text-[11px] space-y-1 text-zinc-300">
+                <div className="p-3 rounded-xl bg-black/50 border-white/5 text-[11px] space-y-1 text-zinc-300">
                   <div>&bull; Vault Core: <span className="text-cyan-300 font-bold">SV-&Omega;&infin;-CORE</span></div>
                   <div>&bull; Capacity: <span className="text-emerald-400">1,024 TB Allocated</span></div>
                   <div>&bull; Encryption: <span className="text-amber-300">FIPS203-ML-KEM-1024</span></div>
@@ -752,7 +752,7 @@ export const FederationKnowledgeDriftHeatmap: React.FC<{ onAddSystemEvent?: (typ
               <button
                 onClick={handleRunVaultExpansionV14}
                 disabled={isExecutingEngine}
-                className="w-full mt-4 py-2.5 rounded-xl bg-cyan-500/20 hover:bg-cyan-500/30 text-cyan-300 border border-cyan-500/40 font-mono text-xs font-bold flex items-center justify-center gap-2 transition-all shadow-[0_0_15px_rgba(6,182,212,0.2)] disabled:opacity-50"
+                className="w-full mt-4 py-2.5 rounded-xl bg-cyan-500/20 hover:bg-cyan-500/30 text-cyan-300 border-cyan-500/40 font-mono text-xs font-bold flex items-center justify-center gap-2 transition-all shadow-[0_0_15px_rgba(6,182,212,0.2)] disabled:opacity-50"
               >
                 <Play className="w-4 h-4 text-cyan-400" />
                 <span>EXPAND SOVEREIGN VAULT v14.0</span>
@@ -760,13 +760,13 @@ export const FederationKnowledgeDriftHeatmap: React.FC<{ onAddSystemEvent?: (typ
             </div>
 
             {/* 3. Autonomous Governance Fabric v14.0 */}
-            <div className="p-6 rounded-[28px] bg-gradient-to-b from-amber-950/20 to-[#0b0e1a]/80 border border-amber-500/30 backdrop-blur-xl space-y-4 flex flex-col justify-between">
+            <div className="p-6 rounded-[28px] bg-gradient-to-b from-amber-950/20 to-[#0b0e1a]/80 border-amber-500/30 backdrop-blur-xl space-y-4 flex flex-col justify-between">
               <div className="space-y-3 font-mono">
                 <div className="flex items-center justify-between">
                   <span className="text-[11px] font-bold text-amber-400 uppercase tracking-wider">
                     PHASE 14.0 FABRIC
                   </span>
-                  <span className="text-[10px] px-2 py-0.5 rounded bg-amber-500/10 text-amber-300 border border-amber-500/20">
+                  <span className="text-[10px] px-2 py-0.5 rounded bg-amber-500/10 text-amber-300 border-amber-500/20">
                     SELF-HEALING CONTINUOUS
                   </span>
                 </div>
@@ -776,7 +776,7 @@ export const FederationKnowledgeDriftHeatmap: React.FC<{ onAddSystemEvent?: (typ
                 <p className="text-xs text-zinc-400">
                   Self-Healing Governance & Continuous Assurance. Deploys 128 Auditor Agents swarm, 12 Senate Nodes consensus (&ge;99.5%), and invariant truth boundary locks.
                 </p>
-                <div className="p-3 rounded-xl bg-black/50 border border-white/5 text-[11px] space-y-1 text-zinc-300">
+                <div className="p-3 rounded-xl bg-black/50 border-white/5 text-[11px] space-y-1 text-zinc-300">
                   <div>&bull; Fabric ID: <span className="text-amber-300 font-bold">AGF-&Omega;&infin;-CORE</span></div>
                   <div>&bull; Swarm Size: <span className="text-emerald-400">128 Auditor Agents</span></div>
                   <div>&bull; Senate Quorum: <span className="text-cyan-300">12 Nodes (&ge;99.5%)</span></div>
@@ -787,7 +787,7 @@ export const FederationKnowledgeDriftHeatmap: React.FC<{ onAddSystemEvent?: (typ
               <button
                 onClick={handleRunGovernanceFabricV14}
                 disabled={isExecutingEngine}
-                className="w-full mt-4 py-2.5 rounded-xl bg-amber-500/20 hover:bg-amber-500/30 text-amber-300 border border-amber-500/40 font-mono text-xs font-bold flex items-center justify-center gap-2 transition-all shadow-[0_0_15px_rgba(245,158,11,0.2)] disabled:opacity-50"
+                className="w-full mt-4 py-2.5 rounded-xl bg-amber-500/20 hover:bg-amber-500/30 text-amber-300 border-amber-500/40 font-mono text-xs font-bold flex items-center justify-center gap-2 transition-all shadow-[0_0_15px_rgba(245,158,11,0.2)] disabled:opacity-50"
               >
                 <Play className="w-4 h-4 text-amber-400" />
                 <span>ACTIVATE GOVERNANCE FABRIC v14.0</span>
@@ -797,7 +797,7 @@ export const FederationKnowledgeDriftHeatmap: React.FC<{ onAddSystemEvent?: (typ
 
           {/* Active Live Logs Inspector */}
           {activeLogs.length > 0 && (
-            <div className="p-6 rounded-[28px] bg-[#090d16]/90 border border-white/10 space-y-4 font-mono text-xs">
+            <div className="p-6 rounded-[28px] bg-[#090d16]/90 border-white/10 space-y-4 font-mono text-xs">
               <div className="flex items-center justify-between">
                 <span className="font-bold text-white flex items-center gap-2">
                   <FileCheck2 className="w-4 h-4 text-cyan-400" />
@@ -813,7 +813,7 @@ export const FederationKnowledgeDriftHeatmap: React.FC<{ onAddSystemEvent?: (typ
 
               <div className="space-y-3">
                 {activeLogs.map((log) => (
-                  <div key={log.id} className="p-4 rounded-2xl bg-black/40 border border-white/5 space-y-2">
+                  <div key={log.id} className="p-4 rounded-2xl bg-black/40 border-white/5 space-y-2">
                     <div className="flex items-center justify-between">
                       <div className="flex items-center gap-2">
                         <span className="font-bold text-white">{log.architecture}</span>

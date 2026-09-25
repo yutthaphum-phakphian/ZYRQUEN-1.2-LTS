@@ -439,7 +439,7 @@ export const TopologyCanvas: React.FC = () => {
       <canvas ref={canvasRef} className="w-full h-full block cursor-grab active:cursor-grabbing" />
 
       {/* Top Left HUD */}
-      <div className="absolute top-3 left-3 flex items-center gap-1.5 bg-black/60 backdrop-blur-md px-2.5 py-1 rounded-lg border border-white/10 text-violet-400 text-[10px] font-mono pointer-events-none">
+      <div className="absolute top-3 left-3 flex items-center gap-1.5 bg-black/60 backdrop-blur-md px-2.5 py-1 rounded-lg border-white/10 text-violet-400 text-[10px] font-mono pointer-events-none">
         <Network className="w-3.5 h-3.5" />
         <span className="font-semibold tracking-wider">TOPOLOGY MESH</span>
         <span className="text-zinc-500">•</span>
@@ -447,7 +447,7 @@ export const TopologyCanvas: React.FC = () => {
       </div>
 
       {/* Top Right Controls */}
-      <div className="absolute top-3 right-3 flex items-center gap-1.5 bg-black/60 backdrop-blur-md p-1 rounded-xl border border-white/10 shadow-lg">
+      <div className="absolute top-3 right-3 flex items-center gap-1.5 bg-black/60 backdrop-blur-md p-1 rounded-xl border-white/10 shadow-lg">
         <button
           onClick={resetTopology}
           title="Reset Node Layout"
@@ -460,7 +460,7 @@ export const TopologyCanvas: React.FC = () => {
 
       {/* Selected Node Inspector Drawer */}
       {selectedNode && (
-        <div className="absolute bottom-3 left-3 right-3 sm:right-auto sm:max-w-sm bg-[#0a0d1a]/95 backdrop-blur-xl border border-cyan-500/30 p-3.5 rounded-2xl shadow-2xl animate-in fade-in slide-in-from-bottom-2">
+        <div className="absolute bottom-3 left-3 right-3 sm:right-auto sm:max-w-sm bg-[#0a0d1a]/95 backdrop-blur-xl border-cyan-500/30 p-3.5 rounded-2xl shadow-2xl animate-in fade-in slide-in-from-bottom-2">
           <div className="flex items-center justify-between gap-2">
             <div className="flex items-center gap-2">
               <span
@@ -484,7 +484,7 @@ export const TopologyCanvas: React.FC = () => {
 
           <div className="mt-2.5 pt-2 border-t border-white/10 flex items-center justify-between text-[10px] font-mono">
             <span className="text-zinc-500">Hash: {selectedNode.hash.substring(0, 16)}...</span>
-            <span className="text-emerald-400 font-medium px-2 py-0.5 rounded-full bg-emerald-500/10 border border-emerald-500/20">
+            <span className="text-emerald-400 font-medium px-2 py-0.5 rounded-full bg-emerald-500/10 border-emerald-500/20">
               {selectedNode.status}
             </span>
           </div>
@@ -493,7 +493,7 @@ export const TopologyCanvas: React.FC = () => {
 
       {/* Helper Footer */}
       {!selectedNode && (
-        <div className="absolute bottom-3 right-3 text-[9px] font-mono text-zinc-500 bg-black/50 backdrop-blur-sm px-2.5 py-1 rounded-md border border-white/5 pointer-events-none hidden sm:flex items-center gap-1.5">
+        <div className="absolute bottom-3 right-3 text-[9px] font-mono text-zinc-500 bg-black/50 backdrop-blur-sm px-2.5 py-1 rounded-md border-white/5 pointer-events-none hidden sm:flex items-center gap-1.5">
           <Sparkles className="w-3 h-3 text-violet-400" />
           <span>Click &amp; Drag Nodes &bull; Realtime Dynamic Topology</span>
         </div>

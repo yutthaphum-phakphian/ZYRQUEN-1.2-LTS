@@ -75,11 +75,11 @@ export const AnomalyDetailModal: React.FC<AnomalyDetailModalProps> = ({
 
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center p-3 sm:p-6 bg-black/80 backdrop-blur-sm font-mono animate-in fade-in duration-150">
-      <div className="relative w-full max-w-2xl bg-[#070a12] border border-amber-500/40 rounded-2xl shadow-[0_0_40px_rgba(245,158,11,0.2)] flex flex-col max-h-[92vh] overflow-hidden">
+      <div className="relative w-full max-w-2xl bg-[#070a12] border-amber-500/40 rounded-2xl shadow-[0_0_40px_rgba(245,158,11,0.2)] flex flex-col max-h-[92vh] overflow-hidden">
         {/* Header */}
         <div className="p-4 sm:p-5 border-b border-amber-500/20 bg-[#0c101c] flex items-center justify-between">
           <div className="flex items-center gap-3">
-            <div className="w-9 h-9 rounded-xl bg-amber-950/60 border border-amber-500/40 flex items-center justify-center text-amber-400">
+            <div className="w-9 h-9 rounded-xl bg-amber-950/60 border-amber-500/40 flex items-center justify-center text-amber-400">
               <ShieldAlert className="w-5 h-5" />
             </div>
             <div>
@@ -89,10 +89,10 @@ export const AnomalyDetailModal: React.FC<AnomalyDetailModalProps> = ({
                 </h3>
                 <span className={`px-2 py-0.5 rounded text-[10px] font-bold uppercase ${
                   evaluation.severity === 'CRITICAL'
-                    ? 'bg-rose-950 text-rose-300 border border-rose-500/50'
+                    ? 'bg-rose-950 text-rose-300 border-rose-500/50'
                     : evaluation.severity === 'HIGH'
-                    ? 'bg-amber-950 text-amber-300 border border-amber-500/50'
-                    : 'bg-yellow-950 text-yellow-300 border border-yellow-500/50'
+                    ? 'bg-amber-950 text-amber-300 border-amber-500/50'
+                    : 'bg-yellow-950 text-yellow-300 border-yellow-500/50'
                 }`}>
                   {evaluation.severity} SEVERITY
                 </span>
@@ -112,30 +112,30 @@ export const AnomalyDetailModal: React.FC<AnomalyDetailModalProps> = ({
         <div className="p-4 sm:p-6 overflow-y-auto space-y-4 text-xs">
           {/* Status & Drift Highlights */}
           <div className="grid grid-cols-2 sm:grid-cols-4 gap-2.5">
-            <div className="p-3 bg-[#0c101c] rounded-xl border border-zinc-800">
+            <div className="p-3 bg-[#0c101c] rounded-xl border-zinc-800">
               <span className="text-[10px] text-zinc-400 block mb-1">Status</span>
               <span className={`font-bold ${event.status === 'SUCCESS' ? 'text-emerald-400' : 'text-rose-400'}`}>
                 {event.status}
               </span>
             </div>
-            <div className="p-3 bg-[#0c101c] rounded-xl border border-zinc-800">
+            <div className="p-3 bg-[#0c101c] rounded-xl border-zinc-800">
               <span className="text-[10px] text-zinc-400 block mb-1">Drift Level</span>
               <span className={`font-bold ${event.driftPercentage >= 15 ? 'text-amber-400 font-bold' : 'text-zinc-300'}`}>
                 {event.driftPercentage.toFixed(2)}%
               </span>
             </div>
-            <div className="p-3 bg-[#0c101c] rounded-xl border border-zinc-800">
+            <div className="p-3 bg-[#0c101c] rounded-xl border-zinc-800">
               <span className="text-[10px] text-zinc-400 block mb-1">Operator</span>
               <span className="text-zinc-300 truncate block">{event.operator || 'system'}</span>
             </div>
-            <div className="p-3 bg-[#0c101c] rounded-xl border border-zinc-800">
+            <div className="p-3 bg-[#0c101c] rounded-xl border-zinc-800">
               <span className="text-[10px] text-zinc-400 block mb-1">Timestamp (UTC)</span>
               <span className="text-zinc-400 text-[10px] block truncate">{event.timestamp}</span>
             </div>
           </div>
 
           {/* Root Cause Analysis */}
-          <div className="p-4 bg-amber-950/20 border border-amber-500/30 rounded-xl space-y-2">
+          <div className="p-4 bg-amber-950/20 border-amber-500/30 rounded-xl space-y-2">
             <div className="flex items-center gap-1.5 text-amber-400 font-bold text-[11px] uppercase tracking-wider">
               <AlertTriangle className="w-3.5 h-3.5" />
               <span>Diagnostic Failure Rationale</span>
@@ -148,7 +148,7 @@ export const AnomalyDetailModal: React.FC<AnomalyDetailModalProps> = ({
           </div>
 
           {/* Cryptographic Invariant Proofs */}
-          <div className="p-3.5 bg-[#05070d] border border-zinc-800 rounded-xl space-y-2">
+          <div className="p-3.5 bg-[#05070d] border-zinc-800 rounded-xl space-y-2">
             <div className="flex items-center justify-between text-zinc-400 text-[11px]">
               <span className="flex items-center gap-1.5">
                 <Hash className="w-3.5 h-3.5 text-cyan-400" />
@@ -156,16 +156,16 @@ export const AnomalyDetailModal: React.FC<AnomalyDetailModalProps> = ({
               </span>
               <span className="text-[10px] text-zinc-500 font-mono">FIPS 204 Compliant</span>
             </div>
-            <div className="p-2 bg-black/60 rounded border border-zinc-800/80 font-mono text-[10.5px] text-cyan-300 break-all">
+            <div className="p-2 bg-black/60 rounded border-zinc-800/80 font-mono text-[10.5px] text-cyan-300 break-all">
               {event.blockHash || '0x7e8f3a9104b2c8d19e075af621bcde4901fa5c2b3e81749a0bcf18204689abcd'}
             </div>
           </div>
 
           {/* Tamper-Resistant Signature */}
           {event.signature && (
-            <div className="p-3.5 bg-[#05070d] border border-zinc-800 rounded-xl space-y-1.5">
+            <div className="p-3.5 bg-[#05070d] border-zinc-800 rounded-xl space-y-1.5">
               <span className="text-[11px] text-zinc-400 block">Operator Signature Witness</span>
-              <div className="p-2 bg-black/60 rounded border border-zinc-800 font-mono text-[10px] text-emerald-400 truncate">
+              <div className="p-2 bg-black/60 rounded border-zinc-800 font-mono text-[10px] text-emerald-400 truncate">
                 {event.signature}
               </div>
             </div>
@@ -173,14 +173,14 @@ export const AnomalyDetailModal: React.FC<AnomalyDetailModalProps> = ({
 
           {/* Error Banner */}
           {errorMessage && (
-            <div className="p-3 rounded-xl bg-rose-950/60 border border-rose-500/50 text-rose-300 text-xs">
+            <div className="p-3 rounded-xl bg-rose-950/60 border-rose-500/50 text-rose-300 text-xs">
               <strong>Acknowledgment Error:</strong> {errorMessage}
             </div>
           )}
 
           {/* Success Banner */}
           {ackSuccess && (
-            <div className="p-3 rounded-xl bg-emerald-950/60 border border-emerald-500/50 text-emerald-300 text-xs flex items-center gap-2">
+            <div className="p-3 rounded-xl bg-emerald-950/60 border-emerald-500/50 text-emerald-300 text-xs flex items-center gap-2">
               <CheckCircle2 className="w-4 h-4 text-emerald-400 shrink-0" />
               <span>Anomaly acknowledged and registered to immutable audit ledger.</span>
             </div>
@@ -192,7 +192,7 @@ export const AnomalyDetailModal: React.FC<AnomalyDetailModalProps> = ({
           <button
             type="button"
             onClick={onClose}
-            className="px-4 py-2 rounded-xl border border-zinc-700 text-zinc-300 hover:text-white hover:bg-zinc-800 transition-colors cursor-pointer text-xs"
+            className="px-4 py-2 rounded-xl border-zinc-700 text-zinc-300 hover:text-white hover:bg-zinc-800 transition-colors cursor-pointer text-xs"
           >
             Close
           </button>

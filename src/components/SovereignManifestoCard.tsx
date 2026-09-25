@@ -141,7 +141,7 @@ DILITHIUM5_SIGNATURE:
   };
 
   return (
-    <div className="rounded-[28px] bg-[#05090f] border border-cyan-500/40 p-5 sm:p-7 shadow-[0_0_50px_-10px_rgba(6,182,212,0.25)] relative overflow-hidden font-mono text-xs">
+    <div className="rounded-[28px] bg-[#05090f] border-cyan-500/40 p-5 sm:p-7 shadow-[0_0_50px_-10px_rgba(6,182,212,0.25)] relative overflow-hidden font-mono text-xs">
       {/* CRT Scanlines and phosphor background overlay */}
       {crtEffect && (
         <div
@@ -168,7 +168,7 @@ DILITHIUM5_SIGNATURE:
             <span className="text-white font-bold tracking-wider text-xs sm:text-sm">
               SOVEREIGN_MANIFESTO_CANONICAL_V1.2.LTS.sig
             </span>
-            <span className="px-2 py-0.5 rounded-full bg-emerald-500/10 text-emerald-300 border border-emerald-500/30 text-[10px]">
+            <span className="px-2 py-0.5 rounded-full bg-emerald-500/10 text-emerald-300 border-emerald-500/30 text-[10px]">
               OMEGA-1 AUTHORIZED
             </span>
           </div>
@@ -191,7 +191,7 @@ DILITHIUM5_SIGNATURE:
           <button
             onClick={handleVerifyManifesto}
             disabled={isVerifying}
-            className="px-3 py-1 rounded-lg bg-cyan-500/20 hover:bg-cyan-500/30 text-cyan-200 border border-cyan-500/40 flex items-center gap-1.5 transition text-[11px]"
+            className="px-3 py-1 rounded-lg bg-cyan-500/20 hover:bg-cyan-500/30 text-cyan-200 border-cyan-500/40 flex items-center gap-1.5 transition text-[11px]"
           >
             <RefreshCw className={`w-3.5 h-3.5 text-cyan-400 ${isVerifying ? 'animate-spin' : ''}`} />
             <span>{isVerifying ? 'Verifying...' : 'Verify Signature'}</span>
@@ -199,7 +199,7 @@ DILITHIUM5_SIGNATURE:
 
           <button
             onClick={handleCopyManifesto}
-            className="px-3 py-1 rounded-lg bg-white/5 hover:bg-white/10 text-zinc-200 border border-white/10 flex items-center gap-1.5 transition text-[11px]"
+            className="px-3 py-1 rounded-lg bg-white/5 hover:bg-white/10 text-zinc-200 border-white/10 flex items-center gap-1.5 transition text-[11px]"
           >
             {copied ? <Check className="w-3.5 h-3.5 text-emerald-400" /> : <Copy className="w-3.5 h-3.5 text-zinc-400" />}
             <span>{copied ? 'Copied Sig' : 'Copy'}</span>
@@ -207,7 +207,7 @@ DILITHIUM5_SIGNATURE:
 
           <button
             onClick={handleDownloadAsc}
-            className="px-3 py-1 rounded-lg bg-emerald-500/20 hover:bg-emerald-500/30 text-emerald-300 border border-emerald-500/40 flex items-center gap-1.5 transition text-[11px]"
+            className="px-3 py-1 rounded-lg bg-emerald-500/20 hover:bg-emerald-500/30 text-emerald-300 border-emerald-500/40 flex items-center gap-1.5 transition text-[11px]"
             title="Download signed ASCII armor .asc"
           >
             <Download className="w-3.5 h-3.5 text-emerald-400" />
@@ -216,7 +216,7 @@ DILITHIUM5_SIGNATURE:
 
           <button
             onClick={() => setTerminalExpanded(!terminalExpanded)}
-            className="p-1.5 rounded-lg bg-white/5 hover:bg-white/10 text-zinc-400 hover:text-white border border-white/10 transition"
+            className="p-1.5 rounded-lg bg-white/5 hover:bg-white/10 text-zinc-400 hover:text-white border-white/10 transition"
           >
             {terminalExpanded ? <Minimize2 className="w-3.5 h-3.5" /> : <Maximize2 className="w-3.5 h-3.5" />}
           </button>
@@ -225,7 +225,7 @@ DILITHIUM5_SIGNATURE:
 
       {/* Verification Success Banner */}
       {verificationSuccess && (
-        <div className="relative z-10 mb-4 p-3 rounded-xl bg-emerald-950/60 border border-emerald-500/50 text-emerald-300 flex items-center justify-between text-xs animate-in fade-in">
+        <div className="relative z-10 mb-4 p-3 rounded-xl bg-emerald-950/60 border-emerald-500/50 text-emerald-300 flex items-center justify-between text-xs animate-in fade-in">
           <div className="flex items-center gap-2">
             <ShieldCheck className="w-4 h-4 text-emerald-400 shrink-0" />
             <span>
@@ -249,7 +249,7 @@ DILITHIUM5_SIGNATURE:
         </div>
 
         {/* ASCII Header Banner */}
-        <pre className="text-[10px] sm:text-[11px] leading-[1.15] text-cyan-400/90 font-mono select-none overflow-x-auto p-3 rounded-xl bg-black/60 border border-cyan-500/20">
+        <pre className="text-[10px] sm:text-[11px] leading-[1.15] text-cyan-400/90 font-mono select-none overflow-x-auto p-3 rounded-xl bg-black/60 border-cyan-500/20">
 {`███████╗██╗   ██╗██████╗  ██████╗ ██╗   ██╗███████╗███╗   ██╗     ██████╗  ██████╗ 
 ╚══███╔╝╚██╗ ██╔╝██╔══██╗██╔═══██╗██║   ██║██╔════╝████╗  ██║    ██╔═══██╗██╔════╝ 
   ███╔╝  ╚████╔╝ ██████╔╝██║   ██║██║   ██║█████╗  ██╔██╗ ██║    ██║   ██║███████╗ 
@@ -261,7 +261,7 @@ SOVEREIGN WORLD ENGINE • FROZEN v1.2 LTS • CANONICAL HASH #849202 • OMEGA-
         {/* Metadata Key-Value Matrix Grid */}
         <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
           {/* Left Column: Core Metadata & Identity */}
-          <div className="p-3.5 rounded-2xl bg-black/50 border border-white/8 space-y-2">
+          <div className="p-3.5 rounded-2xl bg-black/50 border-white/8 space-y-2">
             <div className="text-[10px] uppercase font-bold text-cyan-400 border-b border-white/10 pb-1 flex items-center justify-between">
               <span>[01] CORE PLATFORM IDENTITY (METADATA.JSON)</span>
               <span className="text-zinc-500">CANONICAL SPEC</span>
@@ -295,7 +295,7 @@ SOVEREIGN WORLD ENGINE • FROZEN v1.2 LTS • CANONICAL HASH #849202 • OMEGA-
           </div>
 
           {/* Right Column: SSoT Invariants & Post-Quantum Hardware */}
-          <div className="p-3.5 rounded-2xl bg-black/50 border border-white/8 space-y-2">
+          <div className="p-3.5 rounded-2xl bg-black/50 border-white/8 space-y-2">
             <div className="text-[10px] uppercase font-bold text-emerald-400 border-b border-white/10 pb-1 flex items-center justify-between">
               <span>[02] SSOT INVARIANTS & HARDWARE CRYPTOGRAPHY</span>
               <span className="text-zinc-500">POST-QUANTUM</span>
@@ -331,7 +331,7 @@ SOVEREIGN WORLD ENGINE • FROZEN v1.2 LTS • CANONICAL HASH #849202 • OMEGA-
         </div>
 
         {/* Genesis Merkle Hash Strip */}
-        <div className="p-3 rounded-xl bg-black/70 border border-cyan-500/20 space-y-1">
+        <div className="p-3 rounded-xl bg-black/70 border-cyan-500/20 space-y-1">
           <div className="flex items-center justify-between text-[10px] text-zinc-400">
             <span className="flex items-center gap-1.5 text-cyan-300 font-bold">
               <Lock className="w-3.5 h-3.5 text-cyan-400" />
@@ -339,7 +339,7 @@ SOVEREIGN WORLD ENGINE • FROZEN v1.2 LTS • CANONICAL HASH #849202 • OMEGA-
             </span>
             <span className="text-emerald-400 font-bold">100% SSoT MATCH</span>
           </div>
-          <div className="text-[11px] text-emerald-300 font-mono break-all select-all bg-black/60 p-2 rounded-lg border border-emerald-500/30">
+          <div className="text-[11px] text-emerald-300 font-mono break-all select-all bg-black/60 p-2 rounded-lg border-emerald-500/30">
             {SYSTEM_STATE.merkleGenesisRoot}
           </div>
         </div>
@@ -355,7 +355,7 @@ SOVEREIGN WORLD ENGINE • FROZEN v1.2 LTS • CANONICAL HASH #849202 • OMEGA-
             <span>พันธสัญญาอธิปไตย 4 หมวด (FOUR ARTICLES OF SOVEREIGN FAITH):</span>
           </div>
 
-          <div className="p-3 rounded-xl bg-white/[0.02] border border-white/6 space-y-1">
+          <div className="p-3 rounded-xl bg-white/[0.02] border-white/6 space-y-1">
             <span className="text-amber-300 font-bold text-[11px]">
               หมวดที่ ๑ (Article I) — กฎเหล็กแห่งความสัจธรรม (Primacy of Invariants):
             </span>
@@ -365,7 +365,7 @@ SOVEREIGN WORLD ENGINE • FROZEN v1.2 LTS • CANONICAL HASH #849202 • OMEGA-
             </p>
           </div>
 
-          <div className="p-3 rounded-xl bg-white/[0.02] border border-white/6 space-y-1">
+          <div className="p-3 rounded-xl bg-white/[0.02] border-white/6 space-y-1">
             <span className="text-cyan-300 font-bold text-[11px]">
               หมวดที่ ๒ (Article II) — ปราการหลังยุคควอนตัม (Post-Quantum Sanctuary):
             </span>
@@ -374,7 +374,7 @@ SOVEREIGN WORLD ENGINE • FROZEN v1.2 LTS • CANONICAL HASH #849202 • OMEGA-
             </p>
           </div>
 
-          <div className="p-3 rounded-xl bg-white/[0.02] border border-white/6 space-y-1">
+          <div className="p-3 rounded-xl bg-white/[0.02] border-white/6 space-y-1">
             <span className="text-emerald-300 font-bold text-[11px]">
               หมวดที่ ๓ (Article III) — การรับรองพยานหลักฐานตามกฎหมายไทย (Court Admissibility):
             </span>
@@ -384,7 +384,7 @@ SOVEREIGN WORLD ENGINE • FROZEN v1.2 LTS • CANONICAL HASH #849202 • OMEGA-
             </p>
           </div>
 
-          <div className="p-3 rounded-xl bg-white/[0.02] border border-white/6 space-y-1">
+          <div className="p-3 rounded-xl bg-white/[0.02] border-white/6 space-y-1">
             <span className="text-violet-300 font-bold text-[11px]">
               หมวดที่ ๔ (Article IV) — สภาฉันทามติเอกฉันท์ 10 ผู้พิทักษ์ (Deca-Custodian Quorum):
             </span>
@@ -395,7 +395,7 @@ SOVEREIGN WORLD ENGINE • FROZEN v1.2 LTS • CANONICAL HASH #849202 • OMEGA-
         </div>
 
         {/* Digital Signature Block */}
-        <div className="p-3.5 rounded-xl bg-gradient-to-r from-emerald-950/40 via-black to-cyan-950/40 border border-emerald-500/30 space-y-1.5">
+        <div className="p-3.5 rounded-xl bg-gradient-to-r from-emerald-950/40 via-black to-cyan-950/40 border-emerald-500/30 space-y-1.5">
           <div className="flex items-center justify-between text-[10px] text-zinc-400">
             <span className="text-emerald-400 font-bold flex items-center gap-1.5">
               <ShieldCheck className="w-3.5 h-3.5" />
@@ -403,7 +403,7 @@ SOVEREIGN WORLD ENGINE • FROZEN v1.2 LTS • CANONICAL HASH #849202 • OMEGA-
             </span>
             <span className="text-zinc-500">SEALED INVARIANT</span>
           </div>
-          <div className="text-[10px] font-mono text-zinc-300 break-all select-all bg-black/60 p-2 rounded border border-white/5">
+          <div className="text-[10px] font-mono text-zinc-300 break-all select-all bg-black/60 p-2 rounded border-white/5">
             {SYSTEM_STATE.signatureStamp}
           </div>
         </div>
@@ -420,7 +420,7 @@ SOVEREIGN WORLD ENGINE • FROZEN v1.2 LTS • CANONICAL HASH #849202 • OMEGA-
                 playTone(700, 0.05);
                 onOpenCertificate();
               }}
-              className="px-3.5 py-1.5 rounded-xl bg-gradient-to-r from-amber-500/20 via-yellow-500/20 to-amber-600/20 hover:from-amber-500/30 hover:to-yellow-500/30 border border-amber-500/40 text-amber-300 font-mono text-xs font-semibold flex items-center gap-1.5 transition shadow-sm"
+              className="px-3.5 py-1.5 rounded-xl bg-gradient-to-r from-amber-500/20 via-yellow-500/20 to-amber-600/20 hover:from-amber-500/30 hover:to-yellow-500/30 border-amber-500/40 text-amber-300 font-mono text-xs font-semibold flex items-center gap-1.5 transition shadow-sm"
             >
               <Award className="w-3.5 h-3.5 text-amber-400" />
               <span>เปิดใบรับรอง Gold Master Certificate</span>

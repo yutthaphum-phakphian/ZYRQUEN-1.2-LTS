@@ -466,7 +466,7 @@ export const CourtEvidenceQR: React.FC<CourtEvidenceQRProps> = ({
 
         {/* 1. Subtle Toast Notification Popup */}
         {showToast && (
-          <div className="no-print print:hidden absolute top-2 left-1/2 -translate-x-1/2 z-50 flex items-center gap-2 px-3 py-1.5 bg-emerald-950/95 border border-emerald-500/80 rounded-full shadow-lg shadow-emerald-900/50 text-[11px] font-mono text-emerald-300 animate-in fade-in slide-in-from-top-2 duration-300 backdrop-blur-md pointer-events-none whitespace-nowrap">
+          <div className="no-print print:hidden absolute top-2 left-1/2 -translate-x-1/2 z-50 flex items-center gap-2 px-3 py-1.5 bg-emerald-950/95 border-emerald-500/80 rounded-full shadow-lg shadow-emerald-900/50 text-[11px] font-mono text-emerald-300 animate-in fade-in slide-in-from-top-2 duration-300 backdrop-blur-md pointer-events-none whitespace-nowrap">
             <CheckCircle2 className="w-3.5 h-3.5 text-emerald-400 shrink-0" />
             <span>Payload Hash Validated against Ledger (SSoT Δ0.00%)</span>
           </div>
@@ -513,8 +513,8 @@ export const CourtEvidenceQR: React.FC<CourtEvidenceQRProps> = ({
           {/* 3-Column Landscape Print Grid */}
           <div className="grid grid-cols-12 gap-3 text-[8.5pt] font-mono">
             {/* Column 1: QR Code & Verification Scan (3 cols) */}
-            <div className="col-span-3 border border-black p-2 rounded flex flex-col items-center justify-between text-center bg-white">
-              <div className="p-1 bg-white border border-neutral-300 rounded">
+            <div className="col-span-3 border-black p-2 rounded flex flex-col items-center justify-between text-center bg-white">
+              <div className="p-1 bg-white border-neutral-300 rounded">
                 <QRCodeSVG
                   value={payloadString}
                   size={135}
@@ -533,19 +533,19 @@ export const CourtEvidenceQR: React.FC<CourtEvidenceQRProps> = ({
             </div>
 
             {/* Column 2: Cryptographic Anchors (5 cols) */}
-            <div className="col-span-5 border border-black p-2.5 rounded space-y-2 bg-white">
+            <div className="col-span-5 border-black p-2.5 rounded space-y-2 bg-white">
               <div className="font-bold border-b border-black pb-1 uppercase text-[9pt]">
                 การสลักพยานหลักฐานดิจิทัล (Cryptographic Attestation)
               </div>
               <div>
                 <span className="font-bold block text-[7.5pt] uppercase">Canonical Merkle Root Hash (24-Level):</span>
-                <span className="break-all text-[7pt] block font-mono bg-neutral-100 p-1 rounded border border-neutral-300">
+                <span className="break-all text-[7pt] block font-mono bg-neutral-100 p-1 rounded border-neutral-300">
                   {merkleRoot}
                 </span>
               </div>
               <div>
                 <span className="font-bold block text-[7.5pt] uppercase">Post-Quantum Dilithium-5 Signature (FIPS 204):</span>
-                <span className="break-all text-[7pt] block font-mono bg-neutral-100 p-1 rounded border border-neutral-300">
+                <span className="break-all text-[7pt] block font-mono bg-neutral-100 p-1 rounded border-neutral-300">
                   {anchorSignature}
                 </span>
               </div>
@@ -557,7 +557,7 @@ export const CourtEvidenceQR: React.FC<CourtEvidenceQRProps> = ({
             </div>
 
             {/* Column 3: Legal Compliance & Judicial Sign-off (4 cols) */}
-            <div className="col-span-4 border border-black p-2.5 rounded flex flex-col justify-between bg-white text-[7.5pt]">
+            <div className="col-span-4 border-black p-2.5 rounded flex flex-col justify-between bg-white text-[7.5pt]">
               <div>
                 <div className="font-bold border-b border-black pb-1 uppercase text-[9pt]">
                   ผลผูกพันตามกฎหมาย (Legal Invariants)
@@ -586,7 +586,7 @@ export const CourtEvidenceQR: React.FC<CourtEvidenceQRProps> = ({
         <div className="screen-only-container flex items-center justify-between border-b border-slate-800/80 pb-3">
           <div className="flex items-center gap-3">
             {showCheckbox && onToggleCompare && (
-              <div className="no-print print:hidden flex items-center justify-center p-1 rounded-md bg-slate-900 border border-slate-700 hover:border-cyan-500 transition z-10">
+              <div className="no-print print:hidden flex items-center justify-center p-1 rounded-md bg-slate-900 border-slate-700 hover:border-cyan-500 transition z-10">
                 <input
                   type="checkbox"
                   checked={isCompareSelected}
@@ -597,7 +597,7 @@ export const CourtEvidenceQR: React.FC<CourtEvidenceQRProps> = ({
               </div>
             )}
             <div className="flex items-center gap-2">
-              <div className="p-1.5 rounded-lg bg-cyan-500/10 text-cyan-400 border border-cyan-500/20">
+              <div className="p-1.5 rounded-lg bg-cyan-500/10 text-cyan-400 border-cyan-500/20">
                 <QrCode className="w-5 h-5" />
               </div>
               <div>
@@ -606,7 +606,7 @@ export const CourtEvidenceQR: React.FC<CourtEvidenceQRProps> = ({
                     {evidenceCode ? `${evidenceCode} • ${stageName}` : stageName}
                   </h4>
                   {evidenceCode && (
-                    <span className="px-1.5 py-0.5 rounded text-[10px] font-mono bg-[#D4AF37]/20 text-[#D4AF37] border border-[#D4AF37]/40 font-semibold">
+                    <span className="px-1.5 py-0.5 rounded text-[10px] font-mono bg-[#D4AF37]/20 text-[#D4AF37] border-[#D4AF37]/40 font-semibold">
                       {evidenceCode}
                     </span>
                   )}
@@ -620,15 +620,15 @@ export const CourtEvidenceQR: React.FC<CourtEvidenceQRProps> = ({
 
           <div className="flex items-center gap-2">
             {isVerifying ? (
-              <span className="text-[10px] font-mono px-2.5 py-1 rounded-full bg-cyan-500/20 text-cyan-300 border border-cyan-500/40 flex items-center gap-1 font-bold animate-pulse">
+              <span className="text-[10px] font-mono px-2.5 py-1 rounded-full bg-cyan-500/20 text-cyan-300 border-cyan-500/40 flex items-center gap-1 font-bold animate-pulse">
                 <span className="w-2 h-2 rounded-full bg-cyan-400 animate-ping" /> VERIFYING HANDSHAKE...
               </span>
             ) : isFailed ? (
-              <span className="text-[10px] font-mono px-2.5 py-1 rounded-full bg-red-500/20 text-red-400 border border-red-500/40 flex items-center gap-1 font-bold animate-bounce">
+              <span className="text-[10px] font-mono px-2.5 py-1 rounded-full bg-red-500/20 text-red-400 border-red-500/40 flex items-center gap-1 font-bold animate-bounce">
                 <AlertOctagon className="w-3.5 h-3.5" /> ANOMALY DETECTED
               </span>
             ) : (
-              <span className="text-[10px] font-mono px-2.5 py-1 rounded-full bg-emerald-500/10 text-emerald-400 border border-emerald-500/30 flex items-center gap-1 font-bold">
+              <span className="text-[10px] font-mono px-2.5 py-1 rounded-full bg-emerald-500/10 text-emerald-400 border-emerald-500/30 flex items-center gap-1 font-bold">
                 <ShieldCheck className="w-3.5 h-3.5 text-emerald-400" /> VERIFIED (SSoT Δ0.00%)
               </span>
             )}
@@ -642,7 +642,7 @@ export const CourtEvidenceQR: React.FC<CourtEvidenceQRProps> = ({
           {/* QR Code Card - Clickable for Inspection Modal */}
           <div 
             onClick={() => setIsModalOpen(true)}
-            className="sm:col-span-4 flex flex-col items-center justify-center p-3 rounded-xl bg-slate-950 border border-slate-800 hover:border-cyan-500/50 cursor-pointer group transition duration-300 z-10"
+            className="sm:col-span-4 flex flex-col items-center justify-center p-3 rounded-xl bg-slate-950 border-slate-800 hover:border-cyan-500/50 cursor-pointer group transition duration-300 z-10"
             title="Click to expand for judicial scanning"
           >
             <div className="p-2.5 bg-white rounded-lg shadow-inner transition group-hover:scale-105">
@@ -671,14 +671,14 @@ export const CourtEvidenceQR: React.FC<CourtEvidenceQRProps> = ({
               </div>
 
               {/* Tooltip */}
-              <div className="absolute bottom-full left-0 mb-2 hidden group-hover/tooltip:block z-40 w-80 p-3 bg-slate-950 border border-cyan-500/40 rounded-xl shadow-2xl text-[10px] text-slate-300 font-sans leading-relaxed pointer-events-none transition-all">
+              <div className="absolute bottom-full left-0 mb-2 hidden group-hover/tooltip:block z-40 w-80 p-3 bg-slate-950 border-cyan-500/40 rounded-xl shadow-2xl text-[10px] text-slate-300 font-sans leading-relaxed pointer-events-none transition-all">
                 <div className="flex items-center gap-1.5 font-mono font-bold text-cyan-400 mb-1 border-b border-slate-800 pb-1">
                   <ShieldCheck className="w-3.5 h-3.5" /> Merkle Tree Integrity
                 </div>
                 สัจจะทางคณิตศาสตร์จาก Dual-Hash (BLAKE3 + SHA3-512) ผ่านการยืนยัน Sibling Path 24 ชั้น การันตีความถูกต้องของข้อมูลทั้งหมดบน Genesis Block โดยปราศจากการเบี่ยงเบน (Δ0.00% Zero Drift)
               </div>
 
-              <div className="p-2 rounded-lg bg-slate-950 border border-slate-800 text-cyan-300 text-[11px] truncate select-all font-mono break-all">
+              <div className="p-2 rounded-lg bg-slate-950 border-slate-800 text-cyan-300 text-[11px] truncate select-all font-mono break-all">
                 {merkleRoot}
               </div>
             </div>
@@ -693,14 +693,14 @@ export const CourtEvidenceQR: React.FC<CourtEvidenceQRProps> = ({
               </div>
 
               {/* Tooltip */}
-              <div className="absolute bottom-full left-0 mb-2 hidden group-hover/tooltip:block z-40 w-80 p-3 bg-slate-950 border border-purple-500/40 rounded-xl shadow-2xl text-[10px] text-slate-300 font-sans leading-relaxed pointer-events-none transition-all">
+              <div className="absolute bottom-full left-0 mb-2 hidden group-hover/tooltip:block z-40 w-80 p-3 bg-slate-950 border-purple-500/40 rounded-xl shadow-2xl text-[10px] text-slate-300 font-sans leading-relaxed pointer-events-none transition-all">
                 <div className="flex items-center gap-1.5 font-mono font-bold text-purple-400 mb-1 border-b border-slate-800 pb-1">
                   <Lock className="w-3.5 h-3.5" /> NIST FIPS 204 (ML-DSA-87)
                 </div>
                 ตราประทับดิจิทัลฐานแลตทิซ (Lattice-based) ยุคหลังควอนตัม เพื่อป้องกันยุทธศาสตร์ดักจับข้อมูลในปัจจุบันเพื่อรอนำไปถอดรหัสในอนาคต (Harvest Now, Decrypt Later)
               </div>
 
-              <div className="p-2 rounded-lg bg-slate-950 border border-slate-800 text-purple-300 text-[10px] truncate flex items-center justify-between">
+              <div className="p-2 rounded-lg bg-slate-950 border-slate-800 text-purple-300 text-[10px] truncate flex items-center justify-between">
                 <span className="truncate font-mono">{anchorSignature}</span>
                 <span className="w-2 h-2 rounded-full bg-purple-400 animate-ping ml-2 shrink-0" />
               </div>
@@ -708,19 +708,19 @@ export const CourtEvidenceQR: React.FC<CourtEvidenceQRProps> = ({
 
             {/* 4 Sovereign Architecture Pillars Badge Row */}
             <div className="grid grid-cols-2 sm:grid-cols-4 gap-1.5 pt-1 text-[9px] font-mono">
-              <div className="p-1.5 rounded-md bg-slate-950/80 border border-slate-800 text-slate-300">
+              <div className="p-1.5 rounded-md bg-slate-950/80 border-slate-800 text-slate-300">
                 <span className="text-slate-500 block text-[8px] uppercase">1. Smart Contract</span>
                 <span className="text-emerald-400 font-bold">AUDITED / SSOT</span>
               </div>
-              <div className="p-1.5 rounded-md bg-slate-950/80 border border-slate-800 text-slate-300">
+              <div className="p-1.5 rounded-md bg-slate-950/80 border-slate-800 text-slate-300">
                 <span className="text-slate-500 block text-[8px] uppercase">2. Council Quorum</span>
                 <span className="text-cyan-400 font-bold">10/10 REAL_HSM</span>
               </div>
-              <div className="p-1.5 rounded-md bg-slate-950/80 border border-slate-800 text-slate-300">
+              <div className="p-1.5 rounded-md bg-slate-950/80 border-slate-800 text-slate-300">
                 <span className="text-slate-500 block text-[8px] uppercase">3. PQC Standard</span>
                 <span className="text-purple-400 font-bold">ML-DSA-87 (FIPS 204)</span>
               </div>
-              <div className="p-1.5 rounded-md bg-slate-950/80 border border-slate-800 text-slate-300">
+              <div className="p-1.5 rounded-md bg-slate-950/80 border-slate-800 text-slate-300">
                 <span className="text-slate-500 block text-[8px] uppercase">4. Trace Pipeline</span>
                 <span className="text-amber-400 font-bold">12-STAGE PASS</span>
               </div>
@@ -737,7 +737,7 @@ export const CourtEvidenceQR: React.FC<CourtEvidenceQRProps> = ({
             <button
               id={`btn-print-qr-${id}`}
               onClick={handlePrintQR}
-              className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-emerald-500/20 hover:bg-emerald-500/30 text-emerald-300 transition border border-emerald-500/50 active:scale-95 text-[11px] cursor-pointer font-bold shadow-sm shadow-emerald-950"
+              className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-emerald-500/20 hover:bg-emerald-500/30 text-emerald-300 transition border-emerald-500/50 active:scale-95 text-[11px] cursor-pointer font-bold shadow-sm shadow-emerald-950"
               title="Print QR code and evidence dossier specifically formatted in landscape orientation for legal documents"
             >
               <Printer className="w-3.5 h-3.5 text-emerald-400" />
@@ -748,7 +748,7 @@ export const CourtEvidenceQR: React.FC<CourtEvidenceQRProps> = ({
             <button
               onClick={handleExportSinglePdf}
               disabled={isGeneratingPdf}
-              className="flex items-center gap-1.5 px-2.5 py-1.5 rounded-lg bg-[#D4AF37]/15 hover:bg-[#D4AF37]/25 text-[#D4AF37] transition border border-[#D4AF37]/40 active:scale-95 text-[11px] cursor-pointer disabled:opacity-50"
+              className="flex items-center gap-1.5 px-2.5 py-1.5 rounded-lg bg-[#D4AF37]/15 hover:bg-[#D4AF37]/25 text-[#D4AF37] transition border-[#D4AF37]/40 active:scale-95 text-[11px] cursor-pointer disabled:opacity-50"
               title="Generate and Download Official Court Evidence Landscape PDF Dossier"
             >
               <FileText className="w-3.5 h-3.5 text-[#D4AF37]" />
@@ -758,7 +758,7 @@ export const CourtEvidenceQR: React.FC<CourtEvidenceQRProps> = ({
             {/* Copy Payload Button */}
             <button
               onClick={handleCopy}
-              className="flex items-center gap-1.5 px-2.5 py-1.5 rounded-lg bg-slate-800 hover:bg-slate-700 text-slate-200 transition border border-slate-700 active:scale-95 text-[11px] cursor-pointer"
+              className="flex items-center gap-1.5 px-2.5 py-1.5 rounded-lg bg-slate-800 hover:bg-slate-700 text-slate-200 transition border-slate-700 active:scale-95 text-[11px] cursor-pointer"
             >
               {copied ? <Check className="w-3.5 h-3.5 text-emerald-400" /> : <Copy className="w-3.5 h-3.5 text-cyan-400" />}
               <span>{copied ? "Copied" : "Copy Payload"}</span>
@@ -767,7 +767,7 @@ export const CourtEvidenceQR: React.FC<CourtEvidenceQRProps> = ({
             {/* Download JSON Button */}
             <button
               onClick={handleDownloadJson}
-              className="flex items-center gap-1.5 px-2.5 py-1.5 rounded-lg bg-cyan-500/10 hover:bg-cyan-500/20 text-cyan-300 transition border border-cyan-500/30 active:scale-95 text-[11px] cursor-pointer"
+              className="flex items-center gap-1.5 px-2.5 py-1.5 rounded-lg bg-cyan-500/10 hover:bg-cyan-500/20 text-cyan-300 transition border-cyan-500/30 active:scale-95 text-[11px] cursor-pointer"
               title="Download JSON Payload for Offline Verification"
             >
               <Download className="w-3.5 h-3.5 text-cyan-400" />
@@ -778,7 +778,7 @@ export const CourtEvidenceQR: React.FC<CourtEvidenceQRProps> = ({
             {onOpenAuditHistory && (
               <button
                 onClick={() => onOpenAuditHistory(sealIndex, blockNumber)}
-                className="flex items-center gap-1.5 px-2.5 py-1.5 rounded-lg bg-purple-500/10 hover:bg-purple-500/20 text-purple-300 transition border border-purple-500/30 text-[11px] cursor-pointer"
+                className="flex items-center gap-1.5 px-2.5 py-1.5 rounded-lg bg-purple-500/10 hover:bg-purple-500/20 text-purple-300 transition border-purple-500/30 text-[11px] cursor-pointer"
               >
                 <History className="w-3.5 h-3.5 text-purple-400" />
                 <span>Audit Trail</span>

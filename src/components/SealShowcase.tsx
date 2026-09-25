@@ -16,7 +16,7 @@ export const SealShowcase: React.FC<SealShowcaseProps> = ({ onClose, className =
   };
 
   return (
-    <div className={`w-full max-w-5xl mx-auto p-6 bg-slate-950 rounded-2xl border border-slate-800 space-y-6 text-slate-100 font-sans ${className}`}>
+    <div className={`w-full max-w-5xl mx-auto p-6 bg-slate-950 rounded-2xl border-slate-800 space-y-6 text-slate-100 font-sans ${className}`}>
       <div className="flex items-center justify-between border-b border-slate-800 pb-4">
         <div>
           <h3 className="text-lg font-bold font-mono text-white flex items-center gap-2">
@@ -30,7 +30,7 @@ export const SealShowcase: React.FC<SealShowcaseProps> = ({ onClose, className =
 
         <div className="flex items-center gap-3">
           {lastStamped && (
-            <div className="flex items-center gap-2 px-3 py-1.5 bg-emerald-950/80 border border-emerald-500/80 rounded-full text-xs font-mono text-emerald-300 animate-in fade-in duration-300">
+            <div className="flex items-center gap-2 px-3 py-1.5 bg-emerald-950/80 border-emerald-500/80 rounded-full text-xs font-mono text-emerald-300 animate-in fade-in duration-300">
               <CheckCircle2 className="w-4 h-4 text-emerald-400" />
               <span>Applied Seal: {lastStamped}</span>
             </div>
@@ -49,7 +49,7 @@ export const SealShowcase: React.FC<SealShowcaseProps> = ({ onClose, className =
 
       <div className="grid grid-cols-1 md:grid-cols-3 gap-6 text-center">
         {/* 1. Gold Sovereign */}
-        <div className="p-6 rounded-xl bg-slate-900/60 border border-slate-800/80 flex flex-col items-center justify-between space-y-4 hover:border-amber-500/40 transition">
+        <div className="p-6 rounded-xl bg-slate-900/60 border-slate-800/80 flex flex-col items-center justify-between space-y-4 hover:border-amber-500/40 transition">
           <OfficialSealLogo
             variant="gold"
             size={190}
@@ -65,7 +65,7 @@ export const SealShowcase: React.FC<SealShowcaseProps> = ({ onClose, className =
         </div>
 
         {/* 2. Court Evidence Red Wax */}
-        <div className="p-6 rounded-xl bg-slate-900/60 border border-slate-800/80 flex flex-col items-center justify-between space-y-4 hover:border-red-500/40 transition">
+        <div className="p-6 rounded-xl bg-slate-900/60 border-slate-800/80 flex flex-col items-center justify-between space-y-4 hover:border-red-500/40 transition">
           <OfficialSealLogo
             variant="wax-red"
             size={190}
@@ -81,7 +81,7 @@ export const SealShowcase: React.FC<SealShowcaseProps> = ({ onClose, className =
         </div>
 
         {/* 3. Cyber Cyan PQC */}
-        <div className="p-6 rounded-xl bg-slate-900/60 border border-slate-800/80 flex flex-col items-center justify-between space-y-4 hover:border-cyan-500/40 transition">
+        <div className="p-6 rounded-xl bg-slate-900/60 border-slate-800/80 flex flex-col items-center justify-between space-y-4 hover:border-cyan-500/40 transition">
           <OfficialSealLogo
             variant="cyber-cyan"
             size={190}

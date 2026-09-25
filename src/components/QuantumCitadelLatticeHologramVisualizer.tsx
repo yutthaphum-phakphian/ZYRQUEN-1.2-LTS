@@ -837,7 +837,7 @@ export const QuantumCitadelLatticeHologramVisualizer: React.FC<QuantumCitadelLat
   return (
     <div
       ref={containerRef}
-      className={`relative rounded-[28px] bg-gradient-to-b from-[#080b18]/95 via-[#060812]/90 to-[#030408] border border-cyan-500/20 backdrop-blur-2xl overflow-hidden shadow-[0_0_50px_rgba(6,182,212,0.12)] flex flex-col ${
+      className={`relative rounded-[28px] bg-gradient-to-b from-[#080b18]/95 via-[#060812]/90 to-[#030408] border-cyan-500/20 backdrop-blur-2xl overflow-hidden shadow-[0_0_50px_rgba(6,182,212,0.12)] flex flex-col ${
         expanded ? 'fixed inset-4 z-50 rounded-2xl' : 'min-h-[560px] h-[640px]'
       } ${className}`}
     >
@@ -858,7 +858,7 @@ export const QuantumCitadelLatticeHologramVisualizer: React.FC<QuantumCitadelLat
       {/* Top HUD Bar */}
       <div className="absolute top-4 left-4 right-4 z-10 flex flex-col sm:flex-row sm:items-center justify-between gap-3 pointer-events-none font-mono">
         <div className="flex items-center gap-3 pointer-events-auto">
-          <div className="w-10 h-10 rounded-2xl bg-cyan-500/20 border border-cyan-400/40 flex items-center justify-center shadow-[0_0_20px_rgba(6,182,212,0.3)] shrink-0">
+          <div className="w-10 h-10 rounded-2xl bg-cyan-500/20 border-cyan-400/40 flex items-center justify-center shadow-[0_0_20px_rgba(6,182,212,0.3)] shrink-0">
             <Orbit className="w-5 h-5 text-cyan-300 animate-spin" style={{ animationDuration: '28s' }} />
           </div>
           <div>
@@ -866,7 +866,7 @@ export const QuantumCitadelLatticeHologramVisualizer: React.FC<QuantumCitadelLat
               <span className="text-xs sm:text-sm font-bold text-white tracking-wider">
                 3D QUANTUM CITADEL LATTICE
               </span>
-              <span className="px-2 py-0.5 rounded-full bg-cyan-500/15 border border-cyan-500/30 text-[10px] text-cyan-300 font-bold flex items-center gap-1">
+              <span className="px-2 py-0.5 rounded-full bg-cyan-500/15 border-cyan-500/30 text-[10px] text-cyan-300 font-bold flex items-center gap-1">
                 <span className="w-1.5 h-1.5 rounded-full bg-cyan-400 animate-ping" />
                 18 CHAMBERS
               </span>
@@ -879,7 +879,7 @@ export const QuantumCitadelLatticeHologramVisualizer: React.FC<QuantumCitadelLat
 
         {/* Shading & Control Mode Selector */}
         <div className="flex flex-wrap items-center gap-2 pointer-events-auto self-end sm:self-auto">
-          <div className="flex items-center bg-black/70 p-1 rounded-xl border border-white/10 text-xs backdrop-blur-xl">
+          <div className="flex items-center bg-black/70 p-1 rounded-xl border-white/10 text-xs backdrop-blur-xl">
             <button
               onClick={() => {
                 playTone(600, 0.03);
@@ -887,7 +887,7 @@ export const QuantumCitadelLatticeHologramVisualizer: React.FC<QuantumCitadelLat
               }}
               className={`px-2.5 py-1 rounded-lg transition-all ${
                 shadingMode === 'HOLO_NEON'
-                  ? 'bg-cyan-500/25 text-cyan-200 font-bold border border-cyan-500/40'
+                  ? 'bg-cyan-500/25 text-cyan-200 font-bold border-cyan-500/40'
                   : 'text-zinc-400 hover:text-zinc-200'
               }`}
             >
@@ -900,7 +900,7 @@ export const QuantumCitadelLatticeHologramVisualizer: React.FC<QuantumCitadelLat
               }}
               className={`px-2.5 py-1 rounded-lg transition-all flex items-center gap-1 ${
                 shadingMode === 'THERMAL_ENTROPY'
-                  ? 'bg-amber-500/25 text-amber-200 font-bold border border-amber-500/40'
+                  ? 'bg-amber-500/25 text-amber-200 font-bold border-amber-500/40'
                   : 'text-zinc-400 hover:text-zinc-200'
               }`}
             >
@@ -914,7 +914,7 @@ export const QuantumCitadelLatticeHologramVisualizer: React.FC<QuantumCitadelLat
               }}
               className={`px-2.5 py-1 rounded-lg transition-all flex items-center gap-1 ${
                 shadingMode === 'AMPLITUDE_BEACON'
-                  ? 'bg-purple-500/25 text-purple-200 font-bold border border-purple-500/40'
+                  ? 'bg-purple-500/25 text-purple-200 font-bold border-purple-500/40'
                   : 'text-zinc-400 hover:text-zinc-200'
               }`}
             >
@@ -944,7 +944,7 @@ export const QuantumCitadelLatticeHologramVisualizer: React.FC<QuantumCitadelLat
                 onToggleExpand();
                 playTone(620, 0.04);
               }}
-              className="p-2 rounded-xl bg-black/60 border border-white/10 hover:border-white/20 text-zinc-400 hover:text-white transition-colors backdrop-blur-xl"
+              className="p-2 rounded-xl bg-black/60 border-white/10 hover:border-white/20 text-zinc-400 hover:text-white transition-colors backdrop-blur-xl"
             >
               {expanded ? <Minimize2 className="w-3.5 h-3.5" /> : <Maximize2 className="w-3.5 h-3.5" />}
             </button>
@@ -953,7 +953,7 @@ export const QuantumCitadelLatticeHologramVisualizer: React.FC<QuantumCitadelLat
       </div>
 
       {/* Camera View Angle Shortcuts (Bottom Left) */}
-      <div className="absolute bottom-4 left-4 z-10 flex flex-wrap items-center gap-1.5 pointer-events-auto font-mono text-[11px] bg-black/70 p-1.5 rounded-2xl border border-white/10 backdrop-blur-xl">
+      <div className="absolute bottom-4 left-4 z-10 flex flex-wrap items-center gap-1.5 pointer-events-auto font-mono text-[11px] bg-black/70 p-1.5 rounded-2xl border-white/10 backdrop-blur-xl">
         <span className="text-zinc-500 px-1 text-[10px]">CAM:</span>
         <button
           onClick={() => setCameraPreset('ISO')}
@@ -982,7 +982,7 @@ export const QuantumCitadelLatticeHologramVisualizer: React.FC<QuantumCitadelLat
       </div>
 
       {/* Real-time Telemetry Status Strip (Bottom Right) */}
-      <div className="absolute bottom-4 right-4 z-10 hidden sm:flex items-center gap-3 pointer-events-auto font-mono text-[11px] bg-black/80 px-3.5 py-2 rounded-2xl border border-white/10 backdrop-blur-xl text-zinc-300">
+      <div className="absolute bottom-4 right-4 z-10 hidden sm:flex items-center gap-3 pointer-events-auto font-mono text-[11px] bg-black/80 px-3.5 py-2 rounded-2xl border-white/10 backdrop-blur-xl text-zinc-300">
         <div className="flex items-center gap-1.5">
           <Activity className="w-3.5 h-3.5 text-blue-400" />
           <span>Cryo: <strong className="text-blue-300">14.98 mK</strong></span>
@@ -1001,10 +1001,10 @@ export const QuantumCitadelLatticeHologramVisualizer: React.FC<QuantumCitadelLat
 
       {/* Hover Node Preview Tooltip */}
       {hoveredNode && !selectedNode && (
-        <div className="absolute top-20 left-4 z-20 p-3.5 rounded-2xl bg-black/85 border border-cyan-500/40 backdrop-blur-xl font-mono text-xs shadow-2xl pointer-events-none max-w-xs space-y-1.5 animate-in fade-in">
+        <div className="absolute top-20 left-4 z-20 p-3.5 rounded-2xl bg-black/85 border-cyan-500/40 backdrop-blur-xl font-mono text-xs shadow-2xl pointer-events-none max-w-xs space-y-1.5 animate-in fade-in">
           <div className="flex items-center justify-between gap-2">
             <span className="text-cyan-300 font-bold">CHAMBER {hoveredNode.num}</span>
-            <span className="px-2 py-0.5 rounded text-[10px] bg-cyan-500/15 text-cyan-200 border border-cyan-500/30 font-bold">
+            <span className="px-2 py-0.5 rounded text-[10px] bg-cyan-500/15 text-cyan-200 border-cyan-500/30 font-bold">
               {hoveredNode.badge}
             </span>
           </div>
@@ -1019,10 +1019,10 @@ export const QuantumCitadelLatticeHologramVisualizer: React.FC<QuantumCitadelLat
 
       {/* Selected Chamber Detail Modal / Side HUD */}
       {selectedNode && (
-        <div className="absolute top-16 right-4 z-30 w-80 max-w-[calc(100%-2rem)] p-4 rounded-2xl bg-black/90 border border-cyan-400/50 backdrop-blur-2xl font-mono text-xs shadow-[0_0_40px_rgba(6,182,212,0.25)] space-y-3 animate-in fade-in slide-in-from-right-4">
+        <div className="absolute top-16 right-4 z-30 w-80 max-w-[calc(100%-2rem)] p-4 rounded-2xl bg-black/90 border-cyan-400/50 backdrop-blur-2xl font-mono text-xs shadow-[0_0_40px_rgba(6,182,212,0.25)] space-y-3 animate-in fade-in slide-in-from-right-4">
           <div className="flex items-start justify-between gap-2">
             <div className="flex items-center gap-2">
-              <span className="w-7 h-7 rounded-xl bg-cyan-500/20 border border-cyan-400/40 text-cyan-300 flex items-center justify-center font-bold text-xs">
+              <span className="w-7 h-7 rounded-xl bg-cyan-500/20 border-cyan-400/40 text-cyan-300 flex items-center justify-center font-bold text-xs">
                 {selectedNode.num}
               </span>
               <div>
@@ -1039,13 +1039,13 @@ export const QuantumCitadelLatticeHologramVisualizer: React.FC<QuantumCitadelLat
           </div>
 
           <div className="grid grid-cols-2 gap-2 text-[10px]">
-            <div className="p-2 rounded-xl bg-white/5 border border-white/5">
+            <div className="p-2 rounded-xl bg-white/5 border-white/5">
               <div className="text-zinc-400">TELEMETRY AMPLITUDE</div>
               <div className="text-sm font-bold text-cyan-300">
                 {(selectedNode.telemetryAmplitude * 100).toFixed(1)}%
               </div>
             </div>
-            <div className="p-2 rounded-xl bg-white/5 border border-white/5">
+            <div className="p-2 rounded-xl bg-white/5 border-white/5">
               <div className="text-zinc-400">THERMAL ENTROPY</div>
               <div className="text-sm font-bold text-amber-300">
                 {selectedNode.thermalEntropyMk} mK
@@ -1053,7 +1053,7 @@ export const QuantumCitadelLatticeHologramVisualizer: React.FC<QuantumCitadelLat
             </div>
           </div>
 
-          <div className="p-2.5 rounded-xl bg-black/60 border border-white/10 space-y-1 text-[10px]">
+          <div className="p-2.5 rounded-xl bg-black/60 border-white/10 space-y-1 text-[10px]">
             <div className="text-zinc-400 flex items-center justify-between">
               <span>STATUS: <strong className="text-emerald-300">{selectedNode.status}</strong></span>
               <span>ENTROPY: <strong className="text-cyan-300">{selectedNode.entropyScore} ΔS/k</strong></span>
@@ -1075,7 +1075,7 @@ export const QuantumCitadelLatticeHologramVisualizer: React.FC<QuantumCitadelLat
                   onNavigate(selectedNode.targetView);
                 }
               }}
-              className="flex-1 py-2 rounded-xl bg-gradient-to-r from-cyan-600/30 to-emerald-600/30 hover:from-cyan-500/40 hover:to-emerald-500/40 border border-cyan-400/50 text-cyan-100 text-xs font-bold flex items-center justify-center gap-1.5 transition-all shadow-md"
+              className="flex-1 py-2 rounded-xl bg-gradient-to-r from-cyan-600/30 to-emerald-600/30 hover:from-cyan-500/40 hover:to-emerald-500/40 border-cyan-400/50 text-cyan-100 text-xs font-bold flex items-center justify-center gap-1.5 transition-all shadow-md"
             >
               <span>Navigate to Chamber</span>
               <ArrowRight className="w-3.5 h-3.5" />

@@ -30,7 +30,7 @@ export const TenantPartition: React.FC<Props> = ({ onSelectTenant }) => {
   };
 
   return (
-    <section id="tenants-partition-section" className="bg-[#0a0f1e] border border-[#17233f] p-4 mb-8">
+    <section id="tenants-partition-section" className="bg-[#0a0f1e] border-[#17233f] p-4 mb-8">
       <div className="flex flex-col sm:flex-row sm:items-center justify-between border-b border-[#17233f] pb-3 mb-4 gap-2">
         <div>
           <h2 className="text-sm font-bold text-[#D4AF37] flex items-center gap-2">
@@ -50,9 +50,9 @@ export const TenantPartition: React.FC<Props> = ({ onSelectTenant }) => {
               setSearchTerm(e.target.value);
               setPage(1);
             }}
-            className="bg-[#070a12] border border-[#17233f] px-3 py-1 text-xs font-mono text-[#F3F4F6] focus:border-[#D4AF37] focus:outline-none placeholder-[#9CA3AF]"
+            className="bg-[#070a12] border-[#17233f] px-3 py-1 text-xs font-mono text-[#F3F4F6] focus:border-[#D4AF37] focus:outline-none placeholder-[#9CA3AF]"
           />
-          <span className="text-xs font-mono px-2 py-1 bg-[#070a12] border border-[#06B6D4] text-[#06B6D4]">
+          <span className="text-xs font-mono px-2 py-1 bg-[#070a12] border-[#06B6D4] text-[#06B6D4]">
             {filtered.length} Tenants
           </span>
         </div>
@@ -88,7 +88,7 @@ export const TenantPartition: React.FC<Props> = ({ onSelectTenant }) => {
                   <td className="p-2 text-[#F3F4F6]">{t.merkleLeaf}</td>
                   <td className="p-2 text-[#10B981] font-bold">{t.allocatedValue}</td>
                   <td className="p-2">
-                    <span className="px-1.5 py-0.5 bg-[#070a12] border border-[#10B981] text-[#10B981] text-[10px]">
+                    <span className="px-1.5 py-0.5 bg-[#070a12] border-[#10B981] text-[#10B981] text-[10px]">
                       ● {t.status}
                     </span>
                   </td>
@@ -96,7 +96,7 @@ export const TenantPartition: React.FC<Props> = ({ onSelectTenant }) => {
                     <button
                       id={`inspect-tenant-btn-${t.code}`}
                       onClick={() => handleTenantClick(t)}
-                      className="px-2 py-0.5 border border-[#17233f] hover:border-[#D4AF37] text-[11px] text-[#F3F4F6] bg-[#0a0f1e]"
+                      className="px-2 py-0.5 border-[#17233f] hover:border-[#D4AF37] text-[11px] text-[#F3F4F6] bg-[#0a0f1e]"
                     >
                       INSPECT
                     </button>
@@ -117,7 +117,7 @@ export const TenantPartition: React.FC<Props> = ({ onSelectTenant }) => {
             id="prev-page-btn"
             disabled={page <= 1}
             onClick={() => setPage(p => Math.max(1, p - 1))}
-            className="px-3 py-1 bg-[#070a12] border border-[#17233f] text-[#F3F4F6] disabled:opacity-30 hover:border-[#D4AF37]"
+            className="px-3 py-1 bg-[#070a12] border-[#17233f] text-[#F3F4F6] disabled:opacity-30 hover:border-[#D4AF37]"
           >
             PREV
           </button>
@@ -125,7 +125,7 @@ export const TenantPartition: React.FC<Props> = ({ onSelectTenant }) => {
             id="next-page-btn"
             disabled={page >= totalPages}
             onClick={() => setPage(p => Math.min(totalPages, p + 1))}
-            className="px-3 py-1 bg-[#070a12] border border-[#17233f] text-[#F3F4F6] disabled:opacity-30 hover:border-[#D4AF37]"
+            className="px-3 py-1 bg-[#070a12] border-[#17233f] text-[#F3F4F6] disabled:opacity-30 hover:border-[#D4AF37]"
           >
             NEXT
           </button>
@@ -133,7 +133,7 @@ export const TenantPartition: React.FC<Props> = ({ onSelectTenant }) => {
       </div>
 
       {selectedTenant && (
-        <div id="tenant-details-box" className="mt-4 p-3 bg-[#070a12] border border-[#06B6D4] text-xs font-mono">
+        <div id="tenant-details-box" className="mt-4 p-3 bg-[#070a12] border-[#06B6D4] text-xs font-mono">
           <div className="flex justify-between items-center text-[#06B6D4] font-bold mb-2">
             <span># TENANT DOSSIER: {selectedTenant.code} ({selectedTenant.partition})</span>
             <button

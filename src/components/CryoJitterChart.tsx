@@ -135,11 +135,11 @@ export const CryoJitterChart: React.FC<CryoJitterChartProps> = ({ currentCryo })
   };
 
   return (
-    <div className="p-4 rounded-xl bg-slate-950/90 border border-slate-800 shadow-lg space-y-4">
+    <div className="p-4 rounded-xl bg-slate-950/90 border-slate-800 shadow-lg space-y-4">
       {/* Header & Controls */}
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 pb-3 border-b border-slate-800/80">
         <div className="flex items-center space-x-2.5">
-          <div className="p-2 rounded-lg bg-cyan-950/80 border border-cyan-700/60 text-cyan-400">
+          <div className="p-2 rounded-lg bg-cyan-950/80 border-cyan-700/60 text-cyan-400">
             <Thermometer className="w-5 h-5 animate-pulse" />
           </div>
           <div>
@@ -147,7 +147,7 @@ export const CryoJitterChart: React.FC<CryoJitterChartProps> = ({ currentCryo })
               <h3 className="font-display font-bold text-sm text-slate-100">
                 Cryogenic System Jitter Telemetry
               </h3>
-              <span className="text-[10px] font-mono-code px-1.5 py-0.5 rounded bg-cyan-950 text-cyan-300 border border-cyan-800">
+              <span className="text-[10px] font-mono-code px-1.5 py-0.5 rounded bg-cyan-950 text-cyan-300 border-cyan-800">
                 mK Scale • Real-Time
               </span>
             </div>
@@ -160,7 +160,7 @@ export const CryoJitterChart: React.FC<CryoJitterChartProps> = ({ currentCryo })
         {/* Action Controls */}
         <div className="flex items-center space-x-2">
           {/* Window Select */}
-          <div className="flex items-center bg-slate-900 border border-slate-800 rounded-lg p-0.5 text-[11px] font-mono-code">
+          <div className="flex items-center bg-slate-900 border-slate-800 rounded-lg p-0.5 text-[11px] font-mono-code">
             <button
               onClick={() => setWindowSize(20)}
               className={`px-2 py-1 rounded transition-colors ${
@@ -191,7 +191,7 @@ export const CryoJitterChart: React.FC<CryoJitterChartProps> = ({ currentCryo })
           <button
             onClick={handleTestBurst}
             disabled={jitterScale === 'burst'}
-            className="flex items-center space-x-1 px-2.5 py-1 rounded-lg bg-amber-950/60 hover:bg-amber-900/70 border border-amber-800/80 text-amber-300 text-[11px] font-medium transition-all active:scale-95 disabled:opacity-50"
+            className="flex items-center space-x-1 px-2.5 py-1 rounded-lg bg-amber-950/60 hover:bg-amber-900/70 border-amber-800/80 text-amber-300 text-[11px] font-medium transition-all active:scale-95 disabled:opacity-50"
             title="Inject thermal jitter pulse to test feedback loop"
           >
             <Zap className="w-3 h-3" />
@@ -223,7 +223,7 @@ export const CryoJitterChart: React.FC<CryoJitterChartProps> = ({ currentCryo })
           {/* Reset */}
           <button
             onClick={handleReset}
-            className="p-1.5 rounded-lg bg-slate-900 hover:bg-slate-800 border border-slate-800 text-slate-400 hover:text-slate-200"
+            className="p-1.5 rounded-lg bg-slate-900 hover:bg-slate-800 border-slate-800 text-slate-400 hover:text-slate-200"
             title="Reset telemetry stream"
           >
             <RefreshCw className="w-3.5 h-3.5" />
@@ -233,7 +233,7 @@ export const CryoJitterChart: React.FC<CryoJitterChartProps> = ({ currentCryo })
 
       {/* KPI Stats Strip */}
       <div className="grid grid-cols-2 sm:grid-cols-5 gap-2 font-mono-code text-xs">
-        <div className="p-2 rounded-lg bg-slate-900/60 border border-slate-800/80">
+        <div className="p-2 rounded-lg bg-slate-900/60 border-slate-800/80">
           <div className="text-[10px] text-slate-500">CURRENT TEMP</div>
           <div className="text-sm font-bold text-cyan-300 flex items-center space-x-1">
             <span>{currentVal.toFixed(3)}</span>
@@ -241,7 +241,7 @@ export const CryoJitterChart: React.FC<CryoJitterChartProps> = ({ currentCryo })
           </div>
         </div>
 
-        <div className="p-2 rounded-lg bg-slate-900/60 border border-slate-800/80">
+        <div className="p-2 rounded-lg bg-slate-900/60 border-slate-800/80">
           <div className="text-[10px] text-slate-500">NOMINAL BASE</div>
           <div className="text-sm font-bold text-slate-300 flex items-center space-x-1">
             <span>{baseTemp.toFixed(2)}</span>
@@ -249,7 +249,7 @@ export const CryoJitterChart: React.FC<CryoJitterChartProps> = ({ currentCryo })
           </div>
         </div>
 
-        <div className="p-2 rounded-lg bg-slate-900/60 border border-slate-800/80">
+        <div className="p-2 rounded-lg bg-slate-900/60 border-slate-800/80">
           <div className="text-[10px] text-slate-500">RMS JITTER (σ)</div>
           <div className="text-sm font-bold text-purple-300 flex items-center space-x-1">
             <span>±{rmsJitter}</span>
@@ -257,14 +257,14 @@ export const CryoJitterChart: React.FC<CryoJitterChartProps> = ({ currentCryo })
           </div>
         </div>
 
-        <div className="p-2 rounded-lg bg-slate-900/60 border border-slate-800/80">
+        <div className="p-2 rounded-lg bg-slate-900/60 border-slate-800/80">
           <div className="text-[10px] text-slate-500">MIN / MAX RANGE</div>
           <div className="text-xs font-bold text-slate-200 truncate mt-0.5">
             {minTemp.toFixed(3)} / {maxTemp.toFixed(3)}
           </div>
         </div>
 
-        <div className="p-2 rounded-lg bg-slate-900/60 border border-slate-800/80 col-span-2 sm:col-span-1">
+        <div className="p-2 rounded-lg bg-slate-900/60 border-slate-800/80 col-span-2 sm:col-span-1">
           <div className="text-[10px] text-slate-500">CRYO STABILITY</div>
           <div className="text-xs font-bold text-emerald-400 flex items-center space-x-1 mt-0.5">
             <ShieldCheck className="w-3.5 h-3.5 text-emerald-400" />
@@ -274,7 +274,7 @@ export const CryoJitterChart: React.FC<CryoJitterChartProps> = ({ currentCryo })
       </div>
 
       {/* Recharts Line / Area Chart Container */}
-      <div className="w-full h-56 relative bg-[#040813] rounded-lg p-2 border border-slate-800/60">
+      <div className="w-full h-56 relative bg-[#040813] rounded-lg p-2 border-slate-800/60">
         <ResponsiveContainer width="100%" height="100%">
           <AreaChart data={chartData} margin={{ top: 10, right: 15, left: -20, bottom: 0 }}>
             <defs>
@@ -304,7 +304,7 @@ export const CryoJitterChart: React.FC<CryoJitterChartProps> = ({ currentCryo })
                 if (active && payload && payload.length) {
                   const data = payload[0].payload as DataPoint;
                   return (
-                    <div className="p-2.5 bg-slate-950/95 border border-cyan-600/50 rounded-lg shadow-xl font-mono-code text-[11px] space-y-1 z-50">
+                    <div className="p-2.5 bg-slate-950/95 border-cyan-600/50 rounded-lg shadow-xl font-mono-code text-[11px] space-y-1 z-50">
                       <div className="text-slate-400 flex items-center justify-between border-b border-slate-800 pb-1">
                         <span>TIMESTAMP</span>
                         <span className="text-slate-200 font-bold">{data.time}</span>

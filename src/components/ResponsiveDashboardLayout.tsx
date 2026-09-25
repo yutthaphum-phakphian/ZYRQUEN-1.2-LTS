@@ -26,19 +26,19 @@ export const ResponsiveDashboardLayout: React.FC<ResponsiveDashboardLayoutProps>
       {/* 📱 Mobile Top Header (แสดงเฉพาะบนมือถือ < lg) */}
       <header className="lg:hidden sticky top-0 z-50 flex items-center justify-between px-4 py-3 bg-slate-900/95 border-b border-slate-800 backdrop-blur-md">
         <div className="flex items-center gap-2.5">
-          <div className="p-1.5 rounded-lg bg-cyan-500/10 border border-cyan-500/30 text-cyan-400">
+          <div className="p-1.5 rounded-lg bg-cyan-500/10 border-cyan-500/30 text-cyan-400">
             <Shield className="w-5 h-5 animate-pulse" />
           </div>
           <div>
             <span className="font-bold text-sm tracking-wider text-white">ZYRQUEN Ω∞</span>
-            <span className="ml-2 text-[10px] font-mono px-1.5 py-0.5 rounded bg-emerald-500/10 text-emerald-400 border border-emerald-500/20">
+            <span className="ml-2 text-[10px] font-mono px-1.5 py-0.5 rounded bg-emerald-500/10 text-emerald-400 border-emerald-500/20">
               Δ0 SSoT
             </span>
           </div>
         </div>
         <button
           onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
-          className="p-2 rounded-xl bg-slate-800/80 text-slate-200 hover:bg-slate-700 active:scale-95 transition border border-slate-700/50"
+          className="p-2 rounded-xl bg-slate-800/80 text-slate-200 hover:bg-slate-700 active:scale-95 transition border-slate-700/50"
           aria-label="Toggle Mobile Menu"
         >
           {isMobileMenuOpen ? <X className="w-5 h-5 text-amber-400" /> : <Menu className="w-5 h-5 text-cyan-400" />}
@@ -54,7 +54,7 @@ export const ResponsiveDashboardLayout: React.FC<ResponsiveDashboardLayoutProps>
         >
           <div className="space-y-6">
             <div className="hidden lg:flex items-center gap-3 pb-4 border-b border-slate-800">
-              <div className="p-2 rounded-xl bg-cyan-500/10 border border-cyan-500/30 text-cyan-400">
+              <div className="p-2 rounded-xl bg-cyan-500/10 border-cyan-500/30 text-cyan-400">
                 <Shield className="w-6 h-6" />
               </div>
               <div>
@@ -70,7 +70,7 @@ export const ResponsiveDashboardLayout: React.FC<ResponsiveDashboardLayoutProps>
                 onClick={() => handleNavClick('overview')}
                 className={`w-full flex items-center gap-3 px-3.5 py-2.5 rounded-xl transition ${
                   activeTab === 'overview'
-                    ? 'bg-cyan-500/10 text-cyan-300 border border-cyan-500/30 font-semibold'
+                    ? 'bg-cyan-500/10 text-cyan-300 border-cyan-500/30 font-semibold'
                     : 'text-slate-400 hover:bg-slate-800/60 hover:text-slate-200'
                 }`}
               >
@@ -82,7 +82,7 @@ export const ResponsiveDashboardLayout: React.FC<ResponsiveDashboardLayoutProps>
                 onClick={() => handleNavClick('telemetry')}
                 className={`w-full flex items-center gap-3 px-3.5 py-2.5 rounded-xl transition ${
                   activeTab === 'telemetry'
-                    ? 'bg-emerald-500/10 text-emerald-300 border border-emerald-500/30 font-semibold'
+                    ? 'bg-emerald-500/10 text-emerald-300 border-emerald-500/30 font-semibold'
                     : 'text-slate-400 hover:bg-slate-800/60 hover:text-slate-200'
                 }`}
               >
@@ -94,7 +94,7 @@ export const ResponsiveDashboardLayout: React.FC<ResponsiveDashboardLayoutProps>
                 onClick={() => handleNavClick('ledger')}
                 className={`w-full flex items-center gap-3 px-3.5 py-2.5 rounded-xl transition ${
                   activeTab === 'ledger'
-                    ? 'bg-amber-500/10 text-amber-300 border border-amber-500/30 font-semibold'
+                    ? 'bg-amber-500/10 text-amber-300 border-amber-500/30 font-semibold'
                     : 'text-slate-400 hover:bg-slate-800/60 hover:text-slate-200'
                 }`}
               >
@@ -106,7 +106,7 @@ export const ResponsiveDashboardLayout: React.FC<ResponsiveDashboardLayoutProps>
                 onClick={() => handleNavClick('pqc')}
                 className={`w-full flex items-center gap-3 px-3.5 py-2.5 rounded-xl transition ${
                   activeTab === 'pqc'
-                    ? 'bg-purple-500/10 text-purple-300 border border-purple-500/30 font-semibold'
+                    ? 'bg-purple-500/10 text-purple-300 border-purple-500/30 font-semibold'
                     : 'text-slate-400 hover:bg-slate-800/60 hover:text-slate-200'
                 }`}
               >

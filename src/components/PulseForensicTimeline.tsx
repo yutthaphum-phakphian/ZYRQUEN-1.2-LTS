@@ -499,24 +499,24 @@ export const PulseForensicTimeline: React.FC<PulseForensicTimelineProps> = ({
   return (
     <div className="space-y-6 font-mono">
       {/* Top Header Banner */}
-      <div className="p-6 rounded-[28px] bg-[#070a12] border border-cyan-500/30 backdrop-blur-xl shadow-2xl space-y-4">
+      <div className="p-6 rounded-[28px] bg-[#070a12] border-cyan-500/30 backdrop-blur-xl shadow-2xl space-y-4">
         <div className="flex flex-col lg:flex-row lg:items-center justify-between gap-4">
           <div className="flex items-center gap-3.5">
-            <div className="w-12 h-12 rounded-2xl bg-[#0a0f1e] border border-cyan-500/40 flex items-center justify-center text-cyan-400 text-xl shadow-lg shrink-0">
+            <div className="w-12 h-12 rounded-2xl bg-[#0a0f1e] border-cyan-500/40 flex items-center justify-center text-cyan-400 text-xl shadow-lg shrink-0">
               ⚖️
             </div>
             <div>
               <div className="flex flex-wrap items-center gap-2">
-                <span className="px-2.5 py-0.5 rounded-full bg-[#0a0f1e] text-cyan-300 border border-cyan-500/30 text-[10px] font-bold">
+                <span className="px-2.5 py-0.5 rounded-full bg-[#0a0f1e] text-cyan-300 border-cyan-500/30 text-[10px] font-bold">
                   D3.JS FORENSIC STATE TIMELINE
                 </span>
-                <span className="px-2 py-0.5 rounded-full bg-[#0a0f1e] text-amber-300 border border-amber-500/30 text-[10px]">
+                <span className="px-2 py-0.5 rounded-full bg-[#0a0f1e] text-amber-300 border-amber-500/30 text-[10px]">
                   ETDA SEC 9, 26, 28 &bull; SAFE HARBOR
                 </span>
-                <span className="px-2 py-0.5 rounded-full bg-[#0a0f1e] text-emerald-300 border border-emerald-500/30 text-[10px]">
+                <span className="px-2 py-0.5 rounded-full bg-[#0a0f1e] text-emerald-300 border-emerald-500/30 text-[10px]">
                   SSoT &Delta;0.00% INVARIANT
                 </span>
-                <span className="px-2 py-0.5 rounded-full bg-[#0a0f1e] text-cyan-400 border border-cyan-500/30 text-[10px]">
+                <span className="px-2 py-0.5 rounded-full bg-[#0a0f1e] text-cyan-400 border-cyan-500/30 text-[10px]">
                   Ω600_1000 LOCKED
                 </span>
               </div>
@@ -564,7 +564,7 @@ export const PulseForensicTimeline: React.FC<PulseForensicTimelineProps> = ({
                 a.click();
                 URL.revokeObjectURL(url);
               }}
-              className="px-3 py-1.5 rounded-xl text-xs font-bold bg-[#0a0f1e] hover:bg-cyan-950/40 text-cyan-300 border border-cyan-500/40 flex items-center gap-1.5 transition-all"
+              className="px-3 py-1.5 rounded-xl text-xs font-bold bg-[#0a0f1e] hover:bg-cyan-950/40 text-cyan-300 border-cyan-500/40 flex items-center gap-1.5 transition-all"
             >
               <span>📑</span>
               <span>Export Timeline (JSON)</span>
@@ -586,7 +586,7 @@ export const PulseForensicTimeline: React.FC<PulseForensicTimelineProps> = ({
                 className={`px-2.5 py-1 rounded-lg text-xs transition-all ${
                   selectedMetric === m
                     ? 'bg-[#06B6D4] text-black font-bold'
-                    : 'bg-[#0a0f1e] text-zinc-400 border border-zinc-800 hover:text-white'
+                    : 'bg-[#0a0f1e] text-zinc-400 border-zinc-800 hover:text-white'
                 }`}
               >
                 {m === 'cpu' ? 'CPU Temp (°C)' : m === 'cryo' ? 'Cryo (mK)' : m === 'qops' ? 'QOps/s' : 'Voltage (%)'}
@@ -600,7 +600,7 @@ export const PulseForensicTimeline: React.FC<PulseForensicTimelineProps> = ({
               <select
                 value={selectedSectionFilter}
                 onChange={(e) => setSelectedSectionFilter(e.target.value)}
-                className="bg-[#0a0f1e] border border-zinc-700 rounded-lg px-2 py-1 text-xs text-zinc-300 focus:outline-none focus:border-cyan-400"
+                className="bg-[#0a0f1e] border-zinc-700 rounded-lg px-2 py-1 text-xs text-zinc-300 focus:outline-none focus:border-cyan-400"
               >
                 <option value="ALL">All Statutory Invariants</option>
                 <option value="Section 9">ETDA Section 9 (Authenticity)</option>
@@ -614,7 +614,7 @@ export const PulseForensicTimeline: React.FC<PulseForensicTimelineProps> = ({
               <select
                 value={selectedHealthFilter}
                 onChange={(e) => setSelectedHealthFilter(e.target.value)}
-                className="bg-[#0a0f1e] border border-zinc-700 rounded-lg px-2 py-1 text-xs text-zinc-300 focus:outline-none focus:border-cyan-400"
+                className="bg-[#0a0f1e] border-zinc-700 rounded-lg px-2 py-1 text-xs text-zinc-300 focus:outline-none focus:border-cyan-400"
               >
                 <option value="ALL">All Observations</option>
                 <option value="ANOMALIES_ONLY">Anomalies Only</option>
@@ -628,7 +628,7 @@ export const PulseForensicTimeline: React.FC<PulseForensicTimelineProps> = ({
       {/* D3 Interactive Dual-Track Canvas */}
       <div
         ref={containerRef}
-        className="relative p-4 rounded-[28px] bg-[#070a12] border border-white/10 shadow-2xl overflow-hidden"
+        className="relative p-4 rounded-[28px] bg-[#070a12] border-white/10 shadow-2xl overflow-hidden"
       >
         <svg ref={svgRef} className="w-full select-none" />
 
@@ -640,7 +640,7 @@ export const PulseForensicTimeline: React.FC<PulseForensicTimelineProps> = ({
               left: `${Math.min(hoveredTooltip.x + 15, (containerRef.current?.clientWidth || 900) - 280)}px`,
               top: `${Math.max(10, hoveredTooltip.y - 100)}px`,
             }}
-            className="p-3.5 rounded-xl bg-[#0a0f1e] border border-cyan-400/60 shadow-2xl text-xs max-w-xs space-y-1.5 pointer-events-none z-50 animate-in fade-in duration-150"
+            className="p-3.5 rounded-xl bg-[#0a0f1e] border-cyan-400/60 shadow-2xl text-xs max-w-xs space-y-1.5 pointer-events-none z-50 animate-in fade-in duration-150"
           >
             <div className="flex items-center justify-between gap-2 border-b border-white/10 pb-1">
               <span className="font-bold text-white flex items-center gap-1">
@@ -668,19 +668,19 @@ export const PulseForensicTimeline: React.FC<PulseForensicTimelineProps> = ({
               </div>
             ) : (
               <div className="grid grid-cols-2 gap-1.5 text-[10px] text-zinc-300 pt-1">
-                <div className="p-1 rounded bg-black/40 border border-white/5">
+                <div className="p-1 rounded bg-black/40 border-white/5">
                   <span className="text-zinc-500 block">CPU TEMP</span>
                   <span className="font-bold text-white">{hoveredTooltip.event.cpu}°C</span>
                 </div>
-                <div className="p-1 rounded bg-black/40 border border-white/5">
+                <div className="p-1 rounded bg-black/40 border-white/5">
                   <span className="text-zinc-500 block">CRYO</span>
                   <span className="font-bold text-cyan-300">{hoveredTooltip.event.cryo} mK</span>
                 </div>
-                <div className="p-1 rounded bg-black/40 border border-white/5">
+                <div className="p-1 rounded bg-black/40 border-white/5">
                   <span className="text-zinc-500 block">QOPS</span>
                   <span className="font-bold text-violet-300">{hoveredTooltip.event.qops}</span>
                 </div>
-                <div className="p-1 rounded bg-black/40 border border-white/5">
+                <div className="p-1 rounded bg-black/40 border-white/5">
                   <span className="text-zinc-500 block">VOLTAGE</span>
                   <span className="font-bold text-emerald-300">{hoveredTooltip.event.voltage}%</span>
                 </div>
@@ -695,7 +695,7 @@ export const PulseForensicTimeline: React.FC<PulseForensicTimelineProps> = ({
 
       {/* Forensic Inspection Detail Drawer */}
       {selectedEvent && (
-        <div className="p-6 rounded-[28px] bg-[#070a12] border border-white/10 shadow-2xl space-y-5">
+        <div className="p-6 rounded-[28px] bg-[#070a12] border-white/10 shadow-2xl space-y-5">
           <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 border-b border-white/10 pb-4">
             <div className="flex items-center gap-3">
               <span className="text-2xl">{selectedEvent.kind === 'compliance' ? '⚖️' : '📡'}</span>
@@ -717,7 +717,7 @@ export const PulseForensicTimeline: React.FC<PulseForensicTimelineProps> = ({
               >
                 {selectedEvent.status}
               </span>
-              <span className="text-xs text-zinc-400 bg-[#0a0f1e] px-2.5 py-1 rounded-xl border border-zinc-800">
+              <span className="text-xs text-zinc-400 bg-[#0a0f1e] px-2.5 py-1 rounded-xl border-zinc-800">
                 {selectedEvent.timeLabel}
               </span>
             </div>
@@ -725,7 +725,7 @@ export const PulseForensicTimeline: React.FC<PulseForensicTimelineProps> = ({
 
           {selectedEvent.kind === 'compliance' && selectedEvent.compliance ? (
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4 text-xs">
-              <div className="p-4 rounded-2xl bg-[#0a0f1e] border border-white/5 space-y-2">
+              <div className="p-4 rounded-2xl bg-[#0a0f1e] border-white/5 space-y-2">
                 <span className="text-[10px] text-amber-400 font-bold block">
                   STATUTORY SAFE HARBOR & LEGAL IMPLICATION
                 </span>
@@ -739,16 +739,16 @@ export const PulseForensicTimeline: React.FC<PulseForensicTimelineProps> = ({
                 </div>
               </div>
 
-              <div className="p-4 rounded-2xl bg-[#0a0f1e] border border-white/5 space-y-2">
+              <div className="p-4 rounded-2xl bg-[#0a0f1e] border-white/5 space-y-2">
                 <span className="text-[10px] text-cyan-400 font-bold block">
                   STATE SHIFT &amp; POST-QUANTUM CRYPTOGRAPHY
                 </span>
                 <div className="flex items-center gap-2">
-                  <span className="px-2 py-1 rounded bg-black/40 border border-white/10 text-cyan-300 font-bold">
+                  <span className="px-2 py-1 rounded bg-black/40 border-white/10 text-cyan-300 font-bold">
                     {selectedEvent.compliance.fromState}
                   </span>
                   <span className="text-zinc-400">&rarr;</span>
-                  <span className="px-2 py-1 rounded bg-emerald-500/20 border border-emerald-500/30 text-emerald-300 font-bold">
+                  <span className="px-2 py-1 rounded bg-emerald-500/20 border-emerald-500/30 text-emerald-300 font-bold">
                     {selectedEvent.compliance.toState}
                   </span>
                 </div>
@@ -763,38 +763,38 @@ export const PulseForensicTimeline: React.FC<PulseForensicTimelineProps> = ({
             </div>
           ) : selectedEvent.snapshot ? (
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4 text-xs">
-              <div className="p-4 rounded-2xl bg-[#0a0f1e] border border-white/5 space-y-3">
+              <div className="p-4 rounded-2xl bg-[#0a0f1e] border-white/5 space-y-3">
                 <span className="text-[10px] text-cyan-400 font-bold block">
                   HARDWARE SUB-KELVIN & POWER TELEMETRY
                 </span>
                 <div className="grid grid-cols-2 gap-2 text-[11px]">
-                  <div className="p-2 rounded-xl bg-black/40 border border-white/5">
+                  <div className="p-2 rounded-xl bg-black/40 border-white/5">
                     <span className="text-zinc-500 block text-[10px]">CPU TEMPERATURE</span>
                     <span className="font-bold text-white text-sm">{selectedEvent.snapshot.cpuAverage}°C</span>
                   </div>
-                  <div className="p-2 rounded-xl bg-black/40 border border-white/5">
+                  <div className="p-2 rounded-xl bg-black/40 border-white/5">
                     <span className="text-zinc-500 block text-[10px]">CRYO DILUTION</span>
                     <span className="font-bold text-cyan-300 text-sm">{selectedEvent.snapshot.cryoTempMk} mK</span>
                   </div>
-                  <div className="p-2 rounded-xl bg-black/40 border border-white/5">
+                  <div className="p-2 rounded-xl bg-black/40 border-white/5">
                     <span className="text-zinc-500 block text-[10px]">QUANTUM OPERATIONS</span>
                     <span className="font-bold text-violet-300 text-sm">{selectedEvent.snapshot.qopsThroughput} QOps/s</span>
                   </div>
-                  <div className="p-2 rounded-xl bg-black/40 border border-white/5">
+                  <div className="p-2 rounded-xl bg-black/40 border-white/5">
                     <span className="text-zinc-500 block text-[10px]">VOLTAGE STABILITY</span>
                     <span className="font-bold text-emerald-300 text-sm">{selectedEvent.snapshot.voltageStabilityPct}%</span>
                   </div>
                 </div>
               </div>
 
-              <div className="p-4 rounded-2xl bg-[#0a0f1e] border border-white/5 space-y-3">
+              <div className="p-4 rounded-2xl bg-[#0a0f1e] border-white/5 space-y-3">
                 <span className="text-[10px] text-emerald-400 font-bold block">
                   CHAIN OF CUSTODY &amp; MERKLE HASH ANCHOR
                 </span>
                 <div className="space-y-1.5 text-[11px]">
                   <div>
                     <span className="text-zinc-500 block text-[10px]">SEALED LEAF HASH</span>
-                    <div className="p-2 rounded-xl bg-black/60 border border-white/10 text-cyan-300 font-mono text-[10px] break-all flex items-center justify-between gap-2">
+                    <div className="p-2 rounded-xl bg-black/60 border-white/10 text-cyan-300 font-mono text-[10px] break-all flex items-center justify-between gap-2">
                       <span>{selectedEvent.snapshot.sealedHash}</span>
                       <button
                         onClick={() => {
