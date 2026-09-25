@@ -1,9 +1,9 @@
-import { defineConfig } from 'vite';
+import { defineConfig } from 'vitest/config';
 import react from '@vitejs/plugin-react';
 
 export default defineConfig({
   plugins: [react()],
-  base: './', // กำหนด Relative path เพื่อให้ GitHub Pages โหลด Asset ได้ถูกต้อง
+  base: './',
   build: {
     outDir: 'dist',
   },
