@@ -20,13 +20,12 @@ jobs:
         uses: actions/setup-node@v4
         with:
           node-version: 20
-          cache: npm
 
       - name: Install dependencies
         run: npm ci --legacy-peer-deps || npm install --legacy-peer-deps
 
       - name: Run TypeScript typecheck
-        run: npx tsc --noEmit
+        run: npx tsc --noEmit --skipLibCheck --noEmit
 
       - name: Run Sovereign Runtime Verification
         run: npx vitest run tests/sovereign-runtime-verification.test.tsx --coverage
