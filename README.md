@@ -47,15 +47,15 @@ In plain terms: this repository is a security-focused control plane and operatio
 ```
 ┌─────────────────────────────────────────────────────────────────────────────┐
 │                          [ React 19 / Vite SPA ]                            │
-│                  (Three.js 3D Atlas, Tailwind, Lucide, jsQR)                │
+│           (Three.js 3D Atlas, Tailwind, Lucide, jsQR, WebAudio)             │
 └──────────────────────────────────────┬──────────────────────────────────────┘
-                                        │ mTLS 1.3 / OpenAPI 3.0.3
+                                        │ mTLS 1.3 / WebSocket Stream
                                         ▼
 ┌─────────────────────────────────────────────────────────────────────────────┐
 │                 [ Node.js Express Gateway & Sentinel AI ]                   │
 │           (Risk Score >= 0.85 -> Chamber 02 Quarantine Buffer)              │
 └──────────────────────────────────────┬──────────────────────────────────────┘
-                                        │ PQC Dilithium-5 / Kyber-1024
+                                        │ PQC Dilithium-5 / Kyber-1024 / ZKP
                                         ▼
 ┌─────────────────────────────────────────────────────────────────────────────┐
 │                   [ 10/10 REAL_HSM Deca-Key Council ]                       │
@@ -77,7 +77,7 @@ In plain terms: this repository is a security-focused control plane and operatio
 | :--- | :--- | :---: |
 | **Kernel Status** | `LOCKED_FROZEN_v1.2_LTS` (Mainnet Live 100% Green) | 🟢 |
 | **Genesis Block Height** | `#849202` | 🟢 |
-| **Genesis Merkle Root** | `909ab814479844d8a14816bed34cdbb07528e18501da86fc4691763a43fa4c68` | 🟢 |
+| **Genesis Merkle Root** | `0x909ab814479844d8a14816bed34cdbb07528e18501da86fc4691763a43fa4c68` | 🟢 |
 | **Canonical Seals** | `14,902 Seals` (State Consistency: SSoT Δ0) | 🟢 |
 | **Mutation Authority** | `0` (Read-Only Immutable Mode) | 🟢 |
 | **Consensus Mechanism** | `10/10 REAL_HSM Quorum` (Utimaco u.trust GP CSe-Series / FIPS 140-3 L4) | 🟢 |
@@ -158,6 +158,12 @@ In plain terms: this repository is a security-focused control plane and operatio
    ```bash
    npm run lint && npm test && npm run build
    ```
+   * **Executing Full Sovereign Test Suite:**
+   ```bash
+   chmod +x ./run_all_tests.sh
+   ./run_all_tests.sh
+   ```
+   * **Target Benchmark:** `17/17 Scenarios Passed (100% Pure Green)`
 
 5. **Run Verification & Security Penetration Test Scripts:**
    ```bash
