@@ -1,3 +1,4 @@
+/// <reference types="vitest" />
 import { defineConfig } from 'vite';
 import react from '@vitejs/plugin-react';
 import tailwindcss from '@tailwindcss/vite';
@@ -106,6 +107,12 @@ export default defineConfig(() => {
       port: 3000,
       host: '0.0.0.0',
       allowedHosts: true,
+    },
+
+    // 6. Vitest Configuration (จำกัด Environment ให้รองรับ @testing-library/react)
+    test: {
+      globals: true,
+      environment: 'jsdom',
     },
   };
 });
