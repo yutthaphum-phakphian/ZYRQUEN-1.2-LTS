@@ -1,4 +1,4 @@
-import{r as h}from"./vendor-core-BjI7gsU1.js";/**
+import{r as h}from"./vendor-core-B8nbhCKr.js";/**
  * @license lucide-react v0.475.0 - ISC
  *
  * This source code is licensed under the ISC license.
