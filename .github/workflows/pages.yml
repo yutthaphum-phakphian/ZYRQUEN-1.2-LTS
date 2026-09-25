@@ -29,7 +29,6 @@ jobs:
         uses: actions/setup-node@v4
         with:
           node-version: 20
-          cache: 'npm'
 
       # 2. Install Packages with legacy peer deps for React 19 compatibility
       - name: Install Dependencies
