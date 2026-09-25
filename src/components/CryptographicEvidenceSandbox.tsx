@@ -114,9 +114,10 @@ export const CryptographicEvidenceSandbox: React.FC<CryptographicEvidenceSandbox
     // Strict guard pattern: prevent duplicate submissions or re-triggers of terminal states
     if (status === 'COMPLETED' || status === 'UPLOADED' || status === 'TERMINAL_BLOCKED' || status === 'TERMINAL_REJECTED') {
       console.warn(`[CryptographicEvidenceSandbox] Upload blocked: file '${file.name}' already in terminal state '${status}'.`);
-      if (existingJob?.responsePayload?.hash) {
+      const respPayload = existingJob?.responsePayload as Record<string, string> | undefined;
+      if (respPayload?.hash) {
         setIntakeFileName(`${file.name} [CACHED]`);
-        setIntakeByteSha(existingJob.responsePayload.hash);
+        setIntakeByteSha(respPayload.hash);
       }
       e.target.value = '';
       return;

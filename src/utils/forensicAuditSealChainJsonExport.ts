@@ -638,7 +638,7 @@ export async function buildSignedForensicAuditChainPayload(
  * Validates any parsed JSON evidence payload against Sovereign Invariants
  */
 export function verifySignedForensicAuditChainPayload(
-  payload: any
+  payload: unknown
 ): {
   isValid: boolean;
   violations: string[];
@@ -660,29 +660,43 @@ export function verifySignedForensicAuditChainPayload(
     };
   }
 
-  const root = payload.canonicalAnchors?.genesisMerkleRootHash || payload.evidenceMetadata?.genesisMerkleRootHash;
+  const p = payload as Partial<SignedForensicAuditChainPayload> & {
+    canonicalAnchors?: {
+      genesisMerkleRootHash?: string;
+      canonicalSealsCount?: number;
+      ssotMutationDelta?: number;
+      canonicalBlockHeight?: number;
+    };
+    evidenceMetadata?: {
+      genesisMerkleRootHash?: string;
+      canonicalSealsCount?: number;
+      mutationAuthority?: number;
+    };
+  };
+
+  const root = p.canonicalAnchors?.genesisMerkleRootHash || p.evidenceMetadata?.genesisMerkleRootHash;
   const merkleRootMatches = root === CANONICAL_MERKLE_ROOT;
   if (!merkleRootMatches) {
     violations.push(`Genesis Merkle Root mismatch: expected ${CANONICAL_MERKLE_ROOT}, got ${root}`);
   }
 
-  const seals = payload.canonicalAnchors?.canonicalSealsCount ?? payload.evidenceMetadata?.canonicalSealsCount;
+  const seals = p.canonicalAnchors?.canonicalSealsCount ?? p.evidenceMetadata?.canonicalSealsCount;
   const sealsCountMatches = seals === CANONICAL_SEALS;
   if (!sealsCountMatches) {
     violations.push(`Canonical Seals count mismatch: expected ${CANONICAL_SEALS}, got ${seals}`);
   }
 
-  const mutation = payload.canonicalAnchors?.ssotMutationDelta ?? payload.evidenceMetadata?.mutationAuthority;
+  const mutation = p.canonicalAnchors?.ssotMutationDelta ?? p.evidenceMetadata?.mutationAuthority;
   if (mutation !== 0 && mutation !== undefined) {
     violations.push(`SSoT Mutation violation detected: ${mutation} (must be strictly 0)`);
   }
 
-  const signaturesCount = payload.cryptographicSignaturesAndAttestation?.decaKeyHsmQuorum?.activeSignedCount ?? 0;
+  const signaturesCount = p.cryptographicSignaturesAndAttestation?.decaKeyHsmQuorum?.activeSignedCount ?? 0;
 
   return {
     isValid: violations.length === 0,
     violations,
-    canonicalBlock: payload.canonicalAnchors?.canonicalBlockHeight || CANONICAL_GENESIS_BLOCK,
+    canonicalBlock: p.canonicalAnchors?.canonicalBlockHeight || CANONICAL_GENESIS_BLOCK,
     merkleRootMatches,
     sealsCountMatches,
     signaturesCount,

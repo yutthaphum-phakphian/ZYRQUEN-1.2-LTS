@@ -431,14 +431,15 @@ export interface TelemetrySnapshot {
   entropyDrift: number; // 🆕 metric field
 }
 
-export const getEntropyDrift = (snapshot: any): number => {
-  const qops = snapshot?.qopsThroughput ?? snapshot?.qops ?? 850;
-  const coherence = snapshot?.coherence ?? snapshot?.coherencePct ?? 99.9;
+export const getEntropyDrift = (snapshot: unknown): number => {
+  const snap = snapshot as Record<string, number> | undefined;
+  const qops = snap?.qopsThroughput ?? snap?.qops ?? 850;
+  const coherence = snap?.coherence ?? snap?.coherencePct ?? 99.9;
   const variance = Math.abs(qops - coherence);
   return 26 + (Math.round(variance) % 52); // map variance to 26–78 range
 };
 
-export const logEvent = (eventName: string, payload?: any) => {
+export const logEvent = (eventName: string, payload?: unknown) => {
   console.info(`[TELEMETRY LOG] ${eventName}:`, payload);
   return { eventName, payload, timestamp: Date.now() };
 };

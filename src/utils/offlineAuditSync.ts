@@ -30,8 +30,9 @@ function openClientDB(): Promise<IDBDatabase> {
       return reject(new Error('IndexedDB not supported'));
     }
     const request = indexedDB.open(OFFLINE_DB_NAME, 1);
-    request.onupgradeneeded = (event: any) => {
-      const db = event.target.result;
+    request.onupgradeneeded = (event: IDBVersionChangeEvent) => {
+      const target = event.target as IDBOpenDBRequest;
+      const db = target.result;
       if (!db.objectStoreNames.contains(OFFLINE_STORE_NAME)) {
         db.createObjectStore(OFFLINE_STORE_NAME, { keyPath: 'id', autoIncrement: true });
       }

@@ -290,7 +290,7 @@ class TerminalJobLifecycleEngine {
     if (existingJob && isJobTerminalState(existingJob.state)) {
       return {
         success: true,
-        result: existingJob.responsePayload,
+        result: existingJob.responsePayload as T | undefined,
         job: existingJob,
         isDuplicateSuppressed: true,
         error: `Job already reached terminal state '${existingJob.state}'. Duplicate execution suppressed.`,

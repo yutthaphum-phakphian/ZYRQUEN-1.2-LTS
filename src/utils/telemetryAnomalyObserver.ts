@@ -331,7 +331,7 @@ export class TelemetryAnomalyObserver {
   }
 }
 
-export const observeTelemetryAnomaly = (snapshot: any) => {
+export const observeTelemetryAnomaly = (snapshot: HardwareSnapshot | unknown) => {
   const drift = getEntropyDrift(snapshot);
   if (drift > 78 || drift < 26) {
     enforceFailClosed('Entropy Drift Out of Range');

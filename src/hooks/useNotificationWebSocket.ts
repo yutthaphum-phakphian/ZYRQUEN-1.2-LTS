@@ -5,7 +5,7 @@ import { playTone } from '../components/AudioSynthesizer';
 export interface WebSocketAlertNotification {
   type: string;
   message: string;
-  payload?: any;
+  payload?: unknown;
   timestamp: string;
   systemStatus?: string;
   merkleRoot?: string;
@@ -46,7 +46,7 @@ export interface UseNotificationWebSocketReturn {
   lastNotification: WebSocketAlertNotification | null;
   notificationHistory: WebSocketAlertNotification[];
   reconnect: () => void;
-  sendMessage: (data: any) => boolean;
+  sendMessage: (data: unknown) => boolean;
   sendPing: () => void;
   trigger12StageReplay: (sealId?: number) => void;
 }
@@ -218,7 +218,8 @@ export function useNotificationWebSocket(
             }
             // 6. Trace Stage Event (Only milestone stage-12 closure toasts)
             else if (typeLower.includes('TRACE_STAGE_EVENT')) {
-              if (data.payload?.stageId === 12) {
+              const payloadObj = data.payload as Record<string, unknown> | undefined;
+              if (payloadObj?.stageId === 12) {
                 showToastRef.current(`✓ ${data.message}`, 'success');
               }
             }
@@ -272,7 +273,7 @@ export function useNotificationWebSocket(
   }, [connect]);
 
   // Send arbitrary JSON message to backend
-  const sendMessage = useCallback((data: any): boolean => {
+  const sendMessage = useCallback((data: unknown): boolean => {
     if (wsRef.current && wsRef.current.readyState === WebSocket.OPEN) {
       try {
         const payload = typeof data === 'string' ? data : JSON.stringify(data);

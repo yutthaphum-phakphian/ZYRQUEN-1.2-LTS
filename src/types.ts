@@ -458,9 +458,9 @@ export interface JobLifecycleRecord {
   retryCount: number;
   maxRetries: number;
   locked: boolean;
-  responsePayload?: any;
+  responsePayload?: unknown;
   errorMessage?: string;
-  metadata?: Record<string, any>;
+  metadata?: Record<string, unknown>;
 }
 
 export function isJobTerminalState(state: JobLifecycleState): boolean {

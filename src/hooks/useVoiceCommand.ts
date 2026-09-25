@@ -8,6 +8,36 @@ import {
   repeatLastAnnouncement,
 } from '../utils/textToSpeechService';
 
+interface SpeechRecognitionEvent {
+  results: {
+    [index: number]: {
+      [index: number]: {
+        transcript: string;
+      };
+      length: number;
+    };
+    length: number;
+  };
+}
+
+interface SpeechRecognitionInstance {
+  continuous: boolean;
+  interimResults: boolean;
+  lang: string;
+  onstart: (() => void) | null;
+  onend: (() => void) | null;
+  onerror: ((event: unknown) => void) | null;
+  onresult: ((event: SpeechRecognitionEvent) => void) | null;
+  start: () => void;
+  stop: () => void;
+}
+
+interface CustomSpeechWindow extends Window {
+  SpeechRecognition?: new () => SpeechRecognitionInstance;
+  webkitSpeechRecognition?: new () => SpeechRecognitionInstance;
+  _recognition?: SpeechRecognitionInstance;
+}
+
 export const useVoiceCommand = (
   onNavigate: (view: ViewType) => void,
   onCaptureSnapshot: () => void,
@@ -17,7 +47,8 @@ export const useVoiceCommand = (
   const [lastCommand, setLastCommand] = useState<string>('');
 
   useEffect(() => {
-    const SpeechRecognition = (window as any).SpeechRecognition || (window as any).webkitSpeechRecognition;
+    const customWindow = window as unknown as CustomSpeechWindow;
+    const SpeechRecognition = customWindow.SpeechRecognition || customWindow.webkitSpeechRecognition;
     if (!SpeechRecognition) return;
 
     const recognition = new SpeechRecognition();
@@ -28,12 +59,12 @@ export const useVoiceCommand = (
     recognition.onstart = () => setIsListening(true);
     recognition.onend = () => setIsListening(false);
     
-    recognition.onerror = (event: any) => {
+    recognition.onerror = (event: unknown) => {
       console.error("Voice command error", event);
       setIsListening(false);
     };
 
-    recognition.onresult = (event: any) => {
+    recognition.onresult = (event: SpeechRecognitionEvent) => {
       const transcript = event.results[event.results.length - 1][0].transcript.toLowerCase();
       setLastCommand(transcript);
 
@@ -121,11 +152,12 @@ export const useVoiceCommand = (
 
     // Auto-restart if we want continuous listening, but here we just manage state
     // We'll expose a toggle function.
-    (window as any)._recognition = recognition;
+    customWindow._recognition = recognition;
   }, [onNavigate, onCaptureSnapshot, onNotifyEvent]);
 
   const toggleListening = useCallback(() => {
-    const recognition = (window as any)._recognition;
+    const customWindow = window as unknown as CustomSpeechWindow;
+    const recognition = customWindow._recognition;
     if (!recognition) return;
     if (isListening) {
       recognition.stop();

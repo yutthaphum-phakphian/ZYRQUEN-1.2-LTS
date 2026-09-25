@@ -698,8 +698,9 @@ async function startServer() {
             source: 'GEMINI_AI_STUDIO_LIVE',
           });
         }
-      } catch (err: any) {
-        console.warn('[Copilot] Gemini API error, falling back to core engine:', err?.message || err);
+      } catch (err: unknown) {
+        const errMsg = err instanceof Error ? err.message : String(err);
+        console.warn('[Copilot] Gemini API error, falling back to core engine:', errMsg);
       }
     }
 
@@ -733,8 +734,9 @@ async function startServer() {
   });
 
   // Global error handler
-  app.use((err: any, _req: Request, res: Response, _next: NextFunction) => {
-    console.error('[Forensic] Unhandled error:', err?.message || err);
+  app.use((err: Error | unknown, _req: Request, res: Response, _next: NextFunction) => {
+    const errMsg = err instanceof Error ? err.message : String(err);
+    console.error('[Forensic] Unhandled error:', errMsg);
     res.status(500).json({
       success: false,
       error: 'INTERNAL_FORENSIC_ERROR',

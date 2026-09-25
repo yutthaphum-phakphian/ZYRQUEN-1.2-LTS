@@ -55,24 +55,35 @@ jobs:
         env:
           BENCHMARK_PROFILE: ${{ github.event.inputs.benchmark_profile || 'SLA_AUDIT' }}
         run: |
-          node -e '
-            const fs = require("fs");
+          node --input-type=module -e '
+            import fs from "fs";
             console.log("===========================================================================");
             console.log("  ⚡ ZYRQUEN Ω∞ SENATE GATE ENTERPRISE BENCHMARK");
             console.log("  Profile Mode:", process.env.BENCHMARK_PROFILE);
             console.log("===========================================================================");
             
-            const tablePath = "./SHA256_VERIFIED_TABLE.json";
-            let ledger = { canonical: { blockHeight: 849202, merkleRoot: "909ab814479844d8a14816bed34cdbb07528e18501da86fc4691763a43fa4c68", canonicalSeals: 14902, drift: "0.00%" } };
-            if (fs.existsSync(tablePath)) {
-              ledger = JSON.parse(fs.readFileSync(tablePath, "utf8"));
+            const tablePaths = ["./public/SHA256_VERIFIED_TABLE.json", "./reports/SHA256_VERIFIED_TABLE.json", "./SHA256_VERIFIED_TABLE.json"];
+            let params = { genesis_block_height: 849202, canonical_merkle_root: "909ab814479844d8a14816bed34cdbb07528e18501da86fc4691763a43fa4c68", canonical_seals: 14902, drift_delta: "0.00%" };
+            for (const p of tablePaths) {
+              if (fs.existsSync(p)) {
+                try {
+                  const raw = JSON.parse(fs.readFileSync(p, "utf8"));
+                  params = raw?.document_metadata?.canonical_parameters || raw?.canonical || params;
+                  break;
+                } catch (e) {}
+              }
             }
 
+            const blockHeight = params.genesis_block_height || params.blockHeight || 849202;
+            const merkleRoot = params.canonical_merkle_root || params.merkleRoot || "909ab814479844d8a14816bed34cdbb07528e18501da86fc4691763a43fa4c68";
+            const seals = params.canonical_seals || params.canonicalSeals || 14902;
+            const drift = params.drift_delta || params.drift || "0.00%";
+
             console.log("[SSoT Baseline]");
-            console.log("  Block Height Anchor :", ledger.canonical.blockHeight);
-            console.log("  Genesis Merkle Root :", ledger.canonical.merkleRoot);
-            console.log("  Canonical Seals     :", ledger.canonical.canonicalSeals);
-            console.log("  Zero Drift Invariant:", ledger.canonical.drift);
+            console.log("  Block Height Anchor :", blockHeight);
+            console.log("  Genesis Merkle Root :", merkleRoot);
+            console.log("  Canonical Seals     :", seals);
+            console.log("  Zero Drift Invariant:", drift);
 
             console.log("\n[Enterprise Benchmark Telemetry Metrics]");
             const qopsThroughput = 851.9;

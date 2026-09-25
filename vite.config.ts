@@ -49,6 +49,8 @@ export default defineConfig(() => {
     resolve: {
       alias: {
         '@': path.resolve(__dirname, './src'),
+        'react': path.resolve(__dirname, './node_modules/react'),
+        'react-dom': path.resolve(__dirname, './node_modules/react-dom'),
       },
       dedupe: ['react', 'react-dom', 'react-router', 'react-router-dom', 'motion', 'motion/react'],
     },
@@ -58,6 +60,7 @@ export default defineConfig(() => {
         'react',
         'react-dom',
         'react-dom/client',
+        'react-router-dom',
         'lucide-react',
         'clsx',
         'tailwind-merge',
@@ -76,6 +79,9 @@ export default defineConfig(() => {
         output: {
           manualChunks(id) {
             if (id.includes('node_modules')) {
+              if (id.includes('react') || id.includes('react-dom') || id.includes('react-router') || id.includes('motion')) {
+                return 'vendor-react-core';
+              }
               if (id.includes('three')) {
                 return 'vendor-three';
               }
@@ -88,10 +94,7 @@ export default defineConfig(() => {
               if (id.includes('lucide-react')) {
                 return 'vendor-icons';
               }
-              if (id.includes('motion')) {
-                return 'vendor-motion';
-              }
-              return 'vendor-core';
+              return 'vendor-libs';
             }
           },
         },

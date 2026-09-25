@@ -296,8 +296,9 @@ app.get('/api/v1/telemetry', (req: Request, res: Response) => {
 });
 
 // Global error handler - forensic safe
-app.use((err: any, _req: Request, res: Response, _next: NextFunction) => {
-  console.error('[Forensic] Unhandled error:', err?.message || err);
+app.use((err: Error | unknown, _req: Request, res: Response, _next: NextFunction) => {
+  const errMsg = err instanceof Error ? err.message : String(err);
+  console.error('[Forensic] Unhandled error:', errMsg);
   res.status(500).json({
     success: false,
     error: 'INTERNAL_FORENSIC_ERROR',
