@@ -39,6 +39,7 @@ import {
   Send,
   RadioTower,
   Search,
+  QrCode,
 } from 'lucide-react';
 import { playTone, playAuditChime } from './AudioSynthesizer';
 import { SecuritySubTab } from './views/SecurityView';
@@ -186,6 +187,7 @@ export interface SystemEvent {
     | 'AUDIO'
     | 'SECURITY'
     | 'EVIDENCE_IMPORTED'
+    | 'EVIDENCE_INGESTED'
     | 'INVARIANT'
     | 'FORENSIC'
     | 'BACKUP'
@@ -227,7 +229,8 @@ export type SystemEventFilterType =
   | 'CRYPTO'
   | 'BACKUP'
   | 'LEGAL_SEARCH'
-  | 'EVIDENCE_IMPORTED';
+  | 'EVIDENCE_IMPORTED'
+  | 'EVIDENCE_INGESTED';
 
 export const SystemEventsSidebar: React.FC<SystemEventsSidebarProps> = ({
   isOpen,
@@ -286,6 +289,7 @@ export const SystemEventsSidebar: React.FC<SystemEventsSidebarProps> = ({
       BACKUP: 0,
       LEGAL_SEARCH: 0,
       EVIDENCE_IMPORTED: 0,
+      EVIDENCE_INGESTED: 0,
     };
     events.forEach((ev) => {
       if (ev.type === 'COMPLIANCE' || ev.type === 'LEGAL_SEARCH' || ev.isComplianceDrift) {
@@ -300,6 +304,7 @@ export const SystemEventsSidebar: React.FC<SystemEventsSidebarProps> = ({
       if (ev.type === 'BACKUP') counts.BACKUP += 1;
       if (ev.type === 'LEGAL_SEARCH') counts.LEGAL_SEARCH += 1;
       if (ev.type === 'EVIDENCE_IMPORTED') counts.EVIDENCE_IMPORTED += 1;
+      if (ev.type === 'EVIDENCE_INGESTED') counts.EVIDENCE_INGESTED += 1;
     });
     return counts;
   }, [events]);
@@ -669,6 +674,12 @@ export const SystemEventsSidebar: React.FC<SystemEventsSidebarProps> = ({
           label: 'EVIDENCE INTAKE (PROVENANCE)',
           icon: <FileCheck className="w-3 h-3 text-indigo-300" />,
           color: 'bg-[#0e1026] text-indigo-200 border-indigo-500/50',
+        };
+      case 'EVIDENCE_INGESTED':
+        return {
+          label: 'EVIDENCE INGESTED (QR SCAN)',
+          icon: <QrCode className="w-3 h-3 text-emerald-400" />,
+          color: 'bg-[#042017] text-emerald-200 border-emerald-500/50',
         };
       case 'BACKUP':
         return {
@@ -1250,6 +1261,7 @@ export const SystemEventsSidebar: React.FC<SystemEventsSidebarProps> = ({
             <option value="BACKUP">📦 BACKUP & Snapshots ({filterCounts.BACKUP})</option>
             <option value="LEGAL_SEARCH">🔍 LEGAL_SEARCH ({filterCounts.LEGAL_SEARCH})</option>
             <option value="EVIDENCE_IMPORTED">📑 EVIDENCE_IMPORTED ({filterCounts.EVIDENCE_IMPORTED})</option>
+            <option value="EVIDENCE_INGESTED">📷 EVIDENCE_INGESTED ({filterCounts.EVIDENCE_INGESTED})</option>
           </select>
         </div>
 

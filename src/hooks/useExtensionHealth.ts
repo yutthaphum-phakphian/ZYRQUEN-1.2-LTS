@@ -414,7 +414,7 @@ export const healthStateManager = new HealthStateManager();
 
 export function useExtensionHealth(
   onSystemEvent?: (
-    type: 'CRYPTO' | 'HARDWARE' | 'COMPLIANCE' | 'SECURITY' | 'INVARIANT' | 'EVIDENCE_IMPORTED' | 'FORENSIC' | 'WARNING' | 'ALERT',
+    type: 'CRYPTO' | 'HARDWARE' | 'COMPLIANCE' | 'SECURITY' | 'INVARIANT' | 'EVIDENCE_IMPORTED' | 'EVIDENCE_INGESTED' | 'FORENSIC' | 'WARNING' | 'ALERT',
     title: string,
     description: string,
     metaHash?: string,
@@ -443,7 +443,7 @@ export function useExtensionHealth(
 
   const dispatchSystemEvent = useCallback(
     (
-      type: 'CRYPTO' | 'HARDWARE' | 'COMPLIANCE' | 'SECURITY' | 'INVARIANT' | 'EVIDENCE_IMPORTED' | 'FORENSIC' | 'WARNING' | 'ALERT',
+      type: 'CRYPTO' | 'HARDWARE' | 'COMPLIANCE' | 'SECURITY' | 'INVARIANT' | 'EVIDENCE_IMPORTED' | 'EVIDENCE_INGESTED' | 'FORENSIC' | 'WARNING' | 'ALERT',
       title: string,
       description: string,
       metaHash?: string,

@@ -668,13 +668,14 @@ function createNormalizedSystemEvent(
   const isForensic = payload.type === 'FORENSIC';
   const isHardware = payload.type === 'HARDWARE';
   const isEvidence = payload.type === 'EVIDENCE_IMPORTED';
+  const isEvidenceIngested = payload.type === 'EVIDENCE_INGESTED';
   const isCrypto = payload.type === 'CRYPTO';
 
   const timestamp = new Date().toLocaleTimeString('en-GB', { hour12: false }) + ' ICT';
 
   let bindingStatus: SystemEvent['bindingStatus'] = payload.bindingStatus;
   if (!bindingStatus) {
-    if (isCompliance || isForensic || isCrypto) {
+    if (isCompliance || isForensic || isCrypto || isEvidenceIngested) {
       bindingStatus = 'VERIFIED';
     } else if (isEvidence) {
       bindingStatus = 'PENDING';
@@ -685,7 +686,7 @@ function createNormalizedSystemEvent(
 
   let statuteRef = payload.statuteRef;
   if (!statuteRef) {
-    if (isCompliance || isForensic) {
+    if (isCompliance || isForensic || isEvidenceIngested) {
       statuteRef = 'ETDA B.E. 2544 Sec 9/26/28 & PDPA Sec 37';
     } else if (isHardware) {
       statuteRef = 'FIPS 140-3 L4 Hardware Custody & Sub-Kelvin Thermal SLA';
@@ -697,6 +698,8 @@ function createNormalizedSystemEvent(
   let metaHash = payload.metaHash;
   if (!metaHash && isCompliance) {
     metaHash = `etda:sec26:proof:${Date.now().toString(16)}`;
+  } else if (!metaHash && isEvidenceIngested) {
+    metaHash = `merkle:root:ingest:${Date.now().toString(16)}`;
   }
 
   return {
@@ -934,8 +937,11 @@ function SovereignAppContent() {
         showToast(customEvent.detail.message, customEvent.detail.type || 'info');
       }
     };
+
     window.addEventListener('zyrquen-toast', handleGlobalToast);
-    return () => window.removeEventListener('zyrquen-toast', handleGlobalToast);
+    return () => {
+      window.removeEventListener('zyrquen-toast', handleGlobalToast);
+    };
   }, [showToast]);
 
   // Connect to Node.js WebSocket Notification Service and pipe incoming alerts to toasts
@@ -1221,6 +1227,25 @@ function SovereignAppContent() {
     },
     [dispatchAction]
   );
+
+  // Global listener for system events emitted by child modals and air-gapped forensic scanners
+  useEffect(() => {
+    type EmitPayload = Extract<SystemAction, { type: 'EMIT_SYSTEM_EVENT' }>['payload'];
+    const handleGlobalSystemEvent = (e: Event) => {
+      const customEvent = e as CustomEvent<EmitPayload>;
+      if (customEvent.detail && customEvent.detail.type) {
+        dispatchAction({
+          type: 'EMIT_SYSTEM_EVENT',
+          payload: customEvent.detail,
+        });
+      }
+    };
+
+    window.addEventListener('zyrquen-emit-system-event', handleGlobalSystemEvent);
+    return () => {
+      window.removeEventListener('zyrquen-emit-system-event', handleGlobalSystemEvent);
+    };
+  }, [dispatchAction]);
 
   // Trigger 'EVIDENCE_IMPORTED' audit events upon initial mount using batched dispatchAction
   useEffect(() => {
@@ -3018,6 +3043,12 @@ function SovereignAppContent() {
         }}
         currentBlockHeight={CANONICAL_GENESIS_BLOCK}
         merkleRootHash={CANONICAL_MERKLE_ROOT}
+        onScanSuccess={(event) => {
+          dispatchAction({
+            type: 'EMIT_SYSTEM_EVENT',
+            payload: event,
+          });
+        }}
       />
 
       {/* Sovereign Control Dock (Cybernetic Floating Glassmorphism Controls) */}

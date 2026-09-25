@@ -80,7 +80,7 @@ import { P3ArtifactRuntimePanel } from '../P3ArtifactRuntimePanel';
 interface ProductionReadinessViewProps {
   onNavigate?: (view: ViewType) => void;
   onAddSystemEvent?: (
-    type: 'CRYPTO' | 'HARDWARE' | 'COMPLIANCE' | 'SECURITY' | 'INVARIANT' | 'EVIDENCE_IMPORTED' | 'FORENSIC' | 'WARNING' | 'ALERT',
+    type: 'CRYPTO' | 'HARDWARE' | 'COMPLIANCE' | 'SECURITY' | 'INVARIANT' | 'EVIDENCE_IMPORTED' | 'EVIDENCE_INGESTED' | 'FORENSIC' | 'WARNING' | 'ALERT',
     title: string,
     description: string,
     metaHash?: string,

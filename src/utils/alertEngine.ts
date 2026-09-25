@@ -46,7 +46,7 @@ class AlertEngine {
   private alerts: SystemAlert[] = [];
   private listeners: AlertListener[] = [];
   private onSystemEventCallback?: (
-    type: 'CRYPTO' | 'HARDWARE' | 'COMPLIANCE' | 'SECURITY' | 'INVARIANT' | 'EVIDENCE_IMPORTED' | 'FORENSIC' | 'WARNING' | 'ALERT',
+    type: 'CRYPTO' | 'HARDWARE' | 'COMPLIANCE' | 'SECURITY' | 'INVARIANT' | 'EVIDENCE_IMPORTED' | 'EVIDENCE_INGESTED' | 'FORENSIC' | 'WARNING' | 'ALERT',
     title: string,
     description: string,
     metaHash?: string,
@@ -123,7 +123,7 @@ class AlertEngine {
 
   public registerSystemEventHandler(
     handler: (
-      type: 'CRYPTO' | 'HARDWARE' | 'COMPLIANCE' | 'SECURITY' | 'INVARIANT' | 'EVIDENCE_IMPORTED' | 'FORENSIC' | 'WARNING' | 'ALERT',
+      type: 'CRYPTO' | 'HARDWARE' | 'COMPLIANCE' | 'SECURITY' | 'INVARIANT' | 'EVIDENCE_IMPORTED' | 'EVIDENCE_INGESTED' | 'FORENSIC' | 'WARNING' | 'ALERT',
       title: string,
       description: string,
       metaHash?: string,
