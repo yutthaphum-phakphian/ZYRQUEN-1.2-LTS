@@ -637,7 +637,7 @@ async function startServer() {
   });
 
   // POST /api/copilot/chat (Sovereign Coding & System Assistant Copilot Bridge)
-  app.post('/api/copilot/chat', (req: Request, res: Response) => {
+  app.post('/api/copilot/chat', async (req: Request, res: Response) => {
     const { message, context } = req.body || {};
     const userQuery = (message || '').toString();
     const queryLower = userQuery.toLowerCase();
@@ -678,6 +678,29 @@ async function startServer() {
         answer: `✨ เลเยอร์ลายน้ำ 'ZYRQUEN Ω∞' ทำงานอยู่บนทุกมุมมอง รองรับ 3 รูปแบบ (Diagonal Grid, Corner Stamp, Center Halo) พร้อมการปรับความโปร่งใส (Opacity) ผ่านวิดเจ็ตมุมซ้ายล่าง เพื่อความสวยงามและการอ้างอิงหลักฐานทางกฎหมาย (Document Attribution) ครับ`,
         source: 'WATERMARK_OVERLAY_ENGINE',
       });
+    }
+
+    // Server-side Gemini API fallback if GEMINI_API_KEY is available
+    if (process.env.GEMINI_API_KEY) {
+      try {
+        const { GoogleGenAI } = await import('@google/genai');
+        const ai = new GoogleGenAI({});
+        const response = await ai.models.generateContent({
+          model: 'gemini-2.5-flash',
+          contents: userQuery,
+          config: {
+            systemInstruction: `You are the Sovereign Intelligence Assistant for ZYRQUEN Ω∞ Sovereign World Engine (Genesis Block #${GENESIS_BLOCK_NUM}, Merkle ${MERKLE_ROOT_GENESIS}, 14,902 Seals, SSoT Δ0.00% Zero Drift). Respond professionally with authoritative sovereign clarity. Context: ${JSON.stringify(context || {})}`,
+          },
+        });
+        if (response && response.text) {
+          return res.status(200).json({
+            answer: response.text,
+            source: 'GEMINI_AI_STUDIO_LIVE',
+          });
+        }
+      } catch (err: any) {
+        console.warn('[Copilot] Gemini API error, falling back to core engine:', err?.message || err);
+      }
     }
 
     // Default intelligent sovereign response

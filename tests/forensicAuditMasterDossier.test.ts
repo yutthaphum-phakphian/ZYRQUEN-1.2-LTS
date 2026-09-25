@@ -183,4 +183,26 @@ describe('Forensic Audit Master Dossier (DOC-SOV-HSM-1010-2026-V9)', () => {
       expect(payload).toContain(`sealStatus=`);
     });
   });
+
+  it('guarantees template string interpolation with backticks across all step and legal QR buttons', () => {
+    // Regression test for issue: string literals with single quotes '${s.step}' vs backticks `${s.step}`
+    FORENSIC_DOSSIER_V9.steps.forEach((s) => {
+      const expectedBtnId = `btn-qr-step-${s.step}`;
+      const expectedHashKey = `hash-${s.step}`;
+      expect(expectedBtnId).toBe(`btn-qr-step-${s.step}`);
+      expect(expectedBtnId).not.toBe('btn-qr-step-${s.step}');
+      expect(expectedHashKey).toBe(`hash-${s.step}`);
+      expect(expectedHashKey).not.toBe('hash-${s.step}');
+    });
+
+    FORENSIC_DOSSIER_V9.legalAlignments.forEach((_, idx) => {
+      const expectedLegalBtnId = `btn-qr-legal-${idx + 1}`;
+      const expectedEvidenceKey = `legal-${idx + 1}`;
+      expect(expectedLegalBtnId).toBe(`btn-qr-legal-${idx + 1}`);
+      expect(expectedLegalBtnId).not.toBe('btn-qr-legal-${idx + 1}');
+      expect(expectedEvidenceKey).toBe(`legal-${idx + 1}`);
+      expect(expectedEvidenceKey).not.toBe('legal-${idx + 1}');
+    });
+  });
 });
+

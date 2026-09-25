@@ -36,11 +36,12 @@ import { downloadMasterForensicDossierV9Pdf } from '../../utils/forensicDossierP
 import { safeCopyToClipboard } from '../../utils/clipboard';
 import { generateSealQrCodeDataUrl, formatSealPayload } from '../../utils/sealQrCode';
 import { playAuditChime, playTone } from '../AudioSynthesizer';
+import { ForensicEvidenceQrGenerator } from './ForensicEvidenceQrGeneratorModal';
 
 export interface ForensicAuditMasterDossierModalProps {
   isOpen: boolean;
   onClose: () => void;
-  initialTab?: 'pillars' | 'audit-trail' | 'legal' | 'raw-json' | 'qr-verify';
+  initialTab?: 'pillars' | 'audit-trail' | 'legal' | 'qr-generator' | 'raw-json' | 'qr-verify';
 }
 
 export const ForensicAuditMasterDossierModal: React.FC<ForensicAuditMasterDossierModalProps> = ({
@@ -48,13 +49,20 @@ export const ForensicAuditMasterDossierModal: React.FC<ForensicAuditMasterDossie
   onClose,
   initialTab = 'pillars',
 }) => {
-  const [activeTab, setActiveTab] = useState<'pillars' | 'audit-trail' | 'legal' | 'raw-json' | 'qr-verify'>(initialTab);
+  const [activeTab, setActiveTab] = useState<'pillars' | 'audit-trail' | 'legal' | 'qr-generator' | 'raw-json' | 'qr-verify'>(initialTab);
   const [selectedStep, setSelectedStep] = useState<ForensicAuditStep | null>(null);
   const [copiedField, setCopiedField] = useState<string | null>(null);
   const [isExportingPdf, setIsExportingPdf] = useState(false);
   const [qrFormat, setQrFormat] = useState<'url' | 'json' | 'compact'>('url');
+  const [qrEvidenceId, setQrEvidenceId] = useState<string>('master-dossier');
 
   if (!isOpen) return null;
+
+  const handleOpenQrForEvidence = (evidenceId: string) => {
+    setQrEvidenceId(evidenceId);
+    setActiveTab('qr-generator');
+    playTone(720, 0.04);
+  };
 
   const handleCopy = (text: string, fieldName: string) => {
     safeCopyToClipboard(text);
@@ -186,6 +194,16 @@ export const ForensicAuditMasterDossierModal: React.FC<ForensicAuditMasterDossie
 
           <div className="flex items-center gap-2">
             <button
+              id="btn-open-master-qr"
+              onClick={() => handleOpenQrForEvidence('master-dossier')}
+              className="flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-cyan-950/80 border border-cyan-500/40 text-cyan-300 font-bold text-xs transition cursor-pointer active:scale-95 shadow-sm"
+              title="Verify Master Forensic Dossier on Mobile Device via QR Code"
+            >
+              <QrCode className="w-3.5 h-3.5" />
+              <span>Verify on Mobile (QR)</span>
+            </button>
+
+            <button
               id="btn-qr-verification"
               onClick={() => {
                 playTone(740, 0.04);
@@ -262,6 +280,22 @@ export const ForensicAuditMasterDossierModal: React.FC<ForensicAuditMasterDossie
           >
             <Scale className="w-3.5 h-3.5" />
             <span>Statutory Legal Alignment (ETDA / PDPA)</span>
+          </button>
+
+          <button
+            id="tab-btn-qr-generator"
+            onClick={() => {
+              playTone(740, 0.04);
+              setActiveTab('qr-generator');
+            }}
+            className={`flex items-center gap-1.5 px-3 py-1.5 rounded-xl font-bold transition cursor-pointer whitespace-nowrap ${
+              activeTab === 'qr-generator'
+                ? 'bg-emerald-500/20 text-emerald-300 border border-emerald-500/40 shadow-sm'
+                : 'text-zinc-400 hover:text-zinc-200 hover:bg-zinc-800/50 border border-transparent'
+            }`}
+          >
+            <QrCode className="w-3.5 h-3.5 text-emerald-400" />
+            <span>Mobile QR Verifier</span>
           </button>
 
           <button
@@ -343,8 +377,19 @@ export const ForensicAuditMasterDossierModal: React.FC<ForensicAuditMasterDossie
                     </div>
 
                     <div className="mt-4 pt-3 border-t border-zinc-800 flex items-center justify-between text-[10px]">
-                      <span className="text-zinc-500">Status Verification</span>
-                      <span className="font-bold text-emerald-400">{pillar.status}</span>
+                      <div className="flex items-center gap-1.5">
+                        <span className="text-zinc-500">Status Verification:</span>
+                        <span className="font-bold text-emerald-400">{pillar.status}</span>
+                      </div>
+                      <button
+                        id={`btn-qr-${pillar.id}`}
+                        onClick={() => handleOpenQrForEvidence(pillar.id)}
+                        className="px-2 py-1 rounded-lg bg-emerald-950/60 hover:bg-emerald-800/60 border border-emerald-500/40 text-emerald-300 font-bold text-[10px] transition cursor-pointer flex items-center gap-1"
+                        title={`Generate QR Code to verify ${pillar.pillarNumber} on mobile device`}
+                      >
+                        <QrCode className="w-3 h-3 text-emerald-400" />
+                        <span>QR</span>
+                      </button>
                     </div>
                   </div>
                 ))}
@@ -399,16 +444,31 @@ export const ForensicAuditMasterDossierModal: React.FC<ForensicAuditMasterDossie
                             </span>
                           </td>
                           <td className="p-3 text-right">
-                            <button
-                              onClick={(e) => {
-                                e.stopPropagation();
-                                handleCopy(s.merkleHash, `hash-${s.step}`);
-                              }}
-                              className="px-2 py-1 rounded bg-zinc-800/80 hover:bg-zinc-700 text-[10px] text-zinc-300 transition"
-                              title="Copy Merkle Hash"
-                            >
-                              {copiedField === `hash-${s.step}` ? 'Copied' : 'Hash'}
-                            </button>
+                            <div className="flex items-center justify-end gap-1.5">
+                              <button
+                                id={`btn-qr-step-${s.step}`}
+                                onClick={(e) => {
+                                  e.stopPropagation();
+                                  handleOpenQrForEvidence(`step-${s.step}`);
+                                }}
+                                className="px-2 py-1 rounded bg-emerald-950/60 hover:bg-emerald-800/60 border border-emerald-500/40 text-[10px] text-emerald-300 font-bold transition cursor-pointer flex items-center gap-1"
+                                title={`Generate QR Code for Step #${s.step} to verify on mobile device`}
+                              >
+                                <QrCode className="w-3 h-3 text-emerald-400" />
+                                <span>QR</span>
+                              </button>
+                              <button
+                                id={`btn-hash-step-${s.step}`}
+                                onClick={(e) => {
+                                  e.stopPropagation();
+                                  handleCopy(s.merkleHash, `hash-${s.step}`);
+                                }}
+                                className="px-2 py-1 rounded bg-zinc-800/80 hover:bg-zinc-700 text-[10px] text-zinc-300 transition cursor-pointer"
+                                title="Copy Merkle Hash"
+                              >
+                                {copiedField === `hash-${s.step}` ? 'Copied' : 'Hash'}
+                              </button>
+                            </div>
                           </td>
                         </tr>
                       ))}
@@ -438,6 +498,23 @@ export const ForensicAuditMasterDossierModal: React.FC<ForensicAuditMasterDossie
                     <div className="col-span-full break-all">
                       Merkle Hash: <code className="text-emerald-300">{selectedStep.merkleHash}</code>
                     </div>
+                  </div>
+                  <div className="pt-2 flex items-center justify-end gap-2">
+                    <button
+                      onClick={() => handleOpenQrForEvidence(`step-${selectedStep.step}`)}
+                      className="flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-emerald-500/20 hover:bg-emerald-500/30 border border-emerald-500/50 text-emerald-300 font-bold text-xs transition cursor-pointer"
+                    >
+                      <QrCode className="w-3.5 h-3.5" />
+                      <span>Verify Step #{selectedStep.step} via Mobile QR Code</span>
+                    </button>
+                    <button
+                      id={`step-drawer-hash-${selectedStep.step}`}
+                      onClick={() => handleCopy(selectedStep.merkleHash, `step-drawer-hash-${selectedStep.step}`)}
+                      className="px-2.5 py-1.5 rounded-xl bg-zinc-800 hover:bg-zinc-700 text-xs text-zinc-300 transition cursor-pointer flex items-center gap-1"
+                    >
+                      {copiedField === `step-drawer-hash-${selectedStep.step}` ? <Check className="w-3.5 h-3.5 text-emerald-400" /> : <Copy className="w-3.5 h-3.5 text-zinc-400" />}
+                      <span>{copiedField === `step-drawer-hash-${selectedStep.step}` ? 'Copied' : 'Copy Hash'}</span>
+                    </button>
                   </div>
                 </div>
               )}
@@ -470,11 +547,22 @@ export const ForensicAuditMasterDossierModal: React.FC<ForensicAuditMasterDossie
                       {item.mechanism}
                     </p>
 
-                    <div className="p-3 rounded-xl bg-zinc-950/80 border border-zinc-800/80 text-[11px]">
-                      <span className="text-zinc-500 block text-[10px] uppercase font-bold mb-1">
-                        Court Evidentiary Proof Anchor:
-                      </span>
-                      <code className="text-emerald-400">{item.evidence}</code>
+                    <div className="p-3 rounded-xl bg-zinc-950/80 border border-zinc-800/80 text-[11px] flex items-center justify-between gap-2 flex-wrap">
+                      <div className="flex-1 min-w-0">
+                        <span className="text-zinc-500 block text-[10px] uppercase font-bold mb-1">
+                          Court Evidentiary Proof Anchor:
+                        </span>
+                        <code className="text-emerald-400 break-all">{item.evidence}</code>
+                      </div>
+                      <button
+                        id={`btn-qr-legal-${idx + 1}`}
+                        onClick={() => handleOpenQrForEvidence(`legal-${idx + 1}`)}
+                        className="px-2.5 py-1.5 rounded-xl bg-emerald-950/60 hover:bg-emerald-800/60 border border-emerald-500/40 text-emerald-300 font-bold text-xs transition cursor-pointer flex items-center gap-1.5 shrink-0"
+                        title={`Generate QR Code for statutory proof (${item.section})`}
+                      >
+                        <QrCode className="w-3.5 h-3.5 text-emerald-400" />
+                        <span>QR Proof</span>
+                      </button>
                     </div>
                   </div>
                 ))}
@@ -501,6 +589,16 @@ export const ForensicAuditMasterDossierModal: React.FC<ForensicAuditMasterDossie
               <pre className="p-4 rounded-2xl bg-[#050810] border border-zinc-800 text-[10px] text-emerald-300/90 font-mono overflow-x-auto max-h-[50vh] leading-relaxed">
                 {JSON.stringify(dossier, null, 2)}
               </pre>
+            </div>
+          )}
+
+          {/* TAB: MOBILE QR CODE GENERATOR FOR ALL EVIDENCE ITEMS */}
+          {activeTab === 'qr-generator' && (
+            <div className="animate-in fade-in duration-150">
+              <ForensicEvidenceQrGenerator
+                inline={true}
+                initialEvidenceId={qrEvidenceId || 'master-dossier'}
+              />
             </div>
           )}
 
