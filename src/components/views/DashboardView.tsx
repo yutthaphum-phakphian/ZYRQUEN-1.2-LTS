@@ -45,6 +45,7 @@ import { CopilotAutonomyNodePanel } from '../copilot/CopilotAutonomyNodePanel';
 import { SealValidationAnimation } from '../SealValidationAnimation';
 import { LiveQuantumEntropyTicker } from '../LiveQuantumEntropyTicker';
 import { SovereignIntegrityScore } from '../SovereignIntegrityScore';
+import { StressTestIndicatorD3Chart } from '../StressTestIndicatorD3Chart';
 import { useOfflineWarning } from '../../hooks/useOfflineWarning';
 import {
   Activity,
@@ -665,6 +666,9 @@ export const DashboardView: React.FC<DashboardViewProps> = ({
 
           {/* GitHub Synchronization Status Utility (Checksum & Merkle Parity Engine) */}
           <GitHubSyncStatusUtility />
+
+          {/* Real-Time Stress Test & 35.80ms Latency Jitter Indicator against 142.00ms SLA Target */}
+          <StressTestIndicatorD3Chart initialLatencyMs={35.80} slaLimitMs={142.00} />
 
           {/* System Health Dashboard (CPU, Memory, Cryostat Recharts Realtime Stream) */}
           <HealthDashboard snapshots={snapshots} />

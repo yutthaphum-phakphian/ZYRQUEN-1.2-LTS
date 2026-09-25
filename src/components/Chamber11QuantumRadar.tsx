@@ -20,7 +20,9 @@ import {
   QrCode,
   Copy,
   Check,
-  X
+  X,
+  Power,
+  Wrench
 } from 'lucide-react';
 import { QRCodeSVG } from 'qrcode.react';
 import { playTone, playAuditChime } from './AudioSynthesizer';
@@ -110,6 +112,7 @@ const INITIAL_THREAT_VECTORS: ThreatVector[] = [
 ];
 
 export const Chamber11QuantumRadar: React.FC = () => {
+  const [isChamberActive, setIsChamberActive] = useState<boolean>(true);
   const [threats, setThreats] = useState<ThreatVector[]>(INITIAL_THREAT_VECTORS);
   const [selectedThreat, setSelectedThreat] = useState<ThreatVector | null>(INITIAL_THREAT_VECTORS[3]); // Default to VEC-104
   const [isScanning, setIsScanning] = useState<boolean>(true);
@@ -127,6 +130,29 @@ export const Chamber11QuantumRadar: React.FC = () => {
     '[SENTINEL] Fail-Closed automatic trigger primed at 85.0°C / SSoT Zero Drift.',
     '[CRYPTO] NIST FIPS 204 ML-DSA-87 signature integrity 100% verified.'
   ]);
+
+  // Toggle Chamber State between Active Operational and Inactive Maintenance
+  const handleToggleChamberState = () => {
+    setIsChamberActive((prev) => {
+      const next = !prev;
+      if (next) {
+        playAuditChime();
+        setIsScanning(true);
+        setLogs((l) => [
+          `[STATUS] Chamber 11 manually switched to ACTIVE. 360° Quantum Doppler sweep restored.`,
+          ...l.slice(0, 8),
+        ]);
+      } else {
+        playTone(440, 0.15, 'sawtooth');
+        setIsScanning(false);
+        setLogs((l) => [
+          `[MAINTENANCE] 🟡 Chamber 11 manually signaled to INACTIVE (State Maintenance Mode). Fail-closed standby active.`,
+          ...l.slice(0, 8),
+        ]);
+      }
+      return next;
+    });
+  };
 
   // Trigger 8K Threat-Vector Simulator Injection
   const handleTriggerThreatSimulator = () => {
@@ -503,6 +529,54 @@ export const Chamber11QuantumRadar: React.FC = () => {
             <span className="px-2 py-0.5 rounded-full bg-cyan-500/20 text-cyan-300 border-cyan-500/40 text-[11px] font-mono">
               14.98 mK CRYO
             </span>
+
+            {/* Chamber 11 State Maintenance Toggle Switch */}
+            <div className="flex items-center gap-2 pl-2 border-l border-white/10 font-mono text-xs">
+              <button
+                type="button"
+                id="chamber11-maintenance-toggle"
+                onClick={handleToggleChamberState}
+                className={`relative inline-flex h-7 w-14 shrink-0 cursor-pointer rounded-full border-2 transition-colors duration-200 ease-in-out focus:outline-none ${
+                  isChamberActive
+                    ? 'bg-emerald-600 border-emerald-400/80 shadow-[0_0_12px_rgba(16,185,129,0.5)]'
+                    : 'bg-amber-600/80 border-amber-400/80 shadow-[0_0_12px_rgba(245,158,11,0.5)]'
+                }`}
+                role="switch"
+                aria-checked={isChamberActive}
+                title={
+                  isChamberActive
+                    ? 'Chamber 11 is ACTIVE (พร้อมปฏิบัติการ). คลิกเพื่อสลับเป็นโหมดซ่อมบำรุง/กักกันตรวจประเมิน (Inactive / Maintenance)'
+                    : 'Chamber 11 is INACTIVE (โหมดซ่อมบำรุง). คลิกเพื่อเปิดการทำงานเรดาร์เต็มรูปแบบ (Active)'
+                }
+              >
+                <span className="sr-only">Toggle Chamber 11 Active State</span>
+                <span
+                  aria-hidden="true"
+                  className={`pointer-events-none inline-block h-5 w-5 transform rounded-full bg-white shadow-lg ring-0 transition duration-200 ease-in-out ${
+                    isChamberActive ? 'translate-x-7' : 'translate-x-0.5'
+                  }`}
+                />
+              </button>
+              <span
+                className={`px-2.5 py-0.5 rounded-full text-xs font-bold border flex items-center gap-1.5 transition-all ${
+                  isChamberActive
+                    ? 'bg-emerald-500/20 text-emerald-300 border-emerald-500/40'
+                    : 'bg-amber-500/20 text-amber-300 border-amber-500/40 animate-pulse'
+                }`}
+              >
+                {isChamberActive ? (
+                  <>
+                    <Power className="w-3 h-3 text-emerald-400" />
+                    <span>ACTIVE / OPERATIONAL</span>
+                  </>
+                ) : (
+                  <>
+                    <Wrench className="w-3 h-3 text-amber-400" />
+                    <span>INACTIVE / STATE MAINTENANCE</span>
+                  </>
+                )}
+              </span>
+            </div>
           </div>
           <h2 className="text-xl font-bold font-serif text-white flex items-center gap-2">
             <span>เรดาร์ควอนตัม 8K ตรวจจับภัยคุกคามและการแทรกซึมรอบแกนหลัก G11</span>
@@ -601,8 +675,34 @@ export const Chamber11QuantumRadar: React.FC = () => {
               width={520}
               height={520}
               onClick={handleCanvasClick}
-              className="max-w-full h-auto rounded-xl border-emerald-500/20"
+              className={`max-w-full h-auto rounded-xl border-emerald-500/20 transition-all ${
+                !isChamberActive ? 'opacity-40 grayscale contrast-75' : ''
+              }`}
             />
+
+            {/* Inactive State Maintenance Overlay */}
+            {!isChamberActive && (
+              <div className="absolute inset-0 z-20 flex flex-col items-center justify-center bg-black/70 backdrop-blur-sm rounded-xl p-6 text-center border-2 border-amber-500/40">
+                <div className="p-3 bg-amber-500/20 border border-amber-400/50 rounded-2xl mb-3 shadow-[0_0_20px_rgba(245,158,11,0.3)]">
+                  <Wrench className="w-8 h-8 text-amber-400 animate-pulse" />
+                </div>
+                <h4 className="text-sm sm:text-base font-bold font-mono text-amber-300">
+                  CHAMBER 11: INACTIVE / STATE MAINTENANCE
+                </h4>
+                <p className="text-xs text-zinc-300 mt-1 max-w-sm font-sans">
+                  โหมดซ่อมบำรุงและกักกันตรวจประเมินกำลังทำงาน • ระบบเรดาร์อยู่ในสถานะ Standby • แกนกลาง G11 และ SSoT Δ0 ถูกล็อกนิรภัยแบบ Fail-Closed
+                </p>
+                <button
+                  type="button"
+                  onClick={handleToggleChamberState}
+                  className="mt-4 px-4 py-2 rounded-xl bg-emerald-500/20 hover:bg-emerald-500/30 text-emerald-300 border border-emerald-400/50 text-xs font-mono font-bold flex items-center gap-2 cursor-pointer shadow-[0_0_15px_rgba(16,185,129,0.3)] transition"
+                >
+                  <Power className="w-3.5 h-3.5" />
+                  <span>สลับเป็นสถานะ ACTIVE (พร้อมปฏิบัติการ)</span>
+                </button>
+              </div>
+            )}
+
             {/* Export Waveform Telemetry Button */}
             <button
               onClick={() => {

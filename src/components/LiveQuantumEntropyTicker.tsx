@@ -3,7 +3,7 @@ import { Activity, ShieldCheck, Database, Radio, Cpu, Lock, Thermometer } from '
 
 export const LiveQuantumEntropyTicker: React.FC = () => {
   return (
-    <div className="w-full bg-slate-950/95 border-y border-slate-800/80 py-1.5 px-2.5 sm:px-4 overflow-x-auto scrollbar-none font-mono text-[10px] sm:text-[10.5px] text-slate-400 flex items-center gap-2 sm:gap-3 backdrop-blur-md">
+    <div className="w-full max-w-full bg-slate-950/95 border-y border-slate-800/80 py-1.5 px-2.5 sm:px-4 overflow-hidden font-mono text-[10px] sm:text-[10.5px] text-slate-400 flex items-center gap-2 sm:gap-3 backdrop-blur-md">
       <div className="flex items-center gap-1.5 shrink-0 text-cyan-300 font-bold bg-cyan-950/80 px-2 py-0.5 rounded-lg border-cyan-500/40 text-[9.5px] sm:text-[10px] shadow-[0_0_10px_rgba(6,182,212,0.15)]">
         <Radio className="w-3 h-3 animate-pulse text-cyan-400" />
         <span className="whitespace-nowrap">LIVE STREAM</span>

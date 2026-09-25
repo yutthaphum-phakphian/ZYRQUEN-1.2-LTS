@@ -398,7 +398,7 @@ export const Navigation: React.FC<NavigationProps> = ({
         </div>
 
         {/* Right Actions */}
-        <div className="flex items-center gap-1.5 sm:gap-2 shrink-0">
+        <div className="flex items-center gap-1 sm:gap-2 shrink-0">
           {/* GitHub Synchronization Warning & Drift Re-sync System */}
           <PWAInstallButton />
           {onOpenGitHubPwa && (
@@ -408,14 +408,16 @@ export const Navigation: React.FC<NavigationProps> = ({
                 playTone(640, 0.06);
                 onOpenGitHubPwa();
               }}
-              className="flex items-center gap-1.5 px-2.5 py-1.5 rounded-xl bg-slate-900/90 hover:bg-slate-800 text-zinc-300 hover:text-white border-slate-700/60 hover:border-cyan-500/40 transition-all font-mono text-xs cursor-pointer active:scale-95 shadow-sm"
+              className="hidden lg:flex items-center gap-1.5 px-2.5 py-1.5 rounded-xl bg-slate-900/90 hover:bg-slate-800 text-zinc-300 hover:text-white border-slate-700/60 hover:border-cyan-500/40 transition-all font-mono text-xs cursor-pointer active:scale-95 shadow-sm"
               title="GitHub Push & PWA Setup Guide"
             >
               <Github className="w-3.5 h-3.5 text-cyan-400" />
               <span className="hidden xl:inline text-[11px] font-bold">GitHub &amp; PWA</span>
             </button>
           )}
-          <GitHubSyncWarningNav />
+          <div className="hidden sm:block">
+            <GitHubSyncWarningNav />
+          </div>
 
           {/* Copilot Assistant Layer (Sovereign Epoch #849202) Trigger Button */}
           <button
@@ -428,7 +430,7 @@ export const Navigation: React.FC<NavigationProps> = ({
                 setInternalIsCopilotOpen(!internalIsCopilotOpen);
               }
             }}
-            className={`group flex items-center gap-1.5 px-3 py-1.5 rounded-xl border font-mono text-xs transition-all cursor-pointer active:scale-95 ${
+            className={`group flex items-center gap-1 sm:gap-1.5 px-2 sm:px-3 py-1.5 rounded-xl border font-mono text-xs transition-all cursor-pointer active:scale-95 shrink-0 ${
               effectiveIsCopilotOpen
                 ? 'bg-cyan-500 text-black border-cyan-400 shadow-[0_0_15px_rgba(6,182,212,0.4)]'
                 : 'bg-purple-950/40 hover:bg-purple-900/50 border-purple-500/30 hover:border-purple-400/60 text-purple-200 hover:text-white shadow-[0_0_12px_rgba(168,85,247,0.15)] hover:shadow-[0_0_18px_rgba(168,85,247,0.3)]'
@@ -437,13 +439,13 @@ export const Navigation: React.FC<NavigationProps> = ({
           >
             <span className="text-sm group-hover:scale-110 transition-transform">🧠</span>
             <span className="hidden sm:inline font-bold tracking-wide">Copilot</span>
-            <span className={`px-1.5 py-0.2 rounded font-mono text-[9px] border ${
+            <span className={`px-1 sm:px-1.5 py-0.2 rounded font-mono text-[9px] border ${
               effectiveIsCopilotOpen ? 'bg-black/20 text-black border-black/30 font-bold' : 'bg-purple-500/20 text-purple-300 border-purple-500/30'
             }`}>Ω1</span>
           </button>
 
           {/* Global Theme Switcher (Terminal Green / Deep Space Violet / Sovereign Cyan) */}
-          <div id="theme-switcher-nav">
+          <div id="theme-switcher-nav" className="shrink-0">
             <ThemeSwitcher compact />
           </div>
 
@@ -458,7 +460,7 @@ export const Navigation: React.FC<NavigationProps> = ({
                 onOpenLegalSearch();
               }
             }}
-            className="group flex items-center gap-1.5 px-2.5 py-1.5 rounded-xl bg-cyan-950/50 hover:bg-cyan-500/20 border-cyan-500/40 hover:border-cyan-400/60 text-cyan-300 hover:text-cyan-100 font-mono text-xs transition-all shadow-sm cursor-pointer active:scale-95"
+            className="hidden lg:flex items-center gap-1.5 px-2.5 py-1.5 rounded-xl bg-cyan-950/50 hover:bg-cyan-500/20 border-cyan-500/40 hover:border-cyan-400/60 text-cyan-300 hover:text-cyan-100 font-mono text-xs transition-all shadow-sm cursor-pointer active:scale-95"
             title="Global Command Search (System Events, Legal Triggers, Views) [⌘K / Ctrl+K]"
           >
             <Terminal className="w-3.5 h-3.5 text-cyan-400 group-hover:scale-110 transition-transform" />
@@ -473,7 +475,7 @@ export const Navigation: React.FC<NavigationProps> = ({
               playTone(680, 0.08);
               onOpenLegalSearch();
             }}
-            className="group flex items-center gap-1.5 px-2.5 py-1.5 rounded-xl bg-slate-900/90 hover:bg-slate-800 border-slate-700/60 hover:border-cyan-500/40 text-zinc-300 hover:text-white font-mono text-xs transition-all shadow-sm cursor-pointer active:scale-95"
+            className="hidden 2xl:flex items-center gap-1.5 px-2.5 py-1.5 rounded-xl bg-slate-900/90 hover:bg-slate-800 border-slate-700/60 hover:border-cyan-500/40 text-zinc-300 hover:text-white font-mono text-xs transition-all shadow-sm cursor-pointer active:scale-95"
             title="Search Thai Laws & Cryptographic Standards"
           >
             <Search className="w-3.5 h-3.5 text-zinc-400 group-hover:text-cyan-400 group-hover:scale-110 transition-transform" />
@@ -486,7 +488,7 @@ export const Navigation: React.FC<NavigationProps> = ({
               playTone(620, 0.06);
               onOpenShortcuts();
             }}
-            className="flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-black/30 hover:bg-white/10 border-white/10 hover:border-white/20 text-zinc-400 hover:text-white font-mono text-xs transition-colors shadow-sm"
+            className="hidden xl:flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-black/30 hover:bg-white/10 border-white/10 hover:border-white/20 text-zinc-400 hover:text-white font-mono text-xs transition-colors shadow-sm"
             title="Global Keyboard Shortcuts & Fast Navigator (? or Ctrl+/)"
           >
             <Keyboard className="w-4 h-4 text-zinc-400" />
@@ -501,7 +503,7 @@ export const Navigation: React.FC<NavigationProps> = ({
                 playTone(640, 0.05);
                 onOpenEventsSidebar();
               }}
-              className="relative p-2 rounded-xl bg-black/30 hover:bg-white/10 border-white/10 hover:border-white/20 text-zinc-300 hover:text-white font-mono text-xs transition-colors flex items-center gap-1.5 shadow-sm"
+              className="relative p-1.5 sm:p-2 rounded-xl bg-black/30 hover:bg-white/10 border-white/10 hover:border-white/20 text-zinc-300 hover:text-white font-mono text-xs transition-colors flex items-center gap-1.5 shadow-sm shrink-0"
               title="Toggle System Events Activity Feed (Shift+E)"
             >
               <Bell className="w-4 h-4 text-cyan-400" />
@@ -517,7 +519,7 @@ export const Navigation: React.FC<NavigationProps> = ({
           {onCaptureSnapshot && (
             <button
               onClick={handleCaptureSnapshotWithAnimation}
-              className="flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-emerald-950/40 hover:bg-emerald-500/20 border-emerald-500/30 hover:border-emerald-400/50 text-emerald-300 font-mono text-xs transition-all shadow-[0_0_12px_rgba(16,185,129,0.15)] active:scale-95"
+              className="hidden 2xl:flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-emerald-950/40 hover:bg-emerald-500/20 border-emerald-500/30 hover:border-emerald-400/50 text-emerald-300 font-mono text-xs transition-all shadow-[0_0_12px_rgba(16,185,129,0.15)] active:scale-95"
               title="Capture Hardware Telemetry Snapshot (Increments Verified Seals with Progressive Green Highlight)"
             >
               <Camera className="w-3.5 h-3.5 text-emerald-400" />
@@ -532,7 +534,7 @@ export const Navigation: React.FC<NavigationProps> = ({
                 playTone(isForensicAuditMode ? 440 : 760, 0.08);
                 onToggleForensicAuditMode();
               }}
-              className={`flex items-center gap-1.5 px-3 py-1.5 rounded-xl border font-mono text-xs transition-all shadow-sm ${
+              className={`hidden xl:flex items-center gap-1.5 px-3 py-1.5 rounded-xl border font-mono text-xs transition-all shadow-sm ${
                 isForensicAuditMode
                   ? 'bg-purple-500/25 text-purple-200 border-purple-500/60 shadow-[0_0_18px_rgba(168,85,247,0.4)] font-bold ring-1 ring-purple-400/40'
                   : 'bg-black/30 hover:bg-purple-500/10 border-white/10 hover:border-purple-500/30 text-zinc-400 hover:text-purple-200'
@@ -564,7 +566,7 @@ export const Navigation: React.FC<NavigationProps> = ({
                 playTone(isSystemActivityFrozen ? 580 : 340, 0.08);
                 onToggleFreezeSystemActivity();
               }}
-              className={`flex items-center gap-1.5 px-3 py-1.5 rounded-xl border font-mono text-xs transition-all shadow-sm ${
+              className={`hidden xl:flex items-center gap-1.5 px-3 py-1.5 rounded-xl border font-mono text-xs transition-all shadow-sm ${
                 isSystemActivityFrozen
                   ? 'bg-amber-500/20 text-amber-200 border-amber-500/50 shadow-[0_0_16px_rgba(245,158,11,0.35)] animate-pulse font-bold'
                   : 'bg-black/30 hover:bg-cyan-500/10 border-white/10 hover:border-cyan-500/30 text-zinc-400 hover:text-cyan-200'
@@ -596,7 +598,7 @@ export const Navigation: React.FC<NavigationProps> = ({
               playTone(600, 0.08);
               onToggleAudio();
             }}
-            className={`cursor-pointer px-3 py-1.5 rounded-xl border transition-all text-xs font-mono flex items-center gap-2 ${
+            className={`hidden lg:flex cursor-pointer px-3 py-1.5 rounded-xl border transition-all text-xs font-mono items-center gap-2 ${
               isAudioActive
                 ? 'bg-cyan-950/50 border-cyan-500/40 text-cyan-300 shadow-[0_0_15px_rgba(6,182,212,0.25)]'
                 : 'bg-black/30 border-white/10 hover:border-white/20 text-zinc-400 hover:text-zinc-200 shadow-sm'
@@ -649,15 +651,13 @@ export const Navigation: React.FC<NavigationProps> = ({
             )}
           </div>
 
-          <PWAInstallButton />
-
           {onOpenChecklist && (
             <button
               onClick={() => {
                 playTone(760, 0.08);
                 onOpenChecklist();
               }}
-              className="group flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-gradient-to-r from-emerald-500/20 via-teal-500/15 to-cyan-500/20 border-emerald-500/40 text-emerald-300 hover:text-emerald-100 font-mono text-xs hover:border-emerald-400/60 transition-all shadow-[0_0_15px_rgba(16,185,129,0.2)] hover:shadow-[0_0_20px_rgba(16,185,129,0.35)] active:scale-95 cursor-pointer ml-1"
+              className="hidden md:flex group items-center gap-1.5 px-3 py-1.5 rounded-xl bg-gradient-to-r from-emerald-500/20 via-teal-500/15 to-cyan-500/20 border-emerald-500/40 text-emerald-300 hover:text-emerald-100 font-mono text-xs hover:border-emerald-400/60 transition-all shadow-[0_0_15px_rgba(16,185,129,0.2)] hover:shadow-[0_0_20px_rgba(16,185,129,0.35)] active:scale-95 cursor-pointer ml-1"
               title="เปิดระบบตรวจเช็คระบบและพยานหลักฐานดิจิทัลทีละขั้นตอน (System Check-Up & Step-by-Step Stepper)"
             >
               <FileCheck2 className="w-4 h-4 text-emerald-400 group-hover:scale-110 transition-transform" />
@@ -671,10 +671,12 @@ export const Navigation: React.FC<NavigationProps> = ({
               playTone(720, 0.1);
               onOpenCertificate();
             }}
-            className="group flex items-center gap-2 px-3.5 py-1.5 rounded-xl bg-gradient-to-r from-amber-500/20 via-violet-500/15 to-cyan-500/20 border-amber-500/40 text-amber-300 hover:text-amber-100 font-mono text-xs hover:border-amber-400/60 transition-all shadow-[0_0_15px_rgba(245,158,11,0.15)] hover:shadow-[0_0_20px_rgba(245,158,11,0.25)] ml-1"
+            className="group flex items-center gap-1.5 sm:gap-2 px-2.5 sm:px-3.5 py-1.5 rounded-xl bg-gradient-to-r from-amber-500/20 via-violet-500/15 to-cyan-500/20 border-amber-500/40 text-amber-300 hover:text-amber-100 font-mono text-xs hover:border-amber-400/60 transition-all shadow-[0_0_15px_rgba(245,158,11,0.15)] hover:shadow-[0_0_20px_rgba(245,158,11,0.25)] shrink-0"
+            title="Inspect Gold Master Sovereign Certificate"
           >
             <Award className="w-4 h-4 text-amber-400 group-hover:scale-110 transition-transform" />
-            <span className="font-bold tracking-wide">Gold Master</span>
+            <span className="hidden sm:inline font-bold tracking-wide">Gold Master</span>
+            <span className="sm:hidden font-bold tracking-wide text-[10px]">Master</span>
           </button>
         </div>
       </div>
