@@ -1,0 +1,170 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>ZYRQUEN Ω∞ PR #43 Visual Grounding Dashboard</title>
+  <style>
+    body {
+      background-color: #080914;
+      color: #e2e8f0;
+      font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+      margin: 0;
+      padding: 24px;
+    }
+    .container {
+      max-width: 900px;
+      margin: 0 auto;
+      background: #0f172a;
+      border: 1px solid #1e293b;
+      border-radius: 16px;
+      padding: 24px;
+    }
+    h1 {
+      font-size: 1.25rem;
+      color: #38bdf8;
+      margin-top: 0;
+    }
+    .badge {
+      display: inline-block;
+      padding: 4px 8px;
+      border-radius: 6px;
+      background: #0284c7;
+      color: white;
+      font-size: 0.75rem;
+      font-weight: bold;
+    }
+    .overlay-stage {
+      position: relative;
+      width: 800px;
+      height: 500px;
+      margin: 20px 0;
+      border: 1px solid #334155;
+      background: #030712;
+      border-radius: 8px;
+      overflow: hidden;
+    }
+    .box-table {
+      position: absolute;
+      left: 2.5%;
+      top: 16%;
+      width: 95%;
+      height: 60%;
+      border: 2px solid #a855f7;
+      background: rgba(168, 85, 247, 0.1);
+      box-sizing: border-box;
+      pointer-events: none;
+    }
+    .line-finaly {
+      position: absolute;
+      left: 0;
+      top: 76%;
+      width: 100%;
+      height: 2px;
+      background: #ec4899;
+      box-shadow: 0 0 8px #ec4899;
+    }
+    .box-next {
+      position: absolute;
+      left: 2.5%;
+      top: 82%;
+      width: 95%;
+      height: 12%;
+      border: 2px dashed #22c55e;
+      background: rgba(34, 197, 94, 0.1);
+      box-sizing: border-box;
+      pointer-events: none;
+    }
+    .controls {
+      display: flex;
+      gap: 12px;
+      margin-top: 16px;
+    }
+    button {
+      background: #1e293b;
+      color: #f1f5f9;
+      border: 1px solid #475569;
+      padding: 8px 16px;
+      border-radius: 8px;
+      cursor: pointer;
+      font-family: inherit;
+      font-size: 0.85rem;
+    }
+    button:hover {
+      background: #334155;
+    }
+    pre {
+      background: #020617;
+      padding: 16px;
+      border-radius: 8px;
+      border: 1px solid #1e293b;
+      font-size: 0.8rem;
+      overflow-x: auto;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <div style="display: flex; justify-content: space-between; align-items: center;">
+      <h1>ZYRQUEN Ω∞ PR #43 Visual Grounding Overlay</h1>
+      <span class="badge">PR #43 STAGED SECURITY</span>
+    </div>
+    <p style="font-size: 0.85rem; color: #94a3b8;">
+      Visual Grounding Verification: <code>getAutoTableFinalY(doc)</code> coordinate mapping with 0-1000 normalized bounding boxes.
+    </p>
+
+    <div class="overlay-stage" id="stage">
+      <div class="box-table" id="boxTable">
+        <span style="background: #a855f7; color: white; padding: 2px 6px; font-size: 10px;">TABLE [25, 160, 975, 760]</span>
+      </div>
+      <div class="line-finaly" id="lineFinalY">
+        <span style="position: absolute; right: 8px; top: -16px; color: #ec4899; font-size: 10px; font-weight: bold;">finalY = 760</span>
+      </div>
+      <div class="box-next" id="boxNext">
+        <span style="background: #22c55e; color: black; padding: 2px 6px; font-size: 10px; font-weight: bold;">NEXT CONTENT [25, 820, 975, 940]</span>
+      </div>
+    </div>
+
+    <div class="controls">
+      <button onclick="toggleTable()">Toggle TABLE [ON/OFF]</button>
+      <button onclick="toggleFinalY()">Toggle finalY [ON/OFF]</button>
+      <button onclick="toggleNext()">Toggle NEXT [ON/OFF]</button>
+      <button onclick="exportJSON()">Export Grounding JSON</button>
+    </div>
+
+    <h3>Exported Grounding Metadata</h3>
+    <pre id="jsonOutput">{
+  "boxes": [
+    { "label": "BOQ_TABLE", "x_min": 25, "y_min": 160, "x_max": 975, "y_max": 760, "meta": { "finalY": 395 } },
+    { "label": "finalY_line", "x": 500, "y": 760, "type": "point" },
+    { "label": "next_content", "x_min": 25, "y_min": 820, "x_max": 975, "y_max": 940 }
+  ]
+}</pre>
+  </div>
+
+  <script>
+    function toggleTable() {
+      const el = document.getElementById('boxTable');
+      el.style.display = el.style.display === 'none' ? 'block' : 'none';
+    }
+    function toggleFinalY() {
+      const el = document.getElementById('lineFinalY');
+      el.style.display = el.style.display === 'none' ? 'block' : 'none';
+    }
+    function toggleNext() {
+      const el = document.getElementById('boxNext');
+      el.style.display = el.style.display === 'none' ? 'block' : 'none';
+    }
+    function exportJSON() {
+      const data = {
+        boxes: [
+          { label: "BOQ_TABLE", x_min: 25, y_min: 160, x_max: 975, y_max: 760, meta: { finalY: 395 } },
+          { label: "finalY_line", x: 500, y: 760, type: "point" },
+          { label: "next_content", x_min: 25, y_min: 820, x_max: 975, y_max: 940 }
+        ]
+      };
+      document.getElementById('jsonOutput').innerText = JSON.stringify(data, null, 2);
+    }
+  </script>
+</body>
+</html>
