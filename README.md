@@ -1,4 +1,4 @@
-# 🌌 ZYRQUEN Ω∞ Sovereign Kernel v4.16
+# 🌌 ZYRQUEN Ω∞ Sovereign Kernel & Truth Matrix
 
 [![Chamber Console CI](https://github.com/yutthaphum-phakphian/ZYRQUEN-1.2-LTS/actions/workflows/chamber-console-ci.yml/badge.svg)](https://github.com/yutthaphum-phakphian/ZYRQUEN-1.2-LTS/actions/workflows/chamber-console-ci.yml)
 [![GitHub Pages Deployment](https://github.com/yutthaphum-phakphian/ZYRQUEN-1.2-LTS/actions/workflows/pages.yml/badge.svg)](https://github.com/yutthaphum-phakphian/ZYRQUEN-1.2-LTS/actions/workflows/pages.yml)
@@ -7,40 +7,26 @@
 [![CodeQL Security Audit](https://github.com/yutthaphum-phakphian/ZYRQUEN-1.2-LTS/actions/workflows/codeql.yml/badge.svg)](https://github.com/yutthaphum-phakphian/ZYRQUEN-1.2-LTS/actions/workflows/codeql.yml)
 [![Docker GHCR Publish](https://github.com/yutthaphum-phakphian/ZYRQUEN-1.2-LTS/actions/workflows/docker-publish.yml/badge.svg)](https://github.com/yutthaphum-phakphian/ZYRQUEN-1.2-LTS/actions/workflows/docker-publish.yml)
 
-> **Status:** `LOCKED_FROZEN_v1.2_LTS` (10/10 ALL GREEN 🟢, LIVE PRODUCTION)
-> **Deployment Certificate:** `ZQ-GREEN-DEP-849202-3908`
+[![ZYRQUEN FROZEN](https://img.shields.io/badge/ZYRQUEN-Ω∞%20FROZEN%20v1.2__LTS-020617?logo=databricks&logoColor=22D3EE)](https://github.com/yutthaphum-phakphian/ZYRQUEN-1.2-LTS)
+[![Genesis](https://img.shields.io/badge/Genesis-Block%20%23849202-0ea5e9)](https://github.com/yutthaphum-phakphian/ZYRQUEN-1.2-LTS)
+[![Seals](https://img.shields.io/badge/Seals-14902%20Verified-00f5a0)](https://github.com/yutthaphum-phakphian/ZYRQUEN-1.2-LTS)
+[![SSoT Drift](https://img.shields.io/badge/SSoT-Δ0%200.00%25%20Zero%20Drift-22c55e)](https://github.com/yutthaphum-phakphian/ZYRQUEN-1.2-LTS)
+
+> **Status:** `LOCKED_FROZEN_v1.2_LTS` (10/10 ALL GREEN 🟢, LIVE PRODUCTION)  
+> **Deployment Certificate:** `ZQ-GREEN-DEP-849202-3908`  
 > **Sovereign Principal Architect:** นายยุทธภูมิ พากเพียร (`#EP-SOVEREIGN-01` OMEGA-1 SUPREME)
-
----
-
-## Table of Contents
-
-- [Executive Summary](#-executive-summary)
-- [System Architecture & Visual Topology](#️-system-architecture--visual-topology)
-- [Core System Baseline & Parameters](#️-core-system-baseline--parameters)
-- [Security, Cryptography & Compliance Architecture](#️-security-cryptography--compliance-architecture)
-- [Tech Stack & CI/CD Pipelines](#️-tech-stack--cicd-pipelines)
-- [Quick Start & Local Execution](#-quick-start--local-execution)
-- [Environment Variables](#environment-variables)
-- [Development Commands](#development-commands)
-- [Deployment Notes](#deployment-notes)
-- [Project Status](#project-status)
-- [Troubleshooting](#troubleshooting)
-- [Personal Motto](#-personal-motto)
 
 ---
 
 ## 📌 Executive Summary
 
-**ZYRQUEN Ω∞** คือระบบปฏิบัติการและระนาบควบคุมอธิปไตยดิจิทัล (Sovereign Control Plane & Cryptographic Ledger) ที่เปลี่ยนผ่านจากการกล่าวอ้างลอยๆ แบบ *"เชื่อใจเรา"* (Marketing Seal) ไปสู่ **สัจจะทางคณิตศาสตร์สัมบูรณ์** (Mathematical Seal) ที่พิสูจน์และตรวจสอบได้ 100%
+**ZYRQUEN Ω∞** คือระบบปฏิบัติการและระนาบควบคุมอธิปไตยดิจิทัล (Sovereign Control Plane & Cryptographic Ledger) ที่เปลี่ยนผ่านจากการกล่าวอ้างลอยๆ แบบ *"เชื่อใจเรา"* (Marketing Seal) ไปสู่ **สัจจะทางคณิตศาสตร์สัมบูรณ์** (Mathematical Seal) ที่พิสูจน์และตรวจสอบได้ 100% 
 
 ระบบถูกยึดตรึงไว้บนบล็อกปฐมกาล **Block #849202** ภายใต้โครงสร้าง **Single Source of Truth (SSoT Δ0)** ที่มีอัตราความคลาดเคลื่อนสะสมเป็นศูนย์ (**Zero Drift 0.00%**) พร้อมรองรับการนำสืบพยานหลักฐานดิจิทัลในชั้นศาลไทยตาม **พ.ร.บ. ว่าด้วยธุรกรรมทางอิเล็กทรอนิกส์ พ.ศ. ๒๕๔๔ (มาตรา ๙, ๒๖, ๒๘)** และ **พ.ร.บ. คุ้มครองข้อมูลส่วนบุคคล พ.ศ. ๒๕๖๒ (PDPA มาตรา ๓๗)**
 
-In plain terms: this repository is a security-focused control plane and operational dashboard for sovereign workflow orchestration, cryptographic validation, forensic trace replay, and system observability — built for demo, research, and controlled production environments. It is not a generic starter template; governance, verification, and operational transparency are first-class concerns throughout.
-
 ---
 
-## 🏗️ System Architecture & Visual Topology
+## 🏗️ System Architecture Topology
 
 ![ZYRQUEN Ω∞ Sovereign System Architecture](./public/zyrquen_system_architecture_diagram.png)
 
@@ -49,20 +35,20 @@ In plain terms: this repository is a security-focused control plane and operatio
 │                          [ React 19 / Vite SPA ]                            │
 │           (Three.js 3D Atlas, Tailwind, Lucide, jsQR, WebAudio)             │
 └──────────────────────────────────────┬──────────────────────────────────────┘
-                                        │ mTLS 1.3 / WebSocket Stream
-                                        ▼
+                                       │ mTLS 1.3 / WebSocket Stream
+                                       ▼
 ┌─────────────────────────────────────────────────────────────────────────────┐
 │                 [ Node.js Express Gateway & Sentinel AI ]                   │
 │           (Risk Score >= 0.85 -> Chamber 02 Quarantine Buffer)              │
 └──────────────────────────────────────┬──────────────────────────────────────┘
-                                        │ PQC Dilithium-5 / Kyber-1024 / ZKP
-                                        ▼
+                                       │ PQC Dilithium-5 / Kyber-1024 / ZKP
+                                       ▼
 ┌─────────────────────────────────────────────────────────────────────────────┐
 │                   [ 10/10 REAL_HSM Deca-Key Council ]                       │
 │     (Utimaco u.trust GP CSe / FIPS 140-3 L4 / Active Zeroization < 1.2ms)    │
 └──────────────────────────────────────┬──────────────────────────────────────┘
-                                        │ Immutable WORM Log
-                                        ▼
+                                       │ Immutable WORM Log
+                                       ▼
 ┌─────────────────────────────────────────────────────────────────────────────┐
 │               [ Solidity Core V2 & Module 17 V24 Storage ]                  │
 │       (Genesis Block #849202 | 14,902 Seals | Zero-Deletion Guarantee)      │
@@ -84,6 +70,7 @@ In plain terms: this repository is a security-focused control plane and operatio
 | **PQC Signature Schemes** | Dilithium-5 (ML-DSA-87 / FIPS 204), Kyber-1024 (ML-KEM / FIPS 203), SPHINCS+ (SLH-DSA / FIPS 205) | 🟢 |
 | **Cryo Telemetry Bus** | `14.98 mK` (Helium-4 Subzero) \| `851.9 QOps` \| Coherence `99.992%` | 🟢 |
 | **Forensic Trace SLA** | Target SLA `< 142ms` (Actual Execution Speed: `35.80ms`) | 🟢 |
+| **Observed Evidence State** | `QUARANTINED / NON-PROMOTED` (Chamber 02) | 🟢 |
 
 ---
 
@@ -108,12 +95,23 @@ In plain terms: this repository is a security-focused control plane and operatio
 ### 4. 12-Stage Forensic Trace Replay Engine
 ไปป์ไลน์สืบค้นและจำลองพยานดิจิทัลย้อนหลัง 12 ขั้นตอนย่อย (`STAGE-01: INGEST` ถึง `STAGE-12: CLOSURE`) ประมวลผลเสร็จสิ้นภายใน **35.80ms** บนคลังพยานดิบ **Module 17 V24** ซึ่งการันตีการห้ามลบหลักฐานทิ้งย้อนหลัง (**Zero-Deletion Guarantee**)
 
+### 🗃️ Quarantine & Preservation (Chamber 02)
+```text
+OBSERVED ──> QUARANTINE ──> VERIFY ──> [ 100% PASS? ]
+                                            │
+                                    ┌───────┴───────┐
+                                   YES             NO
+                                    │               │
+                                    ▼               ▼
+                                  SEAL         REMAIN QUARANTINED
+```
+
 ---
 
 ## 🛠️ Tech Stack & CI/CD Pipelines
 
-* **Frontend SPA:** React 19, TypeScript 5.6 (`moduleResolution: bundler`, `allowImportingTsExtensions: true`), Vite 5.4, Tailwind CSS, Three.js 3D Atlas, Lucide React, jsQR
-* **Backend Gateway:** Node.js Express, FastAPI, Sentinel AI Risk Interceptor (`Risk >= 0.85` Quarantine Trigger)
+* **Frontend SPA:** React 19, TypeScript 5.6 (`moduleResolution: bundler`, `allowImportingTsExtensions: true`), Vite 5.4, Tailwind CSS, Three.js 3D Atlas, Lucide React, jsQR, WebAudio Telemetry
+* **Backend Gateway:** Node.js Express, Sentinel AI Risk Interceptor (`Risk >= 0.85` Quarantine Trigger)
 * **Smart Contracts:** Solidity v0.8.20 (`ZyrquenSovereignCoreV2` Patched ZYR-01..03, `ZyrquenFiosTreasuryDistributor`)
 * **DevOps & Containers:** Docker (Python 3.12-slim), Docker Compose, GitHub Container Registry (`ghcr.io`)
 * **CI/CD Actions Workflows (Node.js 22 LTS):**
@@ -126,12 +124,33 @@ In plain terms: this repository is a security-focused control plane and operatio
 
 ---
 
+## 📂 Project Structure
+
+```text
+ZYRQUEN-1.2-LTS/
+│
+├── src/
+│   ├── components/       # Sovereign UI, Chambers, Council, Forensics, Audio
+│   ├── data/             # Canonical Datasets, Rego Policies, Audit History
+│   ├── services/         # HSM Tamper, FCM, Anomaly Detector, Copilot
+│   ├── store/            # System State Store & Invariant Engine
+│   └── utils/            # Cryptographic & Forensic Evidence Utilities
+│
+├── contracts/            # ZyrquenSovereignCoreV2 (Solidity)
+├── public/               # Verified Proofs, PDFs, Architecture Diagrams
+├── tests/                # 100% Pure Green Unit & Integration Test Suites
+├── server.ts             # Express & Vite Middlewares Host Entry Point
+├── package.json          # Core Dependencies & Build Scripts
+└── vite.config.ts        # Vite Production Configuration
+```
+
+---
+
 ## 🚀 Quick Start & Local Execution
 
 ### Prerequisites
 * **Node.js** (v22 LTS / v18+)
 * **npm** (v10+ / v9+)
-* **Docker & Docker Compose** (Optional for container testing)
 
 ### Installation & Execution
 
@@ -158,14 +177,8 @@ In plain terms: this repository is a security-focused control plane and operatio
    ```bash
    npm run lint && npm test && npm run build
    ```
-   * **Executing Full Sovereign Test Suite:**
-   ```bash
-   chmod +x ./run_all_tests.sh
-   ./run_all_tests.sh
-   ```
-   * **Target Benchmark:** `17/17 Scenarios Passed (100% Pure Green)`
 
-5. **Run Verification & Security Penetration Test Scripts:**
+5. **Executing Full Sovereign Test Suite & Security Penetration:**
    ```bash
    # Run 12-Stage Forensic Trace Replay Simulation
    python3 tests/court_replay_verification.py
@@ -173,117 +186,59 @@ In plain terms: this repository is a security-focused control plane and operatio
    # Run Full-Spectrum Security Penetration Test Suite
    python3 tests/test_sovereign_security_pen_test.py
    ```
+   * **Target Benchmark:** `17/17 Scenarios Passed (100% Pure Green)`
 
 ---
 
-## Environment Variables
+## 📜 Evidence Policy
 
-| Variable | Required | Description |
-| :--- | :--- | :--- |
-| `GEMINI_API_KEY` | Yes, for AI-enabled features | API key for Gemini integration or related AI functions |
-| `VITE_SOVEREIGN_MODE` | Optional | Runtime mode, commonly `LIVE_PRODUCTION` or equivalent |
+ZYRQUEN follows a strict **Zero Mock Evidence** principle.
 
-If a variable is not required for your workflow, it can be left unset.
+The system must not manufacture:
+- Telemetry
+- Cryptographic seals
+- Hashes
+- HSM attestations
+- Transactions
+- Legal mappings
+- Runtime measurements
+- Verification results
 
----
-
-## Development Commands
-
-```bash
-# install dependencies
-npm install
-
-# run dev server
-npm run dev
-
-# run lint
-npm run lint
-
-# run tests
-npm test
-
-# production build
-npm run build
-```
-
-For a full verification check:
-
-```bash
-npm run lint && npm test && npm run build
-```
+When evidence is unavailable, the correct state is: `NULL / NO EVIDENCE / PENDING / UNVERIFIED` — not an invented PASS state.
 
 ---
 
-## Deployment Notes
+## ⚖️ Compliance & Legal References
 
-Deployment is environment-aware and verification-first. Before production execution, confirm:
-- environment variables are set correctly
-- required secrets are available
-- CI checks are green
-- security validations pass
-- deployment target matches expected operating context
-
-For container-based workflows:
-
-```bash
-docker compose up --build
-```
-
-This project uses GitHub Actions-based automation for testing, security scanning, container publishing, and deployment-related workflows.
+Project documentation references:
+- **Thai Electronic Transactions Act B.E. 2544** (มาตรา ๙, ๒๖, ๒๘)
+- **Thai Personal Data Protection Act B.E. 2562** (PDPA มาตรา ๓๗)
+- **NIST Post-Quantum Cryptography Standards** (FIPS 203, FIPS 204, FIPS 205)
+- **ISO/IEC 27037:2012** Digital Evidence Preservation & Chain of Custody Integrity
 
 ---
 
-## Project Status
+## 📎 Project Attestation Records
 
-This repository is structured as a security-focused, operationally oriented prototype/platform with a strong emphasis on:
-- governance and verification
-- cryptographic readiness
-- zero-trust-style operational design
-- research and demo readiness
-- enterprise-facing deployment patterns
-
-**Important note:** the project includes strong security and operational messaging. Security posture should still be reviewed against your own environment, compliance requirements, and deployment policy — production suitability depends on organizational controls, threat model, and operational review.
-
-Suggested next additions to keep this repository in good shape:
-- a proper `docs/` folder
-- a `CONTRIBUTING.md`
-- a structured `SECURITY.md`
-- a real `.env.example`
-- a normalized release/versioning scheme
+| Document ID | Scope |
+| :--- | :--- |
+| `DOC-SOV-HSM-1010-2026` | HSM quorum / cryptographic architecture |
+| `DOC-SOV-TELEMETRY-144343-ICT` | mTLS / telemetry measurements |
+| `DOC-SOV-PRESERVATION-M17-V24` | Preservation / trace architecture |
 
 ---
 
-## Troubleshooting
+## 👤 Principal Architect
 
-### Problem: app does not start
-Check:
-- Node.js version
-- `npm install` / `npm ci` completed successfully
-- required environment variables exist
-- `.env.local` is present and valid
+**นายยุทธภูมิ พากเพียร** (`#EP-SOVEREIGN-01`)  
+ZYRQUEN Ω∞
 
-### Problem: tests or build fail
-Run:
-```bash
-npm run lint
-npm test
-npm run build
-```
+> *«Build boldly. Verify carefully. Document clearly. Improve continuously.»*
 
-Check for:
-- missing dependency installation
-- incompatible Node version
-- invalid environment variables
-- frontend build issues or TypeScript configuration problems
-
-### Problem: verification scripts fail
-Ensure:
-- Python 3 is installed
-- dependencies and test fixtures are present
-- current repository state matches expected execution path
-
----
-
-## 💬 Personal Motto
-
-> *"Build boldly. Verify carefully. Document clearly. Improve continuously."*
+<p align="center">
+🌌 ⚡ 🛡️
+<br /><br />
+<strong>ZYRQUEN Ω∞</strong> • <code>LOCKED_FROZEN_v1.2_LTS</code>
+<br />
+Sovereign Control Plane &amp; Truth Matrix
+</p>
