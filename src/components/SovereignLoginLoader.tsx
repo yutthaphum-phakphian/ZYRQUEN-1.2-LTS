@@ -167,9 +167,9 @@ export const SovereignLoginLoader: React.FC<SovereignLoginLoaderProps> = ({
         {/* Holographic Warp Stream Particle Field */}
         <div className="absolute inset-0 overflow-hidden pointer-events-none">
           <div className="absolute inset-0 bg-[#070a12] opacity-95" />
-          <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[800px] h-[800px] rounded-full border border-cyan-500/20 opacity-30 animate-pulse pointer-events-none" />
-          <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[600px] rounded-full border border-[#D4AF37]/25 opacity-40 pointer-events-none" />
-          <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[400px] h-[400px] rounded-full border border-emerald-500/20 opacity-40 pointer-events-none" />
+          <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[800px] h-[800px] rounded-full border-cyan-500/20 opacity-30 animate-pulse pointer-events-none" />
+          <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[600px] rounded-full border-[#D4AF37]/25 opacity-40 pointer-events-none" />
+          <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[400px] h-[400px] rounded-full border-emerald-500/20 opacity-40 pointer-events-none" />
         </div>
 
         {/* Central Quantum Warp Login Enclave */}
@@ -188,7 +188,7 @@ export const SovereignLoginLoader: React.FC<SovereignLoginLoaderProps> = ({
                   <h1 className="text-lg font-bold tracking-widest text-[#D4AF37] uppercase">
                     ZYRQUEN Ω∞ SOVEREIGN RUNTIME
                   </h1>
-                  <span className="px-2 py-0.5 rounded bg-cyan-950 border border-cyan-500/50 text-cyan-300 text-[10px] font-bold">
+                  <span className="px-2 py-0.5 rounded bg-cyan-950 border-cyan-500/50 text-cyan-300 text-[10px] font-bold">
                     FROZEN v1.2 LTS
                   </span>
                 </div>
@@ -234,13 +234,13 @@ export const SovereignLoginLoader: React.FC<SovereignLoginLoaderProps> = ({
                 </p>
 
                 {webAuthnFeedback && (
-                  <div className="w-full max-w-md p-2.5 mb-4 rounded-xl bg-cyan-950/50 border border-cyan-500/40 text-xs text-cyan-200 text-center font-mono">
+                  <div className="w-full max-w-md p-2.5 mb-4 rounded-xl bg-cyan-950/50 border-cyan-500/40 text-xs text-cyan-200 text-center font-mono">
                     {webAuthnFeedback}
                   </div>
                 )}
 
                 {webAuthnResult && (
-                  <div className="w-full max-w-md p-2.5 mb-4 rounded-xl bg-emerald-950/60 border border-emerald-500/50 text-[11px] text-emerald-300 font-mono space-y-1">
+                  <div className="w-full max-w-md p-2.5 mb-4 rounded-xl bg-emerald-950/60 border-emerald-500/50 text-[11px] text-emerald-300 font-mono space-y-1">
                     <div className="flex justify-between font-bold">
                       <span>✓ WebAuthn Verified</span>
                       <span>{webAuthnResult.fipsLevel}</span>
@@ -264,7 +264,7 @@ export const SovereignLoginLoader: React.FC<SovereignLoginLoaderProps> = ({
                   <button
                     onClick={handleBiometricAccept}
                     disabled={isVerifyingWebAuthn}
-                    className="py-3 px-4 bg-white/5 hover:bg-white/10 border border-white/20 text-zinc-300 hover:text-white font-semibold text-xs tracking-wider uppercase rounded-xl transition-all active:scale-95 flex items-center justify-center gap-2 cursor-pointer"
+                    className="py-3 px-4 bg-white/5 hover:bg-white/10 border-white/20 text-zinc-300 hover:text-white font-semibold text-xs tracking-wider uppercase rounded-xl transition-all active:scale-95 flex items-center justify-center gap-2 cursor-pointer"
                   >
                     <Cpu className="w-4 h-4 text-[#D4AF37]" />
                     <span>Enclave Fallback</span>
@@ -287,7 +287,7 @@ export const SovereignLoginLoader: React.FC<SovereignLoginLoaderProps> = ({
             </div>
 
             {/* Custom Solid Progress Track */}
-            <div className="w-full h-5 bg-[#070a12] border border-cyan-500/40 rounded-full p-0.5 overflow-hidden">
+            <div className="w-full h-5 bg-[#070a12] border-cyan-500/40 rounded-full p-0.5 overflow-hidden">
               <motion.div
                 className="h-full bg-cyan-400 rounded-full transition-all duration-100 relative"
                 style={{ width: `${progress}%` }}
@@ -334,26 +334,26 @@ export const SovereignLoginLoader: React.FC<SovereignLoginLoaderProps> = ({
 
           {/* SSoT Drift & Genesis Merkle Indicators */}
           <div className="grid grid-cols-2 sm:grid-cols-4 gap-2 text-xs">
-            <div className="p-2.5 rounded-xl bg-[#070a12] border border-zinc-800">
+            <div className="p-2.5 rounded-xl bg-[#070a12] border-zinc-800">
               <div className="text-[10px] text-zinc-400">ENTROPY DRIFT</div>
               <div className="text-emerald-400 font-bold">Δ0.00% ZERO DRIFT</div>
             </div>
-            <div className="p-2.5 rounded-xl bg-[#070a12] border border-zinc-800">
+            <div className="p-2.5 rounded-xl bg-[#070a12] border-zinc-800">
               <div className="text-[10px] text-zinc-400">MERKLE BLOCK</div>
               <div className="text-cyan-300 font-bold">#849202 (14.9K)</div>
             </div>
-            <div className="p-2.5 rounded-xl bg-[#070a12] border border-zinc-800">
+            <div className="p-2.5 rounded-xl bg-[#070a12] border-zinc-800">
               <div className="text-[10px] text-zinc-400">TENANT BOUNDARY</div>
               <div className="text-[#D4AF37] font-bold">Ω600_1000</div>
             </div>
-            <div className="p-2.5 rounded-xl bg-[#070a12] border border-zinc-800">
+            <div className="p-2.5 rounded-xl bg-[#070a12] border-zinc-800">
               <div className="text-[10px] text-zinc-400">LEGAL HARBOR</div>
               <div className="text-cyan-400 font-bold">ETDA & PDPA</div>
             </div>
           </div>
 
           {/* Live Status Message Log */}
-          <div className="p-3 rounded-xl bg-[#070a12] border border-cyan-500/30 text-center">
+          <div className="p-3 rounded-xl bg-[#070a12] border-cyan-500/30 text-center">
             <p className="text-xs text-cyan-300 font-mono tracking-wide font-bold">
               {progress < 100 ? (
                 <>⚡ {phaseText} ({progress}%)</>
@@ -371,7 +371,7 @@ export const SovereignLoginLoader: React.FC<SovereignLoginLoaderProps> = ({
                   playTone(400, 0.05);
                   onCancel();
                 }}
-                className="px-4 py-1.5 rounded-xl bg-zinc-900 hover:bg-zinc-800 border border-zinc-700 text-zinc-400 hover:text-white text-xs cursor-pointer"
+                className="px-4 py-1.5 rounded-xl bg-zinc-900 hover:bg-zinc-800 border-zinc-700 text-zinc-400 hover:text-white text-xs cursor-pointer"
               >
                 ABORT INGRESS
               </button>

@@ -250,11 +250,11 @@ export const OmegaSequenceSimulator: React.FC = () => {
   };
 
   return (
-    <div className="p-6 sm:p-8 rounded-[28px] bg-[#07080F]/90 border border-white/8 backdrop-blur-2xl space-y-6 shadow-2xl font-mono">
+    <div className="p-6 sm:p-8 rounded-[28px] bg-[#07080F]/90 border-white/8 backdrop-blur-2xl space-y-6 shadow-2xl font-mono">
       {/* Header Bar */}
       <div className="flex flex-col lg:flex-row lg:items-center justify-between gap-4 border-b border-white/8 pb-5">
         <div className="flex items-center gap-3.5">
-          <div className="w-12 h-12 rounded-2xl bg-amber-500/15 border border-amber-500/30 flex items-center justify-center text-amber-300 shadow-[0_0_25px_rgba(245,158,11,0.2)] shrink-0">
+          <div className="w-12 h-12 rounded-2xl bg-amber-500/15 border-amber-500/30 flex items-center justify-center text-amber-300 shadow-[0_0_25px_rgba(245,158,11,0.2)] shrink-0">
             <Fingerprint className="w-6 h-6" />
           </div>
           <div>
@@ -262,7 +262,7 @@ export const OmegaSequenceSimulator: React.FC = () => {
               <h3 className="text-base sm:text-lg font-bold text-white tracking-wide">
                 12-Phase Omega Sequence — Executive Custody Protocol
               </h3>
-              <span className="text-[10px] px-2.5 py-0.5 rounded-full bg-amber-500/15 text-amber-300 border border-amber-500/30 font-bold">
+              <span className="text-[10px] px-2.5 py-0.5 rounded-full bg-amber-500/15 text-amber-300 border-amber-500/30 font-bold">
                 #EP-SOVEREIGN-01 RUNTIME
               </span>
             </div>
@@ -350,7 +350,7 @@ export const OmegaSequenceSimulator: React.FC = () => {
       </div>
 
       {/* Selected Phase Detailed Inspector Card */}
-      <div className="p-6 rounded-2xl bg-black/75 border border-white/10 space-y-4">
+      <div className="p-6 rounded-2xl bg-black/75 border-white/10 space-y-4">
         <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 border-b border-white/8 pb-4">
           <div className="flex items-center gap-3.5">
             <div
@@ -390,7 +390,7 @@ export const OmegaSequenceSimulator: React.FC = () => {
 
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4 text-xs">
           {/* Left: Phase Purpose & Description */}
-          <div className="p-4 rounded-xl bg-white/[0.02] border border-white/6 space-y-2">
+          <div className="p-4 rounded-xl bg-white/[0.02] border-white/6 space-y-2">
             <span className="text-amber-300 font-bold flex items-center gap-1.5">
               <Scale className="w-3.5 h-3.5" />
               <span>วัตถุประสงค์และหน้าที่หลัก (Phase Purpose & Scope):</span>
@@ -404,7 +404,7 @@ export const OmegaSequenceSimulator: React.FC = () => {
           </div>
 
           {/* Right: Technical Sovereign Runtime Enforcement */}
-          <div className="p-4 rounded-xl bg-white/[0.02] border border-white/6 space-y-2">
+          <div className="p-4 rounded-xl bg-white/[0.02] border-white/6 space-y-2">
             <span className="text-cyan-300 font-bold flex items-center gap-1.5">
               <Cpu className="w-3.5 h-3.5" />
               <span>การบังคับใช้เชิงสถาปัตยกรรม (Runtime Enforcement Proof):</span>
@@ -412,14 +412,14 @@ export const OmegaSequenceSimulator: React.FC = () => {
             <p className="text-zinc-300 font-mono text-xs leading-relaxed">
               {selectedPhase.technicalEnforcement}
             </p>
-            <div className="p-2 rounded-lg bg-black/60 border border-white/5 text-[10px] text-emerald-400 select-all font-mono truncate">
+            <div className="p-2 rounded-lg bg-black/60 border-white/5 text-[10px] text-emerald-400 select-all font-mono truncate">
               Proof Hash: {selectedPhase.hashPreview}
             </div>
           </div>
         </div>
 
         {/* Global Summary Footprint */}
-        <div className="p-3.5 rounded-xl bg-gradient-to-r from-amber-500/10 via-cyan-500/10 to-emerald-500/10 border border-amber-500/20 flex flex-col sm:flex-row sm:items-center justify-between gap-3 text-xs text-zinc-300">
+        <div className="p-3.5 rounded-xl bg-gradient-to-r from-amber-500/10 via-cyan-500/10 to-emerald-500/10 border-amber-500/20 flex flex-col sm:flex-row sm:items-center justify-between gap-3 text-xs text-zinc-300">
           <div className="flex items-center gap-2">
             <FileCheck className="w-4 h-4 text-emerald-400" />
             <span>

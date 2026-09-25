@@ -140,13 +140,13 @@ const AggregateEntropyCustomTooltip = ({ active, payload }: any) => {
     const isSubQuantum = data.aggregateDrift < 35.0;
 
     return (
-      <div className="p-4 rounded-xl bg-[#070a12] border border-[#06B6D4] text-xs font-mono text-white shadow-2xl space-y-2.5 min-w-[310px] max-w-[360px]">
+      <div className="p-4 rounded-xl bg-[#070a12] border-[#06B6D4] text-xs font-mono text-white shadow-2xl space-y-2.5 min-w-[310px] max-w-[360px]">
         <div className="border-b border-[#0a0f1e] pb-2 flex items-center justify-between">
           <div className="flex items-center gap-1.5 font-bold text-[#06B6D4]">
             <span>📡</span>
             <span>AGGREGATE ENTROPY #{data.id}</span>
           </div>
-          <span className="text-[10px] px-2 py-0.5 rounded bg-[#0a0f1e] text-[#D4AF37] font-bold border border-[#D4AF37]/30">
+          <span className="text-[10px] px-2 py-0.5 rounded bg-[#0a0f1e] text-[#D4AF37] font-bold border-[#D4AF37]/30">
             Ω600_1000
           </span>
         </div>
@@ -157,7 +157,7 @@ const AggregateEntropyCustomTooltip = ({ active, payload }: any) => {
         </div>
 
         <div className="space-y-1.5 py-1">
-          <div className="flex items-center justify-between p-2 rounded bg-[#0a0f1e] border border-white/5">
+          <div className="flex items-center justify-between p-2 rounded bg-[#0a0f1e] border-white/5">
             <span className="text-zinc-400 flex items-center gap-1.5">
               <span>⚖️</span>
               <span>Aggregate Drift:</span>
@@ -175,24 +175,24 @@ const AggregateEntropyCustomTooltip = ({ active, payload }: any) => {
             </span>
           </div>
 
-          <div className="flex items-center justify-between p-1.5 rounded bg-[#0a0f1e] border border-white/5 text-[11px]">
+          <div className="flex items-center justify-between p-1.5 rounded bg-[#0a0f1e] border-white/5 text-[11px]">
             <span className="text-zinc-400">Deviation from Baseline (52.0):</span>
             <span className={`font-bold ${deltaFromNominal >= 0 ? 'text-cyan-300' : 'text-purple-300'}`}>
               {deltaFromNominal >= 0 ? '+' : ''}{deltaFromNominal} (Nominal: 52.0)
             </span>
           </div>
 
-          <div className="flex items-center justify-between p-1.5 rounded bg-[#0a0f1e] border border-white/5 text-[11px]">
+          <div className="flex items-center justify-between p-1.5 rounded bg-[#0a0f1e] border-white/5 text-[11px]">
             <span className="text-zinc-400">Smoothed Moving Avg (EMA):</span>
             <span className="font-bold text-[#D4AF37]">{data.smoothedMovingAvg.toFixed(2)}</span>
           </div>
 
-          <div className="flex items-center justify-between p-1.5 rounded bg-[#0a0f1e] border border-white/5 text-[11px]">
+          <div className="flex items-center justify-between p-1.5 rounded bg-[#0a0f1e] border-white/5 text-[11px]">
             <span className="text-zinc-400">Shannon Informational Entropy:</span>
             <span className="font-bold text-emerald-400">{data.shannonEntropyBits} bits/sym</span>
           </div>
 
-          <div className="flex items-center justify-between p-1.5 rounded bg-[#0a0f1e] border border-white/5 text-[11px]">
+          <div className="flex items-center justify-between p-1.5 rounded bg-[#0a0f1e] border-white/5 text-[11px]">
             <span className="text-zinc-400">Drift Velocity (dE/dt):</span>
             <span className="font-bold text-zinc-300">{data.driftVelocity} u/s</span>
           </div>
@@ -408,7 +408,7 @@ export const AggregateEntropyDriftLineChart: React.FC<AggregateEntropyDriftLineC
   };
 
   return (
-    <div className="p-6 rounded-2xl bg-[#070a12] border border-[#06B6D4]/40 space-y-5 text-white font-mono shadow-2xl">
+    <div className="p-6 rounded-2xl bg-[#070a12] border-[#06B6D4]/40 space-y-5 text-white font-mono shadow-2xl">
       {/* Top Title & Metadata Header */}
       <div className="flex flex-col lg:flex-row lg:items-center justify-between gap-4 pb-4 border-b border-[#0a0f1e]">
         <div className="space-y-1">
@@ -417,13 +417,13 @@ export const AggregateEntropyDriftLineChart: React.FC<AggregateEntropyDriftLineC
             <h3 className="text-base sm:text-lg font-bold text-white tracking-wide">
               REAL-TIME AGGREGATE ENTROPY DRIFT (26–78 RANGE)
             </h3>
-            <span className="px-2 py-0.5 rounded bg-[#0a0f1e] text-[#06B6D4] border border-[#06B6D4]/40 text-xs font-bold">
+            <span className="px-2 py-0.5 rounded bg-[#0a0f1e] text-[#06B6D4] border-[#06B6D4]/40 text-xs font-bold">
               RECHARTS LINE CHART
             </span>
-            <span className="px-2 py-0.5 rounded bg-[#0a0f1e] text-[#D4AF37] border border-[#D4AF37]/40 text-xs font-bold">
+            <span className="px-2 py-0.5 rounded bg-[#0a0f1e] text-[#D4AF37] border-[#D4AF37]/40 text-xs font-bold">
               Ω600_1000 LOCKED
             </span>
-            <span className="px-2 py-0.5 rounded bg-[#0a0f1e] text-emerald-400 border border-emerald-500/40 text-xs font-bold">
+            <span className="px-2 py-0.5 rounded bg-[#0a0f1e] text-emerald-400 border-emerald-500/40 text-xs font-bold">
               10/10 REAL_HSM
             </span>
           </div>
@@ -454,7 +454,7 @@ export const AggregateEntropyDriftLineChart: React.FC<AggregateEntropyDriftLineC
           </button>
 
           {/* Speed Multiplier */}
-          <div className="flex items-center bg-[#0a0f1e] rounded-xl p-0.5 border border-white/10 text-xs">
+          <div className="flex items-center bg-[#0a0f1e] rounded-xl p-0.5 border-white/10 text-xs">
             {([1, 2, 5] as const).map((spd) => (
               <button
                 key={spd}
@@ -476,7 +476,7 @@ export const AggregateEntropyDriftLineChart: React.FC<AggregateEntropyDriftLineC
           {/* Export CSV */}
           <button
             onClick={handleExportCsv}
-            className="px-3 py-1.5 rounded-xl bg-[#0a0f1e] hover:bg-white/10 text-zinc-300 border border-white/10 text-xs font-bold flex items-center gap-1.5"
+            className="px-3 py-1.5 rounded-xl bg-[#0a0f1e] hover:bg-white/10 text-zinc-300 border-white/10 text-xs font-bold flex items-center gap-1.5"
             title="Download Telemetry Drift History CSV"
           >
             <span>📑</span>
@@ -487,7 +487,7 @@ export const AggregateEntropyDriftLineChart: React.FC<AggregateEntropyDriftLineC
 
       {/* KPI Cards Row (26-78 Range Metrics) */}
       <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-3">
-        <div className="p-3.5 rounded-xl bg-[#0a0f1e] border border-white/5 space-y-1">
+        <div className="p-3.5 rounded-xl bg-[#0a0f1e] border-white/5 space-y-1">
           <div className="text-[10px] text-zinc-400">CURRENT AGGREGATE</div>
           <div className={`text-base font-bold ${windowStats.statusColor}`}>
             {windowStats.current}
@@ -495,7 +495,7 @@ export const AggregateEntropyDriftLineChart: React.FC<AggregateEntropyDriftLineC
           <div className="text-[9px] text-zinc-500">Target Range: 26.0 – 78.0</div>
         </div>
 
-        <div className="p-3.5 rounded-xl bg-[#0a0f1e] border border-white/5 space-y-1">
+        <div className="p-3.5 rounded-xl bg-[#0a0f1e] border-white/5 space-y-1">
           <div className="text-[10px] text-zinc-400">BASELINE DEVIATION</div>
           <div className="text-base font-bold text-cyan-300">
             {windowStats.deltaBaseline}
@@ -503,7 +503,7 @@ export const AggregateEntropyDriftLineChart: React.FC<AggregateEntropyDriftLineC
           <div className="text-[9px] text-[#06B6D4]">SSoT Baseline: 52.00</div>
         </div>
 
-        <div className="p-3.5 rounded-xl bg-[#0a0f1e] border border-white/5 space-y-1">
+        <div className="p-3.5 rounded-xl bg-[#0a0f1e] border-white/5 space-y-1">
           <div className="text-[10px] text-zinc-400">MINIMUM DETECTED</div>
           <div className="text-base font-bold text-purple-300">
             {windowStats.min}
@@ -511,7 +511,7 @@ export const AggregateEntropyDriftLineChart: React.FC<AggregateEntropyDriftLineC
           <div className="text-[9px] text-purple-400">Floor Limit: 26.00</div>
         </div>
 
-        <div className="p-3.5 rounded-xl bg-[#0a0f1e] border border-white/5 space-y-1">
+        <div className="p-3.5 rounded-xl bg-[#0a0f1e] border-white/5 space-y-1">
           <div className="text-[10px] text-zinc-400">PEAK DETECTED</div>
           <div className="text-base font-bold text-[#D4AF37]">
             {windowStats.max}
@@ -519,7 +519,7 @@ export const AggregateEntropyDriftLineChart: React.FC<AggregateEntropyDriftLineC
           <div className="text-[9px] text-rose-400">Ceiling Limit: 78.00</div>
         </div>
 
-        <div className="p-3.5 rounded-xl bg-[#0a0f1e] border border-white/5 space-y-1">
+        <div className="p-3.5 rounded-xl bg-[#0a0f1e] border-white/5 space-y-1">
           <div className="text-[10px] text-zinc-400">WINDOW MEAN</div>
           <div className="text-base font-bold text-white">
             {windowStats.avg}
@@ -527,7 +527,7 @@ export const AggregateEntropyDriftLineChart: React.FC<AggregateEntropyDriftLineC
           <div className="text-[9px] text-emerald-400">Nominal Centered</div>
         </div>
 
-        <div className="p-3.5 rounded-xl bg-[#0a0f1e] border border-white/5 space-y-1">
+        <div className="p-3.5 rounded-xl bg-[#0a0f1e] border-white/5 space-y-1">
           <div className="text-[10px] text-zinc-400">SAFE ENVELOPE</div>
           <div className="text-base font-bold text-emerald-400">
             {windowStats.inEnvelopePct}
@@ -537,7 +537,7 @@ export const AggregateEntropyDriftLineChart: React.FC<AggregateEntropyDriftLineC
       </div>
 
       {/* Adversarial Stress Test Controls Bar */}
-      <div className="p-3.5 rounded-xl bg-[#0a0f1e] border border-white/10 flex flex-wrap items-center justify-between gap-3 text-xs">
+      <div className="p-3.5 rounded-xl bg-[#0a0f1e] border-white/10 flex flex-wrap items-center justify-between gap-3 text-xs">
         <div className="flex flex-wrap items-center gap-2">
           <span className="text-zinc-400 flex items-center gap-1.5">
             <span>⚙️</span>
@@ -588,14 +588,14 @@ export const AggregateEntropyDriftLineChart: React.FC<AggregateEntropyDriftLineC
           <span className="text-zinc-400 text-[11px]">Stress Injections:</span>
           <button
             onClick={() => handleTriggerAnomaly('HIGH_SURGE')}
-            className="px-2.5 py-1 rounded-lg bg-[#070a12] hover:bg-rose-950/60 text-rose-300 border border-rose-500/40 text-xs font-bold"
+            className="px-2.5 py-1 rounded-lg bg-[#070a12] hover:bg-rose-950/60 text-rose-300 border-rose-500/40 text-xs font-bold"
             title="Inject high entropy surge towards 78.0 ceiling"
           >
             ⚡ High Surge (→76.5)
           </button>
           <button
             onClick={() => handleTriggerAnomaly('LOW_DROP')}
-            className="px-2.5 py-1 rounded-lg bg-[#070a12] hover:bg-purple-950/60 text-purple-300 border border-purple-500/40 text-xs font-bold"
+            className="px-2.5 py-1 rounded-lg bg-[#070a12] hover:bg-purple-950/60 text-purple-300 border-purple-500/40 text-xs font-bold"
             title="Inject sub-quantum drop towards 26.0 floor"
           >
             🧊 Low Drop (→27.2)
@@ -635,7 +635,7 @@ export const AggregateEntropyDriftLineChart: React.FC<AggregateEntropyDriftLineC
       )}
 
       {/* RECHARTS LINE CHART: Real-Time Aggregate Entropy Drift (26–78 Range) */}
-      <div className="p-4 rounded-xl bg-[#0a0f1e] border border-[#06B6D4]/30 space-y-2">
+      <div className="p-4 rounded-xl bg-[#0a0f1e] border-[#06B6D4]/30 space-y-2">
         <div className="flex items-center justify-between text-xs text-zinc-400 px-1">
           <div className="flex items-center gap-2">
             <span className="w-2 h-2 rounded-full bg-[#06B6D4] animate-pulse" />
@@ -838,7 +838,7 @@ export const AggregateEntropyDriftLineChart: React.FC<AggregateEntropyDriftLineC
 
       {/* Selected Point Forensic Detail Card */}
       {selectedPoint && (
-        <div className="p-4 rounded-xl bg-[#0a0f1e] border border-[#06B6D4] space-y-3 text-xs">
+        <div className="p-4 rounded-xl bg-[#0a0f1e] border-[#06B6D4] space-y-3 text-xs">
           <div className="flex items-center justify-between">
             <span className="font-bold text-white flex items-center gap-2">
               <span>🔍</span>
@@ -853,13 +853,13 @@ export const AggregateEntropyDriftLineChart: React.FC<AggregateEntropyDriftLineC
           </div>
 
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3">
-            <div className="p-2.5 rounded bg-[#070a12] border border-white/5 space-y-0.5">
+            <div className="p-2.5 rounded bg-[#070a12] border-white/5 space-y-0.5">
               <span className="text-zinc-400">Timestamps:</span>
               <div className="text-white font-semibold">{selectedPoint.timestampIct}</div>
               <div className="text-[10px] text-zinc-500">{selectedPoint.timestampUtc}</div>
             </div>
 
-            <div className="p-2.5 rounded bg-[#070a12] border border-white/5 space-y-0.5">
+            <div className="p-2.5 rounded bg-[#070a12] border-white/5 space-y-0.5">
               <span className="text-zinc-400">Drift &amp; Delta:</span>
               <div className="text-[#06B6D4] font-bold text-sm">
                 {selectedPoint.aggregateDrift.toFixed(2)} (Δ {+(selectedPoint.aggregateDrift - 52.0).toFixed(2)})
@@ -867,7 +867,7 @@ export const AggregateEntropyDriftLineChart: React.FC<AggregateEntropyDriftLineC
               <div className="text-[10px] text-emerald-400">Range: 26.0 – 78.0</div>
             </div>
 
-            <div className="p-2.5 rounded bg-[#070a12] border border-white/5 space-y-0.5">
+            <div className="p-2.5 rounded bg-[#070a12] border-white/5 space-y-0.5">
               <span className="text-zinc-400">Shannon Bits &amp; Velocity:</span>
               <div className="text-[#D4AF37] font-bold text-sm">
                 {selectedPoint.shannonEntropyBits} bits • {selectedPoint.driftVelocity} u/s
@@ -875,7 +875,7 @@ export const AggregateEntropyDriftLineChart: React.FC<AggregateEntropyDriftLineC
               <div className="text-[10px] text-zinc-400">Status: {selectedPoint.stabilityStatus}</div>
             </div>
 
-            <div className="p-2.5 rounded bg-[#070a12] border border-white/5 space-y-0.5">
+            <div className="p-2.5 rounded bg-[#070a12] border-white/5 space-y-0.5">
               <span className="text-zinc-400">Cryptographic Seal:</span>
               <div className="text-white font-mono text-[11px] truncate">{selectedPoint.hashDigest}</div>
               <div className="text-[10px] text-emerald-400">10/10 REAL_HSM Quorum Verified</div>

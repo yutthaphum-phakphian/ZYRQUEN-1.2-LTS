@@ -31,18 +31,18 @@ export const CompareEvidenceModal: React.FC<CompareEvidenceModalProps> = ({
 
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-950/85 backdrop-blur-md animate-fadeIn">
-      <div className="relative w-full max-w-5xl max-h-[90vh] bg-slate-900 border border-slate-800 rounded-2xl shadow-2xl overflow-hidden font-sans text-slate-100 flex flex-col">
+      <div className="relative w-full max-w-5xl max-h-[90vh] bg-slate-900 border-slate-800 rounded-2xl shadow-2xl overflow-hidden font-sans text-slate-100 flex flex-col">
         
         {/* Header */}
         <div className="flex items-center justify-between p-4 sm:p-5 border-b border-slate-800 bg-slate-950/70 shrink-0">
           <div className="flex items-center gap-2.5">
-            <div className="p-2 rounded-xl bg-cyan-500/10 text-cyan-400 border border-cyan-500/20">
+            <div className="p-2 rounded-xl bg-cyan-500/10 text-cyan-400 border-cyan-500/20">
               <GitCompare className="w-5 h-5" />
             </div>
             <div>
               <h3 className="text-base font-bold text-white tracking-wide flex items-center gap-2">
                 CRYPTOGRAPHIC EVIDENCE COMPARISON &amp; DIFF
-                <span className="px-2 py-0.5 rounded-full text-[10px] font-mono bg-cyan-500/20 text-cyan-300 border border-cyan-500/30">
+                <span className="px-2 py-0.5 rounded-full text-[10px] font-mono bg-cyan-500/20 text-cyan-300 border-cyan-500/30">
                   {activeSeals.length} SEALS SELECTED
                 </span>
               </h3>
@@ -63,7 +63,7 @@ export const CompareEvidenceModal: React.FC<CompareEvidenceModalProps> = ({
         <div className="p-4 sm:p-6 space-y-5 overflow-y-auto font-mono text-xs custom-scrollbar">
           
           {/* Summary Status Bar */}
-          <div className="p-3.5 rounded-xl bg-slate-950 border border-slate-800 flex flex-wrap items-center justify-between gap-3">
+          <div className="p-3.5 rounded-xl bg-slate-950 border-slate-800 flex flex-wrap items-center justify-between gap-3">
             <div className="flex items-center gap-2">
               <Layers className="w-4 h-4 text-cyan-400" />
               <span className="text-slate-400">Merkle Subtree Parity:</span>
@@ -121,7 +121,7 @@ export const CompareEvidenceModal: React.FC<CompareEvidenceModalProps> = ({
 
                   <div>
                     <span className="text-[10px] text-slate-500 block">PQC Signature</span>
-                    <div className="p-2 rounded border border-purple-500/20 bg-purple-500/10 text-purple-300 text-[10px] truncate mt-1">
+                    <div className="p-2 rounded border-purple-500/20 bg-purple-500/10 text-purple-300 text-[10px] truncate mt-1">
                       {seal.pqc_sig}
                     </div>
                   </div>
@@ -150,7 +150,7 @@ export const CompareEvidenceModal: React.FC<CompareEvidenceModalProps> = ({
           </div>
 
           {/* Forensic Audit Compliance Note */}
-          <div className="p-3 bg-slate-950/80 rounded-xl border border-slate-800/80 flex items-center justify-between text-[11px] text-slate-400">
+          <div className="p-3 bg-slate-950/80 rounded-xl border-slate-800/80 flex items-center justify-between text-[11px] text-slate-400">
             <span>Thai Electronic Transactions Act B.E. 2544 (Sec 9, 26, 28) Non-Repudiation Guaranteed</span>
             <span className="text-cyan-400 font-bold">10/10 REAL_HSM QUORUM ACTIVE</span>
           </div>

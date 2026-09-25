@@ -328,7 +328,7 @@ const CustomEntropyHeartbeatTooltip = ({ active, payload, label }: any) => {
     const isHeartbeatWarning = Math.abs(data.heartbeatHz - 1.0000) > 0.002;
 
     return (
-      <div className="p-4 rounded-xl bg-[#070a12] border border-[#06B6D4] text-xs font-mono text-white shadow-2xl space-y-2.5 min-w-[320px] max-w-[380px]">
+      <div className="p-4 rounded-xl bg-[#070a12] border-[#06B6D4] text-xs font-mono text-white shadow-2xl space-y-2.5 min-w-[320px] max-w-[380px]">
         {/* Header with Timestamps */}
         <div className="border-b border-[#0a0f1e] pb-2">
           <div className="flex items-center justify-between">
@@ -336,7 +336,7 @@ const CustomEntropyHeartbeatTooltip = ({ active, payload, label }: any) => {
               <span>📡</span>
               <span>TELEMETRY BEACON #{data.id}</span>
             </span>
-            <span className="text-[10px] px-2 py-0.5 rounded bg-[#0a0f1e] text-[#D4AF37] font-bold border border-[#D4AF37]/30">
+            <span className="text-[10px] px-2 py-0.5 rounded bg-[#0a0f1e] text-[#D4AF37] font-bold border-[#D4AF37]/30">
               Ω600_1000 LOCKED
             </span>
           </div>
@@ -349,7 +349,7 @@ const CustomEntropyHeartbeatTooltip = ({ active, payload, label }: any) => {
 
         {/* Primary Metrics */}
         <div className="space-y-1.5 py-1">
-          <div className="flex items-center justify-between p-1.5 rounded bg-[#0a0f1e] border border-white/5">
+          <div className="flex items-center justify-between p-1.5 rounded bg-[#0a0f1e] border-white/5">
             <span className="text-zinc-400 flex items-center gap-1.5">
               <span>⚖️</span>
               <span>Entropy Drift (Δ):</span>
@@ -359,7 +359,7 @@ const CustomEntropyHeartbeatTooltip = ({ active, payload, label }: any) => {
             </span>
           </div>
 
-          <div className="flex items-center justify-between p-1.5 rounded bg-[#0a0f1e] border border-white/5">
+          <div className="flex items-center justify-between p-1.5 rounded bg-[#0a0f1e] border-white/5">
             <span className="text-zinc-400 flex items-center gap-1.5">
               <span>💓</span>
               <span>Heartbeat Stability:</span>
@@ -369,7 +369,7 @@ const CustomEntropyHeartbeatTooltip = ({ active, payload, label }: any) => {
             </span>
           </div>
 
-          <div className="flex items-center justify-between p-1.5 rounded bg-[#0a0f1e] border border-white/5">
+          <div className="flex items-center justify-between p-1.5 rounded bg-[#0a0f1e] border-white/5">
             <span className="text-zinc-400 flex items-center gap-1.5">
               <span>🧊</span>
               <span>Cryo Core Temperature:</span>
@@ -379,7 +379,7 @@ const CustomEntropyHeartbeatTooltip = ({ active, payload, label }: any) => {
             </span>
           </div>
 
-          <div className="flex items-center justify-between p-1.5 rounded bg-[#0a0f1e] border border-white/5">
+          <div className="flex items-center justify-between p-1.5 rounded bg-[#0a0f1e] border-white/5">
             <span className="text-zinc-400 flex items-center gap-1.5">
               <span>⚙️</span>
               <span>QOps Throughput:</span>
@@ -389,7 +389,7 @@ const CustomEntropyHeartbeatTooltip = ({ active, payload, label }: any) => {
             </span>
           </div>
 
-          <div className="flex items-center justify-between p-1.5 rounded bg-[#0a0f1e] border border-white/5">
+          <div className="flex items-center justify-between p-1.5 rounded bg-[#0a0f1e] border-white/5">
             <span className="text-zinc-400 flex items-center gap-1.5">
               <span>🐦‍🔥</span>
               <span>Phoenix Self-Healing:</span>
@@ -539,7 +539,7 @@ export const SovereignEntropyDriftHeartbeatRecharts: React.FC = () => {
   }, [streamPoints]);
 
   return (
-    <div className="p-6 rounded-2xl bg-[#070a12] border border-[#06B6D4]/40 space-y-6 text-white font-mono shadow-2xl">
+    <div className="p-6 rounded-2xl bg-[#070a12] border-[#06B6D4]/40 space-y-6 text-white font-mono shadow-2xl">
       {/* Header Bar */}
       <div className="flex flex-col lg:flex-row lg:items-center justify-between gap-4 pb-4 border-b border-[#0a0f1e]">
         <div className="space-y-1">
@@ -548,10 +548,10 @@ export const SovereignEntropyDriftHeartbeatRecharts: React.FC = () => {
             <h2 className="text-base sm:text-lg font-bold text-white tracking-wide">
               ZYRQUEN Ω∞ SOVEREIGN OPERATING SYSTEM — REAL-TIME ENTROPY DRIFT &amp; HEARTBEAT
             </h2>
-            <span className="px-2.5 py-0.5 rounded bg-[#0a0f1e] text-[#D4AF37] border border-[#D4AF37]/40 text-xs font-bold">
+            <span className="px-2.5 py-0.5 rounded bg-[#0a0f1e] text-[#D4AF37] border-[#D4AF37]/40 text-xs font-bold">
               Ω600_1000 LOCKED
             </span>
-            <span className="px-2.5 py-0.5 rounded bg-[#0a0f1e] text-emerald-400 border border-emerald-500/40 text-xs font-bold">
+            <span className="px-2.5 py-0.5 rounded bg-[#0a0f1e] text-emerald-400 border-emerald-500/40 text-xs font-bold">
               10/10 REAL_HSM
             </span>
           </div>
@@ -629,37 +629,37 @@ export const SovereignEntropyDriftHeartbeatRecharts: React.FC = () => {
 
       {/* KPI Top Cards */}
       <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-3">
-        <div className="p-3.5 rounded-xl bg-[#0a0f1e] border border-white/5 space-y-1">
+        <div className="p-3.5 rounded-xl bg-[#0a0f1e] border-white/5 space-y-1">
           <div className="text-[10px] text-zinc-400">ENTROPY DRIFT (Δ)</div>
           <div className="text-sm font-bold text-[#06B6D4]">{stats.avgDrift}</div>
           <div className="text-[9px] text-emerald-400">Zero Baseline Invariant</div>
         </div>
 
-        <div className="p-3.5 rounded-xl bg-[#0a0f1e] border border-white/5 space-y-1">
+        <div className="p-3.5 rounded-xl bg-[#0a0f1e] border-white/5 space-y-1">
           <div className="text-[10px] text-zinc-400">HEARTBEAT CARRIER</div>
           <div className="text-sm font-bold text-emerald-400">{stats.avgHeartbeat}</div>
           <div className="text-[9px] text-zinc-400">Nominal 1.0000 Hz Clock</div>
         </div>
 
-        <div className="p-3.5 rounded-xl bg-[#0a0f1e] border border-white/5 space-y-1">
+        <div className="p-3.5 rounded-xl bg-[#0a0f1e] border-white/5 space-y-1">
           <div className="text-[10px] text-zinc-400">CRYO THERMAL CORE</div>
           <div className="text-sm font-bold text-[#D4AF37]">{stats.cryoMean}</div>
           <div className="text-[9px] text-[#D4AF37]">14.980 mK Sub-Kelvin</div>
         </div>
 
-        <div className="p-3.5 rounded-xl bg-[#0a0f1e] border border-white/5 space-y-1">
+        <div className="p-3.5 rounded-xl bg-[#0a0f1e] border-white/5 space-y-1">
           <div className="text-[10px] text-zinc-400">CANONICAL SEALS</div>
           <div className="text-sm font-bold text-white">14,902 / 14,982</div>
           <div className="text-[9px] text-amber-400">80 Quarantined in Buffer</div>
         </div>
 
-        <div className="p-3.5 rounded-xl bg-[#0a0f1e] border border-white/5 space-y-1">
+        <div className="p-3.5 rounded-xl bg-[#0a0f1e] border-white/5 space-y-1">
           <div className="text-[10px] text-zinc-400">PHOENIX HEALING</div>
           <div className="text-sm font-bold text-purple-300">11.8 ms</div>
           <div className="text-[9px] text-purple-400">&lt; 14.0 ms Certified Target</div>
         </div>
 
-        <div className="p-3.5 rounded-xl bg-[#0a0f1e] border border-white/5 space-y-1">
+        <div className="p-3.5 rounded-xl bg-[#0a0f1e] border-white/5 space-y-1">
           <div className="text-[10px] text-zinc-400">TENANT BOUNDARY</div>
           <div className="text-sm font-bold text-cyan-300">Ω600_1000</div>
           <div className="text-[9px] text-zinc-400">400 Tenants LOCKED</div>
@@ -699,7 +699,7 @@ export const SovereignEntropyDriftHeartbeatRecharts: React.FC = () => {
       {activeTab === 'realtime_graph' && (
         <div className="space-y-5">
           {/* Controls Bar */}
-          <div className="flex flex-wrap items-center justify-between gap-3 p-3 rounded-xl bg-[#0a0f1e] border border-white/10 text-xs">
+          <div className="flex flex-wrap items-center justify-between gap-3 p-3 rounded-xl bg-[#0a0f1e] border-white/10 text-xs">
             <div className="flex flex-wrap items-center gap-2">
               <span className="text-zinc-400">Series Filter:</span>
               {[
@@ -743,7 +743,7 @@ export const SovereignEntropyDriftHeartbeatRecharts: React.FC = () => {
               </button>
 
               {/* Stream Speed */}
-              <div className="flex items-center bg-[#070a12] rounded-lg p-0.5 border border-white/10">
+              <div className="flex items-center bg-[#070a12] rounded-lg p-0.5 border-white/10">
                 {([1, 2, 5] as const).map((spd) => (
                   <button
                     key={spd}
@@ -766,14 +766,14 @@ export const SovereignEntropyDriftHeartbeatRecharts: React.FC = () => {
               <div className="flex items-center gap-1 pl-2 border-l border-white/10">
                 <button
                   onClick={() => triggerStressInjection('TAMPER_DRIFT')}
-                  className="px-2 py-1 rounded bg-[#070a12] hover:bg-rose-950/50 text-rose-300 border border-rose-500/30 text-[10px] font-bold"
+                  className="px-2 py-1 rounded bg-[#070a12] hover:bg-rose-950/50 text-rose-300 border-rose-500/30 text-[10px] font-bold"
                   title="Simulate Red Team Entropy Tamper attempt"
                 >
                   ⚡ Inject Drift
                 </button>
                 <button
                   onClick={() => triggerStressInjection('THERMAL_SURGE')}
-                  className="px-2 py-1 rounded bg-[#070a12] hover:bg-amber-950/50 text-[#D4AF37] border border-[#D4AF37]/30 text-[10px] font-bold"
+                  className="px-2 py-1 rounded bg-[#070a12] hover:bg-amber-950/50 text-[#D4AF37] border-[#D4AF37]/30 text-[10px] font-bold"
                   title="Simulate Thermal Invariant Surge (>15.00 mK)"
                 >
                   🧊 Thermal Surge
@@ -783,7 +783,7 @@ export const SovereignEntropyDriftHeartbeatRecharts: React.FC = () => {
           </div>
 
           {/* Interactive Recharts Graph */}
-          <div className="p-4 rounded-xl bg-[#0a0f1e] border border-[#06B6D4]/30 space-y-2">
+          <div className="p-4 rounded-xl bg-[#0a0f1e] border-[#06B6D4]/30 space-y-2">
             <div className="flex items-center justify-between text-xs text-zinc-400 px-1">
               <span className="flex items-center gap-2">
                 <span className="w-2 h-2 rounded-full bg-[#06B6D4] animate-pulse" />
@@ -936,7 +936,7 @@ export const SovereignEntropyDriftHeartbeatRecharts: React.FC = () => {
 
           {/* Selected Point Forensic Drawer */}
           {selectedPoint && (
-            <div className="p-4 rounded-xl bg-[#0a0f1e] border border-[#06B6D4] space-y-3">
+            <div className="p-4 rounded-xl bg-[#0a0f1e] border-[#06B6D4] space-y-3">
               <div className="flex items-center justify-between">
                 <span className="font-bold text-white flex items-center gap-2">
                   <span>🔍</span>
@@ -951,13 +951,13 @@ export const SovereignEntropyDriftHeartbeatRecharts: React.FC = () => {
               </div>
 
               <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3 text-xs">
-                <div className="p-2.5 rounded bg-[#070a12] border border-white/5 space-y-0.5">
+                <div className="p-2.5 rounded bg-[#070a12] border-white/5 space-y-0.5">
                   <span className="text-zinc-400">Timestamps:</span>
                   <div className="text-white font-semibold">{selectedPoint.timestampIct}</div>
                   <div className="text-[10px] text-zinc-500">{selectedPoint.timestampUtc}</div>
                 </div>
 
-                <div className="p-2.5 rounded bg-[#070a12] border border-white/5 space-y-0.5">
+                <div className="p-2.5 rounded bg-[#070a12] border-white/5 space-y-0.5">
                   <span className="text-zinc-400">Entropy Drift:</span>
                   <div className="text-[#06B6D4] font-bold text-sm">
                     {selectedPoint.entropyDriftPct >= 0 ? '+' : ''}{selectedPoint.entropyDriftPct.toFixed(4)}%
@@ -965,7 +965,7 @@ export const SovereignEntropyDriftHeartbeatRecharts: React.FC = () => {
                   <div className="text-[10px] text-emerald-400">Within ±0.03% Safety Envelope</div>
                 </div>
 
-                <div className="p-2.5 rounded bg-[#070a12] border border-white/5 space-y-0.5">
+                <div className="p-2.5 rounded bg-[#070a12] border-white/5 space-y-0.5">
                   <span className="text-zinc-400">Cryo Core &amp; Coherence:</span>
                   <div className="text-[#D4AF37] font-bold text-sm">
                     {selectedPoint.cryoTempMk.toFixed(3)} mK • {selectedPoint.coherencePct}%
@@ -973,7 +973,7 @@ export const SovereignEntropyDriftHeartbeatRecharts: React.FC = () => {
                   <div className="text-[10px] text-zinc-400">Target: 14.980 mK Strict</div>
                 </div>
 
-                <div className="p-2.5 rounded bg-[#070a12] border border-white/5 space-y-0.5">
+                <div className="p-2.5 rounded bg-[#070a12] border-white/5 space-y-0.5">
                   <span className="text-zinc-400">SSoT Provenance Anchor:</span>
                   <div className="text-white font-mono text-[11px] truncate">{selectedPoint.hashDigest}</div>
                   <div className="text-[10px] text-emerald-400">Signed 10/10 REAL_HSM Quorum</div>
@@ -987,13 +987,13 @@ export const SovereignEntropyDriftHeartbeatRecharts: React.FC = () => {
       {/* TAB 2: RED TEAM CHALLENGE VS GOLD MASTER AUDIT */}
       {activeTab === 'red_team_audit' && (
         <div className="space-y-5">
-          <div className="p-4 rounded-xl bg-[#0a0f1e] border border-[#D4AF37]/40 space-y-2">
+          <div className="p-4 rounded-xl bg-[#0a0f1e] border-[#D4AF37]/40 space-y-2">
             <div className="flex items-center justify-between flex-wrap gap-2">
               <span className="text-sm font-bold text-[#D4AF37] flex items-center gap-2">
                 <span>⚔️</span>
                 <span>RED TEAM GLOBAL CHALLENGE vs. GOLD MASTER AUDIT COMPARISON</span>
               </span>
-              <span className="text-xs px-2.5 py-1 rounded bg-[#070a12] text-emerald-400 border border-emerald-500/30 font-bold">
+              <span className="text-xs px-2.5 py-1 rounded bg-[#070a12] text-emerald-400 border-emerald-500/30 font-bold">
                 10/10 QUORUM PASSED • PROMOTION GATE UNLOCKED (G11–G13)
               </span>
             </div>
@@ -1008,11 +1008,11 @@ export const SovereignEntropyDriftHeartbeatRecharts: React.FC = () => {
             {INITIAL_RED_TEAM_OBJECTIVES.map((obj) => (
               <div
                 key={obj.id}
-                className="p-4 rounded-xl bg-[#0a0f1e] border border-white/10 hover:border-[#D4AF37]/40 transition-all space-y-2.5"
+                className="p-4 rounded-xl bg-[#0a0f1e] border-white/10 hover:border-[#D4AF37]/40 transition-all space-y-2.5"
               >
                 <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2 border-b border-white/5 pb-2">
                   <div className="flex items-center gap-2.5">
-                    <span className="text-sm px-2 py-0.5 rounded bg-[#070a12] text-zinc-300 font-bold border border-white/10">
+                    <span className="text-sm px-2 py-0.5 rounded bg-[#070a12] text-zinc-300 font-bold border-white/10">
                       {obj.id}
                     </span>
                     <div>
@@ -1033,7 +1033,7 @@ export const SovereignEntropyDriftHeartbeatRecharts: React.FC = () => {
                 </div>
 
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-3 text-xs">
-                  <div className="p-3 rounded-lg bg-[#070a12] border border-rose-500/20 space-y-1">
+                  <div className="p-3 rounded-lg bg-[#070a12] border-rose-500/20 space-y-1">
                     <span className="text-[10px] font-bold text-rose-400 uppercase tracking-wider flex items-center gap-1.5">
                       <span>🎯</span>
                       <span>Red Team Target Objective</span>
@@ -1041,7 +1041,7 @@ export const SovereignEntropyDriftHeartbeatRecharts: React.FC = () => {
                     <div className="text-white font-medium">{obj.redTeamTarget}</div>
                   </div>
 
-                  <div className="p-3 rounded-lg bg-[#070a12] border border-emerald-500/20 space-y-1">
+                  <div className="p-3 rounded-lg bg-[#070a12] border-emerald-500/20 space-y-1">
                     <span className="text-[10px] font-bold text-emerald-400 uppercase tracking-wider flex items-center gap-1.5">
                       <span>🏆</span>
                       <span>Gold Master Certified Forensic Result</span>
@@ -1059,21 +1059,21 @@ export const SovereignEntropyDriftHeartbeatRecharts: React.FC = () => {
           </div>
 
           {/* Forensic Legal Proof Box */}
-          <div className="p-4 rounded-xl bg-[#0a0f1e] border border-white/10 text-xs space-y-2">
+          <div className="p-4 rounded-xl bg-[#0a0f1e] border-white/10 text-xs space-y-2">
             <div className="font-bold text-[#D4AF37] flex items-center gap-2">
               <span>⚖️</span>
               <span>Statutory Compliance &amp; Safe Harbor Defense Grounding</span>
             </div>
             <div className="grid grid-cols-1 md:grid-cols-3 gap-3 text-[11px] text-zinc-300">
-              <div className="p-2.5 rounded bg-[#070a12] border border-white/5">
+              <div className="p-2.5 rounded bg-[#070a12] border-white/5">
                 <span className="text-[#06B6D4] font-bold block mb-1">ETDA B.E. 2544 (Sec 9, 26, 28)</span>
                 Electronic Transactions Act compliant with FIPS 204 Post-Quantum cryptographic signature non-repudiation.
               </div>
-              <div className="p-2.5 rounded bg-[#070a12] border border-white/5">
+              <div className="p-2.5 rounded bg-[#070a12] border-white/5">
                 <span className="text-emerald-400 font-bold block mb-1">PDPA B.E. 2562 Statutory Rules</span>
                 Section 28 cross-border data transfer safe harbor via multi-tenant physical namespace containment.
               </div>
-              <div className="p-2.5 rounded bg-[#070a12] border border-white/5">
+              <div className="p-2.5 rounded bg-[#070a12] border-white/5">
                 <span className="text-purple-300 font-bold block mb-1">Ring-04 Quarantine Isolation</span>
                 Seals #14,903–#14,907 isolated in memory-safe hardware sandbox with Zero Canonical Authority.
               </div>
@@ -1085,13 +1085,13 @@ export const SovereignEntropyDriftHeartbeatRecharts: React.FC = () => {
       {/* TAB 3: CUSTODIAN PASSPORTS MATRIX */}
       {activeTab === 'custodian_passports' && (
         <div className="space-y-4">
-          <div className="p-4 rounded-xl bg-[#0a0f1e] border border-[#06B6D4]/40 space-y-1">
+          <div className="p-4 rounded-xl bg-[#0a0f1e] border-[#06B6D4]/40 space-y-1">
             <div className="flex items-center justify-between flex-wrap gap-2">
               <span className="text-sm font-bold text-white flex items-center gap-2">
                 <span>👑</span>
                 <span>10/10 REAL_HSM CUSTODIAN PASSPORTS MATRIX</span>
               </span>
-              <span className="text-xs px-2.5 py-1 rounded bg-[#070a12] text-[#D4AF37] border border-[#D4AF37]/40 font-bold">
+              <span className="text-xs px-2.5 py-1 rounded bg-[#070a12] text-[#D4AF37] border-[#D4AF37]/40 font-bold">
                 FIPS 140-3 LEVEL 4 CERTIFIED
               </span>
             </div>
@@ -1104,16 +1104,16 @@ export const SovereignEntropyDriftHeartbeatRecharts: React.FC = () => {
             {CUSTODIAN_PASSPORTS.map((cp) => (
               <div
                 key={cp.slot}
-                className="p-3.5 rounded-xl bg-[#0a0f1e] border border-white/10 space-y-2 hover:border-[#06B6D4]/40 transition-all text-xs"
+                className="p-3.5 rounded-xl bg-[#0a0f1e] border-white/10 space-y-2 hover:border-[#06B6D4]/40 transition-all text-xs"
               >
                 <div className="flex items-center justify-between border-b border-white/5 pb-1.5">
                   <div className="flex items-center gap-2">
-                    <span className="w-5 h-5 rounded-full bg-[#070a12] text-[#06B6D4] border border-[#06B6D4]/40 flex items-center justify-center font-bold text-[10px]">
+                    <span className="w-5 h-5 rounded-full bg-[#070a12] text-[#06B6D4] border-[#06B6D4]/40 flex items-center justify-center font-bold text-[10px]">
                       {cp.slot}
                     </span>
                     <span className="font-bold text-white">{cp.name}</span>
                   </div>
-                  <span className="text-[10px] text-emerald-400 font-bold bg-emerald-500/15 px-2 py-0.5 rounded border border-emerald-500/30">
+                  <span className="text-[10px] text-emerald-400 font-bold bg-emerald-500/15 px-2 py-0.5 rounded border-emerald-500/30">
                     {cp.attestationStatus}
                   </span>
                 </div>
@@ -1137,13 +1137,13 @@ export const SovereignEntropyDriftHeartbeatRecharts: React.FC = () => {
       {/* TAB 4: REAL EVIDENCE INTAKE HARDENING v2.1 */}
       {activeTab === 'intake_hardening' && (
         <div className="space-y-4">
-          <div className="p-4 rounded-xl bg-[#0a0f1e] border border-[#D4AF37]/40 space-y-1.5">
+          <div className="p-4 rounded-xl bg-[#0a0f1e] border-[#D4AF37]/40 space-y-1.5">
             <div className="flex items-center justify-between flex-wrap gap-2">
               <span className="text-sm font-bold text-[#D4AF37] flex items-center gap-2">
                 <span>🛡️</span>
                 <span>REAL EVIDENCE INTAKE HARDENING v2.1 — CONTROL-PLANE HARDENING</span>
               </span>
-              <span className="text-xs px-2.5 py-1 rounded bg-[#070a12] text-emerald-400 border border-emerald-500/30 font-bold">
+              <span className="text-xs px-2.5 py-1 rounded bg-[#070a12] text-emerald-400 border-emerald-500/30 font-bold">
                 SSoT MUTATION = 0 • FAIL-CLOSED READ-ONLY
               </span>
             </div>
@@ -1157,7 +1157,7 @@ export const SovereignEntropyDriftHeartbeatRecharts: React.FC = () => {
             {INTAKE_ARTIFACTS.map((art) => (
               <div
                 key={art.id}
-                className="p-4 rounded-xl bg-[#0a0f1e] border border-white/10 space-y-3 hover:border-[#D4AF37]/40 transition-all text-xs"
+                className="p-4 rounded-xl bg-[#0a0f1e] border-white/10 space-y-3 hover:border-[#D4AF37]/40 transition-all text-xs"
               >
                 <div className="flex items-center justify-between border-b border-white/5 pb-2">
                   <div className="flex items-center gap-2">
@@ -1167,7 +1167,7 @@ export const SovereignEntropyDriftHeartbeatRecharts: React.FC = () => {
                       <span className="text-zinc-400 block text-[11px]">{art.type}</span>
                     </div>
                   </div>
-                  <span className="text-[10px] px-2 py-0.5 rounded bg-emerald-500/20 text-emerald-300 border border-emerald-500/40 font-bold">
+                  <span className="text-[10px] px-2 py-0.5 rounded bg-emerald-500/20 text-emerald-300 border-emerald-500/40 font-bold">
                     🟢 {art.status}
                   </span>
                 </div>
@@ -1185,7 +1185,7 @@ export const SovereignEntropyDriftHeartbeatRecharts: React.FC = () => {
 
                   <div>
                     <span className="text-zinc-400">SHA-256 Digest:</span>
-                    <div className="p-2 rounded bg-[#070a12] border border-white/5 text-[10px] text-[#06B6D4] font-mono break-all mt-0.5 select-all">
+                    <div className="p-2 rounded bg-[#070a12] border-white/5 text-[10px] text-[#06B6D4] font-mono break-all mt-0.5 select-all">
                       {art.digestSha256}
                     </div>
                   </div>
@@ -1210,29 +1210,29 @@ export const SovereignEntropyDriftHeartbeatRecharts: React.FC = () => {
           </div>
 
           {/* Verification Pipeline Flow */}
-          <div className="p-4 rounded-xl bg-[#0a0f1e] border border-white/10 text-xs space-y-2">
+          <div className="p-4 rounded-xl bg-[#0a0f1e] border-white/10 text-xs space-y-2">
             <div className="font-bold text-white flex items-center gap-2">
               <span>⚙️</span>
               <span>5-Stage Deterministic Verification Pipeline</span>
             </div>
             <div className="grid grid-cols-1 sm:grid-cols-5 gap-2 text-[10px] text-zinc-300">
-              <div className="p-2 rounded bg-[#070a12] border border-white/5 space-y-1">
+              <div className="p-2 rounded bg-[#070a12] border-white/5 space-y-1">
                 <span className="text-[#06B6D4] font-bold block">1. Crypto Verify</span>
                 WebCrypto SHA-256 byte-by-byte digest calculation.
               </div>
-              <div className="p-2 rounded bg-[#070a12] border border-white/5 space-y-1">
+              <div className="p-2 rounded bg-[#070a12] border-white/5 space-y-1">
                 <span className="text-amber-400 font-bold block">2. Quarantine Diff</span>
                 Ring-04 sandbox isolation with zero leakage.
               </div>
-              <div className="p-2 rounded bg-[#070a12] border border-white/5 space-y-1">
+              <div className="p-2 rounded bg-[#070a12] border-white/5 space-y-1">
                 <span className="text-emerald-400 font-bold block">3. Multi-Tenant</span>
                 Physical namespace isolation across Ω600_1000.
               </div>
-              <div className="p-2 rounded bg-[#070a12] border border-white/5 space-y-1">
+              <div className="p-2 rounded bg-[#070a12] border-white/5 space-y-1">
                 <span className="text-purple-300 font-bold block">4. Attack Lab</span>
                 Digital Twin sandbox adversarial simulation.
               </div>
-              <div className="p-2 rounded bg-[#070a12] border border-white/5 space-y-1">
+              <div className="p-2 rounded bg-[#070a12] border-white/5 space-y-1">
                 <span className="text-rose-400 font-bold block">5. Gate Closed</span>
                 0 Canonical Write Authority (Δ0.00% Zero Drift).
               </div>

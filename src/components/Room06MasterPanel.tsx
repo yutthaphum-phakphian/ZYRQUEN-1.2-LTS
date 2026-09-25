@@ -90,20 +90,20 @@ export const Room06MasterPanel: React.FC<Room06MasterPanelProps> = ({
   return (
     <div className="space-y-6 font-mono text-zinc-300">
       {/* Top Banner for Room 06 */}
-      <div className="p-6 sm:p-8 rounded-[28px] bg-gradient-to-br from-rose-950/40 via-[#150a0e]/95 to-black border border-rose-500/40 backdrop-blur-xl relative overflow-hidden shadow-2xl">
+      <div className="p-6 sm:p-8 rounded-[28px] bg-gradient-to-br from-rose-950/40 via-[#150a0e]/95 to-black border-rose-500/40 backdrop-blur-xl relative overflow-hidden shadow-2xl">
         <div className="absolute top-0 right-0 w-96 h-96 bg-gradient-to-bl from-rose-500/10 via-amber-500/5 to-transparent rounded-full blur-3xl pointer-events-none" />
 
         <div className="relative z-10 flex flex-col lg:flex-row lg:items-center justify-between gap-6">
           <div className="space-y-3">
             <div className="flex flex-wrap items-center gap-2">
-              <span className="px-3 py-1 rounded-full bg-rose-500/15 text-rose-300 border border-rose-500/40 text-xs font-bold flex items-center gap-1.5 shadow-[0_0_12px_rgba(244,63,94,0.25)]">
+              <span className="px-3 py-1 rounded-full bg-rose-500/15 text-rose-300 border-rose-500/40 text-xs font-bold flex items-center gap-1.5 shadow-[0_0_12px_rgba(244,63,94,0.25)]">
                 <Flame className="w-4 h-4 text-rose-400 animate-pulse" />
                 CHAMBER 06 • PHOENIX DISASTER RECOVERY
               </span>
-              <span className="px-2.5 py-0.5 rounded-full bg-emerald-500/15 text-emerald-300 border border-emerald-500/30 text-[11px] font-bold">
+              <span className="px-2.5 py-0.5 rounded-full bg-emerald-500/15 text-emerald-300 border-emerald-500/30 text-[11px] font-bold">
                 RTO &lt; 50ms | RPO = 0.00s
               </span>
-              <span className="px-2.5 py-0.5 rounded-full bg-cyan-500/15 text-cyan-300 border border-cyan-500/30 text-[11px] font-bold">
+              <span className="px-2.5 py-0.5 rounded-full bg-cyan-500/15 text-cyan-300 border-cyan-500/30 text-[11px] font-bold">
                 14.98 mK HELIUM-4
               </span>
             </div>
@@ -119,19 +119,19 @@ export const Room06MasterPanel: React.FC<Room06MasterPanelProps> = ({
 
             {/* Quick Metrics Bar */}
             <div className="flex flex-wrap items-center gap-3 pt-2 text-xs">
-              <div className="px-3 py-1.5 rounded-xl bg-white/5 border border-white/10 flex items-center gap-2">
+              <div className="px-3 py-1.5 rounded-xl bg-white/5 border-white/10 flex items-center gap-2">
                 <span className="text-zinc-500">Recovery Time (RTO):</span>
                 <span className="text-emerald-300 font-bold">35.8 ms (Pass &lt; 50ms)</span>
               </div>
-              <div className="px-3 py-1.5 rounded-xl bg-white/5 border border-white/10 flex items-center gap-2">
+              <div className="px-3 py-1.5 rounded-xl bg-white/5 border-white/10 flex items-center gap-2">
                 <span className="text-zinc-500">Data Loss (RPO):</span>
                 <span className="text-cyan-300 font-bold">0.00s (Zero Loss)</span>
               </div>
-              <div className="px-3 py-1.5 rounded-xl bg-amber-500/10 border border-amber-500/30 flex items-center gap-2">
+              <div className="px-3 py-1.5 rounded-xl bg-amber-500/10 border-amber-500/30 flex items-center gap-2">
                 <span className="text-zinc-400">Entropy Threshold:</span>
                 <span className="text-amber-300 font-bold">{ZYRQUEN_ENTROPY_CONFIG.criticalThresholdKBps.toLocaleString()} KBps</span>
               </div>
-              <div className="px-3 py-1.5 rounded-xl bg-cyan-500/10 border border-cyan-500/30 flex items-center gap-2">
+              <div className="px-3 py-1.5 rounded-xl bg-cyan-500/10 border-cyan-500/30 flex items-center gap-2">
                 <span className="text-zinc-400">TRNG Surges:</span>
                 <span className="text-cyan-300 font-bold">Authorized Pass (14.3-14.9k)</span>
               </div>
@@ -162,7 +162,7 @@ export const Room06MasterPanel: React.FC<Room06MasterPanelProps> = ({
                 playTone(720, 0.04);
                 if (onOpenCertificate) onOpenCertificate();
               }}
-              className="px-4 py-2.5 rounded-xl bg-white/5 hover:bg-white/10 border border-white/10 text-white font-bold text-xs transition-all flex items-center justify-center gap-2"
+              className="px-4 py-2.5 rounded-xl bg-white/5 hover:bg-white/10 border-white/10 text-white font-bold text-xs transition-all flex items-center justify-center gap-2"
             >
               <FileCheck2 className="w-4 h-4 text-rose-400" />
               <span>Sovereign Certificate</span>
@@ -172,7 +172,7 @@ export const Room06MasterPanel: React.FC<Room06MasterPanelProps> = ({
       </div>
 
       {/* Tabs Navigation */}
-      <div className="flex flex-wrap items-center gap-2 p-1.5 rounded-2xl bg-black/50 border border-white/10 text-xs font-bold">
+      <div className="flex flex-wrap items-center gap-2 p-1.5 rounded-2xl bg-black/50 border-white/10 text-xs font-bold">
         <button
           onClick={() => {
             playTone(600, 0.03);
@@ -180,8 +180,8 @@ export const Room06MasterPanel: React.FC<Room06MasterPanelProps> = ({
           }}
           className={`px-4 py-2 rounded-xl transition-all flex items-center gap-2 ${
             activeTab === 'rollback'
-              ? 'bg-rose-500/20 text-rose-200 border border-rose-500/40 shadow-[0_0_12px_rgba(244,63,94,0.2)]'
-              : 'text-zinc-400 hover:text-zinc-200 bg-white/5 border border-transparent'
+              ? 'bg-rose-500/20 text-rose-200 border-rose-500/40 shadow-[0_0_12px_rgba(244,63,94,0.2)]'
+              : 'text-zinc-400 hover:text-zinc-200 bg-white/5 border-transparent'
           }`}
         >
           <RotateCw className="w-4 h-4" />
@@ -195,8 +195,8 @@ export const Room06MasterPanel: React.FC<Room06MasterPanelProps> = ({
           }}
           className={`px-4 py-2 rounded-xl transition-all flex items-center gap-2 ${
             activeTab === 'cryo-flush'
-              ? 'bg-rose-500/20 text-rose-200 border border-rose-500/40 shadow-[0_0_12px_rgba(244,63,94,0.2)]'
-              : 'text-zinc-400 hover:text-zinc-200 bg-white/5 border border-transparent'
+              ? 'bg-rose-500/20 text-rose-200 border-rose-500/40 shadow-[0_0_12px_rgba(244,63,94,0.2)]'
+              : 'text-zinc-400 hover:text-zinc-200 bg-white/5 border-transparent'
           }`}
         >
           <Snowflake className="w-4 h-4" />
@@ -210,8 +210,8 @@ export const Room06MasterPanel: React.FC<Room06MasterPanelProps> = ({
           }}
           className={`px-4 py-2 rounded-xl transition-all flex items-center gap-2 ${
             activeTab === 'drill'
-              ? 'bg-rose-500/20 text-rose-200 border border-rose-500/40 shadow-[0_0_12px_rgba(244,63,94,0.2)]'
-              : 'text-zinc-400 hover:text-zinc-200 bg-white/5 border border-transparent'
+              ? 'bg-rose-500/20 text-rose-200 border-rose-500/40 shadow-[0_0_12px_rgba(244,63,94,0.2)]'
+              : 'text-zinc-400 hover:text-zinc-200 bg-white/5 border-transparent'
           }`}
         >
           <Flame className="w-4 h-4" />
@@ -222,7 +222,7 @@ export const Room06MasterPanel: React.FC<Room06MasterPanelProps> = ({
       {/* Tab 1: Rollback & Recovery Timing Graph */}
       {activeTab === 'rollback' && (
         <div className="space-y-6 animate-in fade-in duration-200">
-          <div className="p-5 rounded-2xl bg-black/60 border border-white/10 space-y-4">
+          <div className="p-5 rounded-2xl bg-black/60 border-white/10 space-y-4">
             <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
               <div>
                 <h3 className="text-sm font-bold text-white flex items-center gap-2">
@@ -233,7 +233,7 @@ export const Room06MasterPanel: React.FC<Room06MasterPanelProps> = ({
                   Instant restoration to Sealed Genesis Block #849202 without entropy contamination
                 </p>
               </div>
-              <span className="px-3 py-1 rounded-full bg-emerald-500/15 text-emerald-300 border border-emerald-500/30 text-xs font-bold">
+              <span className="px-3 py-1 rounded-full bg-emerald-500/15 text-emerald-300 border-emerald-500/30 text-xs font-bold">
                 ZERO DATA LOSS CERTIFIED
               </span>
             </div>
@@ -264,7 +264,7 @@ export const Room06MasterPanel: React.FC<Room06MasterPanelProps> = ({
 
       {/* Tab 2: Cryo Flush */}
       {activeTab === 'cryo-flush' && (
-        <div className="p-6 rounded-2xl bg-black/60 border border-white/10 space-y-4 animate-in fade-in duration-200">
+        <div className="p-6 rounded-2xl bg-black/60 border-white/10 space-y-4 animate-in fade-in duration-200">
           <div className="flex items-center gap-2.5">
             <Snowflake className="w-5 h-5 text-cyan-400" />
             <h3 className="text-sm font-bold text-white">Helium-4 Cryogenic Purge System</h3>
@@ -277,7 +277,7 @@ export const Room06MasterPanel: React.FC<Room06MasterPanelProps> = ({
 
       {/* Tab 3: Drill */}
       {activeTab === 'drill' && (
-        <div className="p-6 rounded-2xl bg-black/60 border border-white/10 space-y-4 animate-in fade-in duration-200">
+        <div className="p-6 rounded-2xl bg-black/60 border-white/10 space-y-4 animate-in fade-in duration-200">
           <div className="flex items-center gap-2.5">
             <Flame className="w-5 h-5 text-rose-400" />
             <h3 className="text-sm font-bold text-white">Fail-Closed Autonomous Drill Compliance</h3>

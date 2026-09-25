@@ -115,7 +115,7 @@ export const Phase3UpgradeManifestModal: React.FC<{
         {/* Header */}
         <div className="p-6 border-b border-indigo-500/20 flex items-center justify-between bg-black/40">
           <div className="flex items-center gap-3">
-            <div className="w-10 h-10 rounded-2xl bg-indigo-500/20 border border-indigo-400 text-indigo-300 flex items-center justify-center">
+            <div className="w-10 h-10 rounded-2xl bg-indigo-500/20 border-indigo-400 text-indigo-300 flex items-center justify-center">
               <Award className="w-5 h-5" />
             </div>
             <div>

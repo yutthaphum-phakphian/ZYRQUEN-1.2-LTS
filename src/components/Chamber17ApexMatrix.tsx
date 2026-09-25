@@ -225,9 +225,9 @@ export const Chamber17ApexMatrix: React.FC<Chamber17ApexMatrixProps> = ({
   return (
     <div className={`space-y-6 ${className} font-sans`}>
       {/* Top Sovereign Authority Header */}
-      <div className="bg-slate-900/90 border border-slate-800 rounded-2xl p-5 shadow-2xl backdrop-blur-md flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
+      <div className="bg-slate-900/90 border-slate-800 rounded-2xl p-5 shadow-2xl backdrop-blur-md flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
         <div className="flex items-center gap-3.5">
-          <div className="p-3 bg-cyan-950/80 border border-cyan-700/60 rounded-xl text-cyan-400 shadow-inner">
+          <div className="p-3 bg-cyan-950/80 border-cyan-700/60 rounded-xl text-cyan-400 shadow-inner">
             <span className="text-xl">👑</span>
           </div>
           <div>
@@ -235,10 +235,10 @@ export const Chamber17ApexMatrix: React.FC<Chamber17ApexMatrixProps> = ({
               <span className="font-mono text-xs font-bold text-cyan-400 tracking-wider">
                 ZYRQUEN Ω v1.2 LTS
               </span>
-              <span className="text-[10px] font-mono font-bold px-2 py-0.5 rounded bg-amber-950/80 text-amber-300 border border-amber-800/60">
+              <span className="text-[10px] font-mono font-bold px-2 py-0.5 rounded bg-amber-950/80 text-amber-300 border-amber-800/60">
                 FROZEN v1.2 LTS
               </span>
-              <span className="text-[10px] font-mono px-2 py-0.5 rounded bg-emerald-950/80 text-emerald-300 border border-emerald-800/60">
+              <span className="text-[10px] font-mono px-2 py-0.5 rounded bg-emerald-950/80 text-emerald-300 border-emerald-800/60">
                 SSoT Mutation Delta = 0
               </span>
             </div>
@@ -252,15 +252,15 @@ export const Chamber17ApexMatrix: React.FC<Chamber17ApexMatrixProps> = ({
         </div>
 
         <div className="flex flex-wrap items-center gap-2.5 text-xs font-mono">
-          <div className="bg-slate-950/80 border border-slate-800 px-3 py-1.5 rounded-xl flex items-center gap-2">
+          <div className="bg-slate-950/80 border-slate-800 px-3 py-1.5 rounded-xl flex items-center gap-2">
             <span className="text-slate-500">SSoT Drift:</span>
             <span className="text-emerald-400 font-bold">0.0000%</span>
           </div>
-          <div className="bg-slate-950/80 border border-slate-800 px-3 py-1.5 rounded-xl flex items-center gap-2">
+          <div className="bg-slate-950/80 border-slate-800 px-3 py-1.5 rounded-xl flex items-center gap-2">
             <span className="text-slate-500">Canonical Seals:</span>
             <span className="text-cyan-400 font-bold">14,902</span>
           </div>
-          <div className="bg-slate-950/80 border border-slate-800 px-3 py-1.5 rounded-xl flex items-center gap-2">
+          <div className="bg-slate-950/80 border-slate-800 px-3 py-1.5 rounded-xl flex items-center gap-2">
             <span className="text-slate-500">Lattice Nodes:</span>
             <span className="text-amber-400 font-bold">410 (400 RWA + 10 HSM)</span>
           </div>
@@ -268,7 +268,7 @@ export const Chamber17ApexMatrix: React.FC<Chamber17ApexMatrixProps> = ({
       </div>
 
       {/* Sub-tab Navigation Bar */}
-      <div className="flex flex-wrap items-center gap-2 p-2 bg-slate-900/90 border border-slate-800 rounded-2xl">
+      <div className="flex flex-wrap items-center gap-2 p-2 bg-slate-900/90 border-slate-800 rounded-2xl">
         <button
           type="button"
           onClick={() => {
@@ -382,7 +382,7 @@ export const Chamber17ApexMatrix: React.FC<Chamber17ApexMatrixProps> = ({
           <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
             
             {/* Left 2 Cols: 6x3 Matrix Grid */}
-            <div className="lg:col-span-2 bg-slate-900/80 border border-slate-800 rounded-2xl p-5 shadow-xl flex flex-col justify-between">
+            <div className="lg:col-span-2 bg-slate-900/80 border-slate-800 rounded-2xl p-5 shadow-xl flex flex-col justify-between">
               <div>
                 <div className="flex items-center justify-between border-b border-slate-800 pb-3 mb-3">
                   <div className="flex items-center gap-2">
@@ -391,7 +391,7 @@ export const Chamber17ApexMatrix: React.FC<Chamber17ApexMatrixProps> = ({
                       CH-17: Supreme Apex Control (6×3 Matrix Grid)
                     </h3>
                   </div>
-                  <span className="text-[10px] font-mono px-2 py-0.5 rounded-full bg-cyan-950 text-cyan-400 border border-cyan-800">
+                  <span className="text-[10px] font-mono px-2 py-0.5 rounded-full bg-cyan-950 text-cyan-400 border-cyan-800">
                     18 Chambers Online
                   </span>
                 </div>
@@ -427,8 +427,8 @@ export const Chamber17ApexMatrix: React.FC<Chamber17ApexMatrixProps> = ({
                           <span className="text-slate-500">SSoT</span>
                           <span className={`px-1.5 py-0.2 rounded font-bold ${
                             ch.status.includes('OK') || ch.status === 'SECURE' || ch.status === 'ACTIVE' || ch.status === 'SOVEREIGN'
-                              ? 'bg-emerald-950 text-emerald-400 border border-emerald-800/50'
-                              : 'bg-amber-950 text-amber-300 border border-amber-800/50'
+                              ? 'bg-emerald-950 text-emerald-400 border-emerald-800/50'
+                              : 'bg-amber-950 text-amber-300 border-amber-800/50'
                           }`}>
                             {ch.status}
                           </span>
@@ -445,17 +445,17 @@ export const Chamber17ApexMatrix: React.FC<Chamber17ApexMatrixProps> = ({
                   playTone(720, 0.03);
                   setActiveTab('chamber18_sentinel');
                 }}
-                className="mt-3.5 p-3 rounded-xl bg-gradient-to-r from-purple-950/70 via-slate-950 to-indigo-950/70 border border-purple-800/80 hover:border-purple-500 transition cursor-pointer flex items-center justify-between shadow-lg shadow-purple-950/40"
+                className="mt-3.5 p-3 rounded-xl bg-gradient-to-r from-purple-950/70 via-slate-950 to-indigo-950/70 border-purple-800/80 hover:border-purple-500 transition cursor-pointer flex items-center justify-between shadow-lg shadow-purple-950/40"
               >
                 <div className="flex items-center gap-3">
-                  <div className="p-2 bg-purple-900/60 rounded-lg text-purple-300 border border-purple-700">
+                  <div className="p-2 bg-purple-900/60 rounded-lg text-purple-300 border-purple-700">
                     <Eye className="w-4 h-4" />
                   </div>
                   <div>
                     <div className="flex items-center gap-2">
                       <span className="text-[10px] font-bold text-purple-400">CH-18 EXTENSION</span>
                       <span className="text-xs font-bold text-white">Neural Sentinel &amp; Pattern Detection</span>
-                      <span className="text-[9px] bg-emerald-950 text-emerald-400 px-1.5 py-0.2 rounded border border-emerald-800 font-bold">100 Hz ACTIVE</span>
+                      <span className="text-[9px] bg-emerald-950 text-emerald-400 px-1.5 py-0.2 rounded border-emerald-800 font-bold">100 Hz ACTIVE</span>
                     </div>
                     <p className="text-[10px] text-slate-400 font-mono mt-0.5">
                       ตรวจจับความผิดปกติเชิงรุก ครอบคลุม CH-00 ถึง CH-17 พร้อมการพยากรณ์ธรรมาภิบาลล่วงหน้า 24 ชม.
@@ -464,16 +464,16 @@ export const Chamber17ApexMatrix: React.FC<Chamber17ApexMatrixProps> = ({
                 </div>
 
                 <div className="flex items-center gap-2">
-                  <span className="text-[10px] font-bold text-purple-300 bg-purple-950 px-2 py-1 rounded border border-purple-800">
+                  <span className="text-[10px] font-bold text-purple-300 bg-purple-950 px-2 py-1 rounded border-purple-800">
                     Open Sentinel &rarr;
                   </span>
                 </div>
               </div>
 
               {/* Active Chamber Quick Insight Bar */}
-              <div className="mt-4 p-3.5 bg-slate-950 rounded-xl border border-slate-800 flex flex-wrap items-center justify-between gap-3 text-xs font-mono">
+              <div className="mt-4 p-3.5 bg-slate-950 rounded-xl border-slate-800 flex flex-wrap items-center justify-between gap-3 text-xs font-mono">
                 <div className="flex items-center gap-2">
-                  <span className="px-2 py-0.5 rounded bg-cyan-950 text-cyan-400 font-bold border border-cyan-800">
+                  <span className="px-2 py-0.5 rounded bg-cyan-950 text-cyan-400 font-bold border-cyan-800">
                     {activeData.id}
                   </span>
                   <span className="font-bold text-white">{activeData.name}</span>
@@ -485,7 +485,7 @@ export const Chamber17ApexMatrix: React.FC<Chamber17ApexMatrixProps> = ({
                     <button
                       type="button"
                       onClick={() => setActiveTab('chamber15_d3_entropy')}
-                      className="px-2.5 py-1 bg-cyan-950 hover:bg-cyan-900 text-cyan-300 border border-cyan-700 rounded-lg text-[10px] font-bold cursor-pointer"
+                      className="px-2.5 py-1 bg-cyan-950 hover:bg-cyan-900 text-cyan-300 border-cyan-700 rounded-lg text-[10px] font-bold cursor-pointer"
                     >
                       Open D3 Entropy &rarr;
                     </button>
@@ -494,7 +494,7 @@ export const Chamber17ApexMatrix: React.FC<Chamber17ApexMatrixProps> = ({
                     <button
                       type="button"
                       onClick={() => setActiveTab('chamber18_sentinel')}
-                      className="px-2.5 py-1 bg-purple-950 hover:bg-purple-900 text-purple-300 border border-purple-700 rounded-lg text-[10px] font-bold cursor-pointer"
+                      className="px-2.5 py-1 bg-purple-950 hover:bg-purple-900 text-purple-300 border-purple-700 rounded-lg text-[10px] font-bold cursor-pointer"
                     >
                       Open Sentinel &rarr;
                     </button>
@@ -506,7 +506,7 @@ export const Chamber17ApexMatrix: React.FC<Chamber17ApexMatrixProps> = ({
             </div>
 
             {/* Right 1 Col: Chamber 16 3D Quantum Visualizer */}
-            <div className="bg-slate-900/80 border border-slate-800 rounded-2xl p-5 shadow-xl flex flex-col justify-between">
+            <div className="bg-slate-900/80 border-slate-800 rounded-2xl p-5 shadow-xl flex flex-col justify-between">
               <div>
                 <div className="flex items-center justify-between border-b border-slate-800 pb-3 mb-3">
                   <div className="flex items-center gap-2">
@@ -516,7 +516,7 @@ export const Chamber17ApexMatrix: React.FC<Chamber17ApexMatrixProps> = ({
                     </h3>
                   </div>
                   <div className="flex items-center gap-2">
-                    <span className="text-[10px] font-mono px-2 py-0.5 rounded bg-amber-950 text-amber-400 border border-amber-800">
+                    <span className="text-[10px] font-mono px-2 py-0.5 rounded bg-amber-950 text-amber-400 border-amber-800">
                       10 FPS
                     </span>
                     <button
@@ -531,29 +531,29 @@ export const Chamber17ApexMatrix: React.FC<Chamber17ApexMatrixProps> = ({
                 </div>
 
                 {/* 3D Canvas Box (Isolated UI Buffer) */}
-                <div className="relative bg-slate-950 rounded-xl overflow-hidden border border-slate-800 flex items-center justify-center min-h-[260px] h-[260px]">
+                <div className="relative bg-slate-950 rounded-xl overflow-hidden border-slate-800 flex items-center justify-center min-h-[260px] h-[260px]">
                   <canvas ref={canvasRef} className="w-full h-full absolute inset-0 cursor-grab active:cursor-grabbing"></canvas>
                   
-                  <div className="absolute top-2.5 left-2.5 bg-black/70 backdrop-blur px-2 py-1 rounded border border-slate-800 text-[10px] font-mono text-cyan-300">
+                  <div className="absolute top-2.5 left-2.5 bg-black/70 backdrop-blur px-2 py-1 rounded border-slate-800 text-[10px] font-mono text-cyan-300">
                     Omega Core #849202 • Torus Ring
                   </div>
 
-                  <div className="absolute bottom-2.5 left-2.5 bg-black/70 backdrop-blur px-2 py-1 rounded border border-slate-800 text-[10px] font-mono text-amber-300">
+                  <div className="absolute bottom-2.5 left-2.5 bg-black/70 backdrop-blur px-2 py-1 rounded border-slate-800 text-[10px] font-mono text-amber-300">
                     410 Nodes (400 RWA + 10 HSM)
                   </div>
 
-                  <div className="absolute bottom-2.5 right-2.5 bg-black/70 backdrop-blur px-2 py-1 rounded border border-slate-800 text-[10px] font-mono text-emerald-400">
+                  <div className="absolute bottom-2.5 right-2.5 bg-black/70 backdrop-blur px-2 py-1 rounded border-slate-800 text-[10px] font-mono text-emerald-400">
                     GPU Accelerated
                   </div>
                 </div>
 
                 {/* Metrics Grid */}
                 <div className="mt-3.5 grid grid-cols-2 gap-2 text-xs font-mono">
-                  <div className="bg-slate-950/80 p-2.5 rounded-lg border border-slate-800">
+                  <div className="bg-slate-950/80 p-2.5 rounded-lg border-slate-800">
                     <span className="text-slate-500 block text-[10px]">Crystal Symmetry</span>
                     <span className="text-amber-400 font-bold">Decagonal D10</span>
                   </div>
-                  <div className="bg-slate-950/80 p-2.5 rounded-lg border border-slate-800">
+                  <div className="bg-slate-950/80 p-2.5 rounded-lg border-slate-800">
                     <span className="text-slate-500 block text-[10px]">Isolated UI Buffer</span>
                     <span className="text-emerald-400 font-bold">SECURE / ZERO-DRIFT</span>
                   </div>
@@ -569,7 +569,7 @@ export const Chamber17ApexMatrix: React.FC<Chamber17ApexMatrixProps> = ({
           </div>
 
           {/* Sovereign Audit & Reality Sync Pipeline Log */}
-          <div className="bg-slate-900/80 border border-slate-800 rounded-2xl p-5 shadow-xl">
+          <div className="bg-slate-900/80 border-slate-800 rounded-2xl p-5 shadow-xl">
             <div className="flex items-center justify-between mb-3 border-b border-slate-800 pb-2">
               <div className="flex items-center gap-2">
                 <Activity className="w-4 h-4 text-emerald-400" />
@@ -582,7 +582,7 @@ export const Chamber17ApexMatrix: React.FC<Chamber17ApexMatrixProps> = ({
               </span>
             </div>
 
-            <div className="bg-slate-950 rounded-xl p-3 font-mono text-xs text-emerald-400 space-y-1.5 h-28 overflow-y-auto border border-slate-800">
+            <div className="bg-slate-950 rounded-xl p-3 font-mono text-xs text-emerald-400 space-y-1.5 h-28 overflow-y-auto border-slate-800">
               <div>[03:20:07 UTC] SYSTEM INIT: SSoT Kernel FROZEN v1.2 LTS successfully verified (Mutation Delta = 0, Baseline Drift = 0.00%).</div>
               <div>[03:20:10 UTC] CH-16 QUANTUM SYNC: GPU Accelerated canvas pipeline online (14,902 canonical seals loaded).</div>
               <div>[03:20:15 UTC] CH-17 APEX CONTROL: 6x3 Matrix Grid synchronized under Supreme Sovereign #EP-SOVEREIGN-01.</div>

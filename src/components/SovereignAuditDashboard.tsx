@@ -396,10 +396,10 @@ export const SovereignAuditDashboard: React.FC<{
       const data = payload[0].payload as SystemEntropyHeatmapTile;
       const color = getEntropyHeatmapColor(data.entropy);
       return (
-        <div className="p-3 rounded-xl bg-[#070a12] border border-[#06B6D4] shadow-2xl font-mono text-xs space-y-1.5 z-50 pointer-events-none">
+        <div className="p-3 rounded-xl bg-[#070a12] border-[#06B6D4] shadow-2xl font-mono text-xs space-y-1.5 z-50 pointer-events-none">
           <div className="flex items-center gap-2 border-b border-white/10 pb-1.5">
             <span className="font-bold text-white">{data.subsystem}</span>
-            <span className="px-1.5 py-0.2 rounded text-[10px] bg-cyan-950 text-cyan-300 border border-cyan-500/30">
+            <span className="px-1.5 py-0.2 rounded text-[10px] bg-cyan-950 text-cyan-300 border-cyan-500/30">
               {data.timeBucket}
             </span>
           </div>
@@ -422,7 +422,7 @@ export const SovereignAuditDashboard: React.FC<{
 
   return (
     <div
-      className={`w-full max-w-full overflow-hidden rounded-2xl bg-[#070a12] border border-[#06B6D4]/40 text-zinc-100 shadow-2xl relative font-sans ${className}`}
+      className={`w-full max-w-full overflow-hidden rounded-2xl bg-[#070a12] border-[#06B6D4]/40 text-zinc-100 shadow-2xl relative font-sans ${className}`}
       style={{
         boxShadow: '0 0 35px rgba(6, 182, 212, 0.12), inset 0 0 40px rgba(10, 15, 30, 0.9)',
       }}
@@ -440,16 +440,16 @@ export const SovereignAuditDashboard: React.FC<{
       <div className="relative z-10 p-3 sm:p-5 md:p-6 border-b border-[#06B6D4]/30 bg-[#0a0f1e] flex flex-col md:flex-row md:items-center justify-between gap-4">
         <div className="space-y-1">
           <div className="flex flex-wrap items-center gap-2">
-            <span className="px-2 py-0.5 rounded text-[11px] font-mono font-bold bg-[#070a12] text-[#06B6D4] border border-[#06B6D4]/50">
+            <span className="px-2 py-0.5 rounded text-[11px] font-mono font-bold bg-[#070a12] text-[#06B6D4] border-[#06B6D4]/50">
               🏛️ SOVEREIGN AUDIT DASHBOARD Ω∞
             </span>
-            <span className="px-2 py-0.5 rounded text-[11px] font-mono font-bold bg-[#070a12] text-[#D4AF37] border border-[#D4AF37]/50">
+            <span className="px-2 py-0.5 rounded text-[11px] font-mono font-bold bg-[#070a12] text-[#D4AF37] border-[#D4AF37]/50">
               💎 FROZEN v1.2 LTS
             </span>
-            <span className="px-2 py-0.5 rounded text-[11px] font-mono font-bold bg-[#070a12] text-emerald-400 border border-emerald-500/50">
+            <span className="px-2 py-0.5 rounded text-[11px] font-mono font-bold bg-[#070a12] text-emerald-400 border-emerald-500/50">
               👑 10/10 REAL_HSM
             </span>
-            <span className="px-2 py-0.5 rounded text-[11px] font-mono font-bold bg-[#070a12] text-white border border-white/20">
+            <span className="px-2 py-0.5 rounded text-[11px] font-mono font-bold bg-[#070a12] text-white border-white/20">
               🌐 Ω600_1000 LOCKED
             </span>
           </div>
@@ -477,7 +477,7 @@ export const SovereignAuditDashboard: React.FC<{
           <button
             onClick={handleRunDiagnostic}
             disabled={diagnosticRunning}
-            className="px-3 py-1.5 rounded-lg text-xs font-mono font-bold bg-[#070a12] text-[#D4AF37] border border-[#D4AF37]/60 hover:bg-[#D4AF37] hover:text-[#070a12] transition-all"
+            className="px-3 py-1.5 rounded-lg text-xs font-mono font-bold bg-[#070a12] text-[#D4AF37] border-[#D4AF37]/60 hover:bg-[#D4AF37] hover:text-[#070a12] transition-all"
           >
             {diagnosticRunning ? '⏳ VERIFYING...' : '🛡️ PROBE SSoT DRIFT'}
           </button>
@@ -485,7 +485,7 @@ export const SovereignAuditDashboard: React.FC<{
           <button
             onClick={handleRunFusion}
             disabled={fusionRunning}
-            className="px-3 py-1.5 rounded-lg text-xs font-mono font-bold bg-[#070a12] text-emerald-400 border border-emerald-500/60 hover:bg-emerald-500 hover:text-[#070a12] transition-all"
+            className="px-3 py-1.5 rounded-lg text-xs font-mono font-bold bg-[#070a12] text-emerald-400 border-emerald-500/60 hover:bg-emerald-500 hover:text-[#070a12] transition-all"
           >
             {fusionRunning ? '⏳ FUSING...' : '🌌 QUANTUM FUSION'}
           </button>
@@ -493,7 +493,7 @@ export const SovereignAuditDashboard: React.FC<{
           <button
             onClick={handleRunCommit}
             disabled={commitRunning}
-            className="px-3 py-1.5 rounded-lg text-xs font-mono font-bold bg-[#070a12] text-white border border-[#06B6D4]/80 hover:bg-[#06B6D4] hover:text-[#070a12] transition-all"
+            className="px-3 py-1.5 rounded-lg text-xs font-mono font-bold bg-[#070a12] text-white border-[#06B6D4]/80 hover:bg-[#06B6D4] hover:text-[#070a12] transition-all"
           >
             {commitRunning ? '⏳ SYNCING...' : '🚀 SOVEREIGN SYNC COMMIT'}
           </button>
@@ -501,7 +501,7 @@ export const SovereignAuditDashboard: React.FC<{
           {onClose && (
             <button
               onClick={onClose}
-              className="px-3 py-1.5 rounded-lg text-xs font-mono font-bold bg-[#070a12] text-zinc-400 border border-zinc-700 hover:text-white"
+              className="px-3 py-1.5 rounded-lg text-xs font-mono font-bold bg-[#070a12] text-zinc-400 border-zinc-700 hover:text-white"
             >
               ✕ CLOSE
             </button>
@@ -543,7 +543,7 @@ export const SovereignAuditDashboard: React.FC<{
           <div className="space-y-6">
             {/* Top Stat Matrix */}
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3">
-              <div className="p-4 rounded-xl bg-[#0a0f1e] border border-[#06B6D4]/30 space-y-1">
+              <div className="p-4 rounded-xl bg-[#0a0f1e] border-[#06B6D4]/30 space-y-1">
                 <div className="flex items-center justify-between text-xs text-zinc-400 font-mono">
                   <span>SYSTEM ENTROPY</span>
                   <span className="text-[#06B6D4]">26% - 78% SAFE</span>
@@ -552,7 +552,7 @@ export const SovereignAuditDashboard: React.FC<{
                   <span>{currentEntropy}%</span>
                   <span className="text-xs text-emerald-400 font-normal">STABILIZED</span>
                 </div>
-                <div className="w-full bg-[#070a12] h-2 rounded-full overflow-hidden border border-white/10">
+                <div className="w-full bg-[#070a12] h-2 rounded-full overflow-hidden border-white/10">
                   <div
                     className="bg-[#06B6D4] h-full transition-all duration-300"
                     style={{ width: `${currentEntropy}%` }}
@@ -560,7 +560,7 @@ export const SovereignAuditDashboard: React.FC<{
                 </div>
               </div>
 
-              <div className="p-4 rounded-xl bg-[#0a0f1e] border border-[#D4AF37]/30 space-y-1">
+              <div className="p-4 rounded-xl bg-[#0a0f1e] border-[#D4AF37]/30 space-y-1">
                 <div className="flex items-center justify-between text-xs text-zinc-400 font-mono">
                   <span>CANONICAL SEALS</span>
                   <span className="text-[#D4AF37]">Ω600_1000</span>
@@ -574,7 +574,7 @@ export const SovereignAuditDashboard: React.FC<{
                 </p>
               </div>
 
-              <div className="p-4 rounded-xl bg-[#0a0f1e] border border-emerald-500/30 space-y-1">
+              <div className="p-4 rounded-xl bg-[#0a0f1e] border-emerald-500/30 space-y-1">
                 <div className="flex items-center justify-between text-xs text-zinc-400 font-mono">
                   <span>SSoT DRIFT STATUS</span>
                   <span className="text-emerald-400">ZERO DRIFT</span>
@@ -587,7 +587,7 @@ export const SovereignAuditDashboard: React.FC<{
                 </p>
               </div>
 
-              <div className="p-4 rounded-xl bg-[#0a0f1e] border border-purple-500/30 space-y-1">
+              <div className="p-4 rounded-xl bg-[#0a0f1e] border-purple-500/30 space-y-1">
                 <div className="flex items-center justify-between text-xs text-zinc-400 font-mono">
                   <span>HSM QUORUM</span>
                   <span className="text-purple-300">14.98 mK</span>
@@ -602,7 +602,7 @@ export const SovereignAuditDashboard: React.FC<{
             </div>
 
             {/* Recharts-Based System Entropy Heatmap & Telemetry Section (26% Cyan to 78% Violet) */}
-            <div className="p-4 sm:p-5 rounded-2xl bg-[#0a0f1e] border border-[#06B6D4]/50 space-y-4 relative overflow-hidden max-[479px]:p-[12px] max-[479px]:space-y-3">
+            <div className="p-4 sm:p-5 rounded-2xl bg-[#0a0f1e] border-[#06B6D4]/50 space-y-4 relative overflow-hidden max-[479px]:p-[12px] max-[479px]:space-y-3">
               {/* Header & Mode Switcher */}
               <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 border-b border-white/10 pb-3 max-[479px]:gap-2">
                 <div className="space-y-0.5">
@@ -611,10 +611,10 @@ export const SovereignAuditDashboard: React.FC<{
                       <span>🗺️</span>
                       <span>SYSTEM ENTROPY HEATMAP</span>
                     </span>
-                    <span className="px-2 py-0.5 rounded text-[10px] font-mono bg-[#070a12] text-[#06B6D4] border border-[#06B6D4]/40">
+                    <span className="px-2 py-0.5 rounded text-[10px] font-mono bg-[#070a12] text-[#06B6D4] border-[#06B6D4]/40">
                       26% (CYAN) — 78% (VIOLET)
                     </span>
-                    <span className="px-2 py-0.5 rounded text-[10px] font-mono bg-[#070a12] text-[#D4AF37] border border-[#D4AF37]/40">
+                    <span className="px-2 py-0.5 rounded text-[10px] font-mono bg-[#070a12] text-[#D4AF37] border-[#D4AF37]/40">
                       RECHARTS SCATTER
                     </span>
                   </div>
@@ -624,7 +624,7 @@ export const SovereignAuditDashboard: React.FC<{
                 </div>
 
                 {/* Visualizer Mode Toggle */}
-                <div className="flex items-center gap-1.5 bg-[#070a12] p-1 rounded-xl border border-white/10 max-[479px]:w-full max-[479px]:grid max-[479px]:grid-cols-2">
+                <div className="flex items-center gap-1.5 bg-[#070a12] p-1 rounded-xl border-white/10 max-[479px]:w-full max-[479px]:grid max-[479px]:grid-cols-2">
                   <button
                     onClick={() => {
                       playTone(680, 0.02);
@@ -632,7 +632,7 @@ export const SovereignAuditDashboard: React.FC<{
                     }}
                     className={`px-3 py-1.5 rounded-lg text-xs font-mono font-bold transition-all text-center ${
                       entropyVisualMode === 'HEATMAP'
-                        ? 'bg-[#0a0f1e] text-[#06B6D4] border border-[#06B6D4] shadow-[0_0_12px_rgba(6,182,212,0.3)]'
+                        ? 'bg-[#0a0f1e] text-[#06B6D4] border-[#06B6D4] shadow-[0_0_12px_rgba(6,182,212,0.3)]'
                         : 'text-zinc-400 hover:text-white'
                     }`}
                   >
@@ -645,7 +645,7 @@ export const SovereignAuditDashboard: React.FC<{
                     }}
                     className={`px-3 py-1.5 rounded-lg text-xs font-mono font-bold transition-all text-center ${
                       entropyVisualMode === 'WAVE'
-                        ? 'bg-[#0a0f1e] text-[#D4AF37] border border-[#D4AF37] shadow-[0_0_12px_rgba(212,175,55,0.3)]'
+                        ? 'bg-[#0a0f1e] text-[#D4AF37] border-[#D4AF37] shadow-[0_0_12px_rgba(212,175,55,0.3)]'
                         : 'text-zinc-400 hover:text-white'
                     }`}
                   >
@@ -691,7 +691,7 @@ export const SovereignAuditDashboard: React.FC<{
                   </div>
 
                   {/* Heatmap Color Scale Legend: 26% (Cyan) -> 78% (Violet) */}
-                  <div className="p-3 rounded-xl bg-[#070a12] border border-white/10 flex flex-col sm:flex-row sm:items-center justify-between gap-3 max-[479px]:p-[12px] max-[479px]:gap-2">
+                  <div className="p-3 rounded-xl bg-[#070a12] border-white/10 flex flex-col sm:flex-row sm:items-center justify-between gap-3 max-[479px]:p-[12px] max-[479px]:gap-2">
                     <div className="flex items-center gap-2 text-xs font-mono">
                       <span className="text-zinc-400 font-bold">SPECTRUM SCALE:</span>
                       <span className="text-[#06B6D4] font-bold">26% Cyan (#06B6D4)</span>
@@ -723,16 +723,16 @@ export const SovereignAuditDashboard: React.FC<{
 
                   {/* Selected Heatmap Tile Inspection Card */}
                   {selectedHeatmapTile && (
-                    <div className="p-3.5 rounded-xl bg-[#070a12] border border-[#06B6D4] flex flex-col sm:flex-row sm:items-center justify-between gap-3 font-mono text-xs animate-in fade-in duration-200 max-[479px]:p-[12px]">
+                    <div className="p-3.5 rounded-xl bg-[#070a12] border-[#06B6D4] flex flex-col sm:flex-row sm:items-center justify-between gap-3 font-mono text-xs animate-in fade-in duration-200 max-[479px]:p-[12px]">
                       <div className="space-y-1">
                         <div className="flex items-center gap-2">
                           <span className="font-bold text-white text-sm">
                             {selectedHeatmapTile.subsystem}
                           </span>
-                          <span className="px-2 py-0.5 rounded text-[10px] bg-cyan-950 text-cyan-300 border border-cyan-500/40">
+                          <span className="px-2 py-0.5 rounded text-[10px] bg-cyan-950 text-cyan-300 border-cyan-500/40">
                             {selectedHeatmapTile.timeBucket}
                           </span>
-                          <span className="px-2 py-0.5 rounded text-[10px] bg-emerald-950 text-emerald-300 border border-emerald-500/40">
+                          <span className="px-2 py-0.5 rounded text-[10px] bg-emerald-950 text-emerald-300 border-emerald-500/40">
                             {selectedHeatmapTile.status}
                           </span>
                         </div>
@@ -814,7 +814,7 @@ export const SovereignAuditDashboard: React.FC<{
 
             {/* Verification Panel & SSoT Lock Info */}
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-              <div className="p-4 rounded-xl bg-[#0a0f1e] border border-white/10 space-y-3 font-mono text-xs">
+              <div className="p-4 rounded-xl bg-[#0a0f1e] border-white/10 space-y-3 font-mono text-xs">
                 <h3 className="font-bold text-white flex items-center gap-2">
                   <span>🔒 SSoT CANONICAL ANCHOR SPECIFICATION</span>
                 </h3>
@@ -845,7 +845,7 @@ export const SovereignAuditDashboard: React.FC<{
               <div className="space-y-3">
                 <VerificationPanel status="VERIFIED" />
                 {commitResult && (
-                  <div className="p-3 rounded-xl bg-[#070a12] border border-emerald-500/50 font-mono text-xs text-zinc-300 space-y-1">
+                  <div className="p-3 rounded-xl bg-[#070a12] border-emerald-500/50 font-mono text-xs text-zinc-300 space-y-1">
                     <div className="flex items-center justify-between text-emerald-400 font-bold">
                       <span>✅ RECENT SOVEREIGN SYNC COMMIT</span>
                       <span>{commitResult.status}</span>
@@ -874,7 +874,7 @@ export const SovereignAuditDashboard: React.FC<{
                   Every chamber operates under 10/10 REAL_HSM Quorum and Zero Mutation Authority constraint.
                 </p>
               </div>
-              <div className="text-xs font-mono text-emerald-400 px-3 py-1 rounded bg-[#0a0f1e] border border-emerald-500/40">
+              <div className="text-xs font-mono text-emerald-400 px-3 py-1 rounded bg-[#0a0f1e] border-emerald-500/40">
                 STATUS: 18 / 18 ALL GREEN (100% PASSED)
               </div>
             </div>
@@ -895,7 +895,7 @@ export const SovereignAuditDashboard: React.FC<{
                 >
                   <div className="flex items-center justify-between">
                     <span className="text-lg">{ch.emoji}</span>
-                    <span className="text-[10px] font-mono px-1.5 py-0.5 rounded bg-[#070a12] text-emerald-400 border border-emerald-500/30">
+                    <span className="text-[10px] font-mono px-1.5 py-0.5 rounded bg-[#070a12] text-emerald-400 border-emerald-500/30">
                       {ch.status}
                     </span>
                   </div>
@@ -913,7 +913,7 @@ export const SovereignAuditDashboard: React.FC<{
 
             {/* Selected Chamber Detail Modal / Callout */}
             {selectedChamber && (
-              <div className="p-4 rounded-xl bg-[#0a0f1e] border border-[#06B6D4] space-y-3 font-mono text-xs">
+              <div className="p-4 rounded-xl bg-[#0a0f1e] border-[#06B6D4] space-y-3 font-mono text-xs">
                 <div className="flex items-center justify-between border-b border-white/10 pb-2">
                   <div className="flex items-center gap-2">
                     <span className="text-2xl">{selectedChamber.emoji}</span>
@@ -926,26 +926,26 @@ export const SovereignAuditDashboard: React.FC<{
                   </div>
                   <button
                     onClick={() => setSelectedChamber(null)}
-                    className="px-2 py-1 rounded bg-[#070a12] text-zinc-400 border border-zinc-700 hover:text-white"
+                    className="px-2 py-1 rounded bg-[#070a12] text-zinc-400 border-zinc-700 hover:text-white"
                   >
                     ✕ CLOSE
                   </button>
                 </div>
                 <div className="grid grid-cols-1 md:grid-cols-3 gap-3 text-zinc-300">
-                  <div className="p-2.5 rounded bg-[#070a12] border border-white/5">
+                  <div className="p-2.5 rounded bg-[#070a12] border-white/5">
                     <span className="text-zinc-400 block text-[10px]">VERIFICATION STATUS</span>
                     <span className="text-emerald-400 font-bold">{selectedChamber.status}</span>
                   </div>
-                  <div className="p-2.5 rounded bg-[#070a12] border border-white/5">
+                  <div className="p-2.5 rounded bg-[#070a12] border-white/5">
                     <span className="text-zinc-400 block text-[10px]">INTERNAL LATENCY</span>
                     <span className="text-[#06B6D4] font-bold">{selectedChamber.latency}</span>
                   </div>
-                  <div className="p-2.5 rounded bg-[#070a12] border border-white/5">
+                  <div className="p-2.5 rounded bg-[#070a12] border-white/5">
                     <span className="text-zinc-400 block text-[10px]">CANONICAL BINDING</span>
                     <span className="text-[#D4AF37] font-bold">14,902 SEALS (10/10 HSM)</span>
                   </div>
                 </div>
-                <p className="text-zinc-300 leading-relaxed bg-[#070a12] p-3 rounded border border-white/5">
+                <p className="text-zinc-300 leading-relaxed bg-[#070a12] p-3 rounded border-white/5">
                   {selectedChamber.details}
                 </p>
               </div>
@@ -970,17 +970,17 @@ export const SovereignAuditDashboard: React.FC<{
               </div>
               <button
                 onClick={() => setLogs([])}
-                className="px-2.5 py-1 text-xs rounded bg-[#0a0f1e] border border-white/20 hover:border-white/40 text-zinc-300"
+                className="px-2.5 py-1 text-xs rounded bg-[#0a0f1e] border-white/20 hover:border-white/40 text-zinc-300"
               >
                 Clear View
               </button>
             </div>
 
-            <div className="p-2 rounded-xl bg-[#0a0f1e] border border-white/10 max-h-96 overflow-y-auto space-y-1.5 text-xs">
+            <div className="p-2 rounded-xl bg-[#0a0f1e] border-white/10 max-h-96 overflow-y-auto space-y-1.5 text-xs">
               {logs.map((log) => (
                 <div
                   key={log.id}
-                  className="p-2.5 rounded-lg bg-[#070a12] border border-white/5 flex flex-col sm:flex-row sm:items-center justify-between gap-2 hover:border-white/20 transition-all"
+                  className="p-2.5 rounded-lg bg-[#070a12] border-white/5 flex flex-col sm:flex-row sm:items-center justify-between gap-2 hover:border-white/20 transition-all"
                 >
                   <div className="space-y-0.5">
                     <div className="flex items-center gap-2 text-[11px]">
@@ -989,10 +989,10 @@ export const SovereignAuditDashboard: React.FC<{
                       <span
                         className={`px-1.5 py-0.2 rounded text-[10px] font-bold ${
                           log.status === 'PASS'
-                            ? 'bg-emerald-950 text-emerald-300 border border-emerald-500/40'
+                            ? 'bg-emerald-950 text-emerald-300 border-emerald-500/40'
                             : log.status === 'LOCKED'
-                            ? 'bg-purple-950 text-purple-300 border border-purple-500/40'
-                            : 'bg-cyan-950 text-cyan-300 border border-cyan-500/40'
+                            ? 'bg-purple-950 text-purple-300 border-purple-500/40'
+                            : 'bg-cyan-950 text-cyan-300 border-cyan-500/40'
                         }`}
                       >
                         {log.status}
@@ -1004,7 +1004,7 @@ export const SovereignAuditDashboard: React.FC<{
                     <span className="text-[10px] text-zinc-500">{log.hash}</span>
                     <button
                       onClick={() => handleCopy(log.hash, log.id)}
-                      className="px-2 py-0.5 rounded bg-[#0a0f1e] text-[10px] text-zinc-400 border border-white/10 hover:text-white"
+                      className="px-2 py-0.5 rounded bg-[#0a0f1e] text-[10px] text-zinc-400 border-white/10 hover:text-white"
                     >
                       {copiedKey === log.id ? 'COPIED' : 'HASH'}
                     </button>
@@ -1020,7 +1020,7 @@ export const SovereignAuditDashboard: React.FC<{
         {/* ============================================================ */}
         {activeTab === 'diagnostics' && (
           <div className="space-y-4 font-mono text-xs">
-            <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 p-4 rounded-xl bg-[#0a0f1e] border border-[#D4AF37]/40">
+            <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 p-4 rounded-xl bg-[#0a0f1e] border-[#D4AF37]/40">
               <div className="space-y-1">
                 <h3 className="text-sm font-bold text-white flex items-center gap-2">
                   <span>🔬 SSoT MINOR DRIFT & GUARDRAIL SIMULATION ENGINE</span>
@@ -1039,7 +1039,7 @@ export const SovereignAuditDashboard: React.FC<{
             </div>
 
             {diagnosticReport ? (
-              <div className="p-4 rounded-xl bg-[#0a0f1e] border border-emerald-500/40 space-y-3">
+              <div className="p-4 rounded-xl bg-[#0a0f1e] border-emerald-500/40 space-y-3">
                 <div className="flex items-center justify-between border-b border-white/10 pb-2">
                   <span className="font-bold text-emerald-400 text-sm">
                     {diagnosticReport.guardrailPassed
@@ -1050,25 +1050,25 @@ export const SovereignAuditDashboard: React.FC<{
                 </div>
 
                 <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3 text-zinc-300">
-                  <div className="p-3 rounded bg-[#070a12] border border-white/5">
+                  <div className="p-3 rounded bg-[#070a12] border-white/5">
                     <span className="text-zinc-500 block text-[10px]">PROBE ID</span>
                     <span className="text-white font-bold">{diagnosticReport.id}</span>
                   </div>
-                  <div className="p-3 rounded bg-[#070a12] border border-white/5">
+                  <div className="p-3 rounded bg-[#070a12] border-white/5">
                     <span className="text-zinc-500 block text-[10px]">TARGET PROPERTY</span>
                     <span className="text-[#06B6D4] font-bold">{diagnosticReport.targetField}</span>
                   </div>
-                  <div className="p-3 rounded bg-[#070a12] border border-white/5">
+                  <div className="p-3 rounded bg-[#070a12] border-white/5">
                     <span className="text-zinc-500 block text-[10px]">SIMULATED DRIFT</span>
                     <span className="text-[#D4AF37] font-bold">{diagnosticReport.simulatedDriftDelta}</span>
                   </div>
-                  <div className="p-3 rounded bg-[#070a12] border border-white/5">
+                  <div className="p-3 rounded bg-[#070a12] border-white/5">
                     <span className="text-zinc-500 block text-[10px]">MUTATION DELTA</span>
                     <span className="text-emerald-400 font-bold">Δ 0.00% (STRICT 0)</span>
                   </div>
                 </div>
 
-                <div className="p-3 rounded bg-[#070a12] border border-white/10 space-y-1">
+                <div className="p-3 rounded bg-[#070a12] border-white/10 space-y-1">
                   <div className="flex items-center justify-between text-[11px]">
                     <span className="text-zinc-400">Intercepting Guardrail:</span>
                     <span className="text-[#06B6D4] font-bold">WriteFirewallEngine</span>
@@ -1083,7 +1083,7 @@ export const SovereignAuditDashboard: React.FC<{
                 </div>
               </div>
             ) : (
-              <div className="p-8 text-center rounded-xl bg-[#0a0f1e] border border-white/10 text-zinc-400">
+              <div className="p-8 text-center rounded-xl bg-[#0a0f1e] border-white/10 text-zinc-400">
                 No diagnostic drift report recorded yet. Click "TRIGGER DRIFT PROBE" to execute.
               </div>
             )}

@@ -94,7 +94,7 @@ export const MultiTenantNamespaceMatrix: React.FC = () => {
       {/* Header */}
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 border-b border-cyan-500/20 pb-4">
         <div className="flex items-center gap-3">
-          <div className="w-11 h-11 rounded-2xl bg-cyan-500/20 border border-cyan-400 text-cyan-300 flex items-center justify-center shrink-0 shadow-[0_0_20px_rgba(6,182,212,0.3)]">
+          <div className="w-11 h-11 rounded-2xl bg-cyan-500/20 border-cyan-400 text-cyan-300 flex items-center justify-center shrink-0 shadow-[0_0_20px_rgba(6,182,212,0.3)]">
             <Building2 className="w-5 h-5" />
           </div>
           <div>
@@ -102,7 +102,7 @@ export const MultiTenantNamespaceMatrix: React.FC = () => {
               <h3 className="text-base font-bold text-cyan-100 font-serif">
                 MODULE 3: MULTI-TENANT HARDWARE ISOLATION MATRIX
               </h3>
-              <span className="text-[10px] px-2 py-0.5 rounded bg-cyan-500/20 text-cyan-300 border border-cyan-400/40 font-bold">
+              <span className="text-[10px] px-2 py-0.5 rounded bg-cyan-500/20 text-cyan-300 border-cyan-400/40 font-bold">
                 PHYSICAL HARDWARE SILOS
               </span>
             </div>
@@ -112,7 +112,7 @@ export const MultiTenantNamespaceMatrix: React.FC = () => {
           </div>
         </div>
 
-        <span className="text-[10px] px-3 py-1 rounded-xl bg-emerald-500/20 text-emerald-300 border border-emerald-500/50 font-bold self-start sm:self-auto">
+        <span className="text-[10px] px-3 py-1 rounded-xl bg-emerald-500/20 text-emerald-300 border-emerald-500/50 font-bold self-start sm:self-auto">
           CROSS-TENANT INHERITANCE: BLOCKED
         </span>
       </div>
@@ -133,7 +133,7 @@ export const MultiTenantNamespaceMatrix: React.FC = () => {
             >
               <div className="flex items-center justify-between">
                 <span className="text-xs font-bold text-white font-mono">{t.tenantId}</span>
-                <span className="text-[9px] px-2 py-0.5 rounded bg-emerald-500/20 text-emerald-300 border border-emerald-500/40 font-bold">
+                <span className="text-[9px] px-2 py-0.5 rounded bg-emerald-500/20 text-emerald-300 border-emerald-500/40 font-bold">
                   {t.status}
                 </span>
               </div>
@@ -145,7 +145,7 @@ export const MultiTenantNamespaceMatrix: React.FC = () => {
       </div>
 
       {/* Detailed Tenant Inspector */}
-      <div className="p-5 rounded-2xl bg-black/70 border border-cyan-500/30 space-y-4">
+      <div className="p-5 rounded-2xl bg-black/70 border-cyan-500/30 space-y-4">
         <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2 border-b border-white/5 pb-3">
           <div className="flex items-center gap-2.5">
             <Server className="w-4 h-4 text-cyan-400" />
@@ -154,7 +154,7 @@ export const MultiTenantNamespaceMatrix: React.FC = () => {
             </h4>
           </div>
           <div className="flex items-center gap-2">
-            <span className="text-[10px] px-2.5 py-0.5 rounded bg-rose-500/20 text-rose-300 border border-rose-500/40 font-bold flex items-center gap-1">
+            <span className="text-[10px] px-2.5 py-0.5 rounded bg-rose-500/20 text-rose-300 border-rose-500/40 font-bold flex items-center gap-1">
               <Ban className="w-3 h-3 text-rose-400" />
               <span>CROSS-TENANT PROMOTION: BLOCKED</span>
             </span>
@@ -162,7 +162,7 @@ export const MultiTenantNamespaceMatrix: React.FC = () => {
         </div>
 
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3 text-xs">
-          <div className="p-3 rounded-xl bg-zinc-900/70 border border-white/5 space-y-1">
+          <div className="p-3 rounded-xl bg-zinc-900/70 border-white/5 space-y-1">
             <div className="text-[10px] text-zinc-500 font-bold flex items-center gap-1">
               <Shield className="w-3 h-3 text-cyan-400" />
               ISOLATION MODE
@@ -172,7 +172,7 @@ export const MultiTenantNamespaceMatrix: React.FC = () => {
             </div>
           </div>
 
-          <div className="p-3 rounded-xl bg-zinc-900/70 border border-white/5 space-y-1">
+          <div className="p-3 rounded-xl bg-zinc-900/70 border-white/5 space-y-1">
             <div className="text-[10px] text-zinc-500 font-bold flex items-center gap-1">
               <Key className="w-3 h-3 text-amber-400" />
               KEY FINGERPRINT
@@ -182,7 +182,7 @@ export const MultiTenantNamespaceMatrix: React.FC = () => {
             </div>
           </div>
 
-          <div className="p-3 rounded-xl bg-zinc-900/70 border border-white/5 space-y-1">
+          <div className="p-3 rounded-xl bg-zinc-900/70 border-white/5 space-y-1">
             <div className="text-[10px] text-zinc-500 font-bold flex items-center gap-1">
               <HardDrive className="w-3 h-3 text-purple-400" />
               QUOTA TELEMETRY
@@ -192,7 +192,7 @@ export const MultiTenantNamespaceMatrix: React.FC = () => {
             </div>
           </div>
 
-          <div className="p-3 rounded-xl bg-zinc-900/70 border border-white/5 space-y-1">
+          <div className="p-3 rounded-xl bg-zinc-900/70 border-white/5 space-y-1">
             <div className="text-[10px] text-zinc-500 font-bold flex items-center gap-1">
               <Lock className="w-3 h-3 text-emerald-400" />
               MUTATION AUTHORITY
@@ -204,7 +204,7 @@ export const MultiTenantNamespaceMatrix: React.FC = () => {
         </div>
 
         {/* Tenant Rule 9 Compliance Banner */}
-        <div className="p-3 rounded-xl bg-cyan-950/40 border border-cyan-500/30 text-[10px] text-cyan-200 space-y-1">
+        <div className="p-3 rounded-xl bg-cyan-950/40 border-cyan-500/30 text-[10px] text-cyan-200 space-y-1">
           <strong className="text-white">Rule 9 Tenant Isolation Policy Enforced:</strong> Every piece of evidence
           ingested under <span className="font-bold text-cyan-300">`{currentTenant.tenantId}`</span> remains strictly
           bound to its namespace silo. No cross-tenant promotion, no global canonical write, and zero leakage to other

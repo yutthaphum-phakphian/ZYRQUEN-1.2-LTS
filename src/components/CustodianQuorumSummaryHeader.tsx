@@ -42,7 +42,7 @@ export const CustodianQuorumSummaryHeader: React.FC<CustodianQuorumSummaryHeader
           <div className="text-base sm:text-lg font-bold text-white flex items-center gap-3 flex-wrap">
             <span className="text-emerald-400 font-extrabold">{realHsmSignedCount} / {totalSlots}</span>
             <span className="text-zinc-200">REAL HSM SIGNED</span>
-            <span className="text-emerald-400 font-mono tracking-widest text-sm sm:text-base bg-black/80 px-2.5 py-0.5 rounded-lg border border-emerald-500/30">
+            <span className="text-emerald-400 font-mono tracking-widest text-sm sm:text-base bg-black/80 px-2.5 py-0.5 rounded-lg border-emerald-500/30">
               {visualProgressBar}
             </span>
           </div>
@@ -83,13 +83,13 @@ export const CustodianQuorumSummaryHeader: React.FC<CustodianQuorumSummaryHeader
 
       {/* Metrics Row */}
       <div className="grid grid-cols-2 sm:grid-cols-4 gap-3 text-[11px] pt-1">
-        <div className="p-3 rounded-xl bg-black/60 border border-white/10 space-y-0.5">
+        <div className="p-3 rounded-xl bg-black/60 border-white/10 space-y-0.5">
           <div className="text-zinc-400 text-[10px]">REQUIRED THRESHOLD</div>
           <div className="text-white font-bold text-sm">{requiredQuorum} / {totalSlots} HSMs</div>
           <div className="text-[10px] text-zinc-500">Immutable ETDA / Sovereign Gate</div>
         </div>
 
-        <div className="p-3 rounded-xl bg-black/60 border border-white/10 space-y-0.5">
+        <div className="p-3 rounded-xl bg-black/60 border-white/10 space-y-0.5">
           <div className="text-zinc-400 text-[10px]">REMAINING PROOFS NEEDED</div>
           <div className={`font-bold text-sm ${remainingCount > 0 ? 'text-amber-400' : 'text-emerald-400'}`}>
             {remainingCount} REAL HSM {remainingCount === 1 ? 'Proof' : 'Proofs'}
@@ -99,7 +99,7 @@ export const CustodianQuorumSummaryHeader: React.FC<CustodianQuorumSummaryHeader
           </div>
         </div>
 
-        <div className="p-3 rounded-xl bg-black/60 border border-white/10 space-y-0.5">
+        <div className="p-3 rounded-xl bg-black/60 border-white/10 space-y-0.5">
           <div className="text-zinc-400 text-[10px]">AGGREGATE STATUS</div>
           <div className={`font-bold text-sm ${isQuorumSatisfied ? 'text-emerald-400' : 'text-amber-400'}`}>
             {aggregateStatus}
@@ -107,7 +107,7 @@ export const CustodianQuorumSummaryHeader: React.FC<CustodianQuorumSummaryHeader
           <div className="text-[10px] text-zinc-500">Derived strictly from Real HSMs</div>
         </div>
 
-        <div className="p-3 rounded-xl bg-rose-950/20 border border-rose-500/30 space-y-0.5">
+        <div className="p-3 rounded-xl bg-rose-950/20 border-rose-500/30 space-y-0.5">
           <div className="text-rose-400 text-[10px] font-bold">PROMOTION CIRCUIT</div>
           <div className="text-rose-300 font-bold text-sm">{promotionStatus}</div>
           <div className="text-[10px] text-zinc-500">Non-Bypassable Fail-Closed Invariant</div>

@@ -403,7 +403,7 @@ export const ForensicClosureControlPlane: React.FC = () => {
             <button
               onClick={handleExportForensicClosureReport}
               disabled={isExportingReport}
-              className="px-4 py-2 rounded-xl bg-gradient-to-r from-amber-500/20 via-cyan-500/20 to-violet-500/20 hover:from-amber-500/30 hover:to-cyan-500/30 border border-amber-400/50 text-amber-200 font-bold text-xs flex items-center gap-2 transition-all shadow-[0_0_15px_rgba(245,158,11,0.2)] cursor-pointer"
+              className="px-4 py-2 rounded-xl bg-gradient-to-r from-amber-500/20 via-cyan-500/20 to-violet-500/20 hover:from-amber-500/30 hover:to-cyan-500/30 border-amber-400/50 text-amber-200 font-bold text-xs flex items-center gap-2 transition-all shadow-[0_0_15px_rgba(245,158,11,0.2)] cursor-pointer"
             >
               <Download className="w-3.5 h-3.5" />
               <span>{isExportingReport ? 'EXPORTING...' : 'EXPORT CLOSURE REPORT'}</span>
@@ -413,7 +413,7 @@ export const ForensicClosureControlPlane: React.FC = () => {
       </div>
 
       {/* 5-Stage Control-Plane Structural Diagram */}
-      <div className="p-6 rounded-[28px] bg-[#0b0e1a]/85 border border-white/10 space-y-6">
+      <div className="p-6 rounded-[28px] bg-[#0b0e1a]/85 border-white/10 space-y-6">
         <div className="flex flex-wrap items-center justify-between gap-3 border-b border-white/10 pb-4">
           <div>
             <h3 className="text-sm font-bold text-white flex items-center gap-2">
@@ -424,7 +424,7 @@ export const ForensicClosureControlPlane: React.FC = () => {
               End-to-End Control Plane: Frozen Core &rarr; Hardening v3 &rarr; Forensics &rarr; Quarantine &rarr; Promotion Firewall &rarr; Closure Gate
             </span>
           </div>
-          <span className="text-[11px] px-3 py-1 rounded bg-emerald-500/10 text-emerald-300 border border-emerald-500/20 font-bold">
+          <span className="text-[11px] px-3 py-1 rounded bg-emerald-500/10 text-emerald-300 border-emerald-500/20 font-bold">
             P0 SSoT INVARIANT: ZERO MUTATION
           </span>
         </div>
@@ -432,9 +432,9 @@ export const ForensicClosureControlPlane: React.FC = () => {
         {/* Vertical Stepper Tree Cards */}
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
           {/* Node 1: FROZEN CORE */}
-          <div className="p-4 rounded-2xl bg-gradient-to-br from-[#0c1322] to-black border border-cyan-500/40 space-y-2.5 relative">
+          <div className="p-4 rounded-2xl bg-gradient-to-br from-[#0c1322] to-black border-cyan-500/40 space-y-2.5 relative">
             <div className="flex items-center justify-between">
-              <span className="text-[10px] px-2 py-0.5 rounded bg-cyan-500/20 text-cyan-300 font-bold border border-cyan-500/40">
+              <span className="text-[10px] px-2 py-0.5 rounded bg-cyan-500/20 text-cyan-300 font-bold border-cyan-500/40">
                 1. 🔒 FROZEN CORE
               </span>
               <span className="text-emerald-400 text-[10px] font-bold">LOCKED</span>
@@ -450,9 +450,9 @@ export const ForensicClosureControlPlane: React.FC = () => {
           </div>
 
           {/* Node 2: HARDENING v3 */}
-          <div className="p-4 rounded-2xl bg-gradient-to-br from-[#120f1f] to-black border border-violet-500/40 space-y-2.5 relative">
+          <div className="p-4 rounded-2xl bg-gradient-to-br from-[#120f1f] to-black border-violet-500/40 space-y-2.5 relative">
             <div className="flex items-center justify-between">
-              <span className="text-[10px] px-2 py-0.5 rounded bg-violet-500/20 text-violet-300 font-bold border border-violet-500/40">
+              <span className="text-[10px] px-2 py-0.5 rounded bg-violet-500/20 text-violet-300 font-bold border-violet-500/40">
                 2. 🛡️ HARDENING v3
               </span>
               <span className="text-violet-300 text-[10px] font-bold">ENFORCED</span>
@@ -467,9 +467,9 @@ export const ForensicClosureControlPlane: React.FC = () => {
           </div>
 
           {/* Node 3: FORENSIC RECONCILIATION */}
-          <div className="p-4 rounded-2xl bg-gradient-to-br from-[#1b140a] to-black border border-amber-500/40 space-y-2.5 relative">
+          <div className="p-4 rounded-2xl bg-gradient-to-br from-[#1b140a] to-black border-amber-500/40 space-y-2.5 relative">
             <div className="flex items-center justify-between">
-              <span className="text-[10px] px-2 py-0.5 rounded bg-amber-500/20 text-amber-300 font-bold border border-amber-500/40">
+              <span className="text-[10px] px-2 py-0.5 rounded bg-amber-500/20 text-amber-300 font-bold border-amber-500/40">
                 3. 🔎 FORENSIC RECONCILIATION
               </span>
               <span className="text-amber-300 text-[10px] font-bold">UNRESOLVED</span>
@@ -484,31 +484,31 @@ export const ForensicClosureControlPlane: React.FC = () => {
           </div>
 
           {/* Node 4: QUARANTINE LEDGER */}
-          <div className="p-4 rounded-2xl bg-gradient-to-br from-[#1c0c0c] to-black border border-rose-500/40 space-y-2.5 relative">
+          <div className="p-4 rounded-2xl bg-gradient-to-br from-[#1c0c0c] to-black border-rose-500/40 space-y-2.5 relative">
             <div className="flex items-center justify-between">
-              <span className="text-[10px] px-2 py-0.5 rounded bg-rose-500/20 text-rose-300 font-bold border border-rose-500/40">
+              <span className="text-[10px] px-2 py-0.5 rounded bg-rose-500/20 text-rose-300 font-bold border-rose-500/40">
                 4. 🟡 5 QUARANTINED SEALS
               </span>
               <span className="text-rose-400 text-[10px] font-bold">ISOLATED</span>
             </div>
             <div className="space-y-1 text-[10px] text-zinc-300 font-mono">
-              <div className="p-1 rounded bg-black/40 border border-white/5 flex justify-between">
+              <div className="p-1 rounded bg-black/40 border-white/5 flex justify-between">
                 <span className="text-amber-300 font-bold">#14,903</span>
                 <span className="text-zinc-400 truncate max-w-[170px]">Post-Epoch Emission (Height Mismatch)</span>
               </div>
-              <div className="p-1 rounded bg-black/40 border border-white/5 flex justify-between">
+              <div className="p-1 rounded bg-black/40 border-white/5 flex justify-between">
                 <span className="text-amber-300 font-bold">#14,904</span>
                 <span className="text-zinc-400 truncate max-w-[170px]">Replay Candidate (Duplicate Digest)</span>
               </div>
-              <div className="p-1 rounded bg-black/40 border border-white/5 flex justify-between">
+              <div className="p-1 rounded bg-black/40 border-white/5 flex justify-between">
                 <span className="text-amber-300 font-bold">#14,905</span>
                 <span className="text-zinc-400 truncate max-w-[170px]">Unauthorized Oracle (Ed25519 feed)</span>
               </div>
-              <div className="p-1 rounded bg-black/40 border border-white/5 flex justify-between">
+              <div className="p-1 rounded bg-black/40 border-white/5 flex justify-between">
                 <span className="text-amber-300 font-bold">#14,906</span>
                 <span className="text-zinc-400 truncate max-w-[170px]">Provisional Session Key (No Anchor)</span>
               </div>
-              <div className="p-1 rounded bg-black/40 border border-white/5 flex justify-between">
+              <div className="p-1 rounded bg-black/40 border-white/5 flex justify-between">
                 <span className="text-amber-300 font-bold">#14,907</span>
                 <span className="text-zinc-400 truncate max-w-[170px]">Runtime Diagnostic Stress Artifact</span>
               </div>
@@ -516,9 +516,9 @@ export const ForensicClosureControlPlane: React.FC = () => {
           </div>
 
           {/* Node 5: PROMOTION FIREWALL */}
-          <div className="p-4 rounded-2xl bg-gradient-to-br from-[#1f0a0a] to-black border border-red-500/50 space-y-2.5 relative">
+          <div className="p-4 rounded-2xl bg-gradient-to-br from-[#1f0a0a] to-black border-red-500/50 space-y-2.5 relative">
             <div className="flex items-center justify-between">
-              <span className="text-[10px] px-2 py-0.5 rounded bg-red-500/20 text-red-300 font-bold border border-red-500/40">
+              <span className="text-[10px] px-2 py-0.5 rounded bg-red-500/20 text-red-300 font-bold border-red-500/40">
                 5. 🚫 PROMOTION FIREWALL
               </span>
               <span className="text-red-400 text-[10px] font-bold">FAIL-CLOSED</span>
@@ -535,9 +535,9 @@ export const ForensicClosureControlPlane: React.FC = () => {
           </div>
 
           {/* Node 6: CLOSURE GATE */}
-          <div className="p-4 rounded-2xl bg-gradient-to-br from-[#0c1815] to-black border border-teal-500/40 space-y-2.5 relative">
+          <div className="p-4 rounded-2xl bg-gradient-to-br from-[#0c1815] to-black border-teal-500/40 space-y-2.5 relative">
             <div className="flex items-center justify-between">
-              <span className="text-[10px] px-2 py-0.5 rounded bg-teal-500/20 text-teal-300 font-bold border border-teal-500/40">
+              <span className="text-[10px] px-2 py-0.5 rounded bg-teal-500/20 text-teal-300 font-bold border-teal-500/40">
                 6. 📋 CLOSURE GATE
               </span>
               <span className="text-teal-300 text-[10px] font-bold">GOVERNANCE BOUND</span>
@@ -554,7 +554,7 @@ export const ForensicClosureControlPlane: React.FC = () => {
       </div>
 
       {/* 5 Mandatory Rules Lock Matrix */}
-      <div className="p-6 rounded-[28px] bg-[#090d18] border border-cyan-500/30 space-y-4">
+      <div className="p-6 rounded-[28px] bg-[#090d18] border-cyan-500/30 space-y-4">
         <div className="flex items-center justify-between border-b border-white/10 pb-3">
           <div className="flex items-center gap-2">
             <ShieldCheck className="w-5 h-5 text-cyan-400" />
@@ -563,13 +563,13 @@ export const ForensicClosureControlPlane: React.FC = () => {
               <span className="text-zinc-400 text-[11px]">Strict Operational Contract for Evidence Assurance Control Plane</span>
             </div>
           </div>
-          <span className="px-3 py-1 rounded bg-emerald-500/10 text-emerald-300 border border-emerald-500/20 text-[11px] font-bold">
+          <span className="px-3 py-1 rounded bg-emerald-500/10 text-emerald-300 border-emerald-500/20 text-[11px] font-bold">
             5 / 5 ENFORCED
           </span>
         </div>
 
         <div className="grid grid-cols-1 md:grid-cols-5 gap-3">
-          <div className="p-3.5 rounded-xl bg-black/60 border border-cyan-500/20 space-y-1.5">
+          <div className="p-3.5 rounded-xl bg-black/60 border-cyan-500/20 space-y-1.5">
             <span className="text-[10px] text-cyan-300 font-bold block">RULE 1</span>
             <div className="font-bold text-white text-xs">14,902 = Canonical Only</div>
             <p className="text-[10px] text-zinc-400 leading-snug">
@@ -577,7 +577,7 @@ export const ForensicClosureControlPlane: React.FC = () => {
             </p>
           </div>
 
-          <div className="p-3.5 rounded-xl bg-black/60 border border-amber-500/20 space-y-1.5">
+          <div className="p-3.5 rounded-xl bg-black/60 border-amber-500/20 space-y-1.5">
             <span className="text-[10px] text-amber-300 font-bold block">RULE 2</span>
             <div className="font-bold text-white text-xs">14,907 = Observed Only</div>
             <p className="text-[10px] text-zinc-400 leading-snug">
@@ -585,7 +585,7 @@ export const ForensicClosureControlPlane: React.FC = () => {
             </p>
           </div>
 
-          <div className="p-3.5 rounded-xl bg-black/60 border border-rose-500/20 space-y-1.5">
+          <div className="p-3.5 rounded-xl bg-black/60 border-rose-500/20 space-y-1.5">
             <span className="text-[10px] text-rose-300 font-bold block">RULE 3</span>
             <div className="font-bold text-white text-xs">+5 = Quarantined</div>
             <p className="text-[10px] text-zinc-400 leading-snug">
@@ -593,7 +593,7 @@ export const ForensicClosureControlPlane: React.FC = () => {
             </p>
           </div>
 
-          <div className="p-3.5 rounded-xl bg-black/60 border border-emerald-500/20 space-y-1.5">
+          <div className="p-3.5 rounded-xl bg-black/60 border-emerald-500/20 space-y-1.5">
             <span className="text-[10px] text-emerald-300 font-bold block">RULE 4</span>
             <div className="font-bold text-white text-xs">SSoT Mutation = 0</div>
             <p className="text-[10px] text-zinc-400 leading-snug">
@@ -601,7 +601,7 @@ export const ForensicClosureControlPlane: React.FC = () => {
             </p>
           </div>
 
-          <div className="p-3.5 rounded-xl bg-black/60 border border-violet-500/20 space-y-1.5">
+          <div className="p-3.5 rounded-xl bg-black/60 border-violet-500/20 space-y-1.5">
             <span className="text-[10px] text-violet-300 font-bold block">RULE 5</span>
             <div className="font-bold text-white text-xs">No Fake VERIFIED</div>
             <p className="text-[10px] text-zinc-400 leading-snug">
@@ -629,7 +629,7 @@ export const ForensicClosureControlPlane: React.FC = () => {
       />
 
       {/* 10 Invariant Closure Gates (10 / 10 PASS) */}
-      <div className="p-6 rounded-[28px] bg-[#0b0e1a]/85 border border-cyan-500/30 space-y-5">
+      <div className="p-6 rounded-[28px] bg-[#0b0e1a]/85 border-cyan-500/30 space-y-5">
         <div className="flex flex-wrap items-center justify-between gap-3 border-b border-white/10 pb-3">
           <div className="flex items-center gap-2">
             <ShieldCheck className="w-5 h-5 text-cyan-400" />
@@ -639,7 +639,7 @@ export const ForensicClosureControlPlane: React.FC = () => {
             </div>
           </div>
           <div className="flex items-center gap-2">
-            <span className="px-3 py-1 rounded bg-emerald-500/15 text-emerald-300 border border-emerald-500/30 text-xs font-bold flex items-center gap-1.5">
+            <span className="px-3 py-1 rounded bg-emerald-500/15 text-emerald-300 border-emerald-500/30 text-xs font-bold flex items-center gap-1.5">
               <CheckCircle2 className="w-3.5 h-3.5" />
               <span>10 / 10 GATES VERIFIED</span>
             </span>
@@ -647,7 +647,7 @@ export const ForensicClosureControlPlane: React.FC = () => {
         </div>
 
         {/* 10-Gate Progress Stepper */}
-        <div className="p-4 rounded-2xl bg-black/60 border border-white/5 space-y-3">
+        <div className="p-4 rounded-2xl bg-black/60 border-white/5 space-y-3">
           <div className="text-[11px] text-zinc-400 font-bold flex items-center justify-between">
             <span>FORENSIC PROGRESSION: 4/10 &rarr; 10/10 INVARIANT CLOSURE</span>
             <span className="text-cyan-300 font-mono">100% EVIDENCE TRACEABLE</span>
@@ -694,7 +694,7 @@ export const ForensicClosureControlPlane: React.FC = () => {
                   </td>
                   <td className="py-2.5 text-zinc-400 font-mono">{gate.category}</td>
                   <td className="py-2.5">
-                    <span className="px-2 py-0.5 rounded text-[10px] font-bold bg-emerald-500/20 text-emerald-300 border border-emerald-500/30 flex items-center gap-1 w-fit">
+                    <span className="px-2 py-0.5 rounded text-[10px] font-bold bg-emerald-500/20 text-emerald-300 border-emerald-500/30 flex items-center gap-1 w-fit">
                       <CheckCircle2 className="w-3 h-3" />
                       {gate.status}
                     </span>
@@ -709,12 +709,12 @@ export const ForensicClosureControlPlane: React.FC = () => {
       </div>
 
       {/* ASCII Summary Box: Clean & Sovereign */}
-      <div className="p-6 rounded-[28px] bg-black/90 border border-amber-500/30 space-y-3">
+      <div className="p-6 rounded-[28px] bg-black/90 border-amber-500/30 space-y-3">
         <div className="flex items-center justify-between text-xs text-amber-300 font-bold border-b border-white/10 pb-2">
           <span>ZYRQUEN Ω∞ FROZEN v1.2 LTS — SOVEREIGN CONTROL CONTRACT</span>
           <span className="text-zinc-400 text-[11px] font-normal">SSoT Mutation = 0 &bull; Non-Bypassable</span>
         </div>
-        <pre className="text-amber-200 text-xs font-mono leading-relaxed overflow-x-auto p-4 rounded-2xl bg-[#070a12] border border-amber-500/20">
+        <pre className="text-amber-200 text-xs font-mono leading-relaxed overflow-x-auto p-4 rounded-2xl bg-[#070a12] border-amber-500/20">
 {`╔════════════════════════════════════╗
 ║ ZYRQUEN Ω∞ FROZEN v1.2 LTS        ║
 ║                                    ║

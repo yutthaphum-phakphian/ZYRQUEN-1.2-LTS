@@ -166,7 +166,7 @@ export const SubKelvinNebula: React.FC = () => {
   return (
     <div 
       ref={containerRef} 
-      className="w-full h-full min-h-[400px] rounded-[24px] border border-cyan-500/20 bg-[#070914]/80 shadow-inner relative overflow-hidden flex flex-col items-center justify-center"
+      className="w-full h-full min-h-[400px] rounded-[24px] border-cyan-500/20 bg-[#070914]/80 shadow-inner relative overflow-hidden flex flex-col items-center justify-center"
     >
       <div className="absolute top-4 left-6 z-10 font-mono text-xs text-cyan-400 flex items-center gap-2 drop-shadow-md">
         <span className="w-2 h-2 rounded-full bg-cyan-400 animate-pulse" />

@@ -74,7 +74,7 @@ export const AuditHistoryDrawer: React.FC<AuditHistoryDrawerProps> = ({
           {/* Drawer Header */}
           <div className="flex items-center justify-between border-b border-slate-800 pb-4">
             <div className="flex items-center gap-2.5">
-              <div className="p-2 rounded-xl bg-purple-500/10 text-purple-400 border border-purple-500/20">
+              <div className="p-2 rounded-xl bg-purple-500/10 text-purple-400 border-purple-500/20">
                 <History className="w-5 h-5" />
               </div>
               <div>
@@ -103,7 +103,7 @@ export const AuditHistoryDrawer: React.FC<AuditHistoryDrawerProps> = ({
 
                 <div className="space-y-1">
                   <div className="flex items-center justify-between">
-                    <span className="text-[10px] font-mono px-2 py-0.5 rounded bg-cyan-500/10 text-cyan-300 border border-cyan-500/20">
+                    <span className="text-[10px] font-mono px-2 py-0.5 rounded bg-cyan-500/10 text-cyan-300 border-cyan-500/20">
                       {item.stage}
                     </span>
                     <span className="text-[10px] font-mono text-slate-500 flex items-center gap-1">
@@ -118,7 +118,7 @@ export const AuditHistoryDrawer: React.FC<AuditHistoryDrawerProps> = ({
                     <span>{item.actor}</span>
                   </div>
 
-                  <div className="p-2 rounded bg-slate-950 border border-slate-800/80 font-mono text-[10px] text-slate-400 break-all flex items-center justify-between mt-2">
+                  <div className="p-2 rounded bg-slate-950 border-slate-800/80 font-mono text-[10px] text-slate-400 break-all flex items-center justify-between mt-2">
                     <span className="truncate">{item.hash}</span>
                     <ShieldCheck className="w-3.5 h-3.5 text-emerald-400 shrink-0 ml-1" />
                   </div>

@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import jsPDF from 'jspdf';
 import autoTable from 'jspdf-autotable';
+import { getAutoTableFinalY } from '../utils/pdfAutoTable';
 import {
   Zap,
   Download,
@@ -216,7 +217,7 @@ export const QuantumPerformanceReport: React.FC<QuantumPerformanceReportProps> =
       // -----------------------------------------------------------------------
       // 4. REAL-TIME TELEMETRY LOG BUFFER TABLE
       // -----------------------------------------------------------------------
-      const currentFinalY = (doc as any).lastAutoTable ? (doc as any).lastAutoTable.finalY + 8 : 130;
+      const currentFinalY = getAutoTableFinalY(doc, 130) + 8;
       doc.setFontSize(10);
       doc.setFont('helvetica', 'bold');
       doc.setTextColor(15, 23, 42);
@@ -247,7 +248,7 @@ export const QuantumPerformanceReport: React.FC<QuantumPerformanceReportProps> =
       // -----------------------------------------------------------------------
       // 5. FORENSIC SEAL & COURT-ADMISSIBLE FOOTER
       // -----------------------------------------------------------------------
-      const footerY = (doc as any).lastAutoTable ? (doc as any).lastAutoTable.finalY + 12 : 240;
+      const footerY = getAutoTableFinalY(doc, 240) + 12;
 
       doc.setFillColor(248, 250, 252);
       doc.setDrawColor(203, 213, 225);
@@ -300,12 +301,12 @@ export const QuantumPerformanceReport: React.FC<QuantumPerformanceReportProps> =
   return (
     <div
       id="quantum-performance-report-widget"
-      className="bg-slate-950/90 border border-cyan-500/30 rounded-xl p-5 text-cyan-400 font-mono shadow-2xl backdrop-blur-md transition-all duration-300 hover:border-cyan-500/50 my-4"
+      className="bg-slate-950/90 border-cyan-500/30 rounded-xl p-5 text-cyan-400 font-mono shadow-2xl backdrop-blur-md transition-all duration-300 hover:border-cyan-500/50 my-4"
     >
       {/* Header */}
       <div className="flex flex-wrap items-center justify-between gap-3 border-b border-cyan-500/20 pb-3 mb-4">
         <div className="flex items-center gap-2.5">
-          <div className="p-2 bg-cyan-950/80 border border-cyan-500/40 rounded-lg">
+          <div className="p-2 bg-cyan-950/80 border-cyan-500/40 rounded-lg">
             <Activity className="w-5 h-5 text-cyan-300 animate-pulse" />
           </div>
           <div>
@@ -321,7 +322,7 @@ export const QuantumPerformanceReport: React.FC<QuantumPerformanceReportProps> =
         <div className="flex items-center gap-2">
           <button
             onClick={() => setIsLiveStreaming(prev => !prev)}
-            className="flex items-center gap-1.5 px-3 py-1.5 bg-slate-900 border border-cyan-500/30 rounded-lg text-xs hover:border-cyan-400 transition-colors cursor-pointer"
+            className="flex items-center gap-1.5 px-3 py-1.5 bg-slate-900 border-cyan-500/30 rounded-lg text-xs hover:border-cyan-400 transition-colors cursor-pointer"
           >
             <Radio className={`w-3.5 h-3.5 ${isLiveStreaming ? 'text-emerald-400 animate-pulse' : 'text-slate-500'}`} />
             <span className={isLiveStreaming ? 'text-emerald-400 font-bold' : 'text-slate-500'}>
@@ -333,7 +334,7 @@ export const QuantumPerformanceReport: React.FC<QuantumPerformanceReportProps> =
             id="export-quantum-performance-pdf-btn"
             onClick={handleExportPerformancePdf}
             disabled={isExportingPdf}
-            className="flex items-center gap-1.5 px-3.5 py-1.5 bg-gradient-to-r from-cyan-600/30 to-amber-600/30 hover:from-cyan-600/50 hover:to-amber-600/50 border border-cyan-400/50 rounded-lg text-xs text-white font-semibold shadow-md transition-all cursor-pointer disabled:opacity-50"
+            className="flex items-center gap-1.5 px-3.5 py-1.5 bg-gradient-to-r from-cyan-600/30 to-amber-600/30 hover:from-cyan-600/50 hover:to-amber-600/50 border-cyan-400/50 rounded-lg text-xs text-white font-semibold shadow-md transition-all cursor-pointer disabled:opacity-50"
           >
             {isExportingPdf ? (
               <Clock className="w-3.5 h-3.5 animate-spin text-cyan-300" />
@@ -347,7 +348,7 @@ export const QuantumPerformanceReport: React.FC<QuantumPerformanceReportProps> =
 
       {/* Real-Time Metrics Overview Cards */}
       <div className="grid grid-cols-2 sm:grid-cols-4 gap-2.5 mb-4 text-xs">
-        <div className="bg-slate-900/80 border border-cyan-500/20 rounded-lg p-3">
+        <div className="bg-slate-900/80 border-cyan-500/20 rounded-lg p-3">
           <div className="text-[11px] text-slate-400 flex items-center gap-1 mb-1">
             <Zap className="w-3.5 h-3.5 text-amber-400" />
             THROUGHPUT (qOps)
@@ -356,7 +357,7 @@ export const QuantumPerformanceReport: React.FC<QuantumPerformanceReportProps> =
           <div className="text-[10px] text-slate-500">Live Buffer Stream</div>
         </div>
 
-        <div className="bg-slate-900/80 border border-cyan-500/20 rounded-lg p-3">
+        <div className="bg-slate-900/80 border-cyan-500/20 rounded-lg p-3">
           <div className="text-[11px] text-slate-400 flex items-center gap-1 mb-1">
             <Activity className="w-3.5 h-3.5 text-emerald-400" />
             HEARTBEAT LATENCY
@@ -365,7 +366,7 @@ export const QuantumPerformanceReport: React.FC<QuantumPerformanceReportProps> =
           <div className="text-[10px] text-slate-500">Target &le; 35.80 ms (PASS)</div>
         </div>
 
-        <div className="bg-slate-900/80 border border-cyan-500/20 rounded-lg p-3">
+        <div className="bg-slate-900/80 border-cyan-500/20 rounded-lg p-3">
           <div className="text-[11px] text-slate-400 flex items-center gap-1 mb-1">
             <Cpu className="w-3.5 h-3.5 text-cyan-400" />
             ACTIVE QUBITS
@@ -374,7 +375,7 @@ export const QuantumPerformanceReport: React.FC<QuantumPerformanceReportProps> =
           <div className="text-[10px] text-slate-500">99.98% Coherence</div>
         </div>
 
-        <div className="bg-slate-900/80 border border-cyan-500/20 rounded-lg p-3">
+        <div className="bg-slate-900/80 border-cyan-500/20 rounded-lg p-3">
           <div className="text-[11px] text-slate-400 flex items-center gap-1 mb-1">
             <ShieldCheck className="w-3.5 h-3.5 text-violet-400" />
             FORENSIC ATTESTATION
@@ -385,7 +386,7 @@ export const QuantumPerformanceReport: React.FC<QuantumPerformanceReportProps> =
       </div>
 
       {/* Captured Telemetry Buffer Table */}
-      <div className="border border-slate-800 rounded-lg overflow-hidden bg-slate-900/60">
+      <div className="border-slate-800 rounded-lg overflow-hidden bg-slate-900/60">
         <div className="p-2.5 bg-slate-900/90 border-b border-slate-800 flex items-center justify-between text-xs font-semibold text-slate-300">
           <div className="flex items-center gap-2">
             <FileCheck2 className="w-3.5 h-3.5 text-cyan-400" />
@@ -419,7 +420,7 @@ export const QuantumPerformanceReport: React.FC<QuantumPerformanceReportProps> =
                   <td className="py-1.5 px-3 text-cyan-200">{row.phaseCoherence}%</td>
                   <td className="py-1.5 px-3 text-violet-300">{row.superpositionRate} q/s</td>
                   <td className="py-1.5 px-3 text-right">
-                    <span className="inline-flex items-center gap-1 text-[10px] px-1.5 py-0.5 rounded bg-emerald-950/80 text-emerald-300 border border-emerald-500/40">
+                    <span className="inline-flex items-center gap-1 text-[10px] px-1.5 py-0.5 rounded bg-emerald-950/80 text-emerald-300 border-emerald-500/40">
                       <CheckCircle2 className="w-2.5 h-2.5 text-emerald-400" />
                       VERIFIED
                     </span>

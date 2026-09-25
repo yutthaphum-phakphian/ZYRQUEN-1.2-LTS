@@ -863,13 +863,13 @@ export const GovernanceHealthHeatmap: React.FC<GovernanceHealthHeatmapProps> = (
   return (
     <div id="governance-health-heatmap-container" className="space-y-6 animate-in fade-in duration-300">
       {/* 🏛️ Header: Sovereign Master Telemetry & Heartbeat HUD */}
-      <div className="p-6 sm:p-8 rounded-[28px] bg-gradient-to-br from-[#070a12] via-[#0a0f1e] to-[#0f172a] border border-cyan-500/20 backdrop-blur-xl relative overflow-hidden shadow-2xl">
+      <div className="p-6 sm:p-8 rounded-[28px] bg-gradient-to-br from-[#070a12] via-[#0a0f1e] to-[#0f172a] border-cyan-500/20 backdrop-blur-xl relative overflow-hidden shadow-2xl">
         <div className="absolute top-0 right-0 w-96 h-96 bg-gradient-to-bl from-emerald-500/10 via-cyan-500/10 to-transparent rounded-full blur-3xl pointer-events-none" />
 
         <div className="relative z-10 flex flex-col lg:flex-row lg:items-center justify-between gap-6">
           <div className="space-y-2">
             <div className="flex items-center gap-2 flex-wrap">
-              <span className="px-3 py-1 rounded-full bg-emerald-500/15 text-emerald-300 border border-emerald-500/30 text-xs font-mono font-bold flex items-center gap-1.5 shadow-[0_0_12px_rgba(16,185,129,0.25)]">
+              <span className="px-3 py-1 rounded-full bg-emerald-500/15 text-emerald-300 border-emerald-500/30 text-xs font-mono font-bold flex items-center gap-1.5 shadow-[0_0_12px_rgba(16,185,129,0.25)]">
                 <ShieldCheck className="w-3.5 h-3.5 text-emerald-400" />
                 <span>18 SOVEREIGN CHAMBERS ONLINE</span>
               </span>
@@ -885,11 +885,11 @@ export const GovernanceHealthHeatmap: React.FC<GovernanceHealthHeatmapProps> = (
                 <span>HEARTBEAT 1.00 Hz • NOMINAL</span>
               </span>
 
-              <span className="px-3 py-1 rounded-full bg-zinc-800/80 text-zinc-300 border border-white/10 text-xs font-mono">
+              <span className="px-3 py-1 rounded-full bg-zinc-800/80 text-zinc-300 border-white/10 text-xs font-mono">
                 CYCLE #{heartbeatCycle}
               </span>
 
-              <span className="px-3 py-1 rounded-full bg-amber-500/15 text-amber-300 border border-amber-500/30 text-xs font-mono">
+              <span className="px-3 py-1 rounded-full bg-amber-500/15 text-amber-300 border-amber-500/30 text-xs font-mono">
                 SSoT Δ0.00% ZERO DRIFT
               </span>
             </div>
@@ -953,7 +953,7 @@ export const GovernanceHealthHeatmap: React.FC<GovernanceHealthHeatmapProps> = (
             <button
               id="btn-export-health-report"
               onClick={handleExportHealthReport}
-              className="px-3.5 py-2 rounded-xl bg-white/5 hover:bg-white/10 border border-white/10 text-zinc-300 font-mono text-xs flex items-center gap-1.5 transition cursor-pointer"
+              className="px-3.5 py-2 rounded-xl bg-white/5 hover:bg-white/10 border-white/10 text-zinc-300 font-mono text-xs flex items-center gap-1.5 transition cursor-pointer"
               title="Download 18 Chambers Governance Telemetry JSON"
             >
               <Download className="w-3.5 h-3.5 text-cyan-400" />
@@ -965,7 +965,7 @@ export const GovernanceHealthHeatmap: React.FC<GovernanceHealthHeatmapProps> = (
 
       {/* 📊 Aggregate Telemetry HUD Cards */}
       <div className="grid grid-cols-2 sm:grid-cols-4 gap-3">
-        <div className="p-4 rounded-2xl bg-black/40 border border-white/8">
+        <div className="p-4 rounded-2xl bg-black/40 border-white/8">
           <div className="flex items-center justify-between text-[10px] font-mono text-zinc-400 uppercase">
             <span>Mean Coherence</span>
             <Activity className="w-3.5 h-3.5 text-emerald-400" />
@@ -976,7 +976,7 @@ export const GovernanceHealthHeatmap: React.FC<GovernanceHealthHeatmapProps> = (
           <div className="text-[10px] text-emerald-300/80 font-mono mt-0.5">SLA &ge;99.950% (PASS)</div>
         </div>
 
-        <div className="p-4 rounded-2xl bg-black/40 border border-white/8">
+        <div className="p-4 rounded-2xl bg-black/40 border-white/8">
           <div className="flex items-center justify-between text-[10px] font-mono text-zinc-400 uppercase">
             <span>Stability Index</span>
             <ShieldCheck className="w-3.5 h-3.5 text-cyan-400" />
@@ -987,7 +987,7 @@ export const GovernanceHealthHeatmap: React.FC<GovernanceHealthHeatmapProps> = (
           <div className="text-[10px] text-cyan-300/80 font-mono mt-0.5">18/18 SSoT PARITY</div>
         </div>
 
-        <div className="p-4 rounded-2xl bg-black/40 border border-white/8">
+        <div className="p-4 rounded-2xl bg-black/40 border-white/8">
           <div className="flex items-center justify-between text-[10px] font-mono text-zinc-400 uppercase">
             <span>Cryo Temp Mean</span>
             <Thermometer className="w-3.5 h-3.5 text-blue-400" />
@@ -998,7 +998,7 @@ export const GovernanceHealthHeatmap: React.FC<GovernanceHealthHeatmapProps> = (
           <div className="text-[10px] text-blue-300/80 font-mono mt-0.5">SLA &le;18.00 mK (NOMINAL)</div>
         </div>
 
-        <div className="p-4 rounded-2xl bg-black/40 border border-white/8">
+        <div className="p-4 rounded-2xl bg-black/40 border-white/8">
           <div className="flex items-center justify-between text-[10px] font-mono text-zinc-400 uppercase">
             <span>Quorum Binding</span>
             <Lock className="w-3.5 h-3.5 text-purple-400" />
@@ -1009,15 +1009,15 @@ export const GovernanceHealthHeatmap: React.FC<GovernanceHealthHeatmapProps> = (
       </div>
 
       {/* 🎛️ Toolbar: View Modes, Metric Selectors, Search & Category Filter */}
-      <div className="p-4 rounded-2xl bg-black/40 border border-white/8 flex flex-col lg:flex-row lg:items-center justify-between gap-4">
+      <div className="p-4 rounded-2xl bg-black/40 border-white/8 flex flex-col lg:flex-row lg:items-center justify-between gap-4">
         {/* View Mode Switcher */}
-        <div className="flex items-center bg-black/60 p-1 rounded-xl border border-white/10 text-xs font-mono">
+        <div className="flex items-center bg-black/60 p-1 rounded-xl border-white/10 text-xs font-mono">
           <button
             id="tab-view-grid"
             onClick={() => setActiveViewMode('grid')}
             className={`px-3 py-1.5 rounded-lg transition-all flex items-center gap-1.5 cursor-pointer ${
               activeViewMode === 'grid'
-                ? 'bg-emerald-500/20 text-emerald-300 border border-emerald-500/40 font-bold shadow-[0_0_12px_rgba(16,185,129,0.3)]'
+                ? 'bg-emerald-500/20 text-emerald-300 border-emerald-500/40 font-bold shadow-[0_0_12px_rgba(16,185,129,0.3)]'
                 : 'text-zinc-400 hover:text-white'
             }`}
           >
@@ -1030,7 +1030,7 @@ export const GovernanceHealthHeatmap: React.FC<GovernanceHealthHeatmapProps> = (
             onClick={() => setActiveViewMode('epoch_matrix')}
             className={`px-3 py-1.5 rounded-lg transition-all flex items-center gap-1.5 cursor-pointer ${
               activeViewMode === 'epoch_matrix'
-                ? 'bg-cyan-500/20 text-cyan-300 border border-cyan-500/40 font-bold shadow-[0_0_12px_rgba(6,182,212,0.3)]'
+                ? 'bg-cyan-500/20 text-cyan-300 border-cyan-500/40 font-bold shadow-[0_0_12px_rgba(6,182,212,0.3)]'
                 : 'text-zinc-400 hover:text-white'
             }`}
           >
@@ -1043,7 +1043,7 @@ export const GovernanceHealthHeatmap: React.FC<GovernanceHealthHeatmapProps> = (
             onClick={() => setActiveViewMode('telemetry_trend')}
             className={`px-3 py-1.5 rounded-lg transition-all flex items-center gap-1.5 cursor-pointer ${
               activeViewMode === 'telemetry_trend'
-                ? 'bg-purple-500/20 text-purple-300 border border-purple-500/40 font-bold shadow-[0_0_12px_rgba(168,85,247,0.3)]'
+                ? 'bg-purple-500/20 text-purple-300 border-purple-500/40 font-bold shadow-[0_0_12px_rgba(168,85,247,0.3)]'
                 : 'text-zinc-400 hover:text-white'
             }`}
           >
@@ -1080,14 +1080,14 @@ export const GovernanceHealthHeatmap: React.FC<GovernanceHealthHeatmapProps> = (
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
               placeholder="Filter chamber..."
-              className="w-full bg-black/60 border border-white/10 rounded-xl pl-8 pr-3 py-1.5 text-xs text-white placeholder-zinc-500 focus:outline-none focus:border-cyan-500/50 font-mono"
+              className="w-full bg-black/60 border-white/10 rounded-xl pl-8 pr-3 py-1.5 text-xs text-white placeholder-zinc-500 focus:outline-none focus:border-cyan-500/50 font-mono"
             />
           </div>
 
           <select
             value={selectedCategory}
             onChange={(e) => setSelectedCategory(e.target.value)}
-            className="bg-black/60 border border-white/10 rounded-xl px-2.5 py-1.5 text-xs text-zinc-300 focus:outline-none focus:border-cyan-500/50 font-mono cursor-pointer"
+            className="bg-black/60 border-white/10 rounded-xl px-2.5 py-1.5 text-xs text-zinc-300 focus:outline-none focus:border-cyan-500/50 font-mono cursor-pointer"
           >
             {categories.map((cat) => (
               <option key={cat} value={cat}>
@@ -1102,16 +1102,16 @@ export const GovernanceHealthHeatmap: React.FC<GovernanceHealthHeatmapProps> = (
       {activeViewMode === 'grid' && (
         <div className="space-y-4">
           {/* Sub-toolbar: 18-Cell Matrix (6-Col) vs Detailed Cards + Alert Simulation Trigger */}
-          <div className="flex flex-wrap items-center justify-between gap-3 p-3 rounded-2xl bg-black/50 border border-white/10">
+          <div className="flex flex-wrap items-center justify-between gap-3 p-3 rounded-2xl bg-black/50 border-white/10">
             <div className="flex items-center gap-2">
               <span className="text-xs font-mono text-zinc-400">Layout:</span>
-              <div className="flex items-center bg-black/60 p-1 rounded-xl border border-white/10 text-xs font-mono">
+              <div className="flex items-center bg-black/60 p-1 rounded-xl border-white/10 text-xs font-mono">
                 <button
                   id="btn-subview-6col"
                   onClick={() => setGridSubView('6col')}
                   className={`px-3 py-1 rounded-lg transition-all cursor-pointer ${
                     gridSubView === '6col'
-                      ? 'bg-cyan-500/20 text-cyan-300 border border-cyan-500/40 font-bold shadow-[0_0_10px_rgba(6,182,212,0.3)]'
+                      ? 'bg-cyan-500/20 text-cyan-300 border-cyan-500/40 font-bold shadow-[0_0_10px_rgba(6,182,212,0.3)]'
                       : 'text-zinc-400 hover:text-white'
                   }`}
                 >
@@ -1122,7 +1122,7 @@ export const GovernanceHealthHeatmap: React.FC<GovernanceHealthHeatmapProps> = (
                   onClick={() => setGridSubView('cards')}
                   className={`px-3 py-1 rounded-lg transition-all cursor-pointer ${
                     gridSubView === 'cards'
-                      ? 'bg-emerald-500/20 text-emerald-300 border border-emerald-500/40 font-bold shadow-[0_0_10px_rgba(16,185,129,0.3)]'
+                      ? 'bg-emerald-500/20 text-emerald-300 border-emerald-500/40 font-bold shadow-[0_0_10px_rgba(16,185,129,0.3)]'
                       : 'text-zinc-400 hover:text-white'
                   }`}
                 >
@@ -1136,7 +1136,7 @@ export const GovernanceHealthHeatmap: React.FC<GovernanceHealthHeatmapProps> = (
               <button
                 id="btn-unstable-alerts-overlay"
                 onClick={() => setShowOverlay(true)}
-                className="px-3 py-1.5 bg-red-500/20 border border-red-500/60 text-red-300 text-xs rounded-xl font-mono font-bold hover:bg-red-500/30 transition-all flex items-center gap-1.5 cursor-pointer shadow-[0_0_10px_rgba(239,68,68,0.2)]"
+                className="px-3 py-1.5 bg-red-500/20 border-red-500/60 text-red-300 text-xs rounded-xl font-mono font-bold hover:bg-red-500/30 transition-all flex items-center gap-1.5 cursor-pointer shadow-[0_0_10px_rgba(239,68,68,0.2)]"
                 title="Dedicated Notification Overlay: Searchable Unstable Events (<95% Coherence)"
               >
                 <AlertTriangle className="w-3.5 h-3.5 text-red-400" />
@@ -1168,7 +1168,7 @@ export const GovernanceHealthHeatmap: React.FC<GovernanceHealthHeatmapProps> = (
             const prevTemp = hoveredChamber.prevCryoTemp ?? hoveredChamber.currentCryoTemp;
             const tempDelta = Number((hoveredChamber.currentCryoTemp - prevTemp).toFixed(2));
             return (
-              <div className="p-3.5 bg-black/95 border border-cyan-400/80 rounded-xl text-xs text-cyan-200 shadow-2xl flex flex-wrap justify-between items-center gap-3 backdrop-blur-md animate-in fade-in duration-150">
+              <div className="p-3.5 bg-black/95 border-cyan-400/80 rounded-xl text-xs text-cyan-200 shadow-2xl flex flex-wrap justify-between items-center gap-3 backdrop-blur-md animate-in fade-in duration-150">
                 <div className="flex items-center gap-2">
                   <span className="font-bold text-white font-mono">Chamber:</span>
                   <span className="text-cyan-300 font-mono font-bold">{hoveredChamber.chamber.code}</span>
@@ -1205,7 +1205,7 @@ export const GovernanceHealthHeatmap: React.FC<GovernanceHealthHeatmapProps> = (
           })()}
 
           {/* Persistent System Integrity Index Ring Chart & Summary Stats Bar */}
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-4 p-4 bg-black/60 border border-cyan-900/60 rounded-2xl items-center text-xs">
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-4 p-4 bg-black/60 border-cyan-900/60 rounded-2xl items-center text-xs">
             {/* Ring Chart for System Integrity Index */}
             <div className="flex items-center gap-4 border-b md:border-b-0 md:border-r border-gray-800 pb-3 md:pb-0 md:pr-4">
               <div className="relative w-16 h-16 flex items-center justify-center shrink-0">
@@ -1233,13 +1233,13 @@ export const GovernanceHealthHeatmap: React.FC<GovernanceHealthHeatmapProps> = (
               </div>
             </div>
 
-            <div className="flex justify-between items-center px-4 py-3 bg-cyan-950/30 rounded-xl border border-cyan-800/40">
+            <div className="flex justify-between items-center px-4 py-3 bg-cyan-950/30 rounded-xl border-cyan-800/40">
               <span className="text-zinc-400 uppercase tracking-wider font-mono text-[11px]">
                 Average System Coherence:
               </span>
               <span className="text-cyan-300 font-bold font-mono text-sm">{avgCoherence}%</span>
             </div>
-            <div className="flex justify-between items-center px-4 py-3 bg-emerald-950/30 rounded-xl border border-emerald-800/40">
+            <div className="flex justify-between items-center px-4 py-3 bg-emerald-950/30 rounded-xl border-emerald-800/40">
               <span className="text-zinc-400 uppercase tracking-wider font-mono text-[11px]">
                 Total Active Sovereign Nodes:
               </span>
@@ -1285,7 +1285,7 @@ export const GovernanceHealthHeatmap: React.FC<GovernanceHealthHeatmapProps> = (
                     <div className="text-[10px] text-gray-400 uppercase tracking-wider flex justify-between items-center relative z-10">
                       <span className="font-mono font-bold text-gray-200">{chamber.chamber.code}</span>
                       {isProtected ? (
-                        <span className="text-blue-400 font-bold text-[9px] font-mono px-1.5 py-0.5 rounded bg-blue-500/20 border border-blue-500/40">
+                        <span className="text-blue-400 font-bold text-[9px] font-mono px-1.5 py-0.5 rounded bg-blue-500/20 border-blue-500/40">
                           LOCKED
                         </span>
                       ) : isUnstable ? (
@@ -1331,7 +1331,7 @@ export const GovernanceHealthHeatmap: React.FC<GovernanceHealthHeatmapProps> = (
                       </button>
                     </div>
 
-                    <div className="mt-2 text-[9px] px-1.5 py-0.5 rounded text-center truncate font-mono bg-black/60 border border-white/5 relative z-10">
+                    <div className="mt-2 text-[9px] px-1.5 py-0.5 rounded text-center truncate font-mono bg-black/60 border-white/5 relative z-10">
                       {isProtected ? (
                         <span className="text-blue-300 font-bold">LOCKED PROTECTED</span>
                       ) : isUnstable ? (
@@ -1372,7 +1372,7 @@ export const GovernanceHealthHeatmap: React.FC<GovernanceHealthHeatmapProps> = (
                     {/* Top Bar: Code, Category, Status */}
                     <div className="flex items-center justify-between gap-2 mb-2">
                       <div className="flex items-center gap-2">
-                        <span className="font-mono font-bold text-sm text-white px-2 py-0.5 rounded bg-black/40 border border-white/10">
+                        <span className="font-mono font-bold text-sm text-white px-2 py-0.5 rounded bg-black/40 border-white/10">
                           {prof.chamber.code}
                         </span>
                         <span className="text-[10px] font-mono text-zinc-400 px-2 py-0.5 rounded bg-white/5">
@@ -1395,7 +1395,7 @@ export const GovernanceHealthHeatmap: React.FC<GovernanceHealthHeatmapProps> = (
                     </div>
 
                     {/* Real-time Metric Indicators */}
-                    <div className="grid grid-cols-3 gap-2 p-2.5 rounded-xl bg-black/50 border border-white/5 mb-3 text-center">
+                    <div className="grid grid-cols-3 gap-2 p-2.5 rounded-xl bg-black/50 border-white/5 mb-3 text-center">
                       <div>
                         <div className="text-[9px] font-mono text-zinc-500 uppercase">Coherence</div>
                         <div className="text-xs font-mono font-bold text-emerald-400 mt-0.5">
@@ -1459,7 +1459,7 @@ export const GovernanceHealthHeatmap: React.FC<GovernanceHealthHeatmapProps> = (
                             e.stopPropagation();
                             handlePrintQR(prof);
                           }}
-                          className="px-2 py-0.5 bg-cyan-500/20 hover:bg-cyan-500/30 border border-cyan-500/40 text-cyan-300 text-[10px] rounded-lg font-mono transition flex items-center gap-1 cursor-pointer"
+                          className="px-2 py-0.5 bg-cyan-500/20 hover:bg-cyan-500/30 border-cyan-500/40 text-cyan-300 text-[10px] rounded-lg font-mono transition flex items-center gap-1 cursor-pointer"
                           title="Print QR Evidence & Log to Immutable Ledger"
                         >
                           <Printer className="w-3 h-3 text-cyan-400" />
@@ -1491,7 +1491,7 @@ export const GovernanceHealthHeatmap: React.FC<GovernanceHealthHeatmapProps> = (
                 {printLedgerLogs.map((log) => (
                   <div
                     key={log.printId}
-                    className="flex flex-wrap items-center justify-between bg-black/40 px-3 py-1.5 rounded-lg border border-cyan-900/40 gap-2 hover:border-cyan-500/40 transition"
+                    className="flex flex-wrap items-center justify-between bg-black/40 px-3 py-1.5 rounded-lg border-cyan-900/40 gap-2 hover:border-cyan-500/40 transition"
                   >
                     <div className="flex items-center gap-2">
                       <span className="text-cyan-400 font-bold">[{log.printId}]</span>
@@ -1517,7 +1517,7 @@ export const GovernanceHealthHeatmap: React.FC<GovernanceHealthHeatmapProps> = (
 
       {/* 🗺️ VIEW MODE 2: 2D Spatiotemporal Epoch Heatmap Matrix (18 Chambers × Heartbeat Epochs) */}
       {activeViewMode === 'epoch_matrix' && (
-        <div className="p-6 rounded-[28px] bg-black/40 border border-white/8 space-y-4">
+        <div className="p-6 rounded-[28px] bg-black/40 border-white/8 space-y-4">
           <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2">
             <div>
               <h2 className="text-base font-mono font-bold text-white flex items-center gap-2">
@@ -1574,7 +1574,7 @@ export const GovernanceHealthHeatmap: React.FC<GovernanceHealthHeatmapProps> = (
                     >
                       <td className="py-2.5 px-3">
                         <div className="font-bold text-white flex items-center gap-1.5">
-                          <span className="px-1.5 py-0.5 rounded bg-black/60 text-cyan-400 border border-cyan-500/30 text-[10px]">
+                          <span className="px-1.5 py-0.5 rounded bg-black/60 text-cyan-400 border-cyan-500/30 text-[10px]">
                             {prof.chamber.code}
                           </span>
                           <span className="truncate max-w-[130px]">{prof.chamber.name}</span>
@@ -1582,7 +1582,7 @@ export const GovernanceHealthHeatmap: React.FC<GovernanceHealthHeatmapProps> = (
                       </td>
 
                       <td className="py-2.5 px-2 text-center">
-                        <span className="px-1.5 py-0.5 rounded text-[9px] bg-emerald-500/10 text-emerald-400 border border-emerald-500/20">
+                        <span className="px-1.5 py-0.5 rounded text-[9px] bg-emerald-500/10 text-emerald-400 border-emerald-500/20">
                           {prof.chamber.status}
                         </span>
                       </td>
@@ -1630,7 +1630,7 @@ export const GovernanceHealthHeatmap: React.FC<GovernanceHealthHeatmapProps> = (
 
       {/* 📈 VIEW MODE 3: Aggregate Telemetry Trend (Recharts) */}
       {activeViewMode === 'telemetry_trend' && (
-        <div className="p-6 rounded-[28px] bg-black/40 border border-white/8 space-y-4">
+        <div className="p-6 rounded-[28px] bg-black/40 border-white/8 space-y-4">
           <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2">
             <div>
               <h2 className="text-base font-mono font-bold text-white flex items-center gap-2">
@@ -1705,21 +1705,21 @@ export const GovernanceHealthHeatmap: React.FC<GovernanceHealthHeatmapProps> = (
       {selectedProfile && (
         <div
           id="chamber-detail-drawer"
-          className="p-6 rounded-[28px] bg-gradient-to-br from-[#070e17] via-[#0a121e] to-[#07080F] border border-cyan-500/30 backdrop-blur-xl shadow-2xl space-y-4 animate-in slide-in-from-bottom-3 duration-200"
+          className="p-6 rounded-[28px] bg-gradient-to-br from-[#070e17] via-[#0a121e] to-[#07080F] border-cyan-500/30 backdrop-blur-xl shadow-2xl space-y-4 animate-in slide-in-from-bottom-3 duration-200"
         >
           <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 pb-3 border-b border-white/10">
             <div className="flex items-center gap-3">
-              <div className="p-3 rounded-2xl bg-cyan-500/20 border border-cyan-500/40 text-cyan-300">
+              <div className="p-3 rounded-2xl bg-cyan-500/20 border-cyan-500/40 text-cyan-300">
                 <Cpu className="w-6 h-6" />
               </div>
 
               <div>
                 <div className="flex items-center gap-2">
-                  <span className="font-mono font-bold text-sm text-cyan-400 px-2 py-0.5 rounded bg-black/60 border border-cyan-500/30">
+                  <span className="font-mono font-bold text-sm text-cyan-400 px-2 py-0.5 rounded bg-black/60 border-cyan-500/30">
                     {selectedProfile.chamber.code}
                   </span>
                   <h3 className="text-lg font-mono font-bold text-white">{selectedProfile.chamber.name}</h3>
-                  <span className="px-2 py-0.5 rounded text-[10px] font-mono font-bold bg-emerald-500/20 text-emerald-300 border border-emerald-500/40">
+                  <span className="px-2 py-0.5 rounded text-[10px] font-mono font-bold bg-emerald-500/20 text-emerald-300 border-emerald-500/40">
                     {selectedProfile.chamber.status}
                   </span>
                 </div>
@@ -1733,7 +1733,7 @@ export const GovernanceHealthHeatmap: React.FC<GovernanceHealthHeatmapProps> = (
               <button
                 id="btn-close-chamber-detail"
                 onClick={() => setSelectedChamberId(null)}
-                className="p-2 rounded-xl bg-white/5 hover:bg-white/10 text-zinc-400 hover:text-zinc-200 border border-white/10 cursor-pointer"
+                className="p-2 rounded-xl bg-white/5 hover:bg-white/10 text-zinc-400 hover:text-zinc-200 border-white/10 cursor-pointer"
               >
                 <X className="w-4 h-4" />
               </button>
@@ -1741,7 +1741,7 @@ export const GovernanceHealthHeatmap: React.FC<GovernanceHealthHeatmapProps> = (
           </div>
 
           {/* Description */}
-          <div className="p-3.5 rounded-xl bg-black/50 border border-white/5 text-xs text-zinc-300 space-y-1">
+          <div className="p-3.5 rounded-xl bg-black/50 border-white/5 text-xs text-zinc-300 space-y-1">
             <div className="font-mono text-zinc-400">{selectedProfile.chamber.description}</div>
             <div className="font-sans text-zinc-500">{selectedProfile.chamber.descriptionTh}</div>
           </div>
@@ -1749,7 +1749,7 @@ export const GovernanceHealthHeatmap: React.FC<GovernanceHealthHeatmapProps> = (
           {/* Metrics Grid */}
           <div className="grid grid-cols-2 sm:grid-cols-4 gap-3 text-xs font-mono">
             {selectedProfile.chamber.metrics.map((m, idx) => (
-              <div key={idx} className="p-3 rounded-xl bg-black/60 border border-white/10">
+              <div key={idx} className="p-3 rounded-xl bg-black/60 border-white/10">
                 <div className="text-[10px] text-zinc-400 uppercase">{m.label}</div>
                 <div className="text-sm font-bold text-emerald-400 mt-1">{m.value}</div>
                 {m.sublabel && <div className="text-[9px] text-zinc-500 mt-0.5">{m.sublabel}</div>}
@@ -1768,16 +1768,16 @@ export const GovernanceHealthHeatmap: React.FC<GovernanceHealthHeatmapProps> = (
               {selectedProfile.chamber.invariants.map((inv) => (
                 <span
                   key={inv}
-                  className="px-2.5 py-1 rounded-lg bg-purple-500/15 text-purple-300 border border-purple-500/30 text-xs font-mono flex items-center gap-1"
+                  className="px-2.5 py-1 rounded-lg bg-purple-500/15 text-purple-300 border-purple-500/30 text-xs font-mono flex items-center gap-1"
                 >
                   <CheckCircle2 className="w-3 h-3 text-purple-400" />
                   <span>{inv}</span>
                 </span>
               ))}
-              <span className="px-2.5 py-1 rounded-lg bg-cyan-500/15 text-cyan-300 border border-cyan-500/30 text-xs font-mono">
+              <span className="px-2.5 py-1 rounded-lg bg-cyan-500/15 text-cyan-300 border-cyan-500/30 text-xs font-mono">
                 ETDA Sec 9/26/28 Compliant
               </span>
-              <span className="px-2.5 py-1 rounded-lg bg-emerald-500/15 text-emerald-300 border border-emerald-500/30 text-xs font-mono">
+              <span className="px-2.5 py-1 rounded-lg bg-emerald-500/15 text-emerald-300 border-emerald-500/30 text-xs font-mono">
                 PDPA Sec 37 Zero-Knowledge
               </span>
             </div>
@@ -1802,11 +1802,11 @@ export const GovernanceHealthHeatmap: React.FC<GovernanceHealthHeatmapProps> = (
               animate={{ scale: 1, y: 0 }}
               exit={{ scale: 0.92, y: 20 }}
               onClick={(e) => e.stopPropagation()}
-              className="bg-[#0b101b] border border-red-500/50 rounded-2xl w-full max-w-2xl p-6 shadow-2xl text-white space-y-4"
+              className="bg-[#0b101b] border-red-500/50 rounded-2xl w-full max-w-2xl p-6 shadow-2xl text-white space-y-4"
             >
               <div className="flex justify-between items-center pb-3 border-b border-red-500/30">
                 <div className="flex items-center gap-2.5">
-                  <span className="p-2 rounded-xl bg-red-500/20 text-red-400 border border-red-500/40">
+                  <span className="p-2 rounded-xl bg-red-500/20 text-red-400 border-red-500/40">
                     <AlertTriangle className="w-5 h-5 text-red-400" />
                   </span>
                   <div>
@@ -1821,7 +1821,7 @@ export const GovernanceHealthHeatmap: React.FC<GovernanceHealthHeatmapProps> = (
                 <button
                   id="btn-close-unstable-overlay"
                   onClick={() => setShowOverlay(false)}
-                  className="text-gray-400 hover:text-white text-xs font-mono font-bold px-3 py-1.5 bg-gray-800 hover:bg-gray-700 rounded-xl cursor-pointer border border-white/10"
+                  className="text-gray-400 hover:text-white text-xs font-mono font-bold px-3 py-1.5 bg-gray-800 hover:bg-gray-700 rounded-xl cursor-pointer border-white/10"
                 >
                   ✕ Close
                 </button>
@@ -1837,7 +1837,7 @@ export const GovernanceHealthHeatmap: React.FC<GovernanceHealthHeatmapProps> = (
                     placeholder="Search by Chamber ID (e.g., CH-04) or Timestamp..."
                     value={overlaySearchQuery}
                     onChange={(e) => setOverlaySearchQuery(e.target.value)}
-                    className="w-full pl-9 pr-4 py-2 bg-black/60 border border-gray-700 rounded-xl text-xs text-white placeholder-zinc-500 focus:border-red-400 focus:outline-none font-mono"
+                    className="w-full pl-9 pr-4 py-2 bg-black/60 border-gray-700 rounded-xl text-xs text-white placeholder-zinc-500 focus:border-red-400 focus:outline-none font-mono"
                   />
                 </div>
                 <button
@@ -1857,7 +1857,7 @@ export const GovernanceHealthHeatmap: React.FC<GovernanceHealthHeatmapProps> = (
                   filteredUnstableEvents.map((evt) => (
                     <div
                       key={evt.id}
-                      className="p-3 bg-red-950/30 border border-red-900/60 rounded-xl flex flex-wrap justify-between items-center text-xs gap-2"
+                      className="p-3 bg-red-950/30 border-red-900/60 rounded-xl flex flex-wrap justify-between items-center text-xs gap-2"
                     >
                       <div className="flex items-center gap-3">
                         <input
@@ -1866,7 +1866,7 @@ export const GovernanceHealthHeatmap: React.FC<GovernanceHealthHeatmapProps> = (
                           onChange={() => toggleSelectChamber(evt.chamberId)}
                           className="w-4 h-4 accent-red-500 rounded cursor-pointer"
                         />
-                        <span className="px-2 py-0.5 bg-red-500/20 border border-red-500/40 text-red-300 font-mono font-bold rounded">
+                        <span className="px-2 py-0.5 bg-red-500/20 border-red-500/40 text-red-300 font-mono font-bold rounded">
                           {evt.chamberId}
                         </span>
                         <span className="text-zinc-300 font-mono">
@@ -1916,7 +1916,7 @@ export const GovernanceHealthHeatmap: React.FC<GovernanceHealthHeatmapProps> = (
             initial={{ opacity: 0, y: -20, scale: 0.95 }}
             animate={{ opacity: 1, y: 0, scale: 1 }}
             exit={{ opacity: 0, y: -20, scale: 0.95 }}
-            className="fixed top-6 right-6 z-50 px-4 py-3 rounded-2xl bg-[#081524] border border-cyan-400/80 text-cyan-100 shadow-2xl backdrop-blur-md flex items-center gap-3 text-xs font-mono"
+            className="fixed top-6 right-6 z-50 px-4 py-3 rounded-2xl bg-[#081524] border-cyan-400/80 text-cyan-100 shadow-2xl backdrop-blur-md flex items-center gap-3 text-xs font-mono"
           >
             <CheckCircle2 className="w-4 h-4 text-emerald-400 shrink-0" />
             <span>{printToast}</span>

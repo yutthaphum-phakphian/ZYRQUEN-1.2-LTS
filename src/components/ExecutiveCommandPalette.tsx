@@ -45,7 +45,7 @@ export const ExecutiveCommandPalette: React.FC<CommandPaletteProps> = ({ onSelec
 
   return (
     <div className="fixed inset-0 z-50 flex items-start justify-center pt-16 sm:pt-20 bg-slate-950/80 backdrop-blur-xl font-mono text-slate-100 p-4">
-      <div className="w-full max-w-xl bg-slate-900 border border-cyan-500/40 rounded-2xl shadow-[0_0_50px_rgba(6,182,212,0.25)] overflow-hidden animate-in fade-in zoom-in-95 duration-200">
+      <div className="w-full max-w-xl bg-slate-900 border-cyan-500/40 rounded-2xl shadow-[0_0_50px_rgba(6,182,212,0.25)] overflow-hidden animate-in fade-in zoom-in-95 duration-200">
         {/* Search Input Bar */}
         <div className="flex items-center gap-3 px-4 py-3 border-b border-slate-800 bg-slate-950/50">
           <Search className="w-5 h-5 text-cyan-400 shrink-0" />
@@ -57,7 +57,7 @@ export const ExecutiveCommandPalette: React.FC<CommandPaletteProps> = ({ onSelec
             className="w-full bg-transparent text-xs sm:text-sm text-white placeholder-slate-500 outline-none"
             autoFocus
           />
-          <span className="text-[10px] px-2 py-0.5 rounded bg-slate-800 text-slate-400 border border-slate-700 hidden sm:inline">
+          <span className="text-[10px] px-2 py-0.5 rounded bg-slate-800 text-slate-400 border-slate-700 hidden sm:inline">
             ESC
           </span>
           <button
@@ -81,7 +81,7 @@ export const ExecutiveCommandPalette: React.FC<CommandPaletteProps> = ({ onSelec
                     if (onSelectAction) onSelectAction(cmd.id);
                     setIsOpen(false);
                   }}
-                  className="w-full flex items-center justify-between p-2.5 sm:p-3 rounded-xl hover:bg-cyan-500/10 border border-transparent hover:border-cyan-500/30 transition text-left group cursor-pointer"
+                  className="w-full flex items-center justify-between p-2.5 sm:p-3 rounded-xl hover:bg-cyan-500/10 border-transparent hover:border-cyan-500/30 transition text-left group cursor-pointer"
                 >
                   <div className="flex items-center gap-3 min-w-0">
                     <div className="p-2 rounded-lg bg-slate-800 group-hover:bg-cyan-500/20 text-cyan-400 shrink-0">

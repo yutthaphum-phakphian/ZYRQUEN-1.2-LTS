@@ -146,7 +146,7 @@ export const EvidenceVerificationConsole: React.FC<EvidenceVerificationConsolePr
         </div>
 
         <div className="flex items-center gap-2">
-          <span className="px-3 py-1 rounded-xl text-xs font-bold border border-cyan-500/40 bg-cyan-500/10 text-cyan-300 flex items-center gap-1.5">
+          <span className="px-3 py-1 rounded-xl text-xs font-bold border-cyan-500/40 bg-cyan-500/10 text-cyan-300 flex items-center gap-1.5">
             <Cpu className="w-3.5 h-3.5 text-cyan-400" />
             <span>ENCLAVE GATE: FAIL-CLOSED</span>
           </span>
@@ -154,7 +154,7 @@ export const EvidenceVerificationConsole: React.FC<EvidenceVerificationConsolePr
       </div>
 
       {/* Pipeline 8-Stage Flow Visualization */}
-      <div className="p-4 rounded-2xl bg-black/70 border border-white/10 space-y-3">
+      <div className="p-4 rounded-2xl bg-black/70 border-white/10 space-y-3">
         <div className="flex items-center justify-between text-[11px] text-zinc-400 border-b border-white/5 pb-2">
           <span className="font-bold text-white">FORMAL 8-STAGE VERIFICATION PIPELINE</span>
           <span>Zero Mutation Contract &bull; SSoT = 0</span>
@@ -201,7 +201,7 @@ export const EvidenceVerificationConsole: React.FC<EvidenceVerificationConsolePr
       {/* Target Slot Selector */}
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-4">
         {/* Slot Selection Panel */}
-        <div className="p-4 rounded-2xl bg-black/60 border border-white/10 space-y-3">
+        <div className="p-4 rounded-2xl bg-black/60 border-white/10 space-y-3">
           <div className="text-[11px] font-bold text-zinc-300 flex items-center justify-between">
             <span>SELECT CUSTODIAN SLOT:</span>
             <span className="text-zinc-500">{allSlots.length} Slots Available</span>
@@ -242,22 +242,22 @@ export const EvidenceVerificationConsole: React.FC<EvidenceVerificationConsolePr
 
                   <div className="shrink-0">
                     {isReal && (
-                      <span className="px-2 py-0.5 rounded text-[9px] font-bold bg-emerald-500/20 text-emerald-300 border border-emerald-500/40">
+                      <span className="px-2 py-0.5 rounded text-[9px] font-bold bg-emerald-500/20 text-emerald-300 border-emerald-500/40">
                         🟢 SIGNED
                       </span>
                     )}
                     {isPending && (
-                      <span className="px-2 py-0.5 rounded text-[9px] font-bold bg-amber-500/20 text-amber-300 border border-amber-500/40">
+                      <span className="px-2 py-0.5 rounded text-[9px] font-bold bg-amber-500/20 text-amber-300 border-amber-500/40">
                         🟡 PENDING
                       </span>
                     )}
                     {isSim && (
-                      <span className="px-2 py-0.5 rounded text-[9px] font-bold bg-purple-500/20 text-purple-300 border border-purple-500/40">
+                      <span className="px-2 py-0.5 rounded text-[9px] font-bold bg-purple-500/20 text-purple-300 border-purple-500/40">
                         ⚪ SIMULATED
                       </span>
                     )}
                     {isInv && (
-                      <span className="px-2 py-0.5 rounded text-[9px] font-bold bg-rose-500/20 text-rose-300 border border-rose-500/40">
+                      <span className="px-2 py-0.5 rounded text-[9px] font-bold bg-rose-500/20 text-rose-300 border-rose-500/40">
                         🔴 REJECTED
                       </span>
                     )}
@@ -269,7 +269,7 @@ export const EvidenceVerificationConsole: React.FC<EvidenceVerificationConsolePr
         </div>
 
         {/* Slot Dossier and Intake Verification Controls */}
-        <div className="lg:col-span-2 p-5 rounded-2xl bg-black/60 border border-white/10 space-y-4">
+        <div className="lg:col-span-2 p-5 rounded-2xl bg-black/60 border-white/10 space-y-4">
           <div className="flex items-center justify-between border-b border-white/10 pb-3">
             <div>
               <div className="text-white font-bold text-sm flex items-center gap-2">
@@ -308,7 +308,7 @@ export const EvidenceVerificationConsole: React.FC<EvidenceVerificationConsolePr
           </div>
 
           {/* Key & Hardware Specs */}
-          <div className="grid grid-cols-1 sm:grid-cols-3 gap-2.5 p-3 rounded-xl bg-black/80 border border-white/5 text-[10px]">
+          <div className="grid grid-cols-1 sm:grid-cols-3 gap-2.5 p-3 rounded-xl bg-black/80 border-white/5 text-[10px]">
             <div>
               <span className="text-zinc-500">HARDWARE DEVICE:</span>
               <div className="text-amber-300 font-bold">{selectedSlot.expectedDevice}</div>
@@ -375,7 +375,7 @@ export const EvidenceVerificationConsole: React.FC<EvidenceVerificationConsolePr
                   playAuditChime();
                 }}
                 disabled={pipelineState === 'EXECUTING' || pendingSlots.length === 0}
-                className="py-2.5 px-3 rounded-xl bg-gradient-to-r from-emerald-600/30 to-amber-600/30 hover:from-emerald-600/50 hover:to-amber-600/50 text-emerald-300 border border-emerald-500/50 font-bold text-xs flex items-center justify-center gap-2 cursor-pointer transition-all shadow-md shadow-emerald-500/10"
+                className="py-2.5 px-3 rounded-xl bg-gradient-to-r from-emerald-600/30 to-amber-600/30 hover:from-emerald-600/50 hover:to-amber-600/50 text-emerald-300 border-emerald-500/50 font-bold text-xs flex items-center justify-center gap-2 cursor-pointer transition-all shadow-md shadow-emerald-500/10"
               >
                 <Sparkles className="w-3.5 h-3.5 text-amber-400" />
                 <span>⚡ INTAKE ALL PENDING ({pendingSlots.length}) &rarr; 10/10</span>
@@ -384,7 +384,7 @@ export const EvidenceVerificationConsole: React.FC<EvidenceVerificationConsolePr
               <button
                 onClick={() => handleRunPipeline('SIMULATION_MOCK')}
                 disabled={pipelineState === 'EXECUTING'}
-                className="py-2.5 px-3 rounded-xl bg-purple-500/20 hover:bg-purple-500/30 text-purple-300 border border-purple-500/40 font-bold text-xs flex items-center justify-center gap-2 cursor-pointer transition-all"
+                className="py-2.5 px-3 rounded-xl bg-purple-500/20 hover:bg-purple-500/30 text-purple-300 border-purple-500/40 font-bold text-xs flex items-center justify-center gap-2 cursor-pointer transition-all"
               >
                 <AlertTriangle className="w-3.5 h-3.5 text-purple-400" />
                 <span>TEST SIMULATED/MOCK PROOF (0 QUORUM)</span>
@@ -393,7 +393,7 @@ export const EvidenceVerificationConsole: React.FC<EvidenceVerificationConsolePr
               <button
                 onClick={() => handleRunPipeline('TAMPERED_SIG')}
                 disabled={pipelineState === 'EXECUTING'}
-                className="py-2 px-3 rounded-xl bg-rose-500/20 hover:bg-rose-500/30 text-rose-300 border border-rose-500/40 font-bold text-xs flex items-center justify-center gap-2 cursor-pointer transition-all"
+                className="py-2 px-3 rounded-xl bg-rose-500/20 hover:bg-rose-500/30 text-rose-300 border-rose-500/40 font-bold text-xs flex items-center justify-center gap-2 cursor-pointer transition-all"
               >
                 <XCircle className="w-3.5 h-3.5 text-rose-400" />
                 <span>TEST CORRUPTED SIGNATURE (REJECTED)</span>
@@ -402,7 +402,7 @@ export const EvidenceVerificationConsole: React.FC<EvidenceVerificationConsolePr
               <button
                 onClick={() => handleRunPipeline('REPLAY_NONCE')}
                 disabled={pipelineState === 'EXECUTING'}
-                className="py-2 px-3 rounded-xl bg-amber-500/20 hover:bg-amber-500/30 text-amber-300 border border-amber-500/40 font-bold text-xs flex items-center justify-center gap-2 cursor-pointer transition-all"
+                className="py-2 px-3 rounded-xl bg-amber-500/20 hover:bg-amber-500/30 text-amber-300 border-amber-500/40 font-bold text-xs flex items-center justify-center gap-2 cursor-pointer transition-all"
               >
                 <ShieldAlert className="w-3.5 h-3.5 text-amber-400" />
                 <span>TEST REPLAY ATTACK (REJECTED)</span>
@@ -412,7 +412,7 @@ export const EvidenceVerificationConsole: React.FC<EvidenceVerificationConsolePr
 
           {/* Interactive Logs Window */}
           {activeLogs.length > 0 && (
-            <div className="p-3.5 rounded-xl bg-black border border-white/10 space-y-2 text-[10px]">
+            <div className="p-3.5 rounded-xl bg-black border-white/10 space-y-2 text-[10px]">
               <div className="text-zinc-400 font-bold flex items-center justify-between border-b border-white/10 pb-1.5">
                 <span className="flex items-center gap-1 text-white">
                   <Terminal className="w-3.5 h-3.5 text-cyan-400" />

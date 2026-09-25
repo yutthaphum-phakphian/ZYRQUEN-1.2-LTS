@@ -146,26 +146,26 @@ export const QuantumVisualizer: React.FC = () => {
   }, []);
 
   return (
-    <div className="relative rounded-lg overflow-hidden border border-slate-800 bg-[#040711] shadow-inner">
+    <div className="relative rounded-lg overflow-hidden border-slate-800 bg-[#040711] shadow-inner">
       <div className="absolute top-3 left-3 z-10 flex items-center space-x-2">
-        <span className="text-xs font-semibold text-slate-300 flex items-center space-x-1.5 bg-slate-950/80 px-2.5 py-1 rounded border border-slate-800">
+        <span className="text-xs font-semibold text-slate-300 flex items-center space-x-1.5 bg-slate-950/80 px-2.5 py-1 rounded border-slate-800">
           <Sparkles className="w-3.5 h-3.5 text-cyan-400" />
           <span>Sovereign Quantum Lattice (400T • Ω601–Ω1000)</span>
         </span>
-        <span className="text-[10px] font-mono-code px-2 py-0.5 rounded bg-emerald-950/90 text-emerald-300 border border-emerald-800">
+        <span className="text-[10px] font-mono-code px-2 py-0.5 rounded bg-emerald-950/90 text-emerald-300 border-emerald-800">
           60.0 FPS • REAL-TIME
         </span>
       </div>
 
       <div className="absolute top-3 right-3 z-10 flex items-center space-x-2 text-xs">
-        <span className="bg-slate-950/80 px-2 py-1 rounded text-slate-400 font-mono-code text-[11px] border border-slate-800">
+        <span className="bg-slate-950/80 px-2 py-1 rounded text-slate-400 font-mono-code text-[11px] border-slate-800">
           Deca Quorum: 10/10 Live
         </span>
       </div>
 
       <canvas ref={canvasRef} className="w-full block" />
 
-      <div className="absolute bottom-2 left-3 right-3 flex items-center justify-between text-[11px] text-slate-400 bg-slate-950/70 backdrop-blur-sm px-3 py-1.5 rounded border border-slate-800/80 font-mono-code">
+      <div className="absolute bottom-2 left-3 right-3 flex items-center justify-between text-[11px] text-slate-400 bg-slate-950/70 backdrop-blur-sm px-3 py-1.5 rounded border-slate-800/80 font-mono-code">
         <div>
           <span className="text-slate-500">Genesis Merkle Anchor: </span>
           <span className="text-cyan-300 font-semibold">{CANONICAL_CONSTANTS.GENESIS_MERKLE_ROOT.substring(0, 16)}...</span>

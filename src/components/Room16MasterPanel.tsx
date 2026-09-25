@@ -162,20 +162,20 @@ export const Room16MasterPanel: React.FC<Room16MasterPanelProps> = ({
   return (
     <div className="space-y-6 font-mono text-zinc-300">
       {/* Top Banner for Room 16 */}
-      <div className="p-6 sm:p-8 rounded-[28px] bg-gradient-to-br from-cyan-950/40 via-[#071720]/95 to-black border border-cyan-500/40 backdrop-blur-xl relative overflow-hidden shadow-2xl">
+      <div className="p-6 sm:p-8 rounded-[28px] bg-gradient-to-br from-cyan-950/40 via-[#071720]/95 to-black border-cyan-500/40 backdrop-blur-xl relative overflow-hidden shadow-2xl">
         <div className="absolute top-0 right-0 w-96 h-96 bg-gradient-to-bl from-cyan-500/10 via-blue-500/5 to-transparent rounded-full blur-3xl pointer-events-none" />
 
         <div className="relative z-10 flex flex-col lg:flex-row lg:items-center justify-between gap-6">
           <div className="space-y-3">
             <div className="flex flex-wrap items-center gap-2">
-              <span className="px-3 py-1 rounded-full bg-cyan-500/15 text-cyan-300 border border-cyan-500/40 text-xs font-bold flex items-center gap-1.5 shadow-[0_0_12px_rgba(6,182,212,0.25)]">
+              <span className="px-3 py-1 rounded-full bg-cyan-500/15 text-cyan-300 border-cyan-500/40 text-xs font-bold flex items-center gap-1.5 shadow-[0_0_12px_rgba(6,182,212,0.25)]">
                 <Orbit className="w-4 h-4 text-cyan-400 animate-spin" />
                 CHAMBER 16 • DYNAMIC 3D SOVEREIGN QUANTUM VISUALIZATION
               </span>
-              <span className="px-2.5 py-0.5 rounded-full bg-emerald-500/15 text-emerald-300 border border-emerald-500/30 text-[11px] font-bold">
+              <span className="px-2.5 py-0.5 rounded-full bg-emerald-500/15 text-emerald-300 border-emerald-500/30 text-[11px] font-bold">
                 {fps} FPS STABLE
               </span>
-              <span className="px-2.5 py-0.5 rounded-full bg-indigo-500/15 text-indigo-300 border border-indigo-500/30 text-[11px] font-bold">
+              <span className="px-2.5 py-0.5 rounded-full bg-indigo-500/15 text-indigo-300 border-indigo-500/30 text-[11px] font-bold">
                 10-POINT DECA-KEY RING
               </span>
             </div>
@@ -197,7 +197,7 @@ export const Room16MasterPanel: React.FC<Room16MasterPanelProps> = ({
                 setRotationSpeed((prev) => (prev >= 2.0 ? 0.5 : prev + 0.5));
                 playTone(700, 0.03);
               }}
-              className="px-3 py-2 rounded-xl bg-cyan-500/20 hover:bg-cyan-500/30 text-cyan-200 border border-cyan-500/40 text-xs font-bold flex items-center gap-1.5 transition-all"
+              className="px-3 py-2 rounded-xl bg-cyan-500/20 hover:bg-cyan-500/30 text-cyan-200 border-cyan-500/40 text-xs font-bold flex items-center gap-1.5 transition-all"
             >
               <RotateCw className="w-3.5 h-3.5" />
               Speed: {rotationSpeed.toFixed(1)}x
@@ -207,7 +207,7 @@ export const Room16MasterPanel: React.FC<Room16MasterPanelProps> = ({
                 setShowRwaOrbits((prev) => !prev);
                 playTone(600, 0.03);
               }}
-              className="px-3 py-2 rounded-xl bg-blue-500/20 hover:bg-blue-500/30 text-blue-200 border border-blue-500/40 text-xs font-bold flex items-center gap-1.5 transition-all"
+              className="px-3 py-2 rounded-xl bg-blue-500/20 hover:bg-blue-500/30 text-blue-200 border-blue-500/40 text-xs font-bold flex items-center gap-1.5 transition-all"
             >
               <Layers className="w-3.5 h-3.5" />
               RWA Orbits: {showRwaOrbits ? 'ON' : 'OFF'}
@@ -217,22 +217,22 @@ export const Room16MasterPanel: React.FC<Room16MasterPanelProps> = ({
 
         {/* Quick KPI Cards */}
         <div className="grid grid-cols-2 sm:grid-cols-4 gap-3 mt-6 pt-6 border-t border-cyan-500/20">
-          <div className="p-3 rounded-xl bg-black/40 border border-white/5 space-y-1">
+          <div className="p-3 rounded-xl bg-black/40 border-white/5 space-y-1">
             <div className="text-[10px] text-zinc-400 uppercase tracking-wider">Engine State</div>
             <div className="text-base sm:text-lg font-bold text-cyan-400">Canvas 2D/3D</div>
             <div className="text-[10px] text-emerald-300">GPU Accelerated</div>
           </div>
-          <div className="p-3 rounded-xl bg-black/40 border border-white/5 space-y-1">
+          <div className="p-3 rounded-xl bg-black/40 border-white/5 space-y-1">
             <div className="text-[10px] text-zinc-400 uppercase tracking-wider">Frame Rate</div>
             <div className="text-base sm:text-lg font-bold text-emerald-400">{fps} FPS</div>
             <div className="text-[10px] text-zinc-400">Zero Frame Drop</div>
           </div>
-          <div className="p-3 rounded-xl bg-black/40 border border-white/5 space-y-1">
+          <div className="p-3 rounded-xl bg-black/40 border-white/5 space-y-1">
             <div className="text-[10px] text-zinc-400 uppercase tracking-wider">Lattice Nodes</div>
             <div className="text-base sm:text-lg font-bold text-indigo-400">400 RWA + 10 HSM</div>
             <div className="text-[10px] text-zinc-400">Ω601–Ω1000 Mapped</div>
           </div>
-          <div className="p-3 rounded-xl bg-black/40 border border-white/5 space-y-1">
+          <div className="p-3 rounded-xl bg-black/40 border-white/5 space-y-1">
             <div className="text-[10px] text-zinc-400 uppercase tracking-wider">Crystal Symmetry</div>
             <div className="text-base sm:text-lg font-bold text-yellow-300">Decagonal D10</div>
             <div className="text-[10px] text-zinc-400">Mathematical Parity</div>
@@ -241,7 +241,7 @@ export const Room16MasterPanel: React.FC<Room16MasterPanelProps> = ({
       </div>
 
       {/* Canvas Viewport */}
-      <div className="p-4 rounded-3xl bg-[#030712] border border-cyan-500/30 overflow-hidden shadow-2xl relative">
+      <div className="p-4 rounded-3xl bg-[#030712] border-cyan-500/30 overflow-hidden shadow-2xl relative">
         <canvas ref={canvasRef} className="w-full rounded-2xl block" />
       </div>
     </div>

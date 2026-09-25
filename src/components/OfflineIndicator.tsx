@@ -123,7 +123,7 @@ export const OfflineIndicator: React.FC = () => {
   if (isOnline) {
     if (justSynced) {
       return (
-        <div className="fixed bottom-[calc(3.5rem+env(safe-area-inset-bottom))] left-4 z-50 flex items-center gap-2.5 rounded-xl bg-slate-900/95 border border-emerald-500/60 px-4 py-2 text-xs font-mono text-emerald-300 shadow-2xl backdrop-blur-md animate-in fade-in slide-in-from-bottom-3 duration-300">
+        <div className="fixed bottom-[calc(3.5rem+env(safe-area-inset-bottom))] left-4 z-50 flex items-center gap-2.5 rounded-xl bg-slate-900/95 border-emerald-500/60 px-4 py-2 text-xs font-mono text-emerald-300 shadow-2xl backdrop-blur-md animate-in fade-in slide-in-from-bottom-3 duration-300">
           <CheckCircle2 className="w-4 h-4 text-emerald-400 shrink-0" />
           <span>✅ ซิงก์ข้อมูล Forensic Audit เข้าสู่ Primary Ledger สำเร็จ 100%</span>
         </div>
@@ -134,7 +134,7 @@ export const OfflineIndicator: React.FC = () => {
 
   // Full Offline Mode (Only shown when truly disconnected)
   return (
-    <div className="fixed bottom-[calc(3.5rem+env(safe-area-inset-bottom))] left-4 right-4 sm:right-auto sm:max-w-md z-50 flex flex-col sm:flex-row items-start sm:items-center gap-2.5 rounded-xl bg-[#0a0f1e]/95 border border-amber-500/60 px-4 py-2.5 text-xs font-mono text-amber-300 shadow-2xl backdrop-blur-md animate-in fade-in slide-in-from-bottom-3 duration-300">
+    <div className="fixed bottom-[calc(3.5rem+env(safe-area-inset-bottom))] left-4 right-4 sm:right-auto sm:max-w-md z-50 flex flex-col sm:flex-row items-start sm:items-center gap-2.5 rounded-xl bg-[#0a0f1e]/95 border-amber-500/60 px-4 py-2.5 text-xs font-mono text-amber-300 shadow-2xl backdrop-blur-md animate-in fade-in slide-in-from-bottom-3 duration-300">
       <div className="flex items-center gap-2 shrink-0">
         <span className="relative flex h-3 w-3">
           <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-amber-400 opacity-75" />
@@ -146,7 +146,7 @@ export const OfflineIndicator: React.FC = () => {
 
       <div className="flex items-center gap-2 text-[11px] text-amber-200/90 pl-5 sm:pl-0 border-t sm:border-t-0 sm:border-l border-amber-500/30 pt-1.5 sm:pt-0 sm:pl-3">
         <span>รอ Background Sync:</span>
-        <span className="px-2 py-0.5 rounded-md bg-amber-950 text-amber-300 border border-amber-500/50 font-bold">
+        <span className="px-2 py-0.5 rounded-md bg-amber-950 text-amber-300 border-amber-500/50 font-bold">
           {pendingCount} รายการ
         </span>
         {typeof cachedAssetsCount === 'number' && (
@@ -161,7 +161,7 @@ export const OfflineIndicator: React.FC = () => {
         <button
           onClick={handleManualSync}
           disabled={isSyncing}
-          className="ml-auto mt-1 sm:mt-0 px-2.5 py-1 bg-amber-900/60 hover:bg-amber-800 text-amber-100 rounded-lg text-[10px] font-bold border border-amber-500/40 flex items-center gap-1 transition-all cursor-pointer"
+          className="ml-auto mt-1 sm:mt-0 px-2.5 py-1 bg-amber-900/60 hover:bg-amber-800 text-amber-100 rounded-lg text-[10px] font-bold border-amber-500/40 flex items-center gap-1 transition-all cursor-pointer"
           title="พยายามส่งข้อมูลไปยังเซิร์ฟเวอร์ทันที"
         >
           <RefreshCw className={`w-3 h-3 ${isSyncing ? 'animate-spin' : ''}`} />

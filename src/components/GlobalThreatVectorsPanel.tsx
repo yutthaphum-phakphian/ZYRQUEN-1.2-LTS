@@ -314,20 +314,20 @@ export const GlobalThreatVectorsPanel: React.FC<GlobalThreatVectorsPanelProps> =
   return (
     <div className="space-y-6 animate-in fade-in duration-300 font-mono">
       {/* Top Banner & Operational Status */}
-      <div className="p-6 sm:p-7 rounded-[28px] bg-gradient-to-br from-[#0c0e1e]/95 via-[#07080f]/95 to-[#0b1022]/95 border border-rose-500/25 shadow-[0_10px_50px_-10px_rgba(244,63,94,0.15)] backdrop-blur-3xl relative overflow-hidden group">
+      <div className="p-6 sm:p-7 rounded-[28px] bg-gradient-to-br from-[#0c0e1e]/95 via-[#07080f]/95 to-[#0b1022]/95 border-rose-500/25 shadow-[0_10px_50px_-10px_rgba(244,63,94,0.15)] backdrop-blur-3xl relative overflow-hidden group">
         <div className="absolute top-0 right-1/4 w-96 h-64 bg-rose-500/8 rounded-full blur-[85px] pointer-events-none transition-opacity opacity-60 group-hover:opacity-100" />
 
         <div className="relative z-10 flex flex-col xl:flex-row xl:items-center justify-between gap-5">
           <div className="space-y-2">
             <div className="flex items-center gap-2.5 flex-wrap">
-              <span className="px-3 py-1 rounded-full bg-rose-500/15 text-rose-300 border border-rose-500/30 text-[10px] sm:text-xs font-bold tracking-wider flex items-center gap-1.5 shadow-sm">
+              <span className="px-3 py-1 rounded-full bg-rose-500/15 text-rose-300 border-rose-500/30 text-[10px] sm:text-xs font-bold tracking-wider flex items-center gap-1.5 shadow-sm">
                 <span className="w-2 h-2 rounded-full bg-rose-400 animate-ping" />
                 GLOBAL THREAT MATRIX • REAL-TIME
               </span>
-              <span className="px-3 py-1 rounded-full bg-emerald-500/15 text-emerald-300 border border-emerald-500/30 text-[10px] sm:text-xs font-bold tracking-wider shadow-sm">
+              <span className="px-3 py-1 rounded-full bg-emerald-500/15 text-emerald-300 border-emerald-500/30 text-[10px] sm:text-xs font-bold tracking-wider shadow-sm">
                 100.00% FAIL-CLOSED INTERCEPTED
               </span>
-              <span className="px-3 py-1 rounded-full bg-cyan-500/15 text-cyan-300 border border-cyan-500/30 text-[10px] sm:text-xs font-bold tracking-wider shadow-sm">
+              <span className="px-3 py-1 rounded-full bg-cyan-500/15 text-cyan-300 border-cyan-500/30 text-[10px] sm:text-xs font-bold tracking-wider shadow-sm">
                 5 GEOGRAPHIC REGIONS MONITORED
               </span>
             </div>
@@ -347,8 +347,8 @@ export const GlobalThreatVectorsPanel: React.FC<GlobalThreatVectorsPanelProps> =
               disabled={isSimulatingWave}
               className={`px-5 py-3 rounded-2xl text-xs font-bold flex items-center gap-2.5 transition-all shadow-lg ${
                 isSimulatingWave
-                  ? 'bg-rose-600/40 text-rose-200 border border-rose-500 animate-pulse cursor-not-allowed'
-                  : 'bg-gradient-to-r from-rose-600/30 via-red-600/25 to-rose-600/30 hover:from-rose-600/40 hover:to-rose-600/40 text-rose-100 border border-rose-500/40 hover:border-rose-400 shadow-[0_0_20px_rgba(244,63,94,0.25)]'
+                  ? 'bg-rose-600/40 text-rose-200 border-rose-500 animate-pulse cursor-not-allowed'
+                  : 'bg-gradient-to-r from-rose-600/30 via-red-600/25 to-rose-600/30 hover:from-rose-600/40 hover:to-rose-600/40 text-rose-100 border-rose-500/40 hover:border-rose-400 shadow-[0_0_20px_rgba(244,63,94,0.25)]'
               }`}
               title="Simulate a coordinated multi-region DDoS and cryptographic attack wave"
             >
@@ -361,7 +361,7 @@ export const GlobalThreatVectorsPanel: React.FC<GlobalThreatVectorsPanelProps> =
 
       {/* 4 Executive Metric Counters */}
       <div className="grid grid-cols-2 lg:grid-cols-4 gap-3.5">
-        <div className="p-4 sm:p-5 rounded-2xl bg-[#0b0e1e]/80 border border-white/8 backdrop-blur-xl space-y-1">
+        <div className="p-4 sm:p-5 rounded-2xl bg-[#0b0e1e]/80 border-white/8 backdrop-blur-xl space-y-1">
           <div className="flex items-center justify-between text-zinc-400 text-xs">
             <span>TOTAL ATTEMPTS</span>
             <ShieldAlert className="w-4 h-4 text-rose-400" />
@@ -375,7 +375,7 @@ export const GlobalThreatVectorsPanel: React.FC<GlobalThreatVectorsPanelProps> =
           </div>
         </div>
 
-        <div className="p-4 sm:p-5 rounded-2xl bg-[#0b0e1e]/80 border border-white/8 backdrop-blur-xl space-y-1">
+        <div className="p-4 sm:p-5 rounded-2xl bg-[#0b0e1e]/80 border-white/8 backdrop-blur-xl space-y-1">
           <div className="flex items-center justify-between text-zinc-400 text-xs">
             <span>LIVE ATTACK RATE</span>
             <Activity className="w-4 h-4 text-amber-400 animate-pulse" />
@@ -388,7 +388,7 @@ export const GlobalThreatVectorsPanel: React.FC<GlobalThreatVectorsPanelProps> =
           </div>
         </div>
 
-        <div className="p-4 sm:p-5 rounded-2xl bg-[#0b0e1e]/80 border border-white/8 backdrop-blur-xl space-y-1">
+        <div className="p-4 sm:p-5 rounded-2xl bg-[#0b0e1e]/80 border-white/8 backdrop-blur-xl space-y-1">
           <div className="flex items-center justify-between text-zinc-400 text-xs">
             <span>FAIL-CLOSED ISOLATION</span>
             <Zap className="w-4 h-4 text-cyan-400" />
@@ -401,7 +401,7 @@ export const GlobalThreatVectorsPanel: React.FC<GlobalThreatVectorsPanelProps> =
           </div>
         </div>
 
-        <div className="p-4 sm:p-5 rounded-2xl bg-[#0b0e1e]/80 border border-white/8 backdrop-blur-xl space-y-1">
+        <div className="p-4 sm:p-5 rounded-2xl bg-[#0b0e1e]/80 border-white/8 backdrop-blur-xl space-y-1">
           <div className="flex items-center justify-between text-zinc-400 text-xs">
             <span>SSoT INVARIANTS DRIFT</span>
             <ShieldCheck className="w-4 h-4 text-emerald-400" />
@@ -416,11 +416,11 @@ export const GlobalThreatVectorsPanel: React.FC<GlobalThreatVectorsPanelProps> =
       </div>
 
       {/* Main Visualization Container */}
-      <div className="p-6 rounded-[28px] bg-[#090c1a]/85 border border-white/8 backdrop-blur-2xl space-y-6">
+      <div className="p-6 rounded-[28px] bg-[#090c1a]/85 border-white/8 backdrop-blur-2xl space-y-6">
         {/* Controls Toolbar: Mode Selection & Regional Filter */}
         <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 border-b border-white/8 pb-4">
           {/* Chart Type Selector */}
-          <div className="flex items-center gap-1.5 p-1 bg-black/40 border border-white/8 rounded-2xl text-xs">
+          <div className="flex items-center gap-1.5 p-1 bg-black/40 border-white/8 rounded-2xl text-xs">
             <button
               onClick={() => {
                 playTone(550, 0.03);
@@ -428,7 +428,7 @@ export const GlobalThreatVectorsPanel: React.FC<GlobalThreatVectorsPanelProps> =
               }}
               className={`px-3.5 py-2 rounded-xl flex items-center gap-2 transition-all font-bold ${
                 chartMode === 'area'
-                  ? 'bg-rose-500/20 text-rose-200 border border-rose-500/40 shadow-[0_0_12px_rgba(244,63,94,0.25)]'
+                  ? 'bg-rose-500/20 text-rose-200 border-rose-500/40 shadow-[0_0_12px_rgba(244,63,94,0.25)]'
                   : 'text-zinc-400 hover:text-zinc-200'
               }`}
             >
@@ -443,7 +443,7 @@ export const GlobalThreatVectorsPanel: React.FC<GlobalThreatVectorsPanelProps> =
               }}
               className={`px-3.5 py-2 rounded-xl flex items-center gap-2 transition-all font-bold ${
                 chartMode === 'bar'
-                  ? 'bg-rose-500/20 text-rose-200 border border-rose-500/40 shadow-[0_0_12px_rgba(244,63,94,0.25)]'
+                  ? 'bg-rose-500/20 text-rose-200 border-rose-500/40 shadow-[0_0_12px_rgba(244,63,94,0.25)]'
                   : 'text-zinc-400 hover:text-zinc-200'
               }`}
             >
@@ -458,7 +458,7 @@ export const GlobalThreatVectorsPanel: React.FC<GlobalThreatVectorsPanelProps> =
               }}
               className={`px-3.5 py-2 rounded-xl flex items-center gap-2 transition-all font-bold ${
                 chartMode === 'radar'
-                  ? 'bg-rose-500/20 text-rose-200 border border-rose-500/40 shadow-[0_0_12px_rgba(244,63,94,0.25)]'
+                  ? 'bg-rose-500/20 text-rose-200 border-rose-500/40 shadow-[0_0_12px_rgba(244,63,94,0.25)]'
                   : 'text-zinc-400 hover:text-zinc-200'
               }`}
             >
@@ -488,8 +488,8 @@ export const GlobalThreatVectorsPanel: React.FC<GlobalThreatVectorsPanelProps> =
                 }}
                 className={`px-2.5 py-1.5 rounded-xl transition-all whitespace-nowrap text-[11px] font-bold ${
                   selectedRegion === reg.id
-                    ? 'bg-white/15 text-white border border-white/20'
-                    : 'text-zinc-400 hover:text-zinc-200 bg-white/5 border border-transparent'
+                    ? 'bg-white/15 text-white border-white/20'
+                    : 'text-zinc-400 hover:text-zinc-200 bg-white/5 border-transparent'
                 }`}
               >
                 {reg.label}
@@ -701,7 +701,7 @@ export const GlobalThreatVectorsPanel: React.FC<GlobalThreatVectorsPanelProps> =
             >
               <div className="flex items-center justify-between text-xs">
                 <span className="text-lg">{node.flag}</span>
-                <span className="text-[10px] font-bold px-2 py-0.5 rounded-full bg-black/40 border border-white/10">
+                <span className="text-[10px] font-bold px-2 py-0.5 rounded-full bg-black/40 border-white/10">
                   {node.code}
                 </span>
               </div>
@@ -714,14 +714,14 @@ export const GlobalThreatVectorsPanel: React.FC<GlobalThreatVectorsPanelProps> =
       </div>
 
       {/* Real-Time Neutralized Incidents Stream */}
-      <div className="p-6 rounded-[28px] bg-[#090c1a]/85 border border-white/8 backdrop-blur-2xl space-y-4">
+      <div className="p-6 rounded-[28px] bg-[#090c1a]/85 border-white/8 backdrop-blur-2xl space-y-4">
         <div className="flex items-center justify-between">
           <div className="flex items-center gap-2.5">
             <Radio className="w-4 h-4 text-rose-400 animate-pulse" />
             <h3 className="text-sm font-bold text-white uppercase tracking-wider">
               Intercepted Breach Attempts Activity Stream
             </h3>
-            <span className="text-[10px] px-2 py-0.5 rounded-full bg-rose-500/15 text-rose-300 border border-rose-500/30 font-bold">
+            <span className="text-[10px] px-2 py-0.5 rounded-full bg-rose-500/15 text-rose-300 border-rose-500/30 font-bold">
               LIVE BUFFER
             </span>
           </div>
@@ -734,13 +734,13 @@ export const GlobalThreatVectorsPanel: React.FC<GlobalThreatVectorsPanelProps> =
           {filteredIncidents.map((inc) => (
             <div
               key={inc.id}
-              className="p-4 rounded-2xl bg-black/40 border border-white/6 hover:border-rose-500/30 transition-all flex flex-col md:flex-row md:items-center justify-between gap-3 text-xs"
+              className="p-4 rounded-2xl bg-black/40 border-white/6 hover:border-rose-500/30 transition-all flex flex-col md:flex-row md:items-center justify-between gap-3 text-xs"
             >
               <div className="space-y-1 flex-1">
                 <div className="flex items-center gap-2 flex-wrap">
                   <span className="text-base">{inc.flag}</span>
                   <span className="font-bold text-white">{inc.id}</span>
-                  <span className="px-2 py-0.5 rounded-full bg-rose-500/15 text-rose-300 border border-rose-500/30 text-[10px] font-bold">
+                  <span className="px-2 py-0.5 rounded-full bg-rose-500/15 text-rose-300 border-rose-500/30 text-[10px] font-bold">
                     {inc.severity}
                   </span>
                   <span className="text-zinc-400">{inc.region}</span>
@@ -762,7 +762,7 @@ export const GlobalThreatVectorsPanel: React.FC<GlobalThreatVectorsPanelProps> =
                   </div>
                 </div>
 
-                <span className="px-2.5 py-1 rounded-xl bg-white/5 border border-white/10 text-[10px] text-zinc-400">
+                <span className="px-2.5 py-1 rounded-xl bg-white/5 border-white/10 text-[10px] text-zinc-400">
                   {inc.signatureVerification}
                 </span>
               </div>

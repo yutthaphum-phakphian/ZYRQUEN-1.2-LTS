@@ -94,7 +94,7 @@ export const DeepFreezeColdStoragePanel: React.FC<DeepFreezeColdStoragePanelProp
   return (
     <div
       id="deep-freeze-cold-storage-panel"
-      className="p-6 rounded-[28px] bg-gradient-to-br from-[#0a121e]/90 via-[#070b14]/85 to-[#04060b] border border-cyan-500/25 backdrop-blur-xl space-y-5 shadow-2xl relative overflow-hidden font-mono"
+      className="p-6 rounded-[28px] bg-gradient-to-br from-[#0a121e]/90 via-[#070b14]/85 to-[#04060b] border-cyan-500/25 backdrop-blur-xl space-y-5 shadow-2xl relative overflow-hidden font-mono"
     >
       {/* Background Cold Glow */}
       <div className="absolute top-0 right-0 w-80 h-80 bg-blue-500/5 rounded-full blur-3xl pointer-events-none" />
@@ -102,7 +102,7 @@ export const DeepFreezeColdStoragePanel: React.FC<DeepFreezeColdStoragePanelProp
       {/* Header */}
       <div className="flex flex-col lg:flex-row lg:items-center justify-between gap-4 relative z-10">
         <div className="flex items-center gap-3">
-          <div className="w-10 h-10 rounded-2xl bg-cyan-500/15 border border-cyan-500/30 flex items-center justify-center shrink-0 shadow-[0_0_15px_rgba(6,182,212,0.3)]">
+          <div className="w-10 h-10 rounded-2xl bg-cyan-500/15 border-cyan-500/30 flex items-center justify-center shrink-0 shadow-[0_0_15px_rgba(6,182,212,0.3)]">
             <Snowflake className="w-5 h-5 text-cyan-300 animate-spin" style={{ animationDuration: '18s' }} />
           </div>
           <div>
@@ -110,7 +110,7 @@ export const DeepFreezeColdStoragePanel: React.FC<DeepFreezeColdStoragePanelProp
               <h3 className="text-sm sm:text-base font-bold text-white flex items-center gap-2">
                 DEEP FREEZE ARCHIVE & COLD-STORAGE SERVICE
               </h3>
-              <span className="text-[10px] px-2 py-0.5 rounded-full bg-cyan-500/15 text-cyan-300 border border-cyan-500/30 font-bold flex items-center gap-1">
+              <span className="text-[10px] px-2 py-0.5 rounded-full bg-cyan-500/15 text-cyan-300 border-cyan-500/30 font-bold flex items-center gap-1">
                 <ShieldCheck className="w-3 h-3 text-cyan-400" />
                 AUTO-ARCHIVE &gt; 1,000 ENTRIES ACTIVE
               </span>
@@ -126,7 +126,7 @@ export const DeepFreezeColdStoragePanel: React.FC<DeepFreezeColdStoragePanelProp
           <button
             onClick={handleTriggerDeepFreeze}
             disabled={isProcessing}
-            className="px-3.5 py-1.5 rounded-xl bg-cyan-500/20 hover:bg-cyan-500/30 text-cyan-200 border border-cyan-500/40 font-bold flex items-center gap-1.5 transition-all shadow-[0_0_12px_rgba(6,182,212,0.2)] disabled:opacity-50"
+            className="px-3.5 py-1.5 rounded-xl bg-cyan-500/20 hover:bg-cyan-500/30 text-cyan-200 border-cyan-500/40 font-bold flex items-center gap-1.5 transition-all shadow-[0_0_12px_rgba(6,182,212,0.2)] disabled:opacity-50"
             title="Force deep freeze compression on current uncompressed ledger segment"
           >
             <Snowflake className={`w-3.5 h-3.5 text-cyan-300 ${isProcessing ? 'animate-spin' : ''}`} />
@@ -135,7 +135,7 @@ export const DeepFreezeColdStoragePanel: React.FC<DeepFreezeColdStoragePanelProp
 
           <button
             onClick={handleExportManifest}
-            className="px-3.5 py-1.5 rounded-xl bg-white/5 hover:bg-white/10 border border-white/10 text-zinc-300 flex items-center gap-1.5 transition-all"
+            className="px-3.5 py-1.5 rounded-xl bg-white/5 hover:bg-white/10 border-white/10 text-zinc-300 flex items-center gap-1.5 transition-all"
             title="Download cold-storage archive manifest JSON"
           >
             <Download className="w-3.5 h-3.5 text-emerald-400" />
@@ -146,7 +146,7 @@ export const DeepFreezeColdStoragePanel: React.FC<DeepFreezeColdStoragePanelProp
 
       {/* Metrics Row */}
       <div className="grid grid-cols-2 sm:grid-cols-4 gap-3 relative z-10 text-xs">
-        <div className="p-3 rounded-2xl bg-cyan-950/20 border border-cyan-500/20 flex flex-col justify-between">
+        <div className="p-3 rounded-2xl bg-cyan-950/20 border-cyan-500/20 flex flex-col justify-between">
           <span className="text-[11px] text-zinc-400 flex items-center gap-1.5">
             <Layers className="w-3.5 h-3.5 text-cyan-400" />
             Total Ledger Entries
@@ -158,7 +158,7 @@ export const DeepFreezeColdStoragePanel: React.FC<DeepFreezeColdStoragePanelProp
           <span className="text-[9px] text-cyan-400 mt-0.5">Threshold: 1,000 Hot Entries</span>
         </div>
 
-        <div className="p-3 rounded-2xl bg-blue-950/20 border border-blue-500/20 flex flex-col justify-between">
+        <div className="p-3 rounded-2xl bg-blue-950/20 border-blue-500/20 flex flex-col justify-between">
           <span className="text-[11px] text-zinc-400 flex items-center gap-1.5">
             <Snowflake className="w-3.5 h-3.5 text-blue-400" />
             Deep Frozen Records
@@ -170,7 +170,7 @@ export const DeepFreezeColdStoragePanel: React.FC<DeepFreezeColdStoragePanelProp
           <span className="text-[9px] text-blue-400 mt-0.5">{archiveState.partitions.length} Cold Partitions</span>
         </div>
 
-        <div className="p-3 rounded-2xl bg-emerald-950/20 border border-emerald-500/20 flex flex-col justify-between">
+        <div className="p-3 rounded-2xl bg-emerald-950/20 border-emerald-500/20 flex flex-col justify-between">
           <span className="text-[11px] text-zinc-400 flex items-center gap-1.5">
             <HardDrive className="w-3.5 h-3.5 text-emerald-400" />
             Storage Saved (Ratio)
@@ -182,7 +182,7 @@ export const DeepFreezeColdStoragePanel: React.FC<DeepFreezeColdStoragePanelProp
           <span className="text-[9px] text-emerald-400 mt-0.5">LZW / Zstandard Encrypted</span>
         </div>
 
-        <div className="p-3 rounded-2xl bg-violet-950/20 border border-violet-500/20 flex flex-col justify-between">
+        <div className="p-3 rounded-2xl bg-violet-950/20 border-violet-500/20 flex flex-col justify-between">
           <span className="text-[11px] text-zinc-400 flex items-center gap-1.5">
             <Lock className="w-3.5 h-3.5 text-violet-400" />
             Active Hot Memory Tier
@@ -227,7 +227,7 @@ export const DeepFreezeColdStoragePanel: React.FC<DeepFreezeColdStoragePanelProp
                   </div>
                 </div>
                 <div className="text-right">
-                  <span className="text-[10px] px-1.5 py-0.5 rounded bg-emerald-500/10 text-emerald-400 border border-emerald-500/20 font-bold">
+                  <span className="text-[10px] px-1.5 py-0.5 rounded bg-emerald-500/10 text-emerald-400 border-emerald-500/20 font-bold">
                     {part.compressionRatio}%
                   </span>
                   <div className="text-[9px] text-zinc-500 mt-0.5">READ-ONLY</div>
@@ -239,11 +239,11 @@ export const DeepFreezeColdStoragePanel: React.FC<DeepFreezeColdStoragePanelProp
 
         {/* Selected Partition Forensic Proof Card */}
         {currentPart && (
-          <div className="lg:col-span-8 p-4 rounded-2xl bg-black/40 border border-white/8 space-y-3">
+          <div className="lg:col-span-8 p-4 rounded-2xl bg-black/40 border-white/8 space-y-3">
             <div className="flex items-center justify-between border-b border-white/10 pb-2">
               <div className="flex items-center gap-2">
                 <span className="font-bold text-white text-xs">{currentPart.partitionId}</span>
-                <span className="text-[10px] px-2 py-0.5 rounded bg-blue-500/15 text-blue-300 border border-blue-500/30">
+                <span className="text-[10px] px-2 py-0.5 rounded bg-blue-500/15 text-blue-300 border-blue-500/30">
                   {currentPart.coldStorageVault}
                 </span>
               </div>
@@ -267,7 +267,7 @@ export const DeepFreezeColdStoragePanel: React.FC<DeepFreezeColdStoragePanelProp
 
             <div>
               <span className="text-[10px] text-zinc-500">Merkle Branch Root Seal:</span>
-              <p className="text-[10px] text-cyan-300 font-mono break-all bg-black/50 p-1.5 rounded-lg border border-white/5 mt-0.5">
+              <p className="text-[10px] text-cyan-300 font-mono break-all bg-black/50 p-1.5 rounded-lg border-white/5 mt-0.5">
                 {currentPart.merkleBranchRoot}
               </p>
             </div>

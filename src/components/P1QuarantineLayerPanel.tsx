@@ -82,7 +82,7 @@ export const P1QuarantineLayerPanel: React.FC = () => {
       {/* Header */}
       <div className="flex flex-col lg:flex-row lg:items-center justify-between gap-4 border-b border-amber-500/20 pb-4">
         <div className="flex items-center gap-3.5">
-          <div className="w-12 h-12 rounded-2xl bg-amber-500/15 border border-amber-500/40 text-amber-300 flex items-center justify-center shrink-0 shadow-[0_0_20px_rgba(245,158,11,0.25)]">
+          <div className="w-12 h-12 rounded-2xl bg-amber-500/15 border-amber-500/40 text-amber-300 flex items-center justify-center shrink-0 shadow-[0_0_20px_rgba(245,158,11,0.25)]">
             <ShieldAlert className="w-6 h-6" />
           </div>
           <div>
@@ -90,10 +90,10 @@ export const P1QuarantineLayerPanel: React.FC = () => {
               <h2 className="text-base sm:text-lg font-bold text-white tracking-wide font-serif">
                 P1 — OBSERVED EVIDENCE &amp; QUARANTINE LAYER
               </h2>
-              <span className="px-2.5 py-0.5 rounded-full bg-amber-500/20 text-amber-300 border border-amber-500/40 text-[10px] font-bold">
+              <span className="px-2.5 py-0.5 rounded-full bg-amber-500/20 text-amber-300 border-amber-500/40 text-[10px] font-bold">
                 ISOLATION SANDBOX
               </span>
-              <span className="px-2.5 py-0.5 rounded-full bg-rose-500/20 text-rose-300 border border-rose-500/40 text-[10px] font-bold">
+              <span className="px-2.5 py-0.5 rounded-full bg-rose-500/20 text-rose-300 border-rose-500/40 text-[10px] font-bold">
                 PROMOTION = BLOCKED
               </span>
             </div>
@@ -106,7 +106,7 @@ export const P1QuarantineLayerPanel: React.FC = () => {
         <div className="flex flex-wrap items-center gap-2.5">
           <button
             onClick={handleCopyJson}
-            className="px-3 py-2 rounded-xl bg-white/5 hover:bg-white/10 border border-white/10 text-zinc-200 font-bold flex items-center gap-1.5 transition-all text-[11px]"
+            className="px-3 py-2 rounded-xl bg-white/5 hover:bg-white/10 border-white/10 text-zinc-200 font-bold flex items-center gap-1.5 transition-all text-[11px]"
           >
             {copiedJson ? <Check className="w-3.5 h-3.5 text-emerald-400" /> : <Copy className="w-3.5 h-3.5" />}
             <span>{copiedJson ? 'COPIED JSON' : 'COPY JSON'}</span>
@@ -114,7 +114,7 @@ export const P1QuarantineLayerPanel: React.FC = () => {
 
           <button
             onClick={handleExportManifest}
-            className="px-3 py-2 rounded-xl bg-white/5 hover:bg-white/10 border border-white/10 text-zinc-200 font-bold flex items-center gap-1.5 transition-all text-[11px]"
+            className="px-3 py-2 rounded-xl bg-white/5 hover:bg-white/10 border-white/10 text-zinc-200 font-bold flex items-center gap-1.5 transition-all text-[11px]"
           >
             <Download className="w-3.5 h-3.5" />
             <span>EXPORT MANIFEST</span>
@@ -123,7 +123,7 @@ export const P1QuarantineLayerPanel: React.FC = () => {
           <button
             onClick={handleRunAcceptanceTests}
             disabled={isRunningTests}
-            className="px-4 py-2 rounded-xl bg-amber-500/20 hover:bg-amber-500/30 border border-amber-400/50 text-amber-200 font-bold flex items-center gap-2 transition-all shadow-[0_0_15px_rgba(245,158,11,0.2)] disabled:opacity-50 text-[11px]"
+            className="px-4 py-2 rounded-xl bg-amber-500/20 hover:bg-amber-500/30 border-amber-400/50 text-amber-200 font-bold flex items-center gap-2 transition-all shadow-[0_0_15px_rgba(245,158,11,0.2)] disabled:opacity-50 text-[11px]"
           >
             <RefreshCw className={`w-3.5 h-3.5 ${isRunningTests ? 'animate-spin' : ''}`} />
             <span>{isRunningTests ? 'EVALUATING P1...' : 'RUN P1 SUITE (12/12)'}</span>
@@ -134,7 +134,7 @@ export const P1QuarantineLayerPanel: React.FC = () => {
       {/* 3-Plane Architecture Banner */}
       <div className="grid grid-cols-1 md:grid-cols-3 gap-3">
         {/* Plane 1 */}
-        <div className="p-3.5 rounded-2xl bg-cyan-950/20 border border-cyan-500/40 space-y-1">
+        <div className="p-3.5 rounded-2xl bg-cyan-950/20 border-cyan-500/40 space-y-1">
           <div className="flex items-center justify-between text-[10px] text-cyan-300 font-bold">
             <span>PLANE 1: CANONICAL</span>
             <span className="px-1.5 py-0.5 bg-cyan-500/20 rounded">IMMUTABLE / READ-ONLY</span>
@@ -145,7 +145,7 @@ export const P1QuarantineLayerPanel: React.FC = () => {
         </div>
 
         {/* Plane 2 */}
-        <div className="p-3.5 rounded-2xl bg-amber-950/20 border border-amber-500/40 space-y-1">
+        <div className="p-3.5 rounded-2xl bg-amber-950/20 border-amber-500/40 space-y-1">
           <div className="flex items-center justify-between text-[10px] text-amber-300 font-bold">
             <span>PLANE 2: OBSERVED</span>
             <span className="px-1.5 py-0.5 bg-amber-500/20 rounded">RUNTIME INGRESS</span>
@@ -156,7 +156,7 @@ export const P1QuarantineLayerPanel: React.FC = () => {
         </div>
 
         {/* Plane 3 */}
-        <div className="p-3.5 rounded-2xl bg-rose-950/20 border border-rose-500/40 space-y-1">
+        <div className="p-3.5 rounded-2xl bg-rose-950/20 border-rose-500/40 space-y-1">
           <div className="flex items-center justify-between text-[10px] text-rose-300 font-bold">
             <span>PLANE 3: QUARANTINE</span>
             <span className="px-1.5 py-0.5 bg-rose-500/20 rounded">ISOLATED SANDBOX</span>
@@ -209,13 +209,13 @@ export const P1QuarantineLayerPanel: React.FC = () => {
       {/* Tab 1: 3-Plane Architecture */}
       {activeTab === 'PLANES' && (
         <div className="space-y-4 animate-in fade-in duration-200">
-          <div className="p-4 rounded-2xl bg-black/60 border border-white/10 space-y-3">
+          <div className="p-4 rounded-2xl bg-black/60 border-white/10 space-y-3">
             <h4 className="text-sm font-bold text-white flex items-center gap-2">
               <Layers className="w-4 h-4 text-amber-400" />
               <span>Evidence Plane Separation Rules</span>
             </h4>
             <div className="grid grid-cols-1 md:grid-cols-2 gap-3 text-[11px]">
-              <div className="p-3 rounded-xl bg-black/40 border border-white/5 space-y-1.5">
+              <div className="p-3 rounded-xl bg-black/40 border-white/5 space-y-1.5">
                 <div className="font-bold text-cyan-300">Quarantine Capabilities (ALLOWED):</div>
                 <ul className="space-y-1 text-zinc-400 list-disc list-inside">
                   <li>Ingest runtime observed evidence</li>
@@ -227,7 +227,7 @@ export const P1QuarantineLayerPanel: React.FC = () => {
                 </ul>
               </div>
 
-              <div className="p-3 rounded-xl bg-black/40 border border-rose-500/20 space-y-1.5">
+              <div className="p-3 rounded-xl bg-black/40 border-rose-500/20 space-y-1.5">
                 <div className="font-bold text-rose-400">Quarantine Boundaries (STRICTLY PROHIBITED):</div>
                 <ul className="space-y-1 text-zinc-400 list-disc list-inside">
                   <li>Write or mutate Canonical Core</li>
@@ -241,7 +241,7 @@ export const P1QuarantineLayerPanel: React.FC = () => {
             </div>
           </div>
 
-          <div className="p-4 rounded-2xl bg-amber-950/20 border border-amber-500/30 space-y-2">
+          <div className="p-4 rounded-2xl bg-amber-950/20 border-amber-500/30 space-y-2">
             <h4 className="text-amber-300 font-bold flex items-center gap-2">
               <AlertOctagon className="w-4 h-4 text-amber-400" />
               <span>P1 Evidence Taxonomy &amp; Rules</span>
@@ -257,7 +257,7 @@ export const P1QuarantineLayerPanel: React.FC = () => {
                 { tag: 'QUARANTINED', desc: 'Isolated from canonical' },
                 { tag: 'BLOCKED', desc: 'Fail-closed promotion gate' },
               ].map((item) => (
-                <div key={item.tag} className="p-2 rounded-lg bg-black/50 border border-white/5 space-y-0.5">
+                <div key={item.tag} className="p-2 rounded-lg bg-black/50 border-white/5 space-y-0.5">
                   <div className="text-[10px] font-bold text-amber-300">{item.tag}</div>
                   <div className="text-[9px] text-zinc-400">{item.desc}</div>
                 </div>
@@ -294,10 +294,10 @@ export const P1QuarantineLayerPanel: React.FC = () => {
                       <span className="text-amber-300">Seal #{item.observedSeal}</span>
                       <span className="text-zinc-500">•</span>
                       <span className="text-white">{item.evidenceId}</span>
-                      <span className="px-2 py-0.5 rounded bg-rose-500/20 text-rose-300 border border-rose-500/30 text-[9px]">
+                      <span className="px-2 py-0.5 rounded bg-rose-500/20 text-rose-300 border-rose-500/30 text-[9px]">
                         {item.quarantineStatus}
                       </span>
-                      <span className="px-2 py-0.5 rounded bg-amber-500/20 text-amber-300 border border-amber-500/30 text-[9px]">
+                      <span className="px-2 py-0.5 rounded bg-amber-500/20 text-amber-300 border-amber-500/30 text-[9px]">
                         {item.classification}
                       </span>
                     </div>
@@ -318,7 +318,7 @@ export const P1QuarantineLayerPanel: React.FC = () => {
             </div>
 
             {/* Detail Drawer */}
-            <div className="p-4 rounded-2xl bg-black/70 border border-white/10 space-y-3 lg:col-span-1">
+            <div className="p-4 rounded-2xl bg-black/70 border-white/10 space-y-3 lg:col-span-1">
               <h4 className="font-bold text-white flex items-center justify-between border-b border-white/10 pb-2">
                 <span>Evidence Record Detail</span>
                 <span className="text-[10px] text-amber-300">{selectedRecord?.evidenceId}</span>
@@ -364,7 +364,7 @@ export const P1QuarantineLayerPanel: React.FC = () => {
                     <span className="text-zinc-500">Parent Evidence Link:</span>
                     <div className="text-zinc-300">{selectedRecord.parentEvidence}</div>
                   </div>
-                  <div className="p-2 rounded-lg bg-rose-950/30 border border-rose-500/30 text-rose-200 text-[9px] mt-2">
+                  <div className="p-2 rounded-lg bg-rose-950/30 border-rose-500/30 text-rose-200 text-[9px] mt-2">
                     🔒 <strong>Fail-Closed Gate:</strong> Unresolved classification prohibits automatic promotion. Requires verified cryptographic chain.
                   </div>
                 </div>
@@ -379,7 +379,7 @@ export const P1QuarantineLayerPanel: React.FC = () => {
       {/* Tab 3: Quarantine Write Firewall */}
       {activeTab === 'FIREWALL' && (
         <div className="space-y-4 animate-in fade-in duration-200">
-          <div className="p-4 rounded-2xl bg-black/60 border border-white/10 space-y-3">
+          <div className="p-4 rounded-2xl bg-black/60 border-white/10 space-y-3">
             <h4 className="font-bold text-white flex items-center justify-between">
               <span>Test P1 Quarantine Write Firewall Interceptor</span>
               <span className="text-xs text-zinc-400">QUARANTINE_WRITE &rarr; REJECT &rarr; AUDIT_EVENT &rarr; MUTATION = 0</span>
@@ -388,26 +388,26 @@ export const P1QuarantineLayerPanel: React.FC = () => {
             <div className="flex flex-wrap gap-2">
               <button
                 onClick={() => handleSimulateWriteAttempt('canonicalSeals', '14907')}
-                className="px-3 py-1.5 rounded-lg bg-rose-500/20 hover:bg-rose-500/30 text-rose-300 border border-rose-500/40 text-xs font-bold transition-all"
+                className="px-3 py-1.5 rounded-lg bg-rose-500/20 hover:bg-rose-500/30 text-rose-300 border-rose-500/40 text-xs font-bold transition-all"
               >
                 Attempt Quarantine Promotion &rarr; Canonical
               </button>
               <button
                 onClick={() => handleSimulateWriteAttempt('canonicalRoot', '0xTAMPER_FROM_QUARANTINE')}
-                className="px-3 py-1.5 rounded-lg bg-rose-500/20 hover:bg-rose-500/30 text-rose-300 border border-rose-500/40 text-xs font-bold transition-all"
+                className="px-3 py-1.5 rounded-lg bg-rose-500/20 hover:bg-rose-500/30 text-rose-300 border-rose-500/40 text-xs font-bold transition-all"
               >
                 Attempt Mutate Merkle Root
               </button>
               <button
                 onClick={() => handleSimulateWriteAttempt('blockHeight', '#849207')}
-                className="px-3 py-1.5 rounded-lg bg-rose-500/20 hover:bg-rose-500/30 text-rose-300 border border-rose-500/40 text-xs font-bold transition-all"
+                className="px-3 py-1.5 rounded-lg bg-rose-500/20 hover:bg-rose-500/30 text-rose-300 border-rose-500/40 text-xs font-bold transition-all"
               >
                 Attempt Increment Block Height
               </button>
             </div>
 
             {simulatedWriteTarget && (
-              <div className="p-2.5 rounded-lg bg-rose-950/40 border border-rose-500/40 text-rose-200 text-[11px]">
+              <div className="p-2.5 rounded-lg bg-rose-950/40 border-rose-500/40 text-rose-200 text-[11px]">
                 {simulatedWriteTarget}
               </div>
             )}
@@ -421,7 +421,7 @@ export const P1QuarantineLayerPanel: React.FC = () => {
               {auditTrail.map((log) => (
                 <div
                   key={log.eventId}
-                  className="p-2.5 rounded-xl bg-black/40 border border-white/5 text-[11px] font-mono flex flex-col md:flex-row md:items-center justify-between gap-2"
+                  className="p-2.5 rounded-xl bg-black/40 border-white/5 text-[11px] font-mono flex flex-col md:flex-row md:items-center justify-between gap-2"
                 >
                   <div className="space-y-0.5">
                     <div className="flex items-center gap-2 text-rose-300 font-bold">
@@ -442,7 +442,7 @@ export const P1QuarantineLayerPanel: React.FC = () => {
       {/* Tab 4: Replay & Duplicate Guard */}
       {activeTab === 'DUPLICATE_GUARD' && (
         <div className="space-y-4 animate-in fade-in duration-200">
-          <div className="p-4 rounded-2xl bg-black/60 border border-white/10 space-y-3">
+          <div className="p-4 rounded-2xl bg-black/60 border-white/10 space-y-3">
             <h4 className="text-sm font-bold text-white flex items-center gap-2">
               <ShieldAlert className="w-4 h-4 text-amber-400" />
               <span>Duplicate &amp; Replay Detection Policy</span>
@@ -451,7 +451,7 @@ export const P1QuarantineLayerPanel: React.FC = () => {
               Evidence records are checked against existing artifact digests and source identities. Duplicate or replayed evidence is never counted towards Canonical Seals (Canonical Seals strictly remain 14,902).
             </p>
 
-            <div className="p-3 rounded-xl bg-black/40 border border-white/5 space-y-2">
+            <div className="p-3 rounded-xl bg-black/40 border-white/5 space-y-2">
               <div className="text-xs font-bold text-zinc-200">Simulate Ingress of Existing Artifact Digest (#14,903):</div>
               <div className="flex items-center gap-2">
                 <button
@@ -463,7 +463,7 @@ export const P1QuarantineLayerPanel: React.FC = () => {
                     setSimulatedWriteTarget(`Duplicate Check Result: ${check.action} | Classification: ${check.classification}`);
                     playTone(300, 0.08);
                   }}
-                  className="px-3 py-1.5 rounded-lg bg-amber-500/20 hover:bg-amber-500/30 text-amber-200 border border-amber-500/40 text-xs font-bold transition-all"
+                  className="px-3 py-1.5 rounded-lg bg-amber-500/20 hover:bg-amber-500/30 text-amber-200 border-amber-500/40 text-xs font-bold transition-all"
                 >
                   Test Ingress Duplicate Digest
                 </button>
@@ -480,11 +480,11 @@ export const P1QuarantineLayerPanel: React.FC = () => {
             {tests.map((test) => (
               <div
                 key={test.id}
-                className="p-3 rounded-xl bg-black/60 border border-white/10 flex items-start justify-between gap-3"
+                className="p-3 rounded-xl bg-black/60 border-white/10 flex items-start justify-between gap-3"
               >
                 <div className="space-y-1">
                   <div className="flex items-center gap-2">
-                    <span className="px-2 py-0.5 rounded bg-amber-500/20 text-amber-300 border border-amber-500/30 text-[10px] font-bold">
+                    <span className="px-2 py-0.5 rounded bg-amber-500/20 text-amber-300 border-amber-500/30 text-[10px] font-bold">
                       [{test.id}]
                     </span>
                     <span className="font-bold text-white text-xs">{test.title}</span>
@@ -498,7 +498,7 @@ export const P1QuarantineLayerPanel: React.FC = () => {
                   <p className="text-[9px] text-zinc-500 italic pt-0.5">{test.auditEvidence}</p>
                 </div>
 
-                <span className="px-2.5 py-1 rounded-full bg-emerald-500/20 text-emerald-300 border border-emerald-500/40 text-[10px] font-bold flex items-center gap-1 shrink-0">
+                <span className="px-2.5 py-1 rounded-full bg-emerald-500/20 text-emerald-300 border-emerald-500/40 text-[10px] font-bold flex items-center gap-1 shrink-0">
                   <CheckCircle2 className="w-3 h-3" />
                   {test.status}
                 </span>

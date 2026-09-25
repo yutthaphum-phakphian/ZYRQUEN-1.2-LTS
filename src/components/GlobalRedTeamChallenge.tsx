@@ -38,7 +38,7 @@ export const GlobalRedTeamChallenge: React.FC = () => {
       {/* Header Banner */}
       <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 border-b border-[#D4AF37]/20 pb-5">
         <div className="flex items-start gap-3.5">
-          <div className="w-12 h-12 rounded-2xl bg-[#D4AF37]/15 border border-[#D4AF37]/40 flex items-center justify-center text-xl shrink-0 shadow-[0_0_15px_rgba(212,175,55,0.25)]">
+          <div className="w-12 h-12 rounded-2xl bg-[#D4AF37]/15 border-[#D4AF37]/40 flex items-center justify-center text-xl shrink-0 shadow-[0_0_15px_rgba(212,175,55,0.25)]">
             🐦‍🔥
           </div>
           <div>
@@ -46,10 +46,10 @@ export const GlobalRedTeamChallenge: React.FC = () => {
               <span className="font-bold text-base text-white tracking-wide">
                 ZYRQUEN Ω∞ FROZEN v1.2 LTS GLOBAL RED TEAM CHALLENGE
               </span>
-              <span className="px-2.5 py-0.5 rounded-full text-[10px] font-bold bg-[#D4AF37]/20 text-[#D4AF37] border border-[#D4AF37]/40">
+              <span className="px-2.5 py-0.5 rounded-full text-[10px] font-bold bg-[#D4AF37]/20 text-[#D4AF37] border-[#D4AF37]/40">
                 ACTIVE GLOBAL BOUNTY
               </span>
-              <span className="px-2.5 py-0.5 rounded-full text-[10px] font-bold bg-emerald-500/15 text-emerald-300 border border-emerald-500/30">
+              <span className="px-2.5 py-0.5 rounded-full text-[10px] font-bold bg-emerald-500/15 text-emerald-300 border-emerald-500/30">
                 Δ0.00% VERIFIED
               </span>
             </div>
@@ -69,7 +69,7 @@ export const GlobalRedTeamChallenge: React.FC = () => {
         <div className="flex items-center gap-2">
           <button
             onClick={handleCopyIssuer}
-            className="px-3 py-1.5 rounded-xl bg-white/5 hover:bg-white/10 border border-white/10 text-[11px] flex items-center gap-1.5 transition cursor-pointer"
+            className="px-3 py-1.5 rounded-xl bg-white/5 hover:bg-white/10 border-white/10 text-[11px] flex items-center gap-1.5 transition cursor-pointer"
           >
             {copiedLink ? <Check className="w-3.5 h-3.5 text-emerald-400" /> : <Copy className="w-3.5 h-3.5 text-zinc-400" />}
             <span>{copiedLink ? 'Copied Details' : 'Copy Proof String'}</span>
@@ -79,7 +79,7 @@ export const GlobalRedTeamChallenge: React.FC = () => {
               playTone(isExpanded ? 480 : 640, 0.04);
               setIsExpanded(!isExpanded);
             }}
-            className="p-2 rounded-xl bg-white/5 hover:bg-white/10 border border-white/10 text-zinc-300 transition cursor-pointer"
+            className="p-2 rounded-xl bg-white/5 hover:bg-white/10 border-white/10 text-zinc-300 transition cursor-pointer"
             title={isExpanded ? 'Collapse Red Team Details' : 'Expand Red Team Details'}
           >
             {isExpanded ? <ChevronUp className="w-4 h-4" /> : <ChevronDown className="w-4 h-4" />}
@@ -91,37 +91,37 @@ export const GlobalRedTeamChallenge: React.FC = () => {
         <div className="space-y-6 animate-in fade-in duration-200">
           {/* Quick Metrics Bar */}
           <div className="grid grid-cols-2 sm:grid-cols-4 lg:grid-cols-6 gap-3">
-            <div className="p-3 rounded-2xl bg-[#0a0f1e] border border-white/10 space-y-0.5">
+            <div className="p-3 rounded-2xl bg-[#0a0f1e] border-white/10 space-y-0.5">
               <div className="text-[10px] text-zinc-500">TOTAL SEALS</div>
               <div className="text-sm font-bold text-emerald-400">14,902 (Locked)</div>
               <div className="text-[9px] text-zinc-400">SSoT Inviolable</div>
             </div>
 
-            <div className="p-3 rounded-2xl bg-[#0a0f1e] border border-white/10 space-y-0.5">
+            <div className="p-3 rounded-2xl bg-[#0a0f1e] border-white/10 space-y-0.5">
               <div className="text-[10px] text-zinc-500">BLOCK HEIGHT</div>
               <div className="text-sm font-bold text-cyan-300">#849202</div>
               <div className="text-[9px] text-zinc-400">Epoch Anchor</div>
             </div>
 
-            <div className="p-3 rounded-2xl bg-[#0a0f1e] border border-white/10 space-y-0.5">
+            <div className="p-3 rounded-2xl bg-[#0a0f1e] border-white/10 space-y-0.5">
               <div className="text-[10px] text-zinc-500">CORE THROUGHPUT</div>
               <div className="text-sm font-bold text-[#D4AF37]">851.9 QOps/s</div>
               <div className="text-[9px] text-zinc-400">CANONICAL G11</div>
             </div>
 
-            <div className="p-3 rounded-2xl bg-[#0a0f1e] border border-white/10 space-y-0.5">
+            <div className="p-3 rounded-2xl bg-[#0a0f1e] border-white/10 space-y-0.5">
               <div className="text-[10px] text-zinc-500">CRYO TEMPERATURE</div>
               <div className="text-sm font-bold text-violet-300">14.98 mK</div>
               <div className="text-[9px] text-zinc-400">Sub-Kelvin Lattice</div>
             </div>
 
-            <div className="p-3 rounded-2xl bg-[#0a0f1e] border border-white/10 space-y-0.5">
+            <div className="p-3 rounded-2xl bg-[#0a0f1e] border-white/10 space-y-0.5">
               <div className="text-[10px] text-zinc-500">PHOENIX HEAL</div>
               <div className="text-sm font-bold text-amber-300">14.0 ms</div>
               <div className="text-[9px] text-zinc-400">10.14x Faster</div>
             </div>
 
-            <div className="p-3 rounded-2xl bg-[#0a0f1e] border border-white/10 space-y-0.5">
+            <div className="p-3 rounded-2xl bg-[#0a0f1e] border-white/10 space-y-0.5">
               <div className="text-[10px] text-zinc-500">HSM QUORUM</div>
               <div className="text-sm font-bold text-emerald-300">10/10 REAL</div>
               <div className="text-[9px] text-zinc-400">FIPS 140-3 L4</div>
@@ -137,7 +137,7 @@ export const GlobalRedTeamChallenge: React.FC = () => {
               }}
               className={`px-3 py-1.5 rounded-xl font-bold flex items-center gap-1.5 transition cursor-pointer ${
                 activeTab === 'objectives'
-                  ? 'bg-[#0a0f1e] text-[#D4AF37] border border-[#D4AF37]'
+                  ? 'bg-[#0a0f1e] text-[#D4AF37] border-[#D4AF37]'
                   : 'text-zinc-400 hover:text-white'
               }`}
             >
@@ -152,7 +152,7 @@ export const GlobalRedTeamChallenge: React.FC = () => {
               }}
               className={`px-3 py-1.5 rounded-xl font-bold flex items-center gap-1.5 transition cursor-pointer ${
                 activeTab === 'specs'
-                  ? 'bg-[#0a0f1e] text-[#D4AF37] border border-[#D4AF37]'
+                  ? 'bg-[#0a0f1e] text-[#D4AF37] border-[#D4AF37]'
                   : 'text-zinc-400 hover:text-white'
               }`}
             >
@@ -167,7 +167,7 @@ export const GlobalRedTeamChallenge: React.FC = () => {
               }}
               className={`px-3 py-1.5 rounded-xl font-bold flex items-center gap-1.5 transition cursor-pointer ${
                 activeTab === 'bounty'
-                  ? 'bg-[#0a0f1e] text-[#D4AF37] border border-[#D4AF37]'
+                  ? 'bg-[#0a0f1e] text-[#D4AF37] border-[#D4AF37]'
                   : 'text-zinc-400 hover:text-white'
               }`}
             >
@@ -182,7 +182,7 @@ export const GlobalRedTeamChallenge: React.FC = () => {
               }}
               className={`px-3 py-1.5 rounded-xl font-bold flex items-center gap-1.5 transition cursor-pointer ${
                 activeTab === 'rules'
-                  ? 'bg-[#0a0f1e] text-[#D4AF37] border border-[#D4AF37]'
+                  ? 'bg-[#0a0f1e] text-[#D4AF37] border-[#D4AF37]'
                   : 'text-zinc-400 hover:text-white'
               }`}
             >
@@ -197,7 +197,7 @@ export const GlobalRedTeamChallenge: React.FC = () => {
               }}
               className={`px-3 py-1.5 rounded-xl font-bold flex items-center gap-1.5 transition cursor-pointer ${
                 activeTab === 'why14902'
-                  ? 'bg-[#0a0f1e] text-[#D4AF37] border border-[#D4AF37]'
+                  ? 'bg-[#0a0f1e] text-[#D4AF37] border-[#D4AF37]'
                   : 'text-zinc-400 hover:text-white'
               }`}
             >
@@ -209,23 +209,23 @@ export const GlobalRedTeamChallenge: React.FC = () => {
           {/* Tab 1: 5 Challenge Objectives */}
           {activeTab === 'objectives' && (
             <div className="space-y-4">
-              <div className="p-4 rounded-2xl bg-black/50 border border-white/10 flex items-center justify-between">
+              <div className="p-4 rounded-2xl bg-black/50 border-white/10 flex items-center justify-between">
                 <div>
                   <div className="font-bold text-white text-sm">CHALLENGE OBJECTIVE — WIN CONDITIONS</div>
                   <p className="text-zinc-400 text-xs mt-0.5">
                     The challenger must demonstrate a verifiable breach of the FROZEN v1.2 LTS integrity. Any ONE of the following 5 objectives constitutes a WIN:
                   </p>
                 </div>
-                <span className="px-3 py-1 rounded-xl bg-rose-500/10 text-rose-300 border border-rose-500/30 text-xs font-bold shrink-0">
+                <span className="px-3 py-1 rounded-xl bg-rose-500/10 text-rose-300 border-rose-500/30 text-xs font-bold shrink-0">
                   FAIL-CLOSED GATES
                 </span>
               </div>
 
               <div className="grid grid-cols-1 md:grid-cols-2 gap-3.5">
                 {/* Objective 1 */}
-                <div className="p-4 rounded-2xl bg-[#0a0f1e] border border-white/10 space-y-2 hover:border-[#D4AF37]/50 transition">
+                <div className="p-4 rounded-2xl bg-[#0a0f1e] border-white/10 space-y-2 hover:border-[#D4AF37]/50 transition">
                   <div className="flex items-center justify-between text-xs">
-                    <span className="px-2 py-0.5 rounded bg-[#D4AF37]/20 text-[#D4AF37] font-bold border border-[#D4AF37]/30">
+                    <span className="px-2 py-0.5 rounded bg-[#D4AF37]/20 text-[#D4AF37] font-bold border-[#D4AF37]/30">
                       OBJECTIVE 1
                     </span>
                     <span className="text-zinc-400">Cryptographic Pre-image</span>
@@ -240,9 +240,9 @@ export const GlobalRedTeamChallenge: React.FC = () => {
                 </div>
 
                 {/* Objective 2 */}
-                <div className="p-4 rounded-2xl bg-[#0a0f1e] border border-white/10 space-y-2 hover:border-[#D4AF37]/50 transition">
+                <div className="p-4 rounded-2xl bg-[#0a0f1e] border-white/10 space-y-2 hover:border-[#D4AF37]/50 transition">
                   <div className="flex items-center justify-between text-xs">
-                    <span className="px-2 py-0.5 rounded bg-[#D4AF37]/20 text-[#D4AF37] font-bold border border-[#D4AF37]/30">
+                    <span className="px-2 py-0.5 rounded bg-[#D4AF37]/20 text-[#D4AF37] font-bold border-[#D4AF37]/30">
                       OBJECTIVE 2
                     </span>
                     <span className="text-zinc-400">SSoT Invariant</span>
@@ -257,9 +257,9 @@ export const GlobalRedTeamChallenge: React.FC = () => {
                 </div>
 
                 {/* Objective 3 */}
-                <div className="p-4 rounded-2xl bg-[#0a0f1e] border border-white/10 space-y-2 hover:border-[#D4AF37]/50 transition">
+                <div className="p-4 rounded-2xl bg-[#0a0f1e] border-white/10 space-y-2 hover:border-[#D4AF37]/50 transition">
                   <div className="flex items-center justify-between text-xs">
-                    <span className="px-2 py-0.5 rounded bg-[#D4AF37]/20 text-[#D4AF37] font-bold border border-[#D4AF37]/30">
+                    <span className="px-2 py-0.5 rounded bg-[#D4AF37]/20 text-[#D4AF37] font-bold border-[#D4AF37]/30">
                       OBJECTIVE 3
                     </span>
                     <span className="text-zinc-400">BFT Consensus Quorum</span>
@@ -274,9 +274,9 @@ export const GlobalRedTeamChallenge: React.FC = () => {
                 </div>
 
                 {/* Objective 4 */}
-                <div className="p-4 rounded-2xl bg-[#0a0f1e] border border-white/10 space-y-2 hover:border-[#D4AF37]/50 transition">
+                <div className="p-4 rounded-2xl bg-[#0a0f1e] border-white/10 space-y-2 hover:border-[#D4AF37]/50 transition">
                   <div className="flex items-center justify-between text-xs">
-                    <span className="px-2 py-0.5 rounded bg-[#D4AF37]/20 text-[#D4AF37] font-bold border border-[#D4AF37]/30">
+                    <span className="px-2 py-0.5 rounded bg-[#D4AF37]/20 text-[#D4AF37] font-bold border-[#D4AF37]/30">
                       OBJECTIVE 4
                     </span>
                     <span className="text-zinc-400">Thermal Sub-Kelvin Loop</span>
@@ -291,9 +291,9 @@ export const GlobalRedTeamChallenge: React.FC = () => {
                 </div>
 
                 {/* Objective 5 */}
-                <div className="p-4 rounded-2xl bg-[#0a0f1e] border border-white/10 space-y-2 md:col-span-2 hover:border-[#D4AF37]/50 transition">
+                <div className="p-4 rounded-2xl bg-[#0a0f1e] border-white/10 space-y-2 md:col-span-2 hover:border-[#D4AF37]/50 transition">
                   <div className="flex items-center justify-between text-xs">
-                    <span className="px-2 py-0.5 rounded bg-[#D4AF37]/20 text-[#D4AF37] font-bold border border-[#D4AF37]/30">
+                    <span className="px-2 py-0.5 rounded bg-[#D4AF37]/20 text-[#D4AF37] font-bold border-[#D4AF37]/30">
                       OBJECTIVE 5
                     </span>
                     <span className="text-zinc-400">Phoenix Self-Healing Loop</span>
@@ -313,7 +313,7 @@ export const GlobalRedTeamChallenge: React.FC = () => {
           {/* Tab 2: Target Specifications */}
           {activeTab === 'specs' && (
             <div className="space-y-4">
-              <div className="p-4 rounded-2xl bg-black/40 border border-white/10">
+              <div className="p-4 rounded-2xl bg-black/40 border-white/10">
                 <table className="w-full text-left text-xs font-mono">
                   <thead>
                     <tr className="border-b border-white/10 text-zinc-400 pb-2">
@@ -394,32 +394,32 @@ export const GlobalRedTeamChallenge: React.FC = () => {
                   </span>
                 </div>
                 <div className="grid grid-cols-1 sm:grid-cols-3 gap-3 pt-2">
-                  <div className="p-3 bg-black/60 rounded-xl border border-white/10 space-y-1">
+                  <div className="p-3 bg-black/60 rounded-xl border-white/10 space-y-1">
                     <div className="text-[10px] text-zinc-400">TREASURY ASSET</div>
                     <div className="text-sm font-bold text-[#D4AF37]">14,907 oz LBMA Gold</div>
                     <div className="text-[10px] text-zinc-400">Reserve reference + Chamber 00 Hall of Fame</div>
                   </div>
 
-                  <div className="p-3 bg-black/60 rounded-xl border border-white/10 space-y-1">
+                  <div className="p-3 bg-black/60 rounded-xl border-white/10 space-y-1">
                     <div className="text-[10px] text-zinc-400">CO-AUTHORSHIP</div>
                     <div className="text-sm font-bold text-white">v1.3 LTS Forensic Report</div>
                     <div className="text-[10px] text-zinc-400">Named Lead Red Team Architect</div>
                   </div>
 
-                  <div className="p-3 bg-black/60 rounded-xl border border-white/10 space-y-1">
+                  <div className="p-3 bg-black/60 rounded-xl border-white/10 space-y-1">
                     <div className="text-[10px] text-zinc-400">CERTIFICATE</div>
                     <div className="text-sm font-bold text-emerald-400">Thai/English "Broke Δ0"</div>
                     <div className="text-[10px] text-zinc-400">Certified by Sovereign Principal EP-SOVEREIGN-01</div>
                   </div>
                 </div>
 
-                <div className="p-3 rounded-xl bg-black/40 border border-white/5 text-[11px] text-zinc-400">
+                <div className="p-3 rounded-xl bg-black/40 border-white/5 text-[11px] text-zinc-400">
                   <strong className="text-white">If FAIL (as expected):</strong> Your attempt becomes part of the <strong>22 Master Verification Gates</strong>, permanently strengthening the system with public acknowledgment: <em>"Attempted, Failed to Break Δ0"</em>.
                 </div>
               </div>
 
               {/* 5-Step Verification Process */}
-              <div className="p-4 rounded-2xl bg-black/40 border border-white/10 space-y-3">
+              <div className="p-4 rounded-2xl bg-black/40 border-white/10 space-y-3">
                 <div className="font-bold text-white text-xs">5-STEP VERIFICATION PROCESS</div>
                 <div className="space-y-2 text-[11px] text-zinc-300">
                   <div className="flex items-start gap-2">
@@ -435,7 +435,7 @@ export const GlobalRedTeamChallenge: React.FC = () => {
                     <span>Check: 851.9 QOps, 14.98 mK, 99.98%, 18 Chambers, 10/10 HSM, 16/16 Modules.</span>
                   </div>
                   <div className="flex items-start gap-2">
-                    <span className="w-5 h-5 rounded-full bg-emerald-500/20 text-emerald-300 border border-emerald-500/40 flex items-center justify-center text-[10px] font-bold shrink-0">4</span>
+                    <span className="w-5 h-5 rounded-full bg-emerald-500/20 text-emerald-300 border-emerald-500/40 flex items-center justify-center text-[10px] font-bold shrink-0">4</span>
                     <span>If Δ0 broken → <strong>WIN confirmed</strong>, FROZEN status lifted, v1.3 development initialized.</span>
                   </div>
                   <div className="flex items-start gap-2">
@@ -450,7 +450,7 @@ export const GlobalRedTeamChallenge: React.FC = () => {
           {/* Tab 4: Rules of Engagement */}
           {activeTab === 'rules' && (
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-              <div className="p-4 rounded-2xl bg-emerald-950/20 border border-emerald-500/30 space-y-3">
+              <div className="p-4 rounded-2xl bg-emerald-950/20 border-emerald-500/30 space-y-3">
                 <div className="font-bold text-emerald-300 text-xs flex items-center gap-1.5">
                   <CheckCircle2 className="w-4 h-4 text-emerald-400" />
                   <span>ALLOWED ACTIONS</span>
@@ -463,7 +463,7 @@ export const GlobalRedTeamChallenge: React.FC = () => {
                 </ul>
               </div>
 
-              <div className="p-4 rounded-2xl bg-rose-950/20 border border-rose-500/30 space-y-3">
+              <div className="p-4 rounded-2xl bg-rose-950/20 border-rose-500/30 space-y-3">
                 <div className="font-bold text-rose-300 text-xs flex items-center gap-1.5">
                   <AlertTriangle className="w-4 h-4 text-rose-400" />
                   <span>NOT ALLOWED / PROHIBITED</span>
@@ -481,14 +481,14 @@ export const GlobalRedTeamChallenge: React.FC = () => {
 
           {/* Tab 5: Why 14,902? */}
           {activeTab === 'why14902' && (
-            <div className="p-5 rounded-2xl bg-black/60 border border-white/10 space-y-4">
+            <div className="p-5 rounded-2xl bg-black/60 border-white/10 space-y-4">
               <div className="flex items-center gap-2">
                 <Scale className="w-4 h-4 text-[#D4AF37]" />
                 <h4 className="text-sm font-bold text-white">Why 14,902 Seals? Genesis Freezing Rationale</h4>
               </div>
 
               <div className="space-y-3 text-xs leading-relaxed text-zinc-300">
-                <div className="p-3.5 rounded-xl bg-[#0a0f1e] border border-white/10 space-y-1.5">
+                <div className="p-3.5 rounded-xl bg-[#0a0f1e] border-white/10 space-y-1.5">
                   <div className="text-[#06B6D4] font-bold text-xs">EN — ENGLISH</div>
                   <p>
                     The system can handle far more (G11 Core is operating at ~40% capacity with 851.9 QOps/s). However, <strong>14,902 is FROZEN as the Master Genesis Root for court admissibility</strong>, exactly like the Bitcoin Genesis Block.
@@ -498,7 +498,7 @@ export const GlobalRedTeamChallenge: React.FC = () => {
                   </p>
                 </div>
 
-                <div className="p-3.5 rounded-xl bg-[#0a0f1e] border border-white/10 space-y-1.5">
+                <div className="p-3.5 rounded-xl bg-[#0a0f1e] border-white/10 space-y-1.5">
                   <div className="text-[#D4AF37] font-bold text-xs">TH — ภาษาไทย</div>
                   <p className="font-thai leading-relaxed">
                     ระบบสามารถรองรับภาระงานได้มากกว่านี้ (G11 Core ยังคงทำงานที่ระดับ ~40% พร้อมอัตราการประมวลผล 851.9 QOps/s) แต่ <strong>จำนวน 14,902 ตราประทับ ถูกแช่แข็ง (FROZEN) ไว้เป็น Master Genesis Root เพื่อการยอมรับในชั้นศาล</strong> เช่นเดียวกับ Bitcoin Genesis Block

@@ -260,7 +260,7 @@ export const TelemetryAnomalyObserverTimeline: React.FC<
     <div className="space-y-6">
       {/* Downloaded Anomaly Report Toast */}
       {downloadedReportToast && (
-        <div className="p-4 rounded-2xl bg-[#0a0f1e] border border-rose-500/60 backdrop-blur-xl flex items-center justify-between gap-3 text-xs font-mono text-rose-200 animate-in fade-in duration-200 shadow-2xl">
+        <div className="p-4 rounded-2xl bg-[#0a0f1e] border-rose-500/60 backdrop-blur-xl flex items-center justify-between gap-3 text-xs font-mono text-rose-200 animate-in fade-in duration-200 shadow-2xl">
           <div className="flex items-center gap-2.5">
             <span className="text-base">📑</span>
             <span>
@@ -269,7 +269,7 @@ export const TelemetryAnomalyObserverTimeline: React.FC<
           </div>
           <button
             onClick={() => setDownloadedReportToast(null)}
-            className="px-2.5 py-1 rounded-lg bg-rose-500/20 hover:bg-rose-500/30 text-rose-100 hover:text-white transition-all text-xs border border-rose-500/40"
+            className="px-2.5 py-1 rounded-lg bg-rose-500/20 hover:bg-rose-500/30 text-rose-100 hover:text-white transition-all text-xs border-rose-500/40"
           >
             Close
           </button>
@@ -277,21 +277,21 @@ export const TelemetryAnomalyObserverTimeline: React.FC<
       )}
 
       {/* Top Banner & Anomaly Engine Status */}
-      <div className="p-6 rounded-[28px] bg-gradient-to-br from-[#0c1626]/90 via-[#070b14]/85 to-[#04060b] border border-cyan-500/30 backdrop-blur-xl shadow-2xl space-y-4">
+      <div className="p-6 rounded-[28px] bg-gradient-to-br from-[#0c1626]/90 via-[#070b14]/85 to-[#04060b] border-cyan-500/30 backdrop-blur-xl shadow-2xl space-y-4">
         <div className="flex flex-col lg:flex-row lg:items-center justify-between gap-4">
           <div className="flex items-center gap-3.5">
-            <div className="w-12 h-12 rounded-2xl bg-cyan-500/15 border border-cyan-500/40 flex items-center justify-center text-cyan-400 shadow-lg shadow-cyan-500/10 shrink-0">
+            <div className="w-12 h-12 rounded-2xl bg-cyan-500/15 border-cyan-500/40 flex items-center justify-center text-cyan-400 shadow-lg shadow-cyan-500/10 shrink-0">
               <Activity className="w-6 h-6 animate-pulse" />
             </div>
             <div>
               <div className="flex flex-wrap items-center gap-2">
-                <span className="px-2.5 py-0.5 rounded-full bg-cyan-500/15 text-cyan-300 border border-cyan-500/30 text-[10px] font-mono font-bold">
+                <span className="px-2.5 py-0.5 rounded-full bg-cyan-500/15 text-cyan-300 border-cyan-500/30 text-[10px] font-mono font-bold">
                   TELEMETRY ANOMALY OBSERVER V2.4
                 </span>
-                <span className="px-2 py-0.5 rounded-full bg-emerald-950 text-emerald-300 border border-emerald-700/50 text-[10px] font-mono">
+                <span className="px-2 py-0.5 rounded-full bg-emerald-950 text-emerald-300 border-emerald-700/50 text-[10px] font-mono">
                   ISO/IEC 27037 ASSURANCE
                 </span>
-                <span className="px-2 py-0.5 rounded-full bg-rose-950/80 text-rose-300 border border-rose-700/50 text-[10px] font-mono">
+                <span className="px-2 py-0.5 rounded-full bg-rose-950/80 text-rose-300 border-rose-700/50 text-[10px] font-mono">
                   FAIL-CLOSED TRIPWIRE ARMED
                 </span>
               </div>
@@ -306,15 +306,15 @@ export const TelemetryAnomalyObserverTimeline: React.FC<
 
           {/* Quick Statistics Badges */}
           <div className="flex flex-wrap items-center gap-3">
-            <div className="p-3 rounded-2xl bg-black/50 border border-white/10 font-mono text-xs">
+            <div className="p-3 rounded-2xl bg-black/50 border-white/10 font-mono text-xs">
               <div className="text-zinc-500 text-[10px]">TOTAL SNAPSHOTS</div>
               <div className="text-lg font-bold text-white mt-0.5">{snapshots.length}</div>
             </div>
-            <div className="p-3 rounded-2xl bg-black/50 border border-rose-500/30 font-mono text-xs">
+            <div className="p-3 rounded-2xl bg-black/50 border-rose-500/30 font-mono text-xs">
               <div className="text-rose-400 text-[10px] font-bold">FLAGGED DRIFTS</div>
               <div className="text-lg font-bold text-rose-300 mt-0.5">{allFlaggedReports.length}</div>
             </div>
-            <div className="p-3 rounded-2xl bg-black/50 border border-emerald-500/30 font-mono text-xs">
+            <div className="p-3 rounded-2xl bg-black/50 border-emerald-500/30 font-mono text-xs">
               <div className="text-emerald-400 text-[10px] font-bold">NOMINAL PASS</div>
               <div className="text-lg font-bold text-emerald-300 mt-0.5">
                 {snapshots.length - allFlaggedReports.length}
@@ -327,7 +327,7 @@ export const TelemetryAnomalyObserverTimeline: React.FC<
                 playTone(740, 0.04);
                 exportAllHardwareSnapshotsCsv(snapshots);
               }}
-              className="px-3.5 py-2.5 rounded-xl bg-emerald-500/15 hover:bg-emerald-500/25 border border-emerald-500/40 text-emerald-300 font-mono text-xs font-bold flex items-center gap-2 transition hover:scale-105 shadow-md shadow-emerald-500/10"
+              className="px-3.5 py-2.5 rounded-xl bg-emerald-500/15 hover:bg-emerald-500/25 border-emerald-500/40 text-emerald-300 font-mono text-xs font-bold flex items-center gap-2 transition hover:scale-105 shadow-md shadow-emerald-500/10"
               title="Export all hardware snapshot records to CSV"
             >
               <Download className="w-4 h-4 text-emerald-400" />
@@ -337,7 +337,7 @@ export const TelemetryAnomalyObserverTimeline: React.FC<
             <button
               onClick={handleExportJson}
               disabled={isExporting}
-              className="px-3.5 py-2.5 rounded-xl bg-cyan-500/15 hover:bg-cyan-500/25 border border-cyan-500/40 text-cyan-300 font-mono text-xs font-bold flex items-center gap-2 transition hover:scale-105 shadow-md shadow-cyan-500/10"
+              className="px-3.5 py-2.5 rounded-xl bg-cyan-500/15 hover:bg-cyan-500/25 border-cyan-500/40 text-cyan-300 font-mono text-xs font-bold flex items-center gap-2 transition hover:scale-105 shadow-md shadow-cyan-500/10"
             >
               <Download className="w-4 h-4" />
               <span>Export Anomaly JSON</span>
@@ -355,7 +355,7 @@ export const TelemetryAnomalyObserverTimeline: React.FC<
           <div className="flex flex-wrap items-center gap-2">
             <button
               onClick={() => handleInjectOutlier('thermal')}
-              className="px-2.5 py-1 rounded-xl bg-rose-950/60 hover:bg-rose-900/60 text-rose-300 border border-rose-700/50 flex items-center gap-1 text-[11px] transition"
+              className="px-2.5 py-1 rounded-xl bg-rose-950/60 hover:bg-rose-900/60 text-rose-300 border-rose-700/50 flex items-center gap-1 text-[11px] transition"
             >
               <Flame className="w-3 h-3 text-rose-400" />
               <span>Thermal Surge (+68.4°C)</span>
@@ -363,7 +363,7 @@ export const TelemetryAnomalyObserverTimeline: React.FC<
 
             <button
               onClick={() => handleInjectOutlier('cryo')}
-              className="px-2.5 py-1 rounded-xl bg-cyan-950/60 hover:bg-cyan-900/60 text-cyan-300 border border-cyan-700/50 flex items-center gap-1 text-[11px] transition"
+              className="px-2.5 py-1 rounded-xl bg-cyan-950/60 hover:bg-cyan-900/60 text-cyan-300 border-cyan-700/50 flex items-center gap-1 text-[11px] transition"
             >
               <Snowflake className="w-3 h-3 text-cyan-400" />
               <span>Cryo Drift (28.5 mK)</span>
@@ -371,7 +371,7 @@ export const TelemetryAnomalyObserverTimeline: React.FC<
 
             <button
               onClick={() => handleInjectOutlier('voltage')}
-              className="px-2.5 py-1 rounded-xl bg-amber-950/60 hover:bg-amber-900/60 text-amber-300 border border-amber-700/50 flex items-center gap-1 text-[11px] transition"
+              className="px-2.5 py-1 rounded-xl bg-amber-950/60 hover:bg-amber-900/60 text-amber-300 border-amber-700/50 flex items-center gap-1 text-[11px] transition"
             >
               <Gauge className="w-3 h-3 text-amber-400" />
               <span>Voltage Rail Drop (99.12%)</span>
@@ -379,7 +379,7 @@ export const TelemetryAnomalyObserverTimeline: React.FC<
 
             <button
               onClick={() => handleInjectOutlier('qops')}
-              className="px-2.5 py-1 rounded-xl bg-violet-950/60 hover:bg-violet-900/60 text-violet-300 border border-violet-700/50 flex items-center gap-1 text-[11px] transition"
+              className="px-2.5 py-1 rounded-xl bg-violet-950/60 hover:bg-violet-900/60 text-violet-300 border-violet-700/50 flex items-center gap-1 text-[11px] transition"
             >
               <TrendingDown className="w-3 h-3 text-violet-400" />
               <span>QOps Collapse (712 QOps/s)</span>
@@ -425,7 +425,7 @@ export const TelemetryAnomalyObserverTimeline: React.FC<
       </div>
 
       {/* Interactive Controls & Filters Bar */}
-      <div className="p-4 rounded-2xl bg-[#0b0e1a]/80 border border-white/8 backdrop-blur-xl flex flex-col md:flex-row md:items-center justify-between gap-4 font-mono">
+      <div className="p-4 rounded-2xl bg-[#0b0e1a]/80 border-white/8 backdrop-blur-xl flex flex-col md:flex-row md:items-center justify-between gap-4 font-mono">
         {/* Search Input */}
         <div className="relative flex-1">
           <Search className="w-4 h-4 text-zinc-400 absolute left-3.5 top-1/2 -translate-y-1/2" />
@@ -434,7 +434,7 @@ export const TelemetryAnomalyObserverTimeline: React.FC<
             value={searchQuery}
             onChange={(e) => setSearchQuery(e.target.value)}
             placeholder="ค้นหาตาม Snapshot ID, อัลกอริทึม, ชนิด Outlier, ค่าแฮช หรือคำอธิบาย..."
-            className="w-full bg-zinc-900/90 border border-zinc-700 focus:border-cyan-400 rounded-xl pl-9 pr-4 py-2 text-xs text-zinc-100 placeholder-zinc-500 font-mono focus:outline-none transition"
+            className="w-full bg-zinc-900/90 border-zinc-700 focus:border-cyan-400 rounded-xl pl-9 pr-4 py-2 text-xs text-zinc-100 placeholder-zinc-500 font-mono focus:outline-none transition"
           />
         </div>
 
@@ -446,7 +446,7 @@ export const TelemetryAnomalyObserverTimeline: React.FC<
             <select
               value={selectedTypeFilter}
               onChange={(e) => setSelectedTypeFilter(e.target.value)}
-              className="bg-zinc-900 border border-zinc-700 rounded-xl px-2.5 py-1.5 text-xs text-zinc-300 font-mono focus:outline-none focus:border-cyan-400"
+              className="bg-zinc-900 border-zinc-700 rounded-xl px-2.5 py-1.5 text-xs text-zinc-300 font-mono focus:outline-none focus:border-cyan-400"
             >
               <option value="ALL">All Events ({snapshots.length})</option>
               <option value="ANOMALIES_ONLY">Anomalies Only ({allFlaggedReports.length})</option>
@@ -464,7 +464,7 @@ export const TelemetryAnomalyObserverTimeline: React.FC<
             <select
               value={selectedSeverityFilter}
               onChange={(e) => setSelectedSeverityFilter(e.target.value)}
-              className="bg-zinc-900 border border-zinc-700 rounded-xl px-2.5 py-1.5 text-xs text-zinc-300 font-mono focus:outline-none focus:border-cyan-400"
+              className="bg-zinc-900 border-zinc-700 rounded-xl px-2.5 py-1.5 text-xs text-zinc-300 font-mono focus:outline-none focus:border-cyan-400"
             >
               <option value="ALL">All Severities</option>
               <option value="critical">Critical (&ge;3.2&sigma; / Hard Bound)</option>
@@ -473,7 +473,7 @@ export const TelemetryAnomalyObserverTimeline: React.FC<
           </div>
 
           {/* Z-Score Sensitivity Slider */}
-          <div className="flex items-center gap-2 p-1.5 px-3 rounded-xl bg-black/40 border border-white/10 text-xs">
+          <div className="flex items-center gap-2 p-1.5 px-3 rounded-xl bg-black/40 border-white/10 text-xs">
             <Sliders className="w-3.5 h-3.5 text-cyan-400" />
             <span className="text-zinc-400 text-[11px]">Z-Threshold:</span>
             <input
@@ -500,7 +500,7 @@ export const TelemetryAnomalyObserverTimeline: React.FC<
           </div>
 
           {filteredTimeline.length === 0 ? (
-            <div className="p-8 text-center bg-black/20 border border-dashed border-zinc-800 rounded-2xl space-y-2 font-mono">
+            <div className="p-8 text-center bg-black/20 border-dashed border-zinc-800 rounded-2xl space-y-2 font-mono">
               <AlertTriangle className="w-8 h-8 text-zinc-600 mx-auto" />
               <div className="text-xs text-zinc-400">ไม่พบรายการ Telemetry ที่ตรงกับเงื่อนไขการค้นหา</div>
               <p className="text-[11px] text-zinc-500">
@@ -538,7 +538,7 @@ export const TelemetryAnomalyObserverTimeline: React.FC<
                               ? report?.severity === 'critical'
                                 ? 'bg-rose-500/20 text-rose-300 border-rose-500/40 animate-pulse'
                                 : 'bg-amber-500/20 text-amber-300 border-amber-500/40'
-                              : 'bg-emerald-500/15 text-emerald-300 border border-emerald-500/30'
+                              : 'bg-emerald-500/15 text-emerald-300 border-emerald-500/30'
                           }`}
                         >
                           {isAnomalous
@@ -557,7 +557,7 @@ export const TelemetryAnomalyObserverTimeline: React.FC<
 
                     {/* Headline of Anomaly or Nominal State */}
                     {isAnomalous && report ? (
-                      <div className="p-2.5 rounded-xl bg-black/40 border border-rose-500/30 text-xs text-rose-200 space-y-2">
+                      <div className="p-2.5 rounded-xl bg-black/40 border-rose-500/30 text-xs text-rose-200 space-y-2">
                         <div className="flex items-center justify-between gap-2">
                           <div className="font-bold flex items-center gap-1.5 text-rose-300">
                             <AlertTriangle className="w-3.5 h-3.5 text-rose-400 shrink-0" />
@@ -569,7 +569,7 @@ export const TelemetryAnomalyObserverTimeline: React.FC<
                               e.stopPropagation();
                               handleDownloadAnomalyReport(snap, report, item.anomalies);
                             }}
-                            className="px-2.5 py-1 rounded-xl text-[10px] font-bold font-mono bg-rose-500/20 hover:bg-rose-500/30 border border-rose-500/50 text-rose-200 hover:text-white flex items-center gap-1 transition-all shadow-[0_0_10px_rgba(244,63,94,0.25)] shrink-0"
+                            className="px-2.5 py-1 rounded-xl text-[10px] font-bold font-mono bg-rose-500/20 hover:bg-rose-500/30 border-rose-500/50 text-rose-200 hover:text-white flex items-center gap-1 transition-all shadow-[0_0_10px_rgba(244,63,94,0.25)] shrink-0"
                             title="Export findings as a signed JSON file for audit purposes"
                           >
                             <span>📑</span>
@@ -588,19 +588,19 @@ export const TelemetryAnomalyObserverTimeline: React.FC<
 
                     {/* Quick Telemetry Pills */}
                     <div className="grid grid-cols-4 gap-2 text-[10px] text-zinc-400 pt-1">
-                      <div className="p-1.5 rounded-lg bg-black/30 border border-white/5 flex flex-col">
+                      <div className="p-1.5 rounded-lg bg-black/30 border-white/5 flex flex-col">
                         <span className="text-zinc-500">CPU</span>
                         <span className="font-bold text-zinc-200">{snap.cpuAverage}°C</span>
                       </div>
-                      <div className="p-1.5 rounded-lg bg-black/30 border border-white/5 flex flex-col">
+                      <div className="p-1.5 rounded-lg bg-black/30 border-white/5 flex flex-col">
                         <span className="text-zinc-500">CRYO</span>
                         <span className="font-bold text-cyan-300">{snap.cryoTempMk} mK</span>
                       </div>
-                      <div className="p-1.5 rounded-lg bg-black/30 border border-white/5 flex flex-col">
+                      <div className="p-1.5 rounded-lg bg-black/30 border-white/5 flex flex-col">
                         <span className="text-zinc-500">QOPS</span>
                         <span className="font-bold text-violet-300">{snap.qopsThroughput}</span>
                       </div>
-                      <div className="p-1.5 rounded-lg bg-black/30 border border-white/5 flex flex-col">
+                      <div className="p-1.5 rounded-lg bg-black/30 border-white/5 flex flex-col">
                         <span className="text-zinc-500">VOLTAGE</span>
                         <span className="font-bold text-emerald-300">{snap.voltageStabilityPct}%</span>
                       </div>
@@ -615,10 +615,10 @@ export const TelemetryAnomalyObserverTimeline: React.FC<
         {/* Right Column: Deep Forensic Drill-Down Snapshot Inspector */}
         <div className="lg:col-span-6 space-y-4">
           {activeSelected ? (
-            <div className="p-6 rounded-[28px] bg-gradient-to-br from-[#0c1322]/90 via-[#070b14]/85 to-[#04060b] border border-cyan-500/30 backdrop-blur-xl shadow-2xl space-y-5 font-mono">
+            <div className="p-6 rounded-[28px] bg-gradient-to-br from-[#0c1322]/90 via-[#070b14]/85 to-[#04060b] border-cyan-500/30 backdrop-blur-xl shadow-2xl space-y-5 font-mono">
               <div className="flex items-center justify-between border-b border-white/10 pb-3">
                 <div className="flex items-center gap-2">
-                  <div className="p-2 rounded-xl bg-cyan-500/20 text-cyan-300 border border-cyan-500/40">
+                  <div className="p-2 rounded-xl bg-cyan-500/20 text-cyan-300 border-cyan-500/40">
                     <FileText className="w-5 h-5" />
                   </div>
                   <div>
@@ -636,7 +636,7 @@ export const TelemetryAnomalyObserverTimeline: React.FC<
                       playTone(720, 0.04);
                       exportHardwareSnapshotJson(activeSelected.snapshot);
                     }}
-                    className="px-3 py-1 rounded-xl text-xs font-bold font-mono bg-cyan-500/15 hover:bg-cyan-500/25 border border-cyan-500/40 text-cyan-300 hover:text-white flex items-center gap-1.5 transition-all shadow-[0_0_10px_rgba(6,182,212,0.15)]"
+                    className="px-3 py-1 rounded-xl text-xs font-bold font-mono bg-cyan-500/15 hover:bg-cyan-500/25 border-cyan-500/40 text-cyan-300 hover:text-white flex items-center gap-1.5 transition-all shadow-[0_0_10px_rgba(6,182,212,0.15)]"
                     title={`Download Hardware Snapshot ${activeSelected.snapshot.id} as JSON file`}
                   >
                     <Download className="w-3.5 h-3.5 text-cyan-400" />
@@ -648,7 +648,7 @@ export const TelemetryAnomalyObserverTimeline: React.FC<
                       playTone(740, 0.04);
                       exportAllHardwareSnapshotsCsv(snapshots);
                     }}
-                    className="px-3 py-1 rounded-xl text-xs font-bold font-mono bg-emerald-500/15 hover:bg-emerald-500/25 border border-emerald-500/40 text-emerald-300 hover:text-white flex items-center gap-1.5 transition-all shadow-[0_0_10px_rgba(16,185,129,0.15)]"
+                    className="px-3 py-1 rounded-xl text-xs font-bold font-mono bg-emerald-500/15 hover:bg-emerald-500/25 border-emerald-500/40 text-emerald-300 hover:text-white flex items-center gap-1.5 transition-all shadow-[0_0_10px_rgba(16,185,129,0.15)]"
                     title="Export all hardware snapshots as CSV"
                   >
                     <Download className="w-3.5 h-3.5 text-emerald-400" />
@@ -658,7 +658,7 @@ export const TelemetryAnomalyObserverTimeline: React.FC<
                     className={`px-2.5 py-1 rounded-xl text-xs font-bold border ${
                       activeSelected.isAnomalous
                         ? 'bg-rose-500/20 text-rose-300 border-rose-500/40 animate-pulse'
-                        : 'bg-emerald-500/15 text-emerald-300 border border-emerald-500/30'
+                        : 'bg-emerald-500/15 text-emerald-300 border-emerald-500/30'
                     }`}
                   >
                     {activeSelected.isAnomalous ? 'ANOMALY DETECTED' : 'NOMINAL ZERO-DRIFT'}
@@ -668,20 +668,20 @@ export const TelemetryAnomalyObserverTimeline: React.FC<
 
               {/* Anomaly Diagnosis Card */}
               {activeSelected.isAnomalous && activeSelected.report && (
-                <div className="p-4 rounded-2xl bg-rose-950/40 border border-rose-500/30 space-y-3 text-xs">
+                <div className="p-4 rounded-2xl bg-rose-950/40 border-rose-500/30 space-y-3 text-xs">
                   <div className="font-bold text-rose-300 flex items-center justify-between flex-wrap gap-2">
                     <span className="flex items-center gap-1.5">
                       <AlertTriangle className="w-4 h-4 text-rose-400" />
                       <span>{activeSelected.report.title}</span>
                     </span>
                     <div className="flex items-center gap-2">
-                      <span className="text-[10px] px-2 py-0.5 rounded bg-rose-900/60 border border-rose-600 text-rose-200 font-mono">
+                      <span className="text-[10px] px-2 py-0.5 rounded bg-rose-900/60 border-rose-600 text-rose-200 font-mono">
                         Z-SCORE: {activeSelected.report.zScore}&sigma;
                       </span>
                       <button
                         id="download-anomaly-report-btn"
                         onClick={() => handleDownloadAnomalyReport(activeSelected.snapshot, activeSelected.report!, activeSelected.anomalies)}
-                        className="px-3 py-1.5 rounded-xl text-xs font-bold font-mono bg-rose-500/20 hover:bg-rose-500/30 border border-rose-500/50 text-rose-200 hover:text-white flex items-center gap-1.5 transition-all shadow-[0_0_12px_rgba(244,63,94,0.3)]"
+                        className="px-3 py-1.5 rounded-xl text-xs font-bold font-mono bg-rose-500/20 hover:bg-rose-500/30 border-rose-500/50 text-rose-200 hover:text-white flex items-center gap-1.5 transition-all shadow-[0_0_12px_rgba(244,63,94,0.3)]"
                         title="Export findings as a signed JSON file for audit purposes"
                       >
                         <span>📑</span>
@@ -709,7 +709,7 @@ export const TelemetryAnomalyObserverTimeline: React.FC<
 
                 <div className="grid grid-cols-2 sm:grid-cols-4 gap-2 text-xs">
                   {/* CPU Load Delta */}
-                  <div className="p-3 rounded-xl bg-black/50 border border-white/8 space-y-1">
+                  <div className="p-3 rounded-xl bg-black/50 border-white/8 space-y-1">
                     <div className="text-[10px] text-zinc-500 flex items-center justify-between">
                       <span>CPU TEMP</span>
                       <span className="text-zinc-400">41.2°C</span>
@@ -732,7 +732,7 @@ export const TelemetryAnomalyObserverTimeline: React.FC<
                   </div>
 
                   {/* Cryo Temperature Delta */}
-                  <div className="p-3 rounded-xl bg-black/50 border border-white/8 space-y-1">
+                  <div className="p-3 rounded-xl bg-black/50 border-white/8 space-y-1">
                     <div className="text-[10px] text-zinc-500 flex items-center justify-between">
                       <span>CRYO TEMP</span>
                       <span className="text-zinc-400">14.98 mK</span>
@@ -755,7 +755,7 @@ export const TelemetryAnomalyObserverTimeline: React.FC<
                   </div>
 
                   {/* QOps Throughput Delta */}
-                  <div className="p-3 rounded-xl bg-black/50 border border-white/8 space-y-1">
+                  <div className="p-3 rounded-xl bg-black/50 border-white/8 space-y-1">
                     <div className="text-[10px] text-zinc-500 flex items-center justify-between">
                       <span>QOPS RATE</span>
                       <span className="text-zinc-400">851.9</span>
@@ -777,7 +777,7 @@ export const TelemetryAnomalyObserverTimeline: React.FC<
                   </div>
 
                   {/* Voltage Rail Delta */}
-                  <div className="p-3 rounded-xl bg-black/50 border border-white/8 space-y-1">
+                  <div className="p-3 rounded-xl bg-black/50 border-white/8 space-y-1">
                     <div className="text-[10px] text-zinc-500 flex items-center justify-between">
                       <span>VOLTAGE</span>
                       <span className="text-zinc-400">99.98%</span>
@@ -803,13 +803,13 @@ export const TelemetryAnomalyObserverTimeline: React.FC<
 
               {/* 4-Core CPU Thermal Distribution */}
               {activeSelected.snapshot.cpuCores && (
-                <div className="p-3 rounded-2xl bg-black/40 border border-white/8 space-y-2 text-xs">
+                <div className="p-3 rounded-2xl bg-black/40 border-white/8 space-y-2 text-xs">
                   <div className="text-[11px] font-bold text-zinc-400 uppercase">
                     Quad-Core Thermal &amp; Load Distribution
                   </div>
                   <div className="grid grid-cols-4 gap-2">
                     {activeSelected.snapshot.cpuCores.map((coreTemp, cIdx) => (
-                      <div key={cIdx} className="p-2 rounded-lg bg-zinc-900 border border-zinc-800 text-center">
+                      <div key={cIdx} className="p-2 rounded-lg bg-zinc-900 border-zinc-800 text-center">
                         <div className="text-[10px] text-zinc-500">Core {cIdx}</div>
                         <div
                           className={`font-bold text-xs mt-0.5 ${
@@ -825,7 +825,7 @@ export const TelemetryAnomalyObserverTimeline: React.FC<
               )}
 
               {/* Cryptographic & Merkle Seal Provenance */}
-              <div className="p-3.5 rounded-2xl bg-black/60 border border-white/8 space-y-2 text-xs">
+              <div className="p-3.5 rounded-2xl bg-black/60 border-white/8 space-y-2 text-xs">
                 <div className="text-[11px] font-bold text-zinc-400 uppercase flex items-center gap-1.5">
                   <Fingerprint className="w-3.5 h-3.5 text-cyan-400" />
                   <span>Cryptographic Proof &amp; Invariant Anchors</span>
@@ -874,7 +874,7 @@ export const TelemetryAnomalyObserverTimeline: React.FC<
               </div>
             </div>
           ) : (
-            <div className="p-8 text-center bg-black/20 border border-dashed border-zinc-800 rounded-2xl text-xs font-mono text-zinc-500">
+            <div className="p-8 text-center bg-black/20 border-dashed border-zinc-800 rounded-2xl text-xs font-mono text-zinc-500">
               เลือก Snapshot ทางซ้ายมือเพื่อตรวจสอบข้อมูลพยานหลักฐานและส่วนต่าง SSoT
             </div>
           )}

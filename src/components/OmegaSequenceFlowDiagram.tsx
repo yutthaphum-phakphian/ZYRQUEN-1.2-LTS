@@ -87,14 +87,14 @@ export const OmegaSequenceFlowDiagram: React.FC = () => {
 
   return (
     <div
-      className={`rounded-[28px] bg-[#07080F]/95 border border-white/8 backdrop-blur-2xl transition-all duration-300 font-mono flex flex-col ${
+      className={`rounded-[28px] bg-[#07080F]/95 border-white/8 backdrop-blur-2xl transition-all duration-300 font-mono flex flex-col ${
         isFullscreen ? 'fixed inset-4 z-50 p-6 shadow-[0_0_80px_rgba(0,0,0,0.9)] overflow-y-auto' : 'p-6 sm:p-8 space-y-6 shadow-2xl'
       }`}
     >
       {/* Header Bar */}
       <div className="flex flex-col lg:flex-row lg:items-center justify-between gap-4 border-b border-white/8 pb-4">
         <div className="flex items-center gap-3.5">
-          <div className="w-12 h-12 rounded-2xl bg-cyan-500/15 border border-cyan-500/30 flex items-center justify-center text-cyan-300 shadow-[0_0_25px_rgba(6,182,212,0.2)] shrink-0">
+          <div className="w-12 h-12 rounded-2xl bg-cyan-500/15 border-cyan-500/30 flex items-center justify-center text-cyan-300 shadow-[0_0_25px_rgba(6,182,212,0.2)] shrink-0">
             <Layers className="w-6 h-6" />
           </div>
           <div>
@@ -102,7 +102,7 @@ export const OmegaSequenceFlowDiagram: React.FC = () => {
               <h3 className="text-base sm:text-lg font-bold text-white tracking-wide">
                 12-Phase Omega Sequence Flow Diagram
               </h3>
-              <span className="text-[10px] px-2.5 py-0.5 rounded-full bg-cyan-500/15 text-cyan-300 border border-cyan-500/30 font-bold">
+              <span className="text-[10px] px-2.5 py-0.5 rounded-full bg-cyan-500/15 text-cyan-300 border-cyan-500/30 font-bold">
                 INTERACTIVE SVG NODE MAP
               </span>
             </div>
@@ -129,7 +129,7 @@ export const OmegaSequenceFlowDiagram: React.FC = () => {
 
           <button
             onClick={() => setIsFullscreen(!isFullscreen)}
-            className="p-2.5 rounded-2xl bg-white/5 hover:bg-white/10 text-zinc-400 hover:text-white border border-white/10 transition-all"
+            className="p-2.5 rounded-2xl bg-white/5 hover:bg-white/10 text-zinc-400 hover:text-white border-white/10 transition-all"
             title={isFullscreen ? 'Exit Fullscreen' : 'Expand Fullscreen'}
           >
             {isFullscreen ? <Minimize2 className="w-4 h-4" /> : <Maximize2 className="w-4 h-4" />}
@@ -138,7 +138,7 @@ export const OmegaSequenceFlowDiagram: React.FC = () => {
       </div>
 
       {/* SVG Canvas Flow Diagram */}
-      <div className="relative w-full overflow-x-auto rounded-2xl bg-black/60 border border-white/5 p-4 flex items-center justify-center">
+      <div className="relative w-full overflow-x-auto rounded-2xl bg-black/60 border-white/5 p-4 flex items-center justify-center">
         <svg
           viewBox="0 0 960 340"
           className="w-full max-w-5xl h-auto min-w-[780px] select-none"
@@ -305,7 +305,7 @@ export const OmegaSequenceFlowDiagram: React.FC = () => {
       </div>
 
       {/* Selected Phase Detail Modal / Expand Card */}
-      <div className="p-5 sm:p-6 rounded-2xl bg-black/80 border border-white/10 space-y-4 shadow-xl">
+      <div className="p-5 sm:p-6 rounded-2xl bg-black/80 border-white/10 space-y-4 shadow-xl">
         <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 border-b border-white/8 pb-3">
           <div className="flex items-center gap-3">
             <div
@@ -345,7 +345,7 @@ export const OmegaSequenceFlowDiagram: React.FC = () => {
 
         {/* Phase Details Grid */}
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4 text-xs">
-          <div className="p-3.5 rounded-xl bg-white/[0.02] border border-white/5 space-y-1.5">
+          <div className="p-3.5 rounded-xl bg-white/[0.02] border-white/5 space-y-1.5">
             <span className="text-amber-300 font-bold flex items-center gap-1.5">
               <Scale className="w-3.5 h-3.5" />
               <span>กฎหมายไทยและข้อกำหนด (Statutory Purpose):</span>
@@ -358,7 +358,7 @@ export const OmegaSequenceFlowDiagram: React.FC = () => {
             </p>
           </div>
 
-          <div className="p-3.5 rounded-xl bg-white/[0.02] border border-white/5 space-y-1.5">
+          <div className="p-3.5 rounded-xl bg-white/[0.02] border-white/5 space-y-1.5">
             <span className="text-cyan-300 font-bold flex items-center gap-1.5">
               <Cpu className="w-3.5 h-3.5" />
               <span>การบังคับใช้เชิงรันไทม์ (Runtime Invariant Proof):</span>
@@ -366,7 +366,7 @@ export const OmegaSequenceFlowDiagram: React.FC = () => {
             <p className="text-zinc-300 font-mono text-xs leading-relaxed">
               {selectedPhase.technicalEnforcement}
             </p>
-            <div className="p-2 rounded-lg bg-black/60 border border-white/5 text-[10px] text-emerald-400 select-all font-mono truncate">
+            <div className="p-2 rounded-lg bg-black/60 border-white/5 text-[10px] text-emerald-400 select-all font-mono truncate">
               Proof Hash: {selectedPhase.hashPreview}
             </div>
           </div>

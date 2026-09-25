@@ -67,7 +67,7 @@ export const SnapshotCompareView: React.FC<SnapshotCompareViewProps> = ({
   const renderVarianceBadge = (val: number, unit: string = '', inverseGood: boolean = false) => {
     if (val === 0) {
       return (
-        <span className="px-2 py-0.5 rounded-full bg-zinc-500/10 text-zinc-400 border border-zinc-500/20 text-xs font-mono flex items-center gap-1">
+        <span className="px-2 py-0.5 rounded-full bg-zinc-500/10 text-zinc-400 border-zinc-500/20 text-xs font-mono flex items-center gap-1">
           <Minus className="w-3 h-3" /> 0.0{unit} Δ
         </span>
       );
@@ -93,9 +93,9 @@ export const SnapshotCompareView: React.FC<SnapshotCompareViewProps> = ({
   return (
     <div className="space-y-6 animate-in fade-in duration-200 font-mono">
       {/* Selector Controls Bar */}
-      <div className="p-5 rounded-[24px] bg-[#0b0e1a]/85 border border-white/8 backdrop-blur-xl flex flex-col md:flex-row items-center justify-between gap-4">
+      <div className="p-5 rounded-[24px] bg-[#0b0e1a]/85 border-white/8 backdrop-blur-xl flex flex-col md:flex-row items-center justify-between gap-4">
         <div className="flex items-center gap-3 w-full md:w-auto">
-          <div className="w-10 h-10 rounded-2xl bg-cyan-500/15 border border-cyan-500/30 flex items-center justify-center text-cyan-300 shrink-0">
+          <div className="w-10 h-10 rounded-2xl bg-cyan-500/15 border-cyan-500/30 flex items-center justify-center text-cyan-300 shrink-0">
             <ArrowRightLeft className="w-5 h-5" />
           </div>
           <div>
@@ -110,7 +110,7 @@ export const SnapshotCompareView: React.FC<SnapshotCompareViewProps> = ({
 
         {/* Dual Snapshot Selectors */}
         <div className="flex flex-wrap items-center gap-3 w-full md:w-auto justify-end">
-          <div className="flex items-center gap-2 bg-black/40 border border-white/10 px-3 py-1.5 rounded-xl text-xs">
+          <div className="flex items-center gap-2 bg-black/40 border-white/10 px-3 py-1.5 rounded-xl text-xs">
             <span className="text-cyan-400 font-bold">SNAPSHOT A:</span>
             <select
               value={indexA}
@@ -118,7 +118,7 @@ export const SnapshotCompareView: React.FC<SnapshotCompareViewProps> = ({
                 playTone(500, 0.04);
                 setIndexA(Number(e.target.value));
               }}
-              className="bg-zinc-900 text-white font-mono text-xs rounded-lg px-2 py-1 border border-white/15 focus:outline-none focus:border-cyan-500"
+              className="bg-zinc-900 text-white font-mono text-xs rounded-lg px-2 py-1 border-white/15 focus:outline-none focus:border-cyan-500"
             >
               {snapshots.map((s, idx) => (
                 <option key={s.id} value={idx}>
@@ -130,7 +130,7 @@ export const SnapshotCompareView: React.FC<SnapshotCompareViewProps> = ({
 
           <span className="text-zinc-500 font-bold hidden sm:inline">VS</span>
 
-          <div className="flex items-center gap-2 bg-black/40 border border-white/10 px-3 py-1.5 rounded-xl text-xs">
+          <div className="flex items-center gap-2 bg-black/40 border-white/10 px-3 py-1.5 rounded-xl text-xs">
             <span className="text-violet-400 font-bold">SNAPSHOT B:</span>
             <select
               value={indexB}
@@ -138,7 +138,7 @@ export const SnapshotCompareView: React.FC<SnapshotCompareViewProps> = ({
                 playTone(580, 0.04);
                 setIndexB(Number(e.target.value));
               }}
-              className="bg-zinc-900 text-white font-mono text-xs rounded-lg px-2 py-1 border border-white/15 focus:outline-none focus:border-violet-500"
+              className="bg-zinc-900 text-white font-mono text-xs rounded-lg px-2 py-1 border-white/15 focus:outline-none focus:border-violet-500"
             >
               {snapshots.map((s, idx) => (
                 <option key={s.id} value={idx}>
@@ -152,7 +152,7 @@ export const SnapshotCompareView: React.FC<SnapshotCompareViewProps> = ({
           <button
             onClick={handleGeneratePdfReport}
             disabled={isExportingPdf}
-            className="px-4 py-2 rounded-xl bg-gradient-to-r from-emerald-500/20 to-cyan-500/20 hover:from-emerald-500/30 hover:to-cyan-500/30 border border-emerald-500/30 text-emerald-300 font-bold text-xs flex items-center gap-2 shadow-[0_0_15px_rgba(16,185,129,0.15)] transition-all"
+            className="px-4 py-2 rounded-xl bg-gradient-to-r from-emerald-500/20 to-cyan-500/20 hover:from-emerald-500/30 hover:to-cyan-500/30 border-emerald-500/30 text-emerald-300 font-bold text-xs flex items-center gap-2 shadow-[0_0_15px_rgba(16,185,129,0.15)] transition-all"
           >
             <FileText className="w-3.5 h-3.5 text-emerald-400" />
             <span>{isExportingPdf ? 'Compiling PDF...' : 'Generate Forensic Report (PDF)'}</span>
@@ -161,7 +161,7 @@ export const SnapshotCompareView: React.FC<SnapshotCompareViewProps> = ({
       </div>
 
       {pdfExportedName && (
-        <div className="p-3.5 rounded-2xl bg-emerald-500/10 border border-emerald-500/30 text-emerald-300 text-xs flex items-center justify-between animate-in fade-in">
+        <div className="p-3.5 rounded-2xl bg-emerald-500/10 border-emerald-500/30 text-emerald-300 text-xs flex items-center justify-between animate-in fade-in">
           <div className="flex items-center gap-2">
             <Check className="w-4 h-4 text-emerald-400" />
             <span>Forensic PDF Report compiled and saved: <strong className="text-white">{pdfExportedName}</strong></span>
@@ -173,7 +173,7 @@ export const SnapshotCompareView: React.FC<SnapshotCompareViewProps> = ({
       {/* Side-by-Side Comparison Metric Cards */}
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
         {/* Metric 1: CPU Average */}
-        <div className="p-5 rounded-[24px] bg-[#0b0e1a]/70 border border-white/8 backdrop-blur-xl space-y-3">
+        <div className="p-5 rounded-[24px] bg-[#0b0e1a]/70 border-white/8 backdrop-blur-xl space-y-3">
           <div className="flex items-center justify-between text-xs text-zinc-400">
             <span className="flex items-center gap-1.5">
               <Cpu className="w-4 h-4 text-cyan-400" />
@@ -194,7 +194,7 @@ export const SnapshotCompareView: React.FC<SnapshotCompareViewProps> = ({
         </div>
 
         {/* Metric 2: Cryo Temperature */}
-        <div className="p-5 rounded-[24px] bg-[#0b0e1a]/70 border border-white/8 backdrop-blur-xl space-y-3">
+        <div className="p-5 rounded-[24px] bg-[#0b0e1a]/70 border-white/8 backdrop-blur-xl space-y-3">
           <div className="flex items-center justify-between text-xs text-zinc-400">
             <span className="flex items-center gap-1.5">
               <Thermometer className="w-4 h-4 text-amber-400" />
@@ -215,7 +215,7 @@ export const SnapshotCompareView: React.FC<SnapshotCompareViewProps> = ({
         </div>
 
         {/* Metric 3: QOps Throughput */}
-        <div className="p-5 rounded-[24px] bg-[#0b0e1a]/70 border border-white/8 backdrop-blur-xl space-y-3">
+        <div className="p-5 rounded-[24px] bg-[#0b0e1a]/70 border-white/8 backdrop-blur-xl space-y-3">
           <div className="flex items-center justify-between text-xs text-zinc-400">
             <span className="flex items-center gap-1.5">
               <Zap className="w-4 h-4 text-emerald-400" />
@@ -236,7 +236,7 @@ export const SnapshotCompareView: React.FC<SnapshotCompareViewProps> = ({
         </div>
 
         {/* Metric 4: RAM Usage */}
-        <div className="p-5 rounded-[24px] bg-[#0b0e1a]/70 border border-white/8 backdrop-blur-xl space-y-3">
+        <div className="p-5 rounded-[24px] bg-[#0b0e1a]/70 border-white/8 backdrop-blur-xl space-y-3">
           <div className="flex items-center justify-between text-xs text-zinc-400">
             <span className="flex items-center gap-1.5">
               <Layers className="w-4 h-4 text-violet-400" />
@@ -258,7 +258,7 @@ export const SnapshotCompareView: React.FC<SnapshotCompareViewProps> = ({
       </div>
 
       {/* In-Depth Side-by-Side Comparison Table */}
-      <div className="p-6 rounded-[28px] bg-[#0b0e1a]/70 border border-white/8 backdrop-blur-xl space-y-4">
+      <div className="p-6 rounded-[28px] bg-[#0b0e1a]/70 border-white/8 backdrop-blur-xl space-y-4">
         <div className="flex items-center justify-between">
           <h4 className="text-xs font-bold text-white uppercase tracking-wider flex items-center gap-2">
             <Activity className="w-4 h-4 text-cyan-400" />

@@ -490,17 +490,17 @@ export const Chamber11QuantumRadar: React.FC = () => {
   return (
     <div className="space-y-6">
       {/* Header Band */}
-      <div className="p-5 rounded-2xl bg-gradient-to-r from-emerald-950/70 via-black to-zinc-950 border border-emerald-500/40 backdrop-blur-xl flex flex-col md:flex-row items-start md:items-center justify-between gap-4">
+      <div className="p-5 rounded-2xl bg-gradient-to-r from-emerald-950/70 via-black to-zinc-950 border-emerald-500/40 backdrop-blur-xl flex flex-col md:flex-row items-start md:items-center justify-between gap-4">
         <div className="w-full">
           <div className="flex flex-wrap items-center gap-2 mb-2">
-            <span className="px-2.5 py-0.5 rounded-full bg-emerald-500/20 text-emerald-300 border border-emerald-500/40 text-xs font-mono font-bold flex items-center gap-1.5">
+            <span className="px-2.5 py-0.5 rounded-full bg-emerald-500/20 text-emerald-300 border-emerald-500/40 text-xs font-mono font-bold flex items-center gap-1.5">
               <Radio className="w-3.5 h-3.5 animate-pulse text-emerald-400 shrink-0" />
               <span>CHAMBER 11 • 8K QUANTUM RADAR</span>
             </span>
-            <span className="px-2 py-0.5 rounded-full bg-amber-500/20 text-amber-300 border border-amber-500/40 text-[11px] font-mono">
+            <span className="px-2 py-0.5 rounded-full bg-amber-500/20 text-amber-300 border-amber-500/40 text-[11px] font-mono">
               COHERENCE 99.992%
             </span>
-            <span className="px-2 py-0.5 rounded-full bg-cyan-500/20 text-cyan-300 border border-cyan-500/40 text-[11px] font-mono">
+            <span className="px-2 py-0.5 rounded-full bg-cyan-500/20 text-cyan-300 border-cyan-500/40 text-[11px] font-mono">
               14.98 mK CRYO
             </span>
           </div>
@@ -517,7 +517,7 @@ export const Chamber11QuantumRadar: React.FC = () => {
           <button
             onClick={handleTriggerThreatSimulator}
             disabled={isSimulatingThreat}
-            className="px-3.5 min-h-[44px] py-2 rounded-xl text-xs font-mono font-bold bg-rose-500/20 hover:bg-rose-500/30 text-rose-300 border border-rose-500/40 flex justify-center items-center gap-2 transition shadow-[0_0_15px_rgba(244,63,94,0.2)] cursor-pointer"
+            className="px-3.5 min-h-[44px] py-2 rounded-xl text-xs font-mono font-bold bg-rose-500/20 hover:bg-rose-500/30 text-rose-300 border-rose-500/40 flex justify-center items-center gap-2 transition shadow-[0_0_15px_rgba(244,63,94,0.2)] cursor-pointer"
             title="จำลองการส่งเวกเตอร์ภัยคุกคามควอนตัม 8K สู่แนวรับ SSoT เพื่อทดสอบระบบ Fail-Closed"
           >
             <ShieldAlert className={`w-3.5 h-3.5 text-rose-400 ${isSimulatingThreat ? 'animate-bounce' : ''}`} />
@@ -538,7 +538,7 @@ export const Chamber11QuantumRadar: React.FC = () => {
 
           <button
             onClick={handleExportJson}
-            className="px-3.5 min-h-[44px] py-2 rounded-xl text-xs font-mono font-bold bg-white/5 hover:bg-white/10 text-white border border-white/10 flex justify-center items-center gap-1.5 transition cursor-pointer"
+            className="px-3.5 min-h-[44px] py-2 rounded-xl text-xs font-mono font-bold bg-white/5 hover:bg-white/10 text-white border-white/10 flex justify-center items-center gap-1.5 transition cursor-pointer"
           >
             <Download className="w-3.5 h-3.5 text-cyan-400" />
             <span>ส่งออก JSON ผลการวิเคราะห์</span>
@@ -551,7 +551,7 @@ export const Chamber11QuantumRadar: React.FC = () => {
               playAuditChime();
               setIsQrModalOpen(true);
             }}
-            className="px-3.5 min-h-[44px] py-2 rounded-xl text-xs font-mono font-bold bg-cyan-500/20 hover:bg-cyan-500/30 text-cyan-300 border border-cyan-500/40 flex justify-center items-center gap-2 transition shadow-[0_0_15px_rgba(6,182,212,0.25)] cursor-pointer"
+            className="px-3.5 min-h-[44px] py-2 rounded-xl text-xs font-mono font-bold bg-cyan-500/20 hover:bg-cyan-500/30 text-cyan-300 border-cyan-500/40 flex justify-center items-center gap-2 transition shadow-[0_0_15px_rgba(6,182,212,0.25)] cursor-pointer"
             title="สร้าง QR Code ของ Merkle Proof Hash จากค่า Telemetry Snapshot ล่าสุดสำหรับตรวจประเมิน"
           >
             <QrCode className="w-3.5 h-3.5 text-cyan-400" />
@@ -563,7 +563,7 @@ export const Chamber11QuantumRadar: React.FC = () => {
       {/* Main Radar Layout Grid */}
       <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 items-start">
         {/* Radar Screen Canvas (7 cols on large) */}
-        <div className="lg:col-span-7 bg-[#020b02] border border-emerald-500/30 rounded-2xl p-4 flex flex-col items-center relative overflow-hidden shadow-[0_0_30px_rgba(0,255,65,0.08)]">
+        <div className="lg:col-span-7 bg-[#020b02] border-emerald-500/30 rounded-2xl p-4 flex flex-col items-center relative overflow-hidden shadow-[0_0_30px_rgba(0,255,65,0.08)]">
           <div className="w-full flex flex-col sm:flex-row sm:items-center justify-between gap-3 border-b border-emerald-500/20 pb-2.5 mb-2 text-xs font-mono">
             <div className="flex items-center gap-2 text-emerald-400 font-bold">
               <span className="w-2 h-2 rounded-full bg-emerald-400 animate-ping shrink-0"></span>
@@ -571,7 +571,7 @@ export const Chamber11QuantumRadar: React.FC = () => {
             </div>
             <div className="flex items-center gap-2 text-[11px] text-zinc-400">
               <span className="shrink-0">ความเร็ว:</span>
-              <div className="flex bg-black/40 rounded-lg p-0.5 border border-emerald-500/20">
+              <div className="flex bg-black/40 rounded-lg p-0.5 border-emerald-500/20">
                 <button
                   onClick={() => setScanSpeed(0.8)}
                   className={`min-w-[36px] min-h-[36px] flex items-center justify-center rounded-md transition-colors ${scanSpeed === 0.8 ? 'bg-emerald-500/30 text-emerald-300 font-bold' : 'hover:bg-white/5 hover:text-zinc-200'}`}
@@ -601,7 +601,7 @@ export const Chamber11QuantumRadar: React.FC = () => {
               width={520}
               height={520}
               onClick={handleCanvasClick}
-              className="max-w-full h-auto rounded-xl border border-emerald-500/20"
+              className="max-w-full h-auto rounded-xl border-emerald-500/20"
             />
             {/* Export Waveform Telemetry Button */}
             <button
@@ -624,7 +624,7 @@ export const Chamber11QuantumRadar: React.FC = () => {
                 a.click();
                 URL.revokeObjectURL(url);
               }}
-              className="absolute bottom-3 right-3 z-10 px-2.5 py-1.5 bg-black/80 hover:bg-emerald-950/90 border border-emerald-500/50 rounded-lg flex items-center gap-1.5 text-[10px] font-mono text-emerald-400 shadow-lg backdrop-blur-md transition-all cursor-pointer hover:border-emerald-400 active:scale-95"
+              className="absolute bottom-3 right-3 z-10 px-2.5 py-1.5 bg-black/80 hover:bg-emerald-950/90 border-emerald-500/50 rounded-lg flex items-center gap-1.5 text-[10px] font-mono text-emerald-400 shadow-lg backdrop-blur-md transition-all cursor-pointer hover:border-emerald-400 active:scale-95"
               title="ส่งออกชุดข้อมูลเวฟฟอร์มและเวกเตอร์โทรมาตรเพื่อการตรวจพิสูจน์พยานหลักฐาน"
             >
               <Download className="w-3 h-3 text-emerald-400" />
@@ -634,15 +634,15 @@ export const Chamber11QuantumRadar: React.FC = () => {
 
           {/* Radar Bottom Telemetry Strip */}
           <div className="w-full grid grid-cols-1 sm:grid-cols-3 gap-2 mt-3 pt-3 border-t border-emerald-500/20 text-center font-mono">
-            <div className="p-2.5 rounded-lg bg-black/40 border border-emerald-500/20 flex flex-col items-center justify-center min-h-[44px]">
+            <div className="p-2.5 rounded-lg bg-black/40 border-emerald-500/20 flex flex-col items-center justify-center min-h-[44px]">
               <span className="text-zinc-500 block text-[9px] sm:text-[10px]">เป้าหมายที่ตรวจพบ</span>
               <span className="text-emerald-400 font-bold text-xs sm:text-sm">{threats.length} เวกเตอร์</span>
             </div>
-            <div className="p-2.5 rounded-lg bg-black/40 border border-emerald-500/20 flex flex-col items-center justify-center min-h-[44px]">
+            <div className="p-2.5 rounded-lg bg-black/40 border-emerald-500/20 flex flex-col items-center justify-center min-h-[44px]">
               <span className="text-zinc-500 block text-[9px] sm:text-[10px]">ระดับเสี่ยงสูงสุด</span>
               <span className="text-rose-400 font-bold text-xs sm:text-sm">1.00 (VEC-104)</span>
             </div>
-            <div className="p-2.5 rounded-lg bg-black/40 border border-emerald-500/20 flex flex-col items-center justify-center min-h-[44px]">
+            <div className="p-2.5 rounded-lg bg-black/40 border-emerald-500/20 flex flex-col items-center justify-center min-h-[44px]">
               <span className="text-zinc-500 block text-[9px] sm:text-[10px]">สถานะเกราะกำบัง</span>
               <span className="text-cyan-300 font-bold text-xs sm:text-sm">FIPS L4 ARMED</span>
             </div>
@@ -652,7 +652,7 @@ export const Chamber11QuantumRadar: React.FC = () => {
         {/* Threat Vectors List & Detail Inspector (5 cols on large) */}
         <div className="lg:col-span-5 space-y-4">
           {/* Filter Pills */}
-          <div className="grid grid-cols-2 sm:flex sm:items-center gap-1.5 bg-black/50 p-1.5 rounded-xl border border-white/10 text-xs font-mono">
+          <div className="grid grid-cols-2 sm:flex sm:items-center gap-1.5 bg-black/50 p-1.5 rounded-xl border-white/10 text-xs font-mono">
             {(['ALL', 'CRITICAL', 'WARNING', 'NORMAL'] as const).map((mode) => (
               <button
                 key={mode}
@@ -662,7 +662,7 @@ export const Chamber11QuantumRadar: React.FC = () => {
                 }}
                 className={`flex-1 min-h-[44px] px-2 rounded-lg text-center font-bold transition whitespace-nowrap flex items-center justify-center ${
                   filter === mode
-                    ? 'bg-emerald-500/20 text-emerald-300 border border-emerald-500/40 shadow-[0_0_10px_rgba(16,185,129,0.15)]'
+                    ? 'bg-emerald-500/20 text-emerald-300 border-emerald-500/40 shadow-[0_0_10px_rgba(16,185,129,0.15)]'
                     : 'text-zinc-400 hover:text-zinc-200 hover:bg-white/5'
                 }`}
               >
@@ -721,7 +721,7 @@ export const Chamber11QuantumRadar: React.FC = () => {
 
           {/* Selected Threat Inspector Box */}
           {selectedThreat && (
-            <div className="p-4 rounded-2xl bg-gradient-to-br from-zinc-950 via-black to-zinc-900 border border-emerald-500/40 space-y-3 shadow-xl">
+            <div className="p-4 rounded-2xl bg-gradient-to-br from-zinc-950 via-black to-zinc-900 border-emerald-500/40 space-y-3 shadow-xl">
               <div className="flex items-center justify-between border-b border-white/10 pb-2">
                 <div className="flex items-center gap-2">
                   <ShieldAlert className="w-4 h-4 text-rose-400" />
@@ -739,12 +739,12 @@ export const Chamber11QuantumRadar: React.FC = () => {
                 <span className="text-xs text-cyan-400 font-mono block mt-0.5">
                   ประเภทภัย: {selectedThreat.threat_type}
                 </span>
-                <p className="text-xs text-zinc-300 mt-2 leading-relaxed font-sans bg-black/40 p-2.5 rounded-xl border border-white/5">
+                <p className="text-xs text-zinc-300 mt-2 leading-relaxed font-sans bg-black/40 p-2.5 rounded-xl border-white/5">
                   {selectedThreat.notes}
                 </p>
               </div>
 
-              <div className="p-3 rounded-xl bg-amber-500/10 border border-amber-500/30 space-y-1">
+              <div className="p-3 rounded-xl bg-amber-500/10 border-amber-500/30 space-y-1">
                 <span className="text-[11px] font-bold text-amber-300 block">
                   มาตรการสยบภัยคุกคาม (Remediation Directive):
                 </span>
@@ -764,7 +764,7 @@ export const Chamber11QuantumRadar: React.FC = () => {
               )}
 
               {selectedThreat.status === 'MITIGATED_QUARANTINED' && (
-                <div className="p-2.5 rounded-xl bg-emerald-500/20 border border-emerald-500/40 text-emerald-300 text-xs font-mono flex items-center gap-2">
+                <div className="p-2.5 rounded-xl bg-emerald-500/20 border-emerald-500/40 text-emerald-300 text-xs font-mono flex items-center gap-2">
                   <CheckCircle2 className="w-4 h-4 text-emerald-400" />
                   <span>เวกเตอร์นี้ถูกระงับสิทธิ์และกักโรคไว้ใน Module 17 เรียบร้อยแล้ว</span>
                 </div>
@@ -773,7 +773,7 @@ export const Chamber11QuantumRadar: React.FC = () => {
           )}
 
           {/* Audit Terminal Log */}
-          <div className="p-3 rounded-xl bg-black/80 border border-emerald-500/20 font-mono text-[10px] space-y-1 text-emerald-400/90">
+          <div className="p-3 rounded-xl bg-black/80 border-emerald-500/20 font-mono text-[10px] space-y-1 text-emerald-400/90">
             <div className="flex items-center justify-between text-zinc-500 border-b border-white/5 pb-1 mb-1.5">
               <span className="flex items-center gap-1.5">
                 <Terminal className="w-3 h-3 text-emerald-400" />
@@ -798,13 +798,13 @@ export const Chamber11QuantumRadar: React.FC = () => {
           onClick={() => setIsQrModalOpen(false)}
         >
           <div
-            className="bg-zinc-950 border border-cyan-500/50 rounded-2xl p-6 max-w-md w-full shadow-[0_0_50px_rgba(6,182,212,0.25)] font-mono text-zinc-200 relative space-y-5"
+            className="bg-zinc-950 border-cyan-500/50 rounded-2xl p-6 max-w-md w-full shadow-[0_0_50px_rgba(6,182,212,0.25)] font-mono text-zinc-200 relative space-y-5"
             onClick={(e) => e.stopPropagation()}
           >
             {/* Modal Header */}
             <div className="flex items-center justify-between border-b border-zinc-800 pb-3">
               <div className="flex items-center gap-2">
-                <div className="p-2 rounded-lg bg-cyan-500/20 border border-cyan-500/40 text-cyan-400">
+                <div className="p-2 rounded-lg bg-cyan-500/20 border-cyan-500/40 text-cyan-400">
                   <QrCode className="w-5 h-5" />
                 </div>
                 <div>
@@ -853,21 +853,21 @@ export const Chamber11QuantumRadar: React.FC = () => {
             </div>
 
             {/* Telemetry Snapshot Details */}
-            <div className="bg-black/60 border border-zinc-800 rounded-xl p-3 space-y-2 text-[11px]">
+            <div className="bg-black/60 border-zinc-800 rounded-xl p-3 space-y-2 text-[11px]">
               <div className="flex items-center justify-between text-zinc-400">
                 <span>Genesis Merkle Root:</span>
                 <span className="text-emerald-400 font-bold">Block #849202</span>
               </div>
-              <div className="p-2 rounded bg-zinc-900/80 border border-zinc-800 text-[10px] text-zinc-300 break-all font-mono">
+              <div className="p-2 rounded bg-zinc-900/80 border-zinc-800 text-[10px] text-zinc-300 break-all font-mono">
                 909ab814479844d8a14816bed34cdbb07528e18501da86fc4691763a43fa4c68
               </div>
 
               <div className="grid grid-cols-2 gap-2 pt-1 text-[10px]">
-                <div className="p-2 rounded bg-zinc-900 border border-zinc-800 flex flex-col">
+                <div className="p-2 rounded bg-zinc-900 border-zinc-800 flex flex-col">
                   <span className="text-zinc-500">Coherence / Cryo:</span>
                   <span className="text-cyan-300 font-bold">99.992% • 14.98 mK</span>
                 </div>
-                <div className="p-2 rounded bg-zinc-900 border border-zinc-800 flex flex-col">
+                <div className="p-2 rounded bg-zinc-900 border-zinc-800 flex flex-col">
                   <span className="text-zinc-500">Active Vectors:</span>
                   <span className="text-amber-300 font-bold">{threats.length} Tracked</span>
                 </div>
@@ -885,7 +885,7 @@ export const Chamber11QuantumRadar: React.FC = () => {
                     setTimeout(() => setIsCopied(false), 2000);
                   });
                 }}
-                className="flex-1 py-2.5 px-3 rounded-xl bg-cyan-500/20 hover:bg-cyan-500/30 text-cyan-300 border border-cyan-500/40 text-xs font-bold flex items-center justify-center gap-1.5 transition cursor-pointer"
+                className="flex-1 py-2.5 px-3 rounded-xl bg-cyan-500/20 hover:bg-cyan-500/30 text-cyan-300 border-cyan-500/40 text-xs font-bold flex items-center justify-center gap-1.5 transition cursor-pointer"
               >
                 {isCopied ? (
                   <>

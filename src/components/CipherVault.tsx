@@ -197,19 +197,19 @@ export const CipherVault: React.FC = () => {
   };
 
   return (
-    <div className="p-6 rounded-[28px] bg-gradient-to-br from-[#121824]/90 via-[#0b0e1a]/80 to-[#07080F] border border-amber-500/30 backdrop-blur-xl space-y-6 shadow-2xl">
+    <div className="p-6 rounded-[28px] bg-gradient-to-br from-[#121824]/90 via-[#0b0e1a]/80 to-[#07080F] border-amber-500/30 backdrop-blur-xl space-y-6 shadow-2xl">
       {/* Header */}
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 border-b border-white/10 pb-4">
         <div className="flex items-center gap-3">
-          <div className="w-11 h-11 rounded-2xl bg-amber-500/15 border border-amber-500/40 flex items-center justify-center text-amber-400 shadow-lg shadow-amber-500/10">
+          <div className="w-11 h-11 rounded-2xl bg-amber-500/15 border-amber-500/40 flex items-center justify-center text-amber-400 shadow-lg shadow-amber-500/10">
             <LockKeyhole className="w-6 h-6" />
           </div>
           <div>
             <div className="flex items-center gap-2">
-              <span className="px-2.5 py-0.5 rounded-full bg-amber-500/15 text-amber-300 border border-amber-500/30 text-[10px] font-mono font-bold">
+              <span className="px-2.5 py-0.5 rounded-full bg-amber-500/15 text-amber-300 border-amber-500/30 text-[10px] font-mono font-bold">
                 WEB CRYPTO API (AES-GCM-256)
               </span>
-              <span className="px-2 py-0.5 rounded-full bg-cyan-950 text-cyan-300 border border-cyan-700/50 text-[10px] font-mono">
+              <span className="px-2 py-0.5 rounded-full bg-cyan-950 text-cyan-300 border-cyan-700/50 text-[10px] font-mono">
                 PBKDF2 100K ITERATIONS
               </span>
             </div>
@@ -223,13 +223,13 @@ export const CipherVault: React.FC = () => {
           {isUnlocked ? (
             <button
               onClick={handleLock}
-              className="px-3.5 py-1.5 rounded-xl bg-rose-950/60 hover:bg-rose-900/60 text-rose-300 border border-rose-700/60 text-xs font-mono font-bold flex items-center gap-1.5 transition"
+              className="px-3.5 py-1.5 rounded-xl bg-rose-950/60 hover:bg-rose-900/60 text-rose-300 border-rose-700/60 text-xs font-mono font-bold flex items-center gap-1.5 transition"
             >
               <Lock className="w-3.5 h-3.5" />
               <span>Lock Session &amp; Purge Key</span>
             </button>
           ) : (
-            <span className="px-3 py-1 rounded-xl bg-zinc-900 border border-zinc-800 text-zinc-400 text-xs font-mono flex items-center gap-1.5">
+            <span className="px-3 py-1 rounded-xl bg-zinc-900 border-zinc-800 text-zinc-400 text-xs font-mono flex items-center gap-1.5">
               <FolderLock className="w-3.5 h-3.5 text-amber-400" />
               <span>VAULT LOCKED</span>
             </span>
@@ -239,14 +239,14 @@ export const CipherVault: React.FC = () => {
 
       {/* Alert Messages */}
       {errorMessage && (
-        <div className="p-3 bg-rose-950/40 border border-rose-800/60 rounded-xl text-rose-300 text-xs font-mono flex items-center gap-2">
+        <div className="p-3 bg-rose-950/40 border-rose-800/60 rounded-xl text-rose-300 text-xs font-mono flex items-center gap-2">
           <AlertCircle className="w-4 h-4 shrink-0 text-rose-400" />
           <span>{errorMessage}</span>
         </div>
       )}
 
       {successMessage && (
-        <div className="p-3 bg-emerald-950/40 border border-emerald-800/60 rounded-xl text-emerald-300 text-xs font-mono flex items-center gap-2">
+        <div className="p-3 bg-emerald-950/40 border-emerald-800/60 rounded-xl text-emerald-300 text-xs font-mono flex items-center gap-2">
           <Check className="w-4 h-4 shrink-0 text-emerald-400" />
           <span>{successMessage}</span>
         </div>
@@ -254,7 +254,7 @@ export const CipherVault: React.FC = () => {
 
       {/* Unlock / Key Derivation Banner */}
       {!isUnlocked ? (
-        <form onSubmit={handleUnlock} className="p-5 rounded-2xl bg-black/50 border border-amber-500/20 space-y-4">
+        <form onSubmit={handleUnlock} className="p-5 rounded-2xl bg-black/50 border-amber-500/20 space-y-4">
           <div className="space-y-1">
             <label className="text-xs font-mono font-bold text-amber-300 flex items-center gap-2">
               <Key className="w-4 h-4 text-amber-400" />
@@ -271,7 +271,7 @@ export const CipherVault: React.FC = () => {
               value={sessionPassphrase}
               onChange={(e) => setSessionPassphrase(e.target.value)}
               placeholder="ป้อนรหัสผ่านเซสชันส่วนบุคคล (e.g. MasterPassphrase#849202)..."
-              className="flex-1 bg-zinc-900/90 border border-zinc-700 focus:border-amber-400 rounded-xl px-4 py-2 text-sm text-zinc-100 placeholder-zinc-500 font-mono focus:outline-none transition"
+              className="flex-1 bg-zinc-900/90 border-zinc-700 focus:border-amber-400 rounded-xl px-4 py-2 text-sm text-zinc-100 placeholder-zinc-500 font-mono focus:outline-none transition"
             />
             <button
               type="submit"
@@ -291,13 +291,13 @@ export const CipherVault: React.FC = () => {
       ) : (
         <div className="space-y-6">
           {/* Add New Secret Snippet Form */}
-          <form onSubmit={handleAddSnippet} className="p-4 rounded-2xl bg-black/40 border border-white/10 space-y-3">
+          <form onSubmit={handleAddSnippet} className="p-4 rounded-2xl bg-black/40 border-white/10 space-y-3">
             <div className="flex items-center justify-between">
               <span className="text-xs font-mono font-bold text-zinc-200 uppercase tracking-wider flex items-center gap-2">
                 <Plus className="w-4 h-4 text-amber-400" />
                 <span>เพิ่มข้อความลับหรือกุญแจสำรองใหม่ (Encrypt New Snippet)</span>
               </span>
-              <span className="text-[10px] font-mono text-emerald-400 bg-emerald-950/60 px-2 py-0.5 rounded border border-emerald-800/40">
+              <span className="text-[10px] font-mono text-emerald-400 bg-emerald-950/60 px-2 py-0.5 rounded border-emerald-800/40">
                 AES-GCM ACTIVE
               </span>
             </div>
@@ -309,7 +309,7 @@ export const CipherVault: React.FC = () => {
                   value={newTitle}
                   onChange={(e) => setNewTitle(e.target.value)}
                   placeholder="ชื่อหัวข้อ (เช่น HSM Backup Seed, API Token, Private Note)..."
-                  className="w-full bg-zinc-900 border border-zinc-800 focus:border-amber-400 rounded-xl px-3.5 py-2 text-xs text-zinc-100 placeholder-zinc-500 font-mono focus:outline-none"
+                  className="w-full bg-zinc-900 border-zinc-800 focus:border-amber-400 rounded-xl px-3.5 py-2 text-xs text-zinc-100 placeholder-zinc-500 font-mono focus:outline-none"
                 />
               </div>
 
@@ -317,7 +317,7 @@ export const CipherVault: React.FC = () => {
                 <select
                   value={newCategory}
                   onChange={(e: any) => setNewCategory(e.target.value)}
-                  className="w-full bg-zinc-900 border border-zinc-800 focus:border-amber-400 rounded-xl px-3 py-2 text-xs text-zinc-300 font-mono focus:outline-none"
+                  className="w-full bg-zinc-900 border-zinc-800 focus:border-amber-400 rounded-xl px-3 py-2 text-xs text-zinc-300 font-mono focus:outline-none"
                 >
                   <option value="CREDENTIAL">🔑 Credential / Secret</option>
                   <option value="KEY_BACKUP">🛡️ Key Backup / Seed</option>
@@ -332,7 +332,7 @@ export const CipherVault: React.FC = () => {
               onChange={(e) => setNewContent(e.target.value)}
               placeholder="พิมพ์ข้อความลับหรือรหัสคีย์ที่ต้องการเข้ารหัส (ข้อมูลจะถูกเข้ารหัสก่อนบันทึกลง Local Storage)..."
               rows={3}
-              className="w-full bg-zinc-900 border border-zinc-800 focus:border-amber-400 rounded-xl p-3 text-xs text-zinc-100 placeholder-zinc-500 font-mono focus:outline-none"
+              className="w-full bg-zinc-900 border-zinc-800 focus:border-amber-400 rounded-xl p-3 text-xs text-zinc-100 placeholder-zinc-500 font-mono focus:outline-none"
             />
 
             <div className="flex justify-end">
@@ -355,7 +355,7 @@ export const CipherVault: React.FC = () => {
             </div>
 
             {vaultItems.length === 0 ? (
-              <div className="p-8 text-center bg-black/20 border border-dashed border-zinc-800 rounded-2xl space-y-2">
+              <div className="p-8 text-center bg-black/20 border-dashed border-zinc-800 rounded-2xl space-y-2">
                 <FileKey className="w-8 h-8 text-zinc-600 mx-auto" />
                 <div className="text-xs font-mono text-zinc-400">ยังไม่มีข้อมูลลับในคลัง Cipher Vault</div>
                 <p className="text-[11px] text-zinc-500">
@@ -371,12 +371,12 @@ export const CipherVault: React.FC = () => {
                   return (
                     <div
                       key={item.id}
-                      className="p-4 rounded-2xl bg-[#0b0e1a]/80 border border-white/8 hover:border-amber-500/30 transition space-y-3"
+                      className="p-4 rounded-2xl bg-[#0b0e1a]/80 border-white/8 hover:border-amber-500/30 transition space-y-3"
                     >
                       <div className="flex items-start justify-between gap-2">
                         <div>
                           <div className="flex items-center gap-2">
-                            <span className="text-[10px] font-mono font-bold px-2 py-0.5 rounded bg-zinc-800 text-amber-300 border border-zinc-700">
+                            <span className="text-[10px] font-mono font-bold px-2 py-0.5 rounded bg-zinc-800 text-amber-300 border-zinc-700">
                               {item.category}
                             </span>
                             <h4 className="text-sm font-bold text-zinc-100 font-mono">
@@ -391,7 +391,7 @@ export const CipherVault: React.FC = () => {
                         <div className="flex items-center gap-1.5">
                           <button
                             onClick={() => toggleVisibility(item.id)}
-                            className="p-1.5 rounded-lg bg-white/5 hover:bg-white/10 text-zinc-300 border border-white/10 text-xs transition"
+                            className="p-1.5 rounded-lg bg-white/5 hover:bg-white/10 text-zinc-300 border-white/10 text-xs transition"
                             title={isVisible ? 'ซ่อนข้อความ' : 'แสดงข้อความ'}
                           >
                             {isVisible ? <EyeOff className="w-3.5 h-3.5 text-amber-400" /> : <Eye className="w-3.5 h-3.5" />}
@@ -400,7 +400,7 @@ export const CipherVault: React.FC = () => {
                           {plain && (
                             <button
                               onClick={() => handleCopyText(item.id, plain)}
-                              className="p-1.5 rounded-lg bg-white/5 hover:bg-white/10 text-zinc-300 border border-white/10 text-xs transition"
+                              className="p-1.5 rounded-lg bg-white/5 hover:bg-white/10 text-zinc-300 border-white/10 text-xs transition"
                               title="คัดลอกข้อความลับ"
                             >
                               {copiedId === item.id ? <Check className="w-3.5 h-3.5 text-emerald-400" /> : <Copy className="w-3.5 h-3.5" />}
@@ -409,7 +409,7 @@ export const CipherVault: React.FC = () => {
 
                           <button
                             onClick={() => handleDeleteItem(item.id)}
-                            className="p-1.5 rounded-lg bg-rose-950/40 hover:bg-rose-900/60 text-rose-300 border border-rose-800/50 text-xs transition"
+                            className="p-1.5 rounded-lg bg-rose-950/40 hover:bg-rose-900/60 text-rose-300 border-rose-800/50 text-xs transition"
                             title="ลบออกจากคลัง"
                           >
                             <Trash2 className="w-3.5 h-3.5" />
@@ -418,7 +418,7 @@ export const CipherVault: React.FC = () => {
                       </div>
 
                       {/* Content Box */}
-                      <div className="p-3 bg-black/60 rounded-xl border border-zinc-800 font-mono text-xs text-zinc-200">
+                      <div className="p-3 bg-black/60 rounded-xl border-zinc-800 font-mono text-xs text-zinc-200">
                         {plain ? (
                           isVisible ? (
                             <pre className="whitespace-pre-wrap font-mono text-xs text-amber-200 select-all leading-relaxed">

@@ -53,13 +53,13 @@ export const SecurityPipelineHeader: React.FC<SecurityPipelineHeaderProps> = ({
   return (
     <div className={`w-full bg-slate-950 border-b border-cyan-500/30 p-4 flex flex-wrap items-center justify-between gap-4 font-mono ${className}`}>
       <div className="flex items-center gap-3">
-        <div className="p-2 bg-cyan-500/10 border border-cyan-500/40 rounded-lg text-cyan-400">
+        <div className="p-2 bg-cyan-500/10 border-cyan-500/40 rounded-lg text-cyan-400">
           <ShieldCheck className="w-5 h-5 animate-pulse" />
         </div>
         <div>
           <h2 className="text-sm font-bold text-white tracking-wider flex items-center gap-2">
             SECURITY PIPELINE VIEW
-            <span className="text-[10px] px-1.5 py-0.5 rounded bg-emerald-500/20 text-emerald-300 border border-emerald-500/40">
+            <span className="text-[10px] px-1.5 py-0.5 rounded bg-emerald-500/20 text-emerald-300 border-emerald-500/40">
               ACTIVE
             </span>
           </h2>
@@ -68,7 +68,7 @@ export const SecurityPipelineHeader: React.FC<SecurityPipelineHeaderProps> = ({
       </div>
 
       {/* Mini D3.js Line Chart Component */}
-      <div className="flex items-center gap-3 px-3 py-1.5 bg-slate-900/90 border border-slate-800 rounded-xl shadow-inner">
+      <div className="flex items-center gap-3 px-3 py-1.5 bg-slate-900/90 border-slate-800 rounded-xl shadow-inner">
         <div className="text-right">
           <div className="text-[10px] text-slate-400 flex items-center justify-end gap-1">
             <Activity className="w-3 h-3 text-cyan-400" />

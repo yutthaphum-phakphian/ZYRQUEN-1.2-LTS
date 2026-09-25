@@ -43,7 +43,7 @@ export const QuantumTelemetryOverlay: React.FC = () => {
   return (
     <div
       id="quantum-telemetry-overlay-widget"
-      className="bg-slate-950/90 border border-cyan-500/30 rounded-xl p-5 text-cyan-400 font-mono shadow-2xl backdrop-blur-md my-4 transition-all duration-300 hover:border-cyan-500/50"
+      className="bg-slate-950/90 border-cyan-500/30 rounded-xl p-5 text-cyan-400 font-mono shadow-2xl backdrop-blur-md my-4 transition-all duration-300 hover:border-cyan-500/50"
     >
       <div className="flex flex-wrap items-center justify-between gap-2 border-b border-cyan-500/20 pb-3 mb-4">
         <div className="flex items-center gap-2">
@@ -59,7 +59,7 @@ export const QuantumTelemetryOverlay: React.FC = () => {
               const el = document.getElementById('quantum-performance-report-widget');
               if (el) el.scrollIntoView({ behavior: 'smooth' });
             }}
-            className="flex items-center gap-1.5 px-2.5 py-1 bg-cyan-950/80 border border-cyan-500/40 rounded text-xs text-cyan-200 hover:border-cyan-300 hover:text-white transition-colors cursor-pointer"
+            className="flex items-center gap-1.5 px-2.5 py-1 bg-cyan-950/80 border-cyan-500/40 rounded text-xs text-cyan-200 hover:border-cyan-300 hover:text-white transition-colors cursor-pointer"
             title="Generate Forensic Master Dossier PDF"
           >
             <FileText className="w-3.5 h-3.5 text-amber-400" />
@@ -67,7 +67,7 @@ export const QuantumTelemetryOverlay: React.FC = () => {
           </button>
           <button
             onClick={() => setIsLive(prev => !prev)}
-            className="flex items-center gap-1.5 px-2.5 py-1 bg-slate-900 border border-cyan-500/30 rounded text-xs hover:border-cyan-400 transition-colors cursor-pointer"
+            className="flex items-center gap-1.5 px-2.5 py-1 bg-slate-900 border-cyan-500/30 rounded text-xs hover:border-cyan-400 transition-colors cursor-pointer"
           >
             <Radio className={`w-3 h-3 ${isLive ? 'text-emerald-400 animate-pulse' : 'text-slate-500'}`} />
             <span className={isLive ? 'text-emerald-400' : 'text-slate-500'}>
@@ -81,7 +81,7 @@ export const QuantumTelemetryOverlay: React.FC = () => {
       </div>
 
       <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
-        <div className="bg-slate-900/80 border border-cyan-500/20 rounded-lg p-4">
+        <div className="bg-slate-900/80 border-cyan-500/20 rounded-lg p-4">
           <div className="flex items-center justify-between text-xs text-slate-400 mb-1">
             <span>CURRENT QUANTUM OPS (qOps)</span>
             <Cpu className="w-4 h-4 text-cyan-400" />
@@ -93,7 +93,7 @@ export const QuantumTelemetryOverlay: React.FC = () => {
           <div className="text-[10px] text-slate-500 mt-1">Post-Quantum Dilithium-5 / SPHINCS+ Engine</div>
         </div>
 
-        <div className="bg-slate-900/80 border border-cyan-500/20 rounded-lg p-4">
+        <div className="bg-slate-900/80 border-cyan-500/20 rounded-lg p-4">
           <div className="flex items-center justify-between text-xs text-slate-400 mb-1">
             <span>SYSTEM HEARTBEAT</span>
             <Activity className="w-4 h-4 text-emerald-400 animate-pulse" />
@@ -103,7 +103,7 @@ export const QuantumTelemetryOverlay: React.FC = () => {
         </div>
       </div>
 
-      <div className="bg-slate-900/80 border border-cyan-500/20 rounded-lg p-3">
+      <div className="bg-slate-900/80 border-cyan-500/20 rounded-lg p-3">
         <div className="flex items-center justify-between text-xs text-slate-400 mb-2 pb-1 border-b border-slate-800">
           <span>LIVE STREAM BUFFER (LAST 5 TICKS)</span>
           <span className="text-[10px] text-cyan-500">REAL-TIME INGRESS</span>
@@ -112,7 +112,7 @@ export const QuantumTelemetryOverlay: React.FC = () => {
           {telemetry.map((item, index) => (
             <div
               key={index}
-              className="flex items-center justify-between text-xs py-1 px-2 rounded bg-slate-950/60 border border-slate-800/60 hover:border-cyan-500/30 transition-colors"
+              className="flex items-center justify-between text-xs py-1 px-2 rounded bg-slate-950/60 border-slate-800/60 hover:border-cyan-500/30 transition-colors"
             >
               <span className="text-slate-400 font-mono text-[11px]">{item.time}</span>
               <span className="text-cyan-300 font-mono font-semibold">{item.qOps} qOps</span>

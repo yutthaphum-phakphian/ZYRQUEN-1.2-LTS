@@ -243,9 +243,9 @@ export const OfflineSealChainQrGenerator: React.FC = () => {
   return (
     <div className="space-y-6">
       {/* Intro Banner */}
-      <div className="p-4 rounded-2xl bg-[#0a0f1e] border border-cyan-500/30 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3">
+      <div className="p-4 rounded-2xl bg-[#0a0f1e] border-cyan-500/30 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3">
         <div className="flex items-center gap-3">
-          <div className="p-2.5 rounded-xl bg-cyan-500/20 text-cyan-300 border border-cyan-500/30">
+          <div className="p-2.5 rounded-xl bg-cyan-500/20 text-cyan-300 border-cyan-500/30">
             <QrCode className="w-5 h-5" />
           </div>
           <div>
@@ -258,10 +258,10 @@ export const OfflineSealChainQrGenerator: React.FC = () => {
           </div>
         </div>
         <div className="flex items-center gap-2">
-          <span className="px-2.5 py-1 rounded-full bg-emerald-500/15 text-emerald-300 border border-emerald-500/30 text-[11px] font-mono">
+          <span className="px-2.5 py-1 rounded-full bg-emerald-500/15 text-emerald-300 border-emerald-500/30 text-[11px] font-mono">
             OFFLINE READY
           </span>
-          <span className="px-2.5 py-1 rounded-full bg-cyan-500/15 text-cyan-300 border border-cyan-500/30 text-[11px] font-mono">
+          <span className="px-2.5 py-1 rounded-full bg-cyan-500/15 text-cyan-300 border-cyan-500/30 text-[11px] font-mono">
             14,902 SEALS
           </span>
         </div>
@@ -271,7 +271,7 @@ export const OfflineSealChainQrGenerator: React.FC = () => {
         {/* Left Column: Scope & Controls */}
         <div className="lg:col-span-6 space-y-4">
           {/* Scope Selector */}
-          <div className="p-4 rounded-xl bg-[#070a12] border border-white/8 space-y-3">
+          <div className="p-4 rounded-xl bg-[#070a12] border-white/8 space-y-3">
             <label className="text-xs font-bold text-zinc-300 uppercase tracking-wider block">
               1. Verification Scope
             </label>
@@ -327,7 +327,7 @@ export const OfflineSealChainQrGenerator: React.FC = () => {
                     max={14902}
                     value={sealRangeStart}
                     onChange={(e) => setSealRangeStart(Number(e.target.value))}
-                    className="w-full bg-black/60 border border-white/10 rounded-lg px-2.5 py-1.5 text-xs text-white font-mono focus:border-cyan-400 focus:outline-none"
+                    className="w-full bg-black/60 border-white/10 rounded-lg px-2.5 py-1.5 text-xs text-white font-mono focus:border-cyan-400 focus:outline-none"
                   />
                 </div>
                 <div>
@@ -338,7 +338,7 @@ export const OfflineSealChainQrGenerator: React.FC = () => {
                     max={14902}
                     value={sealRangeEnd}
                     onChange={(e) => setSealRangeEnd(Number(e.target.value))}
-                    className="w-full bg-black/60 border border-white/10 rounded-lg px-2.5 py-1.5 text-xs text-white font-mono focus:border-cyan-400 focus:outline-none"
+                    className="w-full bg-black/60 border-white/10 rounded-lg px-2.5 py-1.5 text-xs text-white font-mono focus:border-cyan-400 focus:outline-none"
                   />
                 </div>
               </div>
@@ -346,7 +346,7 @@ export const OfflineSealChainQrGenerator: React.FC = () => {
           </div>
 
           {/* Format & Style Customization */}
-          <div className="p-4 rounded-xl bg-[#070a12] border border-white/8 space-y-3">
+          <div className="p-4 rounded-xl bg-[#070a12] border-white/8 space-y-3">
             <label className="text-xs font-bold text-zinc-300 uppercase tracking-wider block">
               2. Payload Format & QR Style
             </label>
@@ -419,7 +419,7 @@ export const OfflineSealChainQrGenerator: React.FC = () => {
           </div>
 
           {/* Quick Payload Metadata Preview */}
-          <div className="p-4 rounded-xl bg-[#070a12] border border-white/8 space-y-2">
+          <div className="p-4 rounded-xl bg-[#070a12] border-white/8 space-y-2">
             <div className="flex items-center justify-between text-xs">
               <span className="text-zinc-400 uppercase tracking-wider font-bold flex items-center gap-1.5">
                 <Hash className="w-3.5 h-3.5 text-cyan-400" />
@@ -444,7 +444,7 @@ export const OfflineSealChainQrGenerator: React.FC = () => {
 
         {/* Right Column: High-Res QR Canvas & Downloads */}
         <div className="lg:col-span-6 space-y-4">
-          <div className="p-6 rounded-2xl bg-gradient-to-b from-[#0a0f1e] to-[#070a12] border border-cyan-500/30 flex flex-col items-center justify-center space-y-4 relative shadow-[0_0_35px_rgba(6,182,212,0.15)]">
+          <div className="p-6 rounded-2xl bg-gradient-to-b from-[#0a0f1e] to-[#070a12] border-cyan-500/30 flex flex-col items-center justify-center space-y-4 relative shadow-[0_0_35px_rgba(6,182,212,0.15)]">
             <div className="text-center space-y-1">
               <div className="flex items-center justify-center gap-1.5 text-xs font-bold text-cyan-300 font-mono">
                 <ShieldCheck className="w-4 h-4 text-emerald-400" />
@@ -478,21 +478,21 @@ export const OfflineSealChainQrGenerator: React.FC = () => {
             <div className="flex flex-wrap items-center justify-center gap-2.5 w-full pt-2">
               <button
                 onClick={handleDownloadPng}
-                className="px-3 py-2 rounded-xl bg-cyan-500/20 hover:bg-cyan-500/30 text-cyan-200 border border-cyan-500/40 text-xs font-mono flex items-center gap-1.5 transition-all shadow-[0_0_10px_rgba(6,182,212,0.2)]"
+                className="px-3 py-2 rounded-xl bg-cyan-500/20 hover:bg-cyan-500/30 text-cyan-200 border-cyan-500/40 text-xs font-mono flex items-center gap-1.5 transition-all shadow-[0_0_10px_rgba(6,182,212,0.2)]"
               >
                 <Download className="w-3.5 h-3.5 text-cyan-400" />
                 <span>Download PNG</span>
               </button>
               <button
                 onClick={handleDownloadSvg}
-                className="px-3 py-2 rounded-xl bg-amber-500/20 hover:bg-amber-500/30 text-amber-200 border border-amber-500/40 text-xs font-mono flex items-center gap-1.5 transition-all shadow-[0_0_10px_rgba(245,158,11,0.2)]"
+                className="px-3 py-2 rounded-xl bg-amber-500/20 hover:bg-amber-500/30 text-amber-200 border-amber-500/40 text-xs font-mono flex items-center gap-1.5 transition-all shadow-[0_0_10px_rgba(245,158,11,0.2)]"
               >
                 <Download className="w-3.5 h-3.5 text-amber-400" />
                 <span>Download SVG</span>
               </button>
               <button
                 onClick={handleCopyPayload}
-                className="px-3 py-2 rounded-xl bg-white/5 hover:bg-white/10 text-zinc-300 border border-white/10 text-xs font-mono flex items-center gap-1.5 transition-all"
+                className="px-3 py-2 rounded-xl bg-white/5 hover:bg-white/10 text-zinc-300 border-white/10 text-xs font-mono flex items-center gap-1.5 transition-all"
               >
                 {copied ? <Check className="w-3.5 h-3.5 text-emerald-400" /> : <Copy className="w-3.5 h-3.5" />}
                 <span>{copied ? 'Copied' : 'Copy Payload'}</span>
@@ -501,7 +501,7 @@ export const OfflineSealChainQrGenerator: React.FC = () => {
           </div>
 
           {/* Built-in Offline Verification Validator (Auditor Verification Sandbox) */}
-          <div className="p-4 rounded-xl bg-[#070a12] border border-white/8 space-y-3">
+          <div className="p-4 rounded-xl bg-[#070a12] border-white/8 space-y-3">
             <div className="flex items-center justify-between">
               <span className="text-xs font-bold text-zinc-300 uppercase tracking-wider flex items-center gap-1.5">
                 <span>🔍</span>
@@ -518,11 +518,11 @@ export const OfflineSealChainQrGenerator: React.FC = () => {
                 value={testInput}
                 onChange={(e) => setTestInput(e.target.value)}
                 placeholder="Paste scanned payload (e.g. zyrquen://verify-seal?root=...)"
-                className="flex-1 bg-black/60 border border-white/10 rounded-lg px-3 py-1.5 text-xs text-zinc-200 font-mono focus:border-cyan-400 focus:outline-none"
+                className="flex-1 bg-black/60 border-white/10 rounded-lg px-3 py-1.5 text-xs text-zinc-200 font-mono focus:border-cyan-400 focus:outline-none"
               />
               <button
                 onClick={handleVerifyOfflineInput}
-                className="px-3 py-1.5 rounded-lg bg-emerald-500/20 hover:bg-emerald-500/30 text-emerald-300 border border-emerald-500/40 text-xs font-mono font-bold transition-all"
+                className="px-3 py-1.5 rounded-lg bg-emerald-500/20 hover:bg-emerald-500/30 text-emerald-300 border-emerald-500/40 text-xs font-mono font-bold transition-all"
               >
                 Verify
               </button>

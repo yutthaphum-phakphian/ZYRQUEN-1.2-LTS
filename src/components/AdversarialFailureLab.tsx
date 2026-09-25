@@ -168,7 +168,7 @@ export const AdversarialFailureLab: React.FC = () => {
       {/* Header */}
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 border-b border-rose-500/20 pb-4">
         <div className="flex items-center gap-3">
-          <div className="w-11 h-11 rounded-2xl bg-rose-500/20 border border-rose-400 text-rose-300 flex items-center justify-center shrink-0 shadow-[0_0_20px_rgba(244,63,94,0.3)]">
+          <div className="w-11 h-11 rounded-2xl bg-rose-500/20 border-rose-400 text-rose-300 flex items-center justify-center shrink-0 shadow-[0_0_20px_rgba(244,63,94,0.3)]">
             <Flame className="w-5 h-5" />
           </div>
           <div>
@@ -176,7 +176,7 @@ export const AdversarialFailureLab: React.FC = () => {
               <h3 className="text-base font-bold text-rose-100 font-serif">
                 PHASE 3: ADVERSARIAL FAILURE INJECTION &amp; ATTACK LAB
               </h3>
-              <span className="text-[10px] px-2 py-0.5 rounded bg-rose-500/20 text-rose-300 border border-rose-400/40 font-bold">
+              <span className="text-[10px] px-2 py-0.5 rounded bg-rose-500/20 text-rose-300 border-rose-400/40 font-bold">
                 8 NEGATIVE VECTORS
               </span>
             </div>
@@ -202,9 +202,9 @@ export const AdversarialFailureLab: React.FC = () => {
             disabled={isRunningAll}
             className={`px-4 py-2 rounded-xl text-xs font-bold flex items-center gap-2 transition-all shadow-lg ${
               allPassed
-                ? 'bg-emerald-500/20 text-emerald-300 border border-emerald-500/50 cursor-default'
+                ? 'bg-emerald-500/20 text-emerald-300 border-emerald-500/50 cursor-default'
                 : isRunningAll
-                ? 'bg-rose-600/50 text-rose-200 border border-rose-400/50 animate-pulse'
+                ? 'bg-rose-600/50 text-rose-200 border-rose-400/50 animate-pulse'
                 : 'bg-rose-600 hover:bg-rose-500 text-white shadow-[0_0_20px_rgba(244,63,94,0.4)]'
             }`}
           >
@@ -230,19 +230,19 @@ export const AdversarialFailureLab: React.FC = () => {
 
       {/* Invariant Banner */}
       <div className="grid grid-cols-2 sm:grid-cols-4 gap-3 text-xs">
-        <div className="p-3 rounded-xl bg-black/60 border border-rose-500/30">
+        <div className="p-3 rounded-xl bg-black/60 border-rose-500/30">
           <div className="text-[10px] text-zinc-500 font-bold">TOTAL VECTORS</div>
           <div className="text-white font-bold text-base">8 Vectors</div>
         </div>
-        <div className="p-3 rounded-xl bg-black/60 border border-emerald-500/30">
+        <div className="p-3 rounded-xl bg-black/60 border-emerald-500/30">
           <div className="text-[10px] text-zinc-500 font-bold">INTERCEPTION RATE</div>
           <div className="text-emerald-400 font-bold text-base">{allPassed ? '100.00% (8/8)' : 'READY'}</div>
         </div>
-        <div className="p-3 rounded-xl bg-black/60 border border-indigo-500/30">
+        <div className="p-3 rounded-xl bg-black/60 border-indigo-500/30">
           <div className="text-[10px] text-zinc-500 font-bold">FROZEN CORE STATE</div>
           <div className="text-indigo-300 font-bold text-base">#849202 (LOCKED)</div>
         </div>
-        <div className="p-3 rounded-xl bg-black/60 border border-amber-500/30">
+        <div className="p-3 rounded-xl bg-black/60 border-amber-500/30">
           <div className="text-[10px] text-zinc-500 font-bold">SSOT MUTATION DELTA</div>
           <div className="text-amber-400 font-bold text-base">0 (INVIOLABLE)</div>
         </div>
@@ -267,7 +267,7 @@ export const AdversarialFailureLab: React.FC = () => {
                 <div className="flex items-center gap-2">
                   <span className="text-xs font-mono font-bold text-zinc-400">{test.id}</span>
                   <span className="text-xs font-bold text-white">{test.name}</span>
-                  <span className="text-[9px] px-2 py-0.5 rounded bg-zinc-800 text-zinc-300 font-bold border border-white/10">
+                  <span className="text-[9px] px-2 py-0.5 rounded bg-zinc-800 text-zinc-300 font-bold border-white/10">
                     {test.category}
                   </span>
                 </div>
@@ -290,7 +290,7 @@ export const AdversarialFailureLab: React.FC = () => {
                 </div>
               </div>
 
-              <div className="p-2 rounded-xl bg-black/60 border border-white/5 text-[11px] font-mono text-zinc-300">
+              <div className="p-2 rounded-xl bg-black/60 border-white/5 text-[11px] font-mono text-zinc-300">
                 <span className="text-zinc-500">Payload: </span> {test.payloadVector}
               </div>
 

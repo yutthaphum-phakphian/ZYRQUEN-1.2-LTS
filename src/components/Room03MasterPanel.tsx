@@ -177,20 +177,20 @@ export const Room03MasterPanel: React.FC<Room03MasterPanelProps> = ({
   return (
     <div className="space-y-6 font-mono text-zinc-300">
       {/* Top Banner for Room 03 */}
-      <div className="p-6 sm:p-8 rounded-[28px] bg-gradient-to-br from-indigo-950/40 via-[#0a0d18]/95 to-black border border-indigo-500/40 backdrop-blur-xl relative overflow-hidden shadow-2xl">
+      <div className="p-6 sm:p-8 rounded-[28px] bg-gradient-to-br from-indigo-950/40 via-[#0a0d18]/95 to-black border-indigo-500/40 backdrop-blur-xl relative overflow-hidden shadow-2xl">
         <div className="absolute top-0 right-0 w-96 h-96 bg-gradient-to-bl from-indigo-500/10 via-cyan-500/5 to-transparent rounded-full blur-3xl pointer-events-none" />
 
         <div className="relative z-10 flex flex-col lg:flex-row lg:items-center justify-between gap-6">
           <div className="space-y-3">
             <div className="flex flex-wrap items-center gap-2">
-              <span className="px-3 py-1 rounded-full bg-indigo-500/15 text-indigo-300 border border-indigo-500/40 text-xs font-bold flex items-center gap-1.5 shadow-[0_0_12px_rgba(99,102,241,0.25)]">
+              <span className="px-3 py-1 rounded-full bg-indigo-500/15 text-indigo-300 border-indigo-500/40 text-xs font-bold flex items-center gap-1.5 shadow-[0_0_12px_rgba(99,102,241,0.25)]">
                 <Users className="w-4 h-4 text-indigo-400 animate-pulse" />
                 CHAMBER 03 • CUSTODIAN TRACKER & HSM ROSTER
               </span>
-              <span className="px-2.5 py-0.5 rounded-full bg-emerald-500/15 text-emerald-300 border border-emerald-500/30 text-[11px] font-bold">
+              <span className="px-2.5 py-0.5 rounded-full bg-emerald-500/15 text-emerald-300 border-emerald-500/30 text-[11px] font-bold">
                 10/10 REAL_HSM UNANIMOUS
               </span>
-              <span className="px-2.5 py-0.5 rounded-full bg-cyan-500/15 text-cyan-300 border border-cyan-500/30 text-[11px] font-bold">
+              <span className="px-2.5 py-0.5 rounded-full bg-cyan-500/15 text-cyan-300 border-cyan-500/30 text-[11px] font-bold">
                 FIPS 140-3 LEVEL 4
               </span>
             </div>
@@ -206,19 +206,19 @@ export const Room03MasterPanel: React.FC<Room03MasterPanelProps> = ({
 
             {/* Quick Metrics Bar */}
             <div className="flex flex-wrap items-center gap-4 pt-2 text-xs">
-              <div className="px-3 py-1.5 rounded-xl bg-white/5 border border-white/10 flex items-center gap-2">
+              <div className="px-3 py-1.5 rounded-xl bg-white/5 border-white/10 flex items-center gap-2">
                 <span className="text-zinc-500">Quorum:</span>
                 <span className="text-emerald-300 font-bold">10/10 Signed (100%)</span>
               </div>
-              <div className="px-3 py-1.5 rounded-xl bg-white/5 border border-white/10 flex items-center gap-2">
+              <div className="px-3 py-1.5 rounded-xl bg-white/5 border-white/10 flex items-center gap-2">
                 <span className="text-zinc-500">Heartbeat Coherence:</span>
                 <span className="text-cyan-300 font-bold">99.992%</span>
               </div>
-              <div className="px-3 py-1.5 rounded-xl bg-white/5 border border-white/10 flex items-center gap-2">
+              <div className="px-3 py-1.5 rounded-xl bg-white/5 border-white/10 flex items-center gap-2">
                 <span className="text-zinc-500">Cryo-Bus:</span>
                 <span className="text-indigo-300 font-bold">14.98 mK</span>
               </div>
-              <div className="px-3 py-1.5 rounded-xl bg-white/5 border border-white/10 flex items-center gap-2">
+              <div className="px-3 py-1.5 rounded-xl bg-white/5 border-white/10 flex items-center gap-2">
                 <span className="text-zinc-500">Signature Scheme:</span>
                 <span className="text-amber-300 font-bold">ML-DSA-87</span>
               </div>
@@ -249,7 +249,7 @@ export const Room03MasterPanel: React.FC<Room03MasterPanelProps> = ({
                 playTone(720, 0.04);
                 if (onNavigate) onNavigate('council');
               }}
-              className="px-4 py-2.5 rounded-xl bg-white/5 hover:bg-white/10 border border-white/10 text-white font-bold text-xs transition-all flex items-center justify-center gap-2"
+              className="px-4 py-2.5 rounded-xl bg-white/5 hover:bg-white/10 border-white/10 text-white font-bold text-xs transition-all flex items-center justify-center gap-2"
             >
               <Users className="w-4 h-4 text-indigo-400" />
               <span>Open Council View</span>
@@ -259,7 +259,7 @@ export const Room03MasterPanel: React.FC<Room03MasterPanelProps> = ({
       </div>
 
       {/* Tabs Navigation */}
-      <div className="flex flex-wrap items-center gap-2 p-1.5 rounded-2xl bg-black/50 border border-white/10 text-xs font-bold">
+      <div className="flex flex-wrap items-center gap-2 p-1.5 rounded-2xl bg-black/50 border-white/10 text-xs font-bold">
         <button
           onClick={() => {
             playTone(600, 0.03);
@@ -267,8 +267,8 @@ export const Room03MasterPanel: React.FC<Room03MasterPanelProps> = ({
           }}
           className={`px-4 py-2 rounded-xl transition-all flex items-center gap-2 ${
             activeSubTab === 'roster'
-              ? 'bg-indigo-500/20 text-indigo-200 border border-indigo-500/40 shadow-[0_0_12px_rgba(99,102,241,0.2)]'
-              : 'text-zinc-400 hover:text-zinc-200 bg-white/5 border border-transparent'
+              ? 'bg-indigo-500/20 text-indigo-200 border-indigo-500/40 shadow-[0_0_12px_rgba(99,102,241,0.2)]'
+              : 'text-zinc-400 hover:text-zinc-200 bg-white/5 border-transparent'
           }`}
         >
           <Users className="w-4 h-4" />
@@ -282,8 +282,8 @@ export const Room03MasterPanel: React.FC<Room03MasterPanelProps> = ({
           }}
           className={`px-4 py-2 rounded-xl transition-all flex items-center gap-2 ${
             activeSubTab === 'hsm'
-              ? 'bg-indigo-500/20 text-indigo-200 border border-indigo-500/40 shadow-[0_0_12px_rgba(99,102,241,0.2)]'
-              : 'text-zinc-400 hover:text-zinc-200 bg-white/5 border border-transparent'
+              ? 'bg-indigo-500/20 text-indigo-200 border-indigo-500/40 shadow-[0_0_12px_rgba(99,102,241,0.2)]'
+              : 'text-zinc-400 hover:text-zinc-200 bg-white/5 border-transparent'
           }`}
         >
           <HardDrive className="w-4 h-4" />
@@ -297,8 +297,8 @@ export const Room03MasterPanel: React.FC<Room03MasterPanelProps> = ({
           }}
           className={`px-4 py-2 rounded-xl transition-all flex items-center gap-2 ${
             activeSubTab === 'zeroization'
-              ? 'bg-indigo-500/20 text-indigo-200 border border-indigo-500/40 shadow-[0_0_12px_rgba(99,102,241,0.2)]'
-              : 'text-zinc-400 hover:text-zinc-200 bg-white/5 border border-transparent'
+              ? 'bg-indigo-500/20 text-indigo-200 border-indigo-500/40 shadow-[0_0_12px_rgba(99,102,241,0.2)]'
+              : 'text-zinc-400 hover:text-zinc-200 bg-white/5 border-transparent'
           }`}
         >
           <Flame className="w-4 h-4" />
@@ -312,8 +312,8 @@ export const Room03MasterPanel: React.FC<Room03MasterPanelProps> = ({
           }}
           className={`px-4 py-2 rounded-xl transition-all flex items-center gap-2 ${
             activeSubTab === 'ai-threat'
-              ? 'bg-cyan-500/20 text-cyan-200 border border-cyan-500/40 shadow-[0_0_12px_rgba(6,182,212,0.25)]'
-              : 'text-zinc-400 hover:text-zinc-200 bg-white/5 border border-transparent'
+              ? 'bg-cyan-500/20 text-cyan-200 border-cyan-500/40 shadow-[0_0_12px_rgba(6,182,212,0.25)]'
+              : 'text-zinc-400 hover:text-zinc-200 bg-white/5 border-transparent'
           }`}
         >
           <Activity className="w-4 h-4 text-cyan-400" />
@@ -325,7 +325,7 @@ export const Room03MasterPanel: React.FC<Room03MasterPanelProps> = ({
       {activeSubTab === 'roster' && (
         <div className="space-y-6 animate-in fade-in duration-200">
           {/* Search bar */}
-          <div className="flex items-center gap-3 p-3 rounded-2xl bg-black/60 border border-white/10">
+          <div className="flex items-center gap-3 p-3 rounded-2xl bg-black/60 border-white/10">
             <Search className="w-4 h-4 text-zinc-400 shrink-0" />
             <input
               type="text"
@@ -358,7 +358,7 @@ export const Room03MasterPanel: React.FC<Room03MasterPanelProps> = ({
                   <div className="flex items-start justify-between gap-3 mb-2">
                     <div className="flex items-center gap-2">
                       <span className={`px-2.5 py-0.5 rounded-full font-bold text-[10px] ${
-                        isSovereign ? 'bg-amber-500/20 text-amber-300 border border-amber-500/30' : 'bg-indigo-500/20 text-indigo-300 border border-indigo-500/30'
+                        isSovereign ? 'bg-amber-500/20 text-amber-300 border-amber-500/30' : 'bg-indigo-500/20 text-indigo-300 border-indigo-500/30'
                       }`}>
                         {custodian.passportNumber}
                       </span>
@@ -407,7 +407,7 @@ export const Room03MasterPanel: React.FC<Room03MasterPanelProps> = ({
       {/* TAB 2: Hardware Enclaves & Biometrics */}
       {activeSubTab === 'hsm' && (
         <div className="space-y-6 animate-in fade-in duration-200">
-          <div className="p-5 rounded-2xl bg-black/60 border border-white/10 space-y-4">
+          <div className="p-5 rounded-2xl bg-black/60 border-white/10 space-y-4">
             <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
               <div>
                 <h3 className="text-sm font-bold text-white flex items-center gap-2">
@@ -418,7 +418,7 @@ export const Room03MasterPanel: React.FC<Room03MasterPanelProps> = ({
                   Real-time subzero cryo biometric pulse and hardware response telemetry
                 </p>
               </div>
-              <span className="px-3 py-1 rounded-full bg-emerald-500/15 text-emerald-300 border border-emerald-500/30 text-xs font-bold">
+              <span className="px-3 py-1 rounded-full bg-emerald-500/15 text-emerald-300 border-emerald-500/30 text-xs font-bold">
                 10/10 ENCLAVES ONLINE
               </span>
             </div>
@@ -443,7 +443,7 @@ export const Room03MasterPanel: React.FC<Room03MasterPanelProps> = ({
 
       {/* TAB 3: Active Zeroization */}
       {activeSubTab === 'zeroization' && (
-        <div className="p-6 rounded-2xl bg-black/60 border border-white/10 space-y-4 animate-in fade-in duration-200">
+        <div className="p-6 rounded-2xl bg-black/60 border-white/10 space-y-4 animate-in fade-in duration-200">
           <div className="flex items-center gap-2.5">
             <Flame className="w-5 h-5 text-rose-400" />
             <h3 className="text-sm font-bold text-white">NIST FIPS 140-3 Level 4: Active Physical Zeroization</h3>
@@ -454,15 +454,15 @@ export const Room03MasterPanel: React.FC<Room03MasterPanelProps> = ({
           </p>
 
           <div className="grid grid-cols-1 sm:grid-cols-3 gap-3 pt-2 text-xs">
-            <div className="p-4 rounded-xl bg-white/5 border border-white/5">
+            <div className="p-4 rounded-xl bg-white/5 border-white/5">
               <span className="text-zinc-500 block text-[10px]">Tamper Response:</span>
               <span className="text-emerald-400 font-bold">&lt; 1.0 Millisecond</span>
             </div>
-            <div className="p-4 rounded-xl bg-white/5 border border-white/5">
+            <div className="p-4 rounded-xl bg-white/5 border-white/5">
               <span className="text-zinc-500 block text-[10px]">Thermal Kill-Switch:</span>
               <span className="text-rose-400 font-bold">85.0°C Active Trigger</span>
             </div>
-            <div className="p-4 rounded-xl bg-white/5 border border-white/5">
+            <div className="p-4 rounded-xl bg-white/5 border-white/5">
               <span className="text-zinc-500 block text-[10px]">Zeroization Medium:</span>
               <span className="text-cyan-400 font-bold">Helium-4 Cryo Bus Flush</span>
             </div>
@@ -474,14 +474,14 @@ export const Room03MasterPanel: React.FC<Room03MasterPanelProps> = ({
       {activeSubTab === 'ai-threat' && (
         <div className="space-y-6 animate-in fade-in duration-200">
           {/* Pipeline Banner */}
-          <div className="p-6 rounded-2xl bg-gradient-to-r from-cyan-950/40 via-indigo-950/30 to-black border border-cyan-500/30 space-y-4">
+          <div className="p-6 rounded-2xl bg-gradient-to-r from-cyan-950/40 via-indigo-950/30 to-black border-cyan-500/30 space-y-4">
             <div className="flex flex-col lg:flex-row lg:items-center justify-between gap-4">
               <div className="space-y-1">
                 <div className="flex items-center gap-2">
-                  <span className="px-2.5 py-0.5 rounded-full bg-cyan-500/20 text-cyan-300 border border-cyan-500/40 text-[10px] font-bold">
+                  <span className="px-2.5 py-0.5 rounded-full bg-cyan-500/20 text-cyan-300 border-cyan-500/40 text-[10px] font-bold">
                     KAFKA EVENT STREAM: security.telemetry.raw
                   </span>
-                  <span className="px-2.5 py-0.5 rounded-full bg-emerald-500/20 text-emerald-300 border border-emerald-500/40 text-[10px] font-bold">
+                  <span className="px-2.5 py-0.5 rounded-full bg-emerald-500/20 text-emerald-300 border-emerald-500/40 text-[10px] font-bold">
                     ISOLATION FOREST CONTAMINATION: 2.0%
                   </span>
                 </div>
@@ -514,7 +514,7 @@ export const Room03MasterPanel: React.FC<Room03MasterPanelProps> = ({
                     };
                     setThreatEvents((prev) => [newNormal, ...prev.slice(0, 7)]);
                   }}
-                  className="px-3.5 py-2 rounded-xl bg-emerald-500/20 hover:bg-emerald-500/30 text-emerald-300 border border-emerald-500/40 text-xs font-bold flex items-center gap-1.5 transition-all shadow-[0_0_10px_rgba(16,185,129,0.2)]"
+                  className="px-3.5 py-2 rounded-xl bg-emerald-500/20 hover:bg-emerald-500/30 text-emerald-300 border-emerald-500/40 text-xs font-bold flex items-center gap-1.5 transition-all shadow-[0_0_10px_rgba(16,185,129,0.2)]"
                 >
                   <Play className="w-3.5 h-3.5" />
                   <span>Inject Normal Telemetry</span>
@@ -538,7 +538,7 @@ export const Room03MasterPanel: React.FC<Room03MasterPanelProps> = ({
                     };
                     setThreatEvents((prev) => [anomaly, ...prev.slice(0, 7)]);
                   }}
-                  className="px-3.5 py-2 rounded-xl bg-rose-500/20 hover:bg-rose-500/30 text-rose-300 border border-rose-500/40 text-xs font-bold flex items-center gap-1.5 transition-all shadow-[0_0_12px_rgba(244,63,94,0.3)] animate-pulse"
+                  className="px-3.5 py-2 rounded-xl bg-rose-500/20 hover:bg-rose-500/30 text-rose-300 border-rose-500/40 text-xs font-bold flex items-center gap-1.5 transition-all shadow-[0_0_12px_rgba(244,63,94,0.3)] animate-pulse"
                 >
                   <ShieldAlert className="w-3.5 h-3.5" />
                   <span>Trigger Threat Outlier</span>
@@ -548,19 +548,19 @@ export const Room03MasterPanel: React.FC<Room03MasterPanelProps> = ({
 
             {/* Pipeline Architecture Stats */}
             <div className="grid grid-cols-2 sm:grid-cols-4 gap-3 pt-2 text-xs">
-              <div className="p-3 bg-black/50 rounded-xl border border-white/5">
+              <div className="p-3 bg-black/50 rounded-xl border-white/5">
                 <span className="text-zinc-500 text-[10px] block">KAFKA CLUSTER</span>
                 <span className="text-cyan-300 font-bold mt-0.5 block">kafka:29092 ONLINE</span>
               </div>
-              <div className="p-3 bg-black/50 rounded-xl border border-white/5">
+              <div className="p-3 bg-black/50 rounded-xl border-white/5">
                 <span className="text-zinc-500 text-[10px] block">AI ENGINE BOOTSTRAP</span>
                 <span className="text-emerald-400 font-bold mt-0.5 block">20/20 Frames (100%)</span>
               </div>
-              <div className="p-3 bg-black/50 rounded-xl border border-white/5">
+              <div className="p-3 bg-black/50 rounded-xl border-white/5">
                 <span className="text-zinc-500 text-[10px] block">INFERENCE LATENCY</span>
                 <span className="text-indigo-300 font-bold mt-0.5 block">&lt; 0.085 ms (P99)</span>
               </div>
-              <div className="p-3 bg-black/50 rounded-xl border border-white/5">
+              <div className="p-3 bg-black/50 rounded-xl border-white/5">
                 <span className="text-zinc-500 text-[10px] block">FAIL-CLOSED HOOK</span>
                 <span className="text-amber-300 font-bold mt-0.5 block">Trigger at 85.0°C</span>
               </div>
@@ -568,7 +568,7 @@ export const Room03MasterPanel: React.FC<Room03MasterPanelProps> = ({
           </div>
 
           {/* Live Events Table */}
-          <div className="p-5 rounded-2xl bg-black/60 border border-white/10 space-y-3">
+          <div className="p-5 rounded-2xl bg-black/60 border-white/10 space-y-3">
             <div className="flex items-center justify-between">
               <h4 className="text-xs font-bold text-zinc-200 flex items-center gap-2">
                 <Radio className="w-4 h-4 text-cyan-400 animate-pulse" />
@@ -616,11 +616,11 @@ export const Room03MasterPanel: React.FC<Room03MasterPanelProps> = ({
                       </td>
                       <td className="py-2.5 px-3">
                         {evt.prediction === 'NORMAL' ? (
-                          <span className="px-2 py-0.5 rounded bg-emerald-500/20 text-emerald-300 text-[10px] font-bold border border-emerald-500/30">
+                          <span className="px-2 py-0.5 rounded bg-emerald-500/20 text-emerald-300 text-[10px] font-bold border-emerald-500/30">
                             INLIER (+1)
                           </span>
                         ) : (
-                          <span className="px-2 py-0.5 rounded bg-rose-500/20 text-rose-300 text-[10px] font-bold border border-rose-500/30 flex items-center gap-1 w-fit">
+                          <span className="px-2 py-0.5 rounded bg-rose-500/20 text-rose-300 text-[10px] font-bold border-rose-500/30 flex items-center gap-1 w-fit">
                             <AlertTriangle className="w-3 h-3" />
                             OUTLIER (-1)
                           </span>

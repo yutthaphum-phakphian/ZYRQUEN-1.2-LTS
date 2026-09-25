@@ -198,7 +198,7 @@ export const PromotionSafetyGate: React.FC<PromotionSafetyGateProps> = ({
       </div>
 
       {/* Aggregate Bar */}
-      <div className="p-4 rounded-2xl bg-black/80 border border-white/10 flex flex-col md:flex-row items-center justify-between gap-4">
+      <div className="p-4 rounded-2xl bg-black/80 border-white/10 flex flex-col md:flex-row items-center justify-between gap-4">
         <div className="space-y-1">
           <div className="flex items-center gap-2 text-xs">
             <span className="text-zinc-400">COMPOUND SAFETY CRITERIA:</span>
@@ -226,7 +226,7 @@ export const PromotionSafetyGate: React.FC<PromotionSafetyGateProps> = ({
           className={`px-6 py-3 rounded-2xl font-bold text-xs transition-all flex items-center gap-2 cursor-pointer shadow-lg ${
             isFullyAuthorized
               ? 'bg-emerald-500 hover:bg-emerald-400 text-black shadow-emerald-500/20'
-              : 'bg-zinc-800 text-zinc-500 border border-white/10 cursor-not-allowed opacity-60'
+              : 'bg-zinc-800 text-zinc-500 border-white/10 cursor-not-allowed opacity-60'
           }`}
         >
           {isPromoting ? (
@@ -247,7 +247,7 @@ export const PromotionSafetyGate: React.FC<PromotionSafetyGateProps> = ({
 
       {/* Result feedback */}
       {promotionResult && (
-        <div className="p-4 rounded-2xl bg-emerald-950/40 border border-emerald-500/40 text-emerald-200 text-xs flex items-start gap-3">
+        <div className="p-4 rounded-2xl bg-emerald-950/40 border-emerald-500/40 text-emerald-200 text-xs flex items-start gap-3">
           <CheckCircle2 className="w-5 h-5 text-emerald-400 shrink-0 mt-0.5" />
           <div className="space-y-1">
             <strong className="block text-emerald-300">PROMOTION RATIFIED WITH ZERO CANONICAL MUTATION</strong>

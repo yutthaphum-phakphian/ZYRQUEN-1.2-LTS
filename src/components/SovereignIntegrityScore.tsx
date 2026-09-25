@@ -304,7 +304,7 @@ export const SovereignIntegrityScore: React.FC<SovereignIntegrityScoreProps> = (
       className={`p-4 sm:p-5 md:p-6 rounded-2xl bg-[#0a0f1e] relative overflow-hidden shadow-xl space-y-4 w-full min-w-0 max-w-full transition-all duration-300 ${
         isBelow95Threshold
           ? 'border-2 border-rose-500 shadow-[0_0_30px_rgba(239,68,68,0.25)]'
-          : 'border border-cyan-500/25'
+          : 'border-cyan-500/25'
       }`}
     >
       {/* Background Ambient Glow */}
@@ -322,7 +322,7 @@ export const SovereignIntegrityScore: React.FC<SovereignIntegrityScoreProps> = (
             initial={{ opacity: 0, y: -10 }}
             animate={{ opacity: 1, y: 0 }}
             exit={{ opacity: 0, y: -10 }}
-            className="relative z-20 flex items-center justify-between p-3 rounded-xl bg-rose-950/90 border border-rose-500/80 text-rose-200 text-xs font-mono shadow-[0_0_20px_rgba(239,68,68,0.4)] animate-pulse"
+            className="relative z-20 flex items-center justify-between p-3 rounded-xl bg-rose-950/90 border-rose-500/80 text-rose-200 text-xs font-mono shadow-[0_0_20px_rgba(239,68,68,0.4)] animate-pulse"
           >
             <div className="flex items-center gap-2">
               <AlertTriangle className="w-4 h-4 text-rose-400 animate-bounce shrink-0" />
@@ -335,7 +335,7 @@ export const SovereignIntegrityScore: React.FC<SovereignIntegrityScoreProps> = (
             </div>
             <button
               onClick={handleToggleSimulateDrop}
-              className="px-2.5 py-1 rounded-lg bg-rose-500/20 hover:bg-rose-500/30 text-rose-300 border border-rose-400/40 text-[11px] font-semibold cursor-pointer shrink-0 transition-colors ml-2"
+              className="px-2.5 py-1 rounded-lg bg-rose-500/20 hover:bg-rose-500/30 text-rose-300 border-rose-400/40 text-[11px] font-semibold cursor-pointer shrink-0 transition-colors ml-2"
             >
               Restore Baseline
             </button>
@@ -390,7 +390,7 @@ export const SovereignIntegrityScore: React.FC<SovereignIntegrityScoreProps> = (
             {isSimulatingLowIntegrity ? '⚡ Reset Sim (<95%)' : '🧪 Sim <95% Pulse'}
           </button>
 
-          <div className="flex items-center gap-1 bg-black/60 p-1 rounded-xl border border-white/10">
+          <div className="flex items-center gap-1 bg-black/60 p-1 rounded-xl border-white/10">
             <button
               onClick={() => {
                 playTone(600, 0.03);
@@ -398,7 +398,7 @@ export const SovereignIntegrityScore: React.FC<SovereignIntegrityScoreProps> = (
               }}
               className={`px-2.5 py-1 rounded-lg text-xs font-mono transition-all cursor-pointer whitespace-nowrap ${
                 scopeMode === 'comprehensive'
-                  ? 'bg-emerald-500/20 text-emerald-200 font-bold border border-emerald-400/40 shadow-sm'
+                  ? 'bg-emerald-500/20 text-emerald-200 font-bold border-emerald-400/40 shadow-sm'
                   : 'text-zinc-400 hover:text-zinc-200'
               }`}
               title="Considers all 14,982 seals, including 80 fail-closed quarantined seals (Chamber 02)"
@@ -413,7 +413,7 @@ export const SovereignIntegrityScore: React.FC<SovereignIntegrityScoreProps> = (
               }}
               className={`px-2.5 py-1 rounded-lg text-xs font-mono transition-all cursor-pointer whitespace-nowrap ${
                 scopeMode === 'active_pool'
-                  ? 'bg-cyan-500/20 text-cyan-200 font-bold border border-cyan-400/40 shadow-sm'
+                  ? 'bg-cyan-500/20 text-cyan-200 font-bold border-cyan-400/40 shadow-sm'
                   : 'text-zinc-400 hover:text-zinc-200'
               }`}
               title="Considers 14,902 active operational seals in canonical service"
@@ -427,7 +427,7 @@ export const SovereignIntegrityScore: React.FC<SovereignIntegrityScoreProps> = (
       {/* Main Visualizer Grid: Gauge + Key Metric Cards */}
       <div className="grid grid-cols-1 md:grid-cols-12 gap-4 items-center">
         {/* Left Column: Circular Progress Gauge (Col 5) with Hover Tooltip & Warning Pulse */}
-        <div className="md:col-span-5 flex flex-col items-center justify-center p-3 rounded-2xl bg-black/40 border border-white/5 relative">
+        <div className="md:col-span-5 flex flex-col items-center justify-center p-3 rounded-2xl bg-black/40 border-white/5 relative">
           {/* Gauge Container with Hover Event */}
           <div
             className="relative flex items-center justify-center group cursor-pointer"
@@ -558,7 +558,7 @@ export const SovereignIntegrityScore: React.FC<SovereignIntegrityScoreProps> = (
                   animate={{ opacity: 1, y: 0, scale: 1 }}
                   exit={{ opacity: 0, y: 4, scale: 0.95 }}
                   transition={{ duration: 0.15 }}
-                  className="absolute -top-20 z-30 pointer-events-none whitespace-nowrap bg-slate-950/95 border border-cyan-500/50 backdrop-blur-md px-3.5 py-2.5 rounded-xl shadow-2xl shadow-cyan-950/80 text-left font-mono"
+                  className="absolute -top-20 z-30 pointer-events-none whitespace-nowrap bg-slate-950/95 border-cyan-500/50 backdrop-blur-md px-3.5 py-2.5 rounded-xl shadow-2xl shadow-cyan-950/80 text-left font-mono"
                 >
                   <div className="text-[11px] font-bold text-white flex items-center gap-1.5">
                     <ShieldCheck className="w-3.5 h-3.5 text-emerald-400" />
@@ -601,7 +601,7 @@ export const SovereignIntegrityScore: React.FC<SovereignIntegrityScoreProps> = (
           {/* Key Metrics Triple Card */}
           <div className="grid grid-cols-1 sm:grid-cols-3 gap-2">
             {/* Metric 1: Verified Seals */}
-            <div className="p-3 rounded-xl bg-black/40 border border-white/5 space-y-1">
+            <div className="p-3 rounded-xl bg-black/40 border-white/5 space-y-1">
               <div className="text-[11px] font-mono text-zinc-400 flex items-center justify-between">
                 <span>VERIFIED SEALS</span>
                 <CheckCircle2 className="w-3.5 h-3.5 text-emerald-400" />
@@ -615,7 +615,7 @@ export const SovereignIntegrityScore: React.FC<SovereignIntegrityScoreProps> = (
             </div>
 
             {/* Metric 2: Quarantined / Filtered */}
-            <div className="p-3 rounded-xl bg-black/40 border border-white/5 space-y-1">
+            <div className="p-3 rounded-xl bg-black/40 border-white/5 space-y-1">
               <div className="text-[11px] font-mono text-zinc-400 flex items-center justify-between">
                 <span>QUARANTINE</span>
                 <AlertTriangle className="w-3.5 h-3.5 text-amber-400" />
@@ -629,7 +629,7 @@ export const SovereignIntegrityScore: React.FC<SovereignIntegrityScoreProps> = (
             </div>
 
             {/* Metric 3: Quorum Attainment */}
-            <div className="p-3 rounded-xl bg-black/40 border border-white/5 space-y-1">
+            <div className="p-3 rounded-xl bg-black/40 border-white/5 space-y-1">
               <div className="text-[11px] font-mono text-zinc-400 flex items-center justify-between">
                 <span>SUPER-MAJORITY</span>
                 <Zap className="w-3.5 h-3.5 text-cyan-400" />
@@ -648,7 +648,7 @@ export const SovereignIntegrityScore: React.FC<SovereignIntegrityScoreProps> = (
           </div>
 
           {/* Sparkline Chart: 10-Snapshot Integrity Trend (Recharts) */}
-          <div className="p-3 rounded-xl bg-black/40 border border-white/5 space-y-2">
+          <div className="p-3 rounded-xl bg-black/40 border-white/5 space-y-2">
             <div className="flex items-center justify-between">
               <div className="flex items-center gap-2">
                 <Activity className="w-3.5 h-3.5 text-cyan-400" />
@@ -679,7 +679,7 @@ export const SovereignIntegrityScore: React.FC<SovereignIntegrityScoreProps> = (
                       if (active && payload && payload.length) {
                         const d = payload[0].payload;
                         return (
-                          <div className="bg-slate-950/95 border border-cyan-500/50 backdrop-blur-md px-2.5 py-1.5 rounded-lg shadow-xl text-[10px] font-mono text-left">
+                          <div className="bg-slate-950/95 border-cyan-500/50 backdrop-blur-md px-2.5 py-1.5 rounded-lg shadow-xl text-[10px] font-mono text-left">
                             <div className="font-bold text-white flex items-center gap-1.5">
                               <span className="text-cyan-400">{d.snapshot}</span>
                               <span className="text-zinc-500">·</span>
@@ -726,7 +726,7 @@ export const SovereignIntegrityScore: React.FC<SovereignIntegrityScoreProps> = (
           </div>
 
           {/* Mathematical Proof & Statutory Anchor */}
-          <div className="p-3 rounded-xl bg-black/30 border border-white/5 font-mono text-xs space-y-1.5">
+          <div className="p-3 rounded-xl bg-black/30 border-white/5 font-mono text-xs space-y-1.5">
             <div className="flex items-center justify-between text-[11px] text-zinc-400 border-b border-white/5 pb-1">
               <span>PROBATIVE RATIO FORMULA:</span>
               <span className="text-cyan-400">Integrity = (S_verified ÷ S_total) × 100%</span>
@@ -748,8 +748,8 @@ export const SovereignIntegrityScore: React.FC<SovereignIntegrityScoreProps> = (
               disabled={isAuditing}
               className={`px-3.5 py-2 rounded-xl text-xs font-mono font-semibold flex items-center justify-center gap-2 transition-all cursor-pointer ${
                 isAuditing
-                  ? 'bg-emerald-600/30 border border-emerald-500/50 text-emerald-200 animate-pulse'
-                  : 'bg-emerald-600 hover:bg-emerald-500 text-white shadow-[0_0_15px_rgba(16,185,129,0.3)] hover:shadow-[0_0_20px_rgba(16,185,129,0.5)] border border-emerald-400/60'
+                  ? 'bg-emerald-600/30 border-emerald-500/50 text-emerald-200 animate-pulse'
+                  : 'bg-emerald-600 hover:bg-emerald-500 text-white shadow-[0_0_15px_rgba(16,185,129,0.3)] hover:shadow-[0_0_20px_rgba(16,185,129,0.5)] border-emerald-400/60'
               }`}
             >
               <RotateCw className={`w-3.5 h-3.5 text-white ${isAuditing ? 'animate-spin' : ''}`} />
@@ -758,7 +758,7 @@ export const SovereignIntegrityScore: React.FC<SovereignIntegrityScoreProps> = (
 
             <button
               onClick={() => setShowChamberBreakdown(!showChamberBreakdown)}
-              className="px-3.5 py-2 rounded-xl bg-white/5 hover:bg-white/10 border border-white/10 text-xs font-mono text-zinc-300 hover:text-white flex items-center gap-1.5 transition-all cursor-pointer"
+              className="px-3.5 py-2 rounded-xl bg-white/5 hover:bg-white/10 border-white/10 text-xs font-mono text-zinc-300 hover:text-white flex items-center gap-1.5 transition-all cursor-pointer"
             >
               <Layers className="w-3.5 h-3.5 text-cyan-400" />
               <span>Chamber Pass Rates (18)</span>
@@ -768,7 +768,7 @@ export const SovereignIntegrityScore: React.FC<SovereignIntegrityScoreProps> = (
             {onNavigateToLedger && (
               <button
                 onClick={onNavigateToLedger}
-                className="px-3 py-2 rounded-xl bg-cyan-950/60 hover:bg-cyan-900/60 border border-cyan-500/30 text-xs font-mono text-cyan-300 flex items-center gap-1.5 transition-all cursor-pointer ml-auto"
+                className="px-3 py-2 rounded-xl bg-cyan-950/60 hover:bg-cyan-900/60 border-cyan-500/30 text-xs font-mono text-cyan-300 flex items-center gap-1.5 transition-all cursor-pointer ml-auto"
                 title="Inspect authoritative evidence ledger table"
               >
                 <span>Evidence Ledger</span>

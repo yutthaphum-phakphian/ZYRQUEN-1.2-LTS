@@ -37,13 +37,13 @@ export default function ZyrquenCard({ standalone = true }: { standalone?: boolea
 
         {/* Status */}
         <div className="flex gap-2 justify-center mb-5 flex-wrap">
-          <span className="px-2.5 py-1 rounded-full bg-purple-500/20 border border-purple-400/30 text-[10px] text-purple-200">
+          <span className="px-2.5 py-1 rounded-full bg-purple-500/20 border-purple-400/30 text-[10px] text-purple-200">
             Status: LOCKED_FROZEN_v1.2_LTS
           </span>
-          <span className="px-2.5 py-1 rounded-full bg-amber-500/20 border border-amber-400/30 text-[10px] text-amber-200">
+          <span className="px-2.5 py-1 rounded-full bg-amber-500/20 border-amber-400/30 text-[10px] text-amber-200">
             Δ 0.00% ZERO DRIFT
           </span>
-          <span className="px-2.5 py-1 rounded-full bg-cyan-500/20 border border-cyan-400/30 text-[10px] text-cyan-200">
+          <span className="px-2.5 py-1 rounded-full bg-cyan-500/20 border-cyan-400/30 text-[10px] text-cyan-200">
             Quorum: 10/10 REAL_HSM
           </span>
         </div>
@@ -82,7 +82,7 @@ export default function ZyrquenCard({ standalone = true }: { standalone?: boolea
         </div>
 
         {/* ASCII Logo */}
-        <div className="mt-6 p-3 bg-black/40 rounded-xl border border-white/5 text-center">
+        <div className="mt-6 p-3 bg-black/40 rounded-xl border-white/5 text-center">
           <div className="text-[8px] leading-[8px] text-cyan-300/70 font-mono tracking-widest">
             ███████╗██╗   ██╗██████╗  ██████╗ ██╗   ██╗███████╗<br />
             ╚══███╔╝╚██╗ ██╔╝██╔══██╗██╔═══██╗██║   ██║██╔════╝<br />
@@ -97,7 +97,7 @@ export default function ZyrquenCard({ standalone = true }: { standalone?: boolea
         {/* Footer */}
         <div className="mt-4 text-center">
           <div
-            className={`inline-block px-6 py-2 rounded-full bg-emerald-500/10 border border-emerald-400/40 text-emerald-300 text-[12px] font-bold tracking-widest ${
+            className={`inline-block px-6 py-2 rounded-full bg-emerald-500/10 border-emerald-400/40 text-emerald-300 text-[12px] font-bold tracking-widest ${
               isBlinking ? 'animate-pulse' : ''
             }`}
           >
@@ -109,7 +109,7 @@ export default function ZyrquenCard({ standalone = true }: { standalone?: boolea
         <div className="mt-5 flex justify-center">
           <button
             onClick={() => setIsBlinking(!isBlinking)}
-            className="px-4 py-1.5 rounded-full bg-white/10 hover:bg-white/20 border border-white/10 text-[11px] text-white/70 transition cursor-pointer"
+            className="px-4 py-1.5 rounded-full bg-white/10 hover:bg-white/20 border-white/10 text-[11px] text-white/70 transition cursor-pointer"
           >
             {isBlinking ? '⏸️ หยุดกระพริบ' : '▶️ เปิดกระพริบ'}
           </button>

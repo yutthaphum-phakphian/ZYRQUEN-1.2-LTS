@@ -594,7 +594,7 @@ export const GlobalConsensusMap: React.FC<GlobalConsensusMapProps> = ({
       className={`text-slate-100 font-sans space-y-6 overflow-hidden ${
         isEmbedded
           ? className
-          : `rounded-3xl bg-[#070e1c]/90 border border-cyan-500/25 p-5 sm:p-7 backdrop-blur-2xl shadow-[0_16px_50px_rgba(0,0,0,0.7)] ${className}`
+          : `rounded-3xl bg-[#070e1c]/90 border-cyan-500/25 p-5 sm:p-7 backdrop-blur-2xl shadow-[0_16px_50px_rgba(0,0,0,0.7)] ${className}`
       }`}
     >
       {/* ========================================================================= */}
@@ -603,17 +603,17 @@ export const GlobalConsensusMap: React.FC<GlobalConsensusMapProps> = ({
       <div className="flex flex-col lg:flex-row lg:items-center justify-between gap-4 pb-4 border-b border-white/10">
         <div className="space-y-1">
           <div className="flex items-center gap-2 flex-wrap text-xs font-mono">
-            <span className="flex items-center gap-1.5 px-3 py-1 rounded-full bg-emerald-500/20 text-emerald-300 border border-emerald-500/40 font-bold shadow-[0_0_12px_rgba(16,185,129,0.2)]">
+            <span className="flex items-center gap-1.5 px-3 py-1 rounded-full bg-emerald-500/20 text-emerald-300 border-emerald-500/40 font-bold shadow-[0_0_12px_rgba(16,185,129,0.2)]">
               <span className={`w-2 h-2 rounded-full ${isHealthySla ? 'bg-emerald-400 animate-pulse' : 'bg-rose-400'}`} />
               <span>{isHealthySla ? '14,902 SEALS LOCKED · Δ_0 = 0.00%' : 'REPLICATION LAG DRIFT DETECTED'}</span>
             </span>
-            <span className="px-2.5 py-1 rounded-full bg-cyan-950/70 border border-cyan-500/30 text-cyan-300 font-bold">
+            <span className="px-2.5 py-1 rounded-full bg-cyan-950/70 border-cyan-500/30 text-cyan-300 font-bold">
               99.9996% Sovereign SLA
             </span>
-            <span className="px-2.5 py-1 rounded-full bg-purple-950/70 border border-purple-500/40 text-purple-300 font-bold">
+            <span className="px-2.5 py-1 rounded-full bg-purple-950/70 border-purple-500/40 text-purple-300 font-bold">
               AIR-GAPPED SOVEREIGN INSTANCE
             </span>
-            <span className="px-2.5 py-1 rounded-full bg-black/60 border border-white/10 text-zinc-300">
+            <span className="px-2.5 py-1 rounded-full bg-black/60 border-white/10 text-zinc-300">
               6-Node BFT Mesh
             </span>
           </div>
@@ -621,7 +621,7 @@ export const GlobalConsensusMap: React.FC<GlobalConsensusMapProps> = ({
           <h2 className="text-2xl sm:text-3xl font-black text-white tracking-tight flex items-center gap-2.5 pt-1">
             <Globe className="w-6 h-6 text-cyan-400" />
             <span>Global Consensus Map (ZYRQUEN FROZEN v1.2 LTS)</span>
-            <span className="text-xs font-mono font-normal px-2.5 py-0.5 rounded-full bg-cyan-500/20 text-cyan-200 border border-cyan-500/40">
+            <span className="text-xs font-mono font-normal px-2.5 py-0.5 rounded-full bg-cyan-500/20 text-cyan-200 border-cyan-500/40">
               6-Node BFT Mesh
             </span>
           </h2>
@@ -639,7 +639,7 @@ export const GlobalConsensusMap: React.FC<GlobalConsensusMapProps> = ({
               setIsReportModalOpen(true);
               playTone(600, 0.05);
             }}
-            className="flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-cyan-500/25 hover:bg-cyan-500/35 text-cyan-200 border border-cyan-400/60 font-mono text-xs font-bold transition-all shadow-md cursor-pointer"
+            className="flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-cyan-500/25 hover:bg-cyan-500/35 text-cyan-200 border-cyan-400/60 font-mono text-xs font-bold transition-all shadow-md cursor-pointer"
             title="Open Sovereign Node Technical Verification Report (Manus AI / 2026-05-13)"
           >
             <FileText className="w-3.5 h-3.5 text-cyan-300" />
@@ -647,11 +647,11 @@ export const GlobalConsensusMap: React.FC<GlobalConsensusMapProps> = ({
           </button>
 
           {/* Tab Switcher */}
-          <div className="flex bg-black/60 p-1 rounded-2xl border border-white/10 text-xs font-mono">
+          <div className="flex bg-black/60 p-1 rounded-2xl border-white/10 text-xs font-mono">
             <button
               onClick={() => setActiveTab('map')}
               className={`px-3 py-1.5 rounded-xl transition-all font-semibold ${
-                activeTab === 'map' ? 'bg-cyan-500/30 text-cyan-200 border border-cyan-400/50' : 'text-zinc-400 hover:text-white'
+                activeTab === 'map' ? 'bg-cyan-500/30 text-cyan-200 border-cyan-400/50' : 'text-zinc-400 hover:text-white'
               }`}
             >
               Map Topology
@@ -659,7 +659,7 @@ export const GlobalConsensusMap: React.FC<GlobalConsensusMapProps> = ({
             <button
               onClick={() => setActiveTab('matrix')}
               className={`px-3 py-1.5 rounded-xl transition-all font-semibold ${
-                activeTab === 'matrix' ? 'bg-cyan-500/30 text-cyan-200 border border-cyan-400/50' : 'text-zinc-400 hover:text-white'
+                activeTab === 'matrix' ? 'bg-cyan-500/30 text-cyan-200 border-cyan-400/50' : 'text-zinc-400 hover:text-white'
               }`}
             >
               Replication Matrix
@@ -667,7 +667,7 @@ export const GlobalConsensusMap: React.FC<GlobalConsensusMapProps> = ({
             <button
               onClick={() => setActiveTab('cli')}
               className={`px-3 py-1.5 rounded-xl transition-all font-semibold ${
-                activeTab === 'cli' ? 'bg-cyan-500/30 text-cyan-200 border border-cyan-400/50' : 'text-zinc-400 hover:text-white'
+                activeTab === 'cli' ? 'bg-cyan-500/30 text-cyan-200 border-cyan-400/50' : 'text-zinc-400 hover:text-white'
               }`}
             >
               Audit Script CLI
@@ -694,7 +694,7 @@ export const GlobalConsensusMap: React.FC<GlobalConsensusMapProps> = ({
             id="btn-run-global-sync-audit"
             onClick={handleTriggerSyncAudit}
             disabled={isAuditing}
-            className="flex items-center gap-2 px-3.5 py-2 rounded-xl bg-gradient-to-r from-cyan-500/20 to-emerald-500/20 hover:from-cyan-500/30 hover:to-emerald-500/30 border border-cyan-400/40 text-cyan-200 text-xs font-mono font-bold transition-all shadow-[0_0_15px_rgba(6,182,212,0.2)] cursor-pointer"
+            className="flex items-center gap-2 px-3.5 py-2 rounded-xl bg-gradient-to-r from-cyan-500/20 to-emerald-500/20 hover:from-cyan-500/30 hover:to-emerald-500/30 border-cyan-400/40 text-cyan-200 text-xs font-mono font-bold transition-all shadow-[0_0_15px_rgba(6,182,212,0.2)] cursor-pointer"
           >
             <RefreshCw className={`w-3.5 h-3.5 text-cyan-300 ${isAuditing ? 'animate-spin' : ''}`} />
             <span>{isAuditing ? `Auditing (${auditProgress}%)` : 'Run Sync Audit'}</span>
@@ -706,7 +706,7 @@ export const GlobalConsensusMap: React.FC<GlobalConsensusMapProps> = ({
       {/* 2. STATUTORY SLA & CROSS-REGION LAG HIGHLIGHT BANNER                      */}
       {/* ========================================================================= */}
       <div className="grid grid-cols-2 sm:grid-cols-4 gap-3 font-mono text-xs">
-        <div className="p-3 rounded-2xl bg-black/50 border border-white/10 space-y-1">
+        <div className="p-3 rounded-2xl bg-black/50 border-white/10 space-y-1">
           <div className="flex items-center justify-between text-zinc-400 text-[10px] uppercase">
             <span>Primary Leader</span>
             <Server className="w-3.5 h-3.5 text-sky-400" />
@@ -715,7 +715,7 @@ export const GlobalConsensusMap: React.FC<GlobalConsensusMapProps> = ({
           <div className="text-[10px] text-emerald-400">Raft Lease Term 4209 Active</div>
         </div>
 
-        <div className="p-3 rounded-2xl bg-black/50 border border-white/10 space-y-1">
+        <div className="p-3 rounded-2xl bg-black/50 border-white/10 space-y-1">
           <div className="flex items-center justify-between text-zinc-400 text-[10px] uppercase">
             <span>Max Replication Lag</span>
             <Clock className="w-3.5 h-3.5 text-cyan-400" />
@@ -728,7 +728,7 @@ export const GlobalConsensusMap: React.FC<GlobalConsensusMapProps> = ({
           </div>
         </div>
 
-        <div className="p-3 rounded-2xl bg-black/50 border border-white/10 space-y-1">
+        <div className="p-3 rounded-2xl bg-black/50 border-white/10 space-y-1">
           <div className="flex items-center justify-between text-zinc-400 text-[10px] uppercase">
             <span>Byzantine Parity</span>
             <ShieldCheck className="w-3.5 h-3.5 text-emerald-400" />
@@ -737,7 +737,7 @@ export const GlobalConsensusMap: React.FC<GlobalConsensusMapProps> = ({
           <div className="text-[10px] text-zinc-400">3/3 Regional Clusters Attested</div>
         </div>
 
-        <div className="p-3 rounded-2xl bg-black/50 border border-white/10 space-y-1">
+        <div className="p-3 rounded-2xl bg-black/50 border-white/10 space-y-1">
           <div className="flex items-center justify-between text-zinc-400 text-[10px] uppercase">
             <span>Split-Brain Risk</span>
             <Activity className="w-3.5 h-3.5 text-indigo-400" />
@@ -756,7 +756,7 @@ export const GlobalConsensusMap: React.FC<GlobalConsensusMapProps> = ({
         <div className="space-y-4">
           {/* D3 Map Canvas Container (Stable aspect ratio, zero layout thrashing) */}
           <div
-            className="relative w-full aspect-[16/9] sm:aspect-[2/1] rounded-2xl overflow-hidden border border-cyan-500/30 bg-[#060a16] shadow-2xl flex items-center justify-center"
+            className="relative w-full aspect-[16/9] sm:aspect-[2/1] rounded-2xl overflow-hidden border-cyan-500/30 bg-[#060a16] shadow-2xl flex items-center justify-center"
           >
             <svg
               ref={svgRef}
@@ -791,7 +791,7 @@ export const GlobalConsensusMap: React.FC<GlobalConsensusMapProps> = ({
             </div>
 
             {/* Map Legend on Top Right */}
-            <div className="absolute top-3 right-3 hidden sm:flex items-center gap-3 px-3 py-1.5 rounded-xl bg-black/60 backdrop-blur-md border border-white/10 text-[10px] font-mono text-zinc-300">
+            <div className="absolute top-3 right-3 hidden sm:flex items-center gap-3 px-3 py-1.5 rounded-xl bg-black/60 backdrop-blur-md border-white/10 text-[10px] font-mono text-zinc-300">
               <span className="flex items-center gap-1">
                 <span className="w-2.5 h-2.5 rounded-full bg-sky-400" />
                 <span>Primary Leader (Bangkok)</span>
@@ -837,7 +837,7 @@ export const GlobalConsensusMap: React.FC<GlobalConsensusMapProps> = ({
                       <div className="flex items-center gap-1.5 text-[10px] font-mono uppercase tracking-wider text-zinc-400">
                         <span>{reg.location}</span>
                         {isLeader && (
-                          <span className="px-1.5 py-0.2 rounded bg-amber-500/20 text-amber-300 border border-amber-500/40 font-bold text-[9px]">
+                          <span className="px-1.5 py-0.2 rounded bg-amber-500/20 text-amber-300 border-amber-500/40 font-bold text-[9px]">
                             LEADER
                           </span>
                         )}
@@ -896,7 +896,7 @@ export const GlobalConsensusMap: React.FC<GlobalConsensusMapProps> = ({
       {/* ========================================================================= */}
       {activeTab === 'matrix' && (
         <div className="space-y-4">
-          <div className="overflow-x-auto rounded-2xl border border-white/10 bg-black/60 backdrop-blur-md">
+          <div className="overflow-x-auto rounded-2xl border-white/10 bg-black/60 backdrop-blur-md">
             <table className="w-full text-left font-mono text-xs">
               <thead>
                 <tr className="border-b border-white/10 bg-white/5 text-zinc-400 text-[11px] uppercase tracking-wider">
@@ -976,7 +976,7 @@ export const GlobalConsensusMap: React.FC<GlobalConsensusMapProps> = ({
             </table>
           </div>
 
-          <div className="p-4 rounded-2xl bg-black/40 border border-white/5 flex flex-col sm:flex-row sm:items-center justify-between gap-3 text-xs font-mono">
+          <div className="p-4 rounded-2xl bg-black/40 border-white/5 flex flex-col sm:flex-row sm:items-center justify-between gap-3 text-xs font-mono">
             <div className="flex items-center gap-2 text-zinc-300">
               <ShieldCheck className="w-4 h-4 text-emerald-400" />
               <span>
@@ -1001,14 +1001,14 @@ export const GlobalConsensusMap: React.FC<GlobalConsensusMapProps> = ({
 
             <button
               onClick={handleCopyCli}
-              className="flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-white/5 hover:bg-white/10 border border-white/10 text-xs font-mono text-zinc-300 transition-all cursor-pointer"
+              className="flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-white/5 hover:bg-white/10 border-white/10 text-xs font-mono text-zinc-300 transition-all cursor-pointer"
             >
               {copiedCli ? <Check className="w-3.5 h-3.5 text-emerald-400" /> : <Copy className="w-3.5 h-3.5" />}
               <span>{copiedCli ? 'Copied' : 'Copy Script'}</span>
             </button>
           </div>
 
-          <div className="p-4 rounded-2xl bg-black/80 border border-cyan-500/30 font-mono text-xs text-cyan-300 space-y-1 overflow-x-auto shadow-inner">
+          <div className="p-4 rounded-2xl bg-black/80 border-cyan-500/30 font-mono text-xs text-cyan-300 space-y-1 overflow-x-auto shadow-inner">
             <div className="text-zinc-500"># Validating Multi-Region Consensus Sync &amp; Audit v5.0 LTS</div>
             <div className="text-emerald-400 font-bold">
               $ bash scripts/run_global_sync_audit.sh

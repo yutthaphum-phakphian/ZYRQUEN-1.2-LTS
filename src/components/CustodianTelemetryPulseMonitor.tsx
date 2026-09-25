@@ -93,11 +93,11 @@ export const CustodianTelemetryPulseMonitor: React.FC<{ className?: string }> = 
   }, []);
 
   return (
-    <div className={`w-full rounded-[24px] bg-[#070A16] border border-cyan-500/30 p-5 sm:p-6 shadow-2xl text-white font-mono space-y-6 ${className}`}>
+    <div className={`w-full rounded-[24px] bg-[#070A16] border-cyan-500/30 p-5 sm:p-6 shadow-2xl text-white font-mono space-y-6 ${className}`}>
       {/* Header */}
       <div className="flex flex-col lg:flex-row lg:items-center justify-between gap-4 border-b border-white/10 pb-5">
         <div className="flex items-center gap-3.5">
-          <div className="w-12 h-12 rounded-2xl bg-gradient-to-br from-cyan-500/20 via-fuchsia-500/20 to-amber-500/20 border border-cyan-500/40 flex items-center justify-center shadow-[0_0_20px_rgba(6,182,212,0.35)] shrink-0">
+          <div className="w-12 h-12 rounded-2xl bg-gradient-to-br from-cyan-500/20 via-fuchsia-500/20 to-amber-500/20 border-cyan-500/40 flex items-center justify-center shadow-[0_0_20px_rgba(6,182,212,0.35)] shrink-0">
             <HeartPulse className="w-6 h-6 text-cyan-400 animate-pulse" />
           </div>
           <div>
@@ -105,7 +105,7 @@ export const CustodianTelemetryPulseMonitor: React.FC<{ className?: string }> = 
               <h2 className="text-base sm:text-lg font-bold tracking-wider text-white uppercase">
                 Custodian Telemetry Pulse Monitor (10 REAL HSM)
               </h2>
-              <span className="text-[10px] font-semibold text-emerald-300 bg-emerald-950/80 px-2.5 py-0.5 rounded-full border border-emerald-500/40">
+              <span className="text-[10px] font-semibold text-emerald-300 bg-emerald-950/80 px-2.5 py-0.5 rounded-full border-emerald-500/40">
                 Cryo Bus 14.98 mK He-4
               </span>
             </div>
@@ -123,7 +123,7 @@ export const CustodianTelemetryPulseMonitor: React.FC<{ className?: string }> = 
         <div className="flex items-center gap-2">
           <button
             onClick={handleResyncAll}
-            className="px-4 py-2 rounded-xl bg-black/60 border border-cyan-500/40 hover:border-cyan-400 text-xs font-bold text-cyan-200 flex items-center gap-2 transition-all shadow-[0_0_15px_rgba(6,182,212,0.25)]"
+            className="px-4 py-2 rounded-xl bg-black/60 border-cyan-500/40 hover:border-cyan-400 text-xs font-bold text-cyan-200 flex items-center gap-2 transition-all shadow-[0_0_15px_rgba(6,182,212,0.25)]"
           >
             <RefreshCw className={`w-3.5 h-3.5 ${!isSynced ? 'animate-spin' : ''}`} />
             <span>{isSynced ? 'Cryogenic Resync All (He-4)' : 'Synchronizing...'}</span>
@@ -147,7 +147,7 @@ export const CustodianTelemetryPulseMonitor: React.FC<{ className?: string }> = 
             >
               <div className="flex items-center justify-between">
                 <span className="text-amber-400 font-bold">{c.code}</span>
-                <span className="text-[9px] text-emerald-400 bg-emerald-950/80 px-1.5 py-0.5 rounded border border-emerald-500/30">
+                <span className="text-[9px] text-emerald-400 bg-emerald-950/80 px-1.5 py-0.5 rounded border-emerald-500/30">
                   {c.status}
                 </span>
               </div>
@@ -164,7 +164,7 @@ export const CustodianTelemetryPulseMonitor: React.FC<{ className?: string }> = 
       {/* Active Custodian Waveform & Telemetry Deck */}
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-4">
         {/* Waveform Canvas */}
-        <div className="lg:col-span-2 p-4 rounded-2xl bg-[#050711] border border-cyan-500/20 space-y-3 shadow-inner">
+        <div className="lg:col-span-2 p-4 rounded-2xl bg-[#050711] border-cyan-500/20 space-y-3 shadow-inner">
           <div className="flex items-center justify-between text-xs text-zinc-400 border-b border-white/5 pb-2">
             <div className="flex items-center gap-2">
               <Activity className="w-4 h-4 text-cyan-400 animate-pulse" />
@@ -210,7 +210,7 @@ export const CustodianTelemetryPulseMonitor: React.FC<{ className?: string }> = 
 
         {/* Telemetry Parameter Cards */}
         <div className="space-y-3">
-          <div className="p-3.5 bg-black/60 rounded-2xl border border-white/10 space-y-1">
+          <div className="p-3.5 bg-black/60 rounded-2xl border-white/10 space-y-1">
             <div className="text-[10px] text-zinc-400 uppercase flex items-center gap-1">
               <Snowflake className="w-3 h-3 text-amber-400" />
               <span>Cryo Bus Subzero Temp</span>
@@ -219,7 +219,7 @@ export const CustodianTelemetryPulseMonitor: React.FC<{ className?: string }> = 
             <div className="text-[10px] text-emerald-400">He-4 Constant (Zero Drift 0.00%)</div>
           </div>
 
-          <div className="p-3.5 bg-black/60 rounded-2xl border border-white/10 space-y-1">
+          <div className="p-3.5 bg-black/60 rounded-2xl border-white/10 space-y-1">
             <div className="text-[10px] text-zinc-400 uppercase flex items-center gap-1">
               <Zap className="w-3 h-3 text-cyan-400" />
               <span>Energy Potential & QOps</span>
@@ -228,7 +228,7 @@ export const CustodianTelemetryPulseMonitor: React.FC<{ className?: string }> = 
             <div className="text-[10px] text-zinc-400">Coherence Threshold ≥ 99.992%</div>
           </div>
 
-          <div className="p-3.5 bg-black/60 rounded-2xl border border-white/10 space-y-1">
+          <div className="p-3.5 bg-black/60 rounded-2xl border-white/10 space-y-1">
             <div className="text-[10px] text-zinc-400 uppercase flex items-center gap-1">
               <ShieldCheck className="w-3 h-3 text-emerald-400" />
               <span>Dilithium-5 Signature Seal</span>

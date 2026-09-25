@@ -108,19 +108,19 @@ export const SovereignReportModal: React.FC<SovereignReportModalProps> = ({ isOp
           animate={{ opacity: 1, scale: 1, y: 0 }}
           exit={{ opacity: 0, scale: 0.96, y: 15 }}
           transition={{ duration: 0.22, ease: 'easeOut' }}
-          className="relative w-full max-w-6xl max-h-[92vh] bg-[#070b14] border border-cyan-500/40 rounded-3xl shadow-[0_25px_70px_rgba(0,0,0,0.85)] flex flex-col overflow-hidden text-slate-100"
+          className="relative w-full max-w-6xl max-h-[92vh] bg-[#070b14] border-cyan-500/40 rounded-3xl shadow-[0_25px_70px_rgba(0,0,0,0.85)] flex flex-col overflow-hidden text-slate-100"
         >
           {/* Header Bar */}
           <div className="p-4 sm:p-6 border-b border-white/10 bg-gradient-to-r from-cyan-950/40 via-blue-950/30 to-purple-950/40 flex flex-col sm:flex-row sm:items-center justify-between gap-4">
             <div className="space-y-1">
               <div className="flex items-center gap-2 flex-wrap text-[11px] font-mono">
-                <span className="px-2.5 py-0.5 rounded-full bg-cyan-500/20 text-cyan-300 border border-cyan-500/40 font-bold uppercase tracking-wider">
+                <span className="px-2.5 py-0.5 rounded-full bg-cyan-500/20 text-cyan-300 border-cyan-500/40 font-bold uppercase tracking-wider">
                   {report.classification}
                 </span>
-                <span className="px-2.5 py-0.5 rounded-full bg-emerald-500/20 text-emerald-300 border border-emerald-500/40 font-bold">
+                <span className="px-2.5 py-0.5 rounded-full bg-emerald-500/20 text-emerald-300 border-emerald-500/40 font-bold">
                   {report.status}
                 </span>
-                <span className="px-2 py-0.5 rounded-full bg-black/50 text-zinc-400 border border-white/10">
+                <span className="px-2 py-0.5 rounded-full bg-black/50 text-zinc-400 border-white/10">
                   {report.date}
                 </span>
               </div>
@@ -150,7 +150,7 @@ export const SovereignReportModal: React.FC<SovereignReportModalProps> = ({ isOp
 
               <button
                 onClick={handlePrint}
-                className="p-2 rounded-xl bg-white/5 hover:bg-white/10 text-zinc-300 border border-white/10 transition-all cursor-pointer"
+                className="p-2 rounded-xl bg-white/5 hover:bg-white/10 text-zinc-300 border-white/10 transition-all cursor-pointer"
                 title="Print or Save as PDF"
               >
                 <Printer className="w-4 h-4" />
@@ -158,7 +158,7 @@ export const SovereignReportModal: React.FC<SovereignReportModalProps> = ({ isOp
 
               <button
                 onClick={onClose}
-                className="p-2 rounded-xl bg-white/5 hover:bg-white/10 text-zinc-300 border border-white/10 transition-all cursor-pointer"
+                className="p-2 rounded-xl bg-white/5 hover:bg-white/10 text-zinc-300 border-white/10 transition-all cursor-pointer"
               >
                 <X className="w-4 h-4" />
               </button>
@@ -180,7 +180,7 @@ export const SovereignReportModal: React.FC<SovereignReportModalProps> = ({ isOp
                 onClick={() => { setActiveFormat('rich'); playTone(540, 0.04); }}
                 className={`flex items-center gap-1.5 px-3 py-1.5 rounded-xl transition-all font-semibold ${
                   activeFormat === 'rich'
-                    ? 'bg-cyan-500/25 text-cyan-200 border border-cyan-400/60'
+                    ? 'bg-cyan-500/25 text-cyan-200 border-cyan-400/60'
                     : 'text-zinc-400 hover:text-white'
                 }`}
               >
@@ -192,7 +192,7 @@ export const SovereignReportModal: React.FC<SovereignReportModalProps> = ({ isOp
                 onClick={() => { setActiveFormat('md'); playTone(580, 0.04); }}
                 className={`flex items-center gap-1.5 px-3 py-1.5 rounded-xl transition-all font-semibold ${
                   activeFormat === 'md'
-                    ? 'bg-cyan-500/25 text-cyan-200 border border-cyan-400/60'
+                    ? 'bg-cyan-500/25 text-cyan-200 border-cyan-400/60'
                     : 'text-zinc-400 hover:text-white'
                 }`}
               >
@@ -204,7 +204,7 @@ export const SovereignReportModal: React.FC<SovereignReportModalProps> = ({ isOp
                 onClick={() => { setActiveFormat('json'); playTone(620, 0.04); }}
                 className={`flex items-center gap-1.5 px-3 py-1.5 rounded-xl transition-all font-semibold ${
                   activeFormat === 'json'
-                    ? 'bg-cyan-500/25 text-cyan-200 border border-cyan-400/60'
+                    ? 'bg-cyan-500/25 text-cyan-200 border-cyan-400/60'
                     : 'text-zinc-400 hover:text-white'
                 }`}
               >
@@ -216,7 +216,7 @@ export const SovereignReportModal: React.FC<SovereignReportModalProps> = ({ isOp
                 onClick={() => { setActiveFormat('csv'); playTone(660, 0.04); }}
                 className={`flex items-center gap-1.5 px-3 py-1.5 rounded-xl transition-all font-semibold ${
                   activeFormat === 'csv'
-                    ? 'bg-cyan-500/25 text-cyan-200 border border-cyan-400/60'
+                    ? 'bg-cyan-500/25 text-cyan-200 border-cyan-400/60'
                     : 'text-zinc-400 hover:text-white'
                 }`}
               >
@@ -228,7 +228,7 @@ export const SovereignReportModal: React.FC<SovereignReportModalProps> = ({ isOp
                 onClick={() => { setActiveFormat('sh'); playTone(700, 0.04); }}
                 className={`flex items-center gap-1.5 px-3 py-1.5 rounded-xl transition-all font-semibold ${
                   activeFormat === 'sh'
-                    ? 'bg-cyan-500/25 text-cyan-200 border border-cyan-400/60'
+                    ? 'bg-cyan-500/25 text-cyan-200 border-cyan-400/60'
                     : 'text-zinc-400 hover:text-white'
                 }`}
               >
@@ -240,7 +240,7 @@ export const SovereignReportModal: React.FC<SovereignReportModalProps> = ({ isOp
                 onClick={() => { setActiveFormat('yaml'); playTone(740, 0.04); }}
                 className={`flex items-center gap-1.5 px-3 py-1.5 rounded-xl transition-all font-semibold ${
                   activeFormat === 'yaml'
-                    ? 'bg-cyan-500/25 text-cyan-200 border border-cyan-400/60'
+                    ? 'bg-cyan-500/25 text-cyan-200 border-cyan-400/60'
                     : 'text-zinc-400 hover:text-white'
                 }`}
               >
@@ -263,7 +263,7 @@ export const SovereignReportModal: React.FC<SovereignReportModalProps> = ({ isOp
                   };
                   handleCopy(activeFormat, contentMap[activeFormat]);
                 }}
-                className="flex items-center gap-1 px-2.5 py-1 rounded-lg bg-white/5 hover:bg-white/10 text-zinc-300 border border-white/10 transition-all font-mono text-xs cursor-pointer"
+                className="flex items-center gap-1 px-2.5 py-1 rounded-lg bg-white/5 hover:bg-white/10 text-zinc-300 border-white/10 transition-all font-mono text-xs cursor-pointer"
               >
                 {copiedFormat === activeFormat ? (
                   <>
@@ -292,7 +292,7 @@ export const SovereignReportModal: React.FC<SovereignReportModalProps> = ({ isOp
                     triggerDownload('sovereign_node_v1.2_lts_manifest.yaml', 'text/yaml;charset=utf-8;', yamlContent);
                   }
                 }}
-                className="flex items-center gap-1 px-2.5 py-1 rounded-lg bg-cyan-500/20 hover:bg-cyan-500/30 text-cyan-200 border border-cyan-500/40 transition-all font-mono text-xs cursor-pointer font-bold"
+                className="flex items-center gap-1 px-2.5 py-1 rounded-lg bg-cyan-500/20 hover:bg-cyan-500/30 text-cyan-200 border-cyan-500/40 transition-all font-mono text-xs cursor-pointer font-bold"
               >
                 <Download className="w-3 h-3 text-cyan-300" />
                 <span>Download .{activeFormat === 'rich' ? 'md' : activeFormat}</span>
@@ -306,7 +306,7 @@ export const SovereignReportModal: React.FC<SovereignReportModalProps> = ({ isOp
             {activeFormat === 'rich' && (
               <div className="space-y-6">
                 {/* Executive Summary Callout */}
-                <div className="p-5 rounded-2xl bg-cyan-950/30 border border-cyan-500/30 space-y-2">
+                <div className="p-5 rounded-2xl bg-cyan-950/30 border-cyan-500/30 space-y-2">
                   <div className="flex items-center gap-2 text-cyan-300 font-mono text-xs font-bold uppercase tracking-wider">
                     <ShieldCheck className="w-4 h-4 text-cyan-400" />
                     <span>Executive Summary</span>
@@ -323,7 +323,7 @@ export const SovereignReportModal: React.FC<SovereignReportModalProps> = ({ isOp
                   </h4>
 
                   <div className="grid grid-cols-1 md:grid-cols-2 gap-4 text-xs font-mono">
-                    <div className="p-4 rounded-xl bg-black/40 border border-white/10 space-y-1.5">
+                    <div className="p-4 rounded-xl bg-black/40 border-white/10 space-y-1.5">
                       <div className="text-zinc-400 font-bold uppercase text-[10px] tracking-wider">
                         Definition: ZYRQUEN FROZEN
                       </div>
@@ -332,7 +332,7 @@ export const SovereignReportModal: React.FC<SovereignReportModalProps> = ({ isOp
                       </p>
                     </div>
 
-                    <div className="p-4 rounded-xl bg-black/40 border border-white/10 space-y-1.5">
+                    <div className="p-4 rounded-xl bg-black/40 border-white/10 space-y-1.5">
                       <div className="text-zinc-400 font-bold uppercase text-[10px] tracking-wider">
                         Definition: Sovereign Node
                       </div>
@@ -355,7 +355,7 @@ export const SovereignReportModal: React.FC<SovereignReportModalProps> = ({ isOp
                     </span>
                   </div>
 
-                  <div className="rounded-2xl border border-white/10 overflow-hidden bg-black/40 shadow-xl">
+                  <div className="rounded-2xl border-white/10 overflow-hidden bg-black/40 shadow-xl">
                     <div className="overflow-x-auto">
                       <table className="w-full text-left text-xs font-mono">
                         <thead className="bg-white/5 border-b border-white/10 text-zinc-300 font-bold uppercase tracking-wider text-[10px]">
@@ -443,7 +443,7 @@ export const SovereignReportModal: React.FC<SovereignReportModalProps> = ({ isOp
                   </h4>
 
                   <div className="grid grid-cols-1 md:grid-cols-2 gap-4 text-xs font-mono">
-                    <div className="p-4 rounded-xl bg-black/40 border border-white/10 space-y-2">
+                    <div className="p-4 rounded-xl bg-black/40 border-white/10 space-y-2">
                       <div className="text-cyan-400 font-bold uppercase text-[10px]">
                         Post-Quantum & FIPS Cryptographic Standards
                       </div>
@@ -457,7 +457,7 @@ export const SovereignReportModal: React.FC<SovereignReportModalProps> = ({ isOp
                       </ul>
                     </div>
 
-                    <div className="p-4 rounded-xl bg-black/40 border border-white/10 space-y-2">
+                    <div className="p-4 rounded-xl bg-black/40 border-white/10 space-y-2">
                       <div className="text-amber-400 font-bold uppercase text-[10px]">
                         Thai Sovereign Statutory Frameworks
                       </div>
@@ -474,7 +474,7 @@ export const SovereignReportModal: React.FC<SovereignReportModalProps> = ({ isOp
                 </div>
 
                 {/* 4. References & Artifacts */}
-                <div className="p-4 rounded-xl bg-white/5 border border-white/10 space-y-2 text-xs font-mono">
+                <div className="p-4 rounded-xl bg-white/5 border-white/10 space-y-2 text-xs font-mono">
                   <div className="text-zinc-400 font-bold uppercase text-[10px]">
                     Forensic References & Verification Artifacts
                   </div>
@@ -499,7 +499,7 @@ export const SovereignReportModal: React.FC<SovereignReportModalProps> = ({ isOp
                   <span>Ready for offline execution / ingestion</span>
                 </div>
 
-                <div className="relative rounded-2xl bg-black/80 border border-white/10 p-4 font-mono text-xs text-zinc-200 overflow-x-auto max-h-[60vh] select-text">
+                <div className="relative rounded-2xl bg-black/80 border-white/10 p-4 font-mono text-xs text-zinc-200 overflow-x-auto max-h-[60vh] select-text">
                   <pre className="whitespace-pre">
                     {activeFormat === 'md' && markdownContent}
                     {activeFormat === 'json' && jsonContent}

@@ -112,12 +112,12 @@ export const SovereignControlDock: React.FC<SovereignControlDockProps> = ({
       
       {/* 1. EXPANDABLE QUICK-CONTROL POPOVER DOCK */}
       {isOpen && (
-        <div className="absolute bottom-12 left-0 w-80 sm:w-88 max-w-[calc(100vw-2rem)] bg-slate-950/95 border border-cyan-500/40 rounded-2xl p-4 shadow-[0_0_30px_rgba(6,182,212,0.2)] backdrop-blur-xl space-y-4 animate-in fade-in slide-in-from-bottom-4 duration-300">
+        <div className="absolute bottom-12 left-0 w-80 sm:w-88 max-w-[calc(100vw-2rem)] bg-slate-950/95 border-cyan-500/40 rounded-2xl p-4 shadow-[0_0_30px_rgba(6,182,212,0.2)] backdrop-blur-xl space-y-4 animate-in fade-in slide-in-from-bottom-4 duration-300">
           
           {/* Header */}
           <div className="flex items-center justify-between border-b border-slate-800 pb-2.5">
             <div className="flex items-center gap-2">
-              <div className="p-1 rounded-md bg-cyan-500/20 text-cyan-400 border border-cyan-500/30">
+              <div className="p-1 rounded-md bg-cyan-500/20 text-cyan-400 border-cyan-500/30">
                 <SlidersHorizontal className="w-4 h-4" />
               </div>
               <div>
@@ -143,7 +143,7 @@ export const SovereignControlDock: React.FC<SovereignControlDockProps> = ({
           </div>
 
           {/* Section A: Atmospheric Audio Engine Tuning */}
-          <div className="p-3 rounded-xl bg-slate-900/80 border border-slate-800 space-y-2.5">
+          <div className="p-3 rounded-xl bg-slate-900/80 border-slate-800 space-y-2.5">
             <div className="flex items-center justify-between">
               <div className="flex items-center gap-1.5 text-xs font-bold text-cyan-300">
                 <Waves className={`w-3.5 h-3.5 ${isAudio ? 'animate-pulse text-cyan-400' : 'text-slate-500'}`} />
@@ -188,14 +188,14 @@ export const SovereignControlDock: React.FC<SovereignControlDockProps> = ({
             </div>
 
             {/* Toggle 1: SSoT Zero Drift */}
-            <div className="flex items-center justify-between p-2 rounded-lg bg-slate-900/50 border border-slate-800/80">
+            <div className="flex items-center justify-between p-2 rounded-lg bg-slate-900/50 border-slate-800/80">
               <span className="text-[11px] text-slate-300 flex items-center gap-1.5">
                 <ShieldCheck className="w-3.5 h-3.5 text-emerald-400" /> SSoT Δ0.00% Lock
               </span>
               <button
                 onClick={handleToggleZeroDrift}
                 className={`w-9 h-5 rounded-full p-0.5 transition-colors duration-300 cursor-pointer ${
-                  isZeroDrift ? 'bg-emerald-500/30 border border-emerald-500/60 shadow-[0_0_10px_rgba(16,185,129,0.3)]' : 'bg-slate-800 border border-slate-700'
+                  isZeroDrift ? 'bg-emerald-500/30 border-emerald-500/60 shadow-[0_0_10px_rgba(16,185,129,0.3)]' : 'bg-slate-800 border-slate-700'
                 }`}
                 title={isZeroDrift ? 'Zero Drift Enforced' : 'Zero Drift Bypassed'}
               >
@@ -206,13 +206,13 @@ export const SovereignControlDock: React.FC<SovereignControlDockProps> = ({
             </div>
 
             {/* Toggle 2: PQC Mode */}
-            <div className="flex items-center justify-between p-2 rounded-lg bg-slate-900/50 border border-slate-800/80">
+            <div className="flex items-center justify-between p-2 rounded-lg bg-slate-900/50 border-slate-800/80">
               <span className="text-[11px] text-purple-300 flex items-center gap-1.5">
                 <Lock className="w-3.5 h-3.5 text-purple-400" /> PQC Key Spec
               </span>
               <button
                 onClick={handleTogglePqc}
-                className="px-2 py-0.5 rounded text-[10px] font-bold bg-purple-500/20 text-purple-300 border border-purple-500/40 hover:bg-purple-500/30 transition cursor-pointer"
+                className="px-2 py-0.5 rounded text-[10px] font-bold bg-purple-500/20 text-purple-300 border-purple-500/40 hover:bg-purple-500/30 transition cursor-pointer"
                 title="Switch PQC Algorithm Specification"
               >
                 {currentPqc === 'DILITHIUM5' ? 'ML-DSA-87' : 'ML-KEM-1024'}

@@ -278,7 +278,7 @@ export const PerformanceDashboard: React.FC = () => {
   };
 
   return (
-    <div id="performance-benchmark-dashboard" className="w-full bg-[#070a12] border border-[#D4AF37]/30 rounded-xl p-6 font-mono text-[#06B6D4] shadow-2xl space-y-5">
+    <div id="performance-benchmark-dashboard" className="w-full bg-[#070a12] border-[#D4AF37]/30 rounded-xl p-6 font-mono text-[#06B6D4] shadow-2xl space-y-5">
       {/* Top Sovereign Banner */}
       <div className="flex flex-col md:flex-row md:items-center justify-between pb-4 border-b border-[#0a0f1e] gap-3">
         <div>
@@ -309,7 +309,7 @@ export const PerformanceDashboard: React.FC = () => {
           <button
             id="benchmark-refresh-btn"
             onClick={fetchMetrics}
-            className="px-3 py-1.5 bg-[#0a0f1e] border border-[#06B6D4]/40 hover:border-[#06B6D4] text-[#06B6D4] text-xs font-bold rounded transition-colors"
+            className="px-3 py-1.5 bg-[#0a0f1e] border-[#06B6D4]/40 hover:border-[#06B6D4] text-[#06B6D4] text-xs font-bold rounded transition-colors"
           >
             🔄 Refresh
           </button>
@@ -336,12 +336,12 @@ export const PerformanceDashboard: React.FC = () => {
 
       {/* Dynamic Pipeline Runner Animation */}
       {isPipelineRunning && (
-        <div className="p-4 bg-[#0a0f1e] border border-amber-500/50 rounded-lg space-y-2">
+        <div className="p-4 bg-[#0a0f1e] border-amber-500/50 rounded-lg space-y-2">
           <div className="text-xs text-amber-400 font-bold flex items-center justify-between">
             <span>⚡ GitHub Actions Benchmark & Gatekeeper Pipeline Active...</span>
             <span>Step {pipelineStep + 1} / 7</span>
           </div>
-          <div className="w-full bg-slate-900 rounded-full h-2 overflow-hidden border border-slate-700">
+          <div className="w-full bg-slate-900 rounded-full h-2 overflow-hidden border-slate-700">
             <div
               className="bg-amber-400 h-full transition-all duration-300"
               style={{ width: `${((pipelineStep + 1) / 7) * 100}%` }}
@@ -424,7 +424,7 @@ export const PerformanceDashboard: React.FC = () => {
           </div>
 
           {/* Interactive Recharts Line Graph */}
-          <div className="p-4 bg-[#0a0f1e] border border-[#06B6D4]/30 rounded-lg">
+          <div className="p-4 bg-[#0a0f1e] border-[#06B6D4]/30 rounded-lg">
             <div className="h-72 w-full">
               <ResponsiveContainer width="100%" height="100%">
                 <LineChart data={chartData} margin={{ top: 10, right: 30, left: 0, bottom: 0 }}>
@@ -495,7 +495,7 @@ export const PerformanceDashboard: React.FC = () => {
       {activeTab === 'overview' && (
         <div className="space-y-4">
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3">
-            <div className="p-4 bg-[#0a0f1e] border border-[#06B6D4]/30 rounded-lg">
+            <div className="p-4 bg-[#0a0f1e] border-[#06B6D4]/30 rounded-lg">
               <div className="flex items-center justify-between text-xs text-slate-400">
                 <span>⚡ Replay Latency</span>
                 <span className="text-emerald-400 font-bold">100% SLA PASS</span>
@@ -508,7 +508,7 @@ export const PerformanceDashboard: React.FC = () => {
               </div>
             </div>
 
-            <div className="p-4 bg-[#0a0f1e] border border-[#06B6D4]/30 rounded-lg">
+            <div className="p-4 bg-[#0a0f1e] border-[#06B6D4]/30 rounded-lg">
               <div className="flex items-center justify-between text-xs text-slate-400">
                 <span>🧠 Search CPU Reduction</span>
                 <span className="text-[#D4AF37] font-bold">O(1) Regex</span>
@@ -521,7 +521,7 @@ export const PerformanceDashboard: React.FC = () => {
               </div>
             </div>
 
-            <div className="p-4 bg-[#0a0f1e] border border-[#06B6D4]/30 rounded-lg">
+            <div className="p-4 bg-[#0a0f1e] border-[#06B6D4]/30 rounded-lg">
               <div className="flex items-center justify-between text-xs text-slate-400">
                 <span>🧊 Cache Hit Rate</span>
                 <span className="text-[#06B6D4] font-bold">HTTP 304</span>
@@ -534,7 +534,7 @@ export const PerformanceDashboard: React.FC = () => {
               </div>
             </div>
 
-            <div className="p-4 bg-[#0a0f1e] border border-[#06B6D4]/30 rounded-lg">
+            <div className="p-4 bg-[#0a0f1e] border-[#06B6D4]/30 rounded-lg">
               <div className="flex items-center justify-between text-xs text-slate-400">
                 <span>👑 PQC Verify Throughput</span>
                 <span className="text-purple-400 font-bold">FIPS 204</span>
@@ -548,7 +548,7 @@ export const PerformanceDashboard: React.FC = () => {
             </div>
           </div>
 
-          <div className="p-4 bg-[#0a0f1e] border border-[#D4AF37]/20 rounded-lg grid grid-cols-2 sm:grid-cols-4 gap-4 text-xs">
+          <div className="p-4 bg-[#0a0f1e] border-[#D4AF37]/20 rounded-lg grid grid-cols-2 sm:grid-cols-4 gap-4 text-xs">
             <div>
               <span className="text-slate-500 block">Memory Heap Used</span>
               <span className="text-slate-200 font-bold">{data?.metrics.memory_heap_used_mb ?? 48.6} MB</span>
@@ -629,7 +629,7 @@ export const PerformanceDashboard: React.FC = () => {
                       <button
                         key={art}
                         onClick={() => downloadArtifact(art)}
-                        className="px-2 py-0.5 bg-[#070a12] border border-[#06B6D4]/30 hover:border-[#06B6D4] text-[#06B6D4] text-[10px] rounded"
+                        className="px-2 py-0.5 bg-[#070a12] border-[#06B6D4]/30 hover:border-[#06B6D4] text-[#06B6D4] text-[10px] rounded"
                       >
                         📥 {art}
                       </button>
@@ -645,14 +645,14 @@ export const PerformanceDashboard: React.FC = () => {
       {/* Tab: Gatekeeper Thresholds */}
       {activeTab === 'gatekeeper' && (
         <div className="space-y-4">
-          <div className="p-4 bg-[#0a0f1e] border border-[#D4AF37]/30 rounded-lg space-y-3">
+          <div className="p-4 bg-[#0a0f1e] border-[#D4AF37]/30 rounded-lg space-y-3">
             <div className="flex items-center justify-between">
               <h3 className="text-sm font-bold text-[#D4AF37] flex items-center gap-2">
                 <span>🚨 scripts/check-threshold.js Enforcement Engine</span>
               </h3>
               <button
                 onClick={() => setShowConfigModal(!showConfigModal)}
-                className="px-3 py-1 bg-[#070a12] border border-[#D4AF37] text-[#D4AF37] text-xs font-bold rounded"
+                className="px-3 py-1 bg-[#070a12] border-[#D4AF37] text-[#D4AF37] text-xs font-bold rounded"
               >
                 ⚙️ {showConfigModal ? 'Close Config' : 'Configure Thresholds'}
               </button>
@@ -663,32 +663,32 @@ export const PerformanceDashboard: React.FC = () => {
             </p>
 
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3 pt-2 text-xs">
-              <div className="p-3 bg-[#070a12] border border-slate-800 rounded">
+              <div className="p-3 bg-[#070a12] border-slate-800 rounded">
                 <span className="text-slate-400 block">CPU Load Max</span>
                 <span className="text-emerald-400 text-lg font-bold">{thresholds.cpuMax}%</span>
                 <span className="text-[10px] text-slate-500 block">Current: 48% (PASS)</span>
               </div>
-              <div className="p-3 bg-[#070a12] border border-slate-800 rounded">
+              <div className="p-3 bg-[#070a12] border-slate-800 rounded">
                 <span className="text-slate-400 block">Latency Absolute Max</span>
                 <span className="text-emerald-400 text-lg font-bold">{thresholds.latencyMax} ms</span>
                 <span className="text-[10px] text-slate-500 block">Current: 285ms (PASS)</span>
               </div>
-              <div className="p-3 bg-[#070a12] border border-slate-800 rounded">
+              <div className="p-3 bg-[#070a12] border-slate-800 rounded">
                 <span className="text-slate-400 block">Memory Limit</span>
                 <span className="text-emerald-400 text-lg font-bold">{thresholds.memoryMax} MB</span>
                 <span className="text-[10px] text-slate-500 block">Current: 380MB (PASS)</span>
               </div>
-              <div className="p-3 bg-[#070a12] border border-slate-800 rounded">
+              <div className="p-3 bg-[#070a12] border-slate-800 rounded">
                 <span className="text-slate-400 block">Cache Hit Rate Min</span>
                 <span className="text-emerald-400 text-lg font-bold">{thresholds.cacheHitMin}%</span>
                 <span className="text-[10px] text-slate-500 block">Current: 94.2% (PASS)</span>
               </div>
-              <div className="p-3 bg-[#070a12] border border-slate-800 rounded">
+              <div className="p-3 bg-[#070a12] border-slate-800 rounded">
                 <span className="text-slate-400 block">Throughput Max Decrease</span>
                 <span className="text-emerald-400 text-lg font-bold">{thresholds.throughputMinDec}%</span>
                 <span className="text-[10px] text-slate-500 block">Current: +26% (PASS)</span>
               </div>
-              <div className="p-3 bg-[#070a12] border border-slate-800 rounded">
+              <div className="p-3 bg-[#070a12] border-slate-800 rounded">
                 <span className="text-slate-400 block">Override Authority</span>
                 <span className="text-purple-400 text-sm font-bold">10/10 REAL_HSM</span>
                 <span className="text-[10px] text-slate-500 block">FIPS 140-3 Level 4</span>
@@ -701,21 +701,21 @@ export const PerformanceDashboard: React.FC = () => {
       {/* Tab: Sovereign Quantum Governance */}
       {activeTab === 'sovereign_governance' && (
         <div className="space-y-4">
-          <div className="p-4 bg-[#0a0f1e] border border-[#D4AF37]/30 rounded-lg space-y-4 text-xs">
+          <div className="p-4 bg-[#0a0f1e] border-[#D4AF37]/30 rounded-lg space-y-4 text-xs">
             <div className="flex items-center justify-between border-b border-slate-800 pb-2">
               <h3 className="font-bold text-[#D4AF37] text-sm flex items-center gap-2">
                 <span>🏛️ Sovereign Quantum Governance & Hologram Atlas Deployment</span>
               </h3>
               <button
                 onClick={() => setGovernanceActive(true)}
-                className="px-3 py-1 bg-[#D4AF37]/20 border border-[#D4AF37] text-[#D4AF37] font-bold rounded"
+                className="px-3 py-1 bg-[#D4AF37]/20 border-[#D4AF37] text-[#D4AF37] font-bold rounded"
               >
                 {governanceActive ? '✅ ACTIVE (100% GREEN)' : '🚀 Deploy Governance Map'}
               </button>
             </div>
 
             <div className="grid grid-cols-1 md:grid-cols-3 gap-3">
-              <div className="p-3 bg-[#070a12] border border-[#06B6D4]/30 rounded space-y-1">
+              <div className="p-3 bg-[#070a12] border-[#06B6D4]/30 rounded space-y-1">
                 <div className="text-xs font-bold text-[#06B6D4]">🗺️ Sovereign Governance Map</div>
                 <div className="text-[11px] text-slate-300">Block Range: 849198–849203</div>
                 <div className="text-[11px] text-slate-300">Canonical Seals: 14,902</div>
@@ -723,7 +723,7 @@ export const PerformanceDashboard: React.FC = () => {
                 <div className="text-[10px] text-emerald-400 font-bold mt-2">RUNTIME-VERIFIED 100% GREEN</div>
               </div>
 
-              <div className="p-3 bg-[#070a12] border border-purple-500/30 rounded space-y-1">
+              <div className="p-3 bg-[#070a12] border-purple-500/30 rounded space-y-1">
                 <div className="text-xs font-bold text-purple-400">👑 Supreme Sovereign Dome</div>
                 <div className="text-[11px] text-slate-300">Quorum: 100/100 REAL_HSM</div>
                 <div className="text-[11px] text-slate-300">Constitution: Multiverse Layer</div>
@@ -731,7 +731,7 @@ export const PerformanceDashboard: React.FC = () => {
                 <div className="text-[10px] text-emerald-400 font-bold mt-2">ACTIVE SSoT Δ0.00%</div>
               </div>
 
-              <div className="p-3 bg-[#070a12] border border-[#D4AF37]/30 rounded space-y-1">
+              <div className="p-3 bg-[#070a12] border-[#D4AF37]/30 rounded space-y-1">
                 <div className="text-xs font-bold text-[#D4AF37]">💎 Celestial Sovereign Crown</div>
                 <div className="text-[11px] text-slate-300">Crown Jewels: Custody Quorum</div>
                 <div className="text-[11px] text-slate-300">Principal: นายยุทธภูมิ พากเพียร</div>
@@ -748,7 +748,7 @@ export const PerformanceDashboard: React.FC = () => {
 
       {/* Live Benchmark Execution Logs */}
       {testLog.length > 0 && (
-        <div className="mt-4 p-4 bg-black border border-[#06B6D4]/50 rounded-lg text-[11px] font-mono space-y-1">
+        <div className="mt-4 p-4 bg-black border-[#06B6D4]/50 rounded-lg text-[11px] font-mono space-y-1">
           <div className="text-xs text-slate-500 border-b border-slate-800 pb-1 mb-2">
             🖥️ LIVE TEST CONSOLE OUTPUT:
           </div>

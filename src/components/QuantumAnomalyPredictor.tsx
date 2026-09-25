@@ -102,16 +102,16 @@ export const QuantumAnomalyPredictor: React.FC = () => {
   };
 
   return (
-    <div className="bg-zinc-950/90 border border-cyan-500/40 rounded-2xl p-5 space-y-4 shadow-xl backdrop-blur-xl">
+    <div className="bg-zinc-950/90 border-cyan-500/40 rounded-2xl p-5 space-y-4 shadow-xl backdrop-blur-xl">
       {/* Header */}
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 border-b border-zinc-800 pb-3">
         <div className="flex items-center gap-3">
-          <div className="w-9 h-9 rounded-xl bg-cyan-500/15 border border-cyan-500/40 flex items-center justify-center text-cyan-400">
+          <div className="w-9 h-9 rounded-xl bg-cyan-500/15 border-cyan-500/40 flex items-center justify-center text-cyan-400">
             <Zap className="w-5 h-5" />
           </div>
           <div>
             <div className="flex items-center gap-2">
-              <span className="text-[10px] font-mono font-bold px-2 py-0.5 rounded bg-cyan-950/80 text-cyan-300 border border-cyan-700/60">
+              <span className="text-[10px] font-mono font-bold px-2 py-0.5 rounded bg-cyan-950/80 text-cyan-300 border-cyan-700/60">
                 SENTINEL-LEDGER AI INTERCEPTOR
               </span>
               <span className="text-[10px] font-mono text-zinc-400">
@@ -125,7 +125,7 @@ export const QuantumAnomalyPredictor: React.FC = () => {
         </div>
 
         <div className="flex items-center gap-2 text-xs font-mono">
-          <div className="px-2.5 py-1 rounded-lg bg-zinc-900 border border-zinc-800 text-zinc-300">
+          <div className="px-2.5 py-1 rounded-lg bg-zinc-900 border-zinc-800 text-zinc-300">
             Cryo Temp: <span className="text-cyan-400 font-bold">{SSOT.cryoTemp}</span>
           </div>
         </div>
@@ -133,7 +133,7 @@ export const QuantumAnomalyPredictor: React.FC = () => {
 
       {/* Hardware Telemetry Threshold Bar */}
       <div className="grid grid-cols-1 sm:grid-cols-3 gap-3 font-mono text-xs">
-        <div className="p-3 rounded-xl bg-zinc-900/60 border border-zinc-800 space-y-1">
+        <div className="p-3 rounded-xl bg-zinc-900/60 border-zinc-800 space-y-1">
           <div className="text-zinc-400 text-[11px] flex justify-between">
             <span>Core Temp</span>
             <span className="text-emerald-400">Safe (&lt;85.0°C)</span>
@@ -147,7 +147,7 @@ export const QuantumAnomalyPredictor: React.FC = () => {
           </div>
         </div>
 
-        <div className="p-3 rounded-xl bg-zinc-900/60 border border-zinc-800 space-y-1">
+        <div className="p-3 rounded-xl bg-zinc-900/60 border-zinc-800 space-y-1">
           <div className="text-zinc-400 text-[11px] flex justify-between">
             <span>Memory Bandwidth</span>
             <span className="text-cyan-400">&gt; 15.0 GB/s Safe</span>
@@ -161,7 +161,7 @@ export const QuantumAnomalyPredictor: React.FC = () => {
           </div>
         </div>
 
-        <div className="p-3 rounded-xl bg-zinc-900/60 border border-zinc-800 space-y-1">
+        <div className="p-3 rounded-xl bg-zinc-900/60 border-zinc-800 space-y-1">
           <div className="text-zinc-400 text-[11px] flex justify-between">
             <span>QOps Energy Core</span>
             <span className="text-[#FACC15]">851.9 QOps/s</span>
@@ -198,10 +198,10 @@ export const QuantumAnomalyPredictor: React.FC = () => {
                 <span
                   className={`text-[10px] px-1.5 py-0.5 rounded font-bold ${
                     sim.expectedRoute === 'BLOCKED_FRAUD'
-                      ? 'bg-rose-950 text-rose-300 border border-rose-700/60'
+                      ? 'bg-rose-950 text-rose-300 border-rose-700/60'
                       : sim.expectedRoute === 'ESCROW_PENDING'
-                      ? 'bg-amber-950 text-amber-300 border border-amber-700/60'
-                      : 'bg-emerald-950 text-emerald-300 border border-emerald-700/60'
+                      ? 'bg-amber-950 text-amber-300 border-amber-700/60'
+                      : 'bg-emerald-950 text-emerald-300 border-emerald-700/60'
                   }`}
                 >
                   {sim.expectedRoute}
@@ -217,7 +217,7 @@ export const QuantumAnomalyPredictor: React.FC = () => {
 
       {/* Real-Time Simulation Output Terminal */}
       {simulationLog.length > 0 && (
-        <div className="p-3 bg-black/90 border border-zinc-800 rounded-xl space-y-1 font-mono text-[11px] text-zinc-300 max-h-[160px] overflow-y-auto">
+        <div className="p-3 bg-black/90 border-zinc-800 rounded-xl space-y-1 font-mono text-[11px] text-zinc-300 max-h-[160px] overflow-y-auto">
           <div className="text-[10px] text-cyan-400 border-b border-zinc-800 pb-1 flex items-center justify-between">
             <span>TERMINAL &bull; REAL-TIME INTERCEPTION STREAM</span>
             <span>STATUS: {isSimulating ? 'INTERCEPTING...' : 'COMPLETED'}</span>

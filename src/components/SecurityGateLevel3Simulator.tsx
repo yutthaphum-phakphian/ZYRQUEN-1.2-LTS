@@ -90,7 +90,7 @@ export const SecurityGateLevel3Simulator: React.FC = () => {
   return (
     <div className="space-y-6 font-mono text-xs text-zinc-300">
       {/* Header */}
-      <div className="p-6 bg-[#0b0d18] border border-rose-500/30 rounded-2xl shadow-[0_0_30px_rgba(244,63,94,0.1)] relative overflow-hidden">
+      <div className="p-6 bg-[#0b0d18] border-rose-500/30 rounded-2xl shadow-[0_0_30px_rgba(244,63,94,0.1)] relative overflow-hidden">
         <div className="absolute top-0 right-0 p-6 opacity-10 pointer-events-none">
           <ShieldAlert className="w-32 h-32 text-rose-500" />
         </div>
@@ -98,7 +98,7 @@ export const SecurityGateLevel3Simulator: React.FC = () => {
           <div>
             <div className="flex items-center gap-3 mb-2">
               <h2 className="text-xl font-bold text-rose-400 tracking-widest">SECURITY GATE LEVEL 3</h2>
-              <span className="px-2 py-0.5 bg-rose-500/20 text-rose-300 border border-rose-500/50 rounded text-[10px] font-bold tracking-wider">
+              <span className="px-2 py-0.5 bg-rose-500/20 text-rose-300 border-rose-500/50 rounded text-[10px] font-bold tracking-wider">
                 THREAT INJECTION LAB
               </span>
             </div>
@@ -112,7 +112,7 @@ export const SecurityGateLevel3Simulator: React.FC = () => {
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
         {/* Left Column: Controls & Status */}
         <div className="lg:col-span-1 space-y-6">
-          <div className="bg-black/40 border border-white/10 rounded-xl p-5">
+          <div className="bg-black/40 border-white/10 rounded-xl p-5">
             <h3 className="text-sm font-bold text-white mb-4 flex items-center gap-2">
               <Terminal className="w-4 h-4 text-cyan-400" />
               Command Center
@@ -121,7 +121,7 @@ export const SecurityGateLevel3Simulator: React.FC = () => {
             {simState === 'IDLE' && (
               <button 
                 onClick={handleAuthorize}
-                className="w-full py-3 bg-cyan-500/10 hover:bg-cyan-500/20 border border-cyan-500/40 text-cyan-400 rounded-lg font-bold flex items-center justify-center gap-2 transition-colors"
+                className="w-full py-3 bg-cyan-500/10 hover:bg-cyan-500/20 border-cyan-500/40 text-cyan-400 rounded-lg font-bold flex items-center justify-center gap-2 transition-colors"
               >
                 <Fingerprint className="w-5 h-5" />
                 APPROVE OMEGA-1 CLEARANCE
@@ -131,7 +131,7 @@ export const SecurityGateLevel3Simulator: React.FC = () => {
             {simState === 'AUTHORIZED' && (
               <button 
                 onClick={handleInjectThreat}
-                className="w-full py-3 bg-rose-500/20 hover:bg-rose-500/30 border border-rose-500/50 text-rose-400 rounded-lg font-bold flex items-center justify-center gap-2 transition-colors shadow-[0_0_15px_rgba(244,63,94,0.2)] animate-pulse"
+                className="w-full py-3 bg-rose-500/20 hover:bg-rose-500/30 border-rose-500/50 text-rose-400 rounded-lg font-bold flex items-center justify-center gap-2 transition-colors shadow-[0_0_15px_rgba(244,63,94,0.2)] animate-pulse"
               >
                 <ServerCrash className="w-5 h-5" />
                 INJECT TC-03 PHYSICAL THREAT
@@ -144,8 +144,8 @@ export const SecurityGateLevel3Simulator: React.FC = () => {
                 disabled={simState !== 'LOCKED_SECURE'}
                 className={`w-full py-3 rounded-lg font-bold flex items-center justify-center gap-2 transition-colors ${
                   simState === 'LOCKED_SECURE' 
-                    ? 'bg-zinc-800 hover:bg-zinc-700 text-white border border-zinc-600' 
-                    : 'bg-zinc-900 text-zinc-600 border border-zinc-800 cursor-not-allowed'
+                    ? 'bg-zinc-800 hover:bg-zinc-700 text-white border-zinc-600' 
+                    : 'bg-zinc-900 text-zinc-600 border-zinc-800 cursor-not-allowed'
                 }`}
               >
                 <RefreshCcw className="w-5 h-5" />
@@ -154,7 +154,7 @@ export const SecurityGateLevel3Simulator: React.FC = () => {
             )}
           </div>
 
-          <div className="bg-black/40 border border-white/10 rounded-xl p-5 space-y-4">
+          <div className="bg-black/40 border-white/10 rounded-xl p-5 space-y-4">
             <h3 className="text-sm font-bold text-white flex items-center gap-2">
               <Activity className="w-4 h-4 text-emerald-400" />
               Real-time Hardware Status
@@ -188,7 +188,7 @@ export const SecurityGateLevel3Simulator: React.FC = () => {
         {/* Right Column: Console & Trace Replay */}
         <div className="lg:col-span-2 space-y-6">
           {/* Output Console */}
-          <div className="bg-[#050810] border border-white/10 rounded-xl overflow-hidden flex flex-col h-[280px]">
+          <div className="bg-[#050810] border-white/10 rounded-xl overflow-hidden flex flex-col h-[280px]">
             <div className="p-3 bg-white/5 border-b border-white/10 flex justify-between items-center">
               <div className="flex items-center gap-2">
                 <Terminal className="w-4 h-4 text-zinc-400" />
@@ -222,7 +222,7 @@ export const SecurityGateLevel3Simulator: React.FC = () => {
           </div>
 
           {/* Trace Replay Pipeline UI */}
-          <div className="bg-black/40 border border-white/10 rounded-xl p-5">
+          <div className="bg-black/40 border-white/10 rounded-xl p-5">
             <h3 className="text-sm font-bold text-white mb-4 flex items-center justify-between">
               <div className="flex items-center gap-2">
                 <Activity className="w-4 h-4 text-purple-400" />
@@ -257,7 +257,7 @@ export const SecurityGateLevel3Simulator: React.FC = () => {
 
           {/* Report Download */}
           {simState === 'LOCKED_SECURE' && (
-            <div className="p-4 bg-purple-500/10 border border-purple-500/30 rounded-xl flex items-center justify-between animate-in fade-in slide-in-from-bottom-4 duration-500">
+            <div className="p-4 bg-purple-500/10 border-purple-500/30 rounded-xl flex items-center justify-between animate-in fade-in slide-in-from-bottom-4 duration-500">
               <div className="flex items-center gap-3">
                 <div className="p-2 bg-purple-500/20 rounded-lg">
                   <FileText className="w-6 h-6 text-purple-400" />
@@ -267,7 +267,7 @@ export const SecurityGateLevel3Simulator: React.FC = () => {
                   <div className="text-[10px] text-purple-400/70">Generated at {new Date().toISOString()} • SHA-256 Verified</div>
                 </div>
               </div>
-              <button className="px-4 py-2 bg-purple-500/20 hover:bg-purple-500/30 border border-purple-500/50 text-purple-300 rounded-lg text-xs font-bold transition-colors flex items-center gap-2">
+              <button className="px-4 py-2 bg-purple-500/20 hover:bg-purple-500/30 border-purple-500/50 text-purple-300 rounded-lg text-xs font-bold transition-colors flex items-center gap-2">
                 <FileDown className="w-4 h-4" />
                 DOWNLOAD REPORT
               </button>

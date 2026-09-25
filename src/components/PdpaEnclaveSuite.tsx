@@ -138,11 +138,11 @@ export const PdpaEnclaveSuite: React.FC = () => {
   return (
     <div className="space-y-6">
       {/* Overview Banner */}
-      <div className="p-6 rounded-[28px] bg-gradient-to-r from-[#0a1b24] via-[#091522] to-[#080d1a] border border-emerald-500/20 shadow-2xl relative overflow-hidden">
+      <div className="p-6 rounded-[28px] bg-gradient-to-r from-[#0a1b24] via-[#091522] to-[#080d1a] border-emerald-500/20 shadow-2xl relative overflow-hidden">
         <div className="absolute top-0 right-0 w-96 h-96 bg-emerald-500/5 rounded-full blur-3xl pointer-events-none" />
         <div className="flex flex-col lg:flex-row lg:items-center justify-between gap-5 relative z-10">
           <div className="flex items-center gap-4">
-            <div className="w-14 h-14 rounded-2xl bg-emerald-500/15 border border-emerald-500/30 flex items-center justify-center text-emerald-400 shadow-[0_0_25px_rgba(16,185,129,0.2)] shrink-0">
+            <div className="w-14 h-14 rounded-2xl bg-emerald-500/15 border-emerald-500/30 flex items-center justify-center text-emerald-400 shadow-[0_0_25px_rgba(16,185,129,0.2)] shrink-0">
               <ShieldCheck className="w-7 h-7" />
             </div>
             <div>
@@ -150,7 +150,7 @@ export const PdpaEnclaveSuite: React.FC = () => {
                 <h2 className="text-lg sm:text-xl font-bold font-mono text-white">
                   พ.ร.บ. คุ้มครองข้อมูลส่วนบุคคล พ.ศ. ๒๕๖๒ (PDPA Thailand Enclave)
                 </h2>
-                <span className="px-2.5 py-0.5 rounded-full bg-emerald-500/20 text-emerald-300 border border-emerald-500/40 text-[10px] font-mono font-bold">
+                <span className="px-2.5 py-0.5 rounded-full bg-emerald-500/20 text-emerald-300 border-emerald-500/40 text-[10px] font-mono font-bold">
                   PDPA v4.16 FINAL CERTIFIED
                 </span>
               </div>
@@ -161,11 +161,11 @@ export const PdpaEnclaveSuite: React.FC = () => {
           </div>
 
           <div className="flex items-center gap-2 self-start lg:self-center shrink-0">
-            <div className="text-right px-4 py-2 rounded-2xl bg-black/40 border border-white/10">
+            <div className="text-right px-4 py-2 rounded-2xl bg-black/40 border-white/10">
               <div className="text-[10px] font-mono text-zinc-500 uppercase">Plaintext Leakage Invariant</div>
               <div className="text-sm font-mono font-bold text-emerald-400">0.0000% (ZERO LEAK)</div>
             </div>
-            <div className="text-right px-4 py-2 rounded-2xl bg-black/40 border border-white/10">
+            <div className="text-right px-4 py-2 rounded-2xl bg-black/40 border-white/10">
               <div className="text-[10px] font-mono text-zinc-500 uppercase">PDPA Canonical Block</div>
               <div className="text-sm font-mono font-bold text-cyan-400">#{SYSTEM_METADATA.sealedBlock}</div>
             </div>
@@ -205,7 +205,7 @@ export const PdpaEnclaveSuite: React.FC = () => {
 
       {/* Tab Content: ROPA Section 39 */}
       {activeSection === 'ROPA' && (
-        <div className="p-6 rounded-[28px] bg-[#0b0e1a]/85 border border-white/8 backdrop-blur-xl space-y-5">
+        <div className="p-6 rounded-[28px] bg-[#0b0e1a]/85 border-white/8 backdrop-blur-xl space-y-5">
           <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 border-b border-white/8 pb-4">
             <div>
               <h3 className="text-sm sm:text-base font-mono font-bold text-white flex items-center gap-2">
@@ -216,7 +216,7 @@ export const PdpaEnclaveSuite: React.FC = () => {
                 บันทึกรายการกิจกรรมการประมวลผลข้อมูลส่วนบุคคลแบบกระจายศูนย์ สลักลงสู่ Merkle Leaf ภายใต้ Root Hash {SYSTEM_METADATA.merkleRoot.slice(0, 16)}...
               </p>
             </div>
-            <span className="text-xs font-mono text-emerald-400 bg-emerald-950/60 px-3 py-1 rounded-full border border-emerald-500/30 shrink-0">
+            <span className="text-xs font-mono text-emerald-400 bg-emerald-950/60 px-3 py-1 rounded-full border-emerald-500/30 shrink-0">
               4/4 ROPA RECORDS SEALED
             </span>
           </div>
@@ -225,14 +225,14 @@ export const PdpaEnclaveSuite: React.FC = () => {
             {ROPA_REGISTRY.map((ropa) => (
               <div
                 key={ropa.ropaId}
-                className="p-5 rounded-2xl bg-black/40 border border-white/8 hover:border-emerald-500/30 transition-all space-y-3 relative group"
+                className="p-5 rounded-2xl bg-black/40 border-white/8 hover:border-emerald-500/30 transition-all space-y-3 relative group"
               >
                 <div className="flex items-center justify-between">
                   <div className="flex items-center gap-2">
-                    <span className="px-2 py-0.5 rounded-md bg-emerald-500/15 text-emerald-400 font-mono text-xs font-bold border border-emerald-500/30">
+                    <span className="px-2 py-0.5 rounded-md bg-emerald-500/15 text-emerald-400 font-mono text-xs font-bold border-emerald-500/30">
                       {ropa.ropaId}
                     </span>
-                    <span className="text-[10px] font-mono text-cyan-400 bg-cyan-950/60 px-2 py-0.5 rounded-full border border-cyan-500/20">
+                    <span className="text-[10px] font-mono text-cyan-400 bg-cyan-950/60 px-2 py-0.5 rounded-full border-cyan-500/20">
                       {ropa.status}
                     </span>
                   </div>
@@ -283,7 +283,7 @@ export const PdpaEnclaveSuite: React.FC = () => {
 
       {/* Tab Content: Technical Measures Section 37 */}
       {activeSection === 'MEASURES' && (
-        <div className="p-6 rounded-[28px] bg-[#0b0e1a]/85 border border-white/8 backdrop-blur-xl space-y-6">
+        <div className="p-6 rounded-[28px] bg-[#0b0e1a]/85 border-white/8 backdrop-blur-xl space-y-6">
           <div className="border-b border-white/8 pb-4">
             <h3 className="text-sm sm:text-base font-mono font-bold text-white flex items-center gap-2">
               <Lock className="w-4 h-4 text-cyan-400" />
@@ -295,8 +295,8 @@ export const PdpaEnclaveSuite: React.FC = () => {
           </div>
 
           <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-            <div className="p-5 rounded-2xl bg-black/40 border border-white/8 space-y-3">
-              <div className="w-9 h-9 rounded-xl bg-blue-500/15 border border-blue-500/30 flex items-center justify-center text-blue-400">
+            <div className="p-5 rounded-2xl bg-black/40 border-white/8 space-y-3">
+              <div className="w-9 h-9 rounded-xl bg-blue-500/15 border-blue-500/30 flex items-center justify-center text-blue-400">
                 <Lock className="w-4 h-4" />
               </div>
               <h4 className="text-xs font-mono font-bold text-white uppercase tracking-wider">
@@ -305,13 +305,13 @@ export const PdpaEnclaveSuite: React.FC = () => {
               <p className="text-xs text-zinc-400 font-mono leading-relaxed">
                 การเข้ารหัสแบบ Sub-Kelvin Hardware Security Vault ร่วมกับ NIST FIPS 203 (ML-KEM-1024) ข้อมูลทุกแพลอยด์ถูกสุ่มรหัสผ่าน Zero-Knowledge Ephemeral Keys
               </p>
-              <div className="text-[10px] font-mono text-emerald-400 bg-emerald-950/40 px-2 py-1 rounded border border-emerald-500/20">
+              <div className="text-[10px] font-mono text-emerald-400 bg-emerald-950/40 px-2 py-1 rounded border-emerald-500/20">
                 STATUS: ZERO-PLAINTEXT ENFORCED
               </div>
             </div>
 
-            <div className="p-5 rounded-2xl bg-black/40 border border-white/8 space-y-3">
-              <div className="w-9 h-9 rounded-xl bg-cyan-500/15 border border-cyan-500/30 flex items-center justify-center text-cyan-400">
+            <div className="p-5 rounded-2xl bg-black/40 border-white/8 space-y-3">
+              <div className="w-9 h-9 rounded-xl bg-cyan-500/15 border-cyan-500/30 flex items-center justify-center text-cyan-400">
                 <Server className="w-4 h-4" />
               </div>
               <h4 className="text-xs font-mono font-bold text-white uppercase tracking-wider">
@@ -320,13 +320,13 @@ export const PdpaEnclaveSuite: React.FC = () => {
               <p className="text-xs text-zinc-400 font-mono leading-relaxed">
                 โครงสร้าง Merkle Tree 14,902 บล็อก ตรวจสอบความเปลี่ยนแปลงย้อนหลังแบบ 100% Invariant Checking หากมีการดัดแปลงแม้เพียง 1 บิต ระบบจะ Fail-Closed ทันที
               </p>
-              <div className="text-[10px] font-mono text-cyan-400 bg-cyan-950/40 px-2 py-1 rounded border border-cyan-500/20">
+              <div className="text-[10px] font-mono text-cyan-400 bg-cyan-950/40 px-2 py-1 rounded border-cyan-500/20">
                 STATUS: DRIFT = 0.0000% (FROZEN)
               </div>
             </div>
 
-            <div className="p-5 rounded-2xl bg-black/40 border border-white/8 space-y-3">
-              <div className="w-9 h-9 rounded-xl bg-amber-500/15 border border-amber-500/30 flex items-center justify-center text-amber-400">
+            <div className="p-5 rounded-2xl bg-black/40 border-white/8 space-y-3">
+              <div className="w-9 h-9 rounded-xl bg-amber-500/15 border-amber-500/30 flex items-center justify-center text-amber-400">
                 <Globe className="w-4 h-4" />
               </div>
               <h4 className="text-xs font-mono font-bold text-white uppercase tracking-wider">
@@ -335,7 +335,7 @@ export const PdpaEnclaveSuite: React.FC = () => {
               <p className="text-xs text-zinc-400 font-mono leading-relaxed">
                 กลไกอัตโนมัติ Fail-Closed กักกันภัยคุกคามทันทีเมื่ออุณหภูมิคอร์ &gt; 85.0°C หรือแบนด์วิดท์ &lt; 15.0 GB/s พร้อมระบบ Phoenix Auto-Healing
               </p>
-              <div className="text-[10px] font-mono text-amber-400 bg-amber-950/40 px-2 py-1 rounded border border-amber-500/20">
+              <div className="text-[10px] font-mono text-amber-400 bg-amber-950/40 px-2 py-1 rounded border-amber-500/20">
                 TRIGGER: &gt;85.0°C / &lt;15.0 GB/s ARMED
               </div>
             </div>
@@ -345,7 +345,7 @@ export const PdpaEnclaveSuite: React.FC = () => {
 
       {/* Tab Content: Data Subject Rights & Cryptographic Shredding */}
       {activeSection === 'RIGHTS' && (
-        <div className="p-6 rounded-[28px] bg-[#0b0e1a]/85 border border-white/8 backdrop-blur-xl space-y-6">
+        <div className="p-6 rounded-[28px] bg-[#0b0e1a]/85 border-white/8 backdrop-blur-xl space-y-6">
           <div className="border-b border-white/8 pb-4">
             <h3 className="text-sm sm:text-base font-mono font-bold text-white flex items-center gap-2">
               <KeyRound className="w-4 h-4 text-amber-400" />
@@ -358,7 +358,7 @@ export const PdpaEnclaveSuite: React.FC = () => {
 
           <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 items-center">
             <div className="lg:col-span-7 space-y-4">
-              <div className="p-4 rounded-2xl bg-black/40 border border-white/8 space-y-2">
+              <div className="p-4 rounded-2xl bg-black/40 border-white/8 space-y-2">
                 <h4 className="text-xs font-mono font-bold text-white flex items-center gap-2">
                   <Sparkles className="w-3.5 h-3.5 text-amber-400" />
                   <span>หลักการ Cryptographic Shredding (การทำลายกุญแจถอดรหัสเฉพาะบุคคล)</span>
@@ -369,27 +369,27 @@ export const PdpaEnclaveSuite: React.FC = () => {
               </div>
 
               <div className="grid grid-cols-2 gap-3 text-xs font-mono">
-                <div className="p-3 rounded-xl bg-white/5 border border-white/5">
+                <div className="p-3 rounded-xl bg-white/5 border-white/5">
                   <div className="text-zinc-500 text-[10px]">สิทธิการเข้าถึง (Sec 30):</div>
                   <div className="text-emerald-400 font-bold mt-0.5">พร้อมใช้งาน 100% (Instant Proof)</div>
                 </div>
-                <div className="p-3 rounded-xl bg-white/5 border border-white/5">
+                <div className="p-3 rounded-xl bg-white/5 border-white/5">
                   <div className="text-zinc-500 text-[10px]">สิทธิการโอนย้าย (Sec 31):</div>
                   <div className="text-cyan-400 font-bold mt-0.5">W3C DID / JSON-LD Export</div>
                 </div>
-                <div className="p-3 rounded-xl bg-white/5 border border-white/5">
+                <div className="p-3 rounded-xl bg-white/5 border-white/5">
                   <div className="text-zinc-500 text-[10px]">สิทธิคัดค้าน (Sec 32):</div>
                   <div className="text-amber-400 font-bold mt-0.5">Revocation Invariant Active</div>
                 </div>
-                <div className="p-3 rounded-xl bg-white/5 border border-white/5">
+                <div className="p-3 rounded-xl bg-white/5 border-white/5">
                   <div className="text-zinc-500 text-[10px]">กุญแจที่ถูกทำลายไปแล้ว:</div>
                   <div className="text-rose-400 font-bold mt-0.5">{shreddedCount} รายการ (Permanent Noise)</div>
                 </div>
               </div>
             </div>
 
-            <div className="lg:col-span-5 p-5 rounded-2xl bg-gradient-to-b from-rose-950/30 to-black/60 border border-rose-500/30 space-y-4 text-center">
-              <div className="w-12 h-12 rounded-2xl bg-rose-500/20 border border-rose-500/40 flex items-center justify-center text-rose-400 mx-auto">
+            <div className="lg:col-span-5 p-5 rounded-2xl bg-gradient-to-b from-rose-950/30 to-black/60 border-rose-500/30 space-y-4 text-center">
+              <div className="w-12 h-12 rounded-2xl bg-rose-500/20 border-rose-500/40 flex items-center justify-center text-rose-400 mx-auto">
                 <Trash2 className="w-6 h-6" />
               </div>
               <div>
@@ -424,7 +424,7 @@ export const PdpaEnclaveSuite: React.FC = () => {
 
       {/* Tab Content: 72-Hour Breach Drill */}
       {activeSection === 'BREACH_DRILL' && (
-        <div className="p-6 rounded-[28px] bg-[#0b0e1a]/85 border border-white/8 backdrop-blur-xl space-y-6">
+        <div className="p-6 rounded-[28px] bg-[#0b0e1a]/85 border-white/8 backdrop-blur-xl space-y-6">
           <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 border-b border-white/8 pb-4">
             <div>
               <h3 className="text-sm sm:text-base font-mono font-bold text-white flex items-center gap-2">

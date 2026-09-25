@@ -127,12 +127,12 @@ export const LiveReplayVerificationDashboard: React.FC = () => {
   };
 
   return (
-    <div id="live-replay-verification-dashboard-root" className="w-full bg-gray-950 text-gray-100 p-6 rounded-xl border border-gray-800 space-y-6">
+    <div id="live-replay-verification-dashboard-root" className="w-full bg-gray-950 text-gray-100 p-6 rounded-xl border-gray-800 space-y-6">
       {/* Header & Control Bar */}
       <div className="flex flex-col lg:flex-row justify-between items-start lg:items-center border-b border-gray-800 pb-4 gap-4">
         <div>
           <div className="flex items-center gap-2 flex-wrap">
-            <span className="bg-cyan-500/20 text-cyan-400 border border-cyan-500/40 text-xs font-semibold px-2.5 py-0.5 rounded flex items-center gap-1.5">
+            <span className="bg-cyan-500/20 text-cyan-400 border-cyan-500/40 text-xs font-semibold px-2.5 py-0.5 rounded flex items-center gap-1.5">
               <Zap className="w-3.5 h-3.5" />
               12-STAGE FORENSIC PLAYBACK PIPELINE
             </span>
@@ -168,7 +168,7 @@ export const LiveReplayVerificationDashboard: React.FC = () => {
             type="button"
             onClick={stepNext}
             disabled={isPlaying || currentStageIdx >= stages.length - 1}
-            className="px-3 py-2 bg-gray-800 hover:bg-gray-700 disabled:opacity-40 text-xs font-mono rounded text-gray-200 border border-gray-700 flex items-center gap-1 cursor-pointer"
+            className="px-3 py-2 bg-gray-800 hover:bg-gray-700 disabled:opacity-40 text-xs font-mono rounded text-gray-200 border-gray-700 flex items-center gap-1 cursor-pointer"
           >
             <SkipForward className="w-3.5 h-3.5" />
             <span>Step (+1 Stage)</span>
@@ -177,7 +177,7 @@ export const LiveReplayVerificationDashboard: React.FC = () => {
             id="btn-reset-replay"
             type="button"
             onClick={handleReset}
-            className="px-3 py-2 bg-gray-800 hover:bg-gray-700 text-xs font-mono rounded text-gray-300 border border-gray-700 flex items-center gap-1 cursor-pointer"
+            className="px-3 py-2 bg-gray-800 hover:bg-gray-700 text-xs font-mono rounded text-gray-300 border-gray-700 flex items-center gap-1 cursor-pointer"
           >
             <RotateCcw className="w-3.5 h-3.5" />
             <span>Reset</span>
@@ -187,7 +187,7 @@ export const LiveReplayVerificationDashboard: React.FC = () => {
 
       {/* KPI Metrics */}
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
-        <div id="metric-total-replay-time" className="bg-gray-900 p-3.5 rounded-lg border border-gray-800">
+        <div id="metric-total-replay-time" className="bg-gray-900 p-3.5 rounded-lg border-gray-800">
           <div className="text-[11px] font-mono text-gray-400 flex items-center gap-1">
             <Clock className="w-3.5 h-3.5 text-cyan-400" />
             TOTAL REPLAY TIME
@@ -196,7 +196,7 @@ export const LiveReplayVerificationDashboard: React.FC = () => {
             {totalElapsedTimeMs.toFixed(2)} <span className="text-xs text-gray-500">ms</span>
           </div>
         </div>
-        <div id="metric-sla-benchmark" className="bg-gray-900 p-3.5 rounded-lg border border-gray-800">
+        <div id="metric-sla-benchmark" className="bg-gray-900 p-3.5 rounded-lg border-gray-800">
           <div className="text-[11px] font-mono text-gray-400 flex items-center gap-1">
             <Activity className="w-3.5 h-3.5 text-emerald-400" />
             SLA BENCHMARK STATUS
@@ -205,7 +205,7 @@ export const LiveReplayVerificationDashboard: React.FC = () => {
             {totalElapsedTimeMs <= TARGET_SLA_LIMIT_MS ? 'PASS (SLA MET)' : 'SLA EXCEEDED'}
           </div>
         </div>
-        <div id="metric-stages-completed" className="bg-gray-900 p-3.5 rounded-lg border border-gray-800">
+        <div id="metric-stages-completed" className="bg-gray-900 p-3.5 rounded-lg border-gray-800">
           <div className="text-[11px] font-mono text-gray-400 flex items-center gap-1">
             <CheckCircle2 className="w-3.5 h-3.5 text-slate-300" />
             STAGES COMPLETED
@@ -214,7 +214,7 @@ export const LiveReplayVerificationDashboard: React.FC = () => {
             {currentStageIdx + 1} / {stages.length}
           </div>
         </div>
-        <div id="metric-invariant-verdict" className="bg-gray-900 p-3.5 rounded-lg border border-gray-800">
+        <div id="metric-invariant-verdict" className="bg-gray-900 p-3.5 rounded-lg border-gray-800">
           <div className="text-[11px] font-mono text-gray-400 flex items-center gap-1">
             <ShieldCheck className="w-3.5 h-3.5 text-emerald-400" />
             INVARIANT VERDICT
@@ -247,7 +247,7 @@ export const LiveReplayVerificationDashboard: React.FC = () => {
                 <span
                   className={`w-7 h-7 flex items-center justify-center rounded-full font-mono text-xs font-bold ${
                     isPassed
-                      ? 'bg-emerald-500/20 text-emerald-400 border border-emerald-500/40'
+                      ? 'bg-emerald-500/20 text-emerald-400 border-emerald-500/40'
                       : 'bg-gray-800 text-gray-400'
                   }`}
                 >

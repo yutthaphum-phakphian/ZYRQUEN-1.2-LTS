@@ -674,13 +674,13 @@ export const CitadelCanvas: React.FC<CitadelCanvasProps> = ({
       {/* In-Canvas Telemetry HUD (Top Left) */}
       {showHud && (
         <div className="absolute top-3 left-3 pointer-events-none flex flex-col gap-1 text-[10px] font-mono">
-          <div className="flex items-center gap-1.5 bg-black/60 backdrop-blur-md px-2.5 py-1 rounded-lg border border-white/10 text-cyan-400">
+          <div className="flex items-center gap-1.5 bg-black/60 backdrop-blur-md px-2.5 py-1 rounded-lg border-white/10 text-cyan-400">
             <span className="w-1.5 h-1.5 rounded-full bg-cyan-400 animate-pulse" />
             <span className="font-semibold tracking-wider">CITADEL LATTICE 3D</span>
             <span className="text-zinc-500">•</span>
             <span className="text-zinc-300">12V / 30E / 20F</span>
           </div>
-          <div className="flex items-center gap-2 bg-black/40 backdrop-blur-md px-2 py-0.5 rounded-md border border-white/5 text-zinc-400 text-[9px]">
+          <div className="flex items-center gap-2 bg-black/40 backdrop-blur-md px-2 py-0.5 rounded-md border-white/5 text-zinc-400 text-[9px]">
             <span>YAW: {rotationTelemetry.yaw}°</span>
             <span>PITCH: {rotationTelemetry.pitch}°</span>
             <span>ZOOM: {rotationTelemetry.zoom}%</span>
@@ -690,7 +690,7 @@ export const CitadelCanvas: React.FC<CitadelCanvasProps> = ({
 
       {/* In-Canvas HUD Controls (Top Right) */}
       {showHud && (
-        <div className="absolute top-3 right-3 flex items-center gap-1.5 bg-black/60 backdrop-blur-md p-1 rounded-xl border border-white/10 shadow-lg">
+        <div className="absolute top-3 right-3 flex items-center gap-1.5 bg-black/60 backdrop-blur-md p-1 rounded-xl border-white/10 shadow-lg">
           <button
             onClick={() => handleZoom(0.15)}
             title="Zoom In"
@@ -741,7 +741,7 @@ export const CitadelCanvas: React.FC<CitadelCanvasProps> = ({
 
       {/* Interactive Node Inspection Card (Bottom Left) */}
       {hoveredNode && (
-        <div className="absolute bottom-3 left-3 bg-[#0a0d1a]/90 backdrop-blur-md border border-cyan-500/30 px-3 py-2 rounded-xl text-xs shadow-xl animate-in fade-in zoom-in-95 pointer-events-none">
+        <div className="absolute bottom-3 left-3 bg-[#0a0d1a]/90 backdrop-blur-md border-cyan-500/30 px-3 py-2 rounded-xl text-xs shadow-xl animate-in fade-in zoom-in-95 pointer-events-none">
           <div className="flex items-center gap-1.5 text-amber-400 font-mono text-[10px] uppercase font-bold">
             <Sparkles className="w-3 h-3 text-amber-400" />
             <span>{hoveredNode.label}</span>
@@ -755,7 +755,7 @@ export const CitadelCanvas: React.FC<CitadelCanvasProps> = ({
       )}
 
       {/* Orbit Gesture Helper Tooltip (Bottom Right) */}
-      <div className="absolute bottom-3 right-3 text-[9px] font-mono text-zinc-500 bg-black/50 backdrop-blur-sm px-2.5 py-1 rounded-md border border-white/5 pointer-events-none hidden sm:flex items-center gap-1.5">
+      <div className="absolute bottom-3 right-3 text-[9px] font-mono text-zinc-500 bg-black/50 backdrop-blur-sm px-2.5 py-1 rounded-md border-white/5 pointer-events-none hidden sm:flex items-center gap-1.5">
         <Compass className="w-3 h-3 text-cyan-400 animate-spin" style={{ animationDuration: '10s' }} />
         <span>Drag to rotate • Scroll to zoom</span>
       </div>

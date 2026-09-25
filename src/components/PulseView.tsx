@@ -5,13 +5,13 @@ import { useTelemetry } from '../hooks/useTelemetry';
 export const PulseView: React.FC = () => {
   const { snapshots } = useTelemetry();
   return (
-    <div id="quantum-pulse-view" className="bg-[#0A0F1E] p-6 rounded-xl text-cyan-300 border border-cyan-500/30 shadow-2xl font-mono">
+    <div id="quantum-pulse-view" className="bg-[#0A0F1E] p-6 rounded-xl text-cyan-300 border-cyan-500/30 shadow-2xl font-mono">
       <div className="flex items-center justify-between mb-4">
         <h2 className="text-emerald-400 text-base font-bold flex items-center gap-2">
           <span>📈</span>
           <span>Quantum Entropy Drift</span>
         </h2>
-        <span className="text-[11px] px-2 py-0.5 rounded bg-emerald-950 text-emerald-300 border border-emerald-500/30">
+        <span className="text-[11px] px-2 py-0.5 rounded bg-emerald-950 text-emerald-300 border-emerald-500/30">
           Safe Bounds: [26, 78]
         </span>
       </div>

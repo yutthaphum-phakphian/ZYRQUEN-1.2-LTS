@@ -407,16 +407,16 @@ Sovereign Principal Architect (#EP-SOVEREIGN-01)
   };
 
   return (
-    <div className="bg-slate-900 border border-slate-800 rounded-2xl p-6 shadow-2xl backdrop-blur space-y-6">
+    <div className="bg-slate-900 border-slate-800 rounded-2xl p-6 shadow-2xl backdrop-blur space-y-6">
       {/* Top Header */}
       <div className="flex flex-wrap items-center justify-between gap-4 border-b border-slate-800 pb-4">
         <div className="flex items-center gap-3">
-          <div className="p-2.5 bg-amber-950/80 border border-amber-700/60 rounded-xl text-amber-400">
+          <div className="p-2.5 bg-amber-950/80 border-amber-700/60 rounded-xl text-amber-400">
             <Scale className="w-5 h-5" />
           </div>
           <div>
             <div className="flex items-center gap-2">
-              <span className="text-[10px] font-mono font-bold px-2 py-0.5 rounded bg-amber-950 text-amber-300 border border-amber-800">
+              <span className="text-[10px] font-mono font-bold px-2 py-0.5 rounded bg-amber-950 text-amber-300 border-amber-800">
                 COURT-ADMISSIBLE DOSSIER
               </span>
               <span className="text-xs font-mono text-emerald-400 font-bold">
@@ -433,7 +433,7 @@ Sovereign Principal Architect (#EP-SOVEREIGN-01)
           <button
             type="button"
             onClick={handleExportMasterMarkdownDossier}
-            className="px-3.5 py-2 bg-slate-950 hover:bg-slate-800 border border-amber-500/50 text-amber-300 rounded-xl text-xs font-mono font-bold flex items-center gap-1.5 transition cursor-pointer shadow-md"
+            className="px-3.5 py-2 bg-slate-950 hover:bg-slate-800 border-amber-500/50 text-amber-300 rounded-xl text-xs font-mono font-bold flex items-center gap-1.5 transition cursor-pointer shadow-md"
             title="Download Master Forensic Dossier as Court-Ready Markdown"
           >
             <Download className="w-4 h-4 text-amber-400" />
@@ -452,22 +452,22 @@ Sovereign Principal Architect (#EP-SOVEREIGN-01)
 
       {/* Top 4 Badges */}
       <div className="grid grid-cols-2 sm:grid-cols-4 gap-3 font-mono text-center">
-        <div className="bg-slate-950/80 border border-amber-800/60 p-3 rounded-xl">
+        <div className="bg-slate-950/80 border-amber-800/60 p-3 rounded-xl">
           <span className="text-[9px] text-slate-400 uppercase tracking-wider block">Certificate ID</span>
           <span className="text-xs font-bold text-amber-300 mt-0.5 block truncate">ZQ-GOLD-DEP-849202-3908</span>
           <span className="text-[9px] text-slate-500">PDF/A-3 Archival Grade</span>
         </div>
-        <div className="bg-slate-950/80 border border-slate-800 p-3 rounded-xl">
+        <div className="bg-slate-950/80 border-slate-800 p-3 rounded-xl">
           <span className="text-[9px] text-slate-400 uppercase tracking-wider block">Genesis Block</span>
           <span className="text-xs font-bold text-cyan-300 mt-0.5 block">#849,202</span>
           <span className="text-[9px] text-slate-500">14,902 Canonical Seals</span>
         </div>
-        <div className="bg-slate-950/80 border border-slate-800 p-3 rounded-xl">
+        <div className="bg-slate-950/80 border-slate-800 p-3 rounded-xl">
           <span className="text-[9px] text-slate-400 uppercase tracking-wider block">Deca-Key Quorum</span>
           <span className="text-xs font-bold text-emerald-300 mt-0.5 block">10/10 Real HSM</span>
           <span className="text-[9px] text-slate-500">FIPS 140-3 L4 Certified</span>
         </div>
-        <div className="bg-slate-950/80 border border-slate-800 p-3 rounded-xl">
+        <div className="bg-slate-950/80 border-slate-800 p-3 rounded-xl">
           <span className="text-[9px] text-slate-400 uppercase tracking-wider block">Sovereign Treasury</span>
           <span className="text-xs font-bold text-amber-400 mt-0.5 block">฿2,399,222,000</span>
           <span className="text-[9px] text-slate-500">Variance: ฿0.00 (0.00%)</span>
@@ -563,23 +563,23 @@ Sovereign Principal Architect (#EP-SOVEREIGN-01)
             return (
               <div
                 key={ex.id}
-                className="bg-slate-950/80 border border-slate-800 rounded-xl p-4 space-y-2.5 hover:border-amber-700/60 transition"
+                className="bg-slate-950/80 border-slate-800 rounded-xl p-4 space-y-2.5 hover:border-amber-700/60 transition"
               >
                 <div className="flex items-start justify-between gap-2">
                   <div>
-                    <span className="text-[10px] font-bold px-2 py-0.5 rounded bg-amber-950 text-amber-300 border border-amber-800">
+                    <span className="text-[10px] font-bold px-2 py-0.5 rounded bg-amber-950 text-amber-300 border-amber-800">
                       {ex.id}
                     </span>
                     <h4 className="text-sm font-bold text-white mt-1.5">{ex.name}</h4>
                   </div>
-                  <span className="text-[9px] px-2 py-0.5 rounded bg-emerald-950 text-emerald-400 border border-emerald-800 font-bold shrink-0">
+                  <span className="text-[9px] px-2 py-0.5 rounded bg-emerald-950 text-emerald-400 border-emerald-800 font-bold shrink-0">
                     {ex.status}
                   </span>
                 </div>
 
                 <p className="text-xs text-slate-300 leading-relaxed font-sans">{ex.description}</p>
 
-                <div className="p-2.5 bg-slate-900 rounded-lg border border-slate-800 text-[11px] space-y-1">
+                <div className="p-2.5 bg-slate-900 rounded-lg border-slate-800 text-[11px] space-y-1">
                   <div className="flex justify-between text-slate-500">
                     <span>Cryptographic Anchor:</span>
                     <span className="text-amber-400 font-bold">{ex.statute}</span>
@@ -596,7 +596,7 @@ Sovereign Principal Architect (#EP-SOVEREIGN-01)
 
       {/* Tab 2: 10/10 Council Signers Roster */}
       {activeTab === 'signers' && (
-        <div className="bg-slate-950/80 border border-slate-800 rounded-xl p-4 font-mono space-y-3">
+        <div className="bg-slate-950/80 border-slate-800 rounded-xl p-4 font-mono space-y-3">
           <div className="flex items-center justify-between border-b border-slate-800 pb-2">
             <h4 className="text-xs font-bold text-amber-300 uppercase tracking-wider">
               10/10 Deca-Key Real HSM Quorum (Unanimous Consensus)
@@ -606,7 +606,7 @@ Sovereign Principal Architect (#EP-SOVEREIGN-01)
 
           <div className="grid grid-cols-1 md:grid-cols-2 gap-2.5 max-h-[380px] overflow-y-auto pr-1">
             {DECA_KEY_SIGNERS.map((s, idx) => (
-              <div key={s.id} className="p-3 bg-slate-900 rounded-xl border border-slate-800 text-xs space-y-1">
+              <div key={s.id} className="p-3 bg-slate-900 rounded-xl border-slate-800 text-xs space-y-1">
                 <div className="flex items-center justify-between">
                   <span className="font-bold text-white">{idx + 1}. {s.name}</span>
                   <span className="text-[10px] font-bold text-cyan-400">{s.id}</span>
@@ -622,7 +622,7 @@ Sovereign Principal Architect (#EP-SOVEREIGN-01)
 
       {/* Tab 3: 12-Stage Deterministic Trace Replay */}
       {activeTab === 'trace' && (
-        <div className="bg-slate-950/80 border border-slate-800 rounded-xl p-4 font-mono space-y-3">
+        <div className="bg-slate-950/80 border-slate-800 rounded-xl p-4 font-mono space-y-3">
           <div className="flex items-center justify-between border-b border-slate-800 pb-2">
             <h4 className="text-xs font-bold text-cyan-300 uppercase tracking-wider">
               12-Stage Deterministic Trace Replay Pipeline (142 ms Bit-for-bit Guarantee)
@@ -632,7 +632,7 @@ Sovereign Principal Architect (#EP-SOVEREIGN-01)
 
           <div className="space-y-1.5 max-h-[380px] overflow-y-auto pr-1">
             {REPLAY_12_STAGES.map((st) => (
-              <div key={st.stage} className="p-2.5 bg-slate-900 rounded-xl border border-slate-800 flex items-center justify-between text-xs">
+              <div key={st.stage} className="p-2.5 bg-slate-900 rounded-xl border-slate-800 flex items-center justify-between text-xs">
                 <div className="flex items-center gap-3">
                   <span className="font-bold text-cyan-400 shrink-0">{st.code}</span>
                   <div>
@@ -649,7 +649,7 @@ Sovereign Principal Architect (#EP-SOVEREIGN-01)
 
       {/* Tab 4: Treasury Breakdown & Physical Guarantee */}
       {activeTab === 'treasury' && (
-        <div className="bg-slate-950/80 border border-slate-800 rounded-xl p-4 font-mono space-y-4">
+        <div className="bg-slate-950/80 border-slate-800 rounded-xl p-4 font-mono space-y-4">
           <div className="flex items-center justify-between border-b border-slate-800 pb-2">
             <h4 className="text-xs font-bold text-amber-300 uppercase tracking-wider">
               Sovereign Treasury Vault (คลังสินทรัพย์สัจธรรม ฿2,399,222,000 THB)
@@ -658,29 +658,29 @@ Sovereign Principal Architect (#EP-SOVEREIGN-01)
           </div>
 
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3 text-center">
-            <div className="p-3 bg-slate-900 rounded-xl border border-slate-800">
+            <div className="p-3 bg-slate-900 rounded-xl border-slate-800">
               <span className="text-[9px] text-slate-400 uppercase tracking-wider block">THB-SOV Reserve</span>
               <span className="text-sm font-bold text-white mt-1 block">฿1,490,200,000</span>
               <span className="text-[9px] text-slate-500">55% of Treasury Pool</span>
             </div>
-            <div className="p-3 bg-slate-900 rounded-xl border border-slate-800">
+            <div className="p-3 bg-slate-900 rounded-xl border-slate-800">
               <span className="text-[9px] text-slate-400 uppercase tracking-wider block">Physical Gold (LBMA)</span>
               <span className="text-sm font-bold text-amber-400 mt-1 block">14,902.00 oz</span>
               <span className="text-[9px] text-slate-500">฿610.98M • 30% Pool</span>
             </div>
-            <div className="p-3 bg-slate-900 rounded-xl border border-slate-800">
+            <div className="p-3 bg-slate-900 rounded-xl border-slate-800">
               <span className="text-[9px] text-slate-400 uppercase tracking-wider block">RWA Contracts</span>
               <span className="text-sm font-bold text-cyan-400 mt-1 block">400 รายการ</span>
               <span className="text-[9px] text-slate-500">฿298.04M (Ω601-Ω1000)</span>
             </div>
-            <div className="p-3 bg-slate-900 rounded-xl border border-slate-800">
+            <div className="p-3 bg-slate-900 rounded-xl border-slate-800">
               <span className="text-[9px] text-slate-400 uppercase tracking-wider block">Sovereign Gas Pool</span>
               <span className="text-sm font-bold text-emerald-400 mt-1 block">฿12,500,000</span>
               <span className="text-[9px] text-slate-500">Core Gas Budget</span>
             </div>
           </div>
 
-          <div className="p-3 bg-slate-900 rounded-xl border border-slate-800 text-xs text-slate-300 font-sans leading-relaxed">
+          <div className="p-3 bg-slate-900 rounded-xl border-slate-800 text-xs text-slate-300 font-sans leading-relaxed">
             <b>การค้ำประกันเชิงสถิต (Canonical Fiduciary Protection):</b> สินทรัพย์ทั้งหมดถูกผูกกับบล็อกเจเนซิส #849,202 
             โดยมีกลไกป้องกันการกลืนกลายพันธุ์ (Anti-Griefing ZYR-02 Shield) และสามารถตรวจสอบได้แบบเรียลไทม์ผ่าน Bank of Thailand Anchor Ledger 
             และ Sovereign Bullion Depository ZQ-GOLD
@@ -690,7 +690,7 @@ Sovereign Principal Architect (#EP-SOVEREIGN-01)
 
       {/* Tab 5: 22 Master Verification Gates & 10 Invariants */}
       {activeTab === 'gates' && (
-        <div className="bg-slate-950/80 border border-slate-800 rounded-xl p-4 font-mono space-y-5">
+        <div className="bg-slate-950/80 border-slate-800 rounded-xl p-4 font-mono space-y-5">
           {/* Master Gates 22/22 */}
           <div className="space-y-3">
             <div className="flex items-center justify-between border-b border-slate-800 pb-2">
@@ -703,11 +703,11 @@ Sovereign Principal Architect (#EP-SOVEREIGN-01)
 
             <div className="grid grid-cols-1 md:grid-cols-2 gap-2 max-h-[300px] overflow-y-auto pr-1">
               {MASTER_GATES_22.map((g) => (
-                <div key={g.id} className="p-2.5 bg-slate-900 rounded-xl border border-slate-800 text-xs flex justify-between items-start gap-2">
+                <div key={g.id} className="p-2.5 bg-slate-900 rounded-xl border-slate-800 text-xs flex justify-between items-start gap-2">
                   <div>
                     <div className="flex items-center gap-2">
                       <span className="font-bold text-white text-[11px]">{g.name}</span>
-                      <span className="text-[9px] px-1.5 py-0.2 rounded bg-emerald-950 text-emerald-400 border border-emerald-800 font-bold">
+                      <span className="text-[9px] px-1.5 py-0.2 rounded bg-emerald-950 text-emerald-400 border-emerald-800 font-bold">
                         {g.status}
                       </span>
                     </div>
@@ -732,7 +732,7 @@ Sovereign Principal Architect (#EP-SOVEREIGN-01)
 
             <div className="grid grid-cols-1 md:grid-cols-2 gap-2 max-h-[260px] overflow-y-auto pr-1">
               {INVARIANTS_10.map((inv) => (
-                <div key={inv.code} className="p-2.5 bg-slate-900 rounded-xl border border-slate-800 text-xs space-y-1">
+                <div key={inv.code} className="p-2.5 bg-slate-900 rounded-xl border-slate-800 text-xs space-y-1">
                   <div className="flex items-center justify-between">
                     <span className="font-bold text-amber-300 text-[11px]">{inv.code}</span>
                     <span className="text-[9px] text-emerald-400 font-mono">{inv.scanFrequency}</span>
@@ -749,7 +749,7 @@ Sovereign Principal Architect (#EP-SOVEREIGN-01)
 
       {/* Tab 6: PQC Architecture (FIPS 203, 204, 205) */}
       {activeTab === 'pqc' && (
-        <div className="bg-slate-950/80 border border-slate-800 rounded-xl p-4 font-mono space-y-4">
+        <div className="bg-slate-950/80 border-slate-800 rounded-xl p-4 font-mono space-y-4">
           <div className="flex items-center justify-between border-b border-slate-800 pb-2">
             <h4 className="text-xs font-bold text-indigo-300 uppercase tracking-wider">
               NIST Post-Quantum Cryptography Architecture (FIPS 203, 204, 205)
@@ -758,10 +758,10 @@ Sovereign Principal Architect (#EP-SOVEREIGN-01)
           </div>
 
           <div className="grid grid-cols-1 md:grid-cols-3 gap-3">
-            <div className="p-3 bg-slate-900 rounded-xl border border-slate-800 space-y-2">
+            <div className="p-3 bg-slate-900 rounded-xl border-slate-800 space-y-2">
               <div className="flex items-center justify-between">
                 <span className="text-xs font-bold text-cyan-300">NIST FIPS 204</span>
-                <span className="text-[9px] px-1.5 py-0.5 rounded bg-cyan-950 text-cyan-400 border border-cyan-800">PRIMARY SIGNATURE</span>
+                <span className="text-[9px] px-1.5 py-0.5 rounded bg-cyan-950 text-cyan-400 border-cyan-800">PRIMARY SIGNATURE</span>
               </div>
               <div className="text-sm font-bold text-white">ML-DSA-87 (Dilithium-5)</div>
               <p className="text-[11px] text-slate-300 font-sans leading-relaxed">
@@ -770,10 +770,10 @@ Sovereign Principal Architect (#EP-SOVEREIGN-01)
               <div className="text-[9px] text-slate-500 font-mono">Kernel Implementation: Safe Harbor Active</div>
             </div>
 
-            <div className="p-3 bg-slate-900 rounded-xl border border-slate-800 space-y-2">
+            <div className="p-3 bg-slate-900 rounded-xl border-slate-800 space-y-2">
               <div className="flex items-center justify-between">
                 <span className="text-xs font-bold text-emerald-300">NIST FIPS 203</span>
-                <span className="text-[9px] px-1.5 py-0.5 rounded bg-emerald-950 text-emerald-400 border border-emerald-800">KEY EXCHANGE</span>
+                <span className="text-[9px] px-1.5 py-0.5 rounded bg-emerald-950 text-emerald-400 border-emerald-800">KEY EXCHANGE</span>
               </div>
               <div className="text-sm font-bold text-white">ML-KEM-1024 (Kyber)</div>
               <p className="text-[11px] text-slate-300 font-sans leading-relaxed">
@@ -782,10 +782,10 @@ Sovereign Principal Architect (#EP-SOVEREIGN-01)
               <div className="text-[9px] text-slate-500 font-mono">Throughput: 851.9 QOps/s Coherence: 99.992%</div>
             </div>
 
-            <div className="p-3 bg-slate-900 rounded-xl border border-slate-800 space-y-2">
+            <div className="p-3 bg-slate-900 rounded-xl border-slate-800 space-y-2">
               <div className="flex items-center justify-between">
                 <span className="text-xs font-bold text-violet-300">NIST FIPS 205</span>
-                <span className="text-[9px] px-1.5 py-0.5 rounded bg-violet-950 text-violet-400 border border-violet-800">STATELESS HASH</span>
+                <span className="text-[9px] px-1.5 py-0.5 rounded bg-violet-950 text-violet-400 border-violet-800">STATELESS HASH</span>
               </div>
               <div className="text-sm font-bold text-white">SLH-DSA (SPHINCS+)</div>
               <p className="text-[11px] text-slate-300 font-sans leading-relaxed">
@@ -795,7 +795,7 @@ Sovereign Principal Architect (#EP-SOVEREIGN-01)
             </div>
           </div>
 
-          <div className="p-3 bg-red-950/30 border border-red-800/40 rounded-xl flex items-center gap-3">
+          <div className="p-3 bg-red-950/30 border-red-800/40 rounded-xl flex items-center gap-3">
             <div className="p-2 bg-red-900/50 rounded-lg text-red-400 font-bold text-xs">PURGED</div>
             <div className="text-xs font-sans text-slate-300">
               <b>ถอดถอนอัลกอริทึม HAWK อย่างถาวร:</b> ผ่านการตรวจสอบ Gate 5 เพื่อป้องกันช่องโหว่การกู้คืนกุญแจลับตามข้อเสนอแนะความปลอดภัยสากล
@@ -805,13 +805,13 @@ Sovereign Principal Architect (#EP-SOVEREIGN-01)
       )}
 
       {/* Attestation Signature Box */}
-      <div className="p-4 bg-gradient-to-r from-amber-950/40 via-slate-950 to-slate-900 border border-amber-800/40 rounded-xl flex flex-wrap items-center justify-between gap-4 font-mono text-xs">
+      <div className="p-4 bg-gradient-to-r from-amber-950/40 via-slate-950 to-slate-900 border-amber-800/40 rounded-xl flex flex-wrap items-center justify-between gap-4 font-mono text-xs">
         <div>
           <span className="text-[10px] text-slate-400 uppercase tracking-wider block">Certified Court Attestation by:</span>
           <span className="text-sm font-bold text-amber-300">นายยุทธภูมิ พากเพียร (#EP-SOVEREIGN-01)</span>
           <span className="text-[10px] text-slate-400 block mt-0.5">Sovereign Principal Architect • Time Lock: 2026-08-18 05:05:30 ICT</span>
         </div>
-        <div className="flex items-center gap-2 text-emerald-400 font-bold bg-emerald-950/60 px-3 py-1.5 rounded-lg border border-emerald-800">
+        <div className="flex items-center gap-2 text-emerald-400 font-bold bg-emerald-950/60 px-3 py-1.5 rounded-lg border-emerald-800">
           <CheckCircle2 className="w-4 h-4" />
           <span>STATUTORY SAFE HARBOR ACTIVE</span>
         </div>

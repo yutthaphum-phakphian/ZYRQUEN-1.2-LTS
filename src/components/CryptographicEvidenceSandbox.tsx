@@ -151,12 +151,12 @@ export const CryptographicEvidenceSandbox: React.FC<CryptographicEvidenceSandbox
 
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center p-4 sm:p-6 bg-black/85 backdrop-blur-md overflow-y-auto">
-      <div className="w-full max-w-5xl rounded-3xl bg-[#070a12] border border-cyan-500/30 shadow-[0_0_50px_rgba(6,182,212,0.15)] flex flex-col max-h-[90vh] overflow-hidden text-zinc-200 font-mono">
+      <div className="w-full max-w-5xl rounded-3xl bg-[#070a12] border-cyan-500/30 shadow-[0_0_50px_rgba(6,182,212,0.15)] flex flex-col max-h-[90vh] overflow-hidden text-zinc-200 font-mono">
         
         {/* Header Bar */}
         <div className="p-5 sm:p-6 border-b border-white/10 bg-[#0a0f1e] flex items-center justify-between gap-4">
           <div className="flex items-center gap-3">
-            <div className="w-10 h-10 rounded-2xl bg-cyan-500/10 border border-cyan-500/30 flex items-center justify-center text-cyan-400">
+            <div className="w-10 h-10 rounded-2xl bg-cyan-500/10 border-cyan-500/30 flex items-center justify-center text-cyan-400">
               <Binary className="w-5 h-5" />
             </div>
             <div>
@@ -164,7 +164,7 @@ export const CryptographicEvidenceSandbox: React.FC<CryptographicEvidenceSandbox
                 <h3 className="text-base font-bold text-white tracking-wide">
                   Real Cryptographic Evidence & Circuit Breaker Engine
                 </h3>
-                <span className="px-2 py-0.5 rounded-full bg-emerald-500/15 border border-emerald-500/30 text-[10px] text-emerald-300 font-bold">
+                <span className="px-2 py-0.5 rounded-full bg-emerald-500/15 border-emerald-500/30 text-[10px] text-emerald-300 font-bold">
                   SSoT Δ0.00%
                 </span>
               </div>
@@ -180,7 +180,7 @@ export const CryptographicEvidenceSandbox: React.FC<CryptographicEvidenceSandbox
                 playTone(400, 0.04);
                 onClose();
               }}
-              className="px-3 py-1.5 rounded-xl bg-white/5 hover:bg-white/10 text-zinc-400 hover:text-white border border-white/10 text-xs transition-colors"
+              className="px-3 py-1.5 rounded-xl bg-white/5 hover:bg-white/10 text-zinc-400 hover:text-white border-white/10 text-xs transition-colors"
             >
               Close
             </button>
@@ -266,7 +266,7 @@ export const CryptographicEvidenceSandbox: React.FC<CryptographicEvidenceSandbox
           {/* TAB 1: BLAKE3 + SHA3-512 FUSION */}
           {activeTab === 'dual-fusion' && (
             <div className="space-y-5">
-              <div className="p-4 rounded-2xl bg-[#0a0f1e] border border-white/10 space-y-3">
+              <div className="p-4 rounded-2xl bg-[#0a0f1e] border-white/10 space-y-3">
                 <div className="text-xs font-bold text-cyan-400 uppercase tracking-wider flex items-center gap-2">
                   <ShieldCheck className="w-4 h-4 text-cyan-400" />
                   <span>Leaf Node Cryptographic Dual-Hash Fusion Pipeline</span>
@@ -282,7 +282,7 @@ export const CryptographicEvidenceSandbox: React.FC<CryptographicEvidenceSandbox
                       type="text"
                       value={fusionInput}
                       onChange={(e) => setFusionInput(e.target.value)}
-                      className="flex-1 px-3 py-2 rounded-xl bg-black/60 border border-white/10 text-xs text-white font-mono focus:border-cyan-500 focus:outline-none"
+                      className="flex-1 px-3 py-2 rounded-xl bg-black/60 border-white/10 text-xs text-white font-mono focus:border-cyan-500 focus:outline-none"
                     />
                     <button
                       onClick={handleRecalculateFusion}
@@ -297,7 +297,7 @@ export const CryptographicEvidenceSandbox: React.FC<CryptographicEvidenceSandbox
 
               {/* Output Results Grid */}
               <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-                <div className="p-4 rounded-2xl bg-black/50 border border-white/10 space-y-2">
+                <div className="p-4 rounded-2xl bg-black/50 border-white/10 space-y-2">
                   <div className="flex items-center justify-between">
                     <span className="text-[11px] font-bold text-cyan-300">BLAKE3 256-bit Digest</span>
                     <button
@@ -307,13 +307,13 @@ export const CryptographicEvidenceSandbox: React.FC<CryptographicEvidenceSandbox
                       {copiedKey === 'b3' ? <Check className="w-3.5 h-3.5 text-emerald-400" /> : <Copy className="w-3.5 h-3.5" />}
                     </button>
                   </div>
-                  <div className="p-2.5 rounded-xl bg-black/80 border border-white/5 font-mono text-[11px] text-zinc-300 break-all select-all">
+                  <div className="p-2.5 rounded-xl bg-black/80 border-white/5 font-mono text-[11px] text-zinc-300 break-all select-all">
                     {dualHashResult.blake3Digest}
                   </div>
                   <div className="text-[10px] text-zinc-500">Tree-hashing mode with high throughput</div>
                 </div>
 
-                <div className="p-4 rounded-2xl bg-black/50 border border-white/10 space-y-2">
+                <div className="p-4 rounded-2xl bg-black/50 border-white/10 space-y-2">
                   <div className="flex items-center justify-between">
                     <span className="text-[11px] font-bold text-purple-300">SHA3-512 Digest</span>
                     <button
@@ -323,13 +323,13 @@ export const CryptographicEvidenceSandbox: React.FC<CryptographicEvidenceSandbox
                       {copiedKey === 's3' ? <Check className="w-3.5 h-3.5 text-emerald-400" /> : <Copy className="w-3.5 h-3.5" />}
                     </button>
                   </div>
-                  <div className="p-2.5 rounded-xl bg-black/80 border border-white/5 font-mono text-[11px] text-zinc-300 break-all select-all max-h-16 overflow-y-auto">
+                  <div className="p-2.5 rounded-xl bg-black/80 border-white/5 font-mono text-[11px] text-zinc-300 break-all select-all max-h-16 overflow-y-auto">
                     {dualHashResult.sha3Digest}
                   </div>
                   <div className="text-[10px] text-zinc-500">NIST Keccak sponge construction</div>
                 </div>
 
-                <div className="p-4 rounded-2xl bg-gradient-to-br from-cyan-950/30 to-black border border-cyan-500/40 space-y-2 shadow-lg">
+                <div className="p-4 rounded-2xl bg-gradient-to-br from-cyan-950/30 to-black border-cyan-500/40 space-y-2 shadow-lg">
                   <div className="flex items-center justify-between">
                     <span className="text-[11px] font-bold text-emerald-300 flex items-center gap-1.5">
                       <CheckCircle2 className="w-3.5 h-3.5 text-emerald-400" />
@@ -342,7 +342,7 @@ export const CryptographicEvidenceSandbox: React.FC<CryptographicEvidenceSandbox
                       {copiedKey === 'fuse' ? <Check className="w-3.5 h-3.5 text-emerald-400" /> : <Copy className="w-3.5 h-3.5" />}
                     </button>
                   </div>
-                  <div className="p-2.5 rounded-xl bg-black/80 border border-cyan-500/30 font-mono text-[11px] text-cyan-200 break-all select-all">
+                  <div className="p-2.5 rounded-xl bg-black/80 border-cyan-500/30 font-mono text-[11px] text-cyan-200 break-all select-all">
                     {dualHashResult.fusedDigest}
                   </div>
                   <div className="text-[10px] text-emerald-400/90 font-bold">100% Deterministic & Collision-Proof</div>
@@ -350,7 +350,7 @@ export const CryptographicEvidenceSandbox: React.FC<CryptographicEvidenceSandbox
               </div>
 
               {/* File Intake Verification */}
-              <div className="p-4 rounded-2xl bg-[#0a0f1e] border border-white/10 space-y-3">
+              <div className="p-4 rounded-2xl bg-[#0a0f1e] border-white/10 space-y-3">
                 <div className="text-xs font-bold text-amber-300 flex items-center gap-2">
                   <Upload className="w-4 h-4 text-amber-400" />
                   <span>External Evidence Intake — Byte-Level SHA-256 Verifier</span>
@@ -360,7 +360,7 @@ export const CryptographicEvidenceSandbox: React.FC<CryptographicEvidenceSandbox
                 </p>
 
                 <div className="flex flex-col sm:flex-row items-center gap-4 pt-1">
-                  <label className="px-4 py-2.5 rounded-xl bg-white/5 hover:bg-white/10 border border-white/10 text-xs font-bold text-zinc-200 cursor-pointer transition-colors flex items-center gap-2">
+                  <label className="px-4 py-2.5 rounded-xl bg-white/5 hover:bg-white/10 border-white/10 text-xs font-bold text-zinc-200 cursor-pointer transition-colors flex items-center gap-2">
                     <Upload className="w-4 h-4 text-cyan-400" />
                     <span>Select File to Compute SHA-256</span>
                     <input type="file" onChange={handleFileUpload} className="hidden" />
@@ -375,7 +375,7 @@ export const CryptographicEvidenceSandbox: React.FC<CryptographicEvidenceSandbox
                 </div>
 
                 {intakeByteSha && (
-                  <div className="p-3 rounded-xl bg-black/70 border border-emerald-500/30 space-y-1">
+                  <div className="p-3 rounded-xl bg-black/70 border-emerald-500/30 space-y-1">
                     <div className="flex items-center justify-between text-[11px] text-emerald-300 font-bold">
                       <span>Computed Byte-Level SHA-256:</span>
                       <button
@@ -395,7 +395,7 @@ export const CryptographicEvidenceSandbox: React.FC<CryptographicEvidenceSandbox
           {/* TAB 2: 12-STAGE TRACE */}
           {activeTab === '12-stages' && (
             <div className="space-y-4">
-              <div className="p-4 rounded-2xl bg-[#0a0f1e] border border-white/10 space-y-2">
+              <div className="p-4 rounded-2xl bg-[#0a0f1e] border-white/10 space-y-2">
                 <div className="text-xs font-bold text-cyan-400 uppercase tracking-wider">
                   12-Stage Mathematical Hash Flow (SENSE &rarr; REPLAY)
                 </div>
@@ -408,7 +408,7 @@ export const CryptographicEvidenceSandbox: React.FC<CryptographicEvidenceSandbox
                     type="text"
                     value={stageInput}
                     onChange={(e) => setStageInput(e.target.value)}
-                    className="flex-1 px-3 py-2 rounded-xl bg-black/60 border border-white/10 text-xs text-white font-mono"
+                    className="flex-1 px-3 py-2 rounded-xl bg-black/60 border-white/10 text-xs text-white font-mono"
                   />
                   <button
                     onClick={handleRecalculateTraces}
@@ -423,7 +423,7 @@ export const CryptographicEvidenceSandbox: React.FC<CryptographicEvidenceSandbox
                 {traces.map((stg) => (
                   <div
                     key={stg.stageNumber}
-                    className="p-3.5 rounded-2xl bg-black/40 border border-white/10 space-y-2 hover:border-cyan-500/40 transition-colors"
+                    className="p-3.5 rounded-2xl bg-black/40 border-white/10 space-y-2 hover:border-cyan-500/40 transition-colors"
                   >
                     <div className="flex items-center justify-between text-xs">
                       <span className="font-bold text-white flex items-center gap-1.5">
@@ -432,7 +432,7 @@ export const CryptographicEvidenceSandbox: React.FC<CryptographicEvidenceSandbox
                         </span>
                         {stg.stageName}
                       </span>
-                      <span className="text-[10px] px-2 py-0.5 rounded bg-emerald-500/15 text-emerald-300 border border-emerald-500/30">
+                      <span className="text-[10px] px-2 py-0.5 rounded bg-emerald-500/15 text-emerald-300 border-emerald-500/30">
                         {stg.status} ({stg.latencyMs}ms)
                       </span>
                     </div>
@@ -456,7 +456,7 @@ export const CryptographicEvidenceSandbox: React.FC<CryptographicEvidenceSandbox
           {/* TAB 3: DYNAMIC MERKLE TREE */}
           {activeTab === 'merkle-calc' && (
             <div className="space-y-5">
-              <div className="p-4 rounded-2xl bg-[#0a0f1e] border border-white/10 space-y-2">
+              <div className="p-4 rounded-2xl bg-[#0a0f1e] border-white/10 space-y-2">
                 <div className="text-xs font-bold text-cyan-400 uppercase tracking-wider">
                   Real Merkle Tree Aggregation & Genesis Recalculation
                 </div>
@@ -472,14 +472,14 @@ export const CryptographicEvidenceSandbox: React.FC<CryptographicEvidenceSandbox
                     rows={8}
                     value={leafInputList}
                     onChange={(e) => setLeafInputList(e.target.value)}
-                    className="w-full p-3 rounded-xl bg-black/60 border border-white/10 text-xs font-mono text-cyan-300 focus:border-cyan-500 focus:outline-none"
+                    className="w-full p-3 rounded-xl bg-black/60 border-white/10 text-xs font-mono text-cyan-300 focus:border-cyan-500 focus:outline-none"
                   />
                   <div className="text-[11px] text-zinc-500">
                     Total Active Leaves: <strong className="text-zinc-200">{dynamicMerkleResult.leafCount}</strong> | Tree Depth: <strong className="text-zinc-200">{dynamicMerkleResult.treeDepth}</strong>
                   </div>
                 </div>
 
-                <div className="p-5 rounded-2xl bg-black/60 border border-cyan-500/30 space-y-4 flex flex-col justify-between shadow-xl">
+                <div className="p-5 rounded-2xl bg-black/60 border-cyan-500/30 space-y-4 flex flex-col justify-between shadow-xl">
                   <div className="space-y-2">
                     <div className="flex items-center justify-between">
                       <span className="text-xs font-bold text-emerald-300 flex items-center gap-1.5">
@@ -493,7 +493,7 @@ export const CryptographicEvidenceSandbox: React.FC<CryptographicEvidenceSandbox
                         {copiedKey === 'root' ? <Check className="w-3.5 h-3.5 text-emerald-400" /> : <Copy className="w-3.5 h-3.5" />}
                       </button>
                     </div>
-                    <div className="p-3 rounded-xl bg-black/90 border border-white/10 font-mono text-xs text-cyan-200 break-all select-all">
+                    <div className="p-3 rounded-xl bg-black/90 border-white/10 font-mono text-xs text-cyan-200 break-all select-all">
                       {dynamicMerkleResult.rootHash}
                     </div>
                   </div>
@@ -514,13 +514,13 @@ export const CryptographicEvidenceSandbox: React.FC<CryptographicEvidenceSandbox
           {/* TAB 4: CH-06 CIRCUIT BREAKER */}
           {activeTab === 'ch06-safety' && (
             <div className="space-y-5">
-              <div className="p-4 rounded-2xl bg-[#0a0f1e] border border-amber-500/30 space-y-3">
+              <div className="p-4 rounded-2xl bg-[#0a0f1e] border-amber-500/30 space-y-3">
                 <div className="flex items-center justify-between">
                   <div className="text-xs font-bold text-amber-300 uppercase tracking-wider flex items-center gap-2">
                     <Zap className="w-4 h-4 text-amber-400" />
                     <span>CH-06-SAFETY Circuit Breaker Patch (Report 2026-09-10)</span>
                   </div>
-                  <span className="px-2.5 py-0.5 rounded-full bg-emerald-500/15 border border-emerald-500/30 text-emerald-300 text-[10px] font-bold">
+                  <span className="px-2.5 py-0.5 rounded-full bg-emerald-500/15 border-emerald-500/30 text-emerald-300 text-[10px] font-bold">
                     PATCHED ACTIVE
                   </span>
                 </div>
@@ -530,19 +530,19 @@ export const CryptographicEvidenceSandbox: React.FC<CryptographicEvidenceSandbox
                 </p>
 
                 <div className="grid grid-cols-2 sm:grid-cols-4 gap-2 pt-2 text-[11px] font-mono">
-                  <div className="p-2 rounded-lg bg-black/50 border border-white/5">
+                  <div className="p-2 rounded-lg bg-black/50 border-white/5">
                     <span className="text-zinc-500 block text-[10px]">Baseline</span>
                     <strong className="text-cyan-300">{ZYRQUEN_ENTROPY_CONFIG.baselineKBps.toLocaleString()} KBps</strong>
                   </div>
-                  <div className="p-2 rounded-lg bg-black/50 border border-white/5">
+                  <div className="p-2 rounded-lg bg-black/50 border-white/5">
                     <span className="text-zinc-500 block text-[10px]">StdDev (&sigma;)</span>
                     <strong className="text-zinc-200">&plusmn;{ZYRQUEN_ENTROPY_CONFIG.stdDev} KBps</strong>
                   </div>
-                  <div className="p-2 rounded-lg bg-black/50 border border-white/5">
+                  <div className="p-2 rounded-lg bg-black/50 border-white/5">
                     <span className="text-zinc-500 block text-[10px]">Critical Threshold</span>
                     <strong className="text-amber-300">{ZYRQUEN_ENTROPY_CONFIG.criticalThresholdKBps.toLocaleString()} KBps</strong>
                   </div>
-                  <div className="p-2 rounded-lg bg-black/50 border border-white/5">
+                  <div className="p-2 rounded-lg bg-black/50 border-white/5">
                     <span className="text-zinc-500 block text-[10px]">Stability Index</span>
                     <strong className="text-emerald-300">{ZYRQUEN_ENTROPY_CONFIG.stabilityIndex}%</strong>
                   </div>
@@ -550,7 +550,7 @@ export const CryptographicEvidenceSandbox: React.FC<CryptographicEvidenceSandbox
               </div>
 
               {/* Interactive Rate Simulator */}
-              <div className="p-5 rounded-2xl bg-black/60 border border-white/10 space-y-4">
+              <div className="p-5 rounded-2xl bg-black/60 border-white/10 space-y-4">
                 <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2">
                   <label className="text-xs text-zinc-300 font-bold">
                     Interactive Rate Injection Simulator ({testRate.toLocaleString()} KBps):
@@ -558,19 +558,19 @@ export const CryptographicEvidenceSandbox: React.FC<CryptographicEvidenceSandbox
                   <div className="flex gap-2">
                     <button
                       onClick={() => setTestRate(11264)}
-                      className="px-2.5 py-1 rounded-lg bg-white/5 hover:bg-white/10 text-[11px] text-zinc-300 border border-white/10"
+                      className="px-2.5 py-1 rounded-lg bg-white/5 hover:bg-white/10 text-[11px] text-zinc-300 border-white/10"
                     >
                       Baseline (11,264)
                     </button>
                     <button
                       onClick={() => setTestRate(14600)}
-                      className="px-2.5 py-1 rounded-lg bg-cyan-500/20 hover:bg-cyan-500/30 text-[11px] text-cyan-300 border border-cyan-500/30"
+                      className="px-2.5 py-1 rounded-lg bg-cyan-500/20 hover:bg-cyan-500/30 text-[11px] text-cyan-300 border-cyan-500/30"
                     >
                       TRNG Surge (14,600)
                     </button>
                     <button
                       onClick={() => setTestRate(16500)}
-                      className="px-2.5 py-1 rounded-lg bg-rose-500/20 hover:bg-rose-500/30 text-[11px] text-rose-300 border border-rose-500/30"
+                      className="px-2.5 py-1 rounded-lg bg-rose-500/20 hover:bg-rose-500/30 text-[11px] text-rose-300 border-rose-500/30"
                     >
                       Over-Limit (16,500)
                     </button>
@@ -591,15 +591,15 @@ export const CryptographicEvidenceSandbox: React.FC<CryptographicEvidenceSandbox
                 <div className="p-4 rounded-xl border transition-all flex items-center justify-between gap-4">
                   <div className="flex items-center gap-3">
                     {ch06AlertTriggered ? (
-                      <div className="w-10 h-10 rounded-xl bg-rose-500/20 border border-rose-500/40 flex items-center justify-center text-rose-400">
+                      <div className="w-10 h-10 rounded-xl bg-rose-500/20 border-rose-500/40 flex items-center justify-center text-rose-400">
                         <AlertTriangle className="w-5 h-5 animate-pulse" />
                       </div>
                     ) : isAuthorizedSurge ? (
-                      <div className="w-10 h-10 rounded-xl bg-cyan-500/20 border border-cyan-500/40 flex items-center justify-center text-cyan-300">
+                      <div className="w-10 h-10 rounded-xl bg-cyan-500/20 border-cyan-500/40 flex items-center justify-center text-cyan-300">
                         <Sparkles className="w-5 h-5" />
                       </div>
                     ) : (
-                      <div className="w-10 h-10 rounded-xl bg-emerald-500/20 border border-emerald-500/40 flex items-center justify-center text-emerald-400">
+                      <div className="w-10 h-10 rounded-xl bg-emerald-500/20 border-emerald-500/40 flex items-center justify-center text-emerald-400">
                         <CheckCircle2 className="w-5 h-5" />
                       </div>
                     )}
@@ -639,7 +639,7 @@ export const CryptographicEvidenceSandbox: React.FC<CryptographicEvidenceSandbox
           {/* TAB 5: NIST FIPS 204 PQC SEAL */}
           {activeTab === 'pqc-seal' && (
             <div className="space-y-4">
-              <div className="p-4 rounded-2xl bg-[#0a0f1e] border border-purple-500/30 space-y-2">
+              <div className="p-4 rounded-2xl bg-[#0a0f1e] border-purple-500/30 space-y-2">
                 <div className="text-xs font-bold text-purple-300 uppercase tracking-wider flex items-center gap-2">
                   <Lock className="w-4 h-4 text-purple-400" />
                   <span>NIST FIPS 204 (ML-DSA-87 / Dilithium-5) Post-Quantum Signature Sealing</span>
@@ -649,21 +649,21 @@ export const CryptographicEvidenceSandbox: React.FC<CryptographicEvidenceSandbox
                 </p>
               </div>
 
-              <div className="p-5 rounded-2xl bg-black/60 border border-white/10 space-y-3 font-mono text-xs">
+              <div className="p-5 rounded-2xl bg-black/60 border-white/10 space-y-3 font-mono text-xs">
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 text-[11px]">
-                  <div className="p-2.5 rounded-xl bg-black/40 border border-white/5">
+                  <div className="p-2.5 rounded-xl bg-black/40 border-white/5">
                     <span className="text-zinc-500 block">Standard:</span>
                     <strong className="text-purple-300">{quantumAttestation.algorithm}</strong>
                   </div>
-                  <div className="p-2.5 rounded-xl bg-black/40 border border-white/5">
+                  <div className="p-2.5 rounded-xl bg-black/40 border-white/5">
                     <span className="text-zinc-500 block">Principal Architect:</span>
                     <strong className="text-white">{quantumAttestation.principal} ({quantumAttestation.passportId})</strong>
                   </div>
-                  <div className="p-2.5 rounded-xl bg-black/40 border border-white/5">
+                  <div className="p-2.5 rounded-xl bg-black/40 border-white/5">
                     <span className="text-zinc-500 block">HSM Quorum:</span>
                     <strong className="text-emerald-300">{quantumAttestation.hsmQuorum}</strong>
                   </div>
-                  <div className="p-2.5 rounded-xl bg-black/40 border border-white/5">
+                  <div className="p-2.5 rounded-xl bg-black/40 border-white/5">
                     <span className="text-zinc-500 block">Timestamp:</span>
                     <strong className="text-zinc-300">{quantumAttestation.timestamp}</strong>
                   </div>
@@ -679,7 +679,7 @@ export const CryptographicEvidenceSandbox: React.FC<CryptographicEvidenceSandbox
                       {copiedKey === 'pqc' ? <Check className="w-3.5 h-3.5 text-emerald-400" /> : <Copy className="w-3.5 h-3.5" />}
                     </button>
                   </div>
-                  <div className="p-3 rounded-xl bg-black/90 border border-purple-500/30 text-purple-200 break-all select-all text-xs">
+                  <div className="p-3 rounded-xl bg-black/90 border-purple-500/30 text-purple-200 break-all select-all text-xs">
                     {quantumAttestation.signature}
                   </div>
                 </div>

@@ -688,12 +688,12 @@ export const ChamberDetailPanel: React.FC<ChamberDetailPanelProps> = ({
                   <span className="truncate">QUANTUM DRIFT WARNING: ENTROPY {(entropyLevel * 100).toFixed(1)}% EXCEEDS 85.0% SAFETY THRESHOLD</span>
                 </div>
                 <div className="flex items-center gap-2 shrink-0">
-                  <span className="text-[10px] px-2 py-0.5 rounded bg-purple-500/30 border border-purple-400/50 text-purple-300 font-bold">
+                  <span className="text-[10px] px-2 py-0.5 rounded bg-purple-500/30 border-purple-400/50 text-purple-300 font-bold">
                     FAIL-CLOSED HARMONIC
                   </span>
                   <button
                     onClick={handleToggleDriftDrill}
-                    className="text-[10px] px-2 py-0.5 rounded bg-black/40 hover:bg-black/60 border border-purple-400/40 text-purple-200 cursor-pointer"
+                    className="text-[10px] px-2 py-0.5 rounded bg-black/40 hover:bg-black/60 border-purple-400/40 text-purple-200 cursor-pointer"
                     title="Toggle drift drill state"
                   >
                     RESET DRILL
@@ -706,13 +706,13 @@ export const ChamberDetailPanel: React.FC<ChamberDetailPanelProps> = ({
             <div className="p-5 sm:p-6 border-b border-white/10 flex items-start justify-between gap-4 bg-[#0a0f22]/90 backdrop-blur-lg">
               <div className="space-y-1.5 min-w-0 flex-1">
                 <div className="flex flex-wrap items-center gap-2">
-                  <span className="px-2.5 py-0.5 rounded-lg bg-cyan-500/20 text-cyan-300 border border-cyan-500/40 text-xs font-bold flex items-center gap-1.5">
+                  <span className="px-2.5 py-0.5 rounded-lg bg-cyan-500/20 text-cyan-300 border-cyan-500/40 text-xs font-bold flex items-center gap-1.5">
                     <Terminal className="w-3.5 h-3.5 text-cyan-400" />
                     <span>CHAMBER {chamber.chamberNumber}</span>
                   </span>
 
                   {isComparisonMode && (
-                    <span className="px-2.5 py-0.5 rounded-lg bg-purple-500/20 text-purple-300 border border-purple-500/40 text-xs font-bold flex items-center gap-1.5 animate-pulse">
+                    <span className="px-2.5 py-0.5 rounded-lg bg-purple-500/20 text-purple-300 border-purple-500/40 text-xs font-bold flex items-center gap-1.5 animate-pulse">
                       <ArrowRightLeft className="w-3.5 h-3.5 text-purple-400" />
                       <span>VS CHAMBER {compareChamber.chamberNumber}</span>
                     </span>
@@ -728,7 +728,7 @@ export const ChamberDetailPanel: React.FC<ChamberDetailPanelProps> = ({
                     {chamber.truthLabel}
                   </span>
 
-                  <span className="px-2 py-0.5 rounded text-[10px] bg-blue-500/10 text-blue-300 border border-white/10">
+                  <span className="px-2 py-0.5 rounded text-[10px] bg-blue-500/10 text-blue-300 border-white/10">
                     {chamber.category}
                   </span>
 
@@ -789,7 +789,7 @@ export const ChamberDetailPanel: React.FC<ChamberDetailPanelProps> = ({
                 <button
                   onClick={handleDownloadEvidence}
                   disabled={isExportingEvidenceJSON}
-                  className="px-3 py-1.5 rounded-xl bg-gradient-to-r from-emerald-600/30 to-teal-600/30 hover:from-emerald-600/50 hover:to-teal-600/50 border border-emerald-500/40 text-emerald-200 text-xs font-bold flex items-center gap-1.5 transition shadow-[0_0_12px_rgba(16,185,129,0.2)] cursor-pointer"
+                  className="px-3 py-1.5 rounded-xl bg-gradient-to-r from-emerald-600/30 to-teal-600/30 hover:from-emerald-600/50 hover:to-teal-600/50 border-emerald-500/40 text-emerald-200 text-xs font-bold flex items-center gap-1.5 transition shadow-[0_0_12px_rgba(16,185,129,0.2)] cursor-pointer"
                   title="ดาวน์โหลดไฟล์ประจักษ์พยานดิจิทัล (Download Chamber Telemetry Evidence JSON)"
                 >
                   <Download className={`w-3.5 h-3.5 text-emerald-400 ${isExportingEvidenceJSON ? 'animate-bounce' : ''}`} />
@@ -802,7 +802,7 @@ export const ChamberDetailPanel: React.FC<ChamberDetailPanelProps> = ({
                     playAuditChime();
                     setShowPdfReportModal(true);
                   }}
-                  className="px-3 py-1.5 rounded-xl bg-gradient-to-r from-cyan-600/30 to-blue-600/30 hover:from-cyan-600/50 hover:to-blue-600/50 border border-cyan-500/40 text-cyan-200 text-xs font-bold flex items-center gap-1.5 transition shadow-sm cursor-pointer"
+                  className="px-3 py-1.5 rounded-xl bg-gradient-to-r from-cyan-600/30 to-blue-600/30 hover:from-cyan-600/50 hover:to-blue-600/50 border-cyan-500/40 text-cyan-200 text-xs font-bold flex items-center gap-1.5 transition shadow-sm cursor-pointer"
                   title="Generate Formatted PDF Summary Report"
                 >
                   <FileText className="w-3.5 h-3.5 text-cyan-400" />
@@ -815,7 +815,7 @@ export const ChamberDetailPanel: React.FC<ChamberDetailPanelProps> = ({
                       playTone(500, 0.04);
                       onExitCompareMode();
                     }}
-                    className="px-2.5 py-1.5 rounded-xl bg-purple-500/20 border border-purple-500/40 text-purple-300 hover:bg-purple-500/30 text-xs font-bold transition cursor-pointer"
+                    className="px-2.5 py-1.5 rounded-xl bg-purple-500/20 border-purple-500/40 text-purple-300 hover:bg-purple-500/30 text-xs font-bold transition cursor-pointer"
                   >
                     EXIT COMPARE
                   </button>
@@ -827,7 +827,7 @@ export const ChamberDetailPanel: React.FC<ChamberDetailPanelProps> = ({
                     playTone(480, 0.04);
                     onClose();
                   }}
-                  className="p-2 rounded-xl bg-white/5 border border-white/10 text-zinc-400 hover:text-white hover:bg-white/10 transition shrink-0 cursor-pointer"
+                  className="p-2 rounded-xl bg-white/5 border-white/10 text-zinc-400 hover:text-white hover:bg-white/10 transition shrink-0 cursor-pointer"
                   title="Close Chamber Detail Panel"
                 >
                   <X className="w-5 h-5" />
@@ -903,7 +903,7 @@ export const ChamberDetailPanel: React.FC<ChamberDetailPanelProps> = ({
               
               {/* SIDE-BY-SIDE COMPARISON VIEW (When compareChamber is present) */}
               {isComparisonMode && compareChamber && (
-                <div className="p-4 rounded-2xl bg-gradient-to-r from-purple-950/30 via-indigo-950/20 to-cyan-950/30 border border-purple-500/40 space-y-4 shadow-[0_0_30px_rgba(168,85,247,0.15)]">
+                <div className="p-4 rounded-2xl bg-gradient-to-r from-purple-950/30 via-indigo-950/20 to-cyan-950/30 border-purple-500/40 space-y-4 shadow-[0_0_30px_rgba(168,85,247,0.15)]">
                   <div className="flex items-center justify-between border-b border-white/10 pb-2">
                     <div className="flex items-center gap-2">
                       <Columns className="w-4 h-4 text-purple-400" />
@@ -911,7 +911,7 @@ export const ChamberDetailPanel: React.FC<ChamberDetailPanelProps> = ({
                         CHAMBER PERFORMANCE & MANIFEST COMPARISON
                       </span>
                     </div>
-                    <span className="text-[10px] text-purple-300 px-2 py-0.5 rounded bg-purple-500/20 border border-purple-500/40">
+                    <span className="text-[10px] text-purple-300 px-2 py-0.5 rounded bg-purple-500/20 border-purple-500/40">
                       DUAL TELEMETRY MATRIX
                     </span>
                   </div>
@@ -919,7 +919,7 @@ export const ChamberDetailPanel: React.FC<ChamberDetailPanelProps> = ({
                   {/* Dual Columns Grid */}
                   <div className="grid grid-cols-1 md:grid-cols-2 gap-4 text-xs font-mono">
                     {/* Primary Chamber (Left) */}
-                    <div className="p-3.5 rounded-xl bg-cyan-950/20 border border-cyan-500/30 space-y-2.5">
+                    <div className="p-3.5 rounded-xl bg-cyan-950/20 border-cyan-500/30 space-y-2.5">
                       <div className="flex items-center justify-between border-b border-cyan-500/20 pb-1.5">
                         <span className="font-bold text-cyan-300">CHAMBER {chamber.chamberNumber} (PRIMARY)</span>
                         <span className="text-[10px] text-emerald-400">{chamber.truthLabel}</span>
@@ -955,7 +955,7 @@ export const ChamberDetailPanel: React.FC<ChamberDetailPanelProps> = ({
                     </div>
 
                     {/* Compare Chamber (Right) */}
-                    <div className="p-3.5 rounded-xl bg-purple-950/20 border border-purple-500/30 space-y-2.5">
+                    <div className="p-3.5 rounded-xl bg-purple-950/20 border-purple-500/30 space-y-2.5">
                       <div className="flex items-center justify-between border-b border-purple-500/20 pb-1.5">
                         <span className="font-bold text-purple-300">CHAMBER {compareChamber.chamberNumber} (COMPARISON)</span>
                         <span className="text-[10px] text-emerald-400">{compareChamber.truthLabel}</span>
@@ -994,7 +994,7 @@ export const ChamberDetailPanel: React.FC<ChamberDetailPanelProps> = ({
               )}
 
               {/* HISTORICAL TRUTH-LEVEL TREND CHART (Recharts AreaChart - 24 Cycles) */}
-              <div className="p-4 rounded-2xl bg-black/40 border border-cyan-500/30 shadow-[0_0_25px_rgba(6,182,212,0.15)] space-y-3">
+              <div className="p-4 rounded-2xl bg-black/40 border-cyan-500/30 shadow-[0_0_25px_rgba(6,182,212,0.15)] space-y-3">
                 <div className="flex items-center justify-between">
                   <div className="flex items-center gap-2">
                     <TrendingUp className="w-4 h-4 text-cyan-400" />
@@ -1003,10 +1003,10 @@ export const ChamberDetailPanel: React.FC<ChamberDetailPanelProps> = ({
                     </span>
                   </div>
                   <div className="flex items-center gap-2 text-[10px]">
-                    <span className="px-2 py-0.5 rounded bg-emerald-500/10 text-emerald-300 border border-emerald-500/30 font-bold">
+                    <span className="px-2 py-0.5 rounded bg-emerald-500/10 text-emerald-300 border-emerald-500/30 font-bold">
                       CURRENT: {historicalTruthData[historicalTruthData.length - 1]?.truth}%
                     </span>
-                    <span className="px-2 py-0.5 rounded bg-rose-500/10 text-rose-300 border border-rose-500/30 font-bold">
+                    <span className="px-2 py-0.5 rounded bg-rose-500/10 text-rose-300 border-rose-500/30 font-bold">
                       FAIL-CLOSED: 85.0%
                     </span>
                   </div>
@@ -1046,7 +1046,7 @@ export const ChamberDetailPanel: React.FC<ChamberDetailPanelProps> = ({
                           if (active && payload && payload.length) {
                             const data = payload[0].payload;
                             return (
-                              <div className="p-2 rounded-xl bg-[#090d1c]/95 border border-cyan-500/50 shadow-xl font-mono text-[10px] space-y-1 backdrop-blur-md">
+                              <div className="p-2 rounded-xl bg-[#090d1c]/95 border-cyan-500/50 shadow-xl font-mono text-[10px] space-y-1 backdrop-blur-md">
                                 <div className="text-white font-bold">{data.cycleNum} ({data.hoursAgo})</div>
                                 <div className="text-cyan-300 font-bold">Truth Level: {data.truth}%</div>
                                 <div className="text-purple-300">Coherence: {data.coherence}%</div>
@@ -1091,7 +1091,7 @@ export const ChamberDetailPanel: React.FC<ChamberDetailPanelProps> = ({
               {activeTab === 'NEURAL_DIAGNOSTICS' && (
                 <div className="space-y-5 animate-in fade-in duration-150">
                   {/* Real-time Self-Healing Progress Bar */}
-                  <div className="p-4 sm:p-5 rounded-2xl bg-gradient-to-r from-emerald-950/30 via-black/50 to-cyan-950/30 border border-emerald-500/40 space-y-3.5 shadow-[0_0_30px_rgba(16,185,129,0.15)]">
+                  <div className="p-4 sm:p-5 rounded-2xl bg-gradient-to-r from-emerald-950/30 via-black/50 to-cyan-950/30 border-emerald-500/40 space-y-3.5 shadow-[0_0_30px_rgba(16,185,129,0.15)]">
                     <div className="flex items-center justify-between">
                       <div className="flex items-center gap-2">
                         <Sparkles className="w-4 h-4 text-emerald-400" />
@@ -1106,7 +1106,7 @@ export const ChamberDetailPanel: React.FC<ChamberDetailPanelProps> = ({
 
                     {/* Progress Bar with glowing pulse */}
                     <div className="space-y-1.5">
-                      <div className="w-full h-3.5 rounded-full bg-black/60 border border-white/10 p-0.5 overflow-hidden">
+                      <div className="w-full h-3.5 rounded-full bg-black/60 border-white/10 p-0.5 overflow-hidden">
                         <motion.div
                           className="h-full rounded-full bg-gradient-to-r from-cyan-500 via-emerald-400 to-blue-500 shadow-[0_0_15px_rgba(52,211,153,0.8)]"
                           animate={{ width: `${selfHealingProgress}%` }}
@@ -1121,15 +1121,15 @@ export const ChamberDetailPanel: React.FC<ChamberDetailPanelProps> = ({
 
                     {/* Self-healing Real-time Signals */}
                     <div className="grid grid-cols-2 sm:grid-cols-3 gap-2.5 pt-1 text-xs">
-                      <div className="p-2.5 rounded-xl bg-black/40 border border-white/5 space-y-0.5">
+                      <div className="p-2.5 rounded-xl bg-black/40 border-white/5 space-y-0.5">
                         <div className="text-[9px] text-zinc-400">Phase Lock</div>
                         <div className="font-bold text-emerald-400 text-xs">SYNCHRONIZED</div>
                       </div>
-                      <div className="p-2.5 rounded-xl bg-black/40 border border-white/5 space-y-0.5">
+                      <div className="p-2.5 rounded-xl bg-black/40 border-white/5 space-y-0.5">
                         <div className="text-[9px] text-zinc-400">Quantum Jitter</div>
                         <div className="font-bold text-cyan-300 text-xs">0.0002 nV</div>
                       </div>
-                      <div className="p-2.5 rounded-xl bg-black/40 border border-white/5 space-y-0.5 col-span-2 sm:col-span-1">
+                      <div className="p-2.5 rounded-xl bg-black/40 border-white/5 space-y-0.5 col-span-2 sm:col-span-1">
                         <div className="text-[9px] text-zinc-400">Lattice Coherence</div>
                         <div className="font-bold text-purple-300 text-xs">Δ0.0% DRIFT</div>
                       </div>
@@ -1139,7 +1139,7 @@ export const ChamberDetailPanel: React.FC<ChamberDetailPanelProps> = ({
                   {/* Manual Circuit Purge & Cluster Mass Purge Action Boxes */}
                   <div className="space-y-3">
                     {/* Chamber Specific Purge */}
-                    <div className="p-4 sm:p-5 rounded-2xl bg-gradient-to-r from-rose-950/25 via-black/50 to-amber-950/25 border border-rose-500/40 space-y-3.5 shadow-[0_0_25px_rgba(244,63,94,0.15)]">
+                    <div className="p-4 sm:p-5 rounded-2xl bg-gradient-to-r from-rose-950/25 via-black/50 to-amber-950/25 border-rose-500/40 space-y-3.5 shadow-[0_0_25px_rgba(244,63,94,0.15)]">
                       <div className="flex items-center justify-between">
                         <div className="flex items-center gap-2">
                           <Flame className="w-4 h-4 text-rose-400" />
@@ -1147,7 +1147,7 @@ export const ChamberDetailPanel: React.FC<ChamberDetailPanelProps> = ({
                             MANUAL CIRCUIT PURGE & COHERENCE RESET
                           </span>
                         </div>
-                        <span className="text-[10px] text-amber-300 px-2 py-0.5 rounded bg-amber-500/20 border border-amber-500/40 font-bold">
+                        <span className="text-[10px] text-amber-300 px-2 py-0.5 rounded bg-amber-500/20 border-amber-500/40 font-bold">
                           FAIL-CLOSED 85°C
                         </span>
                       </div>
@@ -1157,7 +1157,7 @@ export const ChamberDetailPanel: React.FC<ChamberDetailPanelProps> = ({
                       </p>
 
                       {purgeMessage && (
-                        <div className="p-3 rounded-xl bg-black/60 border border-cyan-500/40 text-cyan-300 text-xs font-mono animate-pulse flex items-center gap-2">
+                        <div className="p-3 rounded-xl bg-black/60 border-cyan-500/40 text-cyan-300 text-xs font-mono animate-pulse flex items-center gap-2">
                           <RefreshCw className="w-4 h-4 text-cyan-400 animate-spin" />
                           <span>{purgeMessage}</span>
                         </div>
@@ -1179,7 +1179,7 @@ export const ChamberDetailPanel: React.FC<ChamberDetailPanelProps> = ({
                     </div>
 
                     {/* Cluster-Wide Mass Purge Command */}
-                    <div className="p-4 sm:p-5 rounded-2xl bg-gradient-to-r from-purple-950/30 via-black/60 to-rose-950/30 border border-purple-500/50 space-y-3.5 shadow-[0_0_30px_rgba(168,85,247,0.2)]">
+                    <div className="p-4 sm:p-5 rounded-2xl bg-gradient-to-r from-purple-950/30 via-black/60 to-rose-950/30 border-purple-500/50 space-y-3.5 shadow-[0_0_30px_rgba(168,85,247,0.2)]">
                       <div className="flex items-center justify-between">
                         <div className="flex items-center gap-2">
                           <Radiation className="w-4 h-4 text-purple-400" />
@@ -1201,7 +1201,7 @@ export const ChamberDetailPanel: React.FC<ChamberDetailPanelProps> = ({
                       </p>
 
                       {massPurgeMessage && (
-                        <div className="p-3 rounded-xl bg-purple-950/50 border border-purple-400/50 text-purple-200 text-xs font-mono animate-pulse flex items-center gap-2">
+                        <div className="p-3 rounded-xl bg-purple-950/50 border-purple-400/50 text-purple-200 text-xs font-mono animate-pulse flex items-center gap-2">
                           <RefreshCw className="w-4 h-4 text-purple-300 animate-spin" />
                           <span>{massPurgeMessage}</span>
                         </div>
@@ -1224,21 +1224,21 @@ export const ChamberDetailPanel: React.FC<ChamberDetailPanelProps> = ({
                   </div>
 
                   {/* Neural Sensor Stream */}
-                  <div className="p-4 rounded-2xl bg-black/40 border border-white/10 space-y-2.5">
+                  <div className="p-4 rounded-2xl bg-black/40 border-white/10 space-y-2.5">
                     <div className="text-[11px] text-zinc-400 font-bold uppercase tracking-wider flex items-center justify-between">
                       <span>Neural Telemetry Stream</span>
                       <span className="text-emerald-400 text-[10px]">100% SSoT COMPLIANT</span>
                     </div>
                     <div className="space-y-1.5 font-mono text-[11px] text-zinc-300">
-                      <div className="p-2 rounded-lg bg-white/5 border border-white/5 flex items-center justify-between">
+                      <div className="p-2 rounded-lg bg-white/5 border-white/5 flex items-center justify-between">
                         <span className="text-zinc-400">• Synergistic Micro-Lattice:</span>
                         <span className="text-emerald-300">SYNCHRONIZED (0.000ms jitter)</span>
                       </div>
-                      <div className="p-2 rounded-lg bg-white/5 border border-white/5 flex items-center justify-between">
+                      <div className="p-2 rounded-lg bg-white/5 border-white/5 flex items-center justify-between">
                         <span className="text-zinc-400">• Dilithium-5 Signer Loop:</span>
                         <span className="text-cyan-300">VERIFIED CONTINUOUS (0.002s latency)</span>
                       </div>
-                      <div className="p-2 rounded-lg bg-white/5 border border-white/5 flex items-center justify-between">
+                      <div className="p-2 rounded-lg bg-white/5 border-white/5 flex items-center justify-between">
                         <span className="text-zinc-400">• Merkle Provenance Ledger:</span>
                         <span className="text-purple-300">14,902 SEALS INTACT</span>
                       </div>
@@ -1251,7 +1251,7 @@ export const ChamberDetailPanel: React.FC<ChamberDetailPanelProps> = ({
               {activeTab === 'MANIFEST' && (
                 <div className="space-y-5 animate-in fade-in duration-150">
                   {/* Overview Card */}
-                  <div className="p-4 rounded-2xl bg-black/40 border border-white/10 space-y-3">
+                  <div className="p-4 rounded-2xl bg-black/40 border-white/10 space-y-3">
                     <div className="text-xs text-cyan-400 font-bold flex items-center gap-2">
                       <Terminal className="w-4 h-4" />
                       <span>OFFICIAL MANIFEST SPECIFICATION</span>
@@ -1273,14 +1273,14 @@ export const ChamberDetailPanel: React.FC<ChamberDetailPanelProps> = ({
                       <button
                         onClick={handleRunIntegrityVerify}
                         disabled={isVerifyingIntegrity}
-                        className="px-2.5 py-1 rounded-lg bg-cyan-500/20 hover:bg-cyan-500/30 border border-cyan-500/40 text-cyan-300 text-[10px] font-bold flex items-center gap-1.5 transition cursor-pointer disabled:opacity-50"
+                        className="px-2.5 py-1 rounded-lg bg-cyan-500/20 hover:bg-cyan-500/30 border-cyan-500/40 text-cyan-300 text-[10px] font-bold flex items-center gap-1.5 transition cursor-pointer disabled:opacity-50"
                       >
                         <ShieldCheck className={`w-3.5 h-3.5 ${isVerifyingIntegrity ? 'animate-spin' : ''}`} />
                         <span>{isVerifyingIntegrity ? 'VERIFYING...' : 'VERIFY MERKLE INTEGRITY'}</span>
                       </button>
                     </div>
 
-                    <div className="p-3 rounded-xl bg-black/60 border border-cyan-500/30 space-y-2">
+                    <div className="p-3 rounded-xl bg-black/60 border-cyan-500/30 space-y-2">
                       <div className="flex items-center justify-between text-[11px]">
                         <span className="text-zinc-400">Anchor Hash (SHA-256):</span>
                         <button
@@ -1291,7 +1291,7 @@ export const ChamberDetailPanel: React.FC<ChamberDetailPanelProps> = ({
                           <span>{copiedHash ? 'COPIED' : 'COPY'}</span>
                         </button>
                       </div>
-                      <div className="font-mono text-[10px] text-cyan-300 bg-cyan-950/30 p-2 rounded-lg break-all border border-cyan-500/20 select-all">
+                      <div className="font-mono text-[10px] text-cyan-300 bg-cyan-950/30 p-2 rounded-lg break-all border-cyan-500/20 select-all">
                         {chamber.hashAnchor}
                       </div>
 
@@ -1321,7 +1321,7 @@ export const ChamberDetailPanel: React.FC<ChamberDetailPanelProps> = ({
                               )}
                             </div>
                           </div>
-                          <span className="text-[9px] px-2 py-0.5 rounded bg-black/40 border border-white/10 font-bold shrink-0">
+                          <span className="text-[9px] px-2 py-0.5 rounded bg-black/40 border-white/10 font-bold shrink-0">
                             FIPS 204 ML-DSA-87
                           </span>
                         </div>
@@ -1331,28 +1331,28 @@ export const ChamberDetailPanel: React.FC<ChamberDetailPanelProps> = ({
 
                   {/* Manifest Properties Grid */}
                   <div className="grid grid-cols-2 gap-3 text-xs">
-                    <div className="p-3 rounded-xl bg-white/5 border border-white/10 space-y-1">
+                    <div className="p-3 rounded-xl bg-white/5 border-white/10 space-y-1">
                       <div className="text-[10px] text-zinc-400">Operational Mode:</div>
                       <div className="font-bold text-white text-[11px] truncate">
                         {chamber.operationalMode}
                       </div>
                     </div>
 
-                    <div className="p-3 rounded-xl bg-white/5 border border-white/10 space-y-1">
+                    <div className="p-3 rounded-xl bg-white/5 border-white/10 space-y-1">
                       <div className="text-[10px] text-zinc-400">Target View:</div>
                       <div className="font-bold text-cyan-300 text-[11px] uppercase">
                         {chamber.targetView} VIEW
                       </div>
                     </div>
 
-                    <div className="p-3 rounded-xl bg-white/5 border border-white/10 space-y-1">
+                    <div className="p-3 rounded-xl bg-white/5 border-white/10 space-y-1">
                       <div className="text-[10px] text-zinc-400">Canonical Block:</div>
                       <div className="font-bold text-amber-300 text-[11px]">
                         #{SSOT.canonicalBlockHeight}
                       </div>
                     </div>
 
-                    <div className="p-3 rounded-xl bg-white/5 border border-white/10 space-y-1">
+                    <div className="p-3 rounded-xl bg-white/5 border-white/10 space-y-1">
                       <div className="text-[10px] text-zinc-400">Quorum Requirement:</div>
                       <div className="font-bold text-emerald-300 text-[11px]">
                         10/10 REAL_HSM
@@ -1361,20 +1361,20 @@ export const ChamberDetailPanel: React.FC<ChamberDetailPanelProps> = ({
                   </div>
 
                   {/* Historical Provenance Card */}
-                  <div className="p-4 rounded-2xl bg-gradient-to-br from-indigo-950/30 via-black/40 to-cyan-950/30 border border-cyan-500/30 space-y-3">
+                  <div className="p-4 rounded-2xl bg-gradient-to-br from-indigo-950/30 via-black/40 to-cyan-950/30 border-cyan-500/30 space-y-3">
                     <div className="flex items-center justify-between">
                       <div className="flex items-center gap-2 text-xs font-bold text-cyan-300">
                         <Calendar className="w-4 h-4 text-cyan-400" />
                         <span>HISTORICAL PROVENANCE & COMMISSIONING</span>
                       </div>
-                      <span className="px-2 py-0.5 rounded text-[10px] bg-cyan-500/10 text-cyan-300 border border-cyan-500/30 font-mono font-bold">
+                      <span className="px-2 py-0.5 rounded text-[10px] bg-cyan-500/10 text-cyan-300 border-cyan-500/30 font-mono font-bold">
                         {historicalProvenance.genesisBlock}
                       </span>
                     </div>
 
                     <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 text-xs">
                       {/* Commissioning Date */}
-                      <div className="p-3 rounded-xl bg-black/50 border border-white/10 space-y-1">
+                      <div className="p-3 rounded-xl bg-black/50 border-white/10 space-y-1">
                         <div className="text-[10px] text-zinc-400 flex items-center gap-1.5">
                           <Calendar className="w-3 h-3 text-zinc-400" />
                           <span>Original Commissioning Date:</span>
@@ -1388,7 +1388,7 @@ export const ChamberDetailPanel: React.FC<ChamberDetailPanelProps> = ({
                       </div>
 
                       {/* Assigned Custodian */}
-                      <div className="p-3 rounded-xl bg-black/50 border border-white/10 space-y-1">
+                      <div className="p-3 rounded-xl bg-black/50 border-white/10 space-y-1">
                         <div className="text-[10px] text-zinc-400 flex items-center gap-1.5">
                           <UserCheck className="w-3 h-3 text-cyan-400" />
                           <span>Assigned Custodian & Authority:</span>
@@ -1402,7 +1402,7 @@ export const ChamberDetailPanel: React.FC<ChamberDetailPanelProps> = ({
                       </div>
                     </div>
 
-                    <div className="p-2.5 rounded-xl bg-white/5 border border-white/5 flex flex-wrap items-center justify-between gap-2 text-[10px] font-mono">
+                    <div className="p-2.5 rounded-xl bg-white/5 border-white/5 flex flex-wrap items-center justify-between gap-2 text-[10px] font-mono">
                       <div className="text-zinc-300">
                         Attestation Seal: <span className="text-purple-300">{historicalProvenance.custodianCert}</span>
                       </div>
@@ -1413,7 +1413,7 @@ export const ChamberDetailPanel: React.FC<ChamberDetailPanelProps> = ({
                   </div>
 
                   {/* Chamber Alarm Configuration Box */}
-                  <div className="p-4 rounded-2xl bg-black/40 border border-white/10 space-y-2.5">
+                  <div className="p-4 rounded-2xl bg-black/40 border-white/10 space-y-2.5">
                     <div className="flex items-center justify-between">
                       <div className="flex items-center gap-2 text-xs font-bold text-white">
                         {alarmEnabled ? <Bell className="w-4 h-4 text-rose-400" /> : <BellOff className="w-4 h-4 text-zinc-400" />}
@@ -1436,7 +1436,7 @@ export const ChamberDetailPanel: React.FC<ChamberDetailPanelProps> = ({
                   </div>
 
                   {/* Legal & Standards Compliance */}
-                  <div className="p-4 rounded-2xl bg-indigo-950/20 border border-indigo-500/30 space-y-2.5">
+                  <div className="p-4 rounded-2xl bg-indigo-950/20 border-indigo-500/30 space-y-2.5">
                     <div className="flex items-center gap-2 text-xs font-bold text-indigo-300">
                       <Scale className="w-4 h-4 text-indigo-400" />
                       <span>STATUTORY & PQC CERTIFICATION</span>
@@ -1458,13 +1458,13 @@ export const ChamberDetailPanel: React.FC<ChamberDetailPanelProps> = ({
                         {chamber.subModules.map((mod, i) => (
                           <div
                             key={i}
-                            className="p-3 rounded-xl bg-white/5 border border-white/10 flex items-center justify-between text-xs"
+                            className="p-3 rounded-xl bg-white/5 border-white/10 flex items-center justify-between text-xs"
                           >
                             <div className="space-y-0.5">
                               <div className="font-bold text-zinc-200">{mod.name}</div>
                               <div className="text-[10px] text-zinc-400">{mod.desc}</div>
                             </div>
-                            <span className="px-2 py-0.5 rounded text-[10px] bg-emerald-500/10 text-emerald-300 border border-emerald-500/30 font-bold uppercase">
+                            <span className="px-2 py-0.5 rounded text-[10px] bg-emerald-500/10 text-emerald-300 border-emerald-500/30 font-bold uppercase">
                               {mod.status}
                             </span>
                           </div>
@@ -1480,7 +1480,7 @@ export const ChamberDetailPanel: React.FC<ChamberDetailPanelProps> = ({
                 <div className="space-y-5 animate-in fade-in duration-150">
                   {/* Top Health Telemetry Bar */}
                   <div className="grid grid-cols-3 gap-3">
-                    <div className="p-3.5 rounded-2xl bg-cyan-950/20 border border-cyan-500/30 text-center space-y-1">
+                    <div className="p-3.5 rounded-2xl bg-cyan-950/20 border-cyan-500/30 text-center space-y-1">
                       <div className="text-[10px] text-zinc-400">Cryo Dilution</div>
                       <div className="text-base sm:text-lg font-bold text-cyan-300">
                         {subKelvinTemp} mK
@@ -1488,7 +1488,7 @@ export const ChamberDetailPanel: React.FC<ChamberDetailPanelProps> = ({
                       <div className="text-[9px] text-emerald-400">Nominal 0.00% Drift</div>
                     </div>
 
-                    <div className="p-3.5 rounded-2xl bg-blue-950/20 border border-blue-500/30 text-center space-y-1">
+                    <div className="p-3.5 rounded-2xl bg-blue-950/20 border-blue-500/30 text-center space-y-1">
                       <div className="text-[10px] text-zinc-400">QOps Sustained</div>
                       <div className="text-base sm:text-lg font-bold text-blue-300">
                         {qOpsRate}
@@ -1496,7 +1496,7 @@ export const ChamberDetailPanel: React.FC<ChamberDetailPanelProps> = ({
                       <div className="text-[9px] text-blue-400">Clock Locked</div>
                     </div>
 
-                    <div className="p-3.5 rounded-2xl bg-purple-950/20 border border-purple-500/30 text-center space-y-1">
+                    <div className="p-3.5 rounded-2xl bg-purple-950/20 border-purple-500/30 text-center space-y-1">
                       <div className="text-[10px] text-zinc-400">Coherence</div>
                       <div className="text-base sm:text-lg font-bold text-purple-300">
                         {coherencePercent}
@@ -1513,7 +1513,7 @@ export const ChamberDetailPanel: React.FC<ChamberDetailPanelProps> = ({
                     </div>
 
                     <div className="space-y-2 text-xs">
-                      <div className="p-3 rounded-xl bg-black/40 border border-white/10 flex items-center justify-between">
+                      <div className="p-3 rounded-xl bg-black/40 border-white/10 flex items-center justify-between">
                         <div className="flex items-center gap-2.5">
                           <Cpu className="w-4 h-4 text-cyan-400" />
                           <div>
@@ -1521,12 +1521,12 @@ export const ChamberDetailPanel: React.FC<ChamberDetailPanelProps> = ({
                             <div className="text-[10px] text-zinc-400">Thermal noise &lt;0.02 nV/√Hz</div>
                           </div>
                         </div>
-                        <span className="px-2 py-0.5 rounded text-[10px] bg-emerald-500/10 text-emerald-300 border border-emerald-500/30 font-bold">
+                        <span className="px-2 py-0.5 rounded text-[10px] bg-emerald-500/10 text-emerald-300 border-emerald-500/30 font-bold">
                           14.98 mK
                         </span>
                       </div>
 
-                      <div className="p-3 rounded-xl bg-black/40 border border-white/10 flex items-center justify-between">
+                      <div className="p-3 rounded-xl bg-black/40 border-white/10 flex items-center justify-between">
                         <div className="flex items-center gap-2.5">
                           <Radio className="w-4 h-4 text-blue-400" />
                           <div>
@@ -1534,12 +1534,12 @@ export const ChamberDetailPanel: React.FC<ChamberDetailPanelProps> = ({
                             <div className="text-[10px] text-zinc-400">Jitter latency: 0.021 ms</div>
                           </div>
                         </div>
-                        <span className="px-2 py-0.5 rounded text-[10px] bg-blue-500/10 text-blue-300 border border-blue-500/30 font-bold">
+                        <span className="px-2 py-0.5 rounded text-[10px] bg-blue-500/10 text-blue-300 border-blue-500/30 font-bold">
                           100% SYNC
                         </span>
                       </div>
 
-                      <div className="p-3 rounded-xl bg-black/40 border border-white/10 flex items-center justify-between">
+                      <div className="p-3 rounded-xl bg-black/40 border-white/10 flex items-center justify-between">
                         <div className="flex items-center gap-2.5">
                           <Lock className="w-4 h-4 text-purple-400" />
                           <div>
@@ -1547,12 +1547,12 @@ export const ChamberDetailPanel: React.FC<ChamberDetailPanelProps> = ({
                             <div className="text-[10px] text-zinc-400">FIPS 140-3 Level 4 Secure Boundary</div>
                           </div>
                         </div>
-                        <span className="px-2 py-0.5 rounded text-[10px] bg-purple-500/10 text-purple-300 border border-purple-500/30 font-bold">
+                        <span className="px-2 py-0.5 rounded text-[10px] bg-purple-500/10 text-purple-300 border-purple-500/30 font-bold">
                           10/10 KEYS
                         </span>
                       </div>
 
-                      <div className="p-3 rounded-xl bg-black/40 border border-white/10 flex items-center justify-between">
+                      <div className="p-3 rounded-xl bg-black/40 border-white/10 flex items-center justify-between">
                         <div className="flex items-center gap-2.5">
                           <Layers className="w-4 h-4 text-amber-400" />
                           <div>
@@ -1560,7 +1560,7 @@ export const ChamberDetailPanel: React.FC<ChamberDetailPanelProps> = ({
                             <div className="text-[10px] text-zinc-400">Zero write-mutation locks active</div>
                           </div>
                         </div>
-                        <span className="px-2 py-0.5 rounded text-[10px] bg-amber-500/10 text-amber-300 border border-amber-500/30 font-bold">
+                        <span className="px-2 py-0.5 rounded text-[10px] bg-amber-500/10 text-amber-300 border-amber-500/30 font-bold">
                           MUTATION 0
                         </span>
                       </div>
@@ -1568,7 +1568,7 @@ export const ChamberDetailPanel: React.FC<ChamberDetailPanelProps> = ({
                   </div>
 
                   {/* 4x4 Internal Sensor Distribution Grid */}
-                  <div className="p-4 rounded-2xl bg-black/40 border border-white/10 space-y-3.5">
+                  <div className="p-4 rounded-2xl bg-black/40 border-white/10 space-y-3.5">
                     <div className="flex items-center justify-between">
                       <div className="flex items-center gap-2">
                         <Grid3X3 className="w-4 h-4 text-cyan-400" />
@@ -1598,7 +1598,7 @@ export const ChamberDetailPanel: React.FC<ChamberDetailPanelProps> = ({
                     </div>
 
                     {/* 4x4 Interactive Grid Cells */}
-                    <div className="grid grid-cols-4 gap-2.5 sm:gap-3 p-3 rounded-xl bg-black/60 border border-white/5">
+                    <div className="grid grid-cols-4 gap-2.5 sm:gap-3 p-3 rounded-xl bg-black/60 border-white/5">
                       {sensorGridData.map((cell, idx) => {
                         const isSelected = selectedSensorCell === idx;
                         let cellBg = 'bg-emerald-950/40 border-emerald-500/40 text-emerald-300 hover:border-emerald-400 hover:bg-emerald-900/50';
@@ -1646,7 +1646,7 @@ export const ChamberDetailPanel: React.FC<ChamberDetailPanelProps> = ({
 
                     {/* Sensor Cell Selected Inspector Banner */}
                     {selectedSensorCell !== null && sensorGridData[selectedSensorCell] && (
-                      <div className="p-3 rounded-xl bg-white/5 border border-cyan-500/30 flex items-center justify-between gap-3 text-xs animate-in fade-in duration-150">
+                      <div className="p-3 rounded-xl bg-white/5 border-cyan-500/30 flex items-center justify-between gap-3 text-xs animate-in fade-in duration-150">
                         <div className="flex items-center gap-2.5">
                           <Activity className="w-4 h-4 text-cyan-400 shrink-0" />
                           <div>
@@ -1661,7 +1661,7 @@ export const ChamberDetailPanel: React.FC<ChamberDetailPanelProps> = ({
                         </div>
                         <button
                           onClick={() => setSelectedSensorCell(null)}
-                          className="text-[10px] px-2 py-1 rounded bg-black/40 hover:bg-black/60 text-zinc-400 hover:text-zinc-200 border border-white/10 cursor-pointer"
+                          className="text-[10px] px-2 py-1 rounded bg-black/40 hover:bg-black/60 text-zinc-400 hover:text-zinc-200 border-white/10 cursor-pointer"
                         >
                           CLOSE
                         </button>
@@ -1670,13 +1670,13 @@ export const ChamberDetailPanel: React.FC<ChamberDetailPanelProps> = ({
                   </div>
 
                   {/* Circuitry Test Action */}
-                  <div className="p-4 rounded-2xl bg-black/50 border border-white/10 space-y-3">
+                  <div className="p-4 rounded-2xl bg-black/50 border-white/10 space-y-3">
                     <div className="flex items-center justify-between">
                       <div className="text-xs font-bold text-zinc-200">Active Circuitry Self-Diagnostic</div>
                       <button
                         onClick={handleRunCircuitryTest}
                         disabled={circuitryTestRunning}
-                        className="px-3 py-1.5 rounded-xl bg-cyan-500/20 border border-cyan-500/40 text-cyan-300 hover:bg-cyan-500/30 transition text-xs font-bold flex items-center gap-1.5 cursor-pointer disabled:opacity-50"
+                        className="px-3 py-1.5 rounded-xl bg-cyan-500/20 border-cyan-500/40 text-cyan-300 hover:bg-cyan-500/30 transition text-xs font-bold flex items-center gap-1.5 cursor-pointer disabled:opacity-50"
                       >
                         <RefreshCw className={`w-3.5 h-3.5 ${circuitryTestRunning ? 'animate-spin' : ''}`} />
                         <span>{circuitryTestRunning ? 'PROBING BUS...' : 'RUN CIRCUITRY TEST'}</span>
@@ -1684,7 +1684,7 @@ export const ChamberDetailPanel: React.FC<ChamberDetailPanelProps> = ({
                     </div>
 
                     {circuitryTestResult && (
-                      <div className="p-2.5 rounded-xl bg-emerald-950/40 border border-emerald-500/40 text-emerald-300 text-xs font-bold flex items-center gap-2">
+                      <div className="p-2.5 rounded-xl bg-emerald-950/40 border-emerald-500/40 text-emerald-300 text-xs font-bold flex items-center gap-2">
                         <Check className="w-4 h-4 text-emerald-400 shrink-0" />
                         <span>{circuitryTestResult}</span>
                       </div>
@@ -1697,7 +1697,7 @@ export const ChamberDetailPanel: React.FC<ChamberDetailPanelProps> = ({
               {activeTab === 'SEAL_LOG' && (
                 <div className="space-y-5 animate-in fade-in duration-150">
                   {/* Summary Metric Header & Export Action */}
-                  <div className="p-4 rounded-2xl bg-black/40 border border-white/10 flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+                  <div className="p-4 rounded-2xl bg-black/40 border-white/10 flex flex-col sm:flex-row sm:items-center justify-between gap-4">
                     <div className="space-y-1">
                       <div className="text-[10px] text-zinc-400">Total Immutable Canonical Seals</div>
                       <div className="text-lg font-bold text-white flex items-center gap-2">
@@ -1711,7 +1711,7 @@ export const ChamberDetailPanel: React.FC<ChamberDetailPanelProps> = ({
                       <button
                         onClick={handleRunIntegrityVerify}
                         disabled={isVerifyingIntegrity}
-                        className="px-3.5 py-2.5 rounded-xl bg-cyan-600/30 hover:bg-cyan-600/50 border border-cyan-500/40 text-cyan-200 font-bold text-xs flex items-center gap-1.5 transition cursor-pointer disabled:opacity-50"
+                        className="px-3.5 py-2.5 rounded-xl bg-cyan-600/30 hover:bg-cyan-600/50 border-cyan-500/40 text-cyan-200 font-bold text-xs flex items-center gap-1.5 transition cursor-pointer disabled:opacity-50"
                         title="Real-time Cryptographic Hash Comparison with SSoT Merkle Root"
                       >
                         <ShieldCheck className={`w-4 h-4 text-cyan-300 ${isVerifyingIntegrity ? 'animate-spin' : ''}`} />
@@ -1775,7 +1775,7 @@ export const ChamberDetailPanel: React.FC<ChamberDetailPanelProps> = ({
                       {recentSeals.map((seal, idx) => (
                         <div
                           key={idx}
-                          className="p-3.5 rounded-xl bg-black/50 border border-white/10 hover:border-cyan-500/30 transition space-y-2"
+                          className="p-3.5 rounded-xl bg-black/50 border-white/10 hover:border-cyan-500/30 transition space-y-2"
                         >
                           <div className="flex items-center justify-between text-xs">
                             <div className="flex items-center gap-2">
@@ -1783,7 +1783,7 @@ export const ChamberDetailPanel: React.FC<ChamberDetailPanelProps> = ({
                               <span className="font-bold text-white">{seal.sealId}</span>
                               <span className="text-amber-400 text-[10px] font-bold">{seal.block}</span>
                             </div>
-                            <span className="px-2 py-0.5 rounded text-[10px] bg-emerald-500/20 text-emerald-300 border border-emerald-500/40 font-bold">
+                            <span className="px-2 py-0.5 rounded text-[10px] bg-emerald-500/20 text-emerald-300 border-emerald-500/40 font-bold">
                               {seal.status}
                             </span>
                           </div>
@@ -1803,7 +1803,7 @@ export const ChamberDetailPanel: React.FC<ChamberDetailPanelProps> = ({
                   </div>
 
                   {/* Audit Invariant Affirmation */}
-                  <div className="p-4 rounded-2xl bg-purple-950/20 border border-purple-500/30 space-y-2">
+                  <div className="p-4 rounded-2xl bg-purple-950/20 border-purple-500/30 space-y-2">
                     <div className="flex items-center gap-2 text-xs font-bold text-purple-300">
                       <ShieldCheck className="w-4 h-4 text-purple-400" />
                       <span>INVOLATILE SSoT GUARANTEE</span>
@@ -1823,7 +1823,7 @@ export const ChamberDetailPanel: React.FC<ChamberDetailPanelProps> = ({
                   playTone(520, 0.04);
                   onClose();
                 }}
-                className="px-4 py-2.5 rounded-xl bg-white/5 border border-white/10 text-xs font-bold text-zinc-400 hover:text-white hover:bg-white/10 transition cursor-pointer"
+                className="px-4 py-2.5 rounded-xl bg-white/5 border-white/10 text-xs font-bold text-zinc-400 hover:text-white hover:bg-white/10 transition cursor-pointer"
               >
                 DISMISS
               </button>
@@ -1835,7 +1835,7 @@ export const ChamberDetailPanel: React.FC<ChamberDetailPanelProps> = ({
                       onStabilizeChamber(chamber.chamberId);
                       playAuditChime();
                     }}
-                    className="px-3.5 py-2.5 rounded-xl bg-emerald-500/20 border border-emerald-500/40 text-emerald-300 hover:bg-emerald-500/30 transition text-xs font-bold flex items-center gap-1.5 cursor-pointer"
+                    className="px-3.5 py-2.5 rounded-xl bg-emerald-500/20 border-emerald-500/40 text-emerald-300 hover:bg-emerald-500/30 transition text-xs font-bold flex items-center gap-1.5 cursor-pointer"
                     title="Calibrate Coherence & Re-seal to 100% SSoT"
                   >
                     <RefreshCw className="w-3.5 h-3.5" />
@@ -1913,14 +1913,14 @@ export const ChamberDetailPanel: React.FC<ChamberDetailPanelProps> = ({
 
                   {/* Executive Summary & Legal Seal */}
                   <div className="grid grid-cols-2 gap-4">
-                    <div className="p-3.5 rounded-xl bg-zinc-50 border border-zinc-200 space-y-1.5">
+                    <div className="p-3.5 rounded-xl bg-zinc-50 border-zinc-200 space-y-1.5">
                       <div className="text-[10px] font-bold text-zinc-500 uppercase">Sovereign Principal & Authority:</div>
                       <div className="font-bold text-zinc-900">นายยุทธภูมิ พากเพียร (#EP-SOVEREIGN-01)</div>
                       <div className="text-[10px] text-zinc-600">Clearance: OMEGA-1 SUPREME CLEARANCE</div>
                       <div className="text-[10px] text-zinc-600">Mutation Authority: 0 (Read-Only Certified)</div>
                     </div>
 
-                    <div className="p-3.5 rounded-xl bg-zinc-50 border border-zinc-200 space-y-1.5">
+                    <div className="p-3.5 rounded-xl bg-zinc-50 border-zinc-200 space-y-1.5">
                       <div className="text-[10px] font-bold text-zinc-500 uppercase">PQC & Statutory Compliance:</div>
                       <div className="font-bold text-zinc-900">NIST Post-Quantum Suite</div>
                       <div className="text-[10px] text-zinc-600">FIPS 204 ML-DSA-87 / FIPS 203 ML-KEM-1024</div>
@@ -1939,39 +1939,39 @@ export const ChamberDetailPanel: React.FC<ChamberDetailPanelProps> = ({
                     <div className="text-[11px] font-bold text-zinc-800 uppercase tracking-wider">
                       Telemetry & Health Metrics Snapshot
                     </div>
-                    <table className="w-full border-collapse border border-zinc-200 text-xs">
+                    <table className="w-full border-collapse border-zinc-200 text-xs">
                       <thead>
                         <tr className="bg-zinc-100 text-zinc-700 text-left">
-                          <th className="p-2 border border-zinc-200">Metric Identifier</th>
-                          <th className="p-2 border border-zinc-200">Current Measured Value</th>
-                          <th className="p-2 border border-zinc-200">Baseline Threshold</th>
-                          <th className="p-2 border border-zinc-200">Compliance Status</th>
+                          <th className="p-2 border-zinc-200">Metric Identifier</th>
+                          <th className="p-2 border-zinc-200">Current Measured Value</th>
+                          <th className="p-2 border-zinc-200">Baseline Threshold</th>
+                          <th className="p-2 border-zinc-200">Compliance Status</th>
                         </tr>
                       </thead>
                       <tbody className="divide-y divide-zinc-200 font-mono text-[11px]">
                         <tr>
-                          <td className="p-2 border border-zinc-200 font-sans">Cryostat Dilution Temp</td>
-                          <td className="p-2 border border-zinc-200 font-bold">{subKelvinTemp} mK</td>
-                          <td className="p-2 border border-zinc-200">&lt; 20.00 mK</td>
-                          <td className="p-2 border border-zinc-200 text-emerald-700 font-bold">100% NOMINAL</td>
+                          <td className="p-2 border-zinc-200 font-sans">Cryostat Dilution Temp</td>
+                          <td className="p-2 border-zinc-200 font-bold">{subKelvinTemp} mK</td>
+                          <td className="p-2 border-zinc-200">&lt; 20.00 mK</td>
+                          <td className="p-2 border-zinc-200 text-emerald-700 font-bold">100% NOMINAL</td>
                         </tr>
                         <tr>
-                          <td className="p-2 border border-zinc-200 font-sans">Quantum Operations (QOps)</td>
-                          <td className="p-2 border border-zinc-200 font-bold">{qOpsRate} M-QOPS</td>
-                          <td className="p-2 border border-zinc-200">&gt; 800.0 M-QOPS</td>
-                          <td className="p-2 border border-zinc-200 text-emerald-700 font-bold">PASSED</td>
+                          <td className="p-2 border-zinc-200 font-sans">Quantum Operations (QOps)</td>
+                          <td className="p-2 border-zinc-200 font-bold">{qOpsRate} M-QOPS</td>
+                          <td className="p-2 border-zinc-200">&gt; 800.0 M-QOPS</td>
+                          <td className="p-2 border-zinc-200 text-emerald-700 font-bold">PASSED</td>
                         </tr>
                         <tr>
-                          <td className="p-2 border border-zinc-200 font-sans">Coherence Stability Level</td>
-                          <td className="p-2 border border-zinc-200 font-bold">{coherencePercent}</td>
-                          <td className="p-2 border border-zinc-200">&gt; 85.0% Fail-Closed</td>
-                          <td className="p-2 border border-zinc-200 text-emerald-700 font-bold">ZERO DRIFT</td>
+                          <td className="p-2 border-zinc-200 font-sans">Coherence Stability Level</td>
+                          <td className="p-2 border-zinc-200 font-bold">{coherencePercent}</td>
+                          <td className="p-2 border-zinc-200">&gt; 85.0% Fail-Closed</td>
+                          <td className="p-2 border-zinc-200 text-emerald-700 font-bold">ZERO DRIFT</td>
                         </tr>
                         <tr>
-                          <td className="p-2 border border-zinc-200 font-sans">Consensus Quorum</td>
-                          <td className="p-2 border border-zinc-200 font-bold">10/10 REAL_HSM</td>
-                          <td className="p-2 border border-zinc-200">10/10 Hardware HSM</td>
-                          <td className="p-2 border border-zinc-200 text-emerald-700 font-bold">UNANIMOUS</td>
+                          <td className="p-2 border-zinc-200 font-sans">Consensus Quorum</td>
+                          <td className="p-2 border-zinc-200 font-bold">10/10 REAL_HSM</td>
+                          <td className="p-2 border-zinc-200">10/10 Hardware HSM</td>
+                          <td className="p-2 border-zinc-200 text-emerald-700 font-bold">UNANIMOUS</td>
                         </tr>
                       </tbody>
                     </table>

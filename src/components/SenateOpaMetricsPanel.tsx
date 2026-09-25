@@ -338,12 +338,12 @@ export const SenateOpaMetricsPanel: React.FC<SenateOpaMetricsPanelProps> = ({ cl
   return (
     <div
       id="senate-opa-metrics-panel"
-      className={`bg-gradient-to-b from-zinc-900/90 via-zinc-950 to-black/90 border border-sky-500/30 rounded-3xl p-6 backdrop-blur-2xl shadow-[0_0_50px_rgba(56,189,248,0.12)] space-y-6 ${className}`}
+      className={`bg-gradient-to-b from-zinc-900/90 via-zinc-950 to-black/90 border-sky-500/30 rounded-3xl p-6 backdrop-blur-2xl shadow-[0_0_50px_rgba(56,189,248,0.12)] space-y-6 ${className}`}
     >
       {/* Panel Header */}
       <div className="flex flex-col lg:flex-row lg:items-center justify-between gap-4 pb-5 border-b border-white/10">
         <div className="flex items-start gap-4">
-          <div className="w-12 h-12 rounded-2xl bg-gradient-to-br from-sky-500/20 to-indigo-500/20 border border-sky-400/40 flex items-center justify-center text-sky-300 shadow-[0_0_20px_rgba(56,189,248,0.3)] shrink-0">
+          <div className="w-12 h-12 rounded-2xl bg-gradient-to-br from-sky-500/20 to-indigo-500/20 border-sky-400/40 flex items-center justify-center text-sky-300 shadow-[0_0_20px_rgba(56,189,248,0.3)] shrink-0">
             <Gauge className="w-6 h-6 text-sky-400" />
           </div>
           <div>
@@ -351,7 +351,7 @@ export const SenateOpaMetricsPanel: React.FC<SenateOpaMetricsPanelProps> = ({ cl
               <h2 className="text-lg sm:text-xl font-black text-white tracking-wide flex items-center gap-2">
                 <span>Senate Governance: OPA Rego Evaluation Engine</span>
               </h2>
-              <span className="px-2.5 py-0.5 rounded-full text-[10px] font-mono font-bold bg-sky-500/20 text-sky-300 border border-sky-500/40 shadow-sm flex items-center gap-1">
+              <span className="px-2.5 py-0.5 rounded-full text-[10px] font-mono font-bold bg-sky-500/20 text-sky-300 border-sky-500/40 shadow-sm flex items-center gap-1">
                 <Server className="w-3 h-3 text-sky-400" />
                 <span>/metrics</span>
               </span>
@@ -369,7 +369,7 @@ export const SenateOpaMetricsPanel: React.FC<SenateOpaMetricsPanelProps> = ({ cl
                 />
                 <span>{source === 'endpoint' ? 'LIVE ENDPOINT (200 OK)' : 'SYNCHRONOUS ENGINE'}</span>
               </span>
-              <span className="px-2.5 py-0.5 rounded-full text-[10px] font-mono font-bold bg-purple-500/20 text-purple-300 border border-purple-500/40">
+              <span className="px-2.5 py-0.5 rounded-full text-[10px] font-mono font-bold bg-purple-500/20 text-purple-300 border-purple-500/40">
                 SLA &lt; 50ms (99.98%)
               </span>
             </div>
@@ -381,13 +381,13 @@ export const SenateOpaMetricsPanel: React.FC<SenateOpaMetricsPanelProps> = ({ cl
 
         {/* Action Controls & Telemetry Stream Management */}
         <div className="flex flex-wrap items-center gap-2.5 font-mono text-xs">
-          <div className="flex items-center gap-1 bg-black/50 p-1 rounded-xl border border-white/10">
+          <div className="flex items-center gap-1 bg-black/50 p-1 rounded-xl border-white/10">
             <button
               type="button"
               onClick={() => setAutoRefresh(!autoRefresh)}
               className={`px-2.5 py-1 rounded-lg transition-all cursor-pointer flex items-center gap-1.5 text-[11px] font-bold ${
                 autoRefresh
-                  ? 'bg-sky-500/20 text-sky-300 border border-sky-500/40'
+                  ? 'bg-sky-500/20 text-sky-300 border-sky-500/40'
                   : 'text-zinc-400 hover:text-white'
               }`}
               title="Toggle real-time polling from /metrics"
@@ -411,7 +411,7 @@ export const SenateOpaMetricsPanel: React.FC<SenateOpaMetricsPanelProps> = ({ cl
             type="button"
             disabled={burstLoading}
             onClick={() => handleTriggerBurst(350)}
-            className="px-3 py-1.5 rounded-xl bg-gradient-to-r from-amber-500/20 to-orange-500/20 hover:from-amber-500/30 hover:to-orange-500/30 border border-amber-500/40 text-amber-300 hover:text-white font-bold transition-all shadow-[0_0_12px_rgba(245,158,11,0.2)] cursor-pointer flex items-center gap-1.5 text-[11px]"
+            className="px-3 py-1.5 rounded-xl bg-gradient-to-r from-amber-500/20 to-orange-500/20 hover:from-amber-500/30 hover:to-orange-500/30 border-amber-500/40 text-amber-300 hover:text-white font-bold transition-all shadow-[0_0_12px_rgba(245,158,11,0.2)] cursor-pointer flex items-center gap-1.5 text-[11px]"
             title="Dispatch 350 simulated evaluations to benchmark real-time throughput response"
           >
             <Zap className="w-3.5 h-3.5 text-amber-400" />
@@ -421,7 +421,7 @@ export const SenateOpaMetricsPanel: React.FC<SenateOpaMetricsPanelProps> = ({ cl
           <button
             type="button"
             onClick={() => setShowPrometheusModal(true)}
-            className="px-3 py-1.5 rounded-xl bg-white/5 hover:bg-white/10 border border-white/10 text-zinc-300 hover:text-white font-bold transition-all cursor-pointer flex items-center gap-1.5 text-[11px]"
+            className="px-3 py-1.5 rounded-xl bg-white/5 hover:bg-white/10 border-white/10 text-zinc-300 hover:text-white font-bold transition-all cursor-pointer flex items-center gap-1.5 text-[11px]"
             title="View raw Prometheus exposition format text"
           >
             <Code2 className="w-3.5 h-3.5 text-indigo-400" />
@@ -431,7 +431,7 @@ export const SenateOpaMetricsPanel: React.FC<SenateOpaMetricsPanelProps> = ({ cl
           <button
             type="button"
             onClick={handleExportJson}
-            className="px-3 py-1.5 rounded-xl bg-sky-500/20 hover:bg-sky-500/30 border border-sky-400/40 text-sky-200 hover:text-white font-bold transition-all shadow-[0_0_12px_rgba(56,189,248,0.2)] cursor-pointer flex items-center gap-1.5 text-[11px]"
+            className="px-3 py-1.5 rounded-xl bg-sky-500/20 hover:bg-sky-500/30 border-sky-400/40 text-sky-200 hover:text-white font-bold transition-all shadow-[0_0_12px_rgba(56,189,248,0.2)] cursor-pointer flex items-center gap-1.5 text-[11px]"
             title="Export full metrics snapshot to JSON file"
           >
             <Download className="w-3.5 h-3.5 text-sky-300" />
@@ -445,7 +445,7 @@ export const SenateOpaMetricsPanel: React.FC<SenateOpaMetricsPanelProps> = ({ cl
           initial={{ opacity: 0, y: -10 }}
           animate={{ opacity: 1, y: 0 }}
           exit={{ opacity: 0 }}
-          className="p-3 bg-amber-500/15 border border-amber-500/40 rounded-xl text-amber-200 text-xs font-mono flex items-center gap-2"
+          className="p-3 bg-amber-500/15 border-amber-500/40 rounded-xl text-amber-200 text-xs font-mono flex items-center gap-2"
         >
           <Zap className="w-4 h-4 text-amber-400 shrink-0" />
           <span>{burstToast}</span>
@@ -455,7 +455,7 @@ export const SenateOpaMetricsPanel: React.FC<SenateOpaMetricsPanelProps> = ({ cl
       {/* TOP METRICS SUMMARY: 4 HIGH-IMPACT TELEMETRY TILES WITH SPARKLINES */}
       <div className="grid grid-cols-2 lg:grid-cols-4 gap-3 sm:gap-4 font-mono">
         {/* Throughput Tile */}
-        <div className="bg-black/50 border border-sky-500/30 rounded-2xl p-4 space-y-1 relative overflow-hidden group">
+        <div className="bg-black/50 border-sky-500/30 rounded-2xl p-4 space-y-1 relative overflow-hidden group">
           <div className="absolute top-0 right-0 w-24 h-24 bg-sky-500/5 rounded-full blur-2xl group-hover:bg-sky-500/10 transition-all" />
           <div className="text-[10px] text-zinc-400 uppercase tracking-wider flex items-center justify-between">
             <span>Evaluation Throughput</span>
@@ -485,7 +485,7 @@ export const SenateOpaMetricsPanel: React.FC<SenateOpaMetricsPanelProps> = ({ cl
         </div>
 
         {/* p99 Latency Tile */}
-        <div className="bg-black/50 border border-emerald-500/30 rounded-2xl p-4 space-y-1 relative overflow-hidden group">
+        <div className="bg-black/50 border-emerald-500/30 rounded-2xl p-4 space-y-1 relative overflow-hidden group">
           <div className="absolute top-0 right-0 w-24 h-24 bg-emerald-500/5 rounded-full blur-2xl group-hover:bg-emerald-500/10 transition-all" />
           <div className="text-[10px] text-zinc-400 uppercase tracking-wider flex items-center justify-between">
             <span>p99 Latency (Sovereign SLA)</span>
@@ -515,7 +515,7 @@ export const SenateOpaMetricsPanel: React.FC<SenateOpaMetricsPanelProps> = ({ cl
         </div>
 
         {/* Cumulative Evaluations Tile */}
-        <div className="bg-black/50 border border-indigo-500/30 rounded-2xl p-4 space-y-1 relative overflow-hidden group">
+        <div className="bg-black/50 border-indigo-500/30 rounded-2xl p-4 space-y-1 relative overflow-hidden group">
           <div className="absolute top-0 right-0 w-24 h-24 bg-indigo-500/5 rounded-full blur-2xl group-hover:bg-indigo-500/10 transition-all" />
           <div className="text-[10px] text-zinc-400 uppercase tracking-wider flex items-center justify-between">
             <span>Total Evaluations</span>
@@ -540,7 +540,7 @@ export const SenateOpaMetricsPanel: React.FC<SenateOpaMetricsPanelProps> = ({ cl
         </div>
 
         {/* SLA Compliance Tile */}
-        <div className="bg-black/50 border border-purple-500/30 rounded-2xl p-4 space-y-1 relative overflow-hidden group">
+        <div className="bg-black/50 border-purple-500/30 rounded-2xl p-4 space-y-1 relative overflow-hidden group">
           <div className="absolute top-0 right-0 w-24 h-24 bg-purple-500/5 rounded-full blur-2xl group-hover:bg-purple-500/10 transition-all" />
           <div className="text-[10px] text-zinc-400 uppercase tracking-wider flex items-center justify-between">
             <span>SLA Compliance</span>
@@ -568,7 +568,7 @@ export const SenateOpaMetricsPanel: React.FC<SenateOpaMetricsPanelProps> = ({ cl
       {/* CORE DUAL-PANEL: GAUGES & THROUGHPUT TRENDS */}
       <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 items-stretch">
         {/* LEFT COLUMN: P99 LATENCY GAUGES & DISTRIBUTION (5 COLS) */}
-        <div className="lg:col-span-5 bg-black/60 border border-white/10 rounded-2xl p-5 space-y-5 flex flex-col justify-between">
+        <div className="lg:col-span-5 bg-black/60 border-white/10 rounded-2xl p-5 space-y-5 flex flex-col justify-between">
           <div className="flex items-center justify-between border-b border-white/10 pb-3">
             <div className="flex items-center gap-2">
               <Gauge className="w-4 h-4 text-emerald-400" />
@@ -686,15 +686,15 @@ export const SenateOpaMetricsPanel: React.FC<SenateOpaMetricsPanelProps> = ({ cl
 
             {/* Average & Min/Max */}
             <div className="grid grid-cols-3 gap-2 pt-2 text-[10px] text-center border-t border-white/5">
-              <div className="bg-black/40 p-2 rounded-xl border border-white/5">
+              <div className="bg-black/40 p-2 rounded-xl border-white/5">
                 <div className="text-zinc-500">MIN</div>
                 <div className="text-emerald-300 font-bold mt-0.5">{metrics?.minLatencyMs.toFixed(2) || '0.21'}ms</div>
               </div>
-              <div className="bg-black/40 p-2 rounded-xl border border-white/5">
+              <div className="bg-black/40 p-2 rounded-xl border-white/5">
                 <div className="text-zinc-500">AVG</div>
                 <div className="text-sky-300 font-bold mt-0.5">{metrics?.avgLatencyMs.toFixed(2) || '0.48'}ms</div>
               </div>
-              <div className="bg-black/40 p-2 rounded-xl border border-white/5">
+              <div className="bg-black/40 p-2 rounded-xl border-white/5">
                 <div className="text-zinc-500">MAX</div>
                 <div className="text-amber-300 font-bold mt-0.5">{metrics?.maxLatencyMs.toFixed(2) || '1.18'}ms</div>
               </div>
@@ -703,7 +703,7 @@ export const SenateOpaMetricsPanel: React.FC<SenateOpaMetricsPanelProps> = ({ cl
         </div>
 
         {/* RIGHT COLUMN: EVALUATION THROUGHPUT & LATENCY TRENDS CHART (7 COLS) */}
-        <div className="lg:col-span-7 bg-black/60 border border-white/10 rounded-2xl p-5 space-y-4 flex flex-col justify-between">
+        <div className="lg:col-span-7 bg-black/60 border-white/10 rounded-2xl p-5 space-y-4 flex flex-col justify-between">
           <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 border-b border-white/10 pb-3">
             <div className="flex items-center gap-2">
               <TrendingUp className="w-4 h-4 text-sky-400" />
@@ -713,7 +713,7 @@ export const SenateOpaMetricsPanel: React.FC<SenateOpaMetricsPanelProps> = ({ cl
             </div>
 
             {/* Chart Sub-Tabs */}
-            <div className="flex items-center gap-1 bg-black/50 p-1 rounded-xl border border-white/10 font-mono text-xs">
+            <div className="flex items-center gap-1 bg-black/50 p-1 rounded-xl border-white/10 font-mono text-xs">
               <button
                 type="button"
                 onClick={() => {
@@ -838,7 +838,7 @@ export const SenateOpaMetricsPanel: React.FC<SenateOpaMetricsPanelProps> = ({ cl
       {/* LOWER SECTION: ACTIVE REGO RULES BREAKDOWN & RISK-TIERED PERFORMANCE */}
       <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 items-stretch">
         {/* Rules Breakdown Table (7 Cols) */}
-        <div className="lg:col-span-7 bg-black/60 border border-white/10 rounded-2xl p-5 space-y-3">
+        <div className="lg:col-span-7 bg-black/60 border-white/10 rounded-2xl p-5 space-y-3">
           <div className="flex items-center justify-between border-b border-white/10 pb-3">
             <div className="flex items-center gap-2">
               <Terminal className="w-4 h-4 text-sky-400" />
@@ -870,7 +870,7 @@ export const SenateOpaMetricsPanel: React.FC<SenateOpaMetricsPanelProps> = ({ cl
                       {rb.evaluations.toLocaleString()}
                     </td>
                     <td className="py-2.5 px-2 text-center">
-                      <span className="px-2 py-0.5 rounded-md text-[10px] font-bold bg-emerald-500/20 text-emerald-300 border border-emerald-500/40">
+                      <span className="px-2 py-0.5 rounded-md text-[10px] font-bold bg-emerald-500/20 text-emerald-300 border-emerald-500/40">
                         {rb.passRate}%
                       </span>
                     </td>
@@ -885,7 +885,7 @@ export const SenateOpaMetricsPanel: React.FC<SenateOpaMetricsPanelProps> = ({ cl
         </div>
 
         {/* Risk-Tiered Performance (5 Cols) */}
-        <div className="lg:col-span-5 bg-black/60 border border-white/10 rounded-2xl p-5 space-y-4">
+        <div className="lg:col-span-5 bg-black/60 border-white/10 rounded-2xl p-5 space-y-4">
           <div className="flex items-center justify-between border-b border-white/10 pb-3">
             <div className="flex items-center gap-2">
               <Layers className="w-4 h-4 text-purple-400" />
@@ -898,7 +898,7 @@ export const SenateOpaMetricsPanel: React.FC<SenateOpaMetricsPanelProps> = ({ cl
 
           <div className="space-y-3 font-mono text-xs">
             {/* Low Risk Tier */}
-            <div className="p-3 rounded-xl bg-emerald-500/10 border border-emerald-500/25 space-y-1">
+            <div className="p-3 rounded-xl bg-emerald-500/10 border-emerald-500/25 space-y-1">
               <div className="flex justify-between items-center text-emerald-300 font-bold text-[11px]">
                 <span>TIER 1: LOW RISK (Score &lt; 25)</span>
                 <span>{metrics?.riskTierMetrics?.low?.allowRate || 99.4}% Allow</span>
@@ -911,7 +911,7 @@ export const SenateOpaMetricsPanel: React.FC<SenateOpaMetricsPanelProps> = ({ cl
             </div>
 
             {/* Medium Risk Tier */}
-            <div className="p-3 rounded-xl bg-sky-500/10 border border-sky-500/25 space-y-1">
+            <div className="p-3 rounded-xl bg-sky-500/10 border-sky-500/25 space-y-1">
               <div className="flex justify-between items-center text-sky-300 font-bold text-[11px]">
                 <span>TIER 2: MEDIUM RISK (Score 25-60)</span>
                 <span>{metrics?.riskTierMetrics?.medium?.allowRate || 98.1}% Allow</span>
@@ -924,7 +924,7 @@ export const SenateOpaMetricsPanel: React.FC<SenateOpaMetricsPanelProps> = ({ cl
             </div>
 
             {/* High Risk Tier */}
-            <div className="p-3 rounded-xl bg-purple-500/10 border border-purple-500/25 space-y-1">
+            <div className="p-3 rounded-xl bg-purple-500/10 border-purple-500/25 space-y-1">
               <div className="flex justify-between items-center text-purple-300 font-bold text-[11px]">
                 <span>TIER 3: HIGH RISK (Score &gt; 60)</span>
                 <span>{metrics?.riskTierMetrics?.high?.allowRate || 94.2}% Allow</span>
@@ -940,10 +940,10 @@ export const SenateOpaMetricsPanel: React.FC<SenateOpaMetricsPanelProps> = ({ cl
       </div>
 
       {/* OFFICIAL PERFORMANCE BENCHMARK SUITE v1.2 LTS */}
-      <div className="bg-black/60 border border-white/10 rounded-2xl p-5 sm:p-6 space-y-5">
+      <div className="bg-black/60 border-white/10 rounded-2xl p-5 sm:p-6 space-y-5">
         <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 pb-4 border-b border-white/10">
           <div className="flex items-start gap-3">
-            <div className="w-10 h-10 rounded-xl bg-amber-500/20 border border-amber-400/40 flex items-center justify-center text-amber-300 shrink-0 shadow-[0_0_15px_rgba(245,158,11,0.25)]">
+            <div className="w-10 h-10 rounded-xl bg-amber-500/20 border-amber-400/40 flex items-center justify-center text-amber-300 shrink-0 shadow-[0_0_15px_rgba(245,158,11,0.25)]">
               <Zap className="w-5 h-5 text-amber-400" />
             </div>
             <div>
@@ -951,10 +951,10 @@ export const SenateOpaMetricsPanel: React.FC<SenateOpaMetricsPanelProps> = ({ cl
                 <h3 className="text-base sm:text-lg font-bold text-white tracking-wide">
                   Performance Benchmark Suite v1.2 LTS
                 </h3>
-                <span className="px-2.5 py-0.5 rounded-full text-[10px] font-mono font-bold bg-amber-500/20 text-amber-300 border border-amber-500/40">
+                <span className="px-2.5 py-0.5 rounded-full text-[10px] font-mono font-bold bg-amber-500/20 text-amber-300 border-amber-500/40">
                   Sub-50ms SLA Verification
                 </span>
-                <span className="px-2 py-0.5 rounded-full text-[10px] font-mono font-bold bg-purple-500/20 text-purple-300 border border-purple-500/40">
+                <span className="px-2 py-0.5 rounded-full text-[10px] font-mono font-bold bg-purple-500/20 text-purple-300 border-purple-500/40">
                   4 Payloads
                 </span>
               </div>
@@ -969,7 +969,7 @@ export const SenateOpaMetricsPanel: React.FC<SenateOpaMetricsPanelProps> = ({ cl
               type="button"
               disabled={suiteRunning || runningBenchmarkId !== null}
               onClick={runFullBenchmarkSuite}
-              className="px-4 py-2 rounded-xl bg-gradient-to-r from-amber-500/30 to-amber-600/30 hover:from-amber-500/40 hover:to-amber-600/40 border border-amber-400/50 text-amber-200 font-bold text-xs transition-all cursor-pointer flex items-center gap-2 shadow-[0_0_15px_rgba(245,158,11,0.2)] disabled:opacity-50"
+              className="px-4 py-2 rounded-xl bg-gradient-to-r from-amber-500/30 to-amber-600/30 hover:from-amber-500/40 hover:to-amber-600/40 border-amber-400/50 text-amber-200 font-bold text-xs transition-all cursor-pointer flex items-center gap-2 shadow-[0_0_15px_rgba(245,158,11,0.2)] disabled:opacity-50"
             >
               {suiteRunning ? (
                 <RefreshCw className="w-4 h-4 animate-spin text-amber-300" />
@@ -1003,7 +1003,7 @@ export const SenateOpaMetricsPanel: React.FC<SenateOpaMetricsPanelProps> = ({ cl
                 <div className="flex items-start justify-between gap-2">
                   <div className="space-y-1">
                     <div className="flex items-center gap-2 flex-wrap">
-                      <span className="px-2 py-0.5 rounded-md text-[10px] font-bold bg-white/10 text-zinc-300 border border-white/15">
+                      <span className="px-2 py-0.5 rounded-md text-[10px] font-bold bg-white/10 text-zinc-300 border-white/15">
                         {bench.id}
                       </span>
                       <span
@@ -1052,7 +1052,7 @@ export const SenateOpaMetricsPanel: React.FC<SenateOpaMetricsPanelProps> = ({ cl
 
                 {/* Benchmark Execution Stats Tile */}
                 {res ? (
-                  <div className="bg-black/60 rounded-xl p-3 border border-white/10 space-y-2">
+                  <div className="bg-black/60 rounded-xl p-3 border-white/10 space-y-2">
                     <div className="grid grid-cols-3 gap-2 text-center">
                       <div className="p-1.5 rounded-lg bg-white/5">
                         <div className="text-[9px] text-zinc-400 uppercase">p99 Latency</div>
@@ -1077,7 +1077,7 @@ export const SenateOpaMetricsPanel: React.FC<SenateOpaMetricsPanelProps> = ({ cl
                     </div>
                   </div>
                 ) : (
-                  <div className="bg-black/30 rounded-xl p-3 border border-dashed border-white/10 text-center text-[11px] text-zinc-500">
+                  <div className="bg-black/30 rounded-xl p-3 border-dashed border-white/10 text-center text-[11px] text-zinc-500">
                     {isRunning ? (
                       <div className="flex items-center justify-center gap-2 text-amber-300 font-bold py-1">
                         <RefreshCw className="w-3.5 h-3.5 animate-spin" />
@@ -1113,7 +1113,7 @@ export const SenateOpaMetricsPanel: React.FC<SenateOpaMetricsPanelProps> = ({ cl
                         playAuditChime();
                         setTimeout(() => setCopiedBenchmarkId(null), 2000);
                       }}
-                      className="px-2.5 py-1.5 rounded-lg bg-white/5 hover:bg-white/10 border border-white/10 text-[11px] font-semibold text-zinc-300 flex items-center gap-1 transition-all cursor-pointer"
+                      className="px-2.5 py-1.5 rounded-lg bg-white/5 hover:bg-white/10 border-white/10 text-[11px] font-semibold text-zinc-300 flex items-center gap-1 transition-all cursor-pointer"
                     >
                       {copiedBenchmarkId === bench.id ? (
                         <Check className="w-3 h-3 text-emerald-400" />
@@ -1128,7 +1128,7 @@ export const SenateOpaMetricsPanel: React.FC<SenateOpaMetricsPanelProps> = ({ cl
                     type="button"
                     disabled={isRunning || suiteRunning}
                     onClick={() => runSingleBenchmark(bench, 250)}
-                    className="px-3 py-1.5 rounded-lg bg-sky-500/20 hover:bg-sky-500/30 border border-sky-400/40 text-sky-200 text-[11px] font-bold flex items-center gap-1.5 transition-all cursor-pointer disabled:opacity-50"
+                    className="px-3 py-1.5 rounded-lg bg-sky-500/20 hover:bg-sky-500/30 border-sky-400/40 text-sky-200 text-[11px] font-bold flex items-center gap-1.5 transition-all cursor-pointer disabled:opacity-50"
                   >
                     {isRunning ? (
                       <RefreshCw className="w-3 h-3 animate-spin text-sky-300" />
@@ -1163,10 +1163,10 @@ export const SenateOpaMetricsPanel: React.FC<SenateOpaMetricsPanelProps> = ({ cl
                         Copy JSON
                       </button>
                     </div>
-                    <pre className="bg-black/90 p-3 rounded-lg border border-white/10 text-sky-300 overflow-x-auto max-h-48 whitespace-pre font-mono leading-relaxed">
+                    <pre className="bg-black/90 p-3 rounded-lg border-white/10 text-sky-300 overflow-x-auto max-h-48 whitespace-pre font-mono leading-relaxed">
                       {JSON.stringify(bench.payload, null, 2)}
                     </pre>
-                    <div className="bg-black/80 p-2 rounded-lg border border-white/5 text-zinc-400 text-[9px] break-all font-mono">
+                    <div className="bg-black/80 p-2 rounded-lg border-white/5 text-zinc-400 text-[9px] break-all font-mono">
                       <strong className="text-zinc-300">CLI: </strong>{bench.opaCommand}
                     </div>
                   </motion.div>
@@ -1185,7 +1185,7 @@ export const SenateOpaMetricsPanel: React.FC<SenateOpaMetricsPanelProps> = ({ cl
               initial={{ opacity: 0, scale: 0.95 }}
               animate={{ opacity: 1, scale: 1 }}
               exit={{ opacity: 0, scale: 0.95 }}
-              className="bg-zinc-900 border border-sky-500/40 rounded-3xl p-6 max-w-2xl w-full space-y-4 shadow-2xl font-mono"
+              className="bg-zinc-900 border-sky-500/40 rounded-3xl p-6 max-w-2xl w-full space-y-4 shadow-2xl font-mono"
             >
               <div className="flex items-center justify-between pb-3 border-b border-white/10">
                 <div className="flex items-center gap-2">
@@ -1201,7 +1201,7 @@ export const SenateOpaMetricsPanel: React.FC<SenateOpaMetricsPanelProps> = ({ cl
                 </button>
               </div>
 
-              <div className="bg-black/80 p-4 rounded-xl border border-white/10 text-xs text-sky-300 overflow-x-auto max-h-80 font-mono whitespace-pre leading-relaxed">
+              <div className="bg-black/80 p-4 rounded-xl border-white/10 text-xs text-sky-300 overflow-x-auto max-h-80 font-mono whitespace-pre leading-relaxed">
                 {getPrometheusText()}
               </div>
 
@@ -1211,7 +1211,7 @@ export const SenateOpaMetricsPanel: React.FC<SenateOpaMetricsPanelProps> = ({ cl
                   <button
                     type="button"
                     onClick={handleCopyPrometheus}
-                    className="px-3 py-1.5 rounded-xl bg-sky-500/20 hover:bg-sky-500/30 border border-sky-400/40 text-sky-200 font-bold transition-all cursor-pointer flex items-center gap-1 text-xs"
+                    className="px-3 py-1.5 rounded-xl bg-sky-500/20 hover:bg-sky-500/30 border-sky-400/40 text-sky-200 font-bold transition-all cursor-pointer flex items-center gap-1 text-xs"
                   >
                     {copiedPrometheus ? <Check className="w-3.5 h-3.5 text-emerald-400" /> : <Copy className="w-3.5 h-3.5" />}
                     <span>{copiedPrometheus ? 'Copied!' : 'Copy Scrape'}</span>

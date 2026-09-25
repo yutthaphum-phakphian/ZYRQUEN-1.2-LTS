@@ -452,7 +452,7 @@ export const SovereignChambersControlPlane: React.FC = () => {
     return (
       <div className="min-h-screen bg-slate-950 text-slate-100 p-4 sm:p-6 font-sans">
         <div className="max-w-7xl mx-auto space-y-4">
-          <div className="flex flex-wrap items-center justify-between gap-4 p-4 bg-slate-900 border border-slate-800 rounded-2xl shadow-xl">
+          <div className="flex flex-wrap items-center justify-between gap-4 p-4 bg-slate-900 border-slate-800 rounded-2xl shadow-xl">
             <div className="flex items-center gap-3">
               <span className="text-xl">🧊</span>
               <div>
@@ -464,7 +464,7 @@ export const SovereignChambersControlPlane: React.FC = () => {
               <button
                 type="button"
                 onClick={() => setActiveViewMode('control_plane')}
-                className="px-4 py-2 bg-slate-800 hover:bg-slate-700 text-slate-200 border border-slate-700 rounded-xl text-xs font-bold font-mono transition-all cursor-pointer"
+                className="px-4 py-2 bg-slate-800 hover:bg-slate-700 text-slate-200 border-slate-700 rounded-xl text-xs font-bold font-mono transition-all cursor-pointer"
               >
                 🏛️ Switch to 18 Chambers Control Plane
               </button>
@@ -496,7 +496,7 @@ export const SovereignChambersControlPlane: React.FC = () => {
               <h1 className="text-2xl font-bold tracking-tight text-indigo-400">
                 ZYRQUEN Sovereign Dashboard Control Plane
               </h1>
-              <span className="text-[10px] font-mono px-2 py-0.5 rounded bg-indigo-950/80 text-indigo-300 border border-indigo-500/40">
+              <span className="text-[10px] font-mono px-2 py-0.5 rounded bg-indigo-950/80 text-indigo-300 border-indigo-500/40">
                 v2.1 SSoT
               </span>
             </div>
@@ -510,7 +510,7 @@ export const SovereignChambersControlPlane: React.FC = () => {
             <button
               type="button"
               onClick={() => setActiveViewMode('cryo_sentinel')}
-              className="px-3.5 py-2 bg-cyan-950 hover:bg-cyan-900 text-cyan-300 border border-cyan-600/60 text-sm font-semibold rounded-lg transition-all cursor-pointer flex items-center gap-1.5 shadow-sm shadow-cyan-950"
+              className="px-3.5 py-2 bg-cyan-950 hover:bg-cyan-900 text-cyan-300 border-cyan-600/60 text-sm font-semibold rounded-lg transition-all cursor-pointer flex items-center gap-1.5 shadow-sm shadow-cyan-950"
               title="Open Cryo Chamber Sovereign Inspector & 14,902 Batch Console"
             >
               <span>🧊 Cryo Inspector</span>
@@ -538,7 +538,7 @@ export const SovereignChambersControlPlane: React.FC = () => {
               {isWsConnected ? 'WS Telemetry: LIVE' : isFallbackMode ? 'Fallback Mode' : 'HTTP Polling (5s)'}
             </span>
 
-            <span className="inline-flex items-center px-3 py-1 rounded-full text-xs font-medium bg-emerald-950 text-emerald-400 border border-emerald-800">
+            <span className="inline-flex items-center px-3 py-1 rounded-full text-xs font-medium bg-emerald-950 text-emerald-400 border-emerald-800">
               <span className="w-2 h-2 mr-1.5 bg-emerald-400 rounded-full animate-pulse"></span>
               SSoT Drift: 0.00%
             </span>
@@ -546,7 +546,7 @@ export const SovereignChambersControlPlane: React.FC = () => {
             <button
               onClick={handleSentinelSweep}
               disabled={isSweeping}
-              className="px-3 py-2 bg-slate-900 hover:bg-slate-800 text-indigo-300 border border-indigo-500/40 text-sm font-semibold rounded-lg transition-colors cursor-pointer flex items-center gap-1.5"
+              className="px-3 py-2 bg-slate-900 hover:bg-slate-800 text-indigo-300 border-indigo-500/40 text-sm font-semibold rounded-lg transition-colors cursor-pointer flex items-center gap-1.5"
               title="Activate Sentinel Sweep Protocol for instant zero-drift verification"
             >
               <Activity className={`w-4 h-4 text-indigo-400 ${isSweeping ? 'animate-spin' : ''}`} />
@@ -555,7 +555,7 @@ export const SovereignChambersControlPlane: React.FC = () => {
 
             <button
               onClick={() => setIsVerifyModalOpen(true)}
-              className="px-3 py-2 bg-slate-900 hover:bg-slate-800 text-cyan-300 border border-cyan-500/40 text-sm font-semibold rounded-lg transition-colors cursor-pointer flex items-center gap-1.5"
+              className="px-3 py-2 bg-slate-900 hover:bg-slate-800 text-cyan-300 border-cyan-500/40 text-sm font-semibold rounded-lg transition-colors cursor-pointer flex items-center gap-1.5"
             >
               <Hash className="w-4 h-4" />
               <span>Verify Proof</span>
@@ -563,7 +563,7 @@ export const SovereignChambersControlPlane: React.FC = () => {
 
             <button
               onClick={() => setIsAddModalOpen(true)}
-              className="px-3 py-2 bg-slate-900 hover:bg-slate-800 text-emerald-300 border border-emerald-500/40 text-sm font-semibold rounded-lg transition-colors cursor-pointer flex items-center gap-1.5"
+              className="px-3 py-2 bg-slate-900 hover:bg-slate-800 text-emerald-300 border-emerald-500/40 text-sm font-semibold rounded-lg transition-colors cursor-pointer flex items-center gap-1.5"
             >
               <Plus className="w-4 h-4" />
               <span>Add Chamber</span>
@@ -582,7 +582,7 @@ export const SovereignChambersControlPlane: React.FC = () => {
 
         {/* Sync Message Alert */}
         {syncMessage && (
-          <div className="p-4 bg-slate-900 border border-indigo-500/30 text-indigo-300 rounded-xl text-sm flex items-center justify-between gap-2.5 animate-in fade-in duration-200">
+          <div className="p-4 bg-slate-900 border-indigo-500/30 text-indigo-300 rounded-xl text-sm flex items-center justify-between gap-2.5 animate-in fade-in duration-200">
             <div className="flex items-center gap-2.5">
               <CheckCircle2 className="w-4 h-4 text-emerald-400 shrink-0" />
               <span>{syncMessage}</span>
@@ -598,7 +598,7 @@ export const SovereignChambersControlPlane: React.FC = () => {
 
         {/* Error / Fallback State */}
         {error && (
-          <div className="p-4 bg-amber-950/40 border border-amber-800/60 text-amber-300 rounded-xl text-sm flex items-center gap-2.5">
+          <div className="p-4 bg-amber-950/40 border-amber-800/60 text-amber-300 rounded-xl text-sm flex items-center gap-2.5">
             <AlertTriangle className="w-4 h-4 text-amber-400 shrink-0" />
             <span>⚠️ {error}</span>
           </div>
@@ -632,7 +632,7 @@ export const SovereignChambersControlPlane: React.FC = () => {
                   {operationalCount}
                   <span className="text-xs font-normal text-slate-400 ml-1.5 font-mono">/ {chambers.length}</span>
                 </div>
-                <span className="text-xs font-mono px-2 py-0.5 rounded-full bg-emerald-950/90 text-emerald-300 border border-emerald-700/80 font-bold">
+                <span className="text-xs font-mono px-2 py-0.5 rounded-full bg-emerald-950/90 text-emerald-300 border-emerald-700/80 font-bold">
                   {operationalPercentage}%
                 </span>
               </div>
@@ -691,14 +691,14 @@ export const SovereignChambersControlPlane: React.FC = () => {
             {/* Card 3: Sovereign Quorum Consensus */}
             <div
               id="summary-card-quorum"
-              className="p-4 rounded-2xl bg-slate-900/90 border border-slate-800 hover:border-violet-500/50 transition-all relative overflow-hidden shadow-lg group"
+              className="p-4 rounded-2xl bg-slate-900/90 border-slate-800 hover:border-violet-500/50 transition-all relative overflow-hidden shadow-lg group"
             >
               <div className="flex items-center justify-between mb-2">
                 <span className="text-xs font-mono uppercase tracking-wider text-violet-400 font-bold flex items-center gap-1.5">
                   <Lock className="w-4 h-4 text-violet-400" />
                   <span>Quorum Consensus</span>
                 </span>
-                <span className="text-[10px] font-mono px-2 py-0.5 rounded-full bg-violet-950/90 text-violet-300 border border-violet-800 font-bold">
+                <span className="text-[10px] font-mono px-2 py-0.5 rounded-full bg-violet-950/90 text-violet-300 border-violet-800 font-bold">
                   {quorum.status || 'ASCENDED'}
                 </span>
               </div>
@@ -707,7 +707,7 @@ export const SovereignChambersControlPlane: React.FC = () => {
                   {quorum.verified}
                   <span className="text-xs font-normal text-slate-400 ml-1.5 font-mono">/ {quorum.required} Req</span>
                 </div>
-                <span className="text-xs font-mono text-emerald-400 font-bold px-2 py-0.5 rounded bg-emerald-950/80 border border-emerald-800/50">
+                <span className="text-xs font-mono text-emerald-400 font-bold px-2 py-0.5 rounded bg-emerald-950/80 border-emerald-800/50">
                   {quorum.thresholdRatio || '10/10'}
                 </span>
               </div>
@@ -720,14 +720,14 @@ export const SovereignChambersControlPlane: React.FC = () => {
             {/* Card 4: Sentinel Sweep & Zero Drift Assurance */}
             <div
               id="summary-card-sentinel-sweep"
-              className="p-4 rounded-2xl bg-slate-900/90 border border-slate-800 hover:border-cyan-500/50 transition-all relative overflow-hidden shadow-lg group"
+              className="p-4 rounded-2xl bg-slate-900/90 border-slate-800 hover:border-cyan-500/50 transition-all relative overflow-hidden shadow-lg group"
             >
               <div className="flex items-center justify-between mb-2">
                 <span className="text-xs font-mono uppercase tracking-wider text-cyan-400 font-bold flex items-center gap-1.5">
                   <Activity className="w-4 h-4 text-cyan-400" />
                   <span>Sentinel Sweep</span>
                 </span>
-                <span className="text-[10px] font-mono px-2 py-0.5 rounded-full bg-cyan-950/90 text-cyan-300 border border-cyan-800 font-bold">
+                <span className="text-[10px] font-mono px-2 py-0.5 rounded-full bg-cyan-950/90 text-cyan-300 border-cyan-800 font-bold">
                   ACTIVE_GUARD
                 </span>
               </div>
@@ -735,7 +735,7 @@ export const SovereignChambersControlPlane: React.FC = () => {
                 <div className="text-3xl font-black text-cyan-300 font-mono tracking-tight">
                   Δ0.00%
                 </div>
-                <span className="text-xs font-mono text-emerald-400 font-bold px-2 py-0.5 rounded bg-emerald-950/80 border border-emerald-800/50">
+                <span className="text-xs font-mono text-emerald-400 font-bold px-2 py-0.5 rounded bg-emerald-950/80 border-emerald-800/50">
                   Zero Drift
                 </span>
               </div>
@@ -755,7 +755,7 @@ export const SovereignChambersControlPlane: React.FC = () => {
         </section>
 
         {/* SEARCH AND FILTER BAR */}
-        <section className="p-4 rounded-2xl bg-slate-900/80 border border-slate-800/80 backdrop-blur-md space-y-3 shadow-lg shadow-black/40">
+        <section className="p-4 rounded-2xl bg-slate-900/80 border-slate-800/80 backdrop-blur-md space-y-3 shadow-lg shadow-black/40">
           <div className="flex flex-col md:flex-row items-stretch md:items-center justify-between gap-3">
             {/* Search Input Field with Real-Time Filtering */}
             <div className="relative flex-1 group">
@@ -766,7 +766,7 @@ export const SovereignChambersControlPlane: React.FC = () => {
                 value={searchQuery}
                 onChange={(e) => setSearchQuery(e.target.value)}
                 placeholder="Filter chambers in real-time by name, ID (e.g. 1, 01, 18), or code (CH-00)..."
-                className="w-full bg-slate-950/90 border border-slate-750 focus:border-cyan-400 focus:ring-1 focus:ring-cyan-400/30 rounded-xl pl-10 pr-20 py-2.5 text-sm text-slate-100 placeholder:text-slate-500 focus:outline-none transition-all shadow-inner font-sans"
+                className="w-full bg-slate-950/90 border-slate-750 focus:border-cyan-400 focus:ring-1 focus:ring-cyan-400/30 rounded-xl pl-10 pr-20 py-2.5 text-sm text-slate-100 placeholder:text-slate-500 focus:outline-none transition-all shadow-inner font-sans"
               />
               <div className="absolute right-3 top-1/2 -translate-y-1/2 flex items-center gap-1.5 pointer-events-none">
                 {searchQuery ? (
@@ -779,7 +779,7 @@ export const SovereignChambersControlPlane: React.FC = () => {
                     <X className="w-4 h-4" />
                   </button>
                 ) : (
-                  <span className="hidden sm:inline-block text-[10px] font-mono px-1.5 py-0.5 rounded bg-slate-800/70 border border-slate-700 text-slate-400">
+                  <span className="hidden sm:inline-block text-[10px] font-mono px-1.5 py-0.5 rounded bg-slate-800/70 border-slate-700 text-slate-400">
                     ESC to clear
                   </span>
                 )}
@@ -787,7 +787,7 @@ export const SovereignChambersControlPlane: React.FC = () => {
             </div>
 
             {/* Status Filter Buttons */}
-            <div className="flex items-center gap-1.5 shrink-0 bg-slate-950 p-1 rounded-xl border border-slate-800">
+            <div className="flex items-center gap-1.5 shrink-0 bg-slate-950 p-1 rounded-xl border-slate-800">
               <button
                 id="filter-tab-all"
                 onClick={() => setStatusFilter('ALL')}
@@ -826,14 +826,14 @@ export const SovereignChambersControlPlane: React.FC = () => {
             </div>
 
             {/* Sorting Dropdown */}
-            <div className="flex items-center gap-1.5 shrink-0 bg-slate-950 px-3 py-1.5 rounded-xl border border-slate-800 text-xs font-mono">
+            <div className="flex items-center gap-1.5 shrink-0 bg-slate-950 px-3 py-1.5 rounded-xl border-slate-800 text-xs font-mono">
               <SlidersHorizontal className="w-3.5 h-3.5 text-cyan-400" />
               <label htmlFor="controlplane-chamber-sort" className="text-slate-400 font-medium">Sort:</label>
               <select
                 id="controlplane-chamber-sort"
                 value={sortBy}
                 onChange={(e) => setSortBy(e.target.value as any)}
-                className="bg-slate-900 border border-slate-750 text-cyan-300 rounded-lg px-2 py-1 focus:outline-none focus:border-cyan-400 cursor-pointer text-xs font-mono"
+                className="bg-slate-900 border-slate-750 text-cyan-300 rounded-lg px-2 py-1 focus:outline-none focus:border-cyan-400 cursor-pointer text-xs font-mono"
               >
                 <option value="stability_desc">★ Stability: Most Stable First</option>
                 <option value="id_asc">Chamber ID: 1 → 18</option>
@@ -887,7 +887,7 @@ export const SovereignChambersControlPlane: React.FC = () => {
               <span>Loading telemetry data...</span>
             </div>
           ) : sortedAndFilteredChambers.length === 0 ? (
-            <div className="text-center py-12 px-4 rounded-2xl bg-slate-900/40 border border-dashed border-slate-800 text-slate-400 flex flex-col items-center gap-3">
+            <div className="text-center py-12 px-4 rounded-2xl bg-slate-900/40 border-dashed border-slate-800 text-slate-400 flex flex-col items-center gap-3">
               <Search className="w-8 h-8 text-slate-500" />
               <div className="text-sm font-semibold text-slate-300">No Chambers match your filter</div>
               <p className="text-xs text-slate-500 max-w-sm">
@@ -951,7 +951,7 @@ export const SovereignChambersControlPlane: React.FC = () => {
                         <span>Status:</span>
                         <span
                           className={`font-mono font-medium px-1.5 py-0.5 rounded text-[10px] ${
-                            isOp ? 'bg-emerald-950/80 text-emerald-300 border border-emerald-800/60' : 'bg-amber-950/80 text-amber-300 border border-amber-800/60'
+                            isOp ? 'bg-emerald-950/80 text-emerald-300 border-emerald-800/60' : 'bg-amber-950/80 text-amber-300 border-amber-800/60'
                           }`}
                         >
                           {chamber.status}
@@ -978,10 +978,10 @@ export const SovereignChambersControlPlane: React.FC = () => {
         {/* Selected Chamber Detail / Edit Modal */}
         {selectedChamber && (
           <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/80 backdrop-blur-xs font-mono">
-            <div className="relative w-full max-w-lg bg-slate-900 border border-indigo-500/40 rounded-2xl shadow-2xl overflow-hidden">
+            <div className="relative w-full max-w-lg bg-slate-900 border-indigo-500/40 rounded-2xl shadow-2xl overflow-hidden">
               <div className="p-4 sm:p-5 border-b border-slate-800 flex items-center justify-between bg-slate-950">
                 <div className="flex items-center gap-2.5">
-                  <div className="w-8 h-8 rounded-lg bg-indigo-950 border border-indigo-500/40 flex items-center justify-center text-indigo-400 font-bold text-xs">
+                  <div className="w-8 h-8 rounded-lg bg-indigo-950 border-indigo-500/40 flex items-center justify-center text-indigo-400 font-bold text-xs">
                     #{String(selectedChamber.id).padStart(2, '0')}
                   </div>
                   <div>
@@ -1008,7 +1008,7 @@ export const SovereignChambersControlPlane: React.FC = () => {
                     <select
                       value={editStatus}
                       onChange={(e) => setEditStatus(e.target.value)}
-                      className="w-full bg-slate-950 border border-slate-700 rounded-lg p-2 text-slate-200 focus:outline-none focus:border-indigo-500"
+                      className="w-full bg-slate-950 border-slate-700 rounded-lg p-2 text-slate-200 focus:outline-none focus:border-indigo-500"
                     >
                       <option value="Operational">Operational</option>
                       <option value="Sub-Kelvin Lock">Sub-Kelvin Lock</option>
@@ -1025,12 +1025,12 @@ export const SovereignChambersControlPlane: React.FC = () => {
                       type="text"
                       value={editDrift}
                       onChange={(e) => setEditDrift(e.target.value)}
-                      className="w-full bg-slate-950 border border-slate-700 rounded-lg p-2 text-slate-200 font-mono focus:outline-none focus:border-indigo-500"
+                      className="w-full bg-slate-950 border-slate-700 rounded-lg p-2 text-slate-200 font-mono focus:outline-none focus:border-indigo-500"
                     />
                   </div>
                 </div>
 
-                <div className="p-3 rounded-xl bg-slate-950 border border-slate-800 space-y-1">
+                <div className="p-3 rounded-xl bg-slate-950 border-slate-800 space-y-1">
                   <div className="text-[10px] text-slate-400">Last Telemetry Sync</div>
                   <div className="text-slate-300 font-mono text-xs">{selectedChamber.lastSync}</div>
                 </div>
@@ -1040,7 +1040,7 @@ export const SovereignChambersControlPlane: React.FC = () => {
                 <button
                   type="button"
                   onClick={() => handleDeleteChamber(selectedChamber.id)}
-                  className="px-3 py-2 bg-rose-950/80 hover:bg-rose-900 text-rose-300 border border-rose-800 rounded-lg text-xs font-bold transition-colors cursor-pointer flex items-center gap-1.5"
+                  className="px-3 py-2 bg-rose-950/80 hover:bg-rose-900 text-rose-300 border-rose-800 rounded-lg text-xs font-bold transition-colors cursor-pointer flex items-center gap-1.5"
                 >
                   <Trash2 className="w-3.5 h-3.5" />
                   <span>Quarantine</span>
@@ -1049,7 +1049,7 @@ export const SovereignChambersControlPlane: React.FC = () => {
                   <button
                     type="button"
                     onClick={() => setSelectedChamber(null)}
-                    className="px-3 py-2 rounded-lg border border-slate-700 text-slate-300 hover:bg-slate-800 text-xs"
+                    className="px-3 py-2 rounded-lg border-slate-700 text-slate-300 hover:bg-slate-800 text-xs"
                   >
                     Cancel
                   </button>
@@ -1070,7 +1070,7 @@ export const SovereignChambersControlPlane: React.FC = () => {
         {/* Add Chamber Modal */}
         {isAddModalOpen && (
           <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/80 backdrop-blur-xs font-mono">
-            <div className="relative w-full max-w-md bg-slate-900 border border-emerald-500/40 rounded-2xl shadow-2xl overflow-hidden">
+            <div className="relative w-full max-w-md bg-slate-900 border-emerald-500/40 rounded-2xl shadow-2xl overflow-hidden">
               <div className="p-4 border-b border-slate-800 flex items-center justify-between bg-slate-950">
                 <h3 className="text-sm font-bold text-white flex items-center gap-2">
                   <Plus className="w-4 h-4 text-emerald-400" />
@@ -1095,7 +1095,7 @@ export const SovereignChambersControlPlane: React.FC = () => {
                     placeholder="e.g., Chamber 19 (Hyper-Lattice Enclave)"
                     value={newChamberName}
                     onChange={(e) => setNewChamberName(e.target.value)}
-                    className="w-full bg-slate-950 border border-slate-700 rounded-lg p-2.5 text-slate-200 focus:outline-none focus:border-emerald-500"
+                    className="w-full bg-slate-950 border-slate-700 rounded-lg p-2.5 text-slate-200 focus:outline-none focus:border-emerald-500"
                   />
                 </div>
 
@@ -1106,7 +1106,7 @@ export const SovereignChambersControlPlane: React.FC = () => {
                   <select
                     value={newChamberStatus}
                     onChange={(e) => setNewChamberStatus(e.target.value)}
-                    className="w-full bg-slate-950 border border-slate-700 rounded-lg p-2.5 text-slate-200 focus:outline-none focus:border-emerald-500"
+                    className="w-full bg-slate-950 border-slate-700 rounded-lg p-2.5 text-slate-200 focus:outline-none focus:border-emerald-500"
                   >
                     <option value="Operational">Operational</option>
                     <option value="Standby">Standby</option>
@@ -1114,7 +1114,7 @@ export const SovereignChambersControlPlane: React.FC = () => {
                   </select>
                 </div>
 
-                <div className="p-3 bg-emerald-950/20 border border-emerald-500/30 rounded-lg text-[11px] text-emerald-300">
+                <div className="p-3 bg-emerald-950/20 border-emerald-500/30 rounded-lg text-[11px] text-emerald-300">
                   New chamber will automatically receive auto-incremented ID and 0.00% initial SSoT drift index.
                 </div>
 
@@ -1122,7 +1122,7 @@ export const SovereignChambersControlPlane: React.FC = () => {
                   <button
                     type="button"
                     onClick={() => setIsAddModalOpen(false)}
-                    className="px-3 py-2 rounded-lg border border-slate-700 text-slate-300 hover:bg-slate-800 text-xs"
+                    className="px-3 py-2 rounded-lg border-slate-700 text-slate-300 hover:bg-slate-800 text-xs"
                   >
                     Cancel
                   </button>
@@ -1141,7 +1141,7 @@ export const SovereignChambersControlPlane: React.FC = () => {
         {/* Merkle Proof Verification Modal */}
         {isVerifyModalOpen && (
           <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/80 backdrop-blur-xs font-mono">
-            <div className="relative w-full max-w-lg bg-slate-900 border border-cyan-500/40 rounded-2xl shadow-2xl overflow-hidden">
+            <div className="relative w-full max-w-lg bg-slate-900 border-cyan-500/40 rounded-2xl shadow-2xl overflow-hidden">
               <div className="p-4 border-b border-slate-800 flex items-center justify-between bg-slate-950">
                 <h3 className="text-sm font-bold text-white flex items-center gap-2">
                   <Hash className="w-4 h-4 text-cyan-400" />
@@ -1168,7 +1168,7 @@ export const SovereignChambersControlPlane: React.FC = () => {
                       required
                       value={verifySealIndex}
                       onChange={(e) => setVerifySealIndex(parseInt(e.target.value) || 1)}
-                      className="flex-1 bg-slate-950 border border-slate-700 rounded-lg p-2.5 text-slate-200 font-mono focus:outline-none focus:border-cyan-500"
+                      className="flex-1 bg-slate-950 border-slate-700 rounded-lg p-2.5 text-slate-200 font-mono focus:outline-none focus:border-cyan-500"
                     />
                     <button
                       type="submit"
@@ -1181,13 +1181,13 @@ export const SovereignChambersControlPlane: React.FC = () => {
                 </div>
 
                 {verifyError && (
-                  <div className="p-3 bg-rose-950/60 border border-rose-500/50 rounded-lg text-rose-300 text-xs">
+                  <div className="p-3 bg-rose-950/60 border-rose-500/50 rounded-lg text-rose-300 text-xs">
                     {verifyError}
                   </div>
                 )}
 
                 {verifyResult && (
-                  <div className="p-3.5 bg-slate-950 border border-cyan-500/40 rounded-xl space-y-2 text-xs">
+                  <div className="p-3.5 bg-slate-950 border-cyan-500/40 rounded-xl space-y-2 text-xs">
                     <div className="flex items-center justify-between text-emerald-400 font-bold">
                       <span className="flex items-center gap-1.5">
                         <CheckCircle2 className="w-4 h-4" />
@@ -1197,13 +1197,13 @@ export const SovereignChambersControlPlane: React.FC = () => {
                     </div>
                     <div>
                       <span className="text-[10px] text-slate-400 block">SHA-256 Leaf Hash:</span>
-                      <code className="text-[11px] text-cyan-300 break-all bg-black/60 p-1.5 rounded block border border-slate-800">
+                      <code className="text-[11px] text-cyan-300 break-all bg-black/60 p-1.5 rounded block border-slate-800">
                         {verifyResult.leafHash}
                       </code>
                     </div>
                     <div>
                       <span className="text-[10px] text-slate-400 block">Merkle Root Anchor:</span>
-                      <code className="text-[11px] text-indigo-300 break-all bg-black/60 p-1.5 rounded block border border-slate-800">
+                      <code className="text-[11px] text-indigo-300 break-all bg-black/60 p-1.5 rounded block border-slate-800">
                         {verifyResult.merkleRoot}
                       </code>
                     </div>
@@ -1214,7 +1214,7 @@ export const SovereignChambersControlPlane: React.FC = () => {
                   <button
                     type="button"
                     onClick={() => setIsVerifyModalOpen(false)}
-                    className="px-4 py-2 rounded-lg border border-slate-700 text-slate-300 hover:bg-slate-800 text-xs"
+                    className="px-4 py-2 rounded-lg border-slate-700 text-slate-300 hover:bg-slate-800 text-xs"
                   >
                     Close
                   </button>

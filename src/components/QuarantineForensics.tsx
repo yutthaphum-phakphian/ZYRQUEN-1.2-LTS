@@ -260,7 +260,7 @@ export const QuarantineForensics: React.FC = () => {
       {/* Top Header */}
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 border-b border-rose-500/20 pb-4">
         <div className="flex items-center gap-3">
-          <div className="w-11 h-11 rounded-2xl bg-rose-500/20 border border-rose-400 text-rose-300 flex items-center justify-center shrink-0 shadow-[0_0_20px_rgba(244,63,94,0.3)]">
+          <div className="w-11 h-11 rounded-2xl bg-rose-500/20 border-rose-400 text-rose-300 flex items-center justify-center shrink-0 shadow-[0_0_20px_rgba(244,63,94,0.3)]">
             <ShieldAlert className="w-5 h-5" />
           </div>
           <div>
@@ -268,7 +268,7 @@ export const QuarantineForensics: React.FC = () => {
               <h3 className="text-base font-bold text-rose-100 font-serif">
                 QUARANTINE FORENSICS &amp; MISMATCH DIFF LAB
               </h3>
-              <span className="text-[10px] px-2.5 py-0.5 rounded bg-rose-500/20 text-rose-300 border border-rose-400/50 font-bold">
+              <span className="text-[10px] px-2.5 py-0.5 rounded bg-rose-500/20 text-rose-300 border-rose-400/50 font-bold">
                 FAIL-CLOSED SANDBOX
               </span>
             </div>
@@ -279,7 +279,7 @@ export const QuarantineForensics: React.FC = () => {
         </div>
 
         <div className="flex items-center gap-2">
-          <div className="px-3 py-1.5 rounded-xl bg-black/60 border border-rose-500/30 text-xs font-mono text-zinc-300 flex items-center gap-2">
+          <div className="px-3 py-1.5 rounded-xl bg-black/60 border-rose-500/30 text-xs font-mono text-zinc-300 flex items-center gap-2">
             <Lock className="w-3.5 h-3.5 text-rose-400" />
             <span>Frozen Core: #849202 🔒</span>
           </div>
@@ -309,7 +309,7 @@ export const QuarantineForensics: React.FC = () => {
       </div>
 
       {/* Incident Summary Card */}
-      <div className="p-4 rounded-2xl bg-black/60 border border-rose-500/30 space-y-3">
+      <div className="p-4 rounded-2xl bg-black/60 border-rose-500/30 space-y-3">
         <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2 border-b border-rose-500/20 pb-2.5">
           <div>
             <div className="text-xs font-bold text-white flex items-center gap-2">
@@ -323,7 +323,7 @@ export const QuarantineForensics: React.FC = () => {
           </div>
 
           <div className="flex items-center gap-2">
-            <span className="text-[10px] px-2.5 py-0.5 rounded bg-emerald-500/10 text-emerald-400 border border-emerald-500/30 font-bold">
+            <span className="text-[10px] px-2.5 py-0.5 rounded bg-emerald-500/10 text-emerald-400 border-emerald-500/30 font-bold">
               SSoT Mutation Delta: 0
             </span>
             <span className="text-[10px] text-zinc-500 font-mono">{selectedIncident.quarantinedAt}</span>
@@ -336,7 +336,7 @@ export const QuarantineForensics: React.FC = () => {
             onClick={() => setActiveSubTab('DIFF')}
             className={`px-3 py-1.5 rounded-lg text-xs font-bold transition-all ${
               activeSubTab === 'DIFF'
-                ? 'bg-rose-500/20 text-rose-200 border border-rose-400/50'
+                ? 'bg-rose-500/20 text-rose-200 border-rose-400/50'
                 : 'text-zinc-400 hover:text-white'
             }`}
           >
@@ -346,7 +346,7 @@ export const QuarantineForensics: React.FC = () => {
             onClick={() => setActiveSubTab('FIELDS')}
             className={`px-3 py-1.5 rounded-lg text-xs font-bold transition-all flex items-center gap-1.5 ${
               activeSubTab === 'FIELDS'
-                ? 'bg-rose-500/20 text-rose-200 border border-rose-400/50'
+                ? 'bg-rose-500/20 text-rose-200 border-rose-400/50'
                 : 'text-zinc-400 hover:text-white'
             }`}
           >
@@ -359,7 +359,7 @@ export const QuarantineForensics: React.FC = () => {
             onClick={() => setActiveSubTab('TIMELINE')}
             className={`px-3 py-1.5 rounded-lg text-xs font-bold transition-all ${
               activeSubTab === 'TIMELINE'
-                ? 'bg-rose-500/20 text-rose-200 border border-rose-400/50'
+                ? 'bg-rose-500/20 text-rose-200 border-rose-400/50'
                 : 'text-zinc-400 hover:text-white'
             }`}
           >
@@ -369,7 +369,7 @@ export const QuarantineForensics: React.FC = () => {
             onClick={() => setActiveSubTab('RAW_PAYLOAD')}
             className={`px-3 py-1.5 rounded-lg text-xs font-bold transition-all ${
               activeSubTab === 'RAW_PAYLOAD'
-                ? 'bg-rose-500/20 text-rose-200 border border-rose-400/50'
+                ? 'bg-rose-500/20 text-rose-200 border-rose-400/50'
                 : 'text-zinc-400 hover:text-white'
             }`}
           >
@@ -382,7 +382,7 @@ export const QuarantineForensics: React.FC = () => {
       {activeSubTab === 'DIFF' && (
         <div className="space-y-4">
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-            <div className="p-4 rounded-2xl bg-black/70 border border-emerald-500/40 space-y-2">
+            <div className="p-4 rounded-2xl bg-black/70 border-emerald-500/40 space-y-2">
               <div className="flex items-center justify-between text-xs text-emerald-400 font-bold">
                 <span className="flex items-center gap-1.5">
                   <CheckCircle2 className="w-4 h-4 text-emerald-400" />
@@ -396,7 +396,7 @@ export const QuarantineForensics: React.FC = () => {
                   <span>{copiedKey === 'exp-hash' ? 'Copied' : 'Copy'}</span>
                 </button>
               </div>
-              <div className="p-3 rounded-xl bg-black font-mono text-xs text-emerald-300 break-all border border-emerald-500/20">
+              <div className="p-3 rounded-xl bg-black font-mono text-xs text-emerald-300 break-all border-emerald-500/20">
                 {selectedIncident.expectedSha256}
               </div>
               <div className="text-[11px] text-zinc-400">
@@ -404,7 +404,7 @@ export const QuarantineForensics: React.FC = () => {
               </div>
             </div>
 
-            <div className="p-4 rounded-2xl bg-black/70 border border-rose-500/40 space-y-2">
+            <div className="p-4 rounded-2xl bg-black/70 border-rose-500/40 space-y-2">
               <div className="flex items-center justify-between text-xs text-rose-400 font-bold">
                 <span className="flex items-center gap-1.5">
                   <AlertOctagon className="w-4 h-4 text-rose-400" />
@@ -418,7 +418,7 @@ export const QuarantineForensics: React.FC = () => {
                   <span>{copiedKey === 'act-hash' ? 'Copied' : 'Copy'}</span>
                 </button>
               </div>
-              <div className="p-3 rounded-xl bg-black font-mono text-xs text-rose-300 break-all border border-rose-500/20">
+              <div className="p-3 rounded-xl bg-black font-mono text-xs text-rose-300 break-all border-rose-500/20">
                 {selectedIncident.actualSha256}
               </div>
               <div className="text-[11px] text-rose-300/80">
@@ -427,7 +427,7 @@ export const QuarantineForensics: React.FC = () => {
             </div>
           </div>
 
-          <div className="p-3.5 rounded-xl bg-rose-950/30 border border-rose-500/30 text-xs text-rose-200 flex items-center gap-3">
+          <div className="p-3.5 rounded-xl bg-rose-950/30 border-rose-500/30 text-xs text-rose-200 flex items-center gap-3">
             <Ban className="w-5 h-5 text-rose-400 shrink-0" />
             <div>
               <strong>Cryptographic Verdict:</strong> Mismatch detected. System rejected canonical promotion and preserved
@@ -441,20 +441,20 @@ export const QuarantineForensics: React.FC = () => {
       {activeSubTab === 'FIELDS' && (
         <div className="space-y-3">
           {selectedIncident.fieldMismatches.map((field, idx) => (
-            <div key={idx} className="p-3.5 rounded-xl bg-black/60 border border-rose-500/30 space-y-2">
+            <div key={idx} className="p-3.5 rounded-xl bg-black/60 border-rose-500/30 space-y-2">
               <div className="flex items-center justify-between">
                 <span className="text-xs font-mono font-bold text-rose-300">{field.fieldPath}</span>
-                <span className="text-[9px] px-2 py-0.5 rounded bg-rose-500/20 text-rose-300 border border-rose-500/40 font-bold">
+                <span className="text-[9px] px-2 py-0.5 rounded bg-rose-500/20 text-rose-300 border-rose-500/40 font-bold">
                   {field.severity} SEVERITY
                 </span>
               </div>
 
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-2 text-xs font-mono">
-                <div className="p-2 rounded-lg bg-emerald-950/20 border border-emerald-500/20 text-emerald-300">
+                <div className="p-2 rounded-lg bg-emerald-950/20 border-emerald-500/20 text-emerald-300">
                   <span className="text-zinc-500 text-[10px] block">Expected Value:</span>
                   {field.expectedValue}
                 </div>
-                <div className="p-2 rounded-lg bg-rose-950/20 border border-rose-500/20 text-rose-300">
+                <div className="p-2 rounded-lg bg-rose-950/20 border-rose-500/20 text-rose-300">
                   <span className="text-zinc-500 text-[10px] block">Quarantined Payload Value:</span>
                   {field.actualValue}
                 </div>
@@ -472,9 +472,9 @@ export const QuarantineForensics: React.FC = () => {
           {selectedIncident.eventTimeline.map((evt) => (
             <div
               key={evt.step}
-              className="p-3 rounded-xl bg-black/60 border border-white/10 flex items-start gap-3 text-xs"
+              className="p-3 rounded-xl bg-black/60 border-white/10 flex items-start gap-3 text-xs"
             >
-              <div className="w-6 h-6 rounded-full bg-rose-500/20 text-rose-400 border border-rose-400/50 flex items-center justify-center font-mono font-bold shrink-0 text-[11px]">
+              <div className="w-6 h-6 rounded-full bg-rose-500/20 text-rose-400 border-rose-400/50 flex items-center justify-center font-mono font-bold shrink-0 text-[11px]">
                 {evt.step}
               </div>
               <div className="flex-1 space-y-1">
@@ -513,7 +513,7 @@ export const QuarantineForensics: React.FC = () => {
               <CheckCircle2 className="w-4 h-4" />
               <span>Expected Canonical Schema</span>
             </div>
-            <pre className="p-4 rounded-xl bg-black/80 border border-emerald-500/30 text-emerald-300/90 font-mono text-[11px] overflow-x-auto leading-relaxed max-h-[300px]">
+            <pre className="p-4 rounded-xl bg-black/80 border-emerald-500/30 text-emerald-300/90 font-mono text-[11px] overflow-x-auto leading-relaxed max-h-[300px]">
               {selectedIncident.expectedPayloadReference}
             </pre>
           </div>
@@ -523,7 +523,7 @@ export const QuarantineForensics: React.FC = () => {
               <AlertOctagon className="w-4 h-4" />
               <span>Quarantined Payload (Tampered)</span>
             </div>
-            <pre className="p-4 rounded-xl bg-black/80 border border-rose-500/30 text-rose-300/90 font-mono text-[11px] overflow-x-auto leading-relaxed max-h-[300px]">
+            <pre className="p-4 rounded-xl bg-black/80 border-rose-500/30 text-rose-300/90 font-mono text-[11px] overflow-x-auto leading-relaxed max-h-[300px]">
               {selectedIncident.quarantinedRawPayload}
             </pre>
           </div>

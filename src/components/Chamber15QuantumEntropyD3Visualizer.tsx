@@ -599,16 +599,16 @@ Export Timestamp: ${new Date().toISOString()}
   };
 
   return (
-    <div className="bg-slate-900 border border-slate-800 rounded-2xl p-6 shadow-2xl backdrop-blur space-y-6 font-mono text-xs">
+    <div className="bg-slate-900 border-slate-800 rounded-2xl p-6 shadow-2xl backdrop-blur space-y-6 font-mono text-xs">
       {/* Top Header */}
       <div className="flex flex-wrap items-center justify-between gap-4 border-b border-slate-800 pb-4">
         <div className="flex items-center gap-3">
-          <div className="p-2.5 bg-cyan-950/80 border border-cyan-700/60 rounded-xl text-cyan-400">
+          <div className="p-2.5 bg-cyan-950/80 border-cyan-700/60 rounded-xl text-cyan-400">
             <Activity className="w-5 h-5 animate-pulse" />
           </div>
           <div>
             <div className="flex items-center gap-2">
-              <span className="text-[10px] font-bold px-2 py-0.5 rounded bg-cyan-950 text-cyan-300 border border-cyan-800">
+              <span className="text-[10px] font-bold px-2 py-0.5 rounded bg-cyan-950 text-cyan-300 border-cyan-800">
                 CHAMBER 15 • SUB-KELVIN CRYOSTAT
               </span>
               <span className="text-xs text-emerald-400 font-bold">
@@ -630,8 +630,8 @@ Export Timestamp: ${new Date().toISOString()}
             }}
             className={`px-3 py-2 rounded-xl font-bold flex items-center gap-1.5 transition cursor-pointer ${
               isRunning
-                ? 'bg-amber-950/80 text-amber-300 border border-amber-800 hover:bg-amber-900'
-                : 'bg-emerald-950/80 text-emerald-300 border border-emerald-800 hover:bg-emerald-900'
+                ? 'bg-amber-950/80 text-amber-300 border-amber-800 hover:bg-amber-900'
+                : 'bg-emerald-950/80 text-emerald-300 border-emerald-800 hover:bg-emerald-900'
             }`}
           >
             {isRunning ? <Pause className="w-3.5 h-3.5" /> : <Play className="w-3.5 h-3.5" />}
@@ -651,37 +651,37 @@ Export Timestamp: ${new Date().toISOString()}
 
       {/* Top 6 Quantum Metrics Badges */}
       <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-2.5 text-center">
-        <div className="bg-slate-950/80 border border-cyan-800/60 p-3 rounded-xl">
+        <div className="bg-slate-950/80 border-cyan-800/60 p-3 rounded-xl">
           <span className="text-[9px] text-slate-400 uppercase tracking-wider block">Min-Entropy H_inf</span>
           <span className="text-sm font-black text-cyan-300 mt-0.5 block">0.9992 bits</span>
           <span className="text-[8px] text-emerald-400 font-bold">Passed (&gt; 0.9990)</span>
         </div>
 
-        <div className="bg-slate-950/80 border border-slate-800 p-3 rounded-xl">
+        <div className="bg-slate-950/80 border-slate-800 p-3 rounded-xl">
           <span className="text-[9px] text-slate-400 uppercase tracking-wider block">Shannon Purity</span>
           <span className="text-sm font-black text-white mt-0.5 block">0.9998 bits</span>
           <span className="text-[8px] text-slate-500">Max Theoretical 1.0</span>
         </div>
 
-        <div className="bg-slate-950/80 border border-slate-800 p-3 rounded-xl">
+        <div className="bg-slate-950/80 border-slate-800 p-3 rounded-xl">
           <span className="text-[9px] text-slate-400 uppercase tracking-wider block">Cryo Temperature</span>
           <span className="text-sm font-black text-amber-300 mt-0.5 block">{cryoTemp.toFixed(2)} mK</span>
           <span className="text-[8px] text-slate-500">Helium-4 Loop</span>
         </div>
 
-        <div className="bg-slate-950/80 border border-slate-800 p-3 rounded-xl">
+        <div className="bg-slate-950/80 border-slate-800 p-3 rounded-xl">
           <span className="text-[9px] text-slate-400 uppercase tracking-wider block">Phase Jitter</span>
           <span className="text-sm font-black text-emerald-400 mt-0.5 block">1.33 fs</span>
           <span className="text-[8px] text-slate-500">Femtosecond Precision</span>
         </div>
 
-        <div className="bg-slate-950/80 border border-slate-800 p-3 rounded-xl">
+        <div className="bg-slate-950/80 border-slate-800 p-3 rounded-xl">
           <span className="text-[9px] text-slate-400 uppercase tracking-wider block">Entropy Throughput</span>
           <span className="text-sm font-black text-indigo-300 mt-0.5 block">851.9 Mbps</span>
           <span className="text-[8px] text-slate-500">Direct Bus Stream</span>
         </div>
 
-        <div className="bg-slate-950/80 border border-slate-800 p-3 rounded-xl">
+        <div className="bg-slate-950/80 border-slate-800 p-3 rounded-xl">
           <span className="text-[9px] text-slate-400 uppercase tracking-wider block">NIST SP 800-22</span>
           <span className="text-sm font-black text-emerald-300 mt-0.5 block">15/15 PASS</span>
           <span className="text-[8px] text-slate-500">RCT / APT Zero Fault</span>
@@ -691,7 +691,7 @@ Export Timestamp: ${new Date().toISOString()}
       {/* D3 Charts Grid & Sub-Kelvin Cryostat Canvas Particle System */}
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-4">
         {/* Chart 1: Real-Time Quantum Entropy Waveform (Time-Domain) */}
-        <div className="bg-slate-950/80 border border-slate-800 rounded-xl p-4 space-y-2">
+        <div className="bg-slate-950/80 border-slate-800 rounded-xl p-4 space-y-2">
           <div className="flex items-center justify-between border-b border-slate-800 pb-2">
             <div className="flex items-center gap-2">
               <Activity className="w-4 h-4 text-cyan-400" />
@@ -705,7 +705,7 @@ Export Timestamp: ${new Date().toISOString()}
                 aria-label="Sampling Rate"
                 value={samplingRate}
                 onChange={(e) => setSamplingRate(Number(e.target.value))}
-                className="bg-slate-900 border border-slate-700 text-cyan-300 text-[10px] rounded px-1.5 py-0.5 font-mono focus:outline-none"
+                className="bg-slate-900 border-slate-700 text-cyan-300 text-[10px] rounded px-1.5 py-0.5 font-mono focus:outline-none"
               >
                 <option value={10}>10 kHz</option>
                 <option value={100}>100 kHz</option>
@@ -726,7 +726,7 @@ Export Timestamp: ${new Date().toISOString()}
         </div>
 
         {/* Chart 2: Sub-Kelvin Cryostat Stability Canvas Particle System */}
-        <div className="bg-slate-950/80 border border-slate-800 rounded-xl p-4 space-y-2">
+        <div className="bg-slate-950/80 border-slate-800 rounded-xl p-4 space-y-2">
           <div className="flex items-center justify-between border-b border-slate-800 pb-2">
             <div className="flex items-center gap-2">
               <Sparkles className="w-4 h-4 text-cyan-400 animate-pulse" />
@@ -737,7 +737,7 @@ Export Timestamp: ${new Date().toISOString()}
             <span className="text-[9px] text-cyan-300 font-mono">14.98 mK Lattice</span>
           </div>
 
-          <div className="w-full flex justify-center items-center overflow-hidden rounded-lg bg-slate-950/90 border border-slate-900">
+          <div className="w-full flex justify-center items-center overflow-hidden rounded-lg bg-slate-950/90 border-slate-900">
             <canvas
               ref={cryoCanvasRef}
               width={340}
@@ -753,7 +753,7 @@ Export Timestamp: ${new Date().toISOString()}
         </div>
 
         {/* Chart 3: Noise Spectrum (FFT Density) */}
-        <div className="bg-slate-950/80 border border-slate-800 rounded-xl p-4 space-y-2">
+        <div className="bg-slate-950/80 border-slate-800 rounded-xl p-4 space-y-2">
           <div className="flex items-center justify-between border-b border-slate-800 pb-2">
             <div className="flex items-center gap-2">
               <Zap className="w-4 h-4 text-indigo-400" />
@@ -777,7 +777,7 @@ Export Timestamp: ${new Date().toISOString()}
       {/* Second Row: Phase Space Trajectory (Col 1) + 5 Randomness Sources (Col 2-3) */}
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-4">
         {/* Phase Space Attractor */}
-        <div className="bg-slate-950/80 border border-slate-800 rounded-xl p-4 space-y-2">
+        <div className="bg-slate-950/80 border-slate-800 rounded-xl p-4 space-y-2">
           <div className="flex items-center justify-between border-b border-slate-800 pb-2">
             <div className="flex items-center gap-2">
               <Flame className="w-4 h-4 text-purple-400" />
@@ -798,7 +798,7 @@ Export Timestamp: ${new Date().toISOString()}
         </div>
 
         {/* 5 Randomness Sources Interactive Dashboard */}
-        <div className="lg:col-span-2 bg-slate-950/80 border border-slate-800 rounded-xl p-4 space-y-3">
+        <div className="lg:col-span-2 bg-slate-950/80 border-slate-800 rounded-xl p-4 space-y-3">
           <div className="flex items-center justify-between border-b border-slate-800 pb-2">
             <div className="flex items-center gap-2">
               <Layers className="w-4 h-4 text-amber-400" />
@@ -851,7 +851,7 @@ Export Timestamp: ${new Date().toISOString()}
       </div>
 
       {/* Bottom Interactive Controls & PQC Seed Generator */}
-      <div className="p-4 bg-slate-950 border border-slate-800 rounded-xl space-y-3">
+      <div className="p-4 bg-slate-950 border-slate-800 rounded-xl space-y-3">
         <div className="flex flex-wrap items-center justify-between gap-4">
           <div className="flex items-center gap-4">
             <div>
@@ -873,7 +873,7 @@ Export Timestamp: ${new Date().toISOString()}
                 <button
                   type="button"
                   onClick={() => setCryoTemp(14.98)}
-                  className="text-[10px] text-slate-400 hover:text-white px-2 py-0.5 rounded bg-slate-900 border border-slate-700 cursor-pointer"
+                  className="text-[10px] text-slate-400 hover:text-white px-2 py-0.5 rounded bg-slate-900 border-slate-700 cursor-pointer"
                 >
                   Reset 14.98mK
                 </button>
@@ -897,13 +897,13 @@ Export Timestamp: ${new Date().toISOString()}
 
         {/* Generated Seed Display */}
         {generatedSeed && (
-          <div className="p-3 bg-slate-900 border border-emerald-800/80 rounded-xl flex flex-wrap items-center justify-between gap-2 text-xs">
+          <div className="p-3 bg-slate-900 border-emerald-800/80 rounded-xl flex flex-wrap items-center justify-between gap-2 text-xs">
             <div className="flex items-center gap-2">
               <CheckCircle2 className="w-4 h-4 text-emerald-400 shrink-0" />
               <span className="text-slate-400">Cryptographic Quantum Seed (NIST FIPS 204 Ready):</span>
               <code className="text-emerald-300 font-bold break-all">{generatedSeed}</code>
             </div>
-            <span className="text-[10px] text-emerald-400 font-bold bg-emerald-950 px-2 py-0.5 rounded border border-emerald-800">
+            <span className="text-[10px] text-emerald-400 font-bold bg-emerald-950 px-2 py-0.5 rounded border-emerald-800">
               Shannon Purity 0.9998 Verified
             </span>
           </div>

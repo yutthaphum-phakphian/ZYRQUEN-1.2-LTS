@@ -326,18 +326,18 @@ export const LedgerHeartbeatD3Chart: React.FC<LedgerHeartbeatD3ChartProps> = ({
   return (
     <div
       ref={containerRef}
-      className="p-4 rounded-2xl bg-[#070b16]/90 border border-cyan-500/20 backdrop-blur-xl space-y-3 font-mono"
+      className="p-4 rounded-2xl bg-[#070b16]/90 border-cyan-500/20 backdrop-blur-xl space-y-3 font-mono"
     >
       {/* Chart Header & Controls */}
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2.5 border-b border-white/5 pb-2.5">
         <div className="flex items-center gap-2">
-          <div className="w-7 h-7 rounded-lg bg-cyan-500/15 border border-cyan-500/30 flex items-center justify-center text-cyan-400">
+          <div className="w-7 h-7 rounded-lg bg-cyan-500/15 border-cyan-500/30 flex items-center justify-center text-cyan-400">
             <Activity className="w-4 h-4 animate-pulse" />
           </div>
           <div>
             <h4 className="text-xs font-bold text-white flex items-center gap-1.5">
               <span>{title}</span>
-              <span className="px-1.5 py-0.2 text-[9px] rounded bg-cyan-500/20 text-cyan-300 border border-cyan-500/40">
+              <span className="px-1.5 py-0.2 text-[9px] rounded bg-cyan-500/20 text-cyan-300 border-cyan-500/40">
                 D3 ENGINE
               </span>
             </h4>
@@ -348,7 +348,7 @@ export const LedgerHeartbeatD3Chart: React.FC<LedgerHeartbeatD3ChartProps> = ({
         </div>
 
         {/* Metric Selector Buttons */}
-        <div className="flex items-center gap-1 bg-black/50 p-1 rounded-xl border border-white/5">
+        <div className="flex items-center gap-1 bg-black/50 p-1 rounded-xl border-white/5">
           {(
             [
               { id: 'pulse', label: 'Pulse (ms)', icon: Waves },
@@ -368,7 +368,7 @@ export const LedgerHeartbeatD3Chart: React.FC<LedgerHeartbeatD3ChartProps> = ({
                 }}
                 className={`px-2 py-1 rounded-lg text-[10px] font-bold transition-all flex items-center gap-1 cursor-pointer ${
                   isActive
-                    ? 'bg-cyan-500/20 text-cyan-300 border border-cyan-500/40 shadow-[0_0_8px_rgba(6,182,212,0.25)]'
+                    ? 'bg-cyan-500/20 text-cyan-300 border-cyan-500/40 shadow-[0_0_8px_rgba(6,182,212,0.25)]'
                     : 'text-zinc-400 hover:text-zinc-200'
                 }`}
               >
@@ -382,28 +382,28 @@ export const LedgerHeartbeatD3Chart: React.FC<LedgerHeartbeatD3ChartProps> = ({
 
       {/* KPI Stats Strip */}
       <div className="grid grid-cols-2 sm:grid-cols-4 gap-2">
-        <div className="px-3 py-1.5 rounded-xl bg-black/40 border border-white/5 flex items-center justify-between">
+        <div className="px-3 py-1.5 rounded-xl bg-black/40 border-white/5 flex items-center justify-between">
           <span className="text-zinc-500 text-[10px]">CURRENT:</span>
           <strong className="text-cyan-300 font-bold text-xs">
             {stats.current}
             {metricConfig.unit}
           </strong>
         </div>
-        <div className="px-3 py-1.5 rounded-xl bg-black/40 border border-white/5 flex items-center justify-between">
+        <div className="px-3 py-1.5 rounded-xl bg-black/40 border-white/5 flex items-center justify-between">
           <span className="text-zinc-500 text-[10px]">PEAK:</span>
           <strong className="text-emerald-400 font-bold text-xs">
             {stats.max}
             {metricConfig.unit}
           </strong>
         </div>
-        <div className="px-3 py-1.5 rounded-xl bg-black/40 border border-white/5 flex items-center justify-between">
+        <div className="px-3 py-1.5 rounded-xl bg-black/40 border-white/5 flex items-center justify-between">
           <span className="text-zinc-500 text-[10px]">MIN:</span>
           <strong className="text-indigo-300 font-bold text-xs">
             {stats.min}
             {metricConfig.unit}
           </strong>
         </div>
-        <div className="px-3 py-1.5 rounded-xl bg-black/40 border border-white/5 flex items-center justify-between">
+        <div className="px-3 py-1.5 rounded-xl bg-black/40 border-white/5 flex items-center justify-between">
           <span className="text-zinc-500 text-[10px]">AVERAGE:</span>
           <strong className="text-amber-300 font-bold text-xs">
             {stats.avg}
@@ -418,7 +418,7 @@ export const LedgerHeartbeatD3Chart: React.FC<LedgerHeartbeatD3ChartProps> = ({
 
         {hoveredData && (
           <div
-            className="absolute pointer-events-none z-20 px-2.5 py-1.5 rounded-xl bg-[#090d1a] border border-cyan-500/50 shadow-2xl text-[10px] space-y-0.5 transform -translate-x-1/2 -translate-y-full"
+            className="absolute pointer-events-none z-20 px-2.5 py-1.5 rounded-xl bg-[#090d1a] border-cyan-500/50 shadow-2xl text-[10px] space-y-0.5 transform -translate-x-1/2 -translate-y-full"
             style={{ left: hoveredData.x, top: hoveredData.y - 8 }}
           >
             <div className="text-cyan-300 font-bold flex items-center gap-2 justify-between">

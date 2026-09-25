@@ -265,16 +265,16 @@ Exported at: ${new Date().toISOString()}`;
   };
 
   return (
-    <div className="bg-slate-900 border border-slate-800 rounded-2xl p-6 shadow-2xl backdrop-blur space-y-6">
+    <div className="bg-slate-900 border-slate-800 rounded-2xl p-6 shadow-2xl backdrop-blur space-y-6">
       {/* Top Header & Slide Navigation Controls */}
       <div className="flex flex-wrap items-center justify-between gap-4 border-b border-slate-800 pb-4">
         <div className="flex items-center gap-3">
-          <div className="p-2.5 bg-amber-950/80 border border-amber-700/60 rounded-xl text-amber-400">
+          <div className="p-2.5 bg-amber-950/80 border-amber-700/60 rounded-xl text-amber-400">
             <Award className="w-5 h-5" />
           </div>
           <div>
             <div className="flex items-center gap-2">
-              <span className="text-[10px] font-mono font-bold px-2 py-0.5 rounded bg-cyan-950 text-cyan-300 border border-cyan-800">
+              <span className="text-[10px] font-mono font-bold px-2 py-0.5 rounded bg-cyan-950 text-cyan-300 border-cyan-800">
                 EXECUTIVE SLIDE DECK
               </span>
               <span className="text-xs font-mono text-slate-400">10 Master Slides</span>
@@ -290,14 +290,14 @@ Exported at: ${new Date().toISOString()}`;
           <button
             type="button"
             onClick={handleExportSummary}
-            className="px-3 py-1.5 bg-slate-800 hover:bg-slate-700 text-slate-200 border border-slate-700 rounded-xl text-xs font-mono font-bold flex items-center gap-1.5 transition cursor-pointer"
+            className="px-3 py-1.5 bg-slate-800 hover:bg-slate-700 text-slate-200 border-slate-700 rounded-xl text-xs font-mono font-bold flex items-center gap-1.5 transition cursor-pointer"
             title="Export Slide Deck Text Summary"
           >
             <Download className="w-3.5 h-3.5 text-cyan-400" />
             <span>Export Summary</span>
           </button>
 
-          <div className="flex items-center bg-slate-950 border border-slate-800 rounded-xl p-1">
+          <div className="flex items-center bg-slate-950 border-slate-800 rounded-xl p-1">
             <button
               type="button"
               onClick={handlePrev}
@@ -326,7 +326,7 @@ Exported at: ${new Date().toISOString()}`;
       </div>
 
       {/* Main Slide Card Canvas */}
-      <div className="bg-gradient-to-br from-slate-950 via-slate-900 to-slate-950 border border-slate-800/90 rounded-2xl p-6 sm:p-8 shadow-2xl relative overflow-hidden min-h-[420px] flex flex-col justify-between">
+      <div className="bg-gradient-to-br from-slate-950 via-slate-900 to-slate-950 border-slate-800/90 rounded-2xl p-6 sm:p-8 shadow-2xl relative overflow-hidden min-h-[420px] flex flex-col justify-between">
         {/* Subtle Ambient Glow */}
         <div className="absolute top-0 right-0 w-72 h-72 bg-cyan-500/5 rounded-full blur-3xl pointer-events-none"></div>
         <div className="absolute bottom-0 left-0 w-72 h-72 bg-amber-500/5 rounded-full blur-3xl pointer-events-none"></div>
@@ -337,7 +337,7 @@ Exported at: ${new Date().toISOString()}`;
             <span className="text-[11px] font-mono font-bold text-amber-400 tracking-wider">
               {currentSlide.badge}
             </span>
-            <span className="text-[10px] font-mono px-2.5 py-0.5 rounded-full bg-emerald-950 text-emerald-300 border border-emerald-800/60">
+            <span className="text-[10px] font-mono px-2.5 py-0.5 rounded-full bg-emerald-950 text-emerald-300 border-emerald-800/60">
               AUDIT CERTIFIED PASS
             </span>
           </div>
@@ -356,14 +356,14 @@ Exported at: ${new Date().toISOString()}`;
               {currentSlide.bulletPoints.map((item, idx) => (
                 <div
                   key={idx}
-                  className="bg-slate-900/70 border border-slate-800/80 p-3 rounded-xl flex items-start gap-3 hover:border-slate-700 transition"
+                  className="bg-slate-900/70 border-slate-800/80 p-3 rounded-xl flex items-start gap-3 hover:border-slate-700 transition"
                 >
                   <div className="w-2 h-2 rounded-full bg-cyan-400 mt-1.5 shrink-0 shadow-[0_0_8px_rgba(6,182,212,0.8)]"></div>
                   <div className="text-xs">
                     <span className="font-bold text-slate-200">{item.label}: </span>
                     <span className="text-slate-300">{item.detail}</span>
                     {item.highlight && (
-                      <span className="ml-2 inline-block px-1.5 py-0.2 rounded font-mono font-bold text-[10px] bg-cyan-950 text-cyan-300 border border-cyan-800">
+                      <span className="ml-2 inline-block px-1.5 py-0.2 rounded font-mono font-bold text-[10px] bg-cyan-950 text-cyan-300 border-cyan-800">
                         {item.highlight}
                       </span>
                     )}
@@ -374,7 +374,7 @@ Exported at: ${new Date().toISOString()}`;
 
             {/* Right 1 Col: Stat Callout Box */}
             {currentSlide.statBox && (
-              <div className="bg-slate-900/90 border border-cyan-800/60 p-5 rounded-2xl text-center space-y-2 shadow-lg shadow-cyan-950/40">
+              <div className="bg-slate-900/90 border-cyan-800/60 p-5 rounded-2xl text-center space-y-2 shadow-lg shadow-cyan-950/40">
                 <span className="text-xs font-mono font-bold text-cyan-400 uppercase tracking-wider block">
                   {currentSlide.statBox.label}
                 </span>

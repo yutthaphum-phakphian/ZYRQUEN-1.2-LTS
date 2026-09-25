@@ -391,7 +391,7 @@ export const UtimacoSecondaryHSMGauge: React.FC<{
     return (
       <div 
         ref={trackRef}
-        className="relative w-40 h-[30px] rounded-lg bg-rose-950/40 border border-rose-500/50 flex items-center overflow-hidden touch-none select-none"
+        className="relative w-40 h-[30px] rounded-lg bg-rose-950/40 border-rose-500/50 flex items-center overflow-hidden touch-none select-none"
         onPointerDown={handlePointerDown}
         onPointerMove={handlePointerMove}
         onPointerUp={handlePointerUp}
@@ -447,7 +447,7 @@ export const UtimacoSecondaryHSMGauge: React.FC<{
               <h2 className="text-sm font-bold text-white tracking-wider">
                 UTIMACO SECONDARY HSM SENTINEL GAUGE (v2)
               </h2>
-              <span className="text-[10px] px-2 py-0.5 rounded bg-cyan-950/80 text-cyan-400 border border-cyan-800/60 font-semibold">
+              <span className="text-[10px] px-2 py-0.5 rounded bg-cyan-950/80 text-cyan-400 border-cyan-800/60 font-semibold">
                 FIPS 140-3 LEVEL 4
               </span>
             </div>
@@ -489,7 +489,7 @@ export const UtimacoSecondaryHSMGauge: React.FC<{
           <button
             id="utimaco-download-csv-btn"
             onClick={handleDownloadCsv}
-            className="px-3 py-1.5 rounded-lg border border-[#17233f] bg-[#0a0f1e] hover:border-cyan-500/60 hover:text-cyan-300 text-xs flex items-center gap-1.5 transition text-zinc-300 hidden sm:flex"
+            className="px-3 py-1.5 rounded-lg border-[#17233f] bg-[#0a0f1e] hover:border-cyan-500/60 hover:text-cyan-300 text-xs flex items-center gap-1.5 transition text-zinc-300 hidden sm:flex"
           >
             <Download className="w-3.5 h-3.5 text-cyan-400" />
             <span>CSV</span>
@@ -498,7 +498,7 @@ export const UtimacoSecondaryHSMGauge: React.FC<{
           {isZeroized ? (
             <button
               onClick={handleRestoreNominal}
-              className="px-3 py-1.5 rounded-lg border border-emerald-500/50 bg-emerald-950/40 text-emerald-300 text-xs font-bold flex items-center gap-1.5 hover:bg-emerald-900/40 transition"
+              className="px-3 py-1.5 rounded-lg border-emerald-500/50 bg-emerald-950/40 text-emerald-300 text-xs font-bold flex items-center gap-1.5 hover:bg-emerald-900/40 transition"
             >
               <RotateCcw className="w-3.5 h-3.5" />
               <span>Restore Baseline (14.98 mK)</span>
@@ -511,7 +511,7 @@ export const UtimacoSecondaryHSMGauge: React.FC<{
 
       {/* ── TOP METRICS ROW ── */}
       <div className="grid grid-cols-2 sm:grid-cols-4 gap-3">
-        <div className="p-3 rounded-xl bg-[#0a0f1e] border border-[#17233f]">
+        <div className="p-3 rounded-xl bg-[#0a0f1e] border-[#17233f]">
           <div className="text-[11px] text-zinc-400">Current Temperature</div>
           <div
             className={`text-lg font-bold mt-1 ${
@@ -529,7 +529,7 @@ export const UtimacoSecondaryHSMGauge: React.FC<{
           </div>
         </div>
 
-        <div className="p-3 rounded-xl bg-[#0a0f1e] border border-[#17233f]">
+        <div className="p-3 rounded-xl bg-[#0a0f1e] border-[#17233f]">
           <div className="text-[11px] text-zinc-400">Quarantine Threshold</div>
           <div className="text-lg font-bold text-amber-300 mt-1">
             {thermalThreshold.toFixed(1)}°C
@@ -539,7 +539,7 @@ export const UtimacoSecondaryHSMGauge: React.FC<{
           </div>
         </div>
 
-        <div className="p-3 rounded-xl bg-[#0a0f1e] border border-[#17233f]">
+        <div className="p-3 rounded-xl bg-[#0a0f1e] border-[#17233f]">
           <div className="text-[11px] text-zinc-400">HSM Status & FIPS Level</div>
           <div className="text-xs font-bold text-emerald-400 mt-1 flex items-center gap-1">
             <span className="inline-block w-2 h-2 rounded-full bg-emerald-400 animate-ping" />
@@ -550,7 +550,7 @@ export const UtimacoSecondaryHSMGauge: React.FC<{
           </div>
         </div>
 
-        <div className="p-3 rounded-xl bg-[#0a0f1e] border border-[#17233f]">
+        <div className="p-3 rounded-xl bg-[#0a0f1e] border-[#17233f]">
           <div className="text-[11px] text-zinc-400">Replay Pipeline SLA</div>
           <div className="text-lg font-bold text-cyan-300 mt-1">
             {lastReplayLatencyMs} ms
@@ -562,7 +562,7 @@ export const UtimacoSecondaryHSMGauge: React.FC<{
       </div>
 
       {/* ── 60-SECOND SPARKLINE REAL-TIME CHART ── */}
-      <div className="p-4 rounded-xl bg-[#0a0f1e] border border-[#17233f] space-y-3">
+      <div className="p-4 rounded-xl bg-[#0a0f1e] border-[#17233f] space-y-3">
         <div className="flex items-center justify-between">
           <div className="flex items-center gap-2">
             <Activity className="w-4 h-4 text-cyan-400" />
@@ -570,7 +570,7 @@ export const UtimacoSecondaryHSMGauge: React.FC<{
               60-SECOND THERMAL TELEMETRY SPARKLINE STREAM
             </span>
             {upwardSlopeAlert && (
-              <span className="ml-2 px-2 py-0.5 rounded bg-amber-500/20 text-amber-400 border border-amber-500/50 text-[10px] font-bold flex items-center gap-1 animate-pulse">
+              <span className="ml-2 px-2 py-0.5 rounded bg-amber-500/20 text-amber-400 border-amber-500/50 text-[10px] font-bold flex items-center gap-1 animate-pulse">
                 <TrendingUp className="w-3 h-3" />
                 UPWARD TEMP SLOPE DETECTED
               </span>
@@ -579,7 +579,7 @@ export const UtimacoSecondaryHSMGauge: React.FC<{
           <div className="flex items-center gap-3">
             <button
               onClick={() => setShowCompactTable(!showCompactTable)}
-              className="px-2 py-1 rounded-md border border-cyan-800/40 text-[10px] text-cyan-400 bg-cyan-950/20 hover:bg-cyan-900/40 flex items-center gap-1 transition"
+              className="px-2 py-1 rounded-md border-cyan-800/40 text-[10px] text-cyan-400 bg-cyan-950/20 hover:bg-cyan-900/40 flex items-center gap-1 transition"
             >
               <ListOrdered className="w-3 h-3" />
               {showCompactTable ? 'HIDE TABLE' : 'COMPACT VIEW'}
@@ -634,7 +634,7 @@ export const UtimacoSecondaryHSMGauge: React.FC<{
 
         {/* Tabular List of Last 10 Readings */}
         {showCompactTable && (
-          <div className="mt-3 overflow-x-auto border border-white/5 rounded-lg bg-black/40">
+          <div className="mt-3 overflow-x-auto border-white/5 rounded-lg bg-black/40">
             <table className="w-full text-left text-[10px] font-mono text-zinc-300">
               <thead className="bg-[#17233f]/30 text-zinc-400">
                 <tr>
@@ -680,7 +680,7 @@ export const UtimacoSecondaryHSMGauge: React.FC<{
               max="130"
               value={thermalThreshold}
               onChange={(e) => handleUpdateThreshold(parseFloat(e.target.value))}
-              className="w-20 px-2 py-1 rounded bg-black/60 border border-[#17233f] text-cyan-300 font-bold focus:border-cyan-500 focus:outline-none"
+              className="w-20 px-2 py-1 rounded bg-black/60 border-[#17233f] text-cyan-300 font-bold focus:border-cyan-500 focus:outline-none"
             />
             <span className="text-[10px] text-zinc-500">Auto-saved</span>
           </div>
@@ -692,7 +692,7 @@ export const UtimacoSecondaryHSMGauge: React.FC<{
                 setCurrentTemp(14.98);
                 playTone(650, 0.03);
               }}
-              className="px-2 py-0.5 rounded bg-cyan-950/60 border border-cyan-800/60 text-cyan-300 text-[10px] hover:bg-cyan-900/60"
+              className="px-2 py-0.5 rounded bg-cyan-950/60 border-cyan-800/60 text-cyan-300 text-[10px] hover:bg-cyan-900/60"
             >
               14.98 mK (Nominal)
             </button>
@@ -701,7 +701,7 @@ export const UtimacoSecondaryHSMGauge: React.FC<{
                 setCurrentTemp(52.5);
                 playTone(450, 0.03);
               }}
-              className="px-2 py-0.5 rounded bg-blue-950/60 border border-blue-800/60 text-blue-300 text-[10px] hover:bg-blue-900/60"
+              className="px-2 py-0.5 rounded bg-blue-950/60 border-blue-800/60 text-blue-300 text-[10px] hover:bg-blue-900/60"
             >
               52.5°C (Elevated)
             </button>
@@ -710,7 +710,7 @@ export const UtimacoSecondaryHSMGauge: React.FC<{
                 setCurrentTemp(88.0);
                 playTone(320, 0.04);
               }}
-              className="px-2 py-0.5 rounded bg-amber-950/60 border border-amber-800/60 text-amber-300 text-[10px] hover:bg-amber-900/60"
+              className="px-2 py-0.5 rounded bg-amber-950/60 border-amber-800/60 text-amber-300 text-[10px] hover:bg-amber-900/60"
             >
               88.0°C (Quarantine Alert)
             </button>
@@ -719,14 +719,14 @@ export const UtimacoSecondaryHSMGauge: React.FC<{
                 setCurrentTemp(96.5);
                 playTone(240, 0.06);
               }}
-              className="px-2 py-0.5 rounded bg-rose-950/60 border border-rose-800/60 text-rose-300 text-[10px] hover:bg-rose-900/60 font-bold"
+              className="px-2 py-0.5 rounded bg-rose-950/60 border-rose-800/60 text-rose-300 text-[10px] hover:bg-rose-900/60 font-bold"
             >
               96.5°C (Critical)
             </button>
             <button
               onClick={handleTriggerCooldown}
               disabled={currentTemp <= 15 || cooldownTimeLeft !== null}
-              className="px-2 py-0.5 rounded bg-emerald-950/60 border border-emerald-800/60 text-emerald-300 text-[10px] hover:bg-emerald-900/60 font-bold disabled:opacity-30 flex items-center gap-1"
+              className="px-2 py-0.5 rounded bg-emerald-950/60 border-emerald-800/60 text-emerald-300 text-[10px] hover:bg-emerald-900/60 font-bold disabled:opacity-30 flex items-center gap-1"
             >
               <ThermometerSnowflake className="w-3 h-3" />
               {cooldownTimeLeft !== null ? `COOLING... ${cooldownTimeLeft}s` : 'COOLDOWN'}
@@ -736,7 +736,7 @@ export const UtimacoSecondaryHSMGauge: React.FC<{
       </div>
 
       {/* ── EVERYDAYMARKETING NC X VC GAS ALLOCATION LEDGER ── */}
-      <div className="p-4 rounded-xl bg-[#0a0f1e] border border-[#17233f] space-y-3">
+      <div className="p-4 rounded-xl bg-[#0a0f1e] border-[#17233f] space-y-3">
         <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2 border-b border-[#17233f] pb-2">
           <div className="flex items-center gap-2">
             <Coins className="w-4 h-4 text-[#D4AF37]" />
@@ -777,7 +777,7 @@ export const UtimacoSecondaryHSMGauge: React.FC<{
                     ฿{c.vcPerCapitaThb.toLocaleString('en-US', { minimumFractionDigits: 2 })}
                   </td>
                   <td className="py-2 px-2 text-center">
-                    <span className="px-1.5 py-0.5 rounded text-[9px] bg-emerald-950/60 text-emerald-400 border border-emerald-800/40">
+                    <span className="px-1.5 py-0.5 rounded text-[9px] bg-emerald-950/60 text-emerald-400 border-emerald-800/40">
                       VERIFIED 100%
                     </span>
                   </td>
@@ -801,7 +801,7 @@ export const UtimacoSecondaryHSMGauge: React.FC<{
       </div>
 
       {/* ── ARCHITECTURE AUDIT TABLE: MARKETING SEALS VS MATHEMATICAL SEALS ── */}
-      <div className="p-4 rounded-xl bg-[#0a0f1e] border border-[#17233f] space-y-3">
+      <div className="p-4 rounded-xl bg-[#0a0f1e] border-[#17233f] space-y-3">
         <div className="flex items-center justify-between border-b border-[#17233f] pb-2">
           <div className="flex items-center gap-2">
             <FileSpreadsheet className="w-4 h-4 text-cyan-400" />
@@ -813,7 +813,7 @@ export const UtimacoSecondaryHSMGauge: React.FC<{
         </div>
 
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4 text-xs">
-          <div className="p-3 rounded-lg bg-black/40 border border-white/5 space-y-2">
+          <div className="p-3 rounded-lg bg-black/40 border-white/5 space-y-2">
             <div className="text-[11px] font-bold text-zinc-400 flex items-center gap-1.5">
               <span>📢</span>
               <span>Marketing Layer Claim</span>
@@ -826,7 +826,7 @@ export const UtimacoSecondaryHSMGauge: React.FC<{
             </ul>
           </div>
 
-          <div className="p-3 rounded-lg bg-emerald-950/20 border border-emerald-800/40 space-y-2">
+          <div className="p-3 rounded-lg bg-emerald-950/20 border-emerald-800/40 space-y-2">
             <div className="text-[11px] font-bold text-emerald-400 flex items-center gap-1.5">
               <CheckCircle2 className="w-3.5 h-3.5 text-emerald-400" />
               <span>Mathematical SSoT Ground Truth</span>
@@ -842,7 +842,7 @@ export const UtimacoSecondaryHSMGauge: React.FC<{
       </div>
 
       {/* ── 12-STAGE FORENSIC TRACE REPLAY PIPELINE (CHAMBER 02) ── */}
-      <div className="p-4 rounded-xl bg-[#0a0f1e] border border-[#17233f] space-y-3">
+      <div className="p-4 rounded-xl bg-[#0a0f1e] border-[#17233f] space-y-3">
         <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2 border-b border-[#17233f] pb-2">
           <div className="flex items-center gap-2">
             <Cpu className="w-4 h-4 text-cyan-400" />
@@ -894,7 +894,7 @@ export const UtimacoSecondaryHSMGauge: React.FC<{
       {/* ── EMERGENCY ZEROIZE CONFIRMATION MODAL ── */}
       {showZeroizeConfirm && (
         <div className="fixed inset-0 z-50 bg-black/80 flex items-center justify-center p-4">
-          <div className="max-w-md w-full rounded-2xl bg-[#0a0f1e] border border-rose-500 p-6 space-y-4 shadow-[0_0_50px_rgba(244,63,94,0.4)] font-mono">
+          <div className="max-w-md w-full rounded-2xl bg-[#0a0f1e] border-rose-500 p-6 space-y-4 shadow-[0_0_50px_rgba(244,63,94,0.4)] font-mono">
             <div className="flex items-center gap-3 text-rose-400">
               <AlertTriangle className="w-6 h-6 animate-bounce" />
               <h3 className="text-sm font-bold text-white tracking-wider">
@@ -913,13 +913,13 @@ export const UtimacoSecondaryHSMGauge: React.FC<{
               placeholder="Type ZEROIZE to confirm"
               value={zeroizeInputCode}
               onChange={(e) => setZeroizeInputCode(e.target.value)}
-              className="w-full px-3 py-2 rounded-lg bg-black/70 border border-rose-500/50 text-white font-mono text-xs focus:outline-none focus:border-rose-400"
+              className="w-full px-3 py-2 rounded-lg bg-black/70 border-rose-500/50 text-white font-mono text-xs focus:outline-none focus:border-rose-400"
             />
 
             <div className="flex items-center justify-end gap-2 pt-2">
               <button
                 onClick={() => setShowZeroizeConfirm(false)}
-                className="px-4 py-1.5 rounded-lg border border-zinc-700 text-xs text-zinc-300 hover:bg-zinc-800"
+                className="px-4 py-1.5 rounded-lg border-zinc-700 text-xs text-zinc-300 hover:bg-zinc-800"
               >
                 Cancel
               </button>

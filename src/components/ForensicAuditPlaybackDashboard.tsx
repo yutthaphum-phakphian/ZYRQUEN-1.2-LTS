@@ -107,7 +107,7 @@ export default function ForensicAuditPlaybackDashboard() {
   }, []);
 
   return (
-    <div className="bg-[#0F172A] border border-cyan-900/50 rounded-2xl p-6 text-gray-100 font-sans space-y-6 shadow-2xl">
+    <div className="bg-[#0F172A] border-cyan-900/50 rounded-2xl p-6 text-gray-100 font-sans space-y-6 shadow-2xl">
       {/* Top Header & Status Indicators */}
       <div className="flex flex-wrap items-center justify-between gap-4 border-b border-slate-800 pb-4">
         <div>
@@ -116,7 +116,7 @@ export default function ForensicAuditPlaybackDashboard() {
             <h2 className="text-xl font-black text-white tracking-wide">
               FORENSIC AUDIT PLAYBACK DASHBOARD
             </h2>
-            <span className="text-xs font-mono bg-cyan-950 text-cyan-400 border border-cyan-500/30 px-2 py-0.5 rounded">
+            <span className="text-xs font-mono bg-cyan-950 text-cyan-400 border-cyan-500/30 px-2 py-0.5 rounded">
               LIVE API TIED
             </span>
           </div>
@@ -162,25 +162,25 @@ export default function ForensicAuditPlaybackDashboard() {
 
       {/* KPI Cards Section */}
       <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
-        <div className="bg-[#0B0F19] border border-cyan-500/30 rounded-xl p-4">
+        <div className="bg-[#0B0F19] border-cyan-500/30 rounded-xl p-4">
           <div className="text-xs font-mono text-cyan-400 uppercase">Total Replay Latency</div>
           <div className="text-2xl font-black text-emerald-400 mt-1">{totalLatency.toFixed(2)} ms</div>
           <div className="text-[10px] text-emerald-400/80 font-mono mt-1">SLA PASS (&lt;142.00 ms)</div>
         </div>
 
-        <div className="bg-[#0B0F19] border border-blue-500/30 rounded-xl p-4">
+        <div className="bg-[#0B0F19] border-blue-500/30 rounded-xl p-4">
           <div className="text-xs font-mono text-blue-400 uppercase">Zero-Drift Integrity</div>
           <div className="text-2xl font-black text-blue-300 mt-1">SSoT Δ0 0.00%</div>
           <div className="text-[10px] text-blue-400/80 font-mono mt-1">100% Deterministic Bit-Match</div>
         </div>
 
-        <div className="bg-[#0B0F19] border border-purple-500/30 rounded-xl p-4">
+        <div className="bg-[#0B0F19] border-purple-500/30 rounded-xl p-4">
           <div className="text-xs font-mono text-purple-400 uppercase">HSM Authority</div>
           <div className="text-2xl font-black text-purple-300 mt-1">10/10 REAL_HSM</div>
           <div className="text-[10px] text-purple-400/80 font-mono mt-1">FIPS 140-3 Level 4 Sealed</div>
         </div>
 
-        <div className="bg-[#0B0F19] border border-amber-500/30 rounded-xl p-4">
+        <div className="bg-[#0B0F19] border-amber-500/30 rounded-xl p-4">
           <div className="text-xs font-mono text-amber-400 uppercase">WORM Storage Seals</div>
           <div className="text-2xl font-black text-amber-300 mt-1">14,902 Seals</div>
           <div className="text-[10px] text-amber-400/80 font-mono mt-1">Zero-Deletion Guarantee</div>
@@ -198,10 +198,10 @@ export default function ForensicAuditPlaybackDashboard() {
           {stages.map((stage) => (
             <div
               key={stage.stageNumber}
-              className="bg-[#0B0F19] border border-slate-800 hover:border-cyan-500/40 rounded-xl p-3 flex flex-wrap items-center justify-between gap-3 transition-colors"
+              className="bg-[#0B0F19] border-slate-800 hover:border-cyan-500/40 rounded-xl p-3 flex flex-wrap items-center justify-between gap-3 transition-colors"
             >
               <div className="flex items-center space-x-3 min-w-[300px]">
-                <span className="w-6 h-6 rounded-full bg-cyan-950 border border-cyan-500/40 text-cyan-400 text-xs font-mono font-bold flex items-center justify-center">
+                <span className="w-6 h-6 rounded-full bg-cyan-950 border-cyan-500/40 text-cyan-400 text-xs font-mono font-bold flex items-center justify-center">
                   {stage.stageNumber}
                 </span>
                 <div>
@@ -219,13 +219,13 @@ export default function ForensicAuditPlaybackDashboard() {
               </div>
 
               <div className="flex items-center space-x-4 font-mono text-xs">
-                <span className="text-gray-400 bg-slate-900 px-2 py-0.5 rounded border border-slate-800">
+                <span className="text-gray-400 bg-slate-900 px-2 py-0.5 rounded border-slate-800">
                   {stage.digestHash}
                 </span>
                 <span className="text-cyan-400 font-bold w-16 text-right">
                   {stage.latencyMs.toFixed(2)} ms
                 </span>
-                <span className="text-emerald-400 bg-emerald-950/80 border border-emerald-500/30 px-2 py-0.5 rounded font-bold">
+                <span className="text-emerald-400 bg-emerald-950/80 border-emerald-500/30 px-2 py-0.5 rounded font-bold">
                   {stage.status}
                 </span>
               </div>

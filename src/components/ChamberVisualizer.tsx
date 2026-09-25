@@ -230,9 +230,9 @@ export const ChamberVisualizer: React.FC<ChamberVisualizerProps> = ({ onSelectSe
   return (
     <div id="chamber-visualizer-component" className="space-y-4 font-mono text-zinc-300">
       {/* Visualizer Header */}
-      <div className="p-5 rounded-2xl bg-[#070b16]/90 border border-cyan-500/20 backdrop-blur-xl shadow-xl flex flex-col md:flex-row md:items-center justify-between gap-4">
+      <div className="p-5 rounded-2xl bg-[#070b16]/90 border-cyan-500/20 backdrop-blur-xl shadow-xl flex flex-col md:flex-row md:items-center justify-between gap-4">
         <div className="flex items-center gap-3">
-          <div className="w-10 h-10 rounded-xl bg-cyan-500/10 border border-cyan-500/30 flex items-center justify-center text-cyan-400">
+          <div className="w-10 h-10 rounded-xl bg-cyan-500/10 border-cyan-500/30 flex items-center justify-center text-cyan-400">
             <Layers className="w-5 h-5 animate-pulse" />
           </div>
           <div>
@@ -240,7 +240,7 @@ export const ChamberVisualizer: React.FC<ChamberVisualizerProps> = ({ onSelectSe
               <h3 className="text-sm font-bold text-white tracking-wide">
                 CHAMBER VISUALIZER • 14,902 HARDWARE SEALS
               </h3>
-              <span className="px-2 py-0.5 rounded-full text-[10px] bg-emerald-500/15 text-emerald-400 border border-emerald-500/30 font-bold">
+              <span className="px-2 py-0.5 rounded-full text-[10px] bg-emerald-500/15 text-emerald-400 border-emerald-500/30 font-bold">
                 CANONICAL BASELINE
               </span>
             </div>
@@ -270,7 +270,7 @@ export const ChamberVisualizer: React.FC<ChamberVisualizerProps> = ({ onSelectSe
       </div>
 
       {/* Search, Filter & Quick Jumps Bar */}
-      <div className="p-4 rounded-2xl bg-black/60 border border-white/5 space-y-3">
+      <div className="p-4 rounded-2xl bg-black/60 border-white/5 space-y-3">
         <div className="flex flex-col lg:flex-row items-center gap-3">
           {/* Direct Search / Jump Input */}
           <form onSubmit={handleSearchSubmit} className="relative w-full lg:w-80">
@@ -280,11 +280,11 @@ export const ChamberVisualizer: React.FC<ChamberVisualizerProps> = ({ onSelectSe
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
               placeholder="Search seal # (1 - 14,902) or code..."
-              className="w-full pl-9 pr-20 py-2 rounded-xl bg-white/5 border border-white/10 text-xs text-white placeholder-zinc-500 focus:outline-none focus:border-cyan-500/50"
+              className="w-full pl-9 pr-20 py-2 rounded-xl bg-white/5 border-white/10 text-xs text-white placeholder-zinc-500 focus:outline-none focus:border-cyan-500/50"
             />
             <button
               type="submit"
-              className="absolute right-1.5 top-1/2 -translate-y-1/2 px-2.5 py-1 rounded-lg bg-cyan-500/20 text-cyan-300 border border-cyan-500/30 text-[10px] font-bold hover:bg-cyan-500/30 cursor-pointer"
+              className="absolute right-1.5 top-1/2 -translate-y-1/2 px-2.5 py-1 rounded-lg bg-cyan-500/20 text-cyan-300 border-cyan-500/30 text-[10px] font-bold hover:bg-cyan-500/30 cursor-pointer"
             >
               JUMP
             </button>
@@ -299,7 +299,7 @@ export const ChamberVisualizer: React.FC<ChamberVisualizerProps> = ({ onSelectSe
                 const v = e.target.value;
                 setSelectedChamber(v === 'ALL' ? 'ALL' : parseInt(v, 10));
               }}
-              className="w-full px-3 py-2 rounded-xl bg-white/5 border border-white/10 text-xs text-white focus:outline-none focus:border-cyan-500/50 cursor-pointer"
+              className="w-full px-3 py-2 rounded-xl bg-white/5 border-white/10 text-xs text-white focus:outline-none focus:border-cyan-500/50 cursor-pointer"
             >
               <option value="ALL" className="bg-[#0b0e1e] text-zinc-300">
                 All 18 Chambers (Ω00 - Ω17)
@@ -313,7 +313,7 @@ export const ChamberVisualizer: React.FC<ChamberVisualizerProps> = ({ onSelectSe
           </div>
 
           {/* Severity Filter */}
-          <div className="flex items-center gap-1 bg-white/5 p-1 rounded-xl border border-white/10 w-full lg:w-auto overflow-x-auto">
+          <div className="flex items-center gap-1 bg-white/5 p-1 rounded-xl border-white/10 w-full lg:w-auto overflow-x-auto">
             {(
               [
                 { id: 'ALL', label: 'All Status' },
@@ -331,7 +331,7 @@ export const ChamberVisualizer: React.FC<ChamberVisualizerProps> = ({ onSelectSe
                 }}
                 className={`px-2.5 py-1 rounded-lg text-[10px] font-bold transition-all cursor-pointer whitespace-nowrap ${
                   severityFilter === s.id
-                    ? 'bg-cyan-500/20 text-cyan-300 border border-cyan-500/40'
+                    ? 'bg-cyan-500/20 text-cyan-300 border-cyan-500/40'
                     : 'text-zinc-400 hover:text-white'
                 }`}
               >
@@ -355,7 +355,7 @@ export const ChamberVisualizer: React.FC<ChamberVisualizerProps> = ({ onSelectSe
             <button
               key={preset.id}
               onClick={() => handleJumpToSeal(preset.id)}
-              className="px-2 py-1 rounded-lg bg-white/5 hover:bg-white/10 text-zinc-300 hover:text-cyan-300 border border-white/5 hover:border-cyan-500/30 cursor-pointer transition-all"
+              className="px-2 py-1 rounded-lg bg-white/5 hover:bg-white/10 text-zinc-300 hover:text-cyan-300 border-white/5 hover:border-cyan-500/30 cursor-pointer transition-all"
             >
               {preset.label}
             </button>
@@ -364,7 +364,7 @@ export const ChamberVisualizer: React.FC<ChamberVisualizerProps> = ({ onSelectSe
       </div>
 
       {/* Visual Seal Grid Display */}
-      <div className="p-4 rounded-2xl bg-[#080c18]/90 border border-white/5 shadow-inner space-y-3">
+      <div className="p-4 rounded-2xl bg-[#080c18]/90 border-white/5 shadow-inner space-y-3">
         <div className="flex items-center justify-between text-xs font-mono text-zinc-400 pb-2 border-b border-white/5">
           <div>
             Showing <strong className="text-cyan-300">{visibleSeals.length}</strong> seals in range (
@@ -461,7 +461,7 @@ export const ChamberVisualizer: React.FC<ChamberVisualizerProps> = ({ onSelectSe
                   }}
                   className={`w-7 h-7 rounded-lg text-xs font-bold transition ${
                     currentPage === pg
-                      ? 'bg-cyan-500/20 text-cyan-300 border border-cyan-500/40'
+                      ? 'bg-cyan-500/20 text-cyan-300 border-cyan-500/40'
                       : 'text-zinc-400 hover:text-white'
                   }`}
                 >
@@ -499,14 +499,14 @@ export const ChamberVisualizer: React.FC<ChamberVisualizerProps> = ({ onSelectSe
          ========================================================================= */}
       {selectedSeal && (
         <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/80 backdrop-blur-md animate-in fade-in duration-200">
-          <div className="relative w-full max-w-2xl rounded-3xl bg-[#080d1e] border border-cyan-500/40 shadow-[0_0_50px_rgba(6,182,212,0.25)] p-6 space-y-5 overflow-hidden">
+          <div className="relative w-full max-w-2xl rounded-3xl bg-[#080d1e] border-cyan-500/40 shadow-[0_0_50px_rgba(6,182,212,0.25)] p-6 space-y-5 overflow-hidden">
             {/* Modal Ambient Glow */}
             <div className="absolute top-0 right-0 w-80 h-80 bg-cyan-500/10 rounded-full blur-3xl pointer-events-none" />
 
             {/* Modal Header */}
             <div className="flex items-start justify-between relative z-10 border-b border-white/10 pb-4">
               <div className="flex items-center gap-3">
-                <div className="w-12 h-12 rounded-2xl bg-cyan-500/15 border border-cyan-500/40 flex items-center justify-center text-2xl">
+                <div className="w-12 h-12 rounded-2xl bg-cyan-500/15 border-cyan-500/40 flex items-center justify-center text-2xl">
                   {CHAMBERS_CONFIG[selectedSeal.chamberIndex]?.emoji || '🔐'}
                 </div>
                 <div>
@@ -544,13 +544,13 @@ export const ChamberVisualizer: React.FC<ChamberVisualizerProps> = ({ onSelectSe
             {/* Core Metrics: Live Cryostat Temperature & Quantum Coherence */}
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4 relative z-10">
               {/* Metric 1: Live Cryostat Temperature */}
-              <div className="p-4 rounded-2xl bg-black/50 border border-sky-500/30 space-y-3">
+              <div className="p-4 rounded-2xl bg-black/50 border-sky-500/30 space-y-3">
                 <div className="flex items-center justify-between">
                   <div className="flex items-center gap-2 text-sky-400 font-bold text-xs">
                     <Thermometer className="w-4 h-4" />
                     <span>LIVE CRYOSTAT TEMPERATURE</span>
                   </div>
-                  <span className="text-[10px] px-2 py-0.5 rounded-full bg-sky-500/20 text-sky-300 border border-sky-500/30">
+                  <span className="text-[10px] px-2 py-0.5 rounded-full bg-sky-500/20 text-sky-300 border-sky-500/30">
                     REAL-TIME SENSOR
                   </span>
                 </div>
@@ -584,13 +584,13 @@ export const ChamberVisualizer: React.FC<ChamberVisualizerProps> = ({ onSelectSe
               </div>
 
               {/* Metric 2: Live Quantum Coherence */}
-              <div className="p-4 rounded-2xl bg-black/50 border border-emerald-500/30 space-y-3">
+              <div className="p-4 rounded-2xl bg-black/50 border-emerald-500/30 space-y-3">
                 <div className="flex items-center justify-between">
                   <div className="flex items-center gap-2 text-emerald-400 font-bold text-xs">
                     <Zap className="w-4 h-4" />
                     <span>LIVE QUANTUM COHERENCE</span>
                   </div>
-                  <span className="text-[10px] px-2 py-0.5 rounded-full bg-emerald-500/20 text-emerald-300 border border-emerald-500/30">
+                  <span className="text-[10px] px-2 py-0.5 rounded-full bg-emerald-500/20 text-emerald-300 border-emerald-500/30">
                     10/10 HSM ATTESTED
                   </span>
                 </div>
@@ -624,14 +624,14 @@ export const ChamberVisualizer: React.FC<ChamberVisualizerProps> = ({ onSelectSe
             </div>
 
             {/* Cryptographic & Forensic Attestation Block */}
-            <div className="p-4 rounded-2xl bg-black/40 border border-white/10 space-y-2.5 text-xs">
+            <div className="p-4 rounded-2xl bg-black/40 border-white/10 space-y-2.5 text-xs">
               <div className="text-zinc-400 font-bold flex items-center justify-between">
                 <span>CRYPTOGRAPHIC LEAF ATTESTATION</span>
                 <span className="text-[10px] text-zinc-500">NIST FIPS 204 ML-DSA-87</span>
               </div>
 
               {/* Merkle Leaf */}
-              <div className="flex items-center justify-between bg-white/5 p-2 rounded-xl border border-white/5">
+              <div className="flex items-center justify-between bg-white/5 p-2 rounded-xl border-white/5">
                 <div className="truncate mr-2">
                   <span className="text-zinc-500 text-[10px] block">MERKLE LEAF HASH:</span>
                   <code className="text-cyan-300 font-mono text-[11px]">{selectedSeal.merkleLeaf}</code>
@@ -651,7 +651,7 @@ export const ChamberVisualizer: React.FC<ChamberVisualizerProps> = ({ onSelectSe
               </div>
 
               {/* Post-Quantum Signature */}
-              <div className="bg-white/5 p-2 rounded-xl border border-white/5">
+              <div className="bg-white/5 p-2 rounded-xl border-white/5">
                 <span className="text-zinc-500 text-[10px] block">PQC DILITHIUM-5 SIGNATURE DIGEST:</span>
                 <code className="text-zinc-300 font-mono text-[10px] break-all">{selectedSeal.pqcSignature}</code>
               </div>

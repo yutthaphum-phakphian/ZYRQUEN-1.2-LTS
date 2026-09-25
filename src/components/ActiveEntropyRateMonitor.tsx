@@ -846,7 +846,7 @@ export const ActiveEntropyRateMonitor: React.FC<ActiveEntropyRateMonitorProps> =
     <div
       id="active-entropy-rate-monitor"
       ref={containerRef}
-      className={`rounded-[24px] bg-gradient-to-br from-[#0c131d]/90 via-[#070b14]/85 to-[#04060b] border border-cyan-500/25 p-6 backdrop-blur-xl shadow-2xl relative overflow-hidden font-mono ${className}`}
+      className={`rounded-[24px] bg-gradient-to-br from-[#0c131d]/90 via-[#070b14]/85 to-[#04060b] border-cyan-500/25 p-6 backdrop-blur-xl shadow-2xl relative overflow-hidden font-mono ${className}`}
     >
       {/* Background Decorative Ambient Glow */}
       <div className="absolute top-0 right-1/4 w-80 h-80 bg-emerald-500/5 rounded-full blur-3xl pointer-events-none" />
@@ -856,18 +856,18 @@ export const ActiveEntropyRateMonitor: React.FC<ActiveEntropyRateMonitorProps> =
       <div className="flex flex-col lg:flex-row lg:items-center justify-between gap-4 border-b border-white/8 pb-5">
         <div>
           <div className="flex items-center gap-2 flex-wrap">
-            <span className="px-2.5 py-0.5 rounded-full bg-emerald-500/15 text-emerald-300 border border-emerald-500/30 text-[11px] font-bold flex items-center gap-1.5 shadow-[0_0_10px_rgba(16,185,129,0.2)]">
+            <span className="px-2.5 py-0.5 rounded-full bg-emerald-500/15 text-emerald-300 border-emerald-500/30 text-[11px] font-bold flex items-center gap-1.5 shadow-[0_0_10px_rgba(16,185,129,0.2)]">
               <Activity className="w-3.5 h-3.5 text-emerald-400 animate-pulse" />
               <span>D3 ACTIVE ENTROPY ENGINE</span>
             </span>
-            <span className="px-2.5 py-0.5 rounded-full bg-cyan-500/10 text-cyan-300 border border-cyan-500/20 text-[11px]">
+            <span className="px-2.5 py-0.5 rounded-full bg-cyan-500/10 text-cyan-300 border-cyan-500/20 text-[11px]">
               SUB-KELVIN TRNG POOL (0.014K)
             </span>
-            <span className="px-2.5 py-0.5 rounded-full bg-amber-500/10 text-amber-300 border border-amber-500/20 text-[11px]">
+            <span className="px-2.5 py-0.5 rounded-full bg-amber-500/10 text-amber-300 border-amber-500/20 text-[11px]">
               10/10 ENCLAVES SYNCHRONIZED
             </span>
             {isLiveRunning && (
-              <span className="px-2 py-0.5 rounded-full bg-emerald-950/60 text-emerald-300 text-[10px] border border-emerald-500/30 animate-pulse">
+              <span className="px-2 py-0.5 rounded-full bg-emerald-950/60 text-emerald-300 text-[10px] border-emerald-500/30 animate-pulse">
                 ● LIVE TICK (2s)
               </span>
             )}
@@ -881,7 +881,7 @@ export const ActiveEntropyRateMonitor: React.FC<ActiveEntropyRateMonitorProps> =
 
           {/* Canonical Entropy Anchor Digest Pill */}
           <div className="mt-2.5 flex items-center gap-2 flex-wrap">
-            <div className="flex items-center gap-2 px-3 py-1 rounded-xl bg-black/60 border border-cyan-500/30 text-xs font-mono">
+            <div className="flex items-center gap-2 px-3 py-1 rounded-xl bg-black/60 border-cyan-500/30 text-xs font-mono">
               <ShieldCheck className="w-3.5 h-3.5 text-cyan-400 shrink-0" />
               <span className="text-zinc-400 text-[10px] uppercase font-bold tracking-wider">Entropy Anchor Digest:</span>
               <span className="text-cyan-200 font-mono text-[11px] font-bold tracking-tight select-all">
@@ -895,7 +895,7 @@ export const ActiveEntropyRateMonitor: React.FC<ActiveEntropyRateMonitorProps> =
                 {copiedAnchor ? <Check className="w-3.5 h-3.5 text-emerald-400" /> : <Copy className="w-3.5 h-3.5 text-zinc-400" />}
               </button>
             </div>
-            <span className="text-[10px] text-emerald-400 bg-emerald-500/10 px-2 py-0.5 rounded border border-emerald-500/20">
+            <span className="text-[10px] text-emerald-400 bg-emerald-500/10 px-2 py-0.5 rounded border-emerald-500/20">
               10/10 HSM SSoT Invariant Sealed
             </span>
           </div>
@@ -906,14 +906,14 @@ export const ActiveEntropyRateMonitor: React.FC<ActiveEntropyRateMonitorProps> =
           {/* Horizon View-Switcher: Last 60 Minutes vs Last 24 Hours */}
           <div
             id="entropy-horizon-view-switcher"
-            className="flex items-center bg-black/60 border border-cyan-500/30 rounded-xl p-1 text-xs"
+            className="flex items-center bg-black/60 border-cyan-500/30 rounded-xl p-1 text-xs"
           >
             <button
               id="btn-entropy-horizon-60m"
               onClick={() => handleHorizonToggle('60m')}
               className={`px-3 py-1.5 rounded-lg font-medium transition-all flex items-center gap-1.5 ${
                 timeHorizon === '60m'
-                  ? 'bg-cyan-500/25 text-cyan-200 font-bold border border-cyan-500/50 shadow-[0_0_8px_rgba(6,182,212,0.3)]'
+                  ? 'bg-cyan-500/25 text-cyan-200 font-bold border-cyan-500/50 shadow-[0_0_8px_rgba(6,182,212,0.3)]'
                   : 'text-zinc-400 hover:text-zinc-200'
               }`}
               title="Switch to real-time 60-minute Active Entropy telemetry"
@@ -926,7 +926,7 @@ export const ActiveEntropyRateMonitor: React.FC<ActiveEntropyRateMonitorProps> =
               onClick={() => handleHorizonToggle('24h')}
               className={`px-3 py-1.5 rounded-lg font-medium transition-all flex items-center gap-1.5 ${
                 timeHorizon === '24h'
-                  ? 'bg-cyan-500/25 text-cyan-200 font-bold border border-cyan-500/50 shadow-[0_0_8px_rgba(6,182,212,0.3)]'
+                  ? 'bg-cyan-500/25 text-cyan-200 font-bold border-cyan-500/50 shadow-[0_0_8px_rgba(6,182,212,0.3)]'
                   : 'text-zinc-400 hover:text-zinc-200'
               }`}
               title="Switch to diurnal 24-hour Active Entropy telemetry"
@@ -938,7 +938,7 @@ export const ActiveEntropyRateMonitor: React.FC<ActiveEntropyRateMonitorProps> =
 
           {/* Sub-window filter (Only applicable in 60m view) */}
           {timeHorizon === '60m' && (
-            <div className="flex items-center bg-black/50 border border-white/10 rounded-xl p-1 text-xs">
+            <div className="flex items-center bg-black/50 border-white/10 rounded-xl p-1 text-xs">
               <button
                 onClick={() => {
                   setTimeRangeMinutes(60);
@@ -946,7 +946,7 @@ export const ActiveEntropyRateMonitor: React.FC<ActiveEntropyRateMonitorProps> =
                 }}
                 className={`px-2.5 py-1 rounded-lg transition-all ${
                   timeRangeMinutes === 60
-                    ? 'bg-cyan-500/25 text-cyan-200 font-bold border border-cyan-500/40'
+                    ? 'bg-cyan-500/25 text-cyan-200 font-bold border-cyan-500/40'
                     : 'text-zinc-400 hover:text-zinc-200'
                 }`}
               >
@@ -959,7 +959,7 @@ export const ActiveEntropyRateMonitor: React.FC<ActiveEntropyRateMonitorProps> =
                 }}
                 className={`px-2.5 py-1 rounded-lg transition-all ${
                   timeRangeMinutes === 30
-                    ? 'bg-cyan-500/25 text-cyan-200 font-bold border border-cyan-500/40'
+                    ? 'bg-cyan-500/25 text-cyan-200 font-bold border-cyan-500/40'
                     : 'text-zinc-400 hover:text-zinc-200'
                 }`}
               >
@@ -972,7 +972,7 @@ export const ActiveEntropyRateMonitor: React.FC<ActiveEntropyRateMonitorProps> =
                 }}
                 className={`px-2.5 py-1 rounded-lg transition-all ${
                   timeRangeMinutes === 15
-                    ? 'bg-cyan-500/25 text-cyan-200 font-bold border border-cyan-500/40'
+                    ? 'bg-cyan-500/25 text-cyan-200 font-bold border-cyan-500/40'
                     : 'text-zinc-400 hover:text-zinc-200'
                 }`}
               >
@@ -984,7 +984,7 @@ export const ActiveEntropyRateMonitor: React.FC<ActiveEntropyRateMonitorProps> =
           {/* Trigger Peak Surge Simulation Button */}
           <button
             onClick={triggerEntropySurge}
-            className="px-3 py-1.5 rounded-xl text-xs font-bold bg-gradient-to-r from-amber-500/20 to-orange-500/20 hover:from-amber-500/30 hover:to-orange-500/30 border border-amber-500/40 text-amber-200 hover:text-white flex items-center gap-1.5 transition-all shadow-[0_0_12px_rgba(245,158,11,0.25)] hover:scale-[1.02]"
+            className="px-3 py-1.5 rounded-xl text-xs font-bold bg-gradient-to-r from-amber-500/20 to-orange-500/20 hover:from-amber-500/30 hover:to-orange-500/30 border-amber-500/40 text-amber-200 hover:text-white flex items-center gap-1.5 transition-all shadow-[0_0_12px_rgba(245,158,11,0.25)] hover:scale-[1.02]"
             title="Simulate a real-time cryptographic entropy burst (e.g. 10/10 Council PQC Rekeying)"
           >
             <Flame className="w-3.5 h-3.5 text-amber-400" />
@@ -997,7 +997,7 @@ export const ActiveEntropyRateMonitor: React.FC<ActiveEntropyRateMonitorProps> =
               setIsLiveRunning(!isLiveRunning);
               playTone(650, 0.04);
             }}
-            className="px-3 py-1.5 rounded-xl text-xs bg-black/60 hover:bg-black/80 border border-white/15 text-zinc-300 hover:text-white flex items-center gap-1.5 transition-all"
+            className="px-3 py-1.5 rounded-xl text-xs bg-black/60 hover:bg-black/80 border-white/15 text-zinc-300 hover:text-white flex items-center gap-1.5 transition-all"
             title={isLiveRunning ? 'Pause live entropy tick' : 'Resume live entropy tick'}
           >
             {isLiveRunning ? <Pause className="w-3.5 h-3.5 text-amber-400" /> : <Play className="w-3.5 h-3.5 text-emerald-400" />}
@@ -1008,7 +1008,7 @@ export const ActiveEntropyRateMonitor: React.FC<ActiveEntropyRateMonitorProps> =
           <button
             id="btn-export-entropy-csv"
             onClick={() => exportActiveEntropyCsv(history, 'zyrquen-entropy-60min')}
-            className="px-3 py-1.5 rounded-xl text-xs bg-emerald-500/15 hover:bg-emerald-500/25 border border-emerald-500/40 text-emerald-300 hover:text-white flex items-center gap-1.5 transition-all shadow-[0_0_10px_rgba(16,185,129,0.15)]"
+            className="px-3 py-1.5 rounded-xl text-xs bg-emerald-500/15 hover:bg-emerald-500/25 border-emerald-500/40 text-emerald-300 hover:text-white flex items-center gap-1.5 transition-all shadow-[0_0_10px_rgba(16,185,129,0.15)]"
             title="Download the current 60-minute Active Entropy Rate data points as CSV"
           >
             <Download className="w-3.5 h-3.5 text-emerald-400" />
@@ -1018,7 +1018,7 @@ export const ActiveEntropyRateMonitor: React.FC<ActiveEntropyRateMonitorProps> =
           {/* Export JSON Button */}
           <button
             onClick={handleExportJson}
-            className="px-3 py-1.5 rounded-xl text-xs bg-cyan-500/10 hover:bg-cyan-500/20 border border-cyan-500/30 text-cyan-300 hover:text-white flex items-center gap-1.5 transition-all"
+            className="px-3 py-1.5 rounded-xl text-xs bg-cyan-500/10 hover:bg-cyan-500/20 border-cyan-500/30 text-cyan-300 hover:text-white flex items-center gap-1.5 transition-all"
             title="Export entropy time-series dataset as JSON"
           >
             <Download className="w-3.5 h-3.5 text-cyan-400" />
@@ -1029,7 +1029,7 @@ export const ActiveEntropyRateMonitor: React.FC<ActiveEntropyRateMonitorProps> =
 
       {/* KPI Stats Quick Bar */}
       <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-3 my-4">
-        <div className="p-3 rounded-2xl bg-black/40 border border-white/8">
+        <div className="p-3 rounded-2xl bg-black/40 border-white/8">
           <div className="text-[10px] text-zinc-400 flex items-center gap-1">
             <Radio className="w-3 h-3 text-emerald-400" />
             <span>Current Rate</span>
@@ -1042,7 +1042,7 @@ export const ActiveEntropyRateMonitor: React.FC<ActiveEntropyRateMonitorProps> =
           </div>
         </div>
 
-        <div className="p-3 rounded-2xl bg-black/40 border border-white/8">
+        <div className="p-3 rounded-2xl bg-black/40 border-white/8">
           <div className="text-[10px] text-zinc-400 flex items-center gap-1">
             <Gauge className="w-3 h-3 text-cyan-400" />
             <span>1-Hour Baseline Mean</span>
@@ -1053,7 +1053,7 @@ export const ActiveEntropyRateMonitor: React.FC<ActiveEntropyRateMonitorProps> =
           <div className="text-[10px] text-zinc-400">Nominal 11,264 KBps</div>
         </div>
 
-        <div className="p-3 rounded-2xl bg-black/40 border border-amber-500/20 bg-amber-950/10">
+        <div className="p-3 rounded-2xl bg-black/40 border-amber-500/20 bg-amber-950/10">
           <div className="text-[10px] text-amber-300/80 flex items-center gap-1">
             <Flame className="w-3 h-3 text-amber-400" />
             <span>1-Hour Peak Surge</span>
@@ -1066,7 +1066,7 @@ export const ActiveEntropyRateMonitor: React.FC<ActiveEntropyRateMonitorProps> =
           </div>
         </div>
 
-        <div className="p-3 rounded-2xl bg-black/40 border border-white/8">
+        <div className="p-3 rounded-2xl bg-black/40 border-white/8">
           <div className="text-[10px] text-zinc-400 flex items-center gap-1">
             <ShieldCheck className="w-3 h-3 text-emerald-400" />
             <span>Stability Index</span>
@@ -1077,7 +1077,7 @@ export const ActiveEntropyRateMonitor: React.FC<ActiveEntropyRateMonitorProps> =
           <div className="text-[10px] text-emerald-400/80">ULTRA-STABLE (±{stats.stdDev} KBps)</div>
         </div>
 
-        <div className="p-3 rounded-2xl bg-black/40 border border-white/8">
+        <div className="p-3 rounded-2xl bg-black/40 border-white/8">
           <div className="text-[10px] text-zinc-400 flex items-center gap-1">
             <Layers className="w-3 h-3 text-indigo-400" />
             <span>Detected Peaks</span>
@@ -1088,7 +1088,7 @@ export const ActiveEntropyRateMonitor: React.FC<ActiveEntropyRateMonitorProps> =
           <div className="text-[10px] text-zinc-400">Cryptographic Re-seeds</div>
         </div>
 
-        <div className="p-3 rounded-2xl bg-black/40 border border-white/8">
+        <div className="p-3 rounded-2xl bg-black/40 border-white/8">
           <div className="text-[10px] text-zinc-400 flex items-center gap-1">
             <Clock className="w-3 h-3 text-purple-400" />
             <span>Last Peak Time</span>
@@ -1104,7 +1104,7 @@ export const ActiveEntropyRateMonitor: React.FC<ActiveEntropyRateMonitorProps> =
 
       {/* Surge Notification Toast */}
       {lastSurgeTriggered && (
-        <div className="p-3 mb-3 rounded-xl bg-amber-500/15 border border-amber-500/40 text-amber-200 text-xs flex items-center justify-between animate-in fade-in">
+        <div className="p-3 mb-3 rounded-xl bg-amber-500/15 border-amber-500/40 text-amber-200 text-xs flex items-center justify-between animate-in fade-in">
           <div className="flex items-center gap-2">
             <Flame className="w-4 h-4 text-amber-400 animate-bounce" />
             <span><strong>Entropy Peak Surge Injected:</strong> {lastSurgeTriggered} (+{stats.max.toLocaleString()} KBps peak registered in D3 stream).</span>
@@ -1114,12 +1114,12 @@ export const ActiveEntropyRateMonitor: React.FC<ActiveEntropyRateMonitorProps> =
       )}
 
       {/* D3 Primary Canvas */}
-      <div className="relative w-full rounded-2xl bg-black/60 border border-white/10 p-2 overflow-hidden shadow-inner">
+      <div className="relative w-full rounded-2xl bg-black/60 border-white/10 p-2 overflow-hidden shadow-inner">
         <svg ref={svgRef} className="w-full h-[360px]" />
 
         {/* Live Floating Inspector Tooltip */}
         {hoveredPoint && (
-          <div className="absolute top-4 right-4 p-3 rounded-xl bg-[#090d16]/95 border border-cyan-500/40 backdrop-blur-md shadow-2xl text-xs space-y-1 z-10 pointer-events-none">
+          <div className="absolute top-4 right-4 p-3 rounded-xl bg-[#090d16]/95 border-cyan-500/40 backdrop-blur-md shadow-2xl text-xs space-y-1 z-10 pointer-events-none">
             <div className="flex items-center justify-between gap-3 text-cyan-300 font-bold border-b border-white/10 pb-1">
               <span>Reading @ {hoveredPoint.timeLabel}</span>
               <span className="text-[10px] px-1.5 py-0.5 rounded bg-cyan-500/20 text-cyan-200">
@@ -1151,7 +1151,7 @@ export const ActiveEntropyRateMonitor: React.FC<ActiveEntropyRateMonitorProps> =
 
       {/* Selected Peak Detail Card */}
       {selectedPeak && (
-        <div className="mt-4 p-4 rounded-2xl bg-amber-950/25 border border-amber-500/40 text-xs animate-in fade-in flex flex-col md:flex-row md:items-center justify-between gap-4">
+        <div className="mt-4 p-4 rounded-2xl bg-amber-950/25 border-amber-500/40 text-xs animate-in fade-in flex flex-col md:flex-row md:items-center justify-between gap-4">
           <div className="space-y-1">
             <div className="flex items-center gap-2">
               <Flame className="w-4 h-4 text-amber-400" />
@@ -1201,7 +1201,7 @@ export const ActiveEntropyRateMonitor: React.FC<ActiveEntropyRateMonitorProps> =
             return (
               <div
                 key={m.slotId}
-                className="p-2.5 rounded-xl bg-black/40 border border-white/6 hover:border-cyan-500/40 transition-all group"
+                className="p-2.5 rounded-xl bg-black/40 border-white/6 hover:border-cyan-500/40 transition-all group"
                 title={`${m.councilCode} - ${m.nameEn} (${m.hardwareEnclave})`}
               >
                 <div className="flex items-center justify-between text-[10px] text-zinc-400">

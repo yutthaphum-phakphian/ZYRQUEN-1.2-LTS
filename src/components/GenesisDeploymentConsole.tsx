@@ -125,11 +125,11 @@ export const GenesisDeploymentConsole: React.FC<{ className?: string }> = ({ cla
   }, []);
 
   return (
-    <div className={`w-full rounded-[24px] bg-[#070A16] border border-cyan-500/30 p-5 sm:p-6 shadow-2xl text-white font-mono space-y-6 ${className}`}>
+    <div className={`w-full rounded-[24px] bg-[#070A16] border-cyan-500/30 p-5 sm:p-6 shadow-2xl text-white font-mono space-y-6 ${className}`}>
       {/* Top Banner */}
       <div className="flex flex-col lg:flex-row lg:items-center justify-between gap-4 border-b border-white/10 pb-5">
         <div className="flex items-center gap-3.5">
-          <div className="w-12 h-12 rounded-2xl bg-gradient-to-br from-cyan-500/20 via-violet-500/20 to-amber-500/20 border border-cyan-500/40 flex items-center justify-center shadow-[0_0_20px_rgba(6,182,212,0.35)] shrink-0">
+          <div className="w-12 h-12 rounded-2xl bg-gradient-to-br from-cyan-500/20 via-violet-500/20 to-amber-500/20 border-cyan-500/40 flex items-center justify-center shadow-[0_0_20px_rgba(6,182,212,0.35)] shrink-0">
             <Rocket className="w-6 h-6 text-cyan-400" />
           </div>
           <div>
@@ -137,7 +137,7 @@ export const GenesisDeploymentConsole: React.FC<{ className?: string }> = ({ cla
               <h2 className="text-base sm:text-lg font-bold tracking-wider text-white uppercase">
                 Genesis Deployment Console & Hologram Deck
               </h2>
-              <span className="text-[10px] font-semibold text-cyan-300 bg-cyan-950/80 px-2.5 py-0.5 rounded-full border border-cyan-500/40">
+              <span className="text-[10px] font-semibold text-cyan-300 bg-cyan-950/80 px-2.5 py-0.5 rounded-full border-cyan-500/40">
                 Core G11 Target
               </span>
             </div>
@@ -156,7 +156,7 @@ export const GenesisDeploymentConsole: React.FC<{ className?: string }> = ({ cla
           {currentStep === 'STEP_5_COMPLETED' ? (
             <button
               onClick={handleReset}
-              className="px-4 py-2 rounded-xl bg-black/60 border border-white/10 hover:border-white/30 text-xs font-bold text-zinc-300 flex items-center gap-2 transition-all"
+              className="px-4 py-2 rounded-xl bg-black/60 border-white/10 hover:border-white/30 text-xs font-bold text-zinc-300 flex items-center gap-2 transition-all"
             >
               <RefreshCw className="w-3.5 h-3.5" />
               <span>Reset Deployment</span>
@@ -167,7 +167,7 @@ export const GenesisDeploymentConsole: React.FC<{ className?: string }> = ({ cla
               disabled={isDeploying}
               className={`px-5 py-2.5 rounded-xl font-bold text-xs flex items-center gap-2.5 transition-all shadow-lg ${
                 isDeploying
-                  ? 'bg-cyan-500/20 text-cyan-300 border border-cyan-500/40 animate-pulse'
+                  ? 'bg-cyan-500/20 text-cyan-300 border-cyan-500/40 animate-pulse'
                   : 'bg-gradient-to-r from-cyan-500 via-blue-600 to-violet-600 hover:from-cyan-400 hover:to-violet-500 text-white shadow-[0_0_20px_rgba(6,182,212,0.4)] cursor-pointer'
               }`}
             >
@@ -293,7 +293,7 @@ export const GenesisDeploymentConsole: React.FC<{ className?: string }> = ({ cla
           }}
           className={`px-3.5 py-1.5 rounded-xl transition-all flex items-center gap-2 ${
             activeTab === 'console'
-              ? 'bg-cyan-500/20 text-cyan-300 font-bold border border-cyan-500/40'
+              ? 'bg-cyan-500/20 text-cyan-300 font-bold border-cyan-500/40'
               : 'text-zinc-400 hover:text-white'
           }`}
         >
@@ -308,7 +308,7 @@ export const GenesisDeploymentConsole: React.FC<{ className?: string }> = ({ cla
           }}
           className={`px-3.5 py-1.5 rounded-xl transition-all flex items-center gap-2 ${
             activeTab === 'manifest'
-              ? 'bg-cyan-500/20 text-cyan-300 font-bold border border-cyan-500/40'
+              ? 'bg-cyan-500/20 text-cyan-300 font-bold border-cyan-500/40'
               : 'text-zinc-400 hover:text-white'
           }`}
         >
@@ -323,7 +323,7 @@ export const GenesisDeploymentConsole: React.FC<{ className?: string }> = ({ cla
           }}
           className={`px-3.5 py-1.5 rounded-xl transition-all flex items-center gap-2 ${
             activeTab === 'quorum'
-              ? 'bg-cyan-500/20 text-cyan-300 font-bold border border-cyan-500/40'
+              ? 'bg-cyan-500/20 text-cyan-300 font-bold border-cyan-500/40'
               : 'text-zinc-400 hover:text-white'
           }`}
         >
@@ -338,7 +338,7 @@ export const GenesisDeploymentConsole: React.FC<{ className?: string }> = ({ cla
           }}
           className={`px-3.5 py-1.5 rounded-xl transition-all flex items-center gap-2 ${
             activeTab === 'hologram'
-              ? 'bg-cyan-500/20 text-cyan-300 font-bold border border-cyan-500/40'
+              ? 'bg-cyan-500/20 text-cyan-300 font-bold border-cyan-500/40'
               : 'text-zinc-400 hover:text-white'
           }`}
         >
@@ -349,7 +349,7 @@ export const GenesisDeploymentConsole: React.FC<{ className?: string }> = ({ cla
 
       {/* Tab 1: Terminal Log */}
       {activeTab === 'console' && (
-        <div className="p-4 rounded-2xl bg-black/80 border border-white/10 space-y-2">
+        <div className="p-4 rounded-2xl bg-black/80 border-white/10 space-y-2">
           <div className="flex items-center justify-between text-xs text-zinc-400 border-b border-white/5 pb-2">
             <div className="flex items-center gap-2">
               <span className="w-2.5 h-2.5 rounded-full bg-cyan-400 animate-ping" />
@@ -370,12 +370,12 @@ export const GenesisDeploymentConsole: React.FC<{ className?: string }> = ({ cla
 
       {/* Tab 2: Manifest View */}
       {activeTab === 'manifest' && (
-        <div className="p-4 rounded-2xl bg-black/80 border border-white/10 space-y-3">
+        <div className="p-4 rounded-2xl bg-black/80 border-white/10 space-y-3">
           <div className="flex items-center justify-between text-xs text-zinc-400 border-b border-white/5 pb-2">
             <span className="font-bold text-white">DEPLOYMENT_MANIFEST_OMEGA_V_INF.1.YAML</span>
             <span className="text-emerald-400 text-[10px]">IMMUTABLE SSoT Δ0</span>
           </div>
-          <pre className="text-[11px] leading-relaxed text-cyan-300 overflow-x-auto max-h-56 p-2 bg-black/50 rounded-xl border border-white/5">
+          <pre className="text-[11px] leading-relaxed text-cyan-300 overflow-x-auto max-h-56 p-2 bg-black/50 rounded-xl border-white/5">
             {manifestYaml}
           </pre>
         </div>
@@ -392,7 +392,7 @@ export const GenesisDeploymentConsole: React.FC<{ className?: string }> = ({ cla
             {THAI_CUSTODIANS.map((custodian, i) => (
               <div
                 key={custodian.id}
-                className="p-3 rounded-xl bg-black/60 border border-emerald-500/30 flex items-center justify-between gap-2 text-xs"
+                className="p-3 rounded-xl bg-black/60 border-emerald-500/30 flex items-center justify-between gap-2 text-xs"
               >
                 <div className="space-y-0.5">
                   <div className="font-bold text-white flex items-center gap-1.5">
@@ -413,31 +413,31 @@ export const GenesisDeploymentConsole: React.FC<{ className?: string }> = ({ cla
 
       {/* Tab 4: Hologram Deck Status */}
       {activeTab === 'hologram' && (
-        <div className="p-5 rounded-2xl bg-gradient-to-br from-cyan-950/30 via-black to-fuchsia-950/30 border border-cyan-500/40 space-y-4">
+        <div className="p-5 rounded-2xl bg-gradient-to-br from-cyan-950/30 via-black to-fuchsia-950/30 border-cyan-500/40 space-y-4">
           <div className="flex items-center justify-between flex-wrap gap-2 border-b border-white/10 pb-3">
             <div>
               <h3 className="text-sm font-bold text-white uppercase">Canonical Core G11 Hologram Deck</h3>
               <div className="text-xs text-zinc-400">Cosmic Holographic Visualization of Deployed Components</div>
             </div>
-            <span className="text-xs font-bold text-emerald-300 bg-emerald-950/80 px-3 py-1 rounded-xl border border-emerald-500/40">
+            <span className="text-xs font-bold text-emerald-300 bg-emerald-950/80 px-3 py-1 rounded-xl border-emerald-500/40">
               CORE STATUS: GENESIS ONLINE
             </span>
           </div>
 
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3 text-xs">
-            <div className="p-3 bg-black/60 rounded-xl border border-cyan-500/30 space-y-1">
+            <div className="p-3 bg-black/60 rounded-xl border-cyan-500/30 space-y-1">
               <div className="text-[10px] text-zinc-400 uppercase">Patch Matrix</div>
               <div className="text-sm font-bold text-emerald-300">ZYR-01..03 SECURED</div>
             </div>
-            <div className="p-3 bg-black/60 rounded-xl border border-amber-500/30 space-y-1">
+            <div className="p-3 bg-black/60 rounded-xl border-amber-500/30 space-y-1">
               <div className="text-[10px] text-zinc-400 uppercase">Gas Ledger</div>
               <div className="text-sm font-bold text-amber-300">฿12.5M LOCKED</div>
             </div>
-            <div className="p-3 bg-black/60 rounded-xl border border-emerald-500/30 space-y-1">
+            <div className="p-3 bg-black/60 rounded-xl border-emerald-500/30 space-y-1">
               <div className="text-[10px] text-zinc-400 uppercase">SLA & ETA Law</div>
               <div className="text-sm font-bold text-cyan-300">SEC 9/26/28 PASS</div>
             </div>
-            <div className="p-3 bg-black/60 rounded-xl border border-fuchsia-500/30 space-y-1">
+            <div className="p-3 bg-black/60 rounded-xl border-fuchsia-500/30 space-y-1">
               <div className="text-[10px] text-zinc-400 uppercase">Quorum Signature</div>
               <div className="text-sm font-bold text-fuchsia-300">10/10 SIGNED</div>
             </div>

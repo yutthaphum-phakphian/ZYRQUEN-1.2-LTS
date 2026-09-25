@@ -244,7 +244,7 @@ export const SupremeSealAtlas: React.FC = () => {
   };
 
   return (
-    <div id="supreme-seal-atlas" className="w-full bg-[#070a12] border border-[#D4AF37]/40 rounded-xl p-6 font-mono text-[#06B6D4] shadow-2xl space-y-5">
+    <div id="supreme-seal-atlas" className="w-full bg-[#070a12] border-[#D4AF37]/40 rounded-xl p-6 font-mono text-[#06B6D4] shadow-2xl space-y-5">
       {/* Header */}
       <div className="flex flex-col md:flex-row md:items-center justify-between pb-4 border-b border-[#0a0f1e] gap-3">
         <div>
@@ -273,15 +273,15 @@ export const SupremeSealAtlas: React.FC = () => {
           >
             <span>{quickInspectionEnabled ? '⚡ Quick Inspect: ON' : '⏸️ Quick Inspect: OFF'}</span>
           </button>
-          <span className="px-3 py-1 bg-[#0a0f1e] border border-emerald-500 text-emerald-400 font-bold rounded">
+          <span className="px-3 py-1 bg-[#0a0f1e] border-emerald-500 text-emerald-400 font-bold rounded">
             ✅ 14,902 Canonical Seals Verified
           </span>
-          <span className="px-3 py-1 bg-[#0a0f1e] border border-red-500 text-red-400 font-bold rounded">
+          <span className="px-3 py-1 bg-[#0a0f1e] border-red-500 text-red-400 font-bold rounded">
             🔒 80 Quarantined
           </span>
           <button
             onClick={resetAtlasZoom}
-            className="px-3 py-1 bg-[#0a0f1e] border border-[#06B6D4] hover:bg-[#06B6D4]/20 text-[#06B6D4] font-bold rounded"
+            className="px-3 py-1 bg-[#0a0f1e] border-[#06B6D4] hover:bg-[#06B6D4]/20 text-[#06B6D4] font-bold rounded"
           >
             🔍 Reset View ({zoomLevel}x)
           </button>
@@ -289,13 +289,13 @@ export const SupremeSealAtlas: React.FC = () => {
       </div>
 
       {/* Filter and Search Bar */}
-      <div className="flex flex-col sm:flex-row items-center justify-between gap-3 bg-[#0a0f1e] p-3 rounded-lg border border-slate-800 text-xs">
+      <div className="flex flex-col sm:flex-row items-center justify-between gap-3 bg-[#0a0f1e] p-3 rounded-lg border-slate-800 text-xs">
         <div className="flex items-center gap-2 w-full sm:w-auto">
           <span className="text-slate-400">Filter Chamber:</span>
           <select
             value={filterChamber}
             onChange={e => setFilterChamber(e.target.value === 'all' ? 'all' : Number(e.target.value))}
-            className="bg-[#070a12] border border-[#06B6D4]/40 text-[#06B6D4] px-2.5 py-1 rounded text-xs focus:outline-none"
+            className="bg-[#070a12] border-[#06B6D4]/40 text-[#06B6D4] px-2.5 py-1 rounded text-xs focus:outline-none"
           >
             <option value="all">All 18 Chambers (14,902 Seals)</option>
             {Array.from({ length: 18 }).map((_, i) => (
@@ -313,7 +313,7 @@ export const SupremeSealAtlas: React.FC = () => {
             placeholder="Search Seal #, Ω600_1000, or Chamber..."
             value={searchQuery}
             onChange={e => setSearchQuery(e.target.value)}
-            className="bg-[#070a12] border border-[#06B6D4]/40 text-slate-200 px-3 py-1 rounded text-xs placeholder:text-slate-600 focus:outline-none w-full sm:w-64"
+            className="bg-[#070a12] border-[#06B6D4]/40 text-slate-200 px-3 py-1 rounded text-xs placeholder:text-slate-600 focus:outline-none w-full sm:w-64"
           />
         </div>
       </div>
@@ -323,9 +323,9 @@ export const SupremeSealAtlas: React.FC = () => {
         {/* D3 Interactive Hologram Viewport */}
         <div
           ref={containerRef}
-          className="lg:col-span-7 bg-[#0a0f1e] border border-[#06B6D4]/30 rounded-xl p-3 flex flex-col items-center justify-center relative overflow-hidden min-h-[420px]"
+          className="lg:col-span-7 bg-[#0a0f1e] border-[#06B6D4]/30 rounded-xl p-3 flex flex-col items-center justify-center relative overflow-hidden min-h-[420px]"
         >
-          <div className="absolute top-3 left-3 text-[11px] text-slate-400 z-10 flex items-center gap-2 bg-[#070a12]/80 px-2.5 py-1 rounded border border-slate-800">
+          <div className="absolute top-3 left-3 text-[11px] text-slate-400 z-10 flex items-center gap-2 bg-[#070a12]/80 px-2.5 py-1 rounded border-slate-800">
             <span>Hover for Quick Inspection</span>
             <span>•</span>
             <span>Scroll to Zoom</span>
@@ -342,7 +342,7 @@ export const SupremeSealAtlas: React.FC = () => {
           {/* Quick Inspection Floating Mini-Popover */}
           {quickInspectionEnabled && hoveredSeal && (
             <div
-              className="absolute z-30 pointer-events-none bg-[#070a12] border border-[#D4AF37] p-3 rounded-lg shadow-2xl text-[11px] font-mono text-[#06B6D4] min-w-[240px] max-w-[280px]"
+              className="absolute z-30 pointer-events-none bg-[#070a12] border-[#D4AF37] p-3 rounded-lg shadow-2xl text-[11px] font-mono text-[#06B6D4] min-w-[240px] max-w-[280px]"
               style={{
                 left: `${Math.min(hoveredSeal.clientX + 15, 280)}px`,
                 top: `${Math.min(hoveredSeal.clientY - 40, 240)}px`,
@@ -402,7 +402,7 @@ export const SupremeSealAtlas: React.FC = () => {
         </div>
 
         {/* Selected Seal Cryptographic Inspector */}
-        <div className="lg:col-span-5 bg-[#0a0f1e] border border-[#D4AF37]/30 rounded-xl p-5 space-y-3.5 text-xs">
+        <div className="lg:col-span-5 bg-[#0a0f1e] border-[#D4AF37]/30 rounded-xl p-5 space-y-3.5 text-xs">
           <div className="flex items-center justify-between border-b border-slate-800 pb-2.5">
             <div>
               <span className="text-[10px] text-slate-500 uppercase block">Selected Seal Metadata</span>
@@ -425,41 +425,41 @@ export const SupremeSealAtlas: React.FC = () => {
 
           {selectedSeal ? (
             <div className="space-y-2.5">
-              <div className="p-2.5 bg-[#070a12] border border-slate-800 rounded space-y-1">
+              <div className="p-2.5 bg-[#070a12] border-slate-800 rounded space-y-1">
                 <span className="text-slate-500 text-[10px] block">Chamber Attribution</span>
                 <div className="text-slate-200 font-bold">{selectedSeal.chamberName}</div>
               </div>
 
               <div className="grid grid-cols-2 gap-2">
-                <div className="p-2.5 bg-[#070a12] border border-slate-800 rounded">
+                <div className="p-2.5 bg-[#070a12] border-slate-800 rounded">
                   <span className="text-slate-500 text-[10px] block">PQC Suite</span>
                   <span className="text-purple-300 font-bold">{selectedSeal.pqcType}</span>
                 </div>
-                <div className="p-2.5 bg-[#070a12] border border-slate-800 rounded">
+                <div className="p-2.5 bg-[#070a12] border-slate-800 rounded">
                   <span className="text-slate-500 text-[10px] block">HSM Enclave</span>
                   <span className="text-slate-200 font-bold">{selectedSeal.hsmSlot}</span>
                 </div>
               </div>
 
               <div className="grid grid-cols-2 gap-2">
-                <div className="p-2.5 bg-[#070a12] border border-slate-800 rounded">
+                <div className="p-2.5 bg-[#070a12] border-slate-800 rounded">
                   <span className="text-slate-500 text-[10px] block">Cryo Telemetry</span>
                   <span className="text-[#06B6D4] font-bold">{selectedSeal.cryoTemp}</span>
                 </div>
-                <div className="p-2.5 bg-[#070a12] border border-slate-800 rounded">
+                <div className="p-2.5 bg-[#070a12] border-slate-800 rounded">
                   <span className="text-slate-500 text-[10px] block">State Consistency</span>
                   <span className="text-emerald-400 font-bold">{selectedSeal.drift} ZERO DRIFT</span>
                 </div>
               </div>
 
-              <div className="p-2.5 bg-[#070a12] border border-slate-800 rounded space-y-1">
+              <div className="p-2.5 bg-[#070a12] border-slate-800 rounded space-y-1">
                 <span className="text-slate-500 text-[10px] block">Merkle Leaf Commitment</span>
                 <code className="text-[#D4AF37] text-[11px] block break-all">
                   {selectedSeal.merkleLeaf} (Block #849202)
                 </code>
               </div>
 
-              <div className="p-2.5 bg-[#070a12] border border-[#D4AF37]/30 rounded flex items-center justify-between text-[11px]">
+              <div className="p-2.5 bg-[#070a12] border-[#D4AF37]/30 rounded flex items-center justify-between text-[11px]">
                 <span className="text-slate-400">Boundary Tenant:</span>
                 <span className="text-[#D4AF37] font-bold">{selectedSeal.tenantId} (Ω600_1000 LOCKED)</span>
               </div>

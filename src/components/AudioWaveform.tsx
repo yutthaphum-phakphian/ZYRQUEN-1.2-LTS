@@ -60,7 +60,7 @@ export const AudioWaveform: React.FC = () => {
   }, []);
 
   return (
-    <div className="w-full h-16 bg-black/40 rounded-xl border border-white/5 relative overflow-hidden flex items-center justify-center">
+    <div className="w-full h-16 bg-black/40 rounded-xl border-white/5 relative overflow-hidden flex items-center justify-center">
       <canvas ref={canvasRef} width={300} height={60} className="w-full h-full opacity-80 mix-blend-screen" />
     </div>
   );

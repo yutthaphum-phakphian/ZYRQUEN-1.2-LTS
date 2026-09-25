@@ -18,11 +18,11 @@ export const DossierModal: React.FC<DossierModalProps> = ({ isOpen, onClose }) =
 
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/85 backdrop-blur-sm p-4 select-none overflow-y-auto">
-      <div className="w-full max-w-3xl bg-[#070c18] border border-cyan-500/40 rounded-xl shadow-[0_0_60px_rgba(6,182,212,0.15)] flex flex-col my-8">
+      <div className="w-full max-w-3xl bg-[#070c18] border-cyan-500/40 rounded-xl shadow-[0_0_60px_rgba(6,182,212,0.15)] flex flex-col my-8">
         {/* Header */}
         <div className="p-4 bg-slate-950 border-b border-cyan-800/40 flex items-center justify-between">
           <div className="flex items-center space-x-2.5">
-            <div className="p-2 rounded-lg bg-cyan-500/10 border border-cyan-500/30 text-cyan-400">
+            <div className="p-2 rounded-lg bg-cyan-500/10 border-cyan-500/30 text-cyan-400">
               <FileText className="w-5 h-5" />
             </div>
             <div>
@@ -37,14 +37,14 @@ export const DossierModal: React.FC<DossierModalProps> = ({ isOpen, onClose }) =
           <div className="flex items-center space-x-2">
             <button
               onClick={handlePrint}
-              className="flex items-center space-x-1.5 px-3 py-1.5 rounded-lg bg-cyan-950 hover:bg-cyan-900 border border-cyan-700 text-cyan-200 text-xs font-semibold transition-all"
+              className="flex items-center space-x-1.5 px-3 py-1.5 rounded-lg bg-cyan-950 hover:bg-cyan-900 border-cyan-700 text-cyan-200 text-xs font-semibold transition-all"
             >
               <Printer className="w-3.5 h-3.5" />
               <span>Print Dossier</span>
             </button>
             <button
               onClick={onClose}
-              className="p-1.5 rounded-lg bg-slate-900 border border-slate-800 text-slate-400 hover:text-slate-200"
+              className="p-1.5 rounded-lg bg-slate-900 border-slate-800 text-slate-400 hover:text-slate-200"
             >
               <X className="w-5 h-5" />
             </button>
@@ -67,7 +67,7 @@ export const DossierModal: React.FC<DossierModalProps> = ({ isOpen, onClose }) =
           </div>
 
           {/* Core Sovereign Metadata Grid */}
-          <div className="grid grid-cols-2 gap-3 bg-slate-950/70 p-4 rounded-lg border border-slate-800 font-mono-code text-[11px]">
+          <div className="grid grid-cols-2 gap-3 bg-slate-950/70 p-4 rounded-lg border-slate-800 font-mono-code text-[11px]">
             <div>
               <span className="text-slate-500">Sovereign Principal: </span>
               <span className="text-cyan-300 font-bold">{CANONICAL_CONSTANTS.SOVEREIGN_ARCHITECT}</span>
@@ -104,7 +104,7 @@ export const DossierModal: React.FC<DossierModalProps> = ({ isOpen, onClose }) =
               <ShieldCheck className="w-4 h-4 text-cyan-400" />
               <span>การรับรองสัตยาบันตามกฎหมายไทย (Thai Statutory Compliance)</span>
             </h4>
-            <div className="p-3 bg-slate-950/50 rounded-lg border border-slate-800/80 space-y-2 text-slate-300 leading-relaxed">
+            <div className="p-3 bg-slate-950/50 rounded-lg border-slate-800/80 space-y-2 text-slate-300 leading-relaxed">
               <p>
                 <strong>1. พระราชบัญญัติว่าด้วยธุรกรรมทางอิเล็กทรอนิกส์ พ.ศ. 2544:</strong>
               </p>
@@ -130,7 +130,7 @@ export const DossierModal: React.FC<DossierModalProps> = ({ isOpen, onClose }) =
             </h4>
             <div className="grid grid-cols-2 gap-2 text-[11px] font-mono-code">
               {INVARIANTS.map((inv) => (
-                <div key={inv.id} className="p-2 bg-slate-950/70 border border-slate-800 rounded flex items-center justify-between">
+                <div key={inv.id} className="p-2 bg-slate-950/70 border-slate-800 rounded flex items-center justify-between">
                   <span className="text-slate-300 font-semibold">{inv.name}</span>
                   <span className="text-emerald-400 font-bold">PASS</span>
                 </div>
@@ -145,7 +145,7 @@ export const DossierModal: React.FC<DossierModalProps> = ({ isOpen, onClose }) =
             </h4>
             <div className="grid grid-cols-3 gap-2">
               {TREASURY_ASSETS.map((asset) => (
-                <div key={asset.assetClass} className="p-2.5 bg-slate-950/80 border border-slate-800 rounded">
+                <div key={asset.assetClass} className="p-2.5 bg-slate-950/80 border-slate-800 rounded">
                   <div className="font-mono-code text-cyan-400 font-bold">{asset.assetClass}</div>
                   <div className="text-slate-300 font-semibold mt-0.5">{asset.valuation}</div>
                   <div className="text-[10px] text-slate-500 mt-1">{asset.verificationStatus}</div>

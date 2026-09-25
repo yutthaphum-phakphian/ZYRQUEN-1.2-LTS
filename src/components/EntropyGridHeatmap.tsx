@@ -170,16 +170,16 @@ export const EntropyGridHeatmap: React.FC = () => {
     if (active && payload && payload.length) {
       const data: EntropyHeatmapCell = payload[0].payload;
       return (
-        <div className="p-3.5 rounded-2xl bg-[#070914]/95 border border-cyan-500/40 backdrop-blur-xl shadow-2xl font-mono text-xs space-y-2 min-w-[240px]">
+        <div className="p-3.5 rounded-2xl bg-[#070914]/95 border-cyan-500/40 backdrop-blur-xl shadow-2xl font-mono text-xs space-y-2 min-w-[240px]">
           <div className="flex items-center justify-between border-b border-white/10 pb-1.5 text-zinc-400">
             <span className="font-bold text-white">{data.x}</span>
             <span
               className={`text-[10px] font-bold px-1.5 py-0.5 rounded ${
                 data.status === 'PEAK'
-                  ? 'bg-rose-500/20 text-rose-300 border border-rose-500/40'
+                  ? 'bg-rose-500/20 text-rose-300 border-rose-500/40'
                   : data.status === 'ELEVATED'
-                  ? 'bg-amber-500/20 text-amber-300 border border-amber-500/40'
-                  : 'bg-cyan-500/20 text-cyan-300 border border-cyan-500/40'
+                  ? 'bg-amber-500/20 text-amber-300 border-amber-500/40'
+                  : 'bg-cyan-500/20 text-cyan-300 border-cyan-500/40'
               }`}
             >
               {data.status}
@@ -209,11 +209,11 @@ export const EntropyGridHeatmap: React.FC = () => {
   };
 
   return (
-    <div className="p-5 sm:p-6 rounded-[28px] bg-gradient-to-br from-[#0c1220]/90 via-[#070a14]/90 to-[#04060c] border border-cyan-500/25 shadow-[0_10px_40px_-10px_rgba(6,182,212,0.12)] backdrop-blur-2xl space-y-4 font-mono">
+    <div className="p-5 sm:p-6 rounded-[28px] bg-gradient-to-br from-[#0c1220]/90 via-[#070a14]/90 to-[#04060c] border-cyan-500/25 shadow-[0_10px_40px_-10px_rgba(6,182,212,0.12)] backdrop-blur-2xl space-y-4 font-mono">
       {/* Header */}
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 border-b border-white/8 pb-4">
         <div className="flex items-center gap-3">
-          <div className="w-9 h-9 rounded-xl bg-cyan-500/15 border border-cyan-500/30 flex items-center justify-center shrink-0">
+          <div className="w-9 h-9 rounded-xl bg-cyan-500/15 border-cyan-500/30 flex items-center justify-center shrink-0">
             <Layers className="w-4 h-4 text-cyan-400" />
           </div>
           <div>
@@ -221,7 +221,7 @@ export const EntropyGridHeatmap: React.FC = () => {
               <h3 className="text-xs sm:text-sm font-bold text-white uppercase tracking-wider">
                 2D Spatiotemporal Entropy Distribution Heatmap (Recharts)
               </h3>
-              <span className="text-[10px] px-2 py-0.5 rounded-full bg-cyan-500/15 text-cyan-300 border border-cyan-500/30 font-bold">
+              <span className="text-[10px] px-2 py-0.5 rounded-full bg-cyan-500/15 text-cyan-300 border-cyan-500/30 font-bold">
                 6x6 INTENSITY MATRIX
               </span>
             </div>
@@ -233,7 +233,7 @@ export const EntropyGridHeatmap: React.FC = () => {
 
         {/* Metric Mode Selectors & Refresh */}
         <div className="flex items-center gap-2 flex-wrap">
-          <div className="flex items-center bg-black/60 border border-white/10 rounded-xl p-1 text-xs">
+          <div className="flex items-center bg-black/60 border-white/10 rounded-xl p-1 text-xs">
             <button
               onClick={() => {
                 playTone(520, 0.04);
@@ -241,7 +241,7 @@ export const EntropyGridHeatmap: React.FC = () => {
               }}
               className={`px-2.5 py-1 rounded-lg transition-all ${
                 metricMode === 'rate'
-                  ? 'bg-cyan-500/20 text-cyan-200 font-bold border border-cyan-500/40'
+                  ? 'bg-cyan-500/20 text-cyan-200 font-bold border-cyan-500/40'
                   : 'text-zinc-400 hover:text-zinc-200'
               }`}
             >
@@ -254,7 +254,7 @@ export const EntropyGridHeatmap: React.FC = () => {
               }}
               className={`px-2.5 py-1 rounded-lg transition-all ${
                 metricMode === 'sigma'
-                  ? 'bg-violet-500/20 text-violet-200 font-bold border border-violet-500/40'
+                  ? 'bg-violet-500/20 text-violet-200 font-bold border-violet-500/40'
                   : 'text-zinc-400 hover:text-zinc-200'
               }`}
             >
@@ -267,7 +267,7 @@ export const EntropyGridHeatmap: React.FC = () => {
               }}
               className={`px-2.5 py-1 rounded-lg transition-all ${
                 metricMode === 'fluctuation'
-                  ? 'bg-emerald-500/20 text-emerald-200 font-bold border border-emerald-500/40'
+                  ? 'bg-emerald-500/20 text-emerald-200 font-bold border-emerald-500/40'
                   : 'text-zinc-400 hover:text-zinc-200'
               }`}
             >
@@ -277,7 +277,7 @@ export const EntropyGridHeatmap: React.FC = () => {
 
           <button
             onClick={handleRefresh}
-            className="p-2 rounded-xl bg-black/40 hover:bg-white/10 border border-white/10 text-zinc-400 hover:text-cyan-300 transition-colors"
+            className="p-2 rounded-xl bg-black/40 hover:bg-white/10 border-white/10 text-zinc-400 hover:text-cyan-300 transition-colors"
             title="Sample Live Quantum Entropy Jitter"
           >
             <RefreshCw className="w-3.5 h-3.5" />
@@ -327,11 +327,11 @@ export const EntropyGridHeatmap: React.FC = () => {
         <div className="flex items-center gap-2">
           <span className="text-zinc-400 text-[11px]">Entropy Intensity Scale:</span>
           <div className="flex items-center gap-1">
-            <span className="w-3 h-3 rounded bg-[#083344] border border-white/10" title="< 25% (Low)" />
-            <span className="w-3 h-3 rounded bg-[#06B6D4] border border-white/10" title="25-50% (Nominal)" />
-            <span className="w-3 h-3 rounded bg-[#10B981] border border-white/10" title="50-75% (Elevated)" />
-            <span className="w-3 h-3 rounded bg-[#F59E0B] border border-white/10" title="75-88% (High)" />
-            <span className="w-3 h-3 rounded bg-[#F43F5E] border border-white/10" title="> 88% (Peak Surge)" />
+            <span className="w-3 h-3 rounded bg-[#083344] border-white/10" title="< 25% (Low)" />
+            <span className="w-3 h-3 rounded bg-[#06B6D4] border-white/10" title="25-50% (Nominal)" />
+            <span className="w-3 h-3 rounded bg-[#10B981] border-white/10" title="50-75% (Elevated)" />
+            <span className="w-3 h-3 rounded bg-[#F59E0B] border-white/10" title="75-88% (High)" />
+            <span className="w-3 h-3 rounded bg-[#F43F5E] border-white/10" title="> 88% (Peak Surge)" />
           </div>
           <span className="text-[10px] text-zinc-500 font-mono">0 KBps → 12,000+ KBps</span>
         </div>

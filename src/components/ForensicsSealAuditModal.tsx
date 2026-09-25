@@ -91,11 +91,11 @@ export const ForensicsSealAuditModal: React.FC<ForensicsSealAuditModalProps> = (
 
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center p-3 sm:p-5 bg-black/80 backdrop-blur-md animate-in fade-in duration-200">
-      <div className="relative w-full max-w-3xl bg-[#0a0f1e] border border-cyan-500/40 rounded-3xl p-5 sm:p-6 shadow-2xl space-y-5 font-mono max-h-[90vh] overflow-y-auto">
+      <div className="relative w-full max-w-3xl bg-[#0a0f1e] border-cyan-500/40 rounded-3xl p-5 sm:p-6 shadow-2xl space-y-5 font-mono max-h-[90vh] overflow-y-auto">
         {/* Header */}
         <div className="flex items-center justify-between border-b border-cyan-500/20 pb-4">
           <div className="flex items-center gap-3">
-            <div className="w-10 h-10 rounded-2xl bg-cyan-500/20 border border-cyan-400 text-cyan-300 flex items-center justify-center">
+            <div className="w-10 h-10 rounded-2xl bg-cyan-500/20 border-cyan-400 text-cyan-300 flex items-center justify-center">
               <ShieldCheck className="w-5 h-5" />
             </div>
             <div>
@@ -103,7 +103,7 @@ export const ForensicsSealAuditModal: React.FC<ForensicsSealAuditModalProps> = (
                 <h3 className="text-base font-bold text-white uppercase tracking-wider">
                   Forensics Seal Audit: Seal #{sealId}
                 </h3>
-                <span className="px-2 py-0.5 rounded-full bg-emerald-950 text-emerald-300 border border-emerald-500/40 text-[10px] font-bold">
+                <span className="px-2 py-0.5 rounded-full bg-emerald-950 text-emerald-300 border-emerald-500/40 text-[10px] font-bold">
                   IMMUTABLY BOUND
                 </span>
               </div>
@@ -129,7 +129,7 @@ export const ForensicsSealAuditModal: React.FC<ForensicsSealAuditModalProps> = (
           </div>
 
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-2 text-xs">
-            <div className="p-3 rounded-xl bg-[#070a12] border border-white/5 space-y-1">
+            <div className="p-3 rounded-xl bg-[#070a12] border-white/5 space-y-1">
               <div className="text-zinc-500 text-[10px] uppercase">Intake Principal &amp; Authority</div>
               <div className="text-zinc-200 font-bold flex items-center gap-1.5">
                 <UserCheck className="w-3.5 h-3.5 text-amber-400" />
@@ -138,7 +138,7 @@ export const ForensicsSealAuditModal: React.FC<ForensicsSealAuditModalProps> = (
               <div className="text-zinc-500 text-[10px]">OMEGA-1 Supreme Clearance (Read-Only)</div>
             </div>
 
-            <div className="p-3 rounded-xl bg-[#070a12] border border-white/5 space-y-1">
+            <div className="p-3 rounded-xl bg-[#070a12] border-white/5 space-y-1">
               <div className="text-zinc-500 text-[10px] uppercase">Hardware Attestation &amp; Quorum</div>
               <div className="text-zinc-200 font-bold flex items-center gap-1.5">
                 <Server className="w-3.5 h-3.5 text-emerald-400" />
@@ -147,7 +147,7 @@ export const ForensicsSealAuditModal: React.FC<ForensicsSealAuditModalProps> = (
               <div className="text-zinc-500 text-[10px]">Cryostat sub-Kelvin chamber @ 14.98 mK</div>
             </div>
 
-            <div className="p-3 rounded-xl bg-[#070a12] border border-white/5 space-y-1">
+            <div className="p-3 rounded-xl bg-[#070a12] border-white/5 space-y-1">
               <div className="text-zinc-500 text-[10px] uppercase">Post-Quantum Cryptography (PQC)</div>
               <div className="text-zinc-200 font-bold flex items-center gap-1.5">
                 <Key className="w-3.5 h-3.5 text-purple-400" />
@@ -156,7 +156,7 @@ export const ForensicsSealAuditModal: React.FC<ForensicsSealAuditModalProps> = (
               <div className="text-zinc-500 text-[10px]">FIPS 203 ML-KEM-1024 Quantum Encapsulation</div>
             </div>
 
-            <div className="p-3 rounded-xl bg-[#070a12] border border-white/5 space-y-1">
+            <div className="p-3 rounded-xl bg-[#070a12] border-white/5 space-y-1">
               <div className="text-zinc-500 text-[10px] uppercase">Thai Statutory Admissibility</div>
               <div className="text-zinc-200 font-bold flex items-center gap-1.5">
                 <Scale className="w-3.5 h-3.5 text-cyan-400" />
@@ -178,7 +178,7 @@ export const ForensicsSealAuditModal: React.FC<ForensicsSealAuditModalProps> = (
             <button
               onClick={handleRecomputePath}
               disabled={isVerifyingPath}
-              className="px-2.5 py-1 rounded-lg bg-white/5 hover:bg-white/10 border border-white/10 text-cyan-300 text-xs font-semibold flex items-center gap-1.5"
+              className="px-2.5 py-1 rounded-lg bg-white/5 hover:bg-white/10 border-white/10 text-cyan-300 text-xs font-semibold flex items-center gap-1.5"
             >
               <RefreshCw className={`w-3 h-3 ${isVerifyingPath ? 'animate-spin' : ''}`} />
               <span>{isVerifyingPath ? 'Recomputing Proof...' : 'Verify Merkle Path'}</span>
@@ -189,23 +189,23 @@ export const ForensicsSealAuditModal: React.FC<ForensicsSealAuditModalProps> = (
             {merkleSteps.map((step, idx) => (
               <div
                 key={idx}
-                className="p-3 rounded-xl bg-[#070a12] border border-cyan-500/20 text-xs space-y-1.5 relative overflow-hidden"
+                className="p-3 rounded-xl bg-[#070a12] border-cyan-500/20 text-xs space-y-1.5 relative overflow-hidden"
               >
                 <div className="flex items-center justify-between">
                   <div className="flex items-center gap-2">
-                    <span className="w-5 h-5 rounded-full bg-cyan-950 text-cyan-300 border border-cyan-500/40 text-[10px] font-bold flex items-center justify-center">
+                    <span className="w-5 h-5 rounded-full bg-cyan-950 text-cyan-300 border-cyan-500/40 text-[10px] font-bold flex items-center justify-center">
                       L{step.level}
                     </span>
                     <span className="font-bold text-white">{step.label}</span>
                     <span className="text-[10px] text-zinc-500 uppercase">({step.type})</span>
                   </div>
 
-                  <span className="px-2 py-0.5 rounded bg-emerald-950 text-emerald-300 border border-emerald-500/30 text-[10px] font-bold">
+                  <span className="px-2 py-0.5 rounded bg-emerald-950 text-emerald-300 border-emerald-500/30 text-[10px] font-bold">
                     ✓ {step.status}
                   </span>
                 </div>
 
-                <div className="bg-black/60 p-2 rounded-lg border border-white/5 flex items-center justify-between gap-2 font-mono text-[11px] text-zinc-300">
+                <div className="bg-black/60 p-2 rounded-lg border-white/5 flex items-center justify-between gap-2 font-mono text-[11px] text-zinc-300">
                   <span className="truncate">{step.hash}</span>
                   <button
                     onClick={() => copyToClipboard(step.hash, `step-${idx}`)}
@@ -234,7 +234,7 @@ export const ForensicsSealAuditModal: React.FC<ForensicsSealAuditModalProps> = (
           <div className="flex items-center gap-2 w-full sm:w-auto">
             <button
               onClick={() => copyToClipboard(SYSTEM_METADATA.merkleRoot, 'canonical-root')}
-              className="px-3 py-1.5 rounded-xl bg-white/5 hover:bg-white/10 border border-white/10 text-zinc-200 text-xs font-semibold flex items-center gap-1.5 w-full sm:w-auto justify-center"
+              className="px-3 py-1.5 rounded-xl bg-white/5 hover:bg-white/10 border-white/10 text-zinc-200 text-xs font-semibold flex items-center gap-1.5 w-full sm:w-auto justify-center"
             >
               {copiedKey === 'canonical-root' ? <Check className="w-3.5 h-3.5 text-emerald-400" /> : <Copy className="w-3.5 h-3.5" />}
               <span>Copy Canonical Root</span>
@@ -242,7 +242,7 @@ export const ForensicsSealAuditModal: React.FC<ForensicsSealAuditModalProps> = (
 
             <button
               onClick={onClose}
-              className="px-4 py-1.5 rounded-xl bg-cyan-950 hover:bg-cyan-900 border border-cyan-500/40 text-cyan-200 text-xs font-bold w-full sm:w-auto text-center"
+              className="px-4 py-1.5 rounded-xl bg-cyan-950 hover:bg-cyan-900 border-cyan-500/40 text-cyan-200 text-xs font-bold w-full sm:w-auto text-center"
             >
               Done
             </button>

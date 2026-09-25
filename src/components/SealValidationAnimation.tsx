@@ -82,7 +82,7 @@ export function SealValidationAnimation({ onComplete, onClose }: SealValidationA
         initial={{ opacity: 0, scale: 0.95 }}
         animate={{ opacity: 1, scale: 1 }}
         exit={{ opacity: 0, scale: 0.95 }}
-        className="w-full max-w-2xl bg-[#0a0f1e] border border-cyan-500/30 rounded-2xl shadow-2xl shadow-cyan-900/20 overflow-hidden relative flex flex-col"
+        className="w-full max-w-2xl bg-[#0a0f1e] border-cyan-500/30 rounded-2xl shadow-2xl shadow-cyan-900/20 overflow-hidden relative flex flex-col"
       >
         {/* Header */}
         <div className="flex items-center justify-between px-6 py-4 border-b border-white/10 bg-black/40">
@@ -121,7 +121,7 @@ export function SealValidationAnimation({ onComplete, onClose }: SealValidationA
                 opacity: [0.3, 0.6, 0.3]
               }}
               transition={{ duration: 2, repeat: Infinity, ease: 'easeInOut' }}
-              className="absolute inset-4 border border-cyan-400/40 rounded-full bg-cyan-900/10"
+              className="absolute inset-4 border-cyan-400/40 rounded-full bg-cyan-900/10"
             />
             
             {/* Core Icon */}
@@ -174,7 +174,7 @@ export function SealValidationAnimation({ onComplete, onClose }: SealValidationA
             </div>
             
             {/* Progress Bar */}
-            <div className="h-1.5 w-full bg-black/60 rounded-full overflow-hidden border border-white/5 relative">
+            <div className="h-1.5 w-full bg-black/60 rounded-full overflow-hidden border-white/5 relative">
               <motion.div 
                 className={`absolute top-0 bottom-0 left-0 ${stage === 'complete' ? 'bg-emerald-500 shadow-[0_0_10px_rgba(16,185,129,0.5)]' : 'bg-cyan-500 shadow-[0_0_10px_rgba(6,182,212,0.5)]'}`}
                 style={{ width: `${progress}%` }}
@@ -188,7 +188,7 @@ export function SealValidationAnimation({ onComplete, onClose }: SealValidationA
           </div>
 
           {/* Terminal Logs */}
-          <div className="w-full h-32 bg-black/60 border border-white/5 rounded-xl p-3 overflow-hidden z-10 flex flex-col justify-end">
+          <div className="w-full h-32 bg-black/60 border-white/5 rounded-xl p-3 overflow-hidden z-10 flex flex-col justify-end">
             <div className="space-y-1 font-mono text-[10px]">
               <AnimatePresence>
                 {logs.map((log, i) => (

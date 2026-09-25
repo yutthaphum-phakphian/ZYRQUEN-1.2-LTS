@@ -133,7 +133,7 @@ export const FiosDigitalTwinStressSandbox: React.FC = () => {
       {/* Header */}
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 border-b border-emerald-500/20 pb-4">
         <div className="flex items-center gap-3">
-          <div className="w-11 h-11 rounded-2xl bg-emerald-500/20 border border-emerald-400 text-emerald-300 flex items-center justify-center shrink-0 shadow-[0_0_20px_rgba(16,185,129,0.3)]">
+          <div className="w-11 h-11 rounded-2xl bg-emerald-500/20 border-emerald-400 text-emerald-300 flex items-center justify-center shrink-0 shadow-[0_0_20px_rgba(16,185,129,0.3)]">
             <TrendingUp className="w-5 h-5" />
           </div>
           <div>
@@ -141,7 +141,7 @@ export const FiosDigitalTwinStressSandbox: React.FC = () => {
               <h3 className="text-base font-bold text-emerald-100 font-serif">
                 MODULE 4: FIOS DIGITAL TWIN STRESS BACKTEST SANDBOX
               </h3>
-              <span className="text-[10px] px-2 py-0.5 rounded bg-emerald-500/20 text-emerald-300 border border-emerald-400/40 font-bold">
+              <span className="text-[10px] px-2 py-0.5 rounded bg-emerald-500/20 text-emerald-300 border-emerald-400/40 font-bold">
                 50,000 MONTE CARLO PATHS
               </span>
             </div>
@@ -171,7 +171,7 @@ export const FiosDigitalTwinStressSandbox: React.FC = () => {
       </div>
 
       {/* Mandatory Safety Guard Rule 8 */}
-      <div className="p-3.5 rounded-2xl bg-amber-500/10 border border-amber-500/30 text-amber-200 text-xs flex flex-col sm:flex-row sm:items-center justify-between gap-2">
+      <div className="p-3.5 rounded-2xl bg-amber-500/10 border-amber-500/30 text-amber-200 text-xs flex flex-col sm:flex-row sm:items-center justify-between gap-2">
         <div className="flex items-center gap-2">
           <AlertTriangle className="w-4 h-4 text-amber-400 shrink-0" />
           <span>
@@ -179,7 +179,7 @@ export const FiosDigitalTwinStressSandbox: React.FC = () => {
             <strong>Non-Live Pilot Dataset (DS-901-PILOT)</strong>. Not guaranteed returns or live production trading.
           </span>
         </div>
-        <span className="text-[10px] px-2 py-0.5 rounded bg-rose-500/20 text-rose-300 border border-rose-500/40 font-bold self-start sm:self-auto shrink-0">
+        <span className="text-[10px] px-2 py-0.5 rounded bg-rose-500/20 text-rose-300 border-rose-500/40 font-bold self-start sm:self-auto shrink-0">
           ZERO LIVE TRADING AUTHORITY
         </span>
       </div>
@@ -211,7 +211,7 @@ export const FiosDigitalTwinStressSandbox: React.FC = () => {
       </div>
 
       {/* Scenario Breakdown Card */}
-      <div className="p-5 rounded-2xl bg-black/70 border border-emerald-500/30 space-y-4">
+      <div className="p-5 rounded-2xl bg-black/70 border-emerald-500/30 space-y-4">
         <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2 border-b border-white/5 pb-3">
           <div>
             <h4 className="text-sm font-bold text-white font-serif">{currentScenario.name}</h4>
@@ -219,26 +219,26 @@ export const FiosDigitalTwinStressSandbox: React.FC = () => {
               Shock Injection: {currentScenario.shockInjection}
             </p>
           </div>
-          <span className="text-[10px] px-2.5 py-1 rounded-lg bg-emerald-500/20 text-emerald-300 border border-emerald-500/40 font-bold self-start sm:self-auto">
+          <span className="text-[10px] px-2.5 py-1 rounded-lg bg-emerald-500/20 text-emerald-300 border-emerald-500/40 font-bold self-start sm:self-auto">
             STATUS: {currentScenario.status}
           </span>
         </div>
 
         {/* 3 Survival Metrics */}
         <div className="grid grid-cols-1 sm:grid-cols-3 gap-3 text-xs">
-          <div className="p-3 rounded-xl bg-zinc-900/70 border border-white/5 space-y-1">
+          <div className="p-3 rounded-xl bg-zinc-900/70 border-white/5 space-y-1">
             <div className="text-[10px] text-zinc-400 font-bold">AGGREGATE SURVIVAL PROBABILITY</div>
             <div className="text-emerald-400 font-bold text-lg">{currentScenario.survivalRate}</div>
             <div className="text-[9px] text-zinc-500">Across 50,000 Monte Carlo Paths</div>
           </div>
 
-          <div className="p-3 rounded-xl bg-zinc-900/70 border border-white/5 space-y-1">
+          <div className="p-3 rounded-xl bg-zinc-900/70 border-white/5 space-y-1">
             <div className="text-[10px] text-zinc-400 font-bold">MAX STRESS DRAWDOWN</div>
             <div className="text-amber-400 font-bold text-lg">{currentScenario.maxDrawdown}</div>
             <div className="text-[9px] text-zinc-500">Within Basel III Stress Tolerance</div>
           </div>
 
-          <div className="p-3 rounded-xl bg-zinc-900/70 border border-white/5 space-y-1">
+          <div className="p-3 rounded-xl bg-zinc-900/70 border-white/5 space-y-1">
             <div className="text-[10px] text-zinc-400 font-bold">RECOVERY DURATION</div>
             <div className="text-cyan-400 font-bold text-lg">{currentScenario.recoveryDays} Days</div>
             <div className="text-[9px] text-zinc-500">Mean Mean-Reversion Window</div>
@@ -251,19 +251,19 @@ export const FiosDigitalTwinStressSandbox: React.FC = () => {
             Factor Decomposition Attribution (DS-901-PILOT Model):
           </div>
           <div className="grid grid-cols-2 sm:grid-cols-4 gap-2 text-[11px]">
-            <div className="p-2 rounded-lg bg-zinc-900/60 border border-white/5">
+            <div className="p-2 rounded-lg bg-zinc-900/60 border-white/5">
               <span className="text-zinc-500 text-[10px] block">QUALITY (35%):</span>
               <span className="text-emerald-300 font-bold">{currentScenario.factorImpact.quality}</span>
             </div>
-            <div className="p-2 rounded-lg bg-zinc-900/60 border border-white/5">
+            <div className="p-2 rounded-lg bg-zinc-900/60 border-white/5">
               <span className="text-zinc-500 text-[10px] block">VALUE (20%):</span>
               <span className="text-cyan-300 font-bold">{currentScenario.factorImpact.value}</span>
             </div>
-            <div className="p-2 rounded-lg bg-zinc-900/60 border border-white/5">
+            <div className="p-2 rounded-lg bg-zinc-900/60 border-white/5">
               <span className="text-zinc-500 text-[10px] block">MOMENTUM (25%):</span>
               <span className="text-purple-300 font-bold">{currentScenario.factorImpact.momentum}</span>
             </div>
-            <div className="p-2 rounded-lg bg-zinc-900/60 border border-white/5">
+            <div className="p-2 rounded-lg bg-zinc-900/60 border-white/5">
               <span className="text-zinc-500 text-[10px] block">VOLATILITY (20%):</span>
               <span className="text-amber-300 font-bold">{currentScenario.factorImpact.volatility}</span>
             </div>

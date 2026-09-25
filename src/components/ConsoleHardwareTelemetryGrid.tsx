@@ -621,26 +621,26 @@ export const ConsoleHardwareTelemetryGrid: React.FC<ConsoleHardwareTelemetryGrid
   return (
     <div className="space-y-4 font-mono text-xs select-text relative">
       {/* Top Header Grid Bar with View Mode Toggle, Zoom, Stress, and Timestamps */}
-      <div className="p-4 rounded-2xl bg-black/60 border border-white/8 flex flex-col lg:flex-row lg:items-center justify-between gap-3">
+      <div className="p-4 rounded-2xl bg-black/60 border-white/8 flex flex-col lg:flex-row lg:items-center justify-between gap-3">
         <div className="flex flex-wrap items-center gap-2.5">
           <div className="w-2.5 h-2.5 rounded-full bg-emerald-400 animate-ping" />
           <span className="font-bold text-white uppercase tracking-wider text-xs">
             HARDWARE TELEMETRY & SUBZERO CRYO GRID
           </span>
-          <span className="px-2 py-0.5 rounded bg-emerald-950 text-emerald-300 border border-emerald-500/40 text-[10px] font-bold">
+          <span className="px-2 py-0.5 rounded bg-emerald-950 text-emerald-300 border-emerald-500/40 text-[10px] font-bold">
             [LIVE SENSOR PROVENANCE]
           </span>
-          <span className="px-2 py-0.5 rounded bg-cyan-500/10 text-cyan-300 border border-cyan-500/20 text-[10px]">
+          <span className="px-2 py-0.5 rounded bg-cyan-500/10 text-cyan-300 border-cyan-500/20 text-[10px]">
             OTEL-OTLP v1.28
           </span>
 
           {/* View Mode Switcher: 4x4 Grid vs Accessible Expanded List */}
-          <div className="flex items-center bg-black/80 border border-white/15 rounded-xl p-0.5 text-[10px]">
+          <div className="flex items-center bg-black/80 border-white/15 rounded-xl p-0.5 text-[10px]">
             <button
               onClick={() => setViewMode('grid')}
               className={`px-2.5 py-1 rounded-lg flex items-center gap-1.5 transition-all ${
                 activeViewMode === 'grid'
-                  ? 'bg-cyan-500/25 text-cyan-300 font-bold border border-cyan-500/40 shadow-sm'
+                  ? 'bg-cyan-500/25 text-cyan-300 font-bold border-cyan-500/40 shadow-sm'
                   : 'text-zinc-400 hover:text-zinc-200'
               }`}
               title="Dense 4x4 Hardware Matrix View"
@@ -652,7 +652,7 @@ export const ConsoleHardwareTelemetryGrid: React.FC<ConsoleHardwareTelemetryGrid
               onClick={() => setViewMode('list')}
               className={`px-2.5 py-1 rounded-lg flex items-center gap-1.5 transition-all ${
                 activeViewMode === 'list'
-                  ? 'bg-cyan-500/25 text-cyan-300 font-bold border border-cyan-500/40 shadow-sm'
+                  ? 'bg-cyan-500/25 text-cyan-300 font-bold border-cyan-500/40 shadow-sm'
                   : 'text-zinc-400 hover:text-zinc-200'
               }`}
               title="Expanded Accessible List View with Metrics Breakdown"
@@ -663,7 +663,7 @@ export const ConsoleHardwareTelemetryGrid: React.FC<ConsoleHardwareTelemetryGrid
           </div>
 
           {zoomLevel !== 1.0 && (
-            <span className="px-2 py-0.5 rounded bg-violet-500/20 text-violet-300 border border-violet-500/30 text-[10px] font-bold animate-pulse">
+            <span className="px-2 py-0.5 rounded bg-violet-500/20 text-violet-300 border-violet-500/30 text-[10px] font-bold animate-pulse">
               ZOOM {Math.round(zoomLevel * 100)}% • DRAG TO PAN
             </span>
           )}
@@ -671,7 +671,7 @@ export const ConsoleHardwareTelemetryGrid: React.FC<ConsoleHardwareTelemetryGrid
 
         <div className="flex flex-wrap items-center gap-2 sm:gap-3 text-[11px] text-zinc-400">
           {/* Zoom & Pan Toolbar Controls */}
-          <div className="flex items-center gap-1 bg-black/50 border border-white/10 rounded-xl p-1 text-[10px]">
+          <div className="flex items-center gap-1 bg-black/50 border-white/10 rounded-xl p-1 text-[10px]">
             <span className="text-zinc-400 px-1 text-[9px] uppercase font-bold flex items-center gap-1">
               <Move className="w-3 h-3 text-cyan-400" /> Pan/Zoom:
             </span>
@@ -697,7 +697,7 @@ export const ConsoleHardwareTelemetryGrid: React.FC<ConsoleHardwareTelemetryGrid
             {zoomLevel !== 1.0 && (
               <button
                 onClick={handleResetZoom}
-                className="px-1.5 py-0.5 rounded bg-cyan-500/20 text-cyan-300 hover:bg-cyan-500/30 text-[9px] font-bold border border-cyan-500/30"
+                className="px-1.5 py-0.5 rounded bg-cyan-500/20 text-cyan-300 hover:bg-cyan-500/30 text-[9px] font-bold border-cyan-500/30"
                 title="Reset Zoom to 100%"
               >
                 100%
@@ -706,25 +706,25 @@ export const ConsoleHardwareTelemetryGrid: React.FC<ConsoleHardwareTelemetryGrid
           </div>
 
           {/* CPU Stress Presets for live testing */}
-          <div className="flex items-center gap-1 bg-black/40 border border-white/10 rounded-xl p-1 text-[10px]">
+          <div className="flex items-center gap-1 bg-black/40 border-white/10 rounded-xl p-1 text-[10px]">
             <span className="text-zinc-500 px-1 text-[9px] uppercase">Load Test:</span>
             <button
               onClick={() => setCpuStressPreset('low')}
-              className="px-2 py-0.5 rounded bg-emerald-500/15 text-emerald-300 hover:bg-emerald-500/25 border border-emerald-500/30 transition-all"
+              className="px-2 py-0.5 rounded bg-emerald-500/15 text-emerald-300 hover:bg-emerald-500/25 border-emerald-500/30 transition-all"
               title="Test <50% Nominal Green State"
             >
               41%
             </button>
             <button
               onClick={() => setCpuStressPreset('med')}
-              className="px-2 py-0.5 rounded bg-amber-500/15 text-amber-300 hover:bg-amber-500/25 border border-amber-500/30 transition-all"
+              className="px-2 py-0.5 rounded bg-amber-500/15 text-amber-300 hover:bg-amber-500/25 border-amber-500/30 transition-all"
               title="Test 50-80% Elevated Amber State"
             >
               65%
             </button>
             <button
               onClick={() => setCpuStressPreset('high')}
-              className="px-2 py-0.5 rounded bg-red-500/15 text-red-300 hover:bg-red-500/25 border border-red-500/30 transition-all"
+              className="px-2 py-0.5 rounded bg-red-500/15 text-red-300 hover:bg-red-500/25 border-red-500/30 transition-all"
               title="Test >80% Critical Red Stress State"
             >
               88%
@@ -740,7 +740,7 @@ export const ConsoleHardwareTelemetryGrid: React.FC<ConsoleHardwareTelemetryGrid
 
           <button
             onClick={triggerCalibrate}
-            className="px-2.5 py-1 rounded-lg bg-white/5 hover:bg-white/10 text-zinc-300 hover:text-white border border-white/10 flex items-center gap-1 text-[10px] transition-all"
+            className="px-2.5 py-1 rounded-lg bg-white/5 hover:bg-white/10 text-zinc-300 hover:text-white border-white/10 flex items-center gap-1 text-[10px] transition-all"
             title="Recalibrate Cryo & QOps Sensors"
           >
             <RefreshCw className="w-3 h-3 text-cyan-400" />
@@ -753,7 +753,7 @@ export const ConsoleHardwareTelemetryGrid: React.FC<ConsoleHardwareTelemetryGrid
                 playAuditChime();
                 onSnapshot(telemetry);
               }}
-              className="px-2.5 py-1 rounded-lg bg-emerald-500/15 hover:bg-emerald-500/25 text-emerald-300 hover:text-emerald-200 border border-emerald-500/30 flex items-center gap-1.5 text-[10px] font-bold transition-all shadow-[0_0_12px_rgba(16,185,129,0.2)]"
+              className="px-2.5 py-1 rounded-lg bg-emerald-500/15 hover:bg-emerald-500/25 text-emerald-300 hover:text-emerald-200 border-emerald-500/30 flex items-center gap-1.5 text-[10px] font-bold transition-all shadow-[0_0_12px_rgba(16,185,129,0.2)]"
               title="Capture instantaneous hardware telemetry snapshot into Ledger"
             >
               <Camera className="w-3 h-3 text-emerald-400" />
@@ -766,7 +766,7 @@ export const ConsoleHardwareTelemetryGrid: React.FC<ConsoleHardwareTelemetryGrid
       {/* Floating Hover Tooltip */}
       {hoveredModule && (
         <div
-          className="fixed z-50 pointer-events-none p-3.5 rounded-2xl bg-[#07080F]/95 border border-cyan-500/40 backdrop-blur-xl shadow-2xl space-y-1.5 min-w-[240px] max-w-[320px] text-xs font-mono -translate-x-1/2 -translate-y-full animate-in fade-in zoom-in-95 duration-150"
+          className="fixed z-50 pointer-events-none p-3.5 rounded-2xl bg-[#07080F]/95 border-cyan-500/40 backdrop-blur-xl shadow-2xl space-y-1.5 min-w-[240px] max-w-[320px] text-xs font-mono -translate-x-1/2 -translate-y-full animate-in fade-in zoom-in-95 duration-150"
           style={{ left: `${tooltipPos.x}px`, top: `${tooltipPos.y}px` }}
         >
           <div className="flex items-center justify-between border-b border-white/10 pb-1.5">
@@ -813,7 +813,7 @@ export const ConsoleHardwareTelemetryGrid: React.FC<ConsoleHardwareTelemetryGrid
         onMouseMove={handleMouseMove}
         onMouseUp={handleMouseUp}
         onMouseLeave={handleMouseUp}
-        className={`relative overflow-hidden rounded-[24px] border border-white/5 p-1 bg-black/40 transition-colors ${
+        className={`relative overflow-hidden rounded-[24px] border-white/5 p-1 bg-black/40 transition-colors ${
           zoomLevel > 1.0 ? (isDragging ? 'cursor-grabbing select-none' : 'cursor-grab') : ''
         }`}
       >
@@ -827,11 +827,11 @@ export const ConsoleHardwareTelemetryGrid: React.FC<ConsoleHardwareTelemetryGrid
           className="space-y-3"
         >
           {/* Dedicated Power State Visual Indicator Bar for Quantum Cooling Unit */}
-          <div className="p-4 rounded-2xl bg-gradient-to-r from-[#0c1824]/90 via-[#0b101a]/85 to-[#081414]/90 border border-cyan-500/30 backdrop-blur-xl shadow-[0_0_20px_rgba(6,182,212,0.1)]">
+          <div className="p-4 rounded-2xl bg-gradient-to-r from-[#0c1824]/90 via-[#0b101a]/85 to-[#081414]/90 border-cyan-500/30 backdrop-blur-xl shadow-[0_0_20px_rgba(6,182,212,0.1)]">
             <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
               {/* Left: Power State Headline & Source */}
               <div className="flex items-center gap-3">
-                <div className="w-10 h-10 rounded-2xl bg-cyan-500/15 border border-cyan-500/30 flex items-center justify-center text-cyan-300 shrink-0 shadow-[0_0_15px_rgba(6,182,212,0.2)]">
+                <div className="w-10 h-10 rounded-2xl bg-cyan-500/15 border-cyan-500/30 flex items-center justify-center text-cyan-300 shrink-0 shadow-[0_0_15px_rgba(6,182,212,0.2)]">
                   <BatteryCharging className="w-5 h-5 animate-pulse" />
                 </div>
                 <div>
@@ -840,7 +840,7 @@ export const ConsoleHardwareTelemetryGrid: React.FC<ConsoleHardwareTelemetryGrid
                       <Power className="w-3.5 h-3.5 text-cyan-400" />
                       Quantum Cooling Power State & Subzero Energy Matrix
                     </span>
-                    <span className="px-2 py-0.2 rounded-full bg-cyan-500/20 text-cyan-300 border border-cyan-500/30 text-[9px] font-bold">
+                    <span className="px-2 py-0.2 rounded-full bg-cyan-500/20 text-cyan-300 border-cyan-500/30 text-[9px] font-bold">
                       ACTIVE DILUTION
                     </span>
                   </div>
@@ -853,7 +853,7 @@ export const ConsoleHardwareTelemetryGrid: React.FC<ConsoleHardwareTelemetryGrid
               {/* Right: Simulated Current Draw & Battery Health Readouts */}
               <div className="grid grid-cols-2 sm:grid-cols-4 gap-2.5">
                 {/* 1. Real-time Current Draw & Power */}
-                <div className="p-2.5 rounded-xl bg-black/40 border border-white/8 space-y-1">
+                <div className="p-2.5 rounded-xl bg-black/40 border-white/8 space-y-1">
                   <div className="flex items-center justify-between text-zinc-400 text-[10px]">
                     <span className="flex items-center gap-1 text-cyan-400">
                       <Zap className="w-3 h-3" /> CURRENT DRAW
@@ -871,7 +871,7 @@ export const ConsoleHardwareTelemetryGrid: React.FC<ConsoleHardwareTelemetryGrid
                 </div>
 
                 {/* 2. Battery Health Percentage */}
-                <div className="p-2.5 rounded-xl bg-black/40 border border-white/8 space-y-1">
+                <div className="p-2.5 rounded-xl bg-black/40 border-white/8 space-y-1">
                   <div className="flex items-center justify-between text-zinc-400 text-[10px]">
                     <span className="flex items-center gap-1 text-emerald-400">
                       <BatteryMedium className="w-3 h-3" /> BATTERY HEALTH
@@ -889,7 +889,7 @@ export const ConsoleHardwareTelemetryGrid: React.FC<ConsoleHardwareTelemetryGrid
                 </div>
 
                 {/* 3. Backup Runtime Buffer */}
-                <div className="p-2.5 rounded-xl bg-black/40 border border-white/8 space-y-1">
+                <div className="p-2.5 rounded-xl bg-black/40 border-white/8 space-y-1">
                   <div className="flex items-center justify-between text-zinc-400 text-[10px]">
                     <span className="flex items-center gap-1 text-amber-400">
                       <Clock className="w-3 h-3" /> RESERVE BUFFER
@@ -907,7 +907,7 @@ export const ConsoleHardwareTelemetryGrid: React.FC<ConsoleHardwareTelemetryGrid
                 </div>
 
                 {/* 4. Power Grid Source & Phase */}
-                <div className="p-2.5 rounded-xl bg-black/40 border border-white/8 space-y-1">
+                <div className="p-2.5 rounded-xl bg-black/40 border-white/8 space-y-1">
                   <div className="flex items-center justify-between text-zinc-400 text-[10px]">
                     <span className="flex items-center gap-1 text-violet-400">
                       <Zap className="w-3 h-3" /> GRID BALANCE
@@ -928,15 +928,15 @@ export const ConsoleHardwareTelemetryGrid: React.FC<ConsoleHardwareTelemetryGrid
 
             {/* Sub-stage Power Distribution Bar */}
             <div className="mt-3 pt-3 border-t border-white/5 grid grid-cols-1 sm:grid-cols-3 gap-2 text-[10px] text-zinc-400 font-mono">
-              <div className="flex items-center justify-between bg-black/30 px-2.5 py-1.5 rounded-lg border border-white/5">
+              <div className="flex items-center justify-between bg-black/30 px-2.5 py-1.5 rounded-lg border-white/5">
                 <span>Stage 1 (Compressor):</span>
                 <span className="text-cyan-300 font-semibold">{powerState.stage1CompressorKw} kW (67.6%)</span>
               </div>
-              <div className="flex items-center justify-between bg-black/30 px-2.5 py-1.5 rounded-lg border border-white/5">
+              <div className="flex items-center justify-between bg-black/30 px-2.5 py-1.5 rounded-lg border-white/5">
                 <span>Stage 2 (Turbo-Expander):</span>
                 <span className="text-violet-300 font-semibold">{powerState.stage2TurboExpanderKw} kW (23.9%)</span>
               </div>
-              <div className="flex items-center justify-between bg-black/30 px-2.5 py-1.5 rounded-lg border border-white/5">
+              <div className="flex items-center justify-between bg-black/30 px-2.5 py-1.5 rounded-lg border-white/5">
                 <span>Stage 3 (Sorption Cold Plate):</span>
                 <span className="text-amber-300 font-semibold">{powerState.stage3SorptionPumpKw} kW (8.5%)</span>
               </div>
@@ -962,7 +962,7 @@ export const ConsoleHardwareTelemetryGrid: React.FC<ConsoleHardwareTelemetryGrid
                         <Cpu className="w-4 h-4" /> CPU CLUSTER (4 CORES) & 5-MIN HISTORICAL TREND
                       </span>
                       {cpuStyle.isExceeded && (
-                        <span className="px-2 py-0.2 rounded-full bg-red-500/20 text-red-300 border border-red-500/40 text-[9px] font-bold animate-pulse flex items-center gap-1">
+                        <span className="px-2 py-0.2 rounded-full bg-red-500/20 text-red-300 border-red-500/40 text-[9px] font-bold animate-pulse flex items-center gap-1">
                           <AlertTriangle className="w-3 h-3" /> EXCEEDS {cpuThreshold}% THRESHOLD
                         </span>
                       )}
@@ -991,7 +991,7 @@ export const ConsoleHardwareTelemetryGrid: React.FC<ConsoleHardwareTelemetryGrid
                             content={({ active, payload, label }) => {
                               if (active && payload && payload.length) {
                                 return (
-                                  <div className="p-2 rounded-xl bg-black/90 border border-white/15 text-[10px] font-mono text-white shadow-xl">
+                                  <div className="p-2 rounded-xl bg-black/90 border-white/15 text-[10px] font-mono text-white shadow-xl">
                                     <div>Time: {label}</div>
                                     <div className="font-bold text-cyan-300">CPU: {payload[0].value}%</div>
                                   </div>
@@ -1020,7 +1020,7 @@ export const ConsoleHardwareTelemetryGrid: React.FC<ConsoleHardwareTelemetryGrid
 
                     {/* 4-Core Progress Bars */}
                     <div className="lg:col-span-5 grid grid-cols-2 gap-2 text-[10px]">
-                      <div className="p-2 bg-black/40 rounded-xl border border-white/5 space-y-1">
+                      <div className="p-2 bg-black/40 rounded-xl border-white/5 space-y-1">
                         <div className="flex justify-between">
                           <span className="text-zinc-400">Core 0:</span>
                           <span className="font-bold text-zinc-100">{telemetry.core0}%</span>
@@ -1029,7 +1029,7 @@ export const ConsoleHardwareTelemetryGrid: React.FC<ConsoleHardwareTelemetryGrid
                           <div className={`h-full ${cpuStyle.barColor}`} style={{ width: `${telemetry.core0}%` }} />
                         </div>
                       </div>
-                      <div className="p-2 bg-black/40 rounded-xl border border-white/5 space-y-1">
+                      <div className="p-2 bg-black/40 rounded-xl border-white/5 space-y-1">
                         <div className="flex justify-between">
                           <span className="text-zinc-400">Core 1:</span>
                           <span className="font-bold text-zinc-100">{telemetry.core1}%</span>
@@ -1038,7 +1038,7 @@ export const ConsoleHardwareTelemetryGrid: React.FC<ConsoleHardwareTelemetryGrid
                           <div className={`h-full ${cpuStyle.barColor}`} style={{ width: `${telemetry.core1}%` }} />
                         </div>
                       </div>
-                      <div className="p-2 bg-black/40 rounded-xl border border-white/5 space-y-1">
+                      <div className="p-2 bg-black/40 rounded-xl border-white/5 space-y-1">
                         <div className="flex justify-between">
                           <span className="text-zinc-400">Core 2:</span>
                           <span className="font-bold text-zinc-100">{telemetry.core2}%</span>
@@ -1047,7 +1047,7 @@ export const ConsoleHardwareTelemetryGrid: React.FC<ConsoleHardwareTelemetryGrid
                           <div className={`h-full ${cpuStyle.barColor}`} style={{ width: `${telemetry.core2}%` }} />
                         </div>
                       </div>
-                      <div className="p-2 bg-black/40 rounded-xl border border-white/5 space-y-1">
+                      <div className="p-2 bg-black/40 rounded-xl border-white/5 space-y-1">
                         <div className="flex justify-between">
                           <span className="text-zinc-400">Core 3:</span>
                           <span className="font-bold text-zinc-100">{telemetry.core3}%</span>
@@ -1168,7 +1168,7 @@ export const ConsoleHardwareTelemetryGrid: React.FC<ConsoleHardwareTelemetryGrid
 
           {/* MODE 2: ACCESSIBLE EXPANDED LIST VIEW */}
           {activeViewMode === 'list' && (
-            <div className="p-4 rounded-2xl bg-[#0b0e1a]/85 border border-white/8 backdrop-blur-xl space-y-3 animate-in fade-in duration-200">
+            <div className="p-4 rounded-2xl bg-[#0b0e1a]/85 border-white/8 backdrop-blur-xl space-y-3 animate-in fade-in duration-200">
               <div className="flex items-center justify-between border-b border-white/10 pb-2.5">
                 <span className="font-bold text-white uppercase text-xs flex items-center gap-2">
                   <List className="w-4 h-4 text-cyan-400" />
@@ -1217,7 +1217,7 @@ export const ConsoleHardwareTelemetryGrid: React.FC<ConsoleHardwareTelemetryGrid
                               {m.category}
                             </span>
                             {isAlert && (
-                              <span className="text-[9px] px-1.5 py-0.2 rounded bg-amber-500/20 text-amber-300 border border-amber-500/40 font-bold animate-pulse">
+                              <span className="text-[9px] px-1.5 py-0.2 rounded bg-amber-500/20 text-amber-300 border-amber-500/40 font-bold animate-pulse">
                                 THRESHOLD EXCEEDED
                               </span>
                             )}
@@ -1235,7 +1235,7 @@ export const ConsoleHardwareTelemetryGrid: React.FC<ConsoleHardwareTelemetryGrid
                           <span className="text-zinc-500 text-[9px] block uppercase">Last Activity</span>
                           <span className="text-zinc-300 text-[11px]">{m.lastActivity}</span>
                         </div>
-                        <span className="px-2.5 py-1 rounded-xl bg-emerald-500/10 text-emerald-300 border border-emerald-500/20 text-[10px] font-bold">
+                        <span className="px-2.5 py-1 rounded-xl bg-emerald-500/10 text-emerald-300 border-emerald-500/20 text-[10px] font-bold">
                           NOMINAL
                         </span>
                       </div>
@@ -1251,10 +1251,10 @@ export const ConsoleHardwareTelemetryGrid: React.FC<ConsoleHardwareTelemetryGrid
       {/* Sub-module In-Depth Diagnostic Modal */}
       {inspectedModule && (
         <div className="fixed inset-0 z-50 bg-black/80 backdrop-blur-md flex items-center justify-center p-4">
-          <div className="w-full max-w-2xl bg-[#0b0e1a] border border-cyan-500/40 rounded-[28px] p-6 shadow-2xl space-y-4 animate-in fade-in zoom-in-95 duration-200">
+          <div className="w-full max-w-2xl bg-[#0b0e1a] border-cyan-500/40 rounded-[28px] p-6 shadow-2xl space-y-4 animate-in fade-in zoom-in-95 duration-200">
             <div className="flex items-center justify-between border-b border-white/10 pb-3">
               <div className="flex items-center gap-2">
-                <div className="w-8 h-8 rounded-xl bg-cyan-500/15 border border-cyan-500/30 flex items-center justify-center text-cyan-300">
+                <div className="w-8 h-8 rounded-xl bg-cyan-500/15 border-cyan-500/30 flex items-center justify-center text-cyan-300">
                   <Activity className="w-4 h-4" />
                 </div>
                 <div>
@@ -1279,28 +1279,28 @@ export const ConsoleHardwareTelemetryGrid: React.FC<ConsoleHardwareTelemetryGrid
               {inspectedModule === 'cpu' && (
                 <div className="space-y-3">
                   <div className="grid grid-cols-2 sm:grid-cols-4 gap-2">
-                    <div className="p-3 rounded-xl bg-black/40 border border-white/5">
+                    <div className="p-3 rounded-xl bg-black/40 border-white/5">
                       <span className="text-zinc-500 text-[10px] block">CORE 0 LOAD</span>
                       <span className="text-cyan-300 font-bold text-sm">{telemetry.core0}%</span>
                       <span className="text-zinc-600 text-[9px] block">3.80 GHz Target</span>
                     </div>
-                    <div className="p-3 rounded-xl bg-black/40 border border-white/5">
+                    <div className="p-3 rounded-xl bg-black/40 border-white/5">
                       <span className="text-zinc-500 text-[10px] block">CORE 1 LOAD</span>
                       <span className="text-cyan-300 font-bold text-sm">{telemetry.core1}%</span>
                       <span className="text-zinc-600 text-[9px] block">3.80 GHz Target</span>
                     </div>
-                    <div className="p-3 rounded-xl bg-black/40 border border-white/5">
+                    <div className="p-3 rounded-xl bg-black/40 border-white/5">
                       <span className="text-zinc-500 text-[10px] block">CORE 2 LOAD</span>
                       <span className="text-cyan-300 font-bold text-sm">{telemetry.core2}%</span>
                       <span className="text-zinc-600 text-[9px] block">3.80 GHz Target</span>
                     </div>
-                    <div className="p-3 rounded-xl bg-black/40 border border-white/5">
+                    <div className="p-3 rounded-xl bg-black/40 border-white/5">
                       <span className="text-zinc-500 text-[10px] block">CORE 3 LOAD</span>
                       <span className="text-cyan-300 font-bold text-sm">{telemetry.core3}%</span>
                       <span className="text-zinc-600 text-[9px] block">3.80 GHz Target</span>
                     </div>
                   </div>
-                  <div className="p-3.5 rounded-xl bg-black/50 border border-white/5 space-y-1.5 text-zinc-300">
+                  <div className="p-3.5 rounded-xl bg-black/50 border-white/5 space-y-1.5 text-zinc-300">
                     <div className="flex justify-between text-[11px]">
                       <span>Instruction Set Architecture:</span>
                       <span className="text-emerald-400">ARM64 + AVX-512 VNNI Vector Extensions</span>
@@ -1320,20 +1320,20 @@ export const ConsoleHardwareTelemetryGrid: React.FC<ConsoleHardwareTelemetryGrid
               {inspectedModule === 'cryo' && (
                 <div className="space-y-3">
                   <div className="grid grid-cols-3 gap-2">
-                    <div className="p-3 rounded-xl bg-black/40 border border-white/5">
+                    <div className="p-3 rounded-xl bg-black/40 border-white/5">
                       <span className="text-zinc-500 text-[10px] block">BASE TEMPERATURE</span>
                       <span className="text-amber-300 font-bold text-sm">{telemetry.cryoTempMk} mK</span>
                     </div>
-                    <div className="p-3 rounded-xl bg-black/40 border border-white/5">
+                    <div className="p-3 rounded-xl bg-black/40 border-white/5">
                       <span className="text-zinc-500 text-[10px] block">HE-4 FLOW RATE</span>
                       <span className="text-emerald-300 font-bold text-sm">100% Nominal</span>
                     </div>
-                    <div className="p-3 rounded-xl bg-black/40 border border-white/5">
+                    <div className="p-3 rounded-xl bg-black/40 border-white/5">
                       <span className="text-zinc-500 text-[10px] block">CHAMBER VACUUM</span>
                       <span className="text-cyan-300 font-bold text-sm">1.2 × 10⁻⁸ mbar</span>
                     </div>
                   </div>
-                  <div className="p-3.5 rounded-xl bg-black/50 border border-white/5 space-y-1.5 text-zinc-300">
+                  <div className="p-3.5 rounded-xl bg-black/50 border-white/5 space-y-1.5 text-zinc-300">
                     <div className="flex justify-between text-[11px]">
                       <span>Dilution Circulation Loop:</span>
                       <span className="text-emerald-400">He-3 / He-4 Continuous Closed Cycle</span>
@@ -1349,20 +1349,20 @@ export const ConsoleHardwareTelemetryGrid: React.FC<ConsoleHardwareTelemetryGrid
               {inspectedModule === 'quantum' && (
                 <div className="space-y-3">
                   <div className="grid grid-cols-3 gap-2">
-                    <div className="p-3 rounded-xl bg-black/40 border border-white/5">
+                    <div className="p-3 rounded-xl bg-black/40 border-white/5">
                       <span className="text-zinc-500 text-[10px] block">LOGICAL QUBITS</span>
                       <span className="text-cyan-300 font-bold text-sm">768 Qubits</span>
                     </div>
-                    <div className="p-3 rounded-xl bg-black/40 border border-white/5">
+                    <div className="p-3 rounded-xl bg-black/40 border-white/5">
                       <span className="text-zinc-500 text-[10px] block">COHERENCE T2*</span>
                       <span className="text-violet-300 font-bold text-sm">184.2 μs</span>
                     </div>
-                    <div className="p-3 rounded-xl bg-black/40 border border-white/5">
+                    <div className="p-3 rounded-xl bg-black/40 border-white/5">
                       <span className="text-zinc-500 text-[10px] block">THROUGHPUT</span>
                       <span className="text-emerald-300 font-bold text-sm">{telemetry.qopsThroughput} QOps/s</span>
                     </div>
                   </div>
-                  <div className="p-3.5 rounded-xl bg-black/50 border border-white/5 space-y-1.5 text-zinc-300">
+                  <div className="p-3.5 rounded-xl bg-black/50 border-white/5 space-y-1.5 text-zinc-300">
                     <div className="flex justify-between text-[11px]">
                       <span>Quantum Error Correction:</span>
                       <span className="text-emerald-400">Surface-17 Code Lattice with Real-Time Decoders</span>
@@ -1378,15 +1378,15 @@ export const ConsoleHardwareTelemetryGrid: React.FC<ConsoleHardwareTelemetryGrid
               {inspectedModule === 'memory' && (
                 <div className="space-y-3">
                   <div className="grid grid-cols-3 gap-2">
-                    <div className="p-3 rounded-xl bg-black/40 border border-white/5">
+                    <div className="p-3 rounded-xl bg-black/40 border-white/5">
                       <span className="text-zinc-500 text-[10px] block">V8 HEAP TOTAL</span>
                       <span className="text-violet-300 font-bold text-sm">2,048 MB</span>
                     </div>
-                    <div className="p-3 rounded-xl bg-black/40 border border-white/5">
+                    <div className="p-3 rounded-xl bg-black/40 border-white/5">
                       <span className="text-zinc-500 text-[10px] block">HEAP USED</span>
                       <span className="text-violet-300 font-bold text-sm">1,480 MB</span>
                     </div>
-                    <div className="p-3 rounded-xl bg-black/40 border border-white/5">
+                    <div className="p-3 rounded-xl bg-black/40 border-white/5">
                       <span className="text-zinc-500 text-[10px] block">BUFFER CACHE</span>
                       <span className="text-emerald-300 font-bold text-sm">3,734 MB</span>
                     </div>
@@ -1397,15 +1397,15 @@ export const ConsoleHardwareTelemetryGrid: React.FC<ConsoleHardwareTelemetryGrid
               {inspectedModule === 'network' && (
                 <div className="space-y-3">
                   <div className="grid grid-cols-3 gap-2">
-                    <div className="p-3 rounded-xl bg-black/40 border border-white/5">
+                    <div className="p-3 rounded-xl bg-black/40 border-white/5">
                       <span className="text-zinc-500 text-[10px] block">INGRESS (RX)</span>
                       <span className="text-cyan-300 font-bold text-sm">{telemetry.networkRxMbps} Mbps</span>
                     </div>
-                    <div className="p-3 rounded-xl bg-black/40 border border-white/5">
+                    <div className="p-3 rounded-xl bg-black/40 border-white/5">
                       <span className="text-zinc-500 text-[10px] block">EGRESS (TX)</span>
                       <span className="text-emerald-300 font-bold text-sm">{telemetry.networkTxMbps} Mbps</span>
                     </div>
-                    <div className="p-3 rounded-xl bg-black/40 border border-white/5">
+                    <div className="p-3 rounded-xl bg-black/40 border-white/5">
                       <span className="text-zinc-500 text-[10px] block">OTEL SPANS</span>
                       <span className="text-violet-300 font-bold text-sm">{telemetry.otelSpansSec} /s</span>
                     </div>
@@ -1415,7 +1415,7 @@ export const ConsoleHardwareTelemetryGrid: React.FC<ConsoleHardwareTelemetryGrid
 
               {inspectedModule === 'watchdog' && (
                 <div className="space-y-3">
-                  <div className="p-3.5 rounded-xl bg-black/50 border border-white/5 space-y-1.5 text-zinc-300">
+                  <div className="p-3.5 rounded-xl bg-black/50 border-white/5 space-y-1.5 text-zinc-300">
                     <div className="flex justify-between text-[11px]">
                       <span>SSoT Invariant Policy:</span>
                       <span className="text-emerald-400">Strict Fail-Closed Enforced</span>
@@ -1436,7 +1436,7 @@ export const ConsoleHardwareTelemetryGrid: React.FC<ConsoleHardwareTelemetryGrid
             <div className="flex items-center justify-end gap-2 pt-2 border-t border-white/10">
               <button
                 onClick={() => setInspectedModule(null)}
-                className="px-4 py-2 rounded-xl bg-cyan-500/20 hover:bg-cyan-500/30 text-cyan-300 border border-cyan-500/40 text-xs font-mono font-bold transition-all"
+                className="px-4 py-2 rounded-xl bg-cyan-500/20 hover:bg-cyan-500/30 text-cyan-300 border-cyan-500/40 text-xs font-mono font-bold transition-all"
               >
                 Close Inspector
               </button>

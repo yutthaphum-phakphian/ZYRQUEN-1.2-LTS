@@ -159,7 +159,7 @@ export const SupremeEternumNexusCodex: React.FC<{
   });
 
   return (
-    <div id="supreme-eternum-nexus-codex" className="w-full bg-[#070a12] border border-[#D4AF37]/50 rounded-xl p-6 font-mono text-[#06B6D4] shadow-2xl space-y-6">
+    <div id="supreme-eternum-nexus-codex" className="w-full bg-[#070a12] border-[#D4AF37]/50 rounded-xl p-6 font-mono text-[#06B6D4] shadow-2xl space-y-6">
       {/* Header Banner */}
       <div className="flex flex-col lg:flex-row lg:items-center justify-between pb-4 border-b border-[#0a0f1e] gap-4">
         <div>
@@ -168,7 +168,7 @@ export const SupremeEternumNexusCodex: React.FC<{
             <h2 className="text-lg font-black tracking-wider text-[#D4AF37]">
               SUPREME ETERNUM NEXUS CODEX
             </h2>
-            <span className="px-2.5 py-0.5 rounded text-[10px] font-bold bg-emerald-950/60 border border-emerald-500 text-emerald-400">
+            <span className="px-2.5 py-0.5 rounded text-[10px] font-bold bg-emerald-950/60 border-emerald-500 text-emerald-400">
               FROZEN v1.2 LTS
             </span>
           </div>
@@ -183,7 +183,7 @@ export const SupremeEternumNexusCodex: React.FC<{
               playAuditChime();
               onNavigateToNexus?.();
             }}
-            className="px-3 py-1.5 bg-[#0a0f1e] border border-[#06B6D4] hover:bg-[#06B6D4]/20 text-[#06B6D4] font-bold rounded flex items-center gap-1.5 transition-colors"
+            className="px-3 py-1.5 bg-[#0a0f1e] border-[#06B6D4] hover:bg-[#06B6D4]/20 text-[#06B6D4] font-bold rounded flex items-center gap-1.5 transition-colors"
           >
             <span>🌐 Jump to Nexus Portal</span>
           </button>
@@ -192,7 +192,7 @@ export const SupremeEternumNexusCodex: React.FC<{
               playAuditChime();
               onNavigateToLedger?.();
             }}
-            className="px-3 py-1.5 bg-[#0a0f1e] border border-[#D4AF37] hover:bg-[#D4AF37]/20 text-[#D4AF37] font-bold rounded flex items-center gap-1.5 transition-colors"
+            className="px-3 py-1.5 bg-[#0a0f1e] border-[#D4AF37] hover:bg-[#D4AF37]/20 text-[#D4AF37] font-bold rounded flex items-center gap-1.5 transition-colors"
           >
             <span>📜 View Immutable Ledger</span>
           </button>
@@ -200,7 +200,7 @@ export const SupremeEternumNexusCodex: React.FC<{
       </div>
 
       {/* Mode Navigation Tabs */}
-      <div className="flex flex-wrap items-center gap-2 bg-[#0a0f1e] p-2 rounded-lg border border-slate-800 text-xs">
+      <div className="flex flex-wrap items-center gap-2 bg-[#0a0f1e] p-2 rounded-lg border-slate-800 text-xs">
         <button
           onClick={() => {
             playTone(600, 0.02);
@@ -208,7 +208,7 @@ export const SupremeEternumNexusCodex: React.FC<{
           }}
           className={`px-3.5 py-1.5 rounded font-bold transition-all flex items-center gap-1.5 ${
             activeTab === 'codex_docs'
-              ? 'bg-[#070a12] text-[#D4AF37] border border-[#D4AF37]'
+              ? 'bg-[#070a12] text-[#D4AF37] border-[#D4AF37]'
               : 'text-slate-400 hover:text-slate-200'
           }`}
         >
@@ -222,7 +222,7 @@ export const SupremeEternumNexusCodex: React.FC<{
           }}
           className={`px-3.5 py-1.5 rounded font-bold transition-all flex items-center gap-1.5 ${
             activeTab === 'merkle_explorer'
-              ? 'bg-[#070a12] text-emerald-400 border border-emerald-500'
+              ? 'bg-[#070a12] text-emerald-400 border-emerald-500'
               : 'text-slate-400 hover:text-slate-200'
           }`}
         >
@@ -236,7 +236,7 @@ export const SupremeEternumNexusCodex: React.FC<{
           }}
           className={`px-3.5 py-1.5 rounded font-bold transition-all flex items-center gap-1.5 ${
             activeTab === 'seal_deep_dive'
-              ? 'bg-[#070a12] text-purple-300 border border-purple-500'
+              ? 'bg-[#070a12] text-purple-300 border-purple-500'
               : 'text-slate-400 hover:text-slate-200'
           }`}
         >
@@ -250,7 +250,7 @@ export const SupremeEternumNexusCodex: React.FC<{
           }}
           className={`px-3.5 py-1.5 rounded font-bold transition-all flex items-center gap-1.5 ${
             activeTab === 'legal_crosswalk'
-              ? 'bg-[#070a12] text-cyan-300 border border-cyan-500'
+              ? 'bg-[#070a12] text-cyan-300 border-cyan-500'
               : 'text-slate-400 hover:text-slate-200'
           }`}
         >
@@ -262,7 +262,7 @@ export const SupremeEternumNexusCodex: React.FC<{
       {activeTab === 'codex_docs' && (
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-5">
           {/* Left Column: Codex Navigation & Search */}
-          <div className="lg:col-span-5 bg-[#0a0f1e] border border-slate-800 rounded-xl p-4 space-y-3">
+          <div className="lg:col-span-5 bg-[#0a0f1e] border-slate-800 rounded-xl p-4 space-y-3">
             <div className="flex items-center justify-between pb-2 border-b border-slate-800">
               <span className="text-xs font-bold text-slate-200">Documentation Index</span>
               <span className="text-[10px] text-slate-500">{filteredEntries.length} Articles</span>
@@ -273,7 +273,7 @@ export const SupremeEternumNexusCodex: React.FC<{
               placeholder="Search Codex specifications..."
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
-              className="w-full bg-[#070a12] border border-slate-700 text-xs text-slate-200 px-3 py-1.5 rounded focus:outline-none focus:border-[#D4AF37]"
+              className="w-full bg-[#070a12] border-slate-700 text-xs text-slate-200 px-3 py-1.5 rounded focus:outline-none focus:border-[#D4AF37]"
             />
 
             <div className="space-y-2 max-h-[380px] overflow-y-auto pr-1">
@@ -305,7 +305,7 @@ export const SupremeEternumNexusCodex: React.FC<{
                     </p>
                     <div className="flex items-center gap-1.5 flex-wrap pt-1">
                       {entry.tags.map((tag, tIdx) => (
-                        <span key={tIdx} className="px-1.5 py-0.5 rounded bg-black text-[9px] text-slate-400 border border-slate-800">
+                        <span key={tIdx} className="px-1.5 py-0.5 rounded bg-black text-[9px] text-slate-400 border-slate-800">
                           {tag}
                         </span>
                       ))}
@@ -317,7 +317,7 @@ export const SupremeEternumNexusCodex: React.FC<{
           </div>
 
           {/* Right Column: Codex Article Viewer */}
-          <div className="lg:col-span-7 bg-[#0a0f1e] border border-[#D4AF37]/30 rounded-xl p-5 space-y-4 text-xs">
+          <div className="lg:col-span-7 bg-[#0a0f1e] border-[#D4AF37]/30 rounded-xl p-5 space-y-4 text-xs">
             <div className="flex items-center justify-between border-b border-slate-800 pb-3">
               <div className="flex items-center gap-2">
                 <span className="text-2xl">{currentEntry.emoji}</span>
@@ -326,12 +326,12 @@ export const SupremeEternumNexusCodex: React.FC<{
                   <h3 className="font-bold text-[#D4AF37] text-sm">{currentEntry.title}</h3>
                 </div>
               </div>
-              <span className="px-2.5 py-1 rounded bg-[#070a12] border border-[#06B6D4] text-[#06B6D4] font-bold text-[10px]">
+              <span className="px-2.5 py-1 rounded bg-[#070a12] border-[#06B6D4] text-[#06B6D4] font-bold text-[10px]">
                 {currentEntry.id}
               </span>
             </div>
 
-            <div className="p-3 bg-[#070a12] border border-slate-800 rounded space-y-2">
+            <div className="p-3 bg-[#070a12] border-slate-800 rounded space-y-2">
               <span className="text-[10px] text-slate-500 block uppercase">Operational Overview</span>
               <p className="text-slate-200 leading-relaxed text-xs">
                 {currentEntry.summary}
@@ -339,22 +339,22 @@ export const SupremeEternumNexusCodex: React.FC<{
             </div>
 
             <div className="grid grid-cols-2 gap-3">
-              <div className="p-3 bg-[#070a12] border border-slate-800 rounded">
+              <div className="p-3 bg-[#070a12] border-slate-800 rounded">
                 <span className="text-slate-500 text-[10px] block">Merkle Proof Anchor</span>
                 <span className="text-emerald-400 font-bold">{currentEntry.merkleProofAnchor}</span>
               </div>
-              <div className="p-3 bg-[#070a12] border border-slate-800 rounded">
+              <div className="p-3 bg-[#070a12] border-slate-800 rounded">
                 <span className="text-slate-500 text-[10px] block">Chamber Attribution</span>
                 <span className="text-purple-300 font-bold">{currentEntry.chamberRef}</span>
               </div>
             </div>
 
-            <div className="p-3 bg-[#070a12] border border-slate-800 rounded space-y-1">
+            <div className="p-3 bg-[#070a12] border-slate-800 rounded space-y-1">
               <span className="text-slate-500 text-[10px] block">Mandatory Security Standard</span>
               <span className="text-slate-200 font-bold">{currentEntry.securityStandard}</span>
             </div>
 
-            <div className="p-3 bg-[#070a12] border border-[#D4AF37]/30 rounded flex items-center justify-between">
+            <div className="p-3 bg-[#070a12] border-[#D4AF37]/30 rounded flex items-center justify-between">
               <span className="text-slate-400">Boundary &amp; Tenant Partition:</span>
               <span className="text-[#D4AF37] font-bold">Ω600_1000 (400 Tenants LOCKED)</span>
             </div>
@@ -383,7 +383,7 @@ export const SupremeEternumNexusCodex: React.FC<{
                 >
                   <div className="flex items-center justify-between">
                     <span className="text-xs font-bold text-[#D4AF37]">Block #{proof.blockHeight}</span>
-                    <span className="text-[10px] px-2 py-0.5 rounded bg-emerald-950 border border-emerald-500 text-emerald-400">
+                    <span className="text-[10px] px-2 py-0.5 rounded bg-emerald-950 border-emerald-500 text-emerald-400">
                       10/10 REAL_HSM
                     </span>
                   </div>
@@ -400,7 +400,7 @@ export const SupremeEternumNexusCodex: React.FC<{
           </div>
 
           {/* Deep Merkle Proof Inspector */}
-          <div className="bg-[#0a0f1e] border border-[#06B6D4]/40 rounded-xl p-5 space-y-3.5 text-xs">
+          <div className="bg-[#0a0f1e] border-[#06B6D4]/40 rounded-xl p-5 space-y-3.5 text-xs">
             <div className="flex items-center justify-between border-b border-slate-800 pb-2.5">
               <h3 className="font-bold text-[#D4AF37] text-sm">
                 📜 Block #{currentProof.blockHeight} Merkle Proof Attestation
@@ -414,7 +414,7 @@ export const SupremeEternumNexusCodex: React.FC<{
               {currentProof.description}
             </p>
 
-            <div className="p-3 bg-[#070a12] border border-slate-800 rounded space-y-1">
+            <div className="p-3 bg-[#070a12] border-slate-800 rounded space-y-1">
               <span className="text-slate-500 text-[10px] block">Canonical Merkle Root (SSoT)</span>
               <code className="text-emerald-400 text-xs font-bold block break-all">
                 {currentProof.merkleRoot}
@@ -422,21 +422,21 @@ export const SupremeEternumNexusCodex: React.FC<{
             </div>
 
             <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
-              <div className="p-3 bg-[#070a12] border border-slate-800 rounded">
+              <div className="p-3 bg-[#070a12] border-slate-800 rounded">
                 <span className="text-slate-500 text-[10px] block">PQC Suite</span>
                 <span className="text-purple-300 font-bold">{currentProof.pqcAlgorithm}</span>
               </div>
-              <div className="p-3 bg-[#070a12] border border-slate-800 rounded">
+              <div className="p-3 bg-[#070a12] border-slate-800 rounded">
                 <span className="text-slate-500 text-[10px] block">HSM Quorum</span>
                 <span className="text-[#D4AF37] font-bold">{currentProof.hsmQuorum}</span>
               </div>
-              <div className="p-3 bg-[#070a12] border border-slate-800 rounded">
+              <div className="p-3 bg-[#070a12] border-slate-800 rounded">
                 <span className="text-slate-500 text-[10px] block">Legal Court Dossier</span>
                 <span className="text-cyan-300 font-bold">{currentProof.courtDossierId}</span>
               </div>
             </div>
 
-            <div className="p-3 bg-[#070a12] border border-slate-800 rounded flex flex-col sm:flex-row sm:items-center justify-between gap-2 text-[11px]">
+            <div className="p-3 bg-[#070a12] border-slate-800 rounded flex flex-col sm:flex-row sm:items-center justify-between gap-2 text-[11px]">
               <span className="text-slate-400">
                 Sovereign Architect: <strong className="text-slate-200">{currentProof.principal}</strong>
               </span>
@@ -450,7 +450,7 @@ export const SupremeEternumNexusCodex: React.FC<{
 
       {/* TAB 3: Seal Metadata & HSM Specs */}
       {activeTab === 'seal_deep_dive' && (
-        <div className="bg-[#0a0f1e] border border-purple-500/30 rounded-xl p-5 space-y-4 text-xs">
+        <div className="bg-[#0a0f1e] border-purple-500/30 rounded-xl p-5 space-y-4 text-xs">
           <div className="flex items-center justify-between border-b border-slate-800 pb-2.5">
             <span className="font-bold text-purple-300 text-sm">
               🔐 14,902 Canonical Hardware Seals &amp; HSM Allocation Specs
@@ -459,24 +459,24 @@ export const SupremeEternumNexusCodex: React.FC<{
           </div>
 
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-3">
-            <div className="p-3 bg-[#070a12] border border-slate-800 rounded space-y-1">
+            <div className="p-3 bg-[#070a12] border-slate-800 rounded space-y-1">
               <span className="text-slate-500 text-[10px] block">Canonical Seals</span>
               <span className="text-2xl font-bold text-emerald-400">14,902</span>
               <p className="text-[10px] text-slate-400">Verified by 10/10 REAL_HSM FIPS 140-3 L4</p>
             </div>
-            <div className="p-3 bg-[#070a12] border border-slate-800 rounded space-y-1">
+            <div className="p-3 bg-[#070a12] border-slate-800 rounded space-y-1">
               <span className="text-slate-500 text-[10px] block">Quarantined Seals</span>
               <span className="text-2xl font-bold text-red-400">80</span>
               <p className="text-[10px] text-slate-400">Ring-04 Isolated Buffer (Zero Leakage)</p>
             </div>
-            <div className="p-3 bg-[#070a12] border border-slate-800 rounded space-y-1">
+            <div className="p-3 bg-[#070a12] border-slate-800 rounded space-y-1">
               <span className="text-slate-500 text-[10px] block">Multi-Tenant Partition</span>
               <span className="text-2xl font-bold text-[#D4AF37]">Ω600_1000</span>
               <p className="text-[10px] text-slate-400">400 Isolated Sovereign Tenant Slots</p>
             </div>
           </div>
 
-          <div className="p-3 bg-[#070a12] border border-slate-800 rounded text-slate-300 space-y-1 text-xs">
+          <div className="p-3 bg-[#070a12] border-slate-800 rounded text-slate-300 space-y-1 text-xs">
             <strong className="text-[#D4AF37] block">HSM Hardware Allocation Schedule:</strong>
             <p>
               Slots 01–05: NitroKey HSM-PQC (CRYSTALS-Dilithium-5) • Slots 06–07: Trezor Safe 5 PQC &amp; YubiKey 5C FIPS •
@@ -488,7 +488,7 @@ export const SupremeEternumNexusCodex: React.FC<{
 
       {/* TAB 4: Safe Harbor Legal Crosswalk */}
       {activeTab === 'legal_crosswalk' && (
-        <div className="bg-[#0a0f1e] border border-cyan-500/30 rounded-xl p-5 space-y-4 text-xs">
+        <div className="bg-[#0a0f1e] border-cyan-500/30 rounded-xl p-5 space-y-4 text-xs">
           <div className="flex items-center justify-between border-b border-slate-800 pb-2.5">
             <span className="font-bold text-cyan-300 text-sm">
               ⚖️ Thailand Legal Convergence &amp; Court Admissibility Framework
@@ -497,19 +497,19 @@ export const SupremeEternumNexusCodex: React.FC<{
           </div>
 
           <div className="grid grid-cols-1 md:grid-cols-3 gap-3 text-xs">
-            <div className="p-3 bg-[#070a12] border border-slate-800 rounded space-y-1.5">
+            <div className="p-3 bg-[#070a12] border-slate-800 rounded space-y-1.5">
               <strong className="text-slate-200 block">PDPA มาตรา 9, 26</strong>
               <p className="text-slate-400 text-[11px]">
                 Sensitive data encryption and cryptographic consent logging verified at 14.98 mK sub-kelvin isolation.
               </p>
             </div>
-            <div className="p-3 bg-[#070a12] border border-slate-800 rounded space-y-1.5">
+            <div className="p-3 bg-[#070a12] border-slate-800 rounded space-y-1.5">
               <strong className="text-slate-200 block">PDPA มาตรา 28</strong>
               <p className="text-slate-400 text-[11px]">
                 Cross-border data transfer safe harbor with mathematical zero-knowledge proof binding.
               </p>
             </div>
-            <div className="p-3 bg-[#070a12] border border-slate-800 rounded space-y-1.5">
+            <div className="p-3 bg-[#070a12] border-slate-800 rounded space-y-1.5">
               <strong className="text-slate-200 block">ETDA Sec 9, 26, 28</strong>
               <p className="text-slate-400 text-[11px]">
                 Electronic transactions admissible in judicial court under immutable Dilithium-3 signature guarantees.

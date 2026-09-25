@@ -368,7 +368,7 @@ export const ChamberVerificationProgressD3Chart: React.FC<ChamberVerificationPro
       .selectAll('.d3-chart-tooltip')
       .data([null])
       .join('div')
-      .attr('class', 'd3-chart-tooltip absolute hidden bg-[#070a12]/95 border border-cyan-500/60 p-3 rounded-xl shadow-2xl text-xs font-mono pointer-events-none z-50 backdrop-blur-xl text-white');
+      .attr('class', 'd3-chart-tooltip absolute hidden bg-[#070a12]/95 border-cyan-500/60 p-3 rounded-xl shadow-2xl text-xs font-mono pointer-events-none z-50 backdrop-blur-xl text-white');
 
     // Render Bars
     g.selectAll('.bar-bg')
@@ -475,7 +475,7 @@ export const ChamberVerificationProgressD3Chart: React.FC<ChamberVerificationPro
   return (
     <div
       ref={containerRef}
-      className={`relative p-6 sm:p-7 rounded-[28px] bg-gradient-to-br from-[#070914]/95 via-[#0b0e1e]/90 to-[#070914]/95 border border-cyan-500/30 shadow-[0_10px_50px_-10px_rgba(6,182,212,0.18)] backdrop-blur-3xl overflow-hidden font-sans ${className}`}
+      className={`relative p-6 sm:p-7 rounded-[28px] bg-gradient-to-br from-[#070914]/95 via-[#0b0e1e]/90 to-[#070914]/95 border-cyan-500/30 shadow-[0_10px_50px_-10px_rgba(6,182,212,0.18)] backdrop-blur-3xl overflow-hidden font-sans ${className}`}
     >
       {/* Background ambient lighting */}
       <div className="absolute top-0 right-1/4 w-96 h-64 bg-cyan-500/8 rounded-full blur-[80px] pointer-events-none" />
@@ -485,15 +485,15 @@ export const ChamberVerificationProgressD3Chart: React.FC<ChamberVerificationPro
       <div className="flex flex-col lg:flex-row lg:items-center justify-between gap-4 border-b border-white/10 pb-5">
         <div className="space-y-1.5">
           <div className="flex flex-wrap items-center gap-2">
-            <span className="px-3 py-1 rounded-full bg-cyan-500/15 border border-cyan-500/40 text-xs font-mono font-bold text-cyan-300 flex items-center gap-1.5 shadow-[0_0_15px_rgba(6,182,212,0.25)]">
+            <span className="px-3 py-1 rounded-full bg-cyan-500/15 border-cyan-500/40 text-xs font-mono font-bold text-cyan-300 flex items-center gap-1.5 shadow-[0_0_15px_rgba(6,182,212,0.25)]">
               <Activity className="w-3.5 h-3.5 text-cyan-400 animate-pulse" />
               D3 REAL-TIME VERIFICATION ENGINE
             </span>
-            <span className="px-3 py-1 rounded-full bg-emerald-500/15 border border-emerald-500/40 text-xs font-mono font-bold text-emerald-300 flex items-center gap-1.5">
+            <span className="px-3 py-1 rounded-full bg-emerald-500/15 border-emerald-500/40 text-xs font-mono font-bold text-emerald-300 flex items-center gap-1.5">
               <ShieldCheck className="w-3.5 h-3.5 text-emerald-400" />
               14,902 / 14,902 SEALS VERIFIED
             </span>
-            <span className="px-3 py-1 rounded-full bg-violet-500/15 border border-violet-500/40 text-xs font-mono font-bold text-violet-300">
+            <span className="px-3 py-1 rounded-full bg-violet-500/15 border-violet-500/40 text-xs font-mono font-bold text-violet-300">
               18 SSoT CHAMBERS
             </span>
           </div>
@@ -524,7 +524,7 @@ export const ChamberVerificationProgressD3Chart: React.FC<ChamberVerificationPro
           <button
             onClick={handleTriggerSweep}
             disabled={isVerifying}
-            className="px-4 py-2 rounded-xl bg-gradient-to-r from-cyan-600/30 via-emerald-600/20 to-cyan-600/30 hover:from-cyan-500/40 hover:to-emerald-500/40 border border-cyan-500/50 text-cyan-200 hover:text-white font-mono text-xs font-bold flex items-center gap-2 transition-all shadow-[0_0_20px_rgba(6,182,212,0.2)]"
+            className="px-4 py-2 rounded-xl bg-gradient-to-r from-cyan-600/30 via-emerald-600/20 to-cyan-600/30 hover:from-cyan-500/40 hover:to-emerald-500/40 border-cyan-500/50 text-cyan-200 hover:text-white font-mono text-xs font-bold flex items-center gap-2 transition-all shadow-[0_0_20px_rgba(6,182,212,0.2)]"
             title="Execute high-speed cryptographic sweep across all 14,902 canonical seals"
           >
             <RotateCcw className={`w-3.5 h-3.5 text-cyan-400 ${isVerifying ? 'animate-spin' : ''}`} />
@@ -536,7 +536,7 @@ export const ChamberVerificationProgressD3Chart: React.FC<ChamberVerificationPro
       {/* Main Grid: D3 Radial Gauge (Left) + D3 Multi-Chamber Bar Chart (Right) */}
       <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 mt-6 items-center">
         {/* Left Column: Radial Progress Gauge */}
-        <div className="lg:col-span-4 flex flex-col items-center justify-center p-5 rounded-2xl bg-[#0a0e1c]/80 border border-cyan-500/20 relative shadow-inner">
+        <div className="lg:col-span-4 flex flex-col items-center justify-center p-5 rounded-2xl bg-[#0a0e1c]/80 border-cyan-500/20 relative shadow-inner">
           <div className="relative flex items-center justify-center">
             <svg ref={svgRef} className="w-64 h-64 sm:w-72 sm:h-72 drop-shadow-xl" />
 
@@ -560,15 +560,15 @@ export const ChamberVerificationProgressD3Chart: React.FC<ChamberVerificationPro
 
           {/* Quick Metrics Under Arc */}
           <div className="grid grid-cols-3 gap-2 w-full mt-3 pt-3 border-t border-white/10 text-center font-mono">
-            <div className="p-2 rounded-xl bg-black/40 border border-white/5">
+            <div className="p-2 rounded-xl bg-black/40 border-white/5">
               <div className="text-[10px] text-zinc-400">Total Seals</div>
               <div className="text-xs font-bold text-cyan-300">14,902</div>
             </div>
-            <div className="p-2 rounded-xl bg-black/40 border border-white/5">
+            <div className="p-2 rounded-xl bg-black/40 border-white/5">
               <div className="text-[10px] text-zinc-400">HSM Quorum</div>
               <div className="text-xs font-bold text-emerald-400">10/10</div>
             </div>
-            <div className="p-2 rounded-xl bg-black/40 border border-white/5">
+            <div className="p-2 rounded-xl bg-black/40 border-white/5">
               <div className="text-[10px] text-zinc-400">SSoT Drift</div>
               <div className="text-xs font-bold text-emerald-400">0.00%</div>
             </div>
@@ -576,7 +576,7 @@ export const ChamberVerificationProgressD3Chart: React.FC<ChamberVerificationPro
         </div>
 
         {/* Right Column: D3 Multi-Chamber Progress Distribution */}
-        <div className="lg:col-span-8 flex flex-col space-y-4 p-5 rounded-2xl bg-[#0a0e1c]/80 border border-cyan-500/20 shadow-inner">
+        <div className="lg:col-span-8 flex flex-col space-y-4 p-5 rounded-2xl bg-[#0a0e1c]/80 border-cyan-500/20 shadow-inner">
           <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2">
             <div>
               <h4 className="text-sm font-mono font-bold text-white flex items-center gap-2">
@@ -616,7 +616,7 @@ export const ChamberVerificationProgressD3Chart: React.FC<ChamberVerificationPro
 
           {/* Selected Chamber Detail Card (if clicked) */}
           {selectedChamber && (
-            <div className="p-3.5 rounded-xl bg-[#070a14] border border-cyan-500/40 text-xs font-mono space-y-2 animate-in fade-in duration-200">
+            <div className="p-3.5 rounded-xl bg-[#070a14] border-cyan-500/40 text-xs font-mono space-y-2 animate-in fade-in duration-200">
               <div className="flex items-center justify-between">
                 <div className="flex items-center gap-2">
                   <span className="px-2 py-0.5 rounded-md bg-cyan-500/20 text-cyan-300 font-bold">
@@ -679,10 +679,10 @@ export const ChamberVerificationProgressD3Chart: React.FC<ChamberVerificationPro
         </div>
 
         <div className="flex items-center gap-2">
-          <span className="px-2.5 py-0.5 rounded bg-cyan-950/70 text-cyan-300 border border-cyan-500/30 text-[10px] font-bold">
+          <span className="px-2.5 py-0.5 rounded bg-cyan-950/70 text-cyan-300 border-cyan-500/30 text-[10px] font-bold">
             FIPS 204 ML-DSA-87
           </span>
-          <span className="px-2.5 py-0.5 rounded bg-emerald-950/70 text-emerald-300 border border-emerald-500/30 text-[10px] font-bold">
+          <span className="px-2.5 py-0.5 rounded bg-emerald-950/70 text-emerald-300 border-emerald-500/30 text-[10px] font-bold">
             ETDA SEC 9, 26, 28
           </span>
         </div>

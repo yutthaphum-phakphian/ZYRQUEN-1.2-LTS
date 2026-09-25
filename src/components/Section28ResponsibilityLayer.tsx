@@ -170,11 +170,11 @@ export const Section28ResponsibilityLayer: React.FC = () => {
   });
 
   return (
-    <div className="rounded-[28px] bg-[#07080F]/95 border border-white/8 backdrop-blur-2xl p-6 sm:p-8 space-y-6 shadow-2xl font-mono">
+    <div className="rounded-[28px] bg-[#07080F]/95 border-white/8 backdrop-blur-2xl p-6 sm:p-8 space-y-6 shadow-2xl font-mono">
       {/* Header */}
       <div className="flex flex-col lg:flex-row lg:items-center justify-between gap-4 border-b border-white/8 pb-6">
         <div className="flex items-center gap-3.5">
-          <div className="w-12 h-12 rounded-2xl bg-amber-500/15 border border-amber-500/30 flex items-center justify-center text-amber-300 shadow-[0_0_25px_rgba(245,158,11,0.25)] shrink-0">
+          <div className="w-12 h-12 rounded-2xl bg-amber-500/15 border-amber-500/30 flex items-center justify-center text-amber-300 shadow-[0_0_25px_rgba(245,158,11,0.25)] shrink-0">
             <Scale className="w-6 h-6" />
           </div>
           <div>
@@ -182,7 +182,7 @@ export const Section28ResponsibilityLayer: React.FC = () => {
               <h3 className="text-base sm:text-lg font-bold text-white tracking-wide">
                 Section 28 Responsibility Layer — Executive Passport #EP-SOVEREIGN-01
               </h3>
-              <span className="text-[10px] px-2.5 py-0.5 rounded-full bg-amber-500/15 text-amber-300 border border-amber-500/30 font-bold">
+              <span className="text-[10px] px-2.5 py-0.5 rounded-full bg-amber-500/15 text-amber-300 border-amber-500/30 font-bold">
                 CUSTODIAN DUTY OF CARE & LIABILITY GATE
               </span>
             </div>
@@ -193,7 +193,7 @@ export const Section28ResponsibilityLayer: React.FC = () => {
         </div>
 
         {/* Sub-View Switcher */}
-        <div className="flex items-center bg-black/60 border border-white/10 rounded-2xl p-1 text-xs">
+        <div className="flex items-center bg-black/60 border-white/10 rounded-2xl p-1 text-xs">
           <button
             onClick={() => {
               playTone(560, 0.03);
@@ -201,7 +201,7 @@ export const Section28ResponsibilityLayer: React.FC = () => {
             }}
             className={`px-3 py-1.5 rounded-xl font-bold transition-all ${
               activeSubView === 'RADAR'
-                ? 'bg-amber-500/25 text-amber-200 border border-amber-500/40 shadow-sm'
+                ? 'bg-amber-500/25 text-amber-200 border-amber-500/40 shadow-sm'
                 : 'text-zinc-400 hover:text-zinc-200'
             }`}
           >
@@ -215,7 +215,7 @@ export const Section28ResponsibilityLayer: React.FC = () => {
             }}
             className={`px-3 py-1.5 rounded-xl font-bold transition-all ${
               activeSubView === 'HANDOVER'
-                ? 'bg-cyan-500/25 text-cyan-200 border border-cyan-500/40 shadow-sm'
+                ? 'bg-cyan-500/25 text-cyan-200 border-cyan-500/40 shadow-sm'
                 : 'text-zinc-400 hover:text-zinc-200'
             }`}
           >
@@ -229,7 +229,7 @@ export const Section28ResponsibilityLayer: React.FC = () => {
             }}
             className={`px-3 py-1.5 rounded-xl font-bold transition-all ${
               activeSubView === 'AUDIT_LOG'
-                ? 'bg-rose-500/25 text-rose-200 border border-rose-500/40 shadow-sm'
+                ? 'bg-rose-500/25 text-rose-200 border-rose-500/40 shadow-sm'
                 : 'text-zinc-400 hover:text-zinc-200'
             }`}
           >
@@ -243,7 +243,7 @@ export const Section28ResponsibilityLayer: React.FC = () => {
         <div className="space-y-6">
           <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
             {/* Radar Visualizer (SVG Polygons) */}
-            <div className="p-6 rounded-2xl bg-black/70 border border-white/10 flex flex-col items-center justify-center space-y-4 relative overflow-hidden">
+            <div className="p-6 rounded-2xl bg-black/70 border-white/10 flex flex-col items-center justify-center space-y-4 relative overflow-hidden">
               <div className="text-xs font-bold text-amber-300 uppercase tracking-wider flex items-center gap-1.5 self-start">
                 <Activity className="w-4 h-4 text-amber-400" />
                 <span>#EP-SOVEREIGN-01 Custody Chain Radar</span>
@@ -307,11 +307,11 @@ export const Section28ResponsibilityLayer: React.FC = () => {
               {radarDimensions.map((dim, i) => (
                 <div
                   key={i}
-                  className="p-4 rounded-2xl bg-white/[0.02] border border-white/5 space-y-1.5 hover:border-amber-500/30 transition-all"
+                  className="p-4 rounded-2xl bg-white/[0.02] border-white/5 space-y-1.5 hover:border-amber-500/30 transition-all"
                 >
                   <div className="flex items-center justify-between">
                     <span className="font-bold text-zinc-200">{dim.label}</span>
-                    <span className="text-[10px] font-mono text-amber-300 bg-amber-500/15 px-2 py-0.5 rounded-md border border-amber-500/30 font-bold">
+                    <span className="text-[10px] font-mono text-amber-300 bg-amber-500/15 px-2 py-0.5 rounded-md border-amber-500/30 font-bold">
                       {dim.scoreText}
                     </span>
                   </div>
@@ -328,7 +328,7 @@ export const Section28ResponsibilityLayer: React.FC = () => {
           </div>
 
           {/* Section 28 Full 3-Tier Architecture Alignment (As shown in screenshot) */}
-          <div className="p-6 rounded-2xl bg-gradient-to-br from-[#120d04]/90 via-black/80 to-[#07080F] border border-amber-500/30 space-y-4">
+          <div className="p-6 rounded-2xl bg-gradient-to-br from-[#120d04]/90 via-black/80 to-[#07080F] border-amber-500/30 space-y-4">
             <div className="flex items-center justify-between border-b border-white/8 pb-3">
               <span className="text-xs font-bold text-amber-300 uppercase tracking-wider flex items-center gap-2">
                 <Award className="w-4 h-4 text-amber-400" />
@@ -339,7 +339,7 @@ export const Section28ResponsibilityLayer: React.FC = () => {
 
             <div className="grid grid-cols-1 md:grid-cols-3 gap-4 text-xs">
               {/* Box 1 */}
-              <div className="p-4 rounded-xl bg-black/50 border border-white/8 space-y-2">
+              <div className="p-4 rounded-xl bg-black/50 border-white/8 space-y-2">
                 <div className="text-[10px] font-bold text-amber-400 uppercase">LEGAL STATUTE</div>
                 <div className="text-xs font-bold text-white">Responsibility of Data Subject / Signatory</div>
                 <p className="text-[11px] text-zinc-400 font-sans leading-relaxed">
@@ -351,7 +351,7 @@ export const Section28ResponsibilityLayer: React.FC = () => {
               </div>
 
               {/* Box 2 */}
-              <div className="p-4 rounded-xl bg-black/50 border border-white/8 space-y-2">
+              <div className="p-4 rounded-xl bg-black/50 border-white/8 space-y-2">
                 <div className="text-[10px] font-bold text-cyan-400 uppercase">SOVEREIGN LAYER</div>
                 <div className="text-xs font-bold text-white">Responsibility Layer (Executive Passport & Custody Gate)</div>
                 <p className="text-[11px] text-zinc-400 font-sans leading-relaxed">
@@ -363,7 +363,7 @@ export const Section28ResponsibilityLayer: React.FC = () => {
               </div>
 
               {/* Box 3 */}
-              <div className="p-4 rounded-xl bg-black/50 border border-white/8 space-y-2">
+              <div className="p-4 rounded-xl bg-black/50 border-white/8 space-y-2">
                 <div className="text-[10px] font-bold text-emerald-400 uppercase">CRYPTOGRAPHIC ENFORCEMENT</div>
                 <div className="text-xs font-bold text-white">Sovereign Executive Passport #EP-SOVEREIGN-01</div>
                 <p className="text-[11px] text-zinc-400 font-sans leading-relaxed">
@@ -371,7 +371,7 @@ export const Section28ResponsibilityLayer: React.FC = () => {
                 </p>
                 <div className="text-[10px] text-amber-300 font-mono pt-2 border-t border-white/5 flex items-center justify-between">
                   <span>Anchor Hash:</span>
-                  <span className="px-1.5 py-0.5 rounded bg-amber-500/20 text-amber-300 font-bold border border-amber-500/30">909ab814</span>
+                  <span className="px-1.5 py-0.5 rounded bg-amber-500/20 text-amber-300 font-bold border-amber-500/30">909ab814</span>
                 </div>
               </div>
             </div>
@@ -383,14 +383,14 @@ export const Section28ResponsibilityLayer: React.FC = () => {
                   <Key className="w-4 h-4 text-amber-400" />
                   <span>SECTION 28 STATUTORY CERTIFICATE ANCHOR</span>
                 </span>
-                <span className="text-[9px] px-2 py-0.5 rounded-full bg-emerald-500/20 text-emerald-300 font-bold font-mono border border-emerald-500/40">
+                <span className="text-[9px] px-2 py-0.5 rounded-full bg-emerald-500/20 text-emerald-300 font-bold font-mono border-emerald-500/40">
                   PASSPORT LINKED & HARMONIZED
                 </span>
               </div>
               <div className="grid grid-cols-1 sm:grid-cols-3 gap-2 text-[11px] font-mono">
                 <div>
                   <span className="text-zinc-500 block">MERKLE ROOT ANCHOR:</span>
-                  <span className="text-amber-300 font-bold text-xs bg-amber-500/20 px-1.5 py-0.5 rounded border border-amber-400/40 inline-block mt-0.5">
+                  <span className="text-amber-300 font-bold text-xs bg-amber-500/20 px-1.5 py-0.5 rounded border-amber-400/40 inline-block mt-0.5">
                     909ab814
                   </span>
                 </div>
@@ -410,13 +410,13 @@ export const Section28ResponsibilityLayer: React.FC = () => {
 
             {/* Bottom 3 Lock Pillars */}
             <div className="grid grid-cols-1 sm:grid-cols-3 gap-2 pt-2 text-[11px]">
-              <div className="p-2.5 rounded-lg bg-white/[0.02] border border-white/5 text-center text-zinc-300">
+              <div className="p-2.5 rounded-lg bg-white/[0.02] border-white/5 text-center text-zinc-300">
                 🛡️ <strong>ZERO-TRUST FABRIC</strong> (ETDA Level 3+)
               </div>
-              <div className="p-2.5 rounded-lg bg-white/[0.02] border border-white/5 text-center text-zinc-300">
+              <div className="p-2.5 rounded-lg bg-white/[0.02] border-white/5 text-center text-zinc-300">
                 📜 <strong>SECURE AUDIT TRAIL</strong> (PDPA Aligned)
               </div>
-              <div className="p-2.5 rounded-lg bg-white/[0.02] border border-white/5 text-center text-zinc-300">
+              <div className="p-2.5 rounded-lg bg-white/[0.02] border-white/5 text-center text-zinc-300">
                 ⚖️ <strong>CUSTODY & LIABILITY</strong> (Signatory Bound)
               </div>
             </div>
@@ -427,7 +427,7 @@ export const Section28ResponsibilityLayer: React.FC = () => {
       {/* VIEW 2: Interactive Custody Handover Transaction Simulator */}
       {activeSubView === 'HANDOVER' && (
         <div className="space-y-6">
-          <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 p-4 rounded-2xl bg-cyan-500/10 border border-cyan-500/20 text-xs">
+          <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 p-4 rounded-2xl bg-cyan-500/10 border-cyan-500/20 text-xs">
             <div className="flex items-center gap-2 text-cyan-200">
               <Zap className="w-4 h-4 text-cyan-300 shrink-0" />
               <span>
@@ -439,8 +439,8 @@ export const Section28ResponsibilityLayer: React.FC = () => {
               disabled={isSigning}
               className={`px-4 py-2 rounded-xl font-bold flex items-center gap-1.5 transition-all text-xs shrink-0 ${
                 isSigning
-                  ? 'bg-cyan-500/20 text-cyan-300 border border-cyan-500/40 animate-pulse'
-                  : 'bg-cyan-500/20 hover:bg-cyan-500/30 text-cyan-200 border border-cyan-500/40 shadow-lg'
+                  ? 'bg-cyan-500/20 text-cyan-300 border-cyan-500/40 animate-pulse'
+                  : 'bg-cyan-500/20 hover:bg-cyan-500/30 text-cyan-200 border-cyan-500/40 shadow-lg'
               }`}
             >
               <Send className="w-3.5 h-3.5" />
@@ -458,11 +458,11 @@ export const Section28ResponsibilityLayer: React.FC = () => {
               {transactions.map((tx) => (
                 <div
                   key={tx.id}
-                  className="p-4 rounded-2xl bg-black/60 border border-white/8 space-y-2 text-xs hover:border-cyan-500/30 transition-all shadow-md"
+                  className="p-4 rounded-2xl bg-black/60 border-white/8 space-y-2 text-xs hover:border-cyan-500/30 transition-all shadow-md"
                 >
                   <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2 border-b border-white/5 pb-2">
                     <div className="flex items-center gap-2">
-                      <span className="px-2 py-0.5 rounded-md bg-cyan-500/15 text-cyan-300 font-mono text-[10px] font-bold border border-cyan-500/30">
+                      <span className="px-2 py-0.5 rounded-md bg-cyan-500/15 text-cyan-300 font-mono text-[10px] font-bold border-cyan-500/30">
                         {tx.txHash}
                       </span>
                       <span className="text-zinc-200 font-bold">{tx.payloadType}</span>
@@ -470,7 +470,7 @@ export const Section28ResponsibilityLayer: React.FC = () => {
 
                     <div className="flex items-center gap-2 text-[10px] text-zinc-400">
                       <span>{tx.timestamp}</span>
-                      <span className="px-2 py-0.5 rounded-md bg-emerald-500/15 text-emerald-300 font-bold border border-emerald-500/30">
+                      <span className="px-2 py-0.5 rounded-md bg-emerald-500/15 text-emerald-300 font-bold border-emerald-500/30">
                         DUTY OF CARE: {tx.dutyOfCareScore}%
                       </span>
                     </div>
@@ -518,7 +518,7 @@ export const Section28ResponsibilityLayer: React.FC = () => {
                   }}
                   className={`px-2.5 py-1 rounded-lg text-[10px] font-bold transition-all ${
                     auditLogFilter === f
-                      ? 'bg-rose-500/25 text-rose-200 border border-rose-500/40'
+                      ? 'bg-rose-500/25 text-rose-200 border-rose-500/40'
                       : 'text-zinc-400 hover:text-zinc-200'
                   }`}
                 >
@@ -533,11 +533,11 @@ export const Section28ResponsibilityLayer: React.FC = () => {
             {filteredAlerts.map((alert) => (
               <div
                 key={alert.id}
-                className="p-4 rounded-2xl bg-gradient-to-br from-rose-950/20 via-black/70 to-[#07080F] border border-rose-500/25 space-y-2 text-xs hover:border-rose-500/50 transition-all shadow-lg"
+                className="p-4 rounded-2xl bg-gradient-to-br from-rose-950/20 via-black/70 to-[#07080F] border-rose-500/25 space-y-2 text-xs hover:border-rose-500/50 transition-all shadow-lg"
               >
                 <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2">
                   <div className="flex items-center gap-2">
-                    <span className="px-2 py-0.5 rounded-md bg-rose-500/20 text-rose-300 font-bold text-[10px] border border-rose-500/40 flex items-center gap-1">
+                    <span className="px-2 py-0.5 rounded-md bg-rose-500/20 text-rose-300 font-bold text-[10px] border-rose-500/40 flex items-center gap-1">
                       <AlertOctagon className="w-3 h-3" />
                       <span>{alert.eventType}</span>
                     </span>
@@ -549,7 +549,7 @@ export const Section28ResponsibilityLayer: React.FC = () => {
 
                 <p className="text-[11px] text-zinc-400 font-sans italic">{alert.titleEn}</p>
 
-                <div className="grid grid-cols-1 sm:grid-cols-2 gap-2 p-2.5 rounded-xl bg-black/60 border border-white/5 text-[11px]">
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-2 p-2.5 rounded-xl bg-black/60 border-white/5 text-[11px]">
                   <div>
                     <span className="text-zinc-500 block">BOUND CUSTODIAN:</span>
                     <span className="text-amber-300 font-mono font-semibold">{alert.custodianBound}</span>
@@ -583,7 +583,7 @@ export const Section28ResponsibilityLayer: React.FC = () => {
 
           {/* Selected Alert Modal / Expanded Viewer */}
           {selectedAlert && (
-            <div className="p-4 rounded-2xl bg-cyan-950/30 border border-cyan-500/40 space-y-2 text-xs animate-in fade-in duration-200">
+            <div className="p-4 rounded-2xl bg-cyan-950/30 border-cyan-500/40 space-y-2 text-xs animate-in fade-in duration-200">
               <div className="flex items-center justify-between border-b border-cyan-500/20 pb-2">
                 <span className="font-bold text-cyan-200 flex items-center gap-1.5">
                   <FileCheck className="w-4 h-4 text-cyan-400" />

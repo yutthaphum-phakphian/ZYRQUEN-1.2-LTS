@@ -61,13 +61,13 @@ export const RightSidebar: React.FC<RightSidebarProps> = ({
             <Lock className="w-3.5 h-3.5 text-amber-400" />
             <span className="text-xs font-semibold text-slate-200 tracking-wider">CANONICAL TRUST ANCHOR</span>
           </div>
-          <span className="text-[10px] font-mono-code px-1.5 py-0.5 rounded bg-amber-500/10 text-amber-300 border border-amber-500/30">
+          <span className="text-[10px] font-mono-code px-1.5 py-0.5 rounded bg-amber-500/10 text-amber-300 border-amber-500/30">
             FROZEN
           </span>
         </div>
 
         {/* Certificate Pill Box */}
-        <div className="bg-slate-950/90 border border-slate-800 rounded p-2.5 space-y-1.5">
+        <div className="bg-slate-950/90 border-slate-800 rounded p-2.5 space-y-1.5">
           <div className="flex items-center justify-between text-[11px]">
             <span className="text-slate-400">Deployment Cert:</span>
             <span className="font-mono-code text-cyan-300 font-bold">{CANONICAL_CONSTANTS.DEPLOYMENT_CERTIFICATE}</span>
@@ -87,7 +87,7 @@ export const RightSidebar: React.FC<RightSidebarProps> = ({
           <button
             onClick={handleRunVerify}
             disabled={verifying}
-            className="flex-1 flex items-center justify-center space-x-1.5 py-1.5 px-2.5 rounded bg-cyan-950/80 hover:bg-cyan-900 border border-cyan-800/80 text-cyan-200 text-xs font-medium transition-all shadow-sm active:scale-95 disabled:opacity-50"
+            className="flex-1 flex items-center justify-center space-x-1.5 py-1.5 px-2.5 rounded bg-cyan-950/80 hover:bg-cyan-900 border-cyan-800/80 text-cyan-200 text-xs font-medium transition-all shadow-sm active:scale-95 disabled:opacity-50"
           >
             <RefreshCw className={`w-3 h-3 text-cyan-400 ${verifying ? 'animate-spin' : ''}`} />
             <span>{verifying ? 'Verifying Merkle...' : 'Verify Merkle SSoT'}</span>
@@ -100,12 +100,12 @@ export const RightSidebar: React.FC<RightSidebarProps> = ({
 
       {/* Tabs */}
       <div className="p-2 border-b border-slate-800/70 bg-slate-900/30">
-        <div className="flex rounded-md bg-slate-950 p-1 border border-slate-800/90 text-xs">
+        <div className="flex rounded-md bg-slate-950 p-1 border-slate-800/90 text-xs">
           <button
             onClick={() => setActiveTab('telemetry')}
             className={`flex-1 py-1 rounded text-center font-medium transition-all ${
               activeTab === 'telemetry'
-                ? 'bg-cyan-950 text-cyan-200 border border-cyan-800/60'
+                ? 'bg-cyan-950 text-cyan-200 border-cyan-800/60'
                 : 'text-slate-400 hover:text-slate-200'
             }`}
           >
@@ -115,7 +115,7 @@ export const RightSidebar: React.FC<RightSidebarProps> = ({
             onClick={() => setActiveTab('hsm')}
             className={`flex-1 py-1 rounded text-center font-medium transition-all ${
               activeTab === 'hsm'
-                ? 'bg-cyan-950 text-cyan-200 border border-cyan-800/60'
+                ? 'bg-cyan-950 text-cyan-200 border-cyan-800/60'
                 : 'text-slate-400 hover:text-slate-200'
             }`}
           >
@@ -125,7 +125,7 @@ export const RightSidebar: React.FC<RightSidebarProps> = ({
             onClick={() => setActiveTab('logs')}
             className={`flex-1 py-1 rounded text-center font-medium transition-all ${
               activeTab === 'logs'
-                ? 'bg-cyan-950 text-cyan-200 border border-cyan-800/60'
+                ? 'bg-cyan-950 text-cyan-200 border-cyan-800/60'
                 : 'text-slate-400 hover:text-slate-200'
             }`}
           >
@@ -139,12 +139,12 @@ export const RightSidebar: React.FC<RightSidebarProps> = ({
         {activeTab === 'telemetry' && (
           <div className="space-y-2.5">
             {/* Live Quantum Coherence */}
-            <div className="p-2.5 rounded-md bg-slate-950/70 border border-slate-800">
+            <div className="p-2.5 rounded-md bg-slate-950/70 border-slate-800">
               <div className="flex items-center justify-between text-xs text-slate-400 mb-1">
                 <span>Qubit Coherence Lock</span>
                 <span className="font-mono-code text-cyan-300 font-bold">{CANONICAL_CONSTANTS.COHERENCE_PERCENT}</span>
               </div>
-              <div className="w-full bg-slate-900 h-2 rounded-full overflow-hidden border border-slate-800">
+              <div className="w-full bg-slate-900 h-2 rounded-full overflow-hidden border-slate-800">
                 <div className="bg-gradient-to-r from-cyan-400 to-blue-500 h-full w-[99.99%]"></div>
               </div>
               <div className="grid grid-cols-2 gap-2 mt-2 pt-2 border-t border-slate-900 text-[11px] font-mono-code">
@@ -160,7 +160,7 @@ export const RightSidebar: React.FC<RightSidebarProps> = ({
             </div>
 
             {/* QOps Sustained Rate */}
-            <div className="p-2.5 rounded-md bg-slate-950/70 border border-slate-800">
+            <div className="p-2.5 rounded-md bg-slate-950/70 border-slate-800">
               <div className="text-xs text-slate-400 mb-1">QOps Operations Engine</div>
               <div className="text-sm font-mono-code font-bold text-slate-100">{CANONICAL_CONSTANTS.QOPS_RATE}</div>
               <div className="text-[10px] text-emerald-400 flex items-center space-x-1 mt-1 font-mono-code">
@@ -170,7 +170,7 @@ export const RightSidebar: React.FC<RightSidebarProps> = ({
             </div>
 
             {/* Post-Quantum Cryptography Suite */}
-            <div className="p-2.5 rounded-md bg-slate-950/70 border border-slate-800 space-y-1.5 text-xs">
+            <div className="p-2.5 rounded-md bg-slate-950/70 border-slate-800 space-y-1.5 text-xs">
               <div className="text-slate-400 font-medium">NIST Post-Quantum Suite</div>
               <div className="flex justify-between items-center text-[11px] bg-slate-900/80 px-2 py-1 rounded">
                 <span className="text-slate-400">FIPS 203:</span>
@@ -187,7 +187,7 @@ export const RightSidebar: React.FC<RightSidebarProps> = ({
             </div>
 
             {/* Legal Standards Gateway */}
-            <div className="p-2.5 rounded-md bg-slate-950/70 border border-slate-800 space-y-1.5 text-xs">
+            <div className="p-2.5 rounded-md bg-slate-950/70 border-slate-800 space-y-1.5 text-xs">
               <div className="text-slate-400 font-medium">Thai Legal Statutory Anchor</div>
               <div className="text-[11px] text-slate-300 space-y-1 font-mono-code">
                 <div className="flex items-center space-x-1 text-emerald-400">
@@ -212,7 +212,7 @@ export const RightSidebar: React.FC<RightSidebarProps> = ({
             {HSM_UNITS.map((unit) => (
               <div
                 key={unit.id}
-                className="p-2 rounded bg-slate-950/60 border border-slate-800/80 flex items-center justify-between text-xs hover:border-slate-700"
+                className="p-2 rounded bg-slate-950/60 border-slate-800/80 flex items-center justify-between text-xs hover:border-slate-700"
               >
                 <div className="flex items-center space-x-2">
                   <div className="w-2 h-2 rounded-full bg-emerald-400 shadow-[0_0_6px_rgba(52,211,153,0.8)]"></div>
@@ -235,7 +235,7 @@ export const RightSidebar: React.FC<RightSidebarProps> = ({
             {logs.map((log) => (
               <div
                 key={log.id}
-                className="p-1.5 rounded bg-slate-950/80 border border-slate-900 hover:border-slate-800"
+                className="p-1.5 rounded bg-slate-950/80 border-slate-900 hover:border-slate-800"
               >
                 <div className="flex items-center justify-between text-[10px] text-slate-500 mb-0.5">
                   <span className="text-cyan-400">{log.source}</span>
@@ -252,14 +252,14 @@ export const RightSidebar: React.FC<RightSidebarProps> = ({
       <div className="p-3 border-t border-slate-800/80 bg-slate-950/90 grid grid-cols-2 gap-2 text-xs">
         <button
           onClick={onOpenPhoenix}
-          className="flex items-center justify-center space-x-1.5 py-1.5 rounded bg-amber-500/10 hover:bg-amber-500/20 border border-amber-500/40 text-amber-300 font-medium transition-all"
+          className="flex items-center justify-center space-x-1.5 py-1.5 rounded bg-amber-500/10 hover:bg-amber-500/20 border-amber-500/40 text-amber-300 font-medium transition-all"
         >
           <Zap className="w-3.5 h-3.5" />
           <span>Phoenix 142ms</span>
         </button>
         <button
           onClick={onOpenDossier}
-          className="flex items-center justify-center space-x-1.5 py-1.5 rounded bg-cyan-950/80 hover:bg-cyan-900 border border-cyan-800 text-cyan-200 font-medium transition-all"
+          className="flex items-center justify-center space-x-1.5 py-1.5 rounded bg-cyan-950/80 hover:bg-cyan-900 border-cyan-800 text-cyan-200 font-medium transition-all"
         >
           <FileText className="w-3.5 h-3.5" />
           <span>Court Dossier</span>

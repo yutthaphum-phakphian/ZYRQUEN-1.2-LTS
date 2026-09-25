@@ -102,7 +102,7 @@ export const PromotionFirewallPanel: React.FC = () => {
       {/* Header */}
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 border-b border-red-500/20 pb-4">
         <div className="flex items-center gap-3">
-          <div className="w-10 h-10 rounded-xl bg-red-500/15 border border-red-500/30 text-red-300 flex items-center justify-center shrink-0">
+          <div className="w-10 h-10 rounded-xl bg-red-500/15 border-red-500/30 text-red-300 flex items-center justify-center shrink-0">
             <Flame className="w-5 h-5" />
           </div>
           <div>
@@ -110,7 +110,7 @@ export const PromotionFirewallPanel: React.FC = () => {
               <h3 className="text-base font-bold text-red-100 font-serif">
                 Promotion Firewall & Governance Gate
               </h3>
-              <span className="text-[10px] px-2 py-0.5 rounded-full bg-red-500/20 text-red-300 border border-red-500/40 font-bold">
+              <span className="text-[10px] px-2 py-0.5 rounded-full bg-red-500/20 text-red-300 border-red-500/40 font-bold">
                 NO DIRECT CANDIDATE ➔ CANONICAL
               </span>
             </div>
@@ -121,7 +121,7 @@ export const PromotionFirewallPanel: React.FC = () => {
         </div>
 
         <div className="flex items-center gap-2 text-xs">
-          <span className="px-3 py-1 rounded-xl bg-black/60 border border-red-500/30 text-red-300 font-bold flex items-center gap-1.5">
+          <span className="px-3 py-1 rounded-xl bg-black/60 border-red-500/30 text-red-300 font-bold flex items-center gap-1.5">
             <Lock className="w-3.5 h-3.5" />
             <span>Firewall Active: Inviolable</span>
           </span>
@@ -129,7 +129,7 @@ export const PromotionFirewallPanel: React.FC = () => {
       </div>
 
       {/* 5-Stage Promotion Firewall Pipeline Visualization */}
-      <div className="p-5 rounded-2xl bg-black/60 border border-white/8 space-y-3">
+      <div className="p-5 rounded-2xl bg-black/60 border-white/8 space-y-3">
         <div className="text-xs font-bold text-zinc-300 uppercase tracking-wider flex items-center justify-between">
           <span>5-STAGE GOVERNANCE PROMOTION HIGHWAY</span>
           <span className="text-[10px] text-red-400">SHORTCUTS FORBIDDEN</span>
@@ -174,7 +174,7 @@ export const PromotionFirewallPanel: React.FC = () => {
       {/* Module Selector & Promotion Inspector */}
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-4">
         {/* Left: Module List */}
-        <div className="p-4 rounded-2xl bg-black/60 border border-white/8 space-y-2 lg:col-span-1">
+        <div className="p-4 rounded-2xl bg-black/60 border-white/8 space-y-2 lg:col-span-1">
           <div className="text-xs font-bold text-zinc-400 uppercase tracking-wider pb-1">
             MODULE GOVERNANCE PIPELINE
           </div>
@@ -211,7 +211,7 @@ export const PromotionFirewallPanel: React.FC = () => {
         </div>
 
         {/* Right: Promotion Details & Multi-Sig Requirements */}
-        <div className="p-5 rounded-2xl bg-black/70 border border-red-500/30 space-y-4 lg:col-span-2">
+        <div className="p-5 rounded-2xl bg-black/70 border-red-500/30 space-y-4 lg:col-span-2">
           <div className="flex items-center justify-between border-b border-white/5 pb-2">
             <span className="text-xs font-bold text-red-200 font-serif">
               PROMOTION GATE INSPECTOR: {selectedItem.moduleName}
@@ -230,19 +230,19 @@ export const PromotionFirewallPanel: React.FC = () => {
           <div className="space-y-3 text-xs">
             {/* Checklist */}
             <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
-              <div className="p-3 rounded-xl bg-white/[0.02] border border-white/5 space-y-1">
+              <div className="p-3 rounded-xl bg-white/[0.02] border-white/5 space-y-1">
                 <div className="text-[10px] text-zinc-500">FIOS REPORT:</div>
                 <div className={`font-bold text-[11px] ${selectedItem.fiosReportAttached ? 'text-emerald-400' : 'text-red-400'}`}>
                   {selectedItem.fiosReportAttached ? 'ATTACHED & CERTIFIED' : 'MISSING / REJECTED'}
                 </div>
               </div>
-              <div className="p-3 rounded-xl bg-white/[0.02] border border-white/5 space-y-1">
+              <div className="p-3 rounded-xl bg-white/[0.02] border-white/5 space-y-1">
                 <div className="text-[10px] text-zinc-500">DILITHIUM-5 PROOF:</div>
                 <div className={`font-bold text-[11px] ${selectedItem.dilithiumVerified ? 'text-emerald-400' : 'text-red-400'}`}>
                   {selectedItem.dilithiumVerified ? 'VERIFIED INVIOLABLE' : 'UNVERIFIED'}
                 </div>
               </div>
-              <div className="p-3 rounded-xl bg-white/[0.02] border border-white/5 space-y-1">
+              <div className="p-3 rounded-xl bg-white/[0.02] border-white/5 space-y-1">
                 <div className="text-[10px] text-zinc-500">QUORUM SIGNATURES:</div>
                 <div className="font-bold text-[11px] text-amber-300">
                   {selectedItem.quorumSignedCount}/10 Custodians
@@ -251,7 +251,7 @@ export const PromotionFirewallPanel: React.FC = () => {
             </div>
 
             {/* Governance Notes */}
-            <div className="p-3 rounded-xl bg-red-500/[0.05] border border-red-500/20 space-y-1">
+            <div className="p-3 rounded-xl bg-red-500/[0.05] border-red-500/20 space-y-1">
               <div className="text-[10px] text-red-400 font-bold">GOVERNANCE ENFORCEMENT MANDATE:</div>
               <p className="text-[11px] text-zinc-300 font-sans leading-relaxed">{selectedItem.notes}</p>
             </div>
@@ -260,7 +260,7 @@ export const PromotionFirewallPanel: React.FC = () => {
       </div>
 
       {/* Non-Authoritative Presentation Layer Disclaimer Banner */}
-      <div className="p-4 rounded-2xl bg-gradient-to-r from-black/90 via-[#150a0a] to-black/90 border border-white/10 flex flex-col sm:flex-row sm:items-center justify-between gap-3 text-xs">
+      <div className="p-4 rounded-2xl bg-gradient-to-r from-black/90 via-[#150a0a] to-black/90 border-white/10 flex flex-col sm:flex-row sm:items-center justify-between gap-3 text-xs">
         <div className="flex items-start gap-2.5">
           <EyeOff className="w-4 h-4 text-amber-400 shrink-0 mt-0.5" />
           <div className="font-sans text-zinc-300 text-[11px]">

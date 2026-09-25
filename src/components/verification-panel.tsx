@@ -10,7 +10,7 @@ export const VerificationPanel: React.FC<VerificationPanelProps> = ({ status }) 
   const isPending = status === 'PENDING';
 
   return (
-    <div className="mt-4 p-4 rounded-xl bg-[#070a12] border border-[#06B6D4]/40 font-mono text-xs space-y-2">
+    <div className="mt-4 p-4 rounded-xl bg-[#070a12] border-[#06B6D4]/40 font-mono text-xs space-y-2">
       <div className="flex items-center justify-between">
         <div className="flex items-center gap-2">
           {isVerified ? (

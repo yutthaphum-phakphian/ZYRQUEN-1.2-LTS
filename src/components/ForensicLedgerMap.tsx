@@ -153,16 +153,16 @@ export const ForensicLedgerMap: React.FC = () => {
   };
 
   return (
-    <div className="bg-zinc-950/90 border border-violet-500/40 rounded-2xl p-5 space-y-4 shadow-xl backdrop-blur-xl">
+    <div className="bg-zinc-950/90 border-violet-500/40 rounded-2xl p-5 space-y-4 shadow-xl backdrop-blur-xl">
       {/* Header */}
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 border-b border-zinc-800 pb-3">
         <div className="flex items-center gap-3">
-          <div className="w-9 h-9 rounded-xl bg-violet-500/15 border border-violet-500/40 flex items-center justify-center text-violet-400">
+          <div className="w-9 h-9 rounded-xl bg-violet-500/15 border-violet-500/40 flex items-center justify-center text-violet-400">
             <FileSearch className="w-5 h-5" />
           </div>
           <div>
             <div className="flex items-center gap-2">
-              <span className="text-[10px] font-mono font-bold px-2 py-0.5 rounded bg-violet-950/80 text-violet-300 border border-violet-700/60">
+              <span className="text-[10px] font-mono font-bold px-2 py-0.5 rounded bg-violet-950/80 text-violet-300 border-violet-700/60">
                 12-STAGE DETERMINISTIC REPLAY
               </span>
               <span className="text-[10px] font-mono text-zinc-400">
@@ -190,7 +190,7 @@ export const ForensicLedgerMap: React.FC = () => {
       </div>
 
       {/* 12-Stage Visual Ribbon */}
-      <div className="bg-black/60 border border-zinc-800 p-3 rounded-xl space-y-2">
+      <div className="bg-black/60 border-zinc-800 p-3 rounded-xl space-y-2">
         <div className="flex items-center justify-between text-[11px] font-mono text-zinc-400">
           <span>12-Stage Forensic Trace Replay Timeline</span>
           <span className="text-cyan-400">Replay SLO: 142.1 ms</span>
@@ -206,8 +206,8 @@ export const ForensicLedgerMap: React.FC = () => {
                   isActive
                     ? 'bg-violet-500 text-white font-bold scale-105 shadow-md shadow-violet-500/30'
                     : isPassed
-                    ? 'bg-emerald-950/80 text-emerald-300 border border-emerald-700/50'
-                    : 'bg-zinc-900/80 text-zinc-500 border border-zinc-800'
+                    ? 'bg-emerald-950/80 text-emerald-300 border-emerald-700/50'
+                    : 'bg-zinc-900/80 text-zinc-500 border-zinc-800'
                 }`}
                 title={stage}
               >
@@ -241,7 +241,7 @@ export const ForensicLedgerMap: React.FC = () => {
               >
                 <div className="flex items-center justify-between gap-2">
                   <div className="flex items-center gap-2">
-                    <span className="text-[10px] font-mono font-bold px-1.5 py-0.5 rounded bg-zinc-800 text-zinc-200 border border-zinc-700">
+                    <span className="text-[10px] font-mono font-bold px-1.5 py-0.5 rounded bg-zinc-800 text-zinc-200 border-zinc-700">
                       {ev.id}
                     </span>
                     <span className="text-xs font-bold text-zinc-200 line-clamp-1">
@@ -251,10 +251,10 @@ export const ForensicLedgerMap: React.FC = () => {
                   <span
                     className={`text-[10px] font-mono font-bold px-2 py-0.5 rounded ${
                       ev.verificationStatus === 'VERIFIED'
-                        ? 'bg-emerald-950 text-emerald-300 border border-emerald-700/60'
+                        ? 'bg-emerald-950 text-emerald-300 border-emerald-700/60'
                         : ev.verificationStatus === 'STALE'
-                        ? 'bg-amber-950 text-amber-300 border border-amber-700/60'
-                        : 'bg-rose-950 text-rose-300 border border-rose-700/60'
+                        ? 'bg-amber-950 text-amber-300 border-amber-700/60'
+                        : 'bg-rose-950 text-rose-300 border-rose-700/60'
                     }`}
                   >
                     {ev.verificationStatus}
@@ -274,7 +274,7 @@ export const ForensicLedgerMap: React.FC = () => {
       </div>
 
       {/* Selected Evidence Digest Box */}
-      <div className="p-3 bg-black/80 border border-zinc-800 rounded-xl space-y-1 font-mono text-[11px]">
+      <div className="p-3 bg-black/80 border-zinc-800 rounded-xl space-y-1 font-mono text-[11px]">
         <div className="flex justify-between text-zinc-400">
           <span>Active Selection: {selectedEvidence.id}</span>
           <span className="text-[#FACC15]">{selectedEvidence.designation}</span>

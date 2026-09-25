@@ -193,19 +193,19 @@ export const HardwareHeartbeatStabilityTrend: React.FC<{
   return (
     <div
       id="hardware-heartbeat-stability-trend"
-      className={`p-5 rounded-2xl bg-[#0a0f1e] border border-cyan-500/30 shadow-[0_0_30px_rgba(6,182,212,0.12)] space-y-4 font-mono text-white ${className}`}
+      className={`p-5 rounded-2xl bg-[#0a0f1e] border-cyan-500/30 shadow-[0_0_30px_rgba(6,182,212,0.12)] space-y-4 font-mono text-white ${className}`}
     >
       {/* Header Bar & Control Panel */}
       <div className="flex flex-col lg:flex-row items-start lg:items-center justify-between gap-4 pb-3 border-b border-cyan-500/20">
         <div className="flex items-center gap-3">
-          <div className="w-10 h-10 rounded-xl bg-cyan-950/80 border border-cyan-500/40 flex items-center justify-center text-cyan-400 shadow-[0_0_15px_rgba(6,182,212,0.25)]">
+          <div className="w-10 h-10 rounded-xl bg-cyan-950/80 border-cyan-500/40 flex items-center justify-center text-cyan-400 shadow-[0_0_15px_rgba(6,182,212,0.25)]">
             <Radio className="w-5 h-5 animate-pulse text-cyan-300" />
           </div>
           <div>
             <div className="flex items-center gap-2">
               <h2 className="text-sm sm:text-base font-bold text-white tracking-wide flex items-center gap-2">
                 Hardware Heartbeat Stability Trend
-                <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded text-[10px] font-bold bg-emerald-950 text-emerald-300 border border-emerald-500/40">
+                <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded text-[10px] font-bold bg-emerald-950 text-emerald-300 border-emerald-500/40">
                   <span className="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-ping" />
                   60-MIN ROLLING
                 </span>
@@ -220,7 +220,7 @@ export const HardwareHeartbeatStabilityTrend: React.FC<{
         {/* View Controls & Action Toggles */}
         <div className="flex flex-wrap items-center gap-2 w-full lg:w-auto">
           {/* Metric Selector Tabs */}
-          <div className="flex items-center bg-[#070b14] border border-zinc-800 rounded-xl p-1 text-xs">
+          <div className="flex items-center bg-[#070b14] border-zinc-800 rounded-xl p-1 text-xs">
             <button
               onClick={() => {
                 playTone(520, 0.02);
@@ -317,7 +317,7 @@ export const HardwareHeartbeatStabilityTrend: React.FC<{
           {/* Refresh Action */}
           <button
             onClick={handleRefresh}
-            className="p-1.5 rounded-xl bg-[#070b14] border border-zinc-800 hover:border-cyan-500/40 text-zinc-300 hover:text-white transition-colors cursor-pointer"
+            className="p-1.5 rounded-xl bg-[#070b14] border-zinc-800 hover:border-cyan-500/40 text-zinc-300 hover:text-white transition-colors cursor-pointer"
             title="Re-synchronize Heartbeat Array"
           >
             <RefreshCw className="w-4 h-4 text-cyan-400" />
@@ -327,7 +327,7 @@ export const HardwareHeartbeatStabilityTrend: React.FC<{
 
       {/* Summary KPI Mini-Tiles */}
       <div className="grid grid-cols-2 md:grid-cols-5 gap-3">
-        <div className="p-3 rounded-xl bg-[#070b14] border border-cyan-500/20">
+        <div className="p-3 rounded-xl bg-[#070b14] border-cyan-500/20">
           <span className="text-[10px] text-zinc-400 block mb-0.5">60m Stability Index</span>
           <div className="text-base sm:text-lg font-bold text-emerald-400 flex items-center gap-1.5">
             <span>{summaryStats.meanStability}%</span>
@@ -336,18 +336,18 @@ export const HardwareHeartbeatStabilityTrend: React.FC<{
           <span className="text-[9.5px] text-zinc-500 block mt-0.5">SLA Floor: ≥ 99.95%</span>
         </div>
 
-        <div className="p-3 rounded-xl bg-[#070b14] border border-cyan-500/20">
+        <div className="p-3 rounded-xl bg-[#070b14] border-cyan-500/20">
           <span className="text-[10px] text-zinc-400 block mb-0.5">Sub-Kelvin Jitter</span>
           <div className="text-base sm:text-lg font-bold text-cyan-300 flex items-center gap-1.5">
             <span>{summaryStats.meanJitter} ms</span>
-            <span className="text-[9px] px-1.5 py-0.2 rounded bg-cyan-950 text-cyan-300 border border-cyan-500/40">
+            <span className="text-[9px] px-1.5 py-0.2 rounded bg-cyan-950 text-cyan-300 border-cyan-500/40">
               OPTIMAL
             </span>
           </div>
           <span className="text-[9.5px] text-zinc-500 block mt-0.5">SLA Limit: ≤ 2.00 ms</span>
         </div>
 
-        <div className="p-3 rounded-xl bg-[#070b14] border border-purple-500/20">
+        <div className="p-3 rounded-xl bg-[#070b14] border-purple-500/20">
           <span className="text-[10px] text-zinc-400 block mb-0.5">Carrier Frequency</span>
           <div className="text-base sm:text-lg font-bold text-purple-300">
             {dataPoints[dataPoints.length - 1]?.heartbeatHz.toFixed(4) || '1.0000'} Hz
@@ -357,7 +357,7 @@ export const HardwareHeartbeatStabilityTrend: React.FC<{
           </span>
         </div>
 
-        <div className="p-3 rounded-xl bg-[#070b14] border border-cyan-500/20">
+        <div className="p-3 rounded-xl bg-[#070b14] border-cyan-500/20">
           <span className="text-[10px] text-zinc-400 block mb-0.5">SLA Compliance</span>
           <div className="text-base sm:text-lg font-bold text-white flex items-center gap-1">
             <span className="text-emerald-400">100.0%</span>
@@ -368,11 +368,11 @@ export const HardwareHeartbeatStabilityTrend: React.FC<{
           <span className="text-[9.5px] text-emerald-400/80 block mt-0.5">Zero Drift SSoT Δ0.00%</span>
         </div>
 
-        <div className="p-3 rounded-xl bg-[#070b14] border border-cyan-500/20 col-span-2 md:col-span-1">
+        <div className="p-3 rounded-xl bg-[#070b14] border-cyan-500/20 col-span-2 md:col-span-1">
           <span className="text-[10px] text-zinc-400 block mb-0.5">Hardware Custodians</span>
           <div className="text-base sm:text-lg font-bold text-cyan-400 flex items-center gap-1.5">
             <span>10 / 10</span>
-            <span className="text-[9px] px-1.5 py-0.2 rounded bg-cyan-950 text-cyan-300 border border-cyan-500/40">
+            <span className="text-[9px] px-1.5 py-0.2 rounded bg-cyan-950 text-cyan-300 border-cyan-500/40">
               REAL_HSM
             </span>
           </div>
@@ -477,13 +477,13 @@ export const HardwareHeartbeatStabilityTrend: React.FC<{
                 if (!active || !payload || !payload.length) return null;
                 const p = payload[0].payload as HeartbeatStabilityPoint;
                 return (
-                  <div className="p-3 rounded-xl bg-[#070b14]/95 border border-cyan-500/40 shadow-xl backdrop-blur-md font-mono text-xs space-y-1.5 min-w-[220px]">
+                  <div className="p-3 rounded-xl bg-[#070b14]/95 border-cyan-500/40 shadow-xl backdrop-blur-md font-mono text-xs space-y-1.5 min-w-[220px]">
                     <div className="flex items-center justify-between pb-1 border-b border-zinc-800">
                       <span className="font-bold text-white flex items-center gap-1.5">
                         <Clock className="w-3.5 h-3.5 text-cyan-400" />
                         {p.clockTime} ({p.timeLabel})
                       </span>
-                      <span className="text-[10px] px-1.5 py-0.2 rounded font-bold bg-emerald-950 text-emerald-300 border border-emerald-500/40">
+                      <span className="text-[10px] px-1.5 py-0.2 rounded font-bold bg-emerald-950 text-emerald-300 border-emerald-500/40">
                         {p.status}
                       </span>
                     </div>
@@ -570,7 +570,7 @@ export const HardwareHeartbeatStabilityTrend: React.FC<{
 
       {/* Interactive Detail Inspector Drawer if user clicks a data point */}
       {selectedPoint && (
-        <div className="p-3.5 rounded-xl bg-cyan-950/30 border border-cyan-500/40 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3 text-xs">
+        <div className="p-3.5 rounded-xl bg-cyan-950/30 border-cyan-500/40 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3 text-xs">
           <div className="flex items-center gap-2.5">
             <ShieldCheck className="w-5 h-5 text-cyan-400 shrink-0" />
             <div>

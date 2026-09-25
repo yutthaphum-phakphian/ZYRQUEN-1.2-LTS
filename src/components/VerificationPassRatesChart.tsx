@@ -142,10 +142,10 @@ export const VerificationPassRatesChart: React.FC = () => {
   }, [data]);
 
   return (
-    <div className="p-6 rounded-[28px] bg-[#0b0e1a]/70 border border-white/8 backdrop-blur-xl space-y-4 font-mono">
+    <div className="p-6 rounded-[28px] bg-[#0b0e1a]/70 border-white/8 backdrop-blur-xl space-y-4 font-mono">
       <div className="flex items-center justify-between">
         <div className="flex items-center gap-2">
-          <div className="p-2 bg-cyan-500/10 border border-cyan-500/30 rounded-lg text-cyan-400">
+          <div className="p-2 bg-cyan-500/10 border-cyan-500/30 rounded-lg text-cyan-400">
             <ShieldCheck className="w-5 h-5" />
           </div>
           <div>
@@ -154,7 +154,7 @@ export const VerificationPassRatesChart: React.FC = () => {
           </div>
         </div>
         <div className="flex items-center gap-2">
-           <span className="px-2.5 py-1 rounded-xl bg-emerald-500/15 text-emerald-300 border border-emerald-500/30 text-[10px] font-bold">
+           <span className="px-2.5 py-1 rounded-xl bg-emerald-500/15 text-emerald-300 border-emerald-500/30 text-[10px] font-bold">
             100% UP
           </span>
         </div>

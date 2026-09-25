@@ -541,7 +541,7 @@ export const ChamberStatusGrid: React.FC<ChamberStatusGridProps> = ({ onNavigate
   };
 
   return (
-    <div className="space-y-5 rounded-[28px] bg-gradient-to-br from-[#0a0e1c]/95 via-[#070a14]/90 to-[#04060c] border border-cyan-500/30 p-6 sm:p-7 backdrop-blur-xl shadow-2xl relative overflow-hidden font-mono">
+    <div className="space-y-5 rounded-[28px] bg-gradient-to-br from-[#0a0e1c]/95 via-[#070a14]/90 to-[#04060c] border-cyan-500/30 p-6 sm:p-7 backdrop-blur-xl shadow-2xl relative overflow-hidden font-mono">
       {/* Background ambient lighting */}
       <div className="absolute -top-24 -right-24 w-96 h-96 bg-cyan-500/10 rounded-full blur-3xl pointer-events-none" />
       <div className="absolute -bottom-24 -left-24 w-96 h-96 bg-blue-500/10 rounded-full blur-3xl pointer-events-none" />
@@ -550,15 +550,15 @@ export const ChamberStatusGrid: React.FC<ChamberStatusGridProps> = ({ onNavigate
       <div className="relative z-10 flex flex-col lg:flex-row lg:items-center justify-between gap-4 border-b border-white/10 pb-5">
         <div>
           <div className="flex flex-wrap items-center gap-2 mb-2">
-            <span className="px-2.5 py-0.5 rounded-full bg-cyan-500/10 text-cyan-300 border border-cyan-500/30 text-xs font-bold flex items-center gap-1.5">
+            <span className="px-2.5 py-0.5 rounded-full bg-cyan-500/10 text-cyan-300 border-cyan-500/30 text-xs font-bold flex items-center gap-1.5">
               <Grid className="w-3.5 h-3.5 text-cyan-400" />
               <span>CHAMBER STATUS GRID (6×3 MATRIX)</span>
             </span>
-            <span className="px-2.5 py-0.5 rounded-full bg-emerald-500/10 text-emerald-300 border border-emerald-500/30 text-xs flex items-center gap-1.5">
+            <span className="px-2.5 py-0.5 rounded-full bg-emerald-500/10 text-emerald-300 border-emerald-500/30 text-xs flex items-center gap-1.5">
               <span className="w-2 h-2 rounded-full bg-emerald-400 animate-pulse" />
               <span>STATUS: ALL 18 VISITED (100%)</span>
             </span>
-            <span className="px-2.5 py-0.5 rounded-full bg-blue-500/10 text-blue-300 border border-blue-500/30 text-xs flex items-center gap-1.5">
+            <span className="px-2.5 py-0.5 rounded-full bg-blue-500/10 text-blue-300 border-blue-500/30 text-xs flex items-center gap-1.5">
               <Zap className="w-3 h-3 text-blue-400" />
               <span>RUNTIME & TELEMETRY SYNCED</span>
             </span>
@@ -622,7 +622,7 @@ export const ChamberStatusGrid: React.FC<ChamberStatusGridProps> = ({ onNavigate
               );
               playAuditChime();
             }}
-            className="px-3.5 py-2 rounded-xl text-xs font-bold border border-emerald-500/40 bg-emerald-500/20 text-emerald-300 hover:bg-emerald-500/30 transition flex items-center gap-2 cursor-pointer shadow-[0_0_15px_rgba(16,185,129,0.2)]"
+            className="px-3.5 py-2 rounded-xl text-xs font-bold border-emerald-500/40 bg-emerald-500/20 text-emerald-300 hover:bg-emerald-500/30 transition flex items-center gap-2 cursor-pointer shadow-[0_0_15px_rgba(16,185,129,0.2)]"
             title="Download full 18 Chambers status manifest JSON"
           >
             <Download className="w-4 h-4 text-emerald-400" />
@@ -683,9 +683,9 @@ export const ChamberStatusGrid: React.FC<ChamberStatusGridProps> = ({ onNavigate
 
       {/* COMPARE MODE BANNER (When Compare Mode is Enabled) */}
       {isCompareMode && (
-        <div className="relative z-20 p-3.5 sm:p-4 rounded-2xl bg-gradient-to-r from-purple-950/90 via-indigo-950/80 to-purple-950/90 border border-purple-500/50 shadow-[0_0_30px_rgba(168,85,247,0.3)] flex flex-col sm:flex-row items-center justify-between gap-3 text-xs font-mono">
+        <div className="relative z-20 p-3.5 sm:p-4 rounded-2xl bg-gradient-to-r from-purple-950/90 via-indigo-950/80 to-purple-950/90 border-purple-500/50 shadow-[0_0_30px_rgba(168,85,247,0.3)] flex flex-col sm:flex-row items-center justify-between gap-3 text-xs font-mono">
           <div className="flex items-center gap-3">
-            <div className="w-8 h-8 rounded-xl bg-purple-500/20 border border-purple-400 flex items-center justify-center text-purple-300 shrink-0">
+            <div className="w-8 h-8 rounded-xl bg-purple-500/20 border-purple-400 flex items-center justify-center text-purple-300 shrink-0">
               <Columns className="w-4 h-4 text-purple-400 animate-pulse" />
             </div>
             <div>
@@ -712,7 +712,7 @@ export const ChamberStatusGrid: React.FC<ChamberStatusGridProps> = ({ onNavigate
                   setCompareChamber(null);
                   playTone(450, 0.04);
                 }}
-                className="px-3 py-1.5 rounded-xl bg-white/10 text-zinc-300 hover:text-white border border-white/10 text-xs font-bold transition cursor-pointer"
+                className="px-3 py-1.5 rounded-xl bg-white/10 text-zinc-300 hover:text-white border-white/10 text-xs font-bold transition cursor-pointer"
               >
                 RESET SELECTION
               </button>
@@ -723,7 +723,7 @@ export const ChamberStatusGrid: React.FC<ChamberStatusGridProps> = ({ onNavigate
                 setCompareChamber(null);
                 playTone(400, 0.04);
               }}
-              className="px-3 py-1.5 rounded-xl bg-purple-500/30 border border-purple-400/60 text-purple-200 hover:bg-purple-500/50 transition text-xs font-bold cursor-pointer"
+              className="px-3 py-1.5 rounded-xl bg-purple-500/30 border-purple-400/60 text-purple-200 hover:bg-purple-500/50 transition text-xs font-bold cursor-pointer"
             >
               EXIT COMPARE
             </button>
@@ -735,7 +735,7 @@ export const ChamberStatusGrid: React.FC<ChamberStatusGridProps> = ({ onNavigate
       {hasActiveAnomalies && (
         <div className="relative z-20 p-4 rounded-2xl bg-gradient-to-r from-rose-950/90 via-red-900/80 to-rose-950/90 border-2 border-rose-500 shadow-[0_0_35px_rgba(244,63,94,0.6)] flex flex-col sm:flex-row items-center justify-between gap-3 text-xs font-mono animate-pulse">
           <div className="flex items-center gap-3">
-            <div className="w-9 h-9 rounded-xl bg-rose-500/30 border border-rose-400 flex items-center justify-center text-rose-300 shrink-0">
+            <div className="w-9 h-9 rounded-xl bg-rose-500/30 border-rose-400 flex items-center justify-center text-rose-300 shrink-0">
               <AlertTriangle className="w-5 h-5 text-rose-400 animate-bounce" />
             </div>
             <div>
@@ -756,7 +756,7 @@ export const ChamberStatusGrid: React.FC<ChamberStatusGridProps> = ({ onNavigate
           <div className="flex items-center gap-2 shrink-0">
             <button
               onClick={() => playAnomalyAlarm()}
-              className="px-3 py-1.5 rounded-xl bg-rose-500/25 border border-rose-400/60 text-rose-200 hover:bg-rose-500/40 transition text-xs font-bold flex items-center gap-1.5 cursor-pointer"
+              className="px-3 py-1.5 rounded-xl bg-rose-500/25 border-rose-400/60 text-rose-200 hover:bg-rose-500/40 transition text-xs font-bold flex items-center gap-1.5 cursor-pointer"
               title="Re-play Warning Audio Chime"
             >
               <Volume2 className="w-3.5 h-3.5 text-rose-300" />
@@ -764,7 +764,7 @@ export const ChamberStatusGrid: React.FC<ChamberStatusGridProps> = ({ onNavigate
             </button>
             <button
               onClick={handleClearAllAnomalies}
-              className="px-3 py-1.5 rounded-xl bg-emerald-500/20 border border-emerald-500/60 text-emerald-300 hover:bg-emerald-500/40 transition text-xs font-bold flex items-center gap-1.5 cursor-pointer"
+              className="px-3 py-1.5 rounded-xl bg-emerald-500/20 border-emerald-500/60 text-emerald-300 hover:bg-emerald-500/40 transition text-xs font-bold flex items-center gap-1.5 cursor-pointer"
             >
               <RefreshCw className="w-3.5 h-3.5 text-emerald-400" />
               <span>STABILIZE ALL (RESTORE Δ0)</span>
@@ -774,28 +774,28 @@ export const ChamberStatusGrid: React.FC<ChamberStatusGridProps> = ({ onNavigate
       )}
 
       {/* Color Code Legend Strip */}
-      <div className="relative z-10 flex flex-wrap items-center gap-3 p-3 rounded-2xl bg-black/40 border border-white/8 text-[11px]">
+      <div className="relative z-10 flex flex-wrap items-center gap-3 p-3 rounded-2xl bg-black/40 border-white/8 text-[11px]">
         <span className="text-zinc-400 uppercase font-bold text-[10px] flex items-center gap-1">
           <Info className="w-3.5 h-3.5 text-cyan-400" />
           <span>Color Legend:</span>
         </span>
-        <div className="flex items-center gap-1.5 px-2 py-0.5 rounded-lg bg-emerald-500/10 border border-emerald-500/30 text-emerald-300 font-bold">
+        <div className="flex items-center gap-1.5 px-2 py-0.5 rounded-lg bg-emerald-500/10 border-emerald-500/30 text-emerald-300 font-bold">
           <span className="w-2 h-2 rounded-full bg-emerald-400 animate-pulse" />
           <span>Green = Visited Status (18/18)</span>
         </div>
-        <div className="flex items-center gap-1.5 px-2 py-0.5 rounded-lg bg-blue-500/10 border border-blue-500/30 text-blue-300 font-bold">
+        <div className="flex items-center gap-1.5 px-2 py-0.5 rounded-lg bg-blue-500/10 border-blue-500/30 text-blue-300 font-bold">
           <span className="w-2 h-2 rounded-full bg-blue-400" />
           <span>Blue = Runtime / Telemetry / Simulation</span>
         </div>
-        <div className="flex items-center gap-1.5 px-2 py-0.5 rounded-lg bg-amber-500/10 border border-amber-500/30 text-amber-300 font-bold">
+        <div className="flex items-center gap-1.5 px-2 py-0.5 rounded-lg bg-amber-500/10 border-amber-500/30 text-amber-300 font-bold">
           <span className="w-2 h-2 rounded-full bg-amber-400" />
           <span>Amber = Canonical SSoT (Genesis)</span>
         </div>
-        <div className="flex items-center gap-1.5 px-2 py-0.5 rounded-lg bg-violet-500/10 border border-violet-500/30 text-violet-300 font-bold">
+        <div className="flex items-center gap-1.5 px-2 py-0.5 rounded-lg bg-violet-500/10 border-violet-500/30 text-violet-300 font-bold">
           <span className="w-2 h-2 rounded-full bg-violet-400" />
           <span>Violet = Consensus & HSM Quorum</span>
         </div>
-        <div className="flex items-center gap-1.5 px-2 py-0.5 rounded-lg bg-rose-500/10 border border-rose-500/30 text-rose-300 font-bold">
+        <div className="flex items-center gap-1.5 px-2 py-0.5 rounded-lg bg-rose-500/10 border-rose-500/30 text-rose-300 font-bold">
           <span className="w-2 h-2 rounded-full bg-rose-400" />
           <span>Rose = Forensic & Fail-Closed Quarantine</span>
         </div>
@@ -803,7 +803,7 @@ export const ChamberStatusGrid: React.FC<ChamberStatusGridProps> = ({ onNavigate
 
       {/* Interactive G11 Threat Vectors & Invariant Protection Audit Panel */}
       {showInvariantAudit && (
-        <div className="relative z-10 p-4 sm:p-5 rounded-2xl bg-gradient-to-r from-[#0d1326] to-[#080d1a] border border-cyan-500/40 space-y-4 animate-in fade-in">
+        <div className="relative z-10 p-4 sm:p-5 rounded-2xl bg-gradient-to-r from-[#0d1326] to-[#080d1a] border-cyan-500/40 space-y-4 animate-in fade-in">
           <div className="flex items-center justify-between border-b border-white/10 pb-3">
             <div className="flex items-center gap-2">
               <Shield className="w-5 h-5 text-cyan-400" />
@@ -820,13 +820,13 @@ export const ChamberStatusGrid: React.FC<ChamberStatusGridProps> = ({ onNavigate
                 </div>
               </div>
             </div>
-            <span className="px-2.5 py-1 rounded-lg bg-emerald-500/20 text-emerald-300 border border-emerald-500/50 text-[10px] font-bold">
+            <span className="px-2.5 py-1 rounded-lg bg-emerald-500/20 text-emerald-300 border-emerald-500/50 text-[10px] font-bold">
               10/10 ALL GREEN PASSED
             </span>
           </div>
 
           <div className="grid grid-cols-1 md:grid-cols-2 gap-3 text-xs">
-            <div className="space-y-1.5 p-3 rounded-xl bg-black/50 border border-white/5">
+            <div className="space-y-1.5 p-3 rounded-xl bg-black/50 border-white/5">
               <span className="text-[10px] uppercase font-bold text-cyan-400 block mb-1">
                 10 Invariant Laws (10/10 PASSED):
               </span>
@@ -874,24 +874,24 @@ export const ChamberStatusGrid: React.FC<ChamberStatusGridProps> = ({ onNavigate
               </div>
             </div>
 
-            <div className="space-y-2 p-3 rounded-xl bg-black/50 border border-white/5">
+            <div className="space-y-2 p-3 rounded-xl bg-black/50 border-white/5">
               <span className="text-[10px] uppercase font-bold text-rose-400 block">
                 Threat Simulation - INV-05 Fail-Closed Action:
               </span>
               <div className="space-y-1.5 text-[11px] text-zinc-300">
-                <div className="p-1.5 rounded-lg bg-rose-950/30 border border-rose-500/20 flex items-start gap-1.5">
+                <div className="p-1.5 rounded-lg bg-rose-950/30 border-rose-500/20 flex items-start gap-1.5">
                   <span className="text-rose-400 font-bold shrink-0">1.</span>
                   <span>Physical HSM Tamper → Active Zeroization + Fail-Closed → <strong>Chamber 02</strong></span>
                 </div>
-                <div className="p-1.5 rounded-lg bg-white/[0.02] border border-white/5 flex items-start gap-1.5">
+                <div className="p-1.5 rounded-lg bg-white/[0.02] border-white/5 flex items-start gap-1.5">
                   <span className="text-cyan-400 font-bold shrink-0">2.</span>
                   <span>Bot Signature Forgery → Sentinel AI Risk 1.00 Block (Chamber 11)</span>
                 </div>
-                <div className="p-1.5 rounded-lg bg-white/[0.02] border border-white/5 flex items-start gap-1.5">
+                <div className="p-1.5 rounded-lg bg-white/[0.02] border-white/5 flex items-start gap-1.5">
                   <span className="text-amber-400 font-bold shrink-0">3.</span>
                   <span>Replay Flood → Nonce + Merkle inclusion fail → Drop</span>
                 </div>
-                <div className="p-1.5 rounded-lg bg-white/[0.02] border border-white/5 flex items-start gap-1.5">
+                <div className="p-1.5 rounded-lg bg-white/[0.02] border-white/5 flex items-start gap-1.5">
                   <span className="text-emerald-400 font-bold shrink-0">4.</span>
                   <span>Hash Distortion → SHA-256 chain break → Forensic Ring Flush</span>
                 </div>
@@ -913,7 +913,7 @@ export const ChamberStatusGrid: React.FC<ChamberStatusGridProps> = ({ onNavigate
             placeholder="ค้นหาห้อง (เช่น 00, G11, Radar, Sec 9, Cryo, Forensic)..."
             value={searchQuery}
             onChange={(e) => setSearchQuery(e.target.value)}
-            className="w-full pl-9 pr-4 py-2 rounded-xl bg-black/40 border border-white/10 text-xs text-zinc-200 placeholder-zinc-500 focus:outline-none focus:border-cyan-500/50 transition-colors"
+            className="w-full pl-9 pr-4 py-2 rounded-xl bg-black/40 border-white/10 text-xs text-zinc-200 placeholder-zinc-500 focus:outline-none focus:border-cyan-500/50 transition-colors"
           />
           {searchQuery && (
             <button
@@ -1058,7 +1058,7 @@ export const ChamberStatusGrid: React.FC<ChamberStatusGridProps> = ({ onNavigate
       </div>
 
       {/* Small, Persistent Terminal Status Legend at Bottom */}
-      <div className="mt-5 border-t border-white/10 rounded-2xl bg-[#060812]/95 border border-cyan-500/20 p-3.5 sm:p-4 text-xs font-mono backdrop-blur-md shadow-[0_0_30px_rgba(0,0,0,0.5)]">
+      <div className="mt-5 border-t border-white/10 rounded-2xl bg-[#060812]/95 border-cyan-500/20 p-3.5 sm:p-4 text-xs font-mono backdrop-blur-md shadow-[0_0_30px_rgba(0,0,0,0.5)]">
         <div className="flex flex-col xl:flex-row xl:items-center justify-between gap-3.5">
           {/* Terminal Header */}
           <div className="flex items-center gap-2 text-[11px] text-zinc-400 shrink-0">
@@ -1070,37 +1070,37 @@ export const ChamberStatusGrid: React.FC<ChamberStatusGridProps> = ({ onNavigate
           {/* Color-Coding Explanations with Terminal-Styled Icons */}
           <div className="flex flex-wrap items-center gap-2 sm:gap-2.5 text-[10px]">
             {/* Green = Visited */}
-            <div className="flex items-center gap-1.5 px-2.5 py-1 rounded-lg bg-emerald-500/10 border border-emerald-500/30 text-emerald-300 font-bold">
+            <div className="flex items-center gap-1.5 px-2.5 py-1 rounded-lg bg-emerald-500/10 border-emerald-500/30 text-emerald-300 font-bold">
               <CheckCircle2 className="w-3.5 h-3.5 text-emerald-400" />
               <span>GREEN = VISITED (x18 SEALED)</span>
             </div>
 
             {/* Blue = Active / Runtime */}
-            <div className="flex items-center gap-1.5 px-2.5 py-1 rounded-lg bg-blue-500/10 border border-blue-500/30 text-blue-300 font-bold">
+            <div className="flex items-center gap-1.5 px-2.5 py-1 rounded-lg bg-blue-500/10 border-blue-500/30 text-blue-300 font-bold">
               <Activity className="w-3.5 h-3.5 text-blue-400 animate-pulse" />
               <span>BLUE = ACTIVE RUNTIME / SIM</span>
             </div>
 
             {/* Amber = Canonical SSoT */}
-            <div className="flex items-center gap-1.5 px-2.5 py-1 rounded-lg bg-amber-500/10 border border-amber-500/30 text-amber-300 font-bold">
+            <div className="flex items-center gap-1.5 px-2.5 py-1 rounded-lg bg-amber-500/10 border-amber-500/30 text-amber-300 font-bold">
               <Lock className="w-3.5 h-3.5 text-amber-400" />
               <span>AMBER = CANONICAL SSoT</span>
             </div>
 
             {/* Purple = Consensus Quorum */}
-            <div className="flex items-center gap-1.5 px-2.5 py-1 rounded-lg bg-purple-500/10 border border-purple-500/30 text-purple-300 font-bold">
+            <div className="flex items-center gap-1.5 px-2.5 py-1 rounded-lg bg-purple-500/10 border-purple-500/30 text-purple-300 font-bold">
               <Key className="w-3.5 h-3.5 text-purple-400" />
               <span>PURPLE = 10/10 HSM QUORUM</span>
             </div>
 
             {/* Gray = Quarantined */}
-            <div className="flex items-center gap-1.5 px-2.5 py-1 rounded-lg bg-zinc-800/90 border border-zinc-600 text-zinc-300 font-bold">
+            <div className="flex items-center gap-1.5 px-2.5 py-1 rounded-lg bg-zinc-800/90 border-zinc-600 text-zinc-300 font-bold">
               <ShieldAlert className="w-3.5 h-3.5 text-zinc-400" />
               <span>GRAY = QUARANTINED (80 SEALS)</span>
             </div>
 
             {/* Flashing Red = Critical Anomaly */}
-            <div className="flex items-center gap-1.5 px-2.5 py-1 rounded-lg bg-rose-500/20 border border-rose-500 text-rose-300 font-bold animate-pulse">
+            <div className="flex items-center gap-1.5 px-2.5 py-1 rounded-lg bg-rose-500/20 border-rose-500 text-rose-300 font-bold animate-pulse">
               <AlertTriangle className="w-3.5 h-3.5 text-rose-400" />
               <span>FLASHING RED = CRITICAL ANOMALY (TRUTH &lt;85% / DRIFT)</span>
             </div>
@@ -1124,7 +1124,7 @@ export const ChamberStatusGrid: React.FC<ChamberStatusGridProps> = ({ onNavigate
                   setSelectedChamber(ch09);
                 }
               }}
-              className="group flex items-center gap-1.5 px-2.5 py-1 rounded-lg bg-cyan-950/40 border border-cyan-500/40 text-cyan-300 hover:bg-cyan-500/20 hover:border-cyan-400 transition cursor-pointer"
+              className="group flex items-center gap-1.5 px-2.5 py-1 rounded-lg bg-cyan-950/40 border-cyan-500/40 text-cyan-300 hover:bg-cyan-500/20 hover:border-cyan-400 transition cursor-pointer"
               title="Click to inspect Chamber 09 (Phase Registry 40/40) & DIM-09 External Feeds Contract"
             >
               <Cpu className="w-3 h-3 text-cyan-400 group-hover:scale-110 transition-transform" />
@@ -1142,7 +1142,7 @@ export const ChamberStatusGrid: React.FC<ChamberStatusGridProps> = ({ onNavigate
                   setSelectedChamber(ch10);
                 }
               }}
-              className="group flex items-center gap-1.5 px-2.5 py-1 rounded-lg bg-indigo-950/40 border border-indigo-500/40 text-indigo-300 hover:bg-indigo-500/20 hover:border-indigo-400 transition cursor-pointer"
+              className="group flex items-center gap-1.5 px-2.5 py-1 rounded-lg bg-indigo-950/40 border-indigo-500/40 text-indigo-300 hover:bg-indigo-500/20 hover:border-indigo-400 transition cursor-pointer"
               title="Click to inspect Chamber 10 (Thai Legal & Court Safe) & DIM-10 Live Runtime Execution"
             >
               <Scale className="w-3 h-3 text-indigo-400 group-hover:scale-110 transition-transform" />
@@ -1249,7 +1249,7 @@ export const ChamberStatusGrid: React.FC<ChamberStatusGridProps> = ({ onNavigate
 
               {/* Green Visited Indicator */}
               <div
-                className="flex items-center gap-1 px-1.5 py-0.5 rounded bg-emerald-500/10 border border-emerald-500/30 text-[9px] text-emerald-400 font-bold"
+                className="flex items-center gap-1 px-1.5 py-0.5 rounded bg-emerald-500/10 border-emerald-500/30 text-[9px] text-emerald-400 font-bold"
                 title={`Visited Status: Active (Count: ${chamber.visitCount})`}
               >
                 <span className="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse" />
@@ -1290,7 +1290,7 @@ export const ChamberStatusGrid: React.FC<ChamberStatusGridProps> = ({ onNavigate
 
           {/* Runtime / Telemetry or Critical Anomaly Alert Indicator */}
           {hasAnomaly ? (
-            <div className="mt-2 p-1.5 rounded-lg bg-rose-950/70 border border-rose-500/60 text-[9px] flex items-center justify-between text-rose-200">
+            <div className="mt-2 p-1.5 rounded-lg bg-rose-950/70 border-rose-500/60 text-[9px] flex items-center justify-between text-rose-200">
               <span className="flex items-center gap-1 font-bold text-rose-300">
                 <AlertTriangle className="w-3 h-3 text-rose-400 animate-bounce" />
                 <span>TRUTH {anomaly.truthPercentage.toFixed(1)}% (&lt;85%)</span>
@@ -1298,7 +1298,7 @@ export const ChamberStatusGrid: React.FC<ChamberStatusGridProps> = ({ onNavigate
               <span className="text-rose-300 text-[8px] font-mono">+{anomaly.coherenceDrift}% DRIFT</span>
             </div>
           ) : (
-            <div className="mt-2 p-1.5 rounded-lg bg-black/40 border border-white/5 text-[9px] flex items-center justify-between">
+            <div className="mt-2 p-1.5 rounded-lg bg-black/40 border-white/5 text-[9px] flex items-center justify-between">
               <div className="flex items-center gap-1 text-blue-300">
                 <span className="w-1.5 h-1.5 rounded-full bg-blue-400 animate-ping" />
                 <span className="truncate">
@@ -1342,7 +1342,7 @@ export const ChamberStatusGrid: React.FC<ChamberStatusGridProps> = ({ onNavigate
         <div className={`pointer-events-none absolute bottom-[calc(100%+8px)] left-1/2 -translate-x-1/2 w-64 sm:w-72 p-3 rounded-xl shadow-2xl opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-200 z-50 backdrop-blur-md font-mono text-[10px] space-y-2 ${
           hasAnomaly
             ? 'bg-[#18080c]/95 border-2 border-rose-500 shadow-[0_0_35px_rgba(244,63,94,0.5)]'
-            : 'bg-[#04060e]/95 border border-cyan-500/50 shadow-[0_0_30px_rgba(6,182,212,0.35)]'
+            : 'bg-[#04060e]/95 border-cyan-500/50 shadow-[0_0_30px_rgba(6,182,212,0.35)]'
         }`}>
           {/* Tooltip Header */}
           <div className="flex items-center justify-between border-b border-white/10 pb-1.5">
@@ -1357,7 +1357,7 @@ export const ChamberStatusGrid: React.FC<ChamberStatusGridProps> = ({ onNavigate
               </span>
             </div>
             {hasAnomaly ? (
-              <span className="px-1.5 py-0.2 rounded text-[8px] font-bold bg-rose-500/30 text-rose-200 border border-rose-500">
+              <span className="px-1.5 py-0.2 rounded text-[8px] font-bold bg-rose-500/30 text-rose-200 border-rose-500">
                 CRITICAL ALARM
               </span>
             ) : (
@@ -1369,7 +1369,7 @@ export const ChamberStatusGrid: React.FC<ChamberStatusGridProps> = ({ onNavigate
 
           {/* Anomaly Alarm Warning Box in Tooltip */}
           {hasAnomaly && (
-            <div className="p-2 rounded-lg bg-rose-950/90 border border-rose-500/80 text-rose-200 text-[9px] space-y-1 animate-pulse">
+            <div className="p-2 rounded-lg bg-rose-950/90 border-rose-500/80 text-rose-200 text-[9px] space-y-1 animate-pulse">
               <div className="flex items-center gap-1 font-bold text-rose-300">
                 <AlertTriangle className="w-3 h-3 text-rose-400" />
                 <span>CRITICAL ANOMALY: TRUTH LEVEL &lt; 85%</span>
@@ -1386,7 +1386,7 @@ export const ChamberStatusGrid: React.FC<ChamberStatusGridProps> = ({ onNavigate
           {/* Tooltip Metadata Rows: Uptime, Last Seal ID, Current Coherence Level */}
           <div className="space-y-1.5">
             {/* Uptime */}
-            <div className="flex items-center justify-between bg-black/40 px-2 py-1 rounded-lg border border-white/5">
+            <div className="flex items-center justify-between bg-black/40 px-2 py-1 rounded-lg border-white/5">
               <span className="text-zinc-400 flex items-center gap-1">
                 <Timer className="w-3 h-3 text-cyan-400 shrink-0" />
                 <span>Uptime:</span>
@@ -1397,7 +1397,7 @@ export const ChamberStatusGrid: React.FC<ChamberStatusGridProps> = ({ onNavigate
             </div>
 
             {/* Last Seal ID */}
-            <div className="flex items-center justify-between bg-black/40 px-2 py-1 rounded-lg border border-white/5">
+            <div className="flex items-center justify-between bg-black/40 px-2 py-1 rounded-lg border-white/5">
               <span className="text-zinc-400 flex items-center gap-1">
                 <FileCheck className="w-3 h-3 text-amber-400 shrink-0" />
                 <span>Last Seal ID:</span>
@@ -1408,7 +1408,7 @@ export const ChamberStatusGrid: React.FC<ChamberStatusGridProps> = ({ onNavigate
             </div>
 
             {/* Current Coherence Level */}
-            <div className="flex items-center justify-between bg-black/40 px-2 py-1 rounded-lg border border-white/5">
+            <div className="flex items-center justify-between bg-black/40 px-2 py-1 rounded-lg border-white/5">
               <span className="text-zinc-400 flex items-center gap-1">
                 <Gauge className="w-3 h-3 text-purple-400 shrink-0" />
                 <span>Current Coherence:</span>

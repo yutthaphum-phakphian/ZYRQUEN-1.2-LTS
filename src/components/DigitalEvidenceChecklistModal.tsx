@@ -354,7 +354,7 @@ export const DigitalEvidenceChecklistModal: React.FC<DigitalEvidenceChecklistMod
         {/* Header */}
         <div className="p-4 sm:p-5 border-b border-emerald-500/25 bg-gradient-to-r from-emerald-950/50 via-[#070a12] to-slate-950 flex flex-col md:flex-row md:items-center justify-between gap-4">
           <div className="flex items-center gap-3">
-            <div className="w-11 h-11 rounded-2xl bg-emerald-500/20 border border-emerald-400 text-emerald-300 flex items-center justify-center shrink-0 shadow-[0_0_20px_rgba(16,185,129,0.35)]">
+            <div className="w-11 h-11 rounded-2xl bg-emerald-500/20 border-emerald-400 text-emerald-300 flex items-center justify-center shrink-0 shadow-[0_0_20px_rgba(16,185,129,0.35)]">
               <FileCheck className="w-6 h-6" />
             </div>
             <div>
@@ -362,10 +362,10 @@ export const DigitalEvidenceChecklistModal: React.FC<DigitalEvidenceChecklistMod
                 <h2 className="text-base sm:text-lg font-bold text-white font-serif tracking-wide">
                   ระบบตรวจเช็คระบบ &amp; พยานหลักฐานดิจิทัล (System Check-Up)
                 </h2>
-                <span className="text-[10px] px-2.5 py-0.5 rounded-full bg-emerald-500/20 text-emerald-300 border border-emerald-500/40 font-bold">
+                <span className="text-[10px] px-2.5 py-0.5 rounded-full bg-emerald-500/20 text-emerald-300 border-emerald-500/40 font-bold">
                   ISO/IEC 27037 &bull; v2.0
                 </span>
-                <span className="text-[10px] px-2 py-0.5 rounded-full bg-cyan-500/20 text-cyan-300 border border-cyan-500/40 font-bold">
+                <span className="text-[10px] px-2 py-0.5 rounded-full bg-cyan-500/20 text-cyan-300 border-cyan-500/40 font-bold">
                   SSoT Δ0.00%
                 </span>
               </div>
@@ -377,7 +377,7 @@ export const DigitalEvidenceChecklistModal: React.FC<DigitalEvidenceChecklistMod
 
           <div className="flex items-center gap-2.5 flex-wrap sm:flex-nowrap">
             {/* View Mode Switcher: Stepper vs Matrix */}
-            <div className="flex items-center p-1 bg-black/60 rounded-xl border border-white/10 text-xs">
+            <div className="flex items-center p-1 bg-black/60 rounded-xl border-white/10 text-xs">
               <button
                 type="button"
                 onClick={() => {
@@ -386,7 +386,7 @@ export const DigitalEvidenceChecklistModal: React.FC<DigitalEvidenceChecklistMod
                 }}
                 className={`flex items-center gap-1.5 px-3 py-1.5 rounded-lg font-bold transition-all cursor-pointer ${
                   viewMode === 'stepper'
-                    ? 'bg-emerald-500/30 text-emerald-300 border border-emerald-400/50 shadow-[0_0_12px_rgba(16,185,129,0.3)]'
+                    ? 'bg-emerald-500/30 text-emerald-300 border-emerald-400/50 shadow-[0_0_12px_rgba(16,185,129,0.3)]'
                     : 'text-zinc-400 hover:text-white'
                 }`}
                 title="ไล่ตรวจทีละขั้นตอน (Step-by-Step Stepper Mode)"
@@ -403,7 +403,7 @@ export const DigitalEvidenceChecklistModal: React.FC<DigitalEvidenceChecklistMod
                 }}
                 className={`flex items-center gap-1.5 px-3 py-1.5 rounded-lg font-bold transition-all cursor-pointer ${
                   viewMode === 'matrix'
-                    ? 'bg-emerald-500/30 text-emerald-300 border border-emerald-400/50 shadow-[0_0_12px_rgba(16,185,129,0.3)]'
+                    ? 'bg-emerald-500/30 text-emerald-300 border-emerald-400/50 shadow-[0_0_12px_rgba(16,185,129,0.3)]'
                     : 'text-zinc-400 hover:text-white'
                 }`}
                 title="ตารางตรวจสอบพยานรวม (Full Matrix View)"
@@ -428,7 +428,7 @@ export const DigitalEvidenceChecklistModal: React.FC<DigitalEvidenceChecklistMod
                 playTone(400, 0.03);
                 onClose();
               }}
-              className="p-1.5 rounded-xl bg-white/5 hover:bg-white/10 text-zinc-400 hover:text-white border border-white/10 transition-colors cursor-pointer"
+              className="p-1.5 rounded-xl bg-white/5 hover:bg-white/10 text-zinc-400 hover:text-white border-white/10 transition-colors cursor-pointer"
             >
               <X className="w-5 h-5" />
             </button>
@@ -438,7 +438,7 @@ export const DigitalEvidenceChecklistModal: React.FC<DigitalEvidenceChecklistMod
         {/* Overview Stats Bar */}
         <div className="px-4 py-3 bg-black/60 border-b border-white/10">
           <div className="grid grid-cols-2 sm:grid-cols-4 gap-2.5 text-xs">
-            <div className="p-2.5 rounded-xl bg-zinc-900/80 border border-emerald-500/20">
+            <div className="p-2.5 rounded-xl bg-zinc-900/80 border-emerald-500/20">
               <span className="text-zinc-500 text-[10px]">สถานะการตรวจพิสูจน์รวม</span>
               <div className="text-xs sm:text-sm font-bold text-emerald-400 mt-0.5 flex items-center gap-1.5">
                 <CheckCircle2 className="w-3.5 h-3.5 shrink-0" />
@@ -446,19 +446,19 @@ export const DigitalEvidenceChecklistModal: React.FC<DigitalEvidenceChecklistMod
               </div>
             </div>
 
-            <div className="p-2.5 rounded-xl bg-zinc-900/80 border border-white/5">
+            <div className="p-2.5 rounded-xl bg-zinc-900/80 border-white/5">
               <span className="text-zinc-500 text-[10px]">ผู้ตรวจพิสูจน์ (Lead Inspector)</span>
               <div className="text-xs font-bold text-white mt-0.5 truncate" title={SYSTEM_METADATA.sovereignPrincipal}>
                 {SYSTEM_METADATA.sovereignPrincipal}
               </div>
             </div>
 
-            <div className="p-2.5 rounded-xl bg-zinc-900/80 border border-white/5">
+            <div className="p-2.5 rounded-xl bg-zinc-900/80 border-white/5">
               <span className="text-zinc-500 text-[10px]">รหัสหนังสือเดินทางอธิปไตย</span>
               <div className="text-xs font-bold text-amber-300 mt-0.5">#EP-SOVEREIGN-01 (OMEGA-1)</div>
             </div>
 
-            <div className="p-2.5 rounded-xl bg-zinc-900/80 border border-white/5">
+            <div className="p-2.5 rounded-xl bg-zinc-900/80 border-white/5">
               <span className="text-zinc-500 text-[10px]">สมุดบัญชี Merkle Anchor</span>
               <div className="text-xs font-bold text-cyan-400 mt-0.5">Block #{SYSTEM_METADATA.sealedBlock} 🔒</div>
             </div>
@@ -469,7 +469,7 @@ export const DigitalEvidenceChecklistModal: React.FC<DigitalEvidenceChecklistMod
         {viewMode === 'stepper' && (
           <div className="flex-1 overflow-y-auto p-4 sm:p-6 space-y-5">
             {/* Step Navigation Dots & Progress Bar */}
-            <div className="space-y-2 bg-zinc-950/60 p-3.5 rounded-2xl border border-white/10">
+            <div className="space-y-2 bg-zinc-950/60 p-3.5 rounded-2xl border-white/10">
               <div className="flex items-center justify-between text-xs">
                 <div className="flex items-center gap-2">
                   <span className="text-emerald-400 font-bold flex items-center gap-1">
@@ -492,8 +492,8 @@ export const DigitalEvidenceChecklistModal: React.FC<DigitalEvidenceChecklistMod
                     }}
                     className={`px-2.5 py-1 rounded-lg text-[11px] font-bold flex items-center gap-1.5 transition-all cursor-pointer ${
                       isAutoRunning
-                        ? 'bg-amber-500/30 text-amber-200 border border-amber-400 animate-pulse'
-                        : 'bg-white/10 hover:bg-white/15 text-zinc-300 hover:text-white border border-white/10'
+                        ? 'bg-amber-500/30 text-amber-200 border-amber-400 animate-pulse'
+                        : 'bg-white/10 hover:bg-white/15 text-zinc-300 hover:text-white border-white/10'
                     }`}
                     title="เริ่ม/หยุด การตรวจเช็คอัตโนมัติทีละขั้นตอน"
                   >
@@ -510,7 +510,7 @@ export const DigitalEvidenceChecklistModal: React.FC<DigitalEvidenceChecklistMod
                     )}
                   </button>
 
-                  <span className="text-[11px] px-2 py-0.5 rounded-full bg-emerald-500/20 text-emerald-300 border border-emerald-500/30 font-bold">
+                  <span className="text-[11px] px-2 py-0.5 rounded-full bg-emerald-500/20 text-emerald-300 border-emerald-500/30 font-bold">
                     {Math.round(((activeStep + 1) / totalCount) * 100)}%
                   </span>
                 </div>
@@ -541,8 +541,8 @@ export const DigitalEvidenceChecklistModal: React.FC<DigitalEvidenceChecklistMod
                         isActive
                           ? 'bg-emerald-500 text-black shadow-[0_0_12px_rgba(16,185,129,0.8)] scale-105 ring-2 ring-emerald-300'
                           : it.passed
-                          ? 'bg-emerald-950/40 text-emerald-300 border border-emerald-500/30 hover:bg-emerald-500/20'
-                          : 'bg-zinc-900 text-zinc-500 border border-zinc-700'
+                          ? 'bg-emerald-950/40 text-emerald-300 border-emerald-500/30 hover:bg-emerald-500/20'
+                          : 'bg-zinc-900 text-zinc-500 border-zinc-700'
                       }`}
                       title={`${idx + 1}. ${it.title}`}
                     >
@@ -554,18 +554,18 @@ export const DigitalEvidenceChecklistModal: React.FC<DigitalEvidenceChecklistMod
             </div>
 
             {/* Active Step Detailed Card */}
-            <div className="p-5 sm:p-6 rounded-2xl bg-zinc-950/90 border border-emerald-500/40 shadow-[0_0_30px_rgba(16,185,129,0.15)] space-y-4">
+            <div className="p-5 sm:p-6 rounded-2xl bg-zinc-950/90 border-emerald-500/40 shadow-[0_0_30px_rgba(16,185,129,0.15)] space-y-4">
               {/* Step Header */}
               <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 pb-3 border-b border-white/10">
                 <div className="flex items-center gap-2.5">
-                  <span className="w-8 h-8 rounded-xl bg-emerald-500/20 border border-emerald-400 text-emerald-300 font-bold flex items-center justify-center text-sm">
+                  <span className="w-8 h-8 rounded-xl bg-emerald-500/20 border-emerald-400 text-emerald-300 font-bold flex items-center justify-center text-sm">
                     {activeStep + 1}
                   </span>
                   <div>
-                    <span className="text-[11px] px-2.5 py-0.5 rounded-full bg-cyan-950 text-cyan-300 border border-cyan-500/40 font-bold mr-2">
+                    <span className="text-[11px] px-2.5 py-0.5 rounded-full bg-cyan-950 text-cyan-300 border-cyan-500/40 font-bold mr-2">
                       {currentStep.category}
                     </span>
-                    <span className="text-[11px] px-2.5 py-0.5 rounded-full bg-amber-950 text-amber-300 border border-amber-500/40 font-mono font-bold">
+                    <span className="text-[11px] px-2.5 py-0.5 rounded-full bg-amber-950 text-amber-300 border-amber-500/40 font-mono font-bold">
                       {currentStep.statuteRef}
                     </span>
                   </div>
@@ -577,8 +577,8 @@ export const DigitalEvidenceChecklistModal: React.FC<DigitalEvidenceChecklistMod
                     onClick={() => toggleItem(currentStep.id)}
                     className={`px-3 py-1.5 rounded-xl font-bold text-xs flex items-center gap-2 transition-all cursor-pointer ${
                       currentStep.passed
-                        ? 'bg-emerald-500/20 text-emerald-300 border border-emerald-400 hover:bg-emerald-500/30 shadow-[0_0_12px_rgba(16,185,129,0.3)]'
-                        : 'bg-rose-500/20 text-rose-300 border border-rose-400 hover:bg-rose-500/30'
+                        ? 'bg-emerald-500/20 text-emerald-300 border-emerald-400 hover:bg-emerald-500/30 shadow-[0_0_12px_rgba(16,185,129,0.3)]'
+                        : 'bg-rose-500/20 text-rose-300 border-rose-400 hover:bg-rose-500/30'
                     }`}
                   >
                     {currentStep.passed ? (
@@ -609,7 +609,7 @@ export const DigitalEvidenceChecklistModal: React.FC<DigitalEvidenceChecklistMod
               {/* Cryptographic Proof & Legal Matrix Grid */}
               <div className="grid grid-cols-1 md:grid-cols-2 gap-3.5 pt-2">
                 {/* Technical Proof */}
-                <div className="p-3.5 rounded-xl bg-black/60 border border-cyan-500/20 space-y-1.5">
+                <div className="p-3.5 rounded-xl bg-black/60 border-cyan-500/20 space-y-1.5">
                   <div className="flex items-center justify-between text-[11px] font-bold text-cyan-300">
                     <span className="flex items-center gap-1.5">
                       <Cpu className="w-3.5 h-3.5 text-cyan-400" />
@@ -617,13 +617,13 @@ export const DigitalEvidenceChecklistModal: React.FC<DigitalEvidenceChecklistMod
                     </span>
                     <span className="text-[10px] text-emerald-400">100% SSoT Valid</span>
                   </div>
-                  <p className="text-xs text-zinc-300 font-mono leading-relaxed bg-zinc-900/60 p-2.5 rounded-lg border border-white/5">
+                  <p className="text-xs text-zinc-300 font-mono leading-relaxed bg-zinc-900/60 p-2.5 rounded-lg border-white/5">
                     {currentStep.technicalProof}
                   </p>
                 </div>
 
                 {/* Legal Implication */}
-                <div className="p-3.5 rounded-xl bg-black/60 border border-amber-500/20 space-y-1.5">
+                <div className="p-3.5 rounded-xl bg-black/60 border-amber-500/20 space-y-1.5">
                   <div className="flex items-center justify-between text-[11px] font-bold text-amber-300">
                     <span className="flex items-center gap-1.5">
                       <Scale className="w-3.5 h-3.5 text-amber-400" />
@@ -631,14 +631,14 @@ export const DigitalEvidenceChecklistModal: React.FC<DigitalEvidenceChecklistMod
                     </span>
                     <span className="text-[10px] text-amber-400">Court-Admissible</span>
                   </div>
-                  <p className="text-xs text-zinc-300 font-sans leading-relaxed bg-zinc-900/60 p-2.5 rounded-lg border border-white/5">
+                  <p className="text-xs text-zinc-300 font-sans leading-relaxed bg-zinc-900/60 p-2.5 rounded-lg border-white/5">
                     {currentStep.legalImplication}
                   </p>
                 </div>
               </div>
 
               {/* Hash Digest & PQC Standard Strip */}
-              <div className="p-3 rounded-xl bg-black/40 border border-white/10 flex flex-col sm:flex-row sm:items-center justify-between gap-2.5 text-xs font-mono">
+              <div className="p-3 rounded-xl bg-black/40 border-white/10 flex flex-col sm:flex-row sm:items-center justify-between gap-2.5 text-xs font-mono">
                 <div className="flex items-center gap-2 truncate">
                   <Fingerprint className="w-4 h-4 text-purple-400 shrink-0" />
                   <span className="text-zinc-500 text-[11px]">Hash Digest:</span>
@@ -671,8 +671,8 @@ export const DigitalEvidenceChecklistModal: React.FC<DigitalEvidenceChecklistMod
                   disabled={activeStep === 0}
                   className={`px-4 py-2 rounded-xl text-xs font-bold flex items-center gap-2 transition-all cursor-pointer ${
                     activeStep === 0
-                      ? 'bg-zinc-900 text-zinc-600 border border-zinc-800 cursor-not-allowed'
-                      : 'bg-zinc-800 hover:bg-zinc-700 text-white border border-white/10'
+                      ? 'bg-zinc-900 text-zinc-600 border-zinc-800 cursor-not-allowed'
+                      : 'bg-zinc-800 hover:bg-zinc-700 text-white border-white/10'
                   }`}
                 >
                   <ChevronLeft className="w-4 h-4" />
@@ -727,8 +727,8 @@ export const DigitalEvidenceChecklistModal: React.FC<DigitalEvidenceChecklistMod
                       }}
                       className={`px-3 py-1.5 rounded-lg font-bold whitespace-nowrap transition-all cursor-pointer ${
                         filterCategory === tab.id
-                          ? 'bg-emerald-500/20 text-emerald-300 border border-emerald-500/40'
-                          : 'bg-white/5 text-zinc-400 hover:text-zinc-200 border border-transparent'
+                          ? 'bg-emerald-500/20 text-emerald-300 border-emerald-500/40'
+                          : 'bg-white/5 text-zinc-400 hover:text-zinc-200 border-transparent'
                       }`}
                     >
                       {tab.label}
@@ -743,7 +743,7 @@ export const DigitalEvidenceChecklistModal: React.FC<DigitalEvidenceChecklistMod
                     placeholder="ค้นหาข้อกำหนดหรือมาตรา..."
                     value={searchQuery}
                     onChange={(e) => setSearchQuery(e.target.value)}
-                    className="w-full pl-8 pr-3 py-1.5 rounded-lg bg-black/60 border border-white/10 text-xs text-white placeholder-zinc-500 focus:outline-none focus:border-emerald-500"
+                    className="w-full pl-8 pr-3 py-1.5 rounded-lg bg-black/60 border-white/10 text-xs text-white placeholder-zinc-500 focus:outline-none focus:border-emerald-500"
                   />
                 </div>
               </div>
@@ -766,7 +766,7 @@ export const DigitalEvidenceChecklistModal: React.FC<DigitalEvidenceChecklistMod
                     className={`w-6 h-6 rounded-lg flex items-center justify-center shrink-0 mt-0.5 font-bold transition-all ${
                       item.passed
                         ? 'bg-emerald-500 text-black shadow-[0_0_10px_rgba(16,185,129,0.5)]'
-                        : 'bg-zinc-800 text-zinc-500 border border-zinc-700'
+                        : 'bg-zinc-800 text-zinc-500 border-zinc-700'
                     }`}
                   >
                     {item.passed ? <Check className="w-4 h-4 stroke-[3]" /> : <X className="w-3.5 h-3.5" />}

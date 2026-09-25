@@ -182,7 +182,7 @@ export const ComplianceHistoryLog: React.FC = () => {
       {/* Header */}
       <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 border-b border-amber-500/20 pb-4">
         <div className="flex items-center gap-3">
-          <div className="w-10 h-10 rounded-xl bg-amber-500/15 border border-amber-500/30 text-amber-300 flex items-center justify-center shrink-0">
+          <div className="w-10 h-10 rounded-xl bg-amber-500/15 border-amber-500/30 text-amber-300 flex items-center justify-center shrink-0">
             <History className="w-5 h-5" />
           </div>
           <div>
@@ -190,7 +190,7 @@ export const ComplianceHistoryLog: React.FC = () => {
               <h3 className="text-base font-bold text-amber-100 font-serif">
                 Compliance History Log & Merkle Proof Ledger
               </h3>
-              <span className="text-[10px] px-2 py-0.5 rounded-full bg-amber-500/20 text-amber-300 border border-amber-500/40 font-bold">
+              <span className="text-[10px] px-2 py-0.5 rounded-full bg-amber-500/20 text-amber-300 border-amber-500/40 font-bold">
                 AUDIT DRILL-DOWN READY
               </span>
             </div>
@@ -201,7 +201,7 @@ export const ComplianceHistoryLog: React.FC = () => {
         </div>
 
         {/* Filter Chips */}
-        <div className="flex items-center gap-1.5 bg-black/60 border border-white/10 rounded-xl p-1 text-xs">
+        <div className="flex items-center gap-1.5 bg-black/60 border-white/10 rounded-xl p-1 text-xs">
           {(['ALL', 'Section 9', 'Section 26', 'Section 28'] as const).map((sec) => (
             <button
               key={sec}
@@ -211,7 +211,7 @@ export const ComplianceHistoryLog: React.FC = () => {
               }}
               className={`px-2.5 py-1 rounded-lg text-[11px] font-semibold transition-all ${
                 selectedSection === sec
-                  ? 'bg-amber-500/30 text-amber-100 border border-amber-400/50 shadow-sm'
+                  ? 'bg-amber-500/30 text-amber-100 border-amber-400/50 shadow-sm'
                   : 'text-zinc-400 hover:text-zinc-200'
               }`}
             >
@@ -229,7 +229,7 @@ export const ComplianceHistoryLog: React.FC = () => {
           value={searchTerm}
           onChange={(e) => setSearchTerm(e.target.value)}
           placeholder="Search by Transition ID, Signatory, Statute, Merkle Hash (e.g. 909ab814), or Status..."
-          className="w-full pl-10 pr-4 py-2.5 rounded-xl bg-black/80 border border-amber-500/30 text-amber-100 placeholder-zinc-500 text-xs focus:outline-none focus:border-amber-400 transition-all shadow-inner"
+          className="w-full pl-10 pr-4 py-2.5 rounded-xl bg-black/80 border-amber-500/30 text-amber-100 placeholder-zinc-500 text-xs focus:outline-none focus:border-amber-400 transition-all shadow-inner"
         />
         {searchTerm && (
           <button
@@ -287,7 +287,7 @@ export const ComplianceHistoryLog: React.FC = () => {
                   <div className="flex items-center gap-1.5 text-[11px]">
                     <span className="text-zinc-400 line-through">{t.fromState}</span>
                     <span className="text-amber-400 font-bold">$\rightarrow$</span>
-                    <span className="text-emerald-300 font-bold bg-emerald-500/10 px-1.5 py-0.5 rounded border border-emerald-500/20">
+                    <span className="text-emerald-300 font-bold bg-emerald-500/10 px-1.5 py-0.5 rounded border-emerald-500/20">
                       {t.toState}
                     </span>
                   </div>
@@ -321,7 +321,7 @@ export const ComplianceHistoryLog: React.FC = () => {
                       e.stopPropagation();
                       handleSelectTransition(t);
                     }}
-                    className="px-2.5 py-1 rounded-lg bg-amber-500/20 hover:bg-amber-500/30 text-amber-200 border border-amber-400/40 text-[11px] font-bold inline-flex items-center gap-1 transition-all"
+                    className="px-2.5 py-1 rounded-lg bg-amber-500/20 hover:bg-amber-500/30 text-amber-200 border-amber-400/40 text-[11px] font-bold inline-flex items-center gap-1 transition-all"
                   >
                     <span>Inspect</span>
                     <ChevronRight className="w-3 h-3" />
@@ -350,7 +350,7 @@ export const ComplianceHistoryLog: React.FC = () => {
                 <h4 className="text-sm font-bold text-amber-200">
                   Merkle Proof Verification: {selectedTransition.id}
                 </h4>
-                <span className="text-[10px] px-2 py-0.5 rounded-full bg-emerald-500/20 text-emerald-300 font-bold border border-emerald-500/40">
+                <span className="text-[10px] px-2 py-0.5 rounded-full bg-emerald-500/20 text-emerald-300 font-bold border-emerald-500/40">
                   PROOF VALIDATED (ROOT 909ab814)
                 </span>
               </div>
@@ -362,7 +362,7 @@ export const ComplianceHistoryLog: React.FC = () => {
 
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4 text-xs">
             {/* Left Column: Metadata & Legal Basis */}
-            <div className="space-y-3 p-4 rounded-xl bg-white/[0.02] border border-white/8">
+            <div className="space-y-3 p-4 rounded-xl bg-white/[0.02] border-white/8">
               <div>
                 <span className="text-zinc-500 text-[10px] block">STATUTORY MANDATE:</span>
                 <span className="text-amber-300 font-serif font-bold text-xs">{selectedTransition.statuteRef}</span>
@@ -393,14 +393,14 @@ export const ComplianceHistoryLog: React.FC = () => {
             </div>
 
             {/* Right Column: Merkle Tree Inclusion Proof Structure */}
-            <div className="space-y-3 p-4 rounded-xl bg-black/80 border border-amber-500/30">
+            <div className="space-y-3 p-4 rounded-xl bg-black/80 border-amber-500/30">
               <div className="text-[10px] font-bold text-amber-300 uppercase tracking-wider flex items-center justify-between">
                 <span>MERKLE PROOF TREE PATH</span>
                 <span className="text-emerald-400">DEPTH: {selectedTransition.merkleProofPath.length + 1}</span>
               </div>
 
               {/* Leaf */}
-              <div className="p-2.5 rounded-lg bg-amber-500/10 border border-amber-500/30 space-y-1">
+              <div className="p-2.5 rounded-lg bg-amber-500/10 border-amber-500/30 space-y-1">
                 <div className="flex items-center justify-between text-[10px] text-amber-300 font-bold">
                   <span>LEAF HASH (H0):</span>
                   <span className="text-[9px] bg-amber-500/20 px-1.5 py-0.2 rounded">Transition Leaf</span>
@@ -416,7 +416,7 @@ export const ComplianceHistoryLog: React.FC = () => {
                 {selectedTransition.merkleProofPath.map((pathHash, idx) => (
                   <div
                     key={idx}
-                    className="p-2 rounded bg-white/[0.03] border border-white/5 text-[10px] text-zinc-300 font-mono flex items-center justify-between gap-2"
+                    className="p-2 rounded bg-white/[0.03] border-white/5 text-[10px] text-zinc-300 font-mono flex items-center justify-between gap-2"
                   >
                     <span className="text-cyan-400 font-bold text-[9px]">L{idx + 1}:</span>
                     <span className="truncate flex-1">{pathHash}</span>
@@ -431,12 +431,12 @@ export const ComplianceHistoryLog: React.FC = () => {
               </div>
 
               {/* Root Finality */}
-              <div className="p-2.5 rounded-lg bg-emerald-950/40 border border-emerald-500/40 flex items-center justify-between text-[11px]">
+              <div className="p-2.5 rounded-lg bg-emerald-950/40 border-emerald-500/40 flex items-center justify-between text-[11px]">
                 <div>
                   <span className="text-[10px] text-emerald-400 block font-bold">CANONICAL MERKLE ROOT:</span>
                   <span className="text-white font-bold">909ab814...fa4c68</span>
                 </div>
-                <span className="px-2 py-0.5 rounded bg-emerald-500/20 text-emerald-300 font-bold text-[10px] border border-emerald-500/30">
+                <span className="px-2 py-0.5 rounded bg-emerald-500/20 text-emerald-300 font-bold text-[10px] border-emerald-500/30">
                   ANCHORED & SEALED
                 </span>
               </div>

@@ -18,7 +18,7 @@ export const SystemHealthPulse: React.FC<SystemHealthPulseProps> = ({ snapshots 
   }, [snapshots]);
 
   return (
-    <div className="p-4 rounded-2xl bg-[#0b0e1a]/70 border border-white/8 backdrop-blur-xl flex flex-col gap-3 h-full">
+    <div className="p-4 rounded-2xl bg-[#0b0e1a]/70 border-white/8 backdrop-blur-xl flex flex-col gap-3 h-full">
       <div className="flex items-center gap-2">
         <Cpu className="w-4 h-4 text-emerald-400" />
         <h4 className="text-[11px] font-bold text-zinc-200 uppercase tracking-wider font-mono">System Health Pulse</h4>

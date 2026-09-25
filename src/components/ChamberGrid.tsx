@@ -48,7 +48,7 @@ export const ChamberGrid: React.FC<Props> = ({ onSelectChamber }) => {
           </p>
         </div>
         <div className="text-right">
-          <span className="text-xs bg-[#0a0f1e] border border-[#10B981] text-[#10B981] px-3 py-1 font-mono">
+          <span className="text-xs bg-[#0a0f1e] border-[#10B981] text-[#10B981] px-3 py-1 font-mono">
             18/18 ALL PASS
           </span>
         </div>
@@ -76,7 +76,7 @@ export const ChamberGrid: React.FC<Props> = ({ onSelectChamber }) => {
                 <span className="text-xl" role="img" aria-label={ch.name}>
                   {chEmoji}
                 </span>
-                <span className="text-[10px] font-mono px-1.5 py-0.5 bg-[#070a12] border border-[#17233f] text-[#06B6D4]">
+                <span className="text-[10px] font-mono px-1.5 py-0.5 bg-[#070a12] border-[#17233f] text-[#06B6D4]">
                   {chNum}
                 </span>
               </div>
@@ -104,7 +104,7 @@ export const ChamberGrid: React.FC<Props> = ({ onSelectChamber }) => {
         return (
           <div
             id="chamber-inspector-modal"
-            className="mt-4 bg-[#0a0f1e] border border-[#D4AF37] p-4 text-xs font-mono"
+            className="mt-4 bg-[#0a0f1e] border-[#D4AF37] p-4 text-xs font-mono"
           >
             <div className="flex items-center justify-between border-b border-[#17233f] pb-2 mb-3">
               <div className="flex items-center gap-2">
@@ -119,7 +119,7 @@ export const ChamberGrid: React.FC<Props> = ({ onSelectChamber }) => {
               <button
                 id="close-chamber-inspector"
                 onClick={() => setSelectedChamber(null)}
-                className="text-[#9CA3AF] hover:text-[#D4AF37] border border-[#17233f] px-2 py-1 bg-[#070a12]"
+                className="text-[#9CA3AF] hover:text-[#D4AF37] border-[#17233f] px-2 py-1 bg-[#070a12]"
               >
                 ✕ CLOSE
               </button>
@@ -128,7 +128,7 @@ export const ChamberGrid: React.FC<Props> = ({ onSelectChamber }) => {
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
               <div>
                 <div className="text-[#06B6D4] font-bold mb-2"># SPECIFICATIONS & ANCHORS</div>
-                <div className="bg-[#070a12] border border-[#17233f] p-2 space-y-1.5">
+                <div className="bg-[#070a12] border-[#17233f] p-2 space-y-1.5">
                   {selSpecs.map((spec, i) => (
                     <div key={i} className="flex justify-between border-b border-[#17233f] pb-1">
                       <span className="text-[#9CA3AF]">{spec.label}:</span>
@@ -140,7 +140,7 @@ export const ChamberGrid: React.FC<Props> = ({ onSelectChamber }) => {
 
               <div>
                 <div className="text-[#06B6D4] font-bold mb-2"># REAL-TIME TELEMETRY & AUDIT</div>
-                <div className="bg-[#070a12] border border-[#17233f] p-2 space-y-2">
+                <div className="bg-[#070a12] border-[#17233f] p-2 space-y-2">
                   <div>
                     <span className="text-[#D4AF37]">Telemetry Stream:</span>
                     <p className="text-[#F3F4F6] mt-0.5">{selTelemetry}</p>

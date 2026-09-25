@@ -791,20 +791,20 @@ export const CanonicalSealsVerticalTimeline: React.FC<CanonicalSealsVerticalTime
   return (
     <div className="space-y-6 font-mono text-xs">
       {/* Top Controls & Court Dossier Export Header */}
-      <div className="p-5 sm:p-6 rounded-2xl bg-gradient-to-br from-[#070914]/95 via-[#0c1024]/90 to-[#070914]/95 border border-cyan-500/25 shadow-2xl relative overflow-hidden">
+      <div className="p-5 sm:p-6 rounded-2xl bg-gradient-to-br from-[#070914]/95 via-[#0c1024]/90 to-[#070914]/95 border-cyan-500/25 shadow-2xl relative overflow-hidden">
         <div className="absolute top-0 right-0 w-80 h-40 bg-cyan-500/10 rounded-full blur-3xl pointer-events-none" />
         <div className="flex flex-col lg:flex-row items-start lg:items-center justify-between gap-4 relative z-10">
           <div>
             <div className="flex items-center gap-2 flex-wrap mb-1.5">
-              <span className="px-2.5 py-1 rounded-full bg-cyan-500/15 text-cyan-300 border border-cyan-500/30 font-bold text-[11px] flex items-center gap-1.5">
+              <span className="px-2.5 py-1 rounded-full bg-cyan-500/15 text-cyan-300 border-cyan-500/30 font-bold text-[11px] flex items-center gap-1.5">
                 <Layers className="w-3.5 h-3.5 text-cyan-400" />
                 14,902 SEALS CHRONOLOGICAL TIMELINE
               </span>
-              <span className="px-2.5 py-1 rounded-full bg-emerald-500/15 text-emerald-300 border border-emerald-500/30 font-bold text-[11px] flex items-center gap-1.5">
+              <span className="px-2.5 py-1 rounded-full bg-emerald-500/15 text-emerald-300 border-emerald-500/30 font-bold text-[11px] flex items-center gap-1.5">
                 <CheckCircle2 className="w-3.5 h-3.5 text-emerald-400" />
                 BLOCKS #849198 – #849202
               </span>
-              <span className="px-2.5 py-1 rounded-full bg-amber-500/15 text-amber-300 border border-amber-500/30 font-bold text-[11px] flex items-center gap-1.5">
+              <span className="px-2.5 py-1 rounded-full bg-amber-500/15 text-amber-300 border-amber-500/30 font-bold text-[11px] flex items-center gap-1.5">
                 <Scale className="w-3.5 h-3.5 text-amber-400" />
                 COURT-READY DOSSIER EXPORT
               </span>
@@ -822,7 +822,7 @@ export const CanonicalSealsVerticalTimeline: React.FC<CanonicalSealsVerticalTime
             {/* Standardized JSON Audit Trail Download Button */}
             <button
               onClick={handleExportJson}
-              className="flex-1 sm:flex-initial px-4 py-2.5 rounded-xl font-bold bg-gradient-to-r from-emerald-600/30 via-cyan-600/25 to-emerald-600/30 hover:from-emerald-500/40 hover:to-cyan-500/40 border border-emerald-400/50 text-emerald-100 hover:text-white flex items-center justify-center gap-2 transition-all shadow-[0_0_20px_rgba(16,185,129,0.25)] hover:shadow-[0_0_25px_rgba(16,185,129,0.35)] text-xs"
+              className="flex-1 sm:flex-initial px-4 py-2.5 rounded-xl font-bold bg-gradient-to-r from-emerald-600/30 via-cyan-600/25 to-emerald-600/30 hover:from-emerald-500/40 hover:to-cyan-500/40 border-emerald-400/50 text-emerald-100 hover:text-white flex items-center justify-center gap-2 transition-all shadow-[0_0_20px_rgba(16,185,129,0.25)] hover:shadow-[0_0_25px_rgba(16,185,129,0.35)] text-xs"
               title="Download standardized JSON audit trail serializing full verification state, custodian quorum, and Merkle leaf proofs"
             >
               <FileCode className="w-4 h-4 text-emerald-300" />
@@ -833,7 +833,7 @@ export const CanonicalSealsVerticalTimeline: React.FC<CanonicalSealsVerticalTime
             {/* Cryptographically Signed PDF Dossier Download Button */}
             <button
               onClick={handleExportPdf}
-              className="flex-1 sm:flex-initial px-4 py-2.5 rounded-xl font-bold bg-gradient-to-r from-amber-600/35 via-yellow-600/25 to-amber-600/35 hover:from-amber-500/45 hover:to-yellow-500/45 border border-amber-400/60 text-amber-100 hover:text-white flex items-center justify-center gap-2 transition-all shadow-[0_0_25px_rgba(245,158,11,0.25)] hover:shadow-[0_0_30px_rgba(245,158,11,0.35)] text-xs"
+              className="flex-1 sm:flex-initial px-4 py-2.5 rounded-xl font-bold bg-gradient-to-r from-amber-600/35 via-yellow-600/25 to-amber-600/35 hover:from-amber-500/45 hover:to-yellow-500/45 border-amber-400/60 text-amber-100 hover:text-white flex items-center justify-center gap-2 transition-all shadow-[0_0_25px_rgba(245,158,11,0.25)] hover:shadow-[0_0_30px_rgba(245,158,11,0.35)] text-xs"
               title="Download court-ready dossier as a cryptographically signed PDF with NIST PQC digital signature block and Thai ETDA Sec 9/26/28 bindings"
             >
               <FileText className="w-4 h-4 text-amber-300" />
@@ -844,14 +844,14 @@ export const CanonicalSealsVerticalTimeline: React.FC<CanonicalSealsVerticalTime
         </div>
 
         {/* INTERACTIVE TIMELINE ZOOM SLIDER COMPONENT */}
-        <div className="mt-5 p-4 rounded-xl bg-black/60 border border-cyan-500/30 space-y-3">
+        <div className="mt-5 p-4 rounded-xl bg-black/60 border-cyan-500/30 space-y-3">
           <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
             <div className="flex items-center gap-2.5">
               <SlidersHorizontal className="w-4 h-4 text-cyan-400 animate-pulse" />
               <span className="text-white font-bold text-xs uppercase tracking-wider">
                 Timeline Granularity Zoom Slider:
               </span>
-              <span className="px-2.5 py-0.5 rounded-full bg-cyan-500/20 text-cyan-300 border border-cyan-500/40 text-[11px] font-bold">
+              <span className="px-2.5 py-0.5 rounded-full bg-cyan-500/20 text-cyan-300 border-cyan-500/40 text-[11px] font-bold">
                 {zoomMode === 'epoch' && '1x: Epoch Macro View (5 Epochs + Quarantine)'}
                 {zoomMode === 'daily' && '2x: Daily Aggregate View (5 Days / 24h Cycles)'}
                 {zoomMode === 'hourly' && '3x: Hourly High-Resolution Stream (10 Batches)'}
@@ -859,12 +859,12 @@ export const CanonicalSealsVerticalTimeline: React.FC<CanonicalSealsVerticalTime
             </div>
 
             {/* Direct Toggle Buttons */}
-            <div className="flex items-center gap-1.5 bg-[#0a0f1e] p-1 rounded-xl border border-cyan-500/20">
+            <div className="flex items-center gap-1.5 bg-[#0a0f1e] p-1 rounded-xl border-cyan-500/20">
               <button
                 onClick={() => handleZoomSliderChange(1)}
                 className={`px-3 py-1.5 rounded-lg text-xs font-bold transition-all flex items-center gap-1.5 ${
                   zoomMode === 'epoch'
-                    ? 'bg-cyan-500/30 text-cyan-200 border border-cyan-400 shadow-sm'
+                    ? 'bg-cyan-500/30 text-cyan-200 border-cyan-400 shadow-sm'
                     : 'text-zinc-400 hover:text-white'
                 }`}
               >
@@ -875,7 +875,7 @@ export const CanonicalSealsVerticalTimeline: React.FC<CanonicalSealsVerticalTime
                 onClick={() => handleZoomSliderChange(2)}
                 className={`px-3 py-1.5 rounded-lg text-xs font-bold transition-all flex items-center gap-1.5 ${
                   zoomMode === 'daily'
-                    ? 'bg-emerald-500/30 text-emerald-200 border border-emerald-400 shadow-sm'
+                    ? 'bg-emerald-500/30 text-emerald-200 border-emerald-400 shadow-sm'
                     : 'text-zinc-400 hover:text-white'
                 }`}
               >
@@ -886,7 +886,7 @@ export const CanonicalSealsVerticalTimeline: React.FC<CanonicalSealsVerticalTime
                 onClick={() => handleZoomSliderChange(3)}
                 className={`px-3 py-1.5 rounded-lg text-xs font-bold transition-all flex items-center gap-1.5 ${
                   zoomMode === 'hourly'
-                    ? 'bg-indigo-500/30 text-indigo-200 border border-indigo-400 shadow-sm'
+                    ? 'bg-indigo-500/30 text-indigo-200 border-indigo-400 shadow-sm'
                     : 'text-zinc-400 hover:text-white'
                 }`}
               >
@@ -943,7 +943,7 @@ export const CanonicalSealsVerticalTimeline: React.FC<CanonicalSealsVerticalTime
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
               placeholder="Filter timeline by Seal # (e.g. 14902), Block, Hash, Chamber, Actor, Date or Time Window..."
-              className="w-full pl-9.5 pr-4 py-2 rounded-xl bg-black/50 border border-cyan-500/30 text-cyan-100 placeholder-zinc-500 text-xs focus:outline-none focus:border-cyan-400 focus:ring-1 focus:ring-cyan-400 transition-all"
+              className="w-full pl-9.5 pr-4 py-2 rounded-xl bg-black/50 border-cyan-500/30 text-cyan-100 placeholder-zinc-500 text-xs focus:outline-none focus:border-cyan-400 focus:ring-1 focus:ring-cyan-400 transition-all"
             />
           </div>
         </div>
@@ -951,7 +951,7 @@ export const CanonicalSealsVerticalTimeline: React.FC<CanonicalSealsVerticalTime
 
       {/* Export Toast Notification */}
       {exportToast && (
-        <div className="p-4 rounded-xl bg-gradient-to-r from-emerald-950/90 via-cyan-950/80 to-[#070914] border border-emerald-500/60 text-emerald-200 text-xs flex items-center justify-between gap-3 shadow-2xl animate-in fade-in duration-200">
+        <div className="p-4 rounded-xl bg-gradient-to-r from-emerald-950/90 via-cyan-950/80 to-[#070914] border-emerald-500/60 text-emerald-200 text-xs flex items-center justify-between gap-3 shadow-2xl animate-in fade-in duration-200">
           <div className="flex items-center gap-2.5">
             <CheckCircle2 className="w-4 h-4 text-emerald-300 shrink-0" />
             <span>{exportToast}</span>
@@ -966,7 +966,7 @@ export const CanonicalSealsVerticalTimeline: React.FC<CanonicalSealsVerticalTime
       )}
 
       {/* Block Progression Bar (Historical Visualizer) */}
-      <div className="p-4 sm:p-5 rounded-2xl bg-[#080b18]/90 border border-white/10 backdrop-blur-xl">
+      <div className="p-4 sm:p-5 rounded-2xl bg-[#080b18]/90 border-white/10 backdrop-blur-xl">
         <div className="flex items-center justify-between mb-2">
           <span className="text-zinc-400 text-[11px] font-bold flex items-center gap-2">
             <Compass className="w-3.5 h-3.5 text-cyan-400" />
@@ -974,7 +974,7 @@ export const CanonicalSealsVerticalTimeline: React.FC<CanonicalSealsVerticalTime
           </span>
           <span className="text-emerald-400 font-bold text-xs">14,902 / 14,902 SEALS (100.0% SEALED &amp; FROZEN)</span>
         </div>
-        <div className="h-3 w-full bg-black/60 rounded-full overflow-hidden p-0.5 border border-white/10 flex gap-1">
+        <div className="h-3 w-full bg-black/60 rounded-full overflow-hidden p-0.5 border-white/10 flex gap-1">
           <div className="h-full rounded-full bg-gradient-to-r from-cyan-500 to-blue-500 transition-all" style={{ width: '16.7%' }} title="Epoch 1: Block #849198 (2,500 Seals)" />
           <div className="h-full rounded-full bg-gradient-to-r from-emerald-500 to-teal-500 transition-all" style={{ width: '23.5%' }} title="Epoch 2: Block #849199 (3,500 Seals)" />
           <div className="h-full rounded-full bg-gradient-to-r from-indigo-500 to-violet-500 transition-all" style={{ width: '26.8%' }} title="Epoch 3: Block #849200 (4,000 Seals)" />
@@ -1036,7 +1036,7 @@ export const CanonicalSealsVerticalTimeline: React.FC<CanonicalSealsVerticalTime
                   >
                     <div className="space-y-1">
                       <div className="flex items-center gap-2 flex-wrap">
-                        <span className="font-bold text-[11px] px-2.5 py-0.5 rounded bg-white/10 text-zinc-300 border border-white/10">
+                        <span className="font-bold text-[11px] px-2.5 py-0.5 rounded bg-white/10 text-zinc-300 border-white/10">
                           {epoch.epochId}
                         </span>
                         <span
@@ -1086,7 +1086,7 @@ export const CanonicalSealsVerticalTimeline: React.FC<CanonicalSealsVerticalTime
                         className="mt-4 pt-4 border-t border-white/10 space-y-4"
                       >
                         {/* Key Events Checklist */}
-                        <div className="space-y-1.5 bg-black/40 p-3.5 rounded-xl border border-white/5">
+                        <div className="space-y-1.5 bg-black/40 p-3.5 rounded-xl border-white/5">
                           <span className="text-[11px] font-bold text-zinc-400 tracking-wider">MILESTONE KEY INVARIANTS:</span>
                           <div className="grid grid-cols-1 md:grid-cols-3 gap-2 mt-1">
                             {epoch.keyEvents.map((evt, eIdx) => (
@@ -1100,11 +1100,11 @@ export const CanonicalSealsVerticalTimeline: React.FC<CanonicalSealsVerticalTime
 
                         {/* Cryptographic Proof Header */}
                         <div className="grid grid-cols-1 sm:grid-cols-2 gap-2 text-[11px]">
-                          <div className="p-2.5 rounded-lg bg-white/5 border border-white/5 flex items-center justify-between gap-2">
+                          <div className="p-2.5 rounded-lg bg-white/5 border-white/5 flex items-center justify-between gap-2">
                             <span className="text-zinc-400">PQC Suite:</span>
                             <span className="text-cyan-300 font-bold truncate">{epoch.pqcAlgorithm}</span>
                           </div>
-                          <div className="p-2.5 rounded-lg bg-white/5 border border-white/5 flex items-center justify-between gap-2">
+                          <div className="p-2.5 rounded-lg bg-white/5 border-white/5 flex items-center justify-between gap-2">
                             <span className="text-zinc-400">Custodian Leader:</span>
                             <span className="text-amber-300 font-bold truncate">{epoch.custodianLeader}</span>
                           </div>
@@ -1135,14 +1135,14 @@ export const CanonicalSealsVerticalTimeline: React.FC<CanonicalSealsVerticalTime
                                   <span
                                     className={`px-2 py-0.5 rounded font-bold text-[10px] ${
                                       seal.isKeyMilestone
-                                        ? 'bg-cyan-500/20 text-cyan-300 border border-cyan-500/30'
+                                        ? 'bg-cyan-500/20 text-cyan-300 border-cyan-500/30'
                                         : 'bg-white/10 text-zinc-300'
                                     }`}
                                   >
                                     SEAL #{seal.sealNumber.toLocaleString()}
                                   </span>
                                   <span className="font-bold text-zinc-200 text-xs">{seal.type}</span>
-                                  <span className="text-[10px] px-1.5 py-0.5 rounded bg-indigo-500/20 text-indigo-300 border border-indigo-500/30">
+                                  <span className="text-[10px] px-1.5 py-0.5 rounded bg-indigo-500/20 text-indigo-300 border-indigo-500/30">
                                     {seal.chamber}
                                   </span>
                                 </div>
@@ -1192,17 +1192,17 @@ export const CanonicalSealsVerticalTimeline: React.FC<CanonicalSealsVerticalTime
                   <Calendar className="w-3.5 h-3.5 text-emerald-300" />
                 </div>
 
-                <div className="rounded-2xl border border-white/10 bg-gradient-to-br from-[#080c1d]/90 via-[#060914]/90 to-[#080c1d]/90 p-5 backdrop-blur-xl hover:border-emerald-500/40 transition-all">
+                <div className="rounded-2xl border-white/10 bg-gradient-to-br from-[#080c1d]/90 via-[#060914]/90 to-[#080c1d]/90 p-5 backdrop-blur-xl hover:border-emerald-500/40 transition-all">
                   <div
                     onClick={() => toggleItem(day.dayId)}
                     className="cursor-pointer flex flex-col sm:flex-row sm:items-center justify-between gap-3 select-none"
                   >
                     <div className="space-y-1">
                       <div className="flex items-center gap-2 flex-wrap">
-                        <span className="font-bold text-[11px] px-2.5 py-0.5 rounded bg-emerald-500/20 text-emerald-300 border border-emerald-500/30">
+                        <span className="font-bold text-[11px] px-2.5 py-0.5 rounded bg-emerald-500/20 text-emerald-300 border-emerald-500/30">
                           {day.dayId} • {day.date}
                         </span>
-                        <span className="font-bold text-[11px] px-2.5 py-0.5 rounded bg-white/10 text-zinc-300 border border-white/10">
+                        <span className="font-bold text-[11px] px-2.5 py-0.5 rounded bg-white/10 text-zinc-300 border-white/10">
                           {day.blockRange}
                         </span>
                         <span className="font-bold text-[11px] text-cyan-300">
@@ -1219,7 +1219,7 @@ export const CanonicalSealsVerticalTimeline: React.FC<CanonicalSealsVerticalTime
                     <div className="flex items-center gap-3 shrink-0">
                       <div className="flex items-center gap-1.5 flex-wrap">
                         {day.activeChambers.map((ch) => (
-                          <span key={ch} className="px-2 py-0.5 rounded bg-indigo-500/20 text-indigo-300 border border-indigo-500/30 text-[10px] font-bold">
+                          <span key={ch} className="px-2 py-0.5 rounded bg-indigo-500/20 text-indigo-300 border-indigo-500/30 text-[10px] font-bold">
                             {ch}
                           </span>
                         ))}
@@ -1243,11 +1243,11 @@ export const CanonicalSealsVerticalTimeline: React.FC<CanonicalSealsVerticalTime
                         className="mt-4 pt-4 border-t border-white/10 space-y-4"
                       >
                         <div className="grid grid-cols-1 sm:grid-cols-2 gap-2 text-[11px]">
-                          <div className="p-2.5 rounded-lg bg-black/40 border border-white/5">
+                          <div className="p-2.5 rounded-lg bg-black/40 border-white/5">
                             <span className="text-zinc-500 text-[10px] block">Day Merkle Checkpoint Hash:</span>
                             <span className="text-cyan-300 font-mono text-[11px] break-all">{day.merkleCheckpointHash}</span>
                           </div>
-                          <div className="p-2.5 rounded-lg bg-black/40 border border-white/5">
+                          <div className="p-2.5 rounded-lg bg-black/40 border-white/5">
                             <span className="text-zinc-500 text-[10px] block">PQC Suite &amp; Lead Auditor:</span>
                             <span className="text-amber-300 font-bold block">{day.pqcAlgorithm}</span>
                             <span className="text-zinc-400 text-[10px]">{day.leadAuditor}</span>
@@ -1269,7 +1269,7 @@ export const CanonicalSealsVerticalTimeline: React.FC<CanonicalSealsVerticalTime
                                     originContext: `${day.dayId} (${day.dayLabel})`,
                                   })
                                 }
-                                className="p-3 rounded-xl bg-black/40 border border-white/5 hover:border-emerald-500/40 transition-all cursor-pointer flex flex-col sm:flex-row sm:items-center justify-between gap-2.5"
+                                className="p-3 rounded-xl bg-black/40 border-white/5 hover:border-emerald-500/40 transition-all cursor-pointer flex flex-col sm:flex-row sm:items-center justify-between gap-2.5"
                               >
                                 <div className="flex items-center gap-3">
                                   <span className="px-2 py-0.5 rounded bg-emerald-500/20 text-emerald-300 font-bold text-[10px]">
@@ -1330,7 +1330,7 @@ export const CanonicalSealsVerticalTimeline: React.FC<CanonicalSealsVerticalTime
                   >
                     <div className="space-y-1">
                       <div className="flex items-center gap-2 flex-wrap">
-                        <span className="font-bold text-[11px] px-2.5 py-0.5 rounded bg-indigo-500/20 text-indigo-300 border border-indigo-500/30">
+                        <span className="font-bold text-[11px] px-2.5 py-0.5 rounded bg-indigo-500/20 text-indigo-300 border-indigo-500/30">
                           {hour.hourId} • {hour.timeLabel}
                         </span>
                         <span className="font-bold text-[11px] px-2.5 py-0.5 rounded bg-white/10 text-zinc-300">
@@ -1348,10 +1348,10 @@ export const CanonicalSealsVerticalTimeline: React.FC<CanonicalSealsVerticalTime
 
                     <div className="flex items-center gap-3 shrink-0">
                       <div className="flex items-center gap-2 text-[11px] font-mono">
-                        <span className="px-2 py-0.5 rounded bg-emerald-500/15 text-emerald-300 border border-emerald-500/30">
+                        <span className="px-2 py-0.5 rounded bg-emerald-500/15 text-emerald-300 border-emerald-500/30">
                           {hour.throughputPerSec} seals/s
                         </span>
-                        <span className="px-2 py-0.5 rounded bg-cyan-500/15 text-cyan-300 border border-cyan-500/30">
+                        <span className="px-2 py-0.5 rounded bg-cyan-500/15 text-cyan-300 border-cyan-500/30">
                           {hour.avgChamberLatencyMs}ms
                         </span>
                       </div>
@@ -1374,11 +1374,11 @@ export const CanonicalSealsVerticalTimeline: React.FC<CanonicalSealsVerticalTime
                         className="mt-4 pt-4 border-t border-white/10 space-y-4"
                       >
                         <div className="grid grid-cols-1 sm:grid-cols-2 gap-2 text-[11px]">
-                          <div className="p-2.5 rounded-lg bg-black/40 border border-white/5">
+                          <div className="p-2.5 rounded-lg bg-black/40 border-white/5">
                             <span className="text-zinc-500 text-[10px] block">Lead Execution Chamber:</span>
                             <span className="text-emerald-300 font-bold">{hour.leadChamber}</span>
                           </div>
-                          <div className="p-2.5 rounded-lg bg-black/40 border border-white/5">
+                          <div className="p-2.5 rounded-lg bg-black/40 border-white/5">
                             <span className="text-zinc-500 text-[10px] block">Leaf Merkle Proof Sample:</span>
                             <span className="text-cyan-300 font-mono text-[10px] truncate block">{hour.merkleLeafSample}</span>
                           </div>
@@ -1399,7 +1399,7 @@ export const CanonicalSealsVerticalTimeline: React.FC<CanonicalSealsVerticalTime
                                     originContext: `${hour.hourId} (${hour.timeLabel})`,
                                   })
                                 }
-                                className="p-3 rounded-xl bg-black/50 border border-white/5 hover:border-indigo-500/40 transition-all cursor-pointer flex flex-col sm:flex-row sm:items-center justify-between gap-2.5"
+                                className="p-3 rounded-xl bg-black/50 border-white/5 hover:border-indigo-500/40 transition-all cursor-pointer flex flex-col sm:flex-row sm:items-center justify-between gap-2.5"
                               >
                                 <div className="flex items-center gap-3">
                                   <span className="px-2 py-0.5 rounded bg-indigo-500/20 text-indigo-300 font-bold text-[10px]">
@@ -1436,7 +1436,7 @@ export const CanonicalSealsVerticalTimeline: React.FC<CanonicalSealsVerticalTime
               initial={{ opacity: 0, scale: 0.95 }}
               animate={{ opacity: 1, scale: 1 }}
               exit={{ opacity: 0, scale: 0.95 }}
-              className="w-full max-w-2xl bg-[#080b18] border border-cyan-500/40 rounded-2xl p-6 shadow-2xl space-y-4 relative overflow-hidden font-mono text-xs"
+              className="w-full max-w-2xl bg-[#080b18] border-cyan-500/40 rounded-2xl p-6 shadow-2xl space-y-4 relative overflow-hidden font-mono text-xs"
             >
               <div className="flex items-center justify-between border-b border-white/10 pb-3">
                 <div className="flex items-center gap-2">
@@ -1455,21 +1455,21 @@ export const CanonicalSealsVerticalTimeline: React.FC<CanonicalSealsVerticalTime
 
               <div className="space-y-3">
                 <div className="grid grid-cols-3 gap-2 text-[11px]">
-                  <div className="p-3 rounded-xl bg-black/50 border border-white/10">
+                  <div className="p-3 rounded-xl bg-black/50 border-white/10">
                     <span className="text-zinc-500 block">Block Height</span>
                     <span className="text-cyan-300 font-bold text-sm">#{selectedSealSample.block}</span>
                   </div>
-                  <div className="p-3 rounded-xl bg-black/50 border border-white/10">
+                  <div className="p-3 rounded-xl bg-black/50 border-white/10">
                     <span className="text-zinc-500 block">Issuing Chamber</span>
                     <span className="text-emerald-300 font-bold text-sm">{selectedSealSample.chamber}</span>
                   </div>
-                  <div className="p-3 rounded-xl bg-black/50 border border-white/10">
+                  <div className="p-3 rounded-xl bg-black/50 border-white/10">
                     <span className="text-zinc-500 block">Timestamp</span>
                     <span className="text-zinc-300 font-bold text-xs">{selectedSealSample.time || '00:00:00 ICT'}</span>
                   </div>
                 </div>
 
-                <div className="p-3.5 rounded-xl bg-black/60 border border-white/10 space-y-1">
+                <div className="p-3.5 rounded-xl bg-black/60 border-white/10 space-y-1">
                   <span className="text-zinc-500 text-[10px] block">Cryptographic Seal Hash (SHA-256 / Post-Quantum Lattice):</span>
                   <div className="flex items-center justify-between gap-2">
                     <span className="text-white font-mono text-xs break-all">{selectedSealSample.hash}</span>
@@ -1482,12 +1482,12 @@ export const CanonicalSealsVerticalTimeline: React.FC<CanonicalSealsVerticalTime
                   </div>
                 </div>
 
-                <div className="p-3.5 rounded-xl bg-black/60 border border-white/10 space-y-1">
+                <div className="p-3.5 rounded-xl bg-black/60 border-white/10 space-y-1">
                   <span className="text-zinc-500 text-[10px] block">Parent Predecessor Hash:</span>
                   <span className="text-zinc-300 font-mono text-xs break-all">{selectedSealSample.parentHash}</span>
                 </div>
 
-                <div className="p-3.5 rounded-xl bg-emerald-950/30 border border-emerald-500/40 text-emerald-200 text-xs space-y-1">
+                <div className="p-3.5 rounded-xl bg-emerald-950/30 border-emerald-500/40 text-emerald-200 text-xs space-y-1">
                   <div className="flex items-center gap-1.5 font-bold">
                     <CheckCircle2 className="w-4 h-4 text-emerald-400" />
                     <span>Inclusion Proof Confirmed in Genesis Root:</span>
@@ -1499,13 +1499,13 @@ export const CanonicalSealsVerticalTimeline: React.FC<CanonicalSealsVerticalTime
               <div className="pt-3 border-t border-white/10 flex justify-end gap-2">
                 <button
                   onClick={handleExportPdf}
-                  className="px-4 py-2 rounded-xl bg-amber-500/20 hover:bg-amber-500/30 text-amber-200 border border-amber-500/40 font-bold"
+                  className="px-4 py-2 rounded-xl bg-amber-500/20 hover:bg-amber-500/30 text-amber-200 border-amber-500/40 font-bold"
                 >
                   Export in Court Dossier (PDF)
                 </button>
                 <button
                   onClick={() => setSelectedSealSample(null)}
-                  className="px-4 py-2 rounded-xl bg-cyan-500/20 hover:bg-cyan-500/30 text-cyan-200 border border-cyan-500/40 font-bold"
+                  className="px-4 py-2 rounded-xl bg-cyan-500/20 hover:bg-cyan-500/30 text-cyan-200 border-cyan-500/40 font-bold"
                 >
                   Done
                 </button>

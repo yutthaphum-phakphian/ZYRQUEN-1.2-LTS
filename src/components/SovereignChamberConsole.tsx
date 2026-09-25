@@ -366,14 +366,14 @@ export const SovereignChamberConsole: React.FC = () => {
       <div className="max-w-7xl mx-auto space-y-6">
 
         {/* Top Navigation Header */}
-        <div className="flex flex-wrap items-center justify-between gap-4 p-5 bg-slate-900 border border-slate-800 rounded-2xl shadow-2xl">
+        <div className="flex flex-wrap items-center justify-between gap-4 p-5 bg-slate-900 border-slate-800 rounded-2xl shadow-2xl">
           <div className="flex items-center gap-3.5">
-            <div className="p-3 bg-cyan-950 border border-cyan-800/80 rounded-xl text-cyan-400">
+            <div className="p-3 bg-cyan-950 border-cyan-800/80 rounded-xl text-cyan-400">
               <Cpu className="w-7 h-7" />
             </div>
             <div>
               <div className="flex items-center gap-2">
-                <span className="px-2 py-0.5 bg-cyan-950 text-cyan-400 border border-cyan-800 rounded text-[10px] font-mono font-bold">
+                <span className="px-2 py-0.5 bg-cyan-950 text-cyan-400 border-cyan-800 rounded text-[10px] font-mono font-bold">
                   CRYONIC SSoT SENTINEL
                 </span>
                 <span className="text-xs text-slate-400">18-Cell Quantum Grid</span>
@@ -389,7 +389,7 @@ export const SovereignChamberConsole: React.FC = () => {
             <button
               type="button"
               onClick={handleExportCSV}
-              className="flex items-center gap-2 px-3.5 py-2.5 bg-emerald-950 hover:bg-emerald-900 text-emerald-300 border border-emerald-700/80 rounded-xl text-xs font-bold transition-all shadow cursor-pointer"
+              className="flex items-center gap-2 px-3.5 py-2.5 bg-emerald-950 hover:bg-emerald-900 text-emerald-300 border-emerald-700/80 rounded-xl text-xs font-bold transition-all shadow cursor-pointer"
             >
               <FileSpreadsheet className="w-4 h-4 text-emerald-400" />
               <span>Export Chamber CSV</span>
@@ -480,7 +480,7 @@ export const SovereignChamberConsole: React.FC = () => {
                 <button
                   type="button"
                   onClick={handleExportSelectedCSV}
-                  className="flex items-center gap-1.5 px-3 py-1.5 bg-slate-900 hover:bg-slate-800 text-cyan-300 border border-cyan-700/80 font-bold rounded-lg transition-all cursor-pointer"
+                  className="flex items-center gap-1.5 px-3 py-1.5 bg-slate-900 hover:bg-slate-800 text-cyan-300 border-cyan-700/80 font-bold rounded-lg transition-all cursor-pointer"
                 >
                   <FileSpreadsheet className="w-3.5 h-3.5 text-cyan-400" />
                   <span>Export Selected ({selectedChamberIds.size})</span>
@@ -492,7 +492,7 @@ export const SovereignChamberConsole: React.FC = () => {
                     setDossierActiveTab('chamber_field_qr');
                     setIsDossierModalOpen(true);
                   }}
-                  className="flex items-center gap-1.5 px-3 py-1.5 bg-slate-900 hover:bg-slate-800 text-emerald-300 border border-emerald-700/80 font-bold rounded-lg transition-all cursor-pointer"
+                  className="flex items-center gap-1.5 px-3 py-1.5 bg-slate-900 hover:bg-slate-800 text-emerald-300 border-emerald-700/80 font-bold rounded-lg transition-all cursor-pointer"
                 >
                   <QrCode className="w-3.5 h-3.5 text-emerald-400" />
                   <span>Field QR Badges</span>
@@ -512,13 +512,13 @@ export const SovereignChamberConsole: React.FC = () => {
         </AnimatePresence>
 
         {/* Toolbar: Sorting & Grid Density Toggle */}
-        <div className="flex flex-wrap items-center justify-between gap-4 p-4 bg-slate-900/80 border border-slate-800 rounded-xl">
+        <div className="flex flex-wrap items-center justify-between gap-4 p-4 bg-slate-900/80 border-slate-800 rounded-xl">
           <div className="flex items-center gap-3">
             {/* Select All Toggle */}
             <button
               type="button"
               onClick={handleSelectAll}
-              className="flex items-center gap-1.5 px-3 py-1.5 bg-slate-950 border border-slate-700 hover:border-cyan-500 text-slate-300 hover:text-cyan-400 rounded-lg text-xs font-mono transition-all cursor-pointer"
+              className="flex items-center gap-1.5 px-3 py-1.5 bg-slate-950 border-slate-700 hover:border-cyan-500 text-slate-300 hover:text-cyan-400 rounded-lg text-xs font-mono transition-all cursor-pointer"
             >
               {selectedChamberIds.size === chambers.length ? (
                 <>
@@ -537,7 +537,7 @@ export const SovereignChamberConsole: React.FC = () => {
             <button
               type="button"
               onClick={() => setGridDensity(prev => prev === 'compact' ? 'expanded' : 'compact')}
-              className="flex items-center gap-2 px-3 py-1.5 bg-slate-950 border border-slate-700 hover:border-cyan-500 text-cyan-400 rounded-lg text-xs font-mono font-bold transition-all cursor-pointer"
+              className="flex items-center gap-2 px-3 py-1.5 bg-slate-950 border-slate-700 hover:border-cyan-500 text-cyan-400 rounded-lg text-xs font-mono font-bold transition-all cursor-pointer"
             >
               <Grid className="w-4 h-4" />
               <span>Density: {gridDensity === 'compact' ? 'Compact 6-Col' : 'Expanded 3-Col'}</span>
@@ -554,7 +554,7 @@ export const SovereignChamberConsole: React.FC = () => {
                   id="chamber-sort-select"
                   value={sortCriterion}
                   onChange={(e) => setSortCriterion(e.target.value as SortCriterion)}
-                  className="bg-slate-950 border border-cyan-500/50 hover:border-cyan-400 text-cyan-300 font-bold rounded-lg px-3 py-1.5 pr-8 text-xs font-mono focus:outline-none focus:ring-1 focus:ring-cyan-400 appearance-none cursor-pointer"
+                  className="bg-slate-950 border-cyan-500/50 hover:border-cyan-400 text-cyan-300 font-bold rounded-lg px-3 py-1.5 pr-8 text-xs font-mono focus:outline-none focus:ring-1 focus:ring-cyan-400 appearance-none cursor-pointer"
                 >
                   <option value="status_unstable">⚠️ Unstable First</option>
                   <option value="status_pure">🟢 Pure Green First</option>
@@ -626,10 +626,10 @@ export const SovereignChamberConsole: React.FC = () => {
 
                       <span className={`px-2 py-0.5 rounded text-[9px] font-bold uppercase tracking-wider ${
                         isLowCoherence
-                          ? 'bg-rose-950 text-rose-300 border border-rose-700'
+                          ? 'bg-rose-950 text-rose-300 border-rose-700'
                           : isPure
-                          ? 'bg-emerald-950 text-emerald-400 border border-emerald-800'
-                          : 'bg-amber-900/80 text-amber-300 border border-amber-700'
+                          ? 'bg-emerald-950 text-emerald-400 border-emerald-800'
+                          : 'bg-amber-900/80 text-amber-300 border-amber-700'
                       }`}>
                         {isLowCoherence ? 'LOCKDOWN' : isPure ? 'Pure Green' : 'Unstable'}
                       </span>
@@ -706,7 +706,7 @@ export const SovereignChamberConsole: React.FC = () => {
       {/* FORENSIC AUDIT MASTER DOSSIER MODAL */}
       {isDossierModalOpen && (
         <div className="fixed inset-0 bg-slate-950/85 backdrop-blur-md flex items-center justify-center p-4 z-50 animate-in fade-in duration-200">
-          <div className="bg-slate-900 border border-emerald-500/50 rounded-2xl w-full max-w-4xl p-6 shadow-2xl relative text-slate-100 max-h-[92vh] overflow-y-auto space-y-4">
+          <div className="bg-slate-900 border-emerald-500/50 rounded-2xl w-full max-w-4xl p-6 shadow-2xl relative text-slate-100 max-h-[92vh] overflow-y-auto space-y-4">
             <div className="flex items-start justify-between border-b border-slate-800 pb-3">
               <div>
                 <h2 className="text-xl font-black text-white flex items-center gap-2">
@@ -728,15 +728,15 @@ export const SovereignChamberConsole: React.FC = () => {
 
             {/* Modal Badges */}
             <div className="flex flex-wrap items-center gap-2 font-mono text-[11px]">
-              <span className="px-2.5 py-1 rounded bg-emerald-950/90 border border-emerald-700/80 text-emerald-400 font-semibold flex items-center gap-1.5">
+              <span className="px-2.5 py-1 rounded bg-emerald-950/90 border-emerald-700/80 text-emerald-400 font-semibold flex items-center gap-1.5">
                 <CheckCircle2 className="w-3.5 h-3.5" />
                 LOCKED_FROZEN_v1.2_LTS
               </span>
-              <span className="px-2.5 py-1 rounded bg-cyan-950/90 border border-cyan-700/80 text-cyan-400 font-semibold flex items-center gap-1.5">
+              <span className="px-2.5 py-1 rounded bg-cyan-950/90 border-cyan-700/80 text-cyan-400 font-semibold flex items-center gap-1.5">
                 <Lock className="w-3.5 h-3.5" />
                 10/10 REAL_HSM QUORUM
               </span>
-              <span className="px-2.5 py-1 rounded bg-purple-950/90 border border-purple-700/80 text-purple-400 font-semibold flex items-center gap-1.5">
+              <span className="px-2.5 py-1 rounded bg-purple-950/90 border-purple-700/80 text-purple-400 font-semibold flex items-center gap-1.5">
                 <ShieldCheck className="w-3.5 h-3.5" />
                 SSoT Δ0 ZERO DRIFT (0.00%)
               </span>
@@ -792,7 +792,7 @@ export const SovereignChamberConsole: React.FC = () => {
             {/* TAB 1: MASTER SSOT QR VERIFICATION */}
             {dossierActiveTab === 'qr_verify' && (
               <div className="grid grid-cols-1 md:grid-cols-12 gap-5 pr-1">
-                <div className="md:col-span-5 flex flex-col items-center justify-center bg-slate-950/80 p-4 rounded-xl border border-slate-800 text-center">
+                <div className="md:col-span-5 flex flex-col items-center justify-center bg-slate-950/80 p-4 rounded-xl border-slate-800 text-center">
                   <ForensicDossierQRCode
                     payloadUrl={`https://zyrquen.internal/verify?block=849202&merkle=0x909ab814479844d8a14816bed34cdbb07528e18501da86fc4691763a43fa4c68&status=LOCKED_FROZEN_v1.2_LTS&seals=14902`}
                     size={190}
@@ -816,7 +816,7 @@ export const SovereignChamberConsole: React.FC = () => {
                     <button
                       type="button"
                       onClick={() => setDossierActiveTab('chamber_field_qr')}
-                      className="px-3 py-1.5 bg-emerald-950 hover:bg-emerald-900 text-emerald-300 border border-emerald-800/80 rounded-lg transition-all flex items-center justify-center gap-1.5 cursor-pointer font-bold"
+                      className="px-3 py-1.5 bg-emerald-950 hover:bg-emerald-900 text-emerald-300 border-emerald-800/80 rounded-lg transition-all flex items-center justify-center gap-1.5 cursor-pointer font-bold"
                     >
                       <Smartphone className="w-3.5 h-3.5" />
                       <span>View Individual Chamber QRs (18)</span>
@@ -824,28 +824,28 @@ export const SovereignChamberConsole: React.FC = () => {
                   </div>
                 </div>
 
-                <div className="md:col-span-7 bg-slate-950/80 p-4 rounded-xl border border-slate-800 font-mono text-xs space-y-3">
+                <div className="md:col-span-7 bg-slate-950/80 p-4 rounded-xl border-slate-800 font-mono text-xs space-y-3">
                   <div className="text-emerald-400 font-bold border-b border-slate-800 pb-1.5 flex items-center gap-2">
                     <ShieldCheck className="w-4 h-4" />
                     <span>Cryptographic Forensic Identity Invariants</span>
                   </div>
                   <div>
                     <span className="text-slate-500 text-[10px]">Anchor Merkle Root Digest:</span>
-                    <p className="text-cyan-400 font-bold break-all bg-slate-900 p-2 rounded border border-slate-800 mt-0.5 text-[11px]">
+                    <p className="text-cyan-400 font-bold break-all bg-slate-900 p-2 rounded border-slate-800 mt-0.5 text-[11px]">
                       0x909ab814479844d8a14816bed34cdbb07528e18501da86fc4691763a43fa4c68
                     </p>
                   </div>
                   <div className="grid grid-cols-2 gap-2 text-[11px]">
-                    <div className="bg-slate-900 p-2 rounded border border-slate-800">
+                    <div className="bg-slate-900 p-2 rounded border-slate-800">
                       <span className="text-slate-500 text-[10px] block">Anchor Block Height:</span>
                       <span className="text-emerald-400 font-bold">#849202 (LTS SSoT)</span>
                     </div>
-                    <div className="bg-slate-900 p-2 rounded border border-slate-800">
+                    <div className="bg-slate-900 p-2 rounded border-slate-800">
                       <span className="text-slate-500 text-[10px] block">Cryptographic Scheme:</span>
                       <span className="text-purple-300 font-bold">Dilithium-5 (ML-DSA-87)</span>
                     </div>
                   </div>
-                  <div className="bg-slate-900 p-2 rounded border border-slate-800 text-[11px]">
+                  <div className="bg-slate-900 p-2 rounded border-slate-800 text-[11px]">
                     <span className="text-slate-500 text-[10px] block">Statutory Evidence Standard:</span>
                     <span className="text-slate-200">Thai Electronic Transactions Act B.E. 2544 (Sec 9, 26, 28)</span>
                   </div>
@@ -867,18 +867,18 @@ export const SovereignChamberConsole: React.FC = () => {
 
             {/* TAB 3: CAMERA CROSS-SCAN MODE */}
             {dossierActiveTab === 'camera_scan' && (
-              <div className="bg-slate-950 p-5 rounded-xl border border-slate-800 text-center font-mono space-y-4">
+              <div className="bg-slate-950 p-5 rounded-xl border-slate-800 text-center font-mono space-y-4">
                 <div className="flex items-center justify-center gap-2 text-cyan-400 font-bold text-sm">
                   <Scan className="w-5 h-5" />
                   <span>Optical Camera Cross-Scan Field Simulation</span>
                 </div>
                 {simulatedScanResult ? (
-                  <div className="bg-emerald-950/80 border border-emerald-500/80 p-4 rounded-xl text-left space-y-2">
+                  <div className="bg-emerald-950/80 border-emerald-500/80 p-4 rounded-xl text-left space-y-2">
                     <div className="text-emerald-400 font-bold flex items-center gap-2">
                       <CheckCircle2 className="w-4 h-4" />
                       <span>Decoded Valid Field Scan Result:</span>
                     </div>
-                    <p className="text-xs text-slate-200 break-all bg-slate-900 p-3 rounded border border-slate-800">
+                    <p className="text-xs text-slate-200 break-all bg-slate-900 p-3 rounded border-slate-800">
                       {simulatedScanResult}
                     </p>
                     <div className="text-[11px] text-emerald-300 flex items-center gap-2">
@@ -903,7 +903,7 @@ export const SovereignChamberConsole: React.FC = () => {
 
             {/* TAB 4: DOSSIER TECHNICAL BREAKDOWN */}
             {dossierActiveTab === 'breakdown' && (
-              <div className="bg-slate-950 p-4 rounded-xl border border-slate-800 font-mono text-xs space-y-4 overflow-y-auto max-h-[58vh]">
+              <div className="bg-slate-950 p-4 rounded-xl border-slate-800 font-mono text-xs space-y-4 overflow-y-auto max-h-[58vh]">
                 <div className="flex justify-between items-center border-b border-slate-800 pb-2">
                   <span className="text-emerald-400 font-bold">18-Chamber Field Verification Roster</span>
                   <button
@@ -962,7 +962,7 @@ export const SovereignChamberConsole: React.FC = () => {
       {/* 14,902 BATCH AUDIT SIMULATION MODAL */}
       {isBatchModalOpen && (
         <div className="fixed inset-0 bg-slate-950/85 backdrop-blur-md flex items-center justify-center p-4 z-50 animate-in fade-in duration-200">
-          <div className="bg-slate-900 border border-cyan-500/50 rounded-2xl w-full max-w-3xl p-6 shadow-2xl relative text-slate-100 max-h-[92vh] overflow-y-auto space-y-5 font-mono text-xs">
+          <div className="bg-slate-900 border-cyan-500/50 rounded-2xl w-full max-w-3xl p-6 shadow-2xl relative text-slate-100 max-h-[92vh] overflow-y-auto space-y-5 font-mono text-xs">
             <div className="flex items-start justify-between border-b border-slate-800 pb-3">
               <div>
                 <h2 className="text-xl font-black text-white flex items-center gap-2">
@@ -983,22 +983,22 @@ export const SovereignChamberConsole: React.FC = () => {
             </div>
 
             <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
-              <div className="bg-slate-950 p-3 rounded-xl border border-slate-800">
+              <div className="bg-slate-950 p-3 rounded-xl border-slate-800">
                 <span className="text-slate-500 text-[10px] block">Total Batch Chambers</span>
                 <span className="text-xl font-bold text-white">{TOTAL_BATCH_CHAMBERS.toLocaleString()}</span>
               </div>
-              <div className="bg-slate-950 p-3 rounded-xl border border-slate-800">
+              <div className="bg-slate-950 p-3 rounded-xl border-slate-800">
                 <span className="text-slate-500 text-[10px] block">Verified Passed</span>
                 <span className="text-xl font-bold text-emerald-400">{PASSED_BATCH_CHAMBERS.toLocaleString()}</span>
               </div>
-              <div className="bg-slate-950 p-3 rounded-xl border border-slate-800">
+              <div className="bg-slate-950 p-3 rounded-xl border-slate-800">
                 <span className="text-slate-500 text-[10px] block">Unstable / Quarantined</span>
                 <span className="text-xl font-bold text-amber-400">{UNSTABLE_BATCH_CHAMBERS}</span>
               </div>
             </div>
 
             {/* Progress Bar */}
-            <div className="bg-slate-950 p-4 rounded-xl border border-slate-800 space-y-2">
+            <div className="bg-slate-950 p-4 rounded-xl border-slate-800 space-y-2">
               <div className="flex justify-between items-center text-xs">
                 <span className="text-slate-400">Attestation Pipeline Progress</span>
                 <span className="text-cyan-400 font-bold">{batchProgress}%</span>
@@ -1055,7 +1055,7 @@ export const SovereignChamberConsole: React.FC = () => {
               </div>
 
               {priorityLockdownQueue.length === 0 ? (
-                <div className="p-6 text-center text-slate-500 border border-slate-800 rounded-xl space-y-2">
+                <div className="p-6 text-center text-slate-500 border-slate-800 rounded-xl space-y-2">
                   <CheckCircle2 className="w-8 h-8 text-emerald-400 mx-auto" />
                   <p className="font-bold text-slate-300">All Chambers Operating Normative</p>
                   <p className="text-[11px]">No chambers currently below 90% coherence threshold.</p>
@@ -1063,7 +1063,7 @@ export const SovereignChamberConsole: React.FC = () => {
               ) : (
                 <div className="space-y-3 overflow-y-auto max-h-[70vh]">
                   {priorityLockdownQueue.map(c => (
-                    <div key={c.id} className="p-3 bg-rose-950/30 border border-rose-600/70 rounded-xl space-y-2">
+                    <div key={c.id} className="p-3 bg-rose-950/30 border-rose-600/70 rounded-xl space-y-2">
                       <div className="flex justify-between items-center">
                         <span className="font-bold text-rose-300">{c.chamberId} — {c.name}</span>
                         <span className="px-2 py-0.5 bg-rose-900/80 text-rose-200 rounded text-[10px] font-bold">
@@ -1106,7 +1106,7 @@ export const SovereignChamberConsole: React.FC = () => {
         {toastAlerts.map(toast => (
           <div
             key={toast.id}
-            className="p-3.5 bg-slate-900 border border-rose-500/80 rounded-xl shadow-2xl text-slate-100 font-mono text-xs flex items-start gap-3 pointer-events-auto animate-in slide-in-from-right duration-200"
+            className="p-3.5 bg-slate-900 border-rose-500/80 rounded-xl shadow-2xl text-slate-100 font-mono text-xs flex items-start gap-3 pointer-events-auto animate-in slide-in-from-right duration-200"
           >
             <Siren className="w-5 h-5 text-rose-400 shrink-0 mt-0.5 animate-pulse" />
             <div className="flex-1">

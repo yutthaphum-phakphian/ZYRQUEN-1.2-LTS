@@ -141,7 +141,7 @@ export const Sovereign3DControlPlane: React.FC<Sovereign3DControlPlaneProps> = (
   }, [isRotating]);
 
   return (
-    <div className="w-full bg-zinc-950 border border-zinc-800 rounded-2xl overflow-hidden font-mono shadow-2xl relative">
+    <div className="w-full bg-zinc-950 border-zinc-800 rounded-2xl overflow-hidden font-mono shadow-2xl relative">
       <div className="absolute top-0 left-0 right-0 z-10 p-4 bg-gradient-to-b from-zinc-950/90 to-transparent flex items-center justify-between">
         <div className="flex items-center gap-3">
           <Cpu className="w-5 h-5 text-amber-400 animate-pulse" />
@@ -153,7 +153,7 @@ export const Sovereign3DControlPlane: React.FC<Sovereign3DControlPlaneProps> = (
         <button
           type="button"
           onClick={() => setIsRotating((rotating) => !rotating)}
-          className="px-3 py-1.5 rounded bg-zinc-900 border border-zinc-700 text-zinc-300 text-xs flex items-center gap-1.5"
+          className="px-3 py-1.5 rounded bg-zinc-900 border-zinc-700 text-zinc-300 text-xs flex items-center gap-1.5"
         >
           {isRotating ? <Pause className="w-3.5 h-3.5" /> : <Play className="w-3.5 h-3.5" />}
           <span>{isRotating ? 'Pause' : 'Resume'}</span>

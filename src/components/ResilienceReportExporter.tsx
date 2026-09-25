@@ -133,7 +133,7 @@ export const ResilienceReportExporter: React.FC<ResilienceReportExporterProps> =
     <button
       onClick={generatePDFReport}
       disabled={isExporting}
-      className="flex items-center gap-1.5 px-3 py-1.5 bg-cyan-950/60 hover:bg-cyan-900/80 border border-cyan-500/40 hover:border-cyan-400 text-cyan-300 rounded-lg text-xs font-mono font-semibold transition-all cursor-pointer shadow-sm disabled:opacity-50"
+      className="flex items-center gap-1.5 px-3 py-1.5 bg-cyan-950/60 hover:bg-cyan-900/80 border-cyan-500/40 hover:border-cyan-400 text-cyan-300 rounded-lg text-xs font-mono font-semibold transition-all cursor-pointer shadow-sm disabled:opacity-50"
       title="ส่งออกรายงานการตรวจสอบความคงทนและสุขภาพห้องปฏิบัติการเป็น PDF ทางนิติวิทยาศาสตร์"
     >
       <FileText className={`w-3.5 h-3.5 ${isExporting ? 'animate-bounce text-amber-300' : 'text-cyan-400'}`} />

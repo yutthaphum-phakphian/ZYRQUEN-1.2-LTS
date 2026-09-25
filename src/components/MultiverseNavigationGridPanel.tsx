@@ -123,7 +123,7 @@ export const MultiverseNavigationGridPanel: React.FC<MultiverseNavigationGridPan
   return (
     <div
       id="multiverse-navigation-grid-panel"
-      className="p-6 rounded-[28px] bg-gradient-to-br from-[#0c1322]/90 via-[#070b14]/85 to-[#04060b] border border-cyan-500/25 backdrop-blur-xl space-y-5 shadow-2xl relative overflow-hidden font-mono"
+      className="p-6 rounded-[28px] bg-gradient-to-br from-[#0c1322]/90 via-[#070b14]/85 to-[#04060b] border-cyan-500/25 backdrop-blur-xl space-y-5 shadow-2xl relative overflow-hidden font-mono"
     >
       {/* Background Starlight Radial Effect */}
       <div className="absolute top-0 left-1/4 w-96 h-96 bg-cyan-500/5 rounded-full blur-3xl pointer-events-none" />
@@ -132,7 +132,7 @@ export const MultiverseNavigationGridPanel: React.FC<MultiverseNavigationGridPan
       {/* Header */}
       <div className="flex flex-col lg:flex-row lg:items-center justify-between gap-4 relative z-10">
         <div className="flex items-center gap-3">
-          <div className="w-10 h-10 rounded-2xl bg-cyan-500/15 border border-cyan-500/30 flex items-center justify-center shrink-0 shadow-[0_0_15px_rgba(6,182,212,0.3)]">
+          <div className="w-10 h-10 rounded-2xl bg-cyan-500/15 border-cyan-500/30 flex items-center justify-center shrink-0 shadow-[0_0_15px_rgba(6,182,212,0.3)]">
             <Compass className="w-5 h-5 text-cyan-300 animate-pulse" />
           </div>
           <div>
@@ -140,7 +140,7 @@ export const MultiverseNavigationGridPanel: React.FC<MultiverseNavigationGridPan
               <h3 className="text-sm sm:text-base font-bold text-white flex items-center gap-2">
                 QUANTUM CONTINUUM RUNTIME v14 & MULTIVERSE NAVIGATION GRID v15
               </h3>
-              <span className="text-[10px] px-2 py-0.5 rounded-full bg-cyan-500/15 text-cyan-300 border border-cyan-500/30 font-bold flex items-center gap-1">
+              <span className="text-[10px] px-2 py-0.5 rounded-full bg-cyan-500/15 text-cyan-300 border-cyan-500/30 font-bold flex items-center gap-1">
                 <Sparkles className="w-3 h-3 text-cyan-400" />
                 OMEGA-1 SUPREME CLEARANCE
               </span>
@@ -156,7 +156,7 @@ export const MultiverseNavigationGridPanel: React.FC<MultiverseNavigationGridPan
           <button
             onClick={handleRunContinuum}
             disabled={isActivatingContinuum || isEngagingNav}
-            className="px-3.5 py-1.5 rounded-xl bg-cyan-500/20 hover:bg-cyan-500/30 text-cyan-200 border border-cyan-500/40 font-bold flex items-center gap-1.5 transition-all shadow-[0_0_12px_rgba(6,182,212,0.2)] disabled:opacity-50"
+            className="px-3.5 py-1.5 rounded-xl bg-cyan-500/20 hover:bg-cyan-500/30 text-cyan-200 border-cyan-500/40 font-bold flex items-center gap-1.5 transition-all shadow-[0_0_12px_rgba(6,182,212,0.2)] disabled:opacity-50"
           >
             <RefreshCw className={`w-3.5 h-3.5 text-cyan-300 ${isActivatingContinuum ? 'animate-spin' : ''}`} />
             <span>{isActivatingContinuum ? 'SYNCING CONTINUUM...' : 'SYNC CONTINUUM v14'}</span>
@@ -165,7 +165,7 @@ export const MultiverseNavigationGridPanel: React.FC<MultiverseNavigationGridPan
           <button
             onClick={handleEngageNavigation}
             disabled={isActivatingContinuum || isEngagingNav}
-            className="px-3.5 py-1.5 rounded-xl bg-purple-500/20 hover:bg-purple-500/30 text-purple-200 border border-purple-500/40 font-bold flex items-center gap-1.5 transition-all shadow-[0_0_12px_rgba(168,85,247,0.2)] disabled:opacity-50"
+            className="px-3.5 py-1.5 rounded-xl bg-purple-500/20 hover:bg-purple-500/30 text-purple-200 border-purple-500/40 font-bold flex items-center gap-1.5 transition-all shadow-[0_0_12px_rgba(168,85,247,0.2)] disabled:opacity-50"
           >
             <Rocket className="w-3.5 h-3.5 text-purple-300" />
             <span>{isEngagingNav ? 'WARP ENGAGING...' : 'ENGAGE NAV GRID v15'}</span>
@@ -175,7 +175,7 @@ export const MultiverseNavigationGridPanel: React.FC<MultiverseNavigationGridPan
 
       {/* Real-time Progress ticker */}
       {activeStepText && (
-        <div className="p-3 rounded-2xl bg-cyan-950/40 border border-cyan-500/30 text-xs text-cyan-200 animate-pulse flex items-center gap-2">
+        <div className="p-3 rounded-2xl bg-cyan-950/40 border-cyan-500/30 text-xs text-cyan-200 animate-pulse flex items-center gap-2">
           <Activity className="w-4 h-4 text-cyan-400 animate-spin" />
           <span>{activeStepText}</span>
         </div>
@@ -184,13 +184,13 @@ export const MultiverseNavigationGridPanel: React.FC<MultiverseNavigationGridPan
       {/* Dual Section Grid: Continuum v14 & Nav Grid v15 */}
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-4 relative z-10 text-xs">
         {/* Quantum Continuum Card */}
-        <div className="p-4 rounded-2xl bg-black/40 border border-white/8 space-y-3">
+        <div className="p-4 rounded-2xl bg-black/40 border-white/8 space-y-3">
           <div className="flex items-center justify-between border-b border-white/10 pb-2">
             <div className="flex items-center gap-2">
               <Radio className="w-4 h-4 text-cyan-400" />
               <span className="font-bold text-white text-xs">QUANTUM CONTINUUM (QCR-v14)</span>
             </div>
-            <span className="text-[10px] px-2 py-0.5 rounded bg-cyan-500/15 text-cyan-300 border border-cyan-500/30 font-bold">
+            <span className="text-[10px] px-2 py-0.5 rounded bg-cyan-500/15 text-cyan-300 border-cyan-500/30 font-bold">
               {continuum.status}
             </span>
           </div>
@@ -218,7 +218,7 @@ export const MultiverseNavigationGridPanel: React.FC<MultiverseNavigationGridPan
             <span className="text-[10px] text-zinc-500">Federation Nodes Synchronized:</span>
             <div className="flex items-center gap-1.5 flex-wrap mt-1">
               {continuum.synchronizedNodes.map((node) => (
-                <span key={node} className="text-[10px] px-2 py-0.5 rounded bg-white/5 border border-white/10 text-zinc-300 font-bold">
+                <span key={node} className="text-[10px] px-2 py-0.5 rounded bg-white/5 border-white/10 text-zinc-300 font-bold">
                   {node}
                 </span>
               ))}
@@ -229,7 +229,7 @@ export const MultiverseNavigationGridPanel: React.FC<MultiverseNavigationGridPan
             <span className="text-[10px] text-zinc-500">Active Spatial Dimensions:</span>
             <div className="flex items-center gap-1.5 flex-wrap mt-1">
               {continuum.activeDimensions.map((dim) => (
-                <span key={dim} className="text-[10px] px-2 py-0.5 rounded bg-cyan-500/10 border border-cyan-500/20 text-cyan-300 font-bold">
+                <span key={dim} className="text-[10px] px-2 py-0.5 rounded bg-cyan-500/10 border-cyan-500/20 text-cyan-300 font-bold">
                   {dim} (Latency {continuum.latency})
                 </span>
               ))}
@@ -243,13 +243,13 @@ export const MultiverseNavigationGridPanel: React.FC<MultiverseNavigationGridPan
         </div>
 
         {/* Multiverse Navigation Grid Card */}
-        <div className="p-4 rounded-2xl bg-black/40 border border-white/8 space-y-3">
+        <div className="p-4 rounded-2xl bg-black/40 border-white/8 space-y-3">
           <div className="flex items-center justify-between border-b border-white/10 pb-2">
             <div className="flex items-center gap-2">
               <Globe className="w-4 h-4 text-purple-400" />
               <span className="font-bold text-white text-xs">NAVIGATION GRID (NAV-v15)</span>
             </div>
-            <span className="text-[10px] px-2 py-0.5 rounded bg-purple-500/15 text-purple-300 border border-purple-500/30 font-bold">
+            <span className="text-[10px] px-2 py-0.5 rounded bg-purple-500/15 text-purple-300 border-purple-500/30 font-bold">
               {nav.status}
             </span>
           </div>
@@ -286,7 +286,7 @@ export const MultiverseNavigationGridPanel: React.FC<MultiverseNavigationGridPan
 
           <div>
             <span className="text-[10px] text-zinc-500">Navigation Proof Anchor:</span>
-            <p className="text-[10px] text-purple-300 font-mono break-all bg-black/50 p-1.5 rounded-lg border border-white/5 mt-0.5">
+            <p className="text-[10px] text-purple-300 font-mono break-all bg-black/50 p-1.5 rounded-lg border-white/5 mt-0.5">
               {nav.blockId} • Commit: {nav.commitHash}
             </p>
           </div>
@@ -316,7 +316,7 @@ export const MultiverseNavigationGridPanel: React.FC<MultiverseNavigationGridPan
                 setIsProjectionExpanded(!isProjectionExpanded);
                 playTone(isProjectionExpanded ? 480 : 620, 0.03);
               }}
-              className="text-[11px] px-2.5 py-1 rounded-lg bg-white/5 hover:bg-white/10 text-zinc-300 hover:text-white border border-white/10 transition-colors"
+              className="text-[11px] px-2.5 py-1 rounded-lg bg-white/5 hover:bg-white/10 text-zinc-300 hover:text-white border-white/10 transition-colors"
             >
               {isProjectionExpanded ? 'COLLAPSE VECTOR GRAPH' : 'EXPAND VECTOR GRAPH'}
             </button>

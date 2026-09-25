@@ -138,11 +138,11 @@ export const AuditCertificateModal: React.FC<AuditCertificateModalProps> = ({ is
 
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center p-4 sm:p-6 bg-black/80 backdrop-blur-xl animate-in fade-in duration-300">
-      <div className="modal-slide-in relative w-full max-w-4xl max-h-[90vh] flex flex-col bg-[#0b0d18] border border-white/12 rounded-[28px] shadow-[0_0_50px_rgba(0,0,0,0.8)] overflow-hidden">
+      <div className="modal-slide-in relative w-full max-w-4xl max-h-[90vh] flex flex-col bg-[#0b0d18] border-white/12 rounded-[28px] shadow-[0_0_50px_rgba(0,0,0,0.8)] overflow-hidden">
         {/* Modal Header - Compact Design */}
         <div className="stagger-1 px-4 py-3 sm:px-5 sm:py-3.5 border-b border-white/8 flex flex-wrap items-center justify-between gap-3 bg-gradient-to-r from-amber-500/10 via-violet-500/10 to-cyan-500/10">
           <div className="flex items-center gap-2.5 min-w-0">
-            <div className="p-2 rounded-xl bg-amber-500/20 border border-amber-500/30 text-amber-300 shrink-0">
+            <div className="p-2 rounded-xl bg-amber-500/20 border-amber-500/30 text-amber-300 shrink-0">
               <Award className="w-5 h-5" />
             </div>
             <div className="min-w-0">
@@ -150,7 +150,7 @@ export const AuditCertificateModal: React.FC<AuditCertificateModalProps> = ({ is
                 <h2 className="text-sm sm:text-base font-mono font-bold text-white tracking-wide truncate">
                   GOLD MASTER CERTIFICATE &amp; DEPLOYMENT GATE
                 </h2>
-                <span className="px-2 py-0.5 rounded-full bg-emerald-500/20 text-emerald-300 border border-emerald-500/30 text-[10px] font-mono font-semibold shrink-0">
+                <span className="px-2 py-0.5 rounded-full bg-emerald-500/20 text-emerald-300 border-emerald-500/30 text-[10px] font-mono font-semibold shrink-0">
                   100% VERIFIED
                 </span>
               </div>
@@ -181,7 +181,7 @@ export const AuditCertificateModal: React.FC<AuditCertificateModalProps> = ({ is
                 playTone(620, 0.04);
                 setIsDossierPreviewOpen(true);
               }}
-              className="px-2.5 py-1 text-[11px] font-mono font-medium bg-cyan-950/80 text-cyan-300 border border-cyan-800 hover:border-cyan-500 rounded transition flex items-center gap-1 shrink-0 cursor-pointer"
+              className="px-2.5 py-1 text-[11px] font-mono font-medium bg-cyan-950/80 text-cyan-300 border-cyan-800 hover:border-cyan-500 rounded transition flex items-center gap-1 shrink-0 cursor-pointer"
               title="Open Interactive Sovereign Dossier & PDF Preview"
             >
               <Eye className="w-3.5 h-3.5 text-cyan-400" />
@@ -189,7 +189,7 @@ export const AuditCertificateModal: React.FC<AuditCertificateModalProps> = ({ is
             </button>
             <button
               onClick={downloadCourtAttestationPdf}
-              className="px-2.5 py-1 text-[11px] font-mono font-medium bg-cyan-950/80 text-cyan-300 border border-cyan-800 hover:border-cyan-500 rounded transition flex items-center gap-1 shrink-0 cursor-pointer"
+              className="px-2.5 py-1 text-[11px] font-mono font-medium bg-cyan-950/80 text-cyan-300 border-cyan-800 hover:border-cyan-500 rounded transition flex items-center gap-1 shrink-0 cursor-pointer"
               title="Download Court-Admissible Sovereign Forensic Attestation PDF"
             >
               <FileText className="w-3.5 h-3.5 text-cyan-400" />
@@ -197,7 +197,7 @@ export const AuditCertificateModal: React.FC<AuditCertificateModalProps> = ({ is
             </button>
             <button
               onClick={downloadMasterPdf}
-              className="px-2.5 py-1 text-[11px] font-mono font-semibold bg-amber-500/20 text-amber-300 border border-amber-500/50 hover:bg-amber-500/30 rounded transition flex items-center gap-1 shadow-[0_0_8px_rgba(245,158,11,0.15)] shrink-0 cursor-pointer"
+              className="px-2.5 py-1 text-[11px] font-mono font-semibold bg-amber-500/20 text-amber-300 border-amber-500/50 hover:bg-amber-500/30 rounded transition flex items-center gap-1 shadow-[0_0_8px_rgba(245,158,11,0.15)] shrink-0 cursor-pointer"
               title="Download Master Forensic Audit PDF"
             >
               <FileCheck2 className="w-3.5 h-3.5 text-amber-400" />
@@ -205,7 +205,7 @@ export const AuditCertificateModal: React.FC<AuditCertificateModalProps> = ({ is
             </button>
             <button
               onClick={downloadCertificateCsv}
-              className="px-2.5 py-1 text-[11px] font-mono font-medium bg-gray-800 text-gray-300 border border-gray-700 hover:bg-gray-700 rounded transition flex items-center gap-1 shrink-0 cursor-pointer"
+              className="px-2.5 py-1 text-[11px] font-mono font-medium bg-gray-800 text-gray-300 border-gray-700 hover:bg-gray-700 rounded transition flex items-center gap-1 shrink-0 cursor-pointer"
               title="Export to CSV"
             >
               <Download className="w-3.5 h-3.5 text-emerald-400" />
@@ -213,7 +213,7 @@ export const AuditCertificateModal: React.FC<AuditCertificateModalProps> = ({ is
             </button>
             <button
               onClick={downloadJson}
-              className="px-2.5 py-1 text-[11px] font-mono font-medium bg-gray-800 text-gray-300 border border-gray-700 hover:bg-gray-700 rounded transition flex items-center gap-1 shrink-0 cursor-pointer"
+              className="px-2.5 py-1 text-[11px] font-mono font-medium bg-gray-800 text-gray-300 border-gray-700 hover:bg-gray-700 rounded transition flex items-center gap-1 shrink-0 cursor-pointer"
               title="Download Certificate JSON-LD"
             >
               <Download className="w-3.5 h-3.5 text-cyan-400" />
@@ -224,7 +224,7 @@ export const AuditCertificateModal: React.FC<AuditCertificateModalProps> = ({ is
                 playTone(450, 0.04);
                 onClose();
               }}
-              className="p-1 rounded bg-white/5 hover:bg-white/10 text-zinc-400 hover:text-white border border-white/10 transition shrink-0 cursor-pointer ml-1"
+              className="p-1 rounded bg-white/5 hover:bg-white/10 text-zinc-400 hover:text-white border-white/10 transition shrink-0 cursor-pointer ml-1"
             >
               <X className="w-4 h-4" />
             </button>
@@ -264,16 +264,16 @@ export const AuditCertificateModal: React.FC<AuditCertificateModalProps> = ({ is
           {activeTab === 'goldMaster' && (
             <div className="space-y-5">
               {/* Header Badge & Credential Banner */}
-              <div className="p-4 sm:p-5 rounded-2xl bg-[#0a0f1e] border border-[#06B6D4]/30 space-y-3">
+              <div className="p-4 sm:p-5 rounded-2xl bg-[#0a0f1e] border-[#06B6D4]/30 space-y-3">
                 <div className="flex flex-wrap items-center justify-between gap-2">
                   <div className="flex items-center gap-1.5 flex-wrap">
-                    <span className="px-2 py-0.5 rounded-full bg-[#D4AF37]/15 text-[#D4AF37] border border-[#D4AF37]/30 text-[10px] sm:text-xs font-bold">
+                    <span className="px-2 py-0.5 rounded-full bg-[#D4AF37]/15 text-[#D4AF37] border-[#D4AF37]/30 text-[10px] sm:text-xs font-bold">
                       🏆 GOLD MASTER FULL QUORUM (10/10)
                     </span>
-                    <span className="px-2 py-0.5 rounded-full bg-emerald-500/15 text-emerald-300 border border-emerald-500/30 text-[10px] sm:text-xs font-bold">
+                    <span className="px-2 py-0.5 rounded-full bg-emerald-500/15 text-emerald-300 border-emerald-500/30 text-[10px] sm:text-xs font-bold">
                       🔓 PROMOTION G11-G13 UNLOCKED
                     </span>
-                    <span className="px-2 py-0.5 rounded-full bg-cyan-950 text-cyan-300 border border-cyan-800 text-[10px]">
+                    <span className="px-2 py-0.5 rounded-full bg-cyan-950 text-cyan-300 border-cyan-800 text-[10px]">
                       {GOLD_MASTER_FORENSIC_REPORT.engineVersion}
                     </span>
                   </div>
@@ -282,7 +282,7 @@ export const AuditCertificateModal: React.FC<AuditCertificateModalProps> = ({ is
                       href="./zyrquen_master_forensic_audit_agentic_artifact_1_4e1b77b4ffb8.html"
                       target="_blank"
                       rel="noopener noreferrer"
-                      className="px-2.5 py-1 rounded-lg bg-cyan-500/20 hover:bg-cyan-500/30 text-cyan-200 border border-cyan-500/40 text-[11px] flex items-center gap-1.5 transition-all"
+                      className="px-2.5 py-1 rounded-lg bg-cyan-500/20 hover:bg-cyan-500/30 text-cyan-200 border-cyan-500/40 text-[11px] flex items-center gap-1.5 transition-all"
                     >
                       <ExternalLink className="w-3.5 h-3.5 text-cyan-400" />
                       <span>Open Standalone HTML</span>
@@ -305,7 +305,7 @@ export const AuditCertificateModal: React.FC<AuditCertificateModalProps> = ({ is
 
               {/* 6 Metric Forensics Grid */}
               <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3">
-                <div className="p-4 rounded-xl bg-[#070a12] border border-white/8 space-y-1">
+                <div className="p-4 rounded-xl bg-[#070a12] border-white/8 space-y-1">
                   <div className="text-[10px] text-zinc-500 uppercase">Sovereign Principal</div>
                   <div className="text-sm font-bold text-[#D4AF37]">
                     {GOLD_MASTER_FORENSIC_REPORT.executiveSummary.sovereignPrincipal}
@@ -315,7 +315,7 @@ export const AuditCertificateModal: React.FC<AuditCertificateModalProps> = ({ is
                   </div>
                 </div>
 
-                <div className="p-4 rounded-xl bg-[#070a12] border border-white/8 space-y-1">
+                <div className="p-4 rounded-xl bg-[#070a12] border-white/8 space-y-1">
                   <div className="text-[10px] text-zinc-500 uppercase">Canonical Core Mutation</div>
                   <div className="text-sm font-bold text-emerald-400">
                     {GOLD_MASTER_FORENSIC_REPORT.executiveSummary.canonicalCoreMutationDelta}
@@ -323,7 +323,7 @@ export const AuditCertificateModal: React.FC<AuditCertificateModalProps> = ({ is
                   <div className="text-[11px] text-zinc-400">Zero Mutation / SSoT Δ0 Invariant Safe</div>
                 </div>
 
-                <div className="p-4 rounded-xl bg-[#070a12] border border-white/8 space-y-1">
+                <div className="p-4 rounded-xl bg-[#070a12] border-white/8 space-y-1">
                   <div className="text-[10px] text-zinc-500 uppercase">Genesis Block Height</div>
                   <div className="text-sm font-bold text-white">
                     {GOLD_MASTER_FORENSIC_REPORT.executiveSummary.genesisBlockHeight}
@@ -331,7 +331,7 @@ export const AuditCertificateModal: React.FC<AuditCertificateModalProps> = ({ is
                   <div className="text-[11px] text-zinc-400">Frozen Epoch Anchor (LOCKED)</div>
                 </div>
 
-                <div className="p-4 rounded-xl bg-[#070a12] border border-white/8 space-y-1">
+                <div className="p-4 rounded-xl bg-[#070a12] border-white/8 space-y-1">
                   <div className="text-[10px] text-zinc-500 uppercase">Canonical Seals Verified</div>
                   <div className="text-sm font-bold text-cyan-300">
                     {GOLD_MASTER_FORENSIC_REPORT.executiveSummary.canonicalSealsCount.toLocaleString()} Seals
@@ -339,7 +339,7 @@ export const AuditCertificateModal: React.FC<AuditCertificateModalProps> = ({ is
                   <div className="text-[11px] text-emerald-400">100% Immutable Verified</div>
                 </div>
 
-                <div className="p-4 rounded-xl bg-[#070a12] border border-white/8 space-y-1">
+                <div className="p-4 rounded-xl bg-[#070a12] border-white/8 space-y-1">
                   <div className="text-[10px] text-zinc-500 uppercase">Forensic Quarantine (Ring-04)</div>
                   <div className="text-sm font-bold text-amber-300">
                     {GOLD_MASTER_FORENSIC_REPORT.executiveSummary.forensicQuarantineRange}
@@ -349,7 +349,7 @@ export const AuditCertificateModal: React.FC<AuditCertificateModalProps> = ({ is
                   </div>
                 </div>
 
-                <div className="p-4 rounded-xl bg-[#070a12] border border-white/8 space-y-1">
+                <div className="p-4 rounded-xl bg-[#070a12] border-white/8 space-y-1">
                   <div className="text-[10px] text-zinc-500 uppercase">Reconciliation Status</div>
                   <div className="text-xs font-bold text-emerald-300 truncate">
                     {GOLD_MASTER_FORENSIC_REPORT.executiveSummary.reconciliationStatus}
@@ -359,7 +359,7 @@ export const AuditCertificateModal: React.FC<AuditCertificateModalProps> = ({ is
               </div>
 
               {/* Merkle Root Box */}
-              <div className="p-4 rounded-xl bg-[#070a12] border border-[#06B6D4]/30 space-y-2">
+              <div className="p-4 rounded-xl bg-[#070a12] border-[#06B6D4]/30 space-y-2">
                 <div className="flex items-center justify-between">
                   <span className="text-xs text-zinc-400 uppercase tracking-wider font-bold flex items-center gap-1.5">
                     <span>🔗</span>
@@ -384,7 +384,7 @@ export const AuditCertificateModal: React.FC<AuditCertificateModalProps> = ({ is
               </div>
 
               {/* 10 Passports Table */}
-              <div className="p-5 rounded-2xl bg-[#0a0f1e] border border-white/10 space-y-3">
+              <div className="p-5 rounded-2xl bg-[#0a0f1e] border-white/10 space-y-3">
                 <div className="flex items-center justify-between">
                   <span className="text-xs font-bold text-white uppercase tracking-wider flex items-center gap-2">
                     <span>👑</span>
@@ -421,7 +421,7 @@ export const AuditCertificateModal: React.FC<AuditCertificateModalProps> = ({ is
                             SHA256:{p.sha256}
                           </td>
                           <td className="py-2.5 px-3 whitespace-nowrap">
-                            <span className="px-2 py-0.5 rounded-full bg-emerald-500/20 text-emerald-300 border border-emerald-500/30 text-[10px] font-bold">
+                            <span className="px-2 py-0.5 rounded-full bg-emerald-500/20 text-emerald-300 border-emerald-500/30 text-[10px] font-bold">
                               🟢 {p.status}
                             </span>
                           </td>
@@ -433,7 +433,7 @@ export const AuditCertificateModal: React.FC<AuditCertificateModalProps> = ({ is
               </div>
 
               {/* Master Proof & Dilithium-5 JWS */}
-              <div className="p-5 rounded-2xl bg-[#070a12] border border-[#06B6D4]/30 space-y-3">
+              <div className="p-5 rounded-2xl bg-[#070a12] border-[#06B6D4]/30 space-y-3">
                 <div className="flex items-center justify-between">
                   <span className="text-xs font-bold text-[#D4AF37] uppercase tracking-wider flex items-center gap-1.5">
                     <span>🔐</span>
@@ -461,14 +461,14 @@ export const AuditCertificateModal: React.FC<AuditCertificateModalProps> = ({ is
               </div>
 
               {/* Evidence Source Files List */}
-              <div className="p-4 rounded-xl bg-[#070a12] border border-white/8 space-y-2">
+              <div className="p-4 rounded-xl bg-[#070a12] border-white/8 space-y-2">
                 <div className="text-xs font-bold text-zinc-400 uppercase tracking-wider flex items-center gap-1.5">
                   <span>📑</span>
                   <span>Consolidated Evidence Source Files (7 Files)</span>
                 </div>
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-2 text-xs text-zinc-300">
                   {GOLD_MASTER_FORENSIC_REPORT.sourceFiles.map((sf, idx) => (
-                    <div key={idx} className="p-2 rounded bg-white/[0.02] border border-white/5 flex items-center gap-2">
+                    <div key={idx} className="p-2 rounded bg-white/[0.02] border-white/5 flex items-center gap-2">
                       <span className="text-cyan-400">📄</span>
                       <span className="font-mono text-[11px] truncate">{sf}</span>
                     </div>
@@ -477,7 +477,7 @@ export const AuditCertificateModal: React.FC<AuditCertificateModalProps> = ({ is
               </div>
 
               {/* Signer Footer */}
-              <div className="p-4 rounded-xl bg-[#0a0f1e] border border-[#D4AF37]/30 text-xs text-[#D4AF37] flex items-center justify-between">
+              <div className="p-4 rounded-xl bg-[#0a0f1e] border-[#D4AF37]/30 text-xs text-[#D4AF37] flex items-center justify-between">
                 <div>
                   <strong>Signed & Sealed By:</strong> {GOLD_MASTER_FORENSIC_REPORT.signedBy}
                 </div>
@@ -491,43 +491,43 @@ export const AuditCertificateModal: React.FC<AuditCertificateModalProps> = ({ is
           {activeTab === 'certificate' && (
             <div className="space-y-6">
               {/* Master Merkle Hash Banner */}
-              <div className="p-5 rounded-2xl bg-white/[0.02] border border-white/8 space-y-3">
+              <div className="p-5 rounded-2xl bg-white/[0.02] border-white/8 space-y-3">
                 <div className="flex items-center justify-between">
                   <span className="text-xs text-zinc-400 font-mono uppercase tracking-wider">Merkle Root Hash (SHA-256)</span>
                   <div className="flex items-center gap-2">
                     <button
                       onClick={handleShowQrCode}
-                      className="flex items-center gap-1 text-xs text-amber-400 hover:text-amber-300 bg-amber-500/10 px-2 py-1 rounded-lg border border-amber-500/20 transition-all"
+                      className="flex items-center gap-1 text-xs text-amber-400 hover:text-amber-300 bg-amber-500/10 px-2 py-1 rounded-lg border-amber-500/20 transition-all"
                     >
                       <QrCode className="w-3.5 h-3.5" />
                       <span>QR Code</span>
                     </button>
                     <button
                       onClick={copyMerkle}
-                      className="flex items-center gap-1 text-xs text-cyan-400 hover:text-cyan-300 bg-cyan-500/10 px-2 py-1 rounded-lg border border-cyan-500/20"
+                      className="flex items-center gap-1 text-xs text-cyan-400 hover:text-cyan-300 bg-cyan-500/10 px-2 py-1 rounded-lg border-cyan-500/20"
                     >
                       {copiedHash ? <Check className="w-3.5 h-3.5" /> : <Copy className="w-3.5 h-3.5" />}
                       <span>{copiedHash ? 'Copied' : 'Copy Hash'}</span>
                     </button>
                   </div>
                 </div>
-                <div className="p-3 bg-black/60 rounded-xl border border-white/5 font-mono text-xs sm:text-sm text-cyan-300 break-all select-all">
+                <div className="p-3 bg-black/60 rounded-xl border-white/5 font-mono text-xs sm:text-sm text-cyan-300 break-all select-all">
                   {SYSTEM_METADATA.merkleRoot}
                 </div>
                 <div className="grid grid-cols-2 sm:grid-cols-4 gap-3 pt-2 text-xs">
-                  <div className="p-3 bg-white/[0.02] rounded-xl border border-white/5">
+                  <div className="p-3 bg-white/[0.02] rounded-xl border-white/5">
                     <div className="text-zinc-500 text-[10px]">SEALED BLOCK</div>
                     <div className="text-zinc-100 font-bold mt-0.5">#{SYSTEM_METADATA.sealedBlock}</div>
                   </div>
-                  <div className="p-3 bg-white/[0.02] rounded-xl border border-white/5">
+                  <div className="p-3 bg-white/[0.02] rounded-xl border-white/5">
                     <div className="text-zinc-500 text-[10px]">TOTAL SEALS</div>
                     <div className="text-emerald-400 font-bold mt-0.5">{SYSTEM_METADATA.totalVerifiedSeals.toLocaleString()}</div>
                   </div>
-                  <div className="p-3 bg-white/[0.02] rounded-xl border border-white/5">
+                  <div className="p-3 bg-white/[0.02] rounded-xl border-white/5">
                     <div className="text-zinc-500 text-[10px]">BASELINE DRIFT</div>
                     <div className="text-zinc-100 font-bold mt-0.5">{SYSTEM_METADATA.baselineDrift}</div>
                   </div>
-                  <div className="p-3 bg-white/[0.02] rounded-xl border border-white/5">
+                  <div className="p-3 bg-white/[0.02] rounded-xl border-white/5">
                     <div className="text-zinc-500 text-[10px]">SSOT MUTATION</div>
                     <div className="text-emerald-400 font-bold mt-0.5">{SYSTEM_METADATA.ssotMutation}</div>
                   </div>
@@ -535,7 +535,7 @@ export const AuditCertificateModal: React.FC<AuditCertificateModalProps> = ({ is
               </div>
 
               {/* 4-Layer Manifesto Envelope */}
-              <div className="p-5 rounded-2xl bg-white/[0.02] border border-white/8 space-y-3">
+              <div className="p-5 rounded-2xl bg-white/[0.02] border-white/8 space-y-3">
                 <h3 className="text-sm font-bold text-zinc-100 flex items-center gap-2">
                   <span className="w-2 h-2 rounded-full bg-violet-400" />
                   THE 4-LAYER ARCHITECTURAL MANIFESTO (V1.21 PROTOCOL)
@@ -546,19 +546,19 @@ export const AuditCertificateModal: React.FC<AuditCertificateModalProps> = ({ is
                   Truth Plane (v1.2 LTS). Extension plane expansions occur without mutating the locked core state.
                 </p>
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-2 pt-2 text-xs">
-                  <div className="p-2.5 rounded-lg bg-black/40 border border-white/5 flex items-center justify-between">
+                  <div className="p-2.5 rounded-lg bg-black/40 border-white/5 flex items-center justify-between">
                     <span className="text-zinc-400">Layer 1: Canonical SSoT Core</span>
                     <span className="text-emerald-400 font-semibold">🔒 FROZEN</span>
                   </div>
-                  <div className="p-2.5 rounded-lg bg-black/40 border border-white/5 flex items-center justify-between">
+                  <div className="p-2.5 rounded-lg bg-black/40 border-white/5 flex items-center justify-between">
                     <span className="text-zinc-400">Layer 2: Verification Engine</span>
                     <span className="text-cyan-400 font-semibold">31 PHASES</span>
                   </div>
-                  <div className="p-2.5 rounded-lg bg-black/40 border border-white/5 flex items-center justify-between">
+                  <div className="p-2.5 rounded-lg bg-black/40 border-white/5 flex items-center justify-between">
                     <span className="text-zinc-400">Layer 3: Adversarial Shield</span>
                     <span className="text-violet-400 font-semibold">5 BLOCKED (SIM)</span>
                   </div>
-                  <div className="p-2.5 rounded-lg bg-black/40 border border-white/5 flex items-center justify-between">
+                  <div className="p-2.5 rounded-lg bg-black/40 border-white/5 flex items-center justify-between">
                     <span className="text-zinc-400">Layer 4: Extension Plane</span>
                     <span className="text-amber-400 font-semibold">NON-AUTHORITATIVE</span>
                   </div>
@@ -570,14 +570,14 @@ export const AuditCertificateModal: React.FC<AuditCertificateModalProps> = ({ is
           {activeTab === 'treasury' && (
             <div className="space-y-6 animate-in fade-in duration-200">
               {/* Top Treasury Summary Card */}
-              <div className="p-5 rounded-2xl bg-gradient-to-r from-amber-500/10 via-cyan-500/10 to-indigo-500/10 border border-amber-500/30 space-y-4">
+              <div className="p-5 rounded-2xl bg-gradient-to-r from-amber-500/10 via-cyan-500/10 to-indigo-500/10 border-amber-500/30 space-y-4">
                 <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
                   <div className="space-y-1">
                     <div className="flex items-center gap-2">
-                      <span className="px-2.5 py-0.5 rounded-full bg-amber-500/20 text-amber-300 border border-amber-500/40 text-[10px] font-bold">
+                      <span className="px-2.5 py-0.5 rounded-full bg-amber-500/20 text-amber-300 border-amber-500/40 text-[10px] font-bold">
                         SSoT Δ0 ZERO-DRIFT VERIFIED (0.00%)
                       </span>
-                      <span className="px-2.5 py-0.5 rounded-full bg-emerald-500/20 text-emerald-300 border border-emerald-500/40 text-[10px] font-bold">
+                      <span className="px-2.5 py-0.5 rounded-full bg-emerald-500/20 text-emerald-300 border-emerald-500/40 text-[10px] font-bold">
                         10/10 REAL_HSM RATIFIED
                       </span>
                     </div>
@@ -594,7 +594,7 @@ export const AuditCertificateModal: React.FC<AuditCertificateModalProps> = ({ is
                     <button
                       type="button"
                       onClick={downloadTreasuryPdf}
-                      className="px-3 py-2 rounded-xl bg-amber-500/20 hover:bg-amber-500/30 text-amber-200 border border-amber-500/40 text-xs font-bold flex items-center gap-1.5 transition-all shadow-[0_0_12px_rgba(245,158,11,0.25)] font-sans"
+                      className="px-3 py-2 rounded-xl bg-amber-500/20 hover:bg-amber-500/30 text-amber-200 border-amber-500/40 text-xs font-bold flex items-center gap-1.5 transition-all shadow-[0_0_12px_rgba(245,158,11,0.25)] font-sans"
                     >
                       <FileCheck2 className="w-3.5 h-3.5 text-amber-400" />
                       <span>Export Treasury PDF</span>
@@ -602,7 +602,7 @@ export const AuditCertificateModal: React.FC<AuditCertificateModalProps> = ({ is
                     <button
                       type="button"
                       onClick={downloadTreasuryJson}
-                      className="px-3 py-2 rounded-xl bg-white/5 hover:bg-white/10 text-zinc-300 border border-white/10 text-xs font-bold flex items-center gap-1.5 transition-all font-sans"
+                      className="px-3 py-2 rounded-xl bg-white/5 hover:bg-white/10 text-zinc-300 border-white/10 text-xs font-bold flex items-center gap-1.5 transition-all font-sans"
                     >
                       <Download className="w-3.5 h-3.5 text-cyan-400" />
                       <span>JSON Proof</span>
@@ -612,19 +612,19 @@ export const AuditCertificateModal: React.FC<AuditCertificateModalProps> = ({ is
 
                 {/* 4 Metric Boxes */}
                 <div className="grid grid-cols-2 sm:grid-cols-4 gap-3 pt-2 text-xs">
-                  <div className="p-3 bg-black/50 rounded-xl border border-white/5">
+                  <div className="p-3 bg-black/50 rounded-xl border-white/5">
                     <span className="text-zinc-500 text-[10px] block">TOTAL POPULATION</span>
                     <span className="text-white font-bold mt-0.5 block">70,000,000 Users</span>
                   </div>
-                  <div className="p-3 bg-black/50 rounded-xl border border-white/5">
+                  <div className="p-3 bg-black/50 rounded-xl border-white/5">
                     <span className="text-zinc-500 text-[10px] block">TOTAL PORTFOLIO VALUE</span>
                     <span className="text-amber-300 font-bold mt-0.5 block">฿1,424,080,000.00 THB</span>
                   </div>
-                  <div className="p-3 bg-black/50 rounded-xl border border-white/5">
+                  <div className="p-3 bg-black/50 rounded-xl border-white/5">
                     <span className="text-zinc-500 text-[10px] block">TOTAL GAS POOL FUND</span>
                     <span className="text-cyan-300 font-bold mt-0.5 block">฿12,500,000.00 THB</span>
                   </div>
-                  <div className="p-3 bg-black/50 rounded-xl border border-white/5">
+                  <div className="p-3 bg-black/50 rounded-xl border-white/5">
                     <span className="text-zinc-500 text-[10px] block">ABSOLUTE DRIFT DELTA</span>
                     <span className="text-emerald-400 font-bold mt-0.5 block">0.0000% (Δ0.00 THB)</span>
                   </div>
@@ -632,7 +632,7 @@ export const AuditCertificateModal: React.FC<AuditCertificateModalProps> = ({ is
               </div>
 
               {/* Allocations Table */}
-              <div className="p-5 rounded-2xl bg-black/60 border border-white/10 space-y-3">
+              <div className="p-5 rounded-2xl bg-black/60 border-white/10 space-y-3">
                 <div className="flex items-center justify-between">
                   <span className="text-xs font-bold text-zinc-200 uppercase tracking-wider">
                     Chain Model Segment Allocations (Nc x Vc)
@@ -695,13 +695,13 @@ export const AuditCertificateModal: React.FC<AuditCertificateModalProps> = ({ is
               </div>
 
               {/* Legal Admissibility Box */}
-              <div className="p-5 rounded-2xl bg-white/[0.02] border border-white/8 space-y-3">
+              <div className="p-5 rounded-2xl bg-white/[0.02] border-white/8 space-y-3">
                 <h4 className="text-xs font-bold text-zinc-200 flex items-center gap-2">
                   <Scale className="w-4 h-4 text-cyan-400" />
                   Thai Statutory Compliance & Court Admissibility (ETDA B.E. 2544)
                 </h4>
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-2 text-xs font-sans">
-                  <div className="p-3 bg-black/40 rounded-xl border border-white/5 space-y-1">
+                  <div className="p-3 bg-black/40 rounded-xl border-white/5 space-y-1">
                     <div className="flex items-center justify-between">
                       <span className="text-cyan-300 font-bold">ETDA Section 9 (General e-Signature)</span>
                       <span className="text-emerald-400 font-bold text-[10px]">PASSED</span>
@@ -710,7 +710,7 @@ export const AuditCertificateModal: React.FC<AuditCertificateModalProps> = ({ is
                       Identity Bound & Explicit Sovereign Principal Consent (#EP-SOVEREIGN-01)
                     </p>
                   </div>
-                  <div className="p-3 bg-black/40 rounded-xl border border-white/5 space-y-1">
+                  <div className="p-3 bg-black/40 rounded-xl border-white/5 space-y-1">
                     <div className="flex items-center justify-between">
                       <span className="text-cyan-300 font-bold">ETDA Section 26 (Secure Digital Signature)</span>
                       <span className="text-emerald-400 font-bold text-[10px]">PASSED</span>
@@ -719,7 +719,7 @@ export const AuditCertificateModal: React.FC<AuditCertificateModalProps> = ({ is
                       NIST FIPS 204 ML-DSA-87 Dilithium-5 Post-Quantum Cryptographic Proof
                     </p>
                   </div>
-                  <div className="p-3 bg-black/40 rounded-xl border border-white/5 space-y-1">
+                  <div className="p-3 bg-black/40 rounded-xl border-white/5 space-y-1">
                     <div className="flex items-center justify-between">
                       <span className="text-cyan-300 font-bold">ETDA Section 28 (Sovereign CA & Ledger)</span>
                       <span className="text-emerald-400 font-bold text-[10px]">PASSED</span>
@@ -728,7 +728,7 @@ export const AuditCertificateModal: React.FC<AuditCertificateModalProps> = ({ is
                       10/10 Hardware Deca-Key Quorum (FIPS 140-3 Level 4 HSM Sealed)
                     </p>
                   </div>
-                  <div className="p-3 bg-black/40 rounded-xl border border-white/5 space-y-1">
+                  <div className="p-3 bg-black/40 rounded-xl border-white/5 space-y-1">
                     <div className="flex items-center justify-between">
                       <span className="text-cyan-300 font-bold">PDPA B.E. 2562 (Sections 9, 26, 28)</span>
                       <span className="text-emerald-400 font-bold text-[10px]">PASSED</span>
@@ -751,13 +751,13 @@ export const AuditCertificateModal: React.FC<AuditCertificateModalProps> = ({ is
               {SYSTEM_INVARIANTS.map((inv) => (
                 <div
                   key={inv.id}
-                  className="p-3.5 rounded-xl bg-white/[0.02] border border-white/6 hover:border-white/12 transition-all flex flex-col sm:flex-row sm:items-center justify-between gap-2"
+                  className="p-3.5 rounded-xl bg-white/[0.02] border-white/6 hover:border-white/12 transition-all flex flex-col sm:flex-row sm:items-center justify-between gap-2"
                 >
                   <div className="space-y-1">
                     <div className="flex items-center gap-2">
                       <CheckCircle2 className="w-4 h-4 text-emerald-400 shrink-0" />
                       <span className="text-xs font-bold text-zinc-200">{inv.code}</span>
-                      <span className="text-[10px] px-1.5 py-0.5 rounded bg-white/5 text-zinc-400 border border-white/5">
+                      <span className="text-[10px] px-1.5 py-0.5 rounded bg-white/5 text-zinc-400 border-white/5">
                         {inv.layer}
                       </span>
                     </div>
@@ -773,7 +773,7 @@ export const AuditCertificateModal: React.FC<AuditCertificateModalProps> = ({ is
 
           {activeTab === 'stages' && (
             <div className="space-y-4">
-              <div className="p-4 rounded-xl bg-cyan-500/10 border border-cyan-500/20 text-xs">
+              <div className="p-4 rounded-xl bg-cyan-500/10 border-cyan-500/20 text-xs">
                 <div className="font-bold text-cyan-300">Transaction: {AUDIT_TRACE_TX.txId}</div>
                 <div className="text-zinc-400 mt-0.5">
                   {AUDIT_TRACE_TX.title} • Latency: {AUDIT_TRACE_TX.totalLatencyMs}ms • Sealed Block #{AUDIT_TRACE_TX.sealedLedgerBlock}
@@ -783,10 +783,10 @@ export const AuditCertificateModal: React.FC<AuditCertificateModalProps> = ({ is
                 {AUDIT_TRACE_TX.stages.map((stage) => (
                   <div
                     key={stage.id}
-                    className="p-3 rounded-xl bg-white/[0.02] border border-white/6 text-xs flex flex-col sm:flex-row sm:items-center justify-between gap-2"
+                    className="p-3 rounded-xl bg-white/[0.02] border-white/6 text-xs flex flex-col sm:flex-row sm:items-center justify-between gap-2"
                   >
                     <div className="flex items-center gap-3">
-                      <span className="w-6 h-6 rounded-lg bg-white/5 border border-white/10 flex items-center justify-center font-bold text-[11px] text-cyan-300">
+                      <span className="w-6 h-6 rounded-lg bg-white/5 border-white/10 flex items-center justify-center font-bold text-[11px] text-cyan-300">
                         {stage.stageNumber}
                       </span>
                       <div>
@@ -797,7 +797,7 @@ export const AuditCertificateModal: React.FC<AuditCertificateModalProps> = ({ is
                     <div className="flex items-center gap-4 text-[11px] text-zinc-400 font-mono">
                       <span>{stage.durationMs}ms</span>
                       <span className="text-cyan-400">{stage.outputHash.slice(0, 16)}...</span>
-                      <span className="px-2 py-0.5 rounded bg-emerald-500/20 text-emerald-300 border border-emerald-500/30 text-[10px]">
+                      <span className="px-2 py-0.5 rounded bg-emerald-500/20 text-emerald-300 border-emerald-500/30 text-[10px]">
                         {stage.status}
                       </span>
                     </div>
@@ -812,7 +812,7 @@ export const AuditCertificateModal: React.FC<AuditCertificateModalProps> = ({ is
               {THAI_CUSTODIANS.map((cust) => (
                 <div
                   key={cust.id}
-                  className="p-4 rounded-2xl bg-white/[0.02] border border-white/8 space-y-2"
+                  className="p-4 rounded-2xl bg-white/[0.02] border-white/8 space-y-2"
                 >
                   <div className="flex items-center justify-between">
                     <div className="flex items-center gap-2">
@@ -820,7 +820,7 @@ export const AuditCertificateModal: React.FC<AuditCertificateModalProps> = ({ is
                       <span className="text-sm font-bold text-zinc-100">{cust.nameTh}</span>
                       <span className="text-xs text-zinc-400 font-mono">({cust.nameEn})</span>
                     </div>
-                    <span className="px-2 py-0.5 rounded-full bg-amber-500/20 text-amber-300 border border-amber-500/30 text-[10px]">
+                    <span className="px-2 py-0.5 rounded-full bg-amber-500/20 text-amber-300 border-amber-500/30 text-[10px]">
                       {cust.passportNumber}
                     </span>
                   </div>
@@ -847,7 +847,7 @@ export const AuditCertificateModal: React.FC<AuditCertificateModalProps> = ({ is
       {/* QR Code Modal */}
       {isQrModalOpen && (
         <div className="fixed inset-0 z-[60] flex items-center justify-center p-4 bg-black/90 backdrop-blur-md animate-in fade-in duration-200" onClick={() => setIsQrModalOpen(false)}>
-          <div className="bg-[#0b0d18] border border-cyan-500/30 p-6 rounded-2xl shadow-[0_0_40px_rgba(6,182,212,0.3)] flex flex-col items-center gap-4 relative" onClick={e => e.stopPropagation()}>
+          <div className="bg-[#0b0d18] border-cyan-500/30 p-6 rounded-2xl shadow-[0_0_40px_rgba(6,182,212,0.3)] flex flex-col items-center gap-4 relative" onClick={e => e.stopPropagation()}>
             <button onClick={() => setIsQrModalOpen(false)} className="absolute top-4 right-4 text-zinc-400 hover:text-white">
               <X className="w-5 h-5" />
             </button>

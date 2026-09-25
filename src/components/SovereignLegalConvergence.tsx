@@ -351,7 +351,7 @@ export const SovereignLegalConvergence: React.FC = () => {
       className={`rounded-[28px] p-6 sm:p-8 space-y-6 shadow-2xl backdrop-blur-2xl transition-all duration-500 ${
         royalGazetteMode
           ? 'bg-gradient-to-br from-[#120d04]/98 via-[#0b0803]/98 to-[#07080F] border-2 border-amber-500/40 text-zinc-100 shadow-[0_0_60px_rgba(245,158,11,0.12)]'
-          : 'bg-[#07080F]/95 border border-white/8 text-zinc-100'
+          : 'bg-[#07080F]/95 border-white/8 text-zinc-100'
       }`}
     >
       {/* Royal Gazette Decorative Header Bar */}
@@ -362,7 +362,7 @@ export const SovereignLegalConvergence: React.FC = () => {
             <span>ฉบับราชกิจจานุเบกษาอิเล็กทรอนิกส์ • พระราชบัญญัติว่าด้วยธุรกรรมทางอิเล็กทรอนิกส์ พ.ศ. ๒๕๔๔</span>
           </div>
           <div className="flex items-center gap-2 font-mono text-[10px] text-amber-400/80">
-            <span className="px-2 py-0.5 rounded-full bg-amber-500/10 border border-amber-500/20">
+            <span className="px-2 py-0.5 rounded-full bg-amber-500/10 border-amber-500/20">
               เล่ม ๑๑๘ ตอนที่ ๑๑๐ ก
             </span>
             <span>ETDA LEVEL 3+ GOLD MASTER</span>
@@ -377,7 +377,7 @@ export const SovereignLegalConvergence: React.FC = () => {
             className={`w-14 h-14 rounded-2xl flex items-center justify-center shrink-0 shadow-lg ${
               royalGazetteMode
                 ? 'bg-gradient-to-br from-amber-400/25 via-yellow-600/20 to-amber-700/30 border-2 border-amber-400/60 text-amber-300 shadow-[0_0_30px_rgba(245,158,11,0.3)]'
-                : 'bg-white/5 border border-white/10 text-white'
+                : 'bg-white/5 border-white/10 text-white'
             }`}
           >
             <Scale className="w-7 h-7" />
@@ -392,7 +392,7 @@ export const SovereignLegalConvergence: React.FC = () => {
               >
                 Technical Legal-Alignment Evidence — Tri-Invariant Matrix
               </h2>
-              <span className="text-[10px] px-2.5 py-0.5 rounded-full bg-amber-500/20 text-amber-300 border border-amber-500/40 font-bold font-mono">
+              <span className="text-[10px] px-2.5 py-0.5 rounded-full bg-amber-500/20 text-amber-300 border-amber-500/40 font-bold font-mono">
                 LAW REF ➔ TECHNICAL MAPPING ➔ EVIDENCE STATUS
               </span>
             </div>
@@ -402,7 +402,7 @@ export const SovereignLegalConvergence: React.FC = () => {
               }`}
             >
               Mathematically Verifiable Technical Mapping & Post-Quantum Proof Chain • Merkle Root Anchor{' '}
-              <code className="text-amber-300 font-mono font-bold bg-amber-500/10 px-1 py-0.5 rounded border border-amber-500/20">
+              <code className="text-amber-300 font-mono font-bold bg-amber-500/10 px-1 py-0.5 rounded border-amber-500/20">
                 909ab814
               </code>{' '}
               • Executive Passport #EP-SOVEREIGN-01
@@ -430,7 +430,7 @@ export const SovereignLegalConvergence: React.FC = () => {
 
           <button
             onClick={handleDownloadReport}
-            className="px-3.5 py-2 rounded-xl bg-gradient-to-r from-amber-500/25 via-yellow-600/25 to-amber-500/25 hover:from-amber-500/35 hover:to-amber-500/35 border border-amber-400/50 text-amber-100 hover:text-white transition-all text-xs flex items-center gap-1.5 font-bold shadow-[0_0_15px_rgba(245,158,11,0.2)]"
+            className="px-3.5 py-2 rounded-xl bg-gradient-to-r from-amber-500/25 via-yellow-600/25 to-amber-500/25 hover:from-amber-500/35 hover:to-amber-500/35 border-amber-400/50 text-amber-100 hover:text-white transition-all text-xs flex items-center gap-1.5 font-bold shadow-[0_0_15px_rgba(245,158,11,0.2)]"
             title="Download Official Sovereign Compliance Report (PDF) with Merkle Anchor 909ab814"
           >
             <Download className="w-3.5 h-3.5 text-amber-300" />
@@ -439,7 +439,7 @@ export const SovereignLegalConvergence: React.FC = () => {
 
           <button
             onClick={handleCopyProofHash}
-            className="px-3.5 py-2 rounded-xl bg-black/60 hover:bg-black/80 border border-amber-500/30 text-amber-300 hover:text-white transition-all text-xs flex items-center gap-1.5"
+            className="px-3.5 py-2 rounded-xl bg-black/60 hover:bg-black/80 border-amber-500/30 text-amber-300 hover:text-white transition-all text-xs flex items-center gap-1.5"
             title="Copy Canonical 64-character Tri-Invariant Root Hash 909ab814..."
           >
             {copiedHash ? <Check className="w-3.5 h-3.5 text-emerald-400" /> : <Copy className="w-3.5 h-3.5 text-amber-300" />}
@@ -452,7 +452,7 @@ export const SovereignLegalConvergence: React.FC = () => {
             className={`px-4 py-2 rounded-xl font-bold flex items-center gap-2 transition-all text-xs shadow-lg ${
               isVerifyingAll
                 ? 'bg-amber-500/25 border-amber-500/50 text-amber-200 animate-pulse'
-                : 'bg-gradient-to-r from-amber-500/30 via-yellow-600/30 to-amber-500/30 hover:from-amber-500/40 hover:to-amber-500/40 border border-amber-400/50 text-amber-100 hover:text-white shadow-[0_0_20px_rgba(245,158,11,0.25)]'
+                : 'bg-gradient-to-r from-amber-500/30 via-yellow-600/30 to-amber-500/30 hover:from-amber-500/40 hover:to-amber-500/40 border-amber-400/50 text-amber-100 hover:text-white shadow-[0_0_20px_rgba(245,158,11,0.25)]'
             }`}
           >
             <RefreshCw className={`w-3.5 h-3.5 ${isVerifyingAll ? 'animate-spin' : ''}`} />
@@ -463,7 +463,7 @@ export const SovereignLegalConvergence: React.FC = () => {
 
       {/* Sovereign Report Toast */}
       {reportToast && (
-        <div className="p-4 rounded-2xl bg-gradient-to-r from-amber-950/90 via-[#0e1224] to-[#07080F] border border-amber-500/50 backdrop-blur-xl flex items-center justify-between gap-3 text-xs font-mono text-amber-200 animate-in fade-in duration-200 shadow-2xl">
+        <div className="p-4 rounded-2xl bg-gradient-to-r from-amber-950/90 via-[#0e1224] to-[#07080F] border-amber-500/50 backdrop-blur-xl flex items-center justify-between gap-3 text-xs font-mono text-amber-200 animate-in fade-in duration-200 shadow-2xl">
           <div className="flex items-center gap-2.5">
             <FileText className="w-4 h-4 text-amber-300 shrink-0" />
             <span>
@@ -480,7 +480,7 @@ export const SovereignLegalConvergence: React.FC = () => {
       )}
 
       {/* Tri-Invariant Alignment Metric Bar */}
-      <div className="p-4 rounded-2xl bg-black/70 border border-amber-500/20 grid grid-cols-1 sm:grid-cols-4 gap-3 text-xs font-mono">
+      <div className="p-4 rounded-2xl bg-black/70 border-amber-500/20 grid grid-cols-1 sm:grid-cols-4 gap-3 text-xs font-mono">
         <div className="flex items-center gap-2.5">
           <div className="w-3 h-3 rounded-full bg-cyan-400 animate-pulse shadow-[0_0_10px_#22d3ee]" />
           <div>
@@ -549,12 +549,12 @@ export const SovereignLegalConvergence: React.FC = () => {
                     {col.tag}
                   </span>
                   {isPending ? (
-                    <span className="text-[10px] text-amber-300 font-mono flex items-center gap-1 font-bold bg-amber-500/20 px-2 py-0.5 rounded-full border border-amber-400/40 animate-pulse">
+                    <span className="text-[10px] text-amber-300 font-mono flex items-center gap-1 font-bold bg-amber-500/20 px-2 py-0.5 rounded-full border-amber-400/40 animate-pulse">
                       <RefreshCw className="w-3 h-3 animate-spin text-amber-400" />
                       <span>PENDING PROOF</span>
                     </span>
                   ) : (
-                    <span className="text-[10px] text-emerald-400 font-mono flex items-center gap-1 font-bold bg-emerald-500/10 px-2 py-0.5 rounded-full border border-emerald-500/30">
+                    <span className="text-[10px] text-emerald-400 font-mono flex items-center gap-1 font-bold bg-emerald-500/10 px-2 py-0.5 rounded-full border-emerald-500/30">
                       <CheckCircle2 className="w-3 h-3" />
                       <span>IMMUTABLE VALIDATED</span>
                     </span>
@@ -562,7 +562,7 @@ export const SovereignLegalConvergence: React.FC = () => {
                 </div>
 
                 <div className="flex items-start gap-3">
-                  <div className={`p-2.5 rounded-xl bg-white/[0.04] border border-amber-500/20 ${col.textColor} shrink-0 mt-0.5`}>
+                  <div className={`p-2.5 rounded-xl bg-white/[0.04] border-amber-500/20 ${col.textColor} shrink-0 mt-0.5`}>
                     <IconComp className="w-5 h-5" />
                   </div>
                   <div>
@@ -582,7 +582,7 @@ export const SovereignLegalConvergence: React.FC = () => {
               {/* 3 Sub-Panels within Column */}
               <div className="space-y-3 text-xs flex-1">
                 {/* 1. Legal Statute Foundation */}
-                <div className="p-3.5 rounded-xl bg-black/60 border border-white/5 space-y-1.5">
+                <div className="p-3.5 rounded-xl bg-black/60 border-white/5 space-y-1.5">
                   <div className="text-[10px] font-bold text-zinc-400 uppercase font-mono flex items-center justify-between">
                     <span>1. LAW REFERENCE</span>
                     <span className="text-[9px] text-amber-400/80 font-serif">บทบัญญัติอ้างอิง</span>
@@ -599,7 +599,7 @@ export const SovereignLegalConvergence: React.FC = () => {
                 </div>
 
                 {/* 2. Technical Mapping Layer */}
-                <div className="p-3.5 rounded-xl bg-black/60 border border-white/5 space-y-1.5">
+                <div className="p-3.5 rounded-xl bg-black/60 border-white/5 space-y-1.5">
                   <div className="text-[10px] font-bold text-zinc-400 uppercase font-mono flex items-center justify-between">
                     <span>2. TECHNICAL MAPPING</span>
                     <span className="text-[9px] text-zinc-400 font-mono">การแมปเชิงเทคนิค</span>
@@ -614,7 +614,7 @@ export const SovereignLegalConvergence: React.FC = () => {
                 </div>
 
                 {/* 3. Evidence Status & PQC Proof */}
-                <div className="p-3.5 rounded-xl bg-black/60 border border-white/5 space-y-1.5">
+                <div className="p-3.5 rounded-xl bg-black/60 border-white/5 space-y-1.5">
                   <div className="text-[10px] font-bold text-zinc-400 uppercase font-mono flex items-center justify-between">
                     <span>3. EVIDENCE STATUS</span>
                     <span className="text-[9px] text-emerald-400 font-mono">PQC PROOF</span>
@@ -637,7 +637,7 @@ export const SovereignLegalConvergence: React.FC = () => {
                         <Key className="w-3.5 h-3.5 text-amber-400" />
                         <span>SECTION 28 CERTIFICATE ROOT ANCHOR</span>
                       </span>
-                      <span className="text-[9px] px-2 py-0.5 rounded-full bg-emerald-500/20 text-emerald-300 font-bold font-mono border border-emerald-500/40">
+                      <span className="text-[9px] px-2 py-0.5 rounded-full bg-emerald-500/20 text-emerald-300 font-bold font-mono border-emerald-500/40">
                         100.0% ZERO-DRIFT
                       </span>
                     </div>
@@ -653,7 +653,7 @@ export const SovereignLegalConvergence: React.FC = () => {
                       </div>
                       <div className="flex items-center justify-between">
                         <span className="text-zinc-400">Merkle Root Anchor:</span>
-                        <span className="px-2 py-0.5 rounded bg-amber-500/25 text-amber-300 font-bold border border-amber-400/40">
+                        <span className="px-2 py-0.5 rounded bg-amber-500/25 text-amber-300 font-bold border-amber-400/40">
                           {invariants.sec28.merkleRootAnchor}
                         </span>
                       </div>
@@ -696,7 +696,7 @@ export const SovereignLegalConvergence: React.FC = () => {
 
               {/* Expanded Inspection Drawer */}
               {isSelected && (
-                <div className="p-3.5 rounded-xl bg-black/90 border border-amber-500/40 space-y-2 text-[10px] font-mono text-zinc-300 animate-in fade-in duration-200">
+                <div className="p-3.5 rounded-xl bg-black/90 border-amber-500/40 space-y-2 text-[10px] font-mono text-zinc-300 animate-in fade-in duration-200">
                   <div className="text-amber-300 font-bold border-b border-white/10 pb-1 flex items-center justify-between">
                     <span>Statutory Attestation Certificate Leaf:</span>
                     <span className="text-emerald-400">VALIDATED</span>
@@ -713,7 +713,7 @@ export const SovereignLegalConvergence: React.FC = () => {
       </div>
 
       {/* Unified Interactive Section 28 Governance (Radar, Handover & Audit Log) */}
-      <div className="p-6 rounded-2xl bg-black/70 border border-amber-500/30 space-y-6">
+      <div className="p-6 rounded-2xl bg-black/70 border-amber-500/30 space-y-6">
         <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 border-b border-amber-500/20 pb-4">
           <div className="flex items-center gap-3">
             <Sliders className="w-5 h-5 text-amber-400" />
@@ -727,7 +727,7 @@ export const SovereignLegalConvergence: React.FC = () => {
             </div>
           </div>
 
-          <div className="flex items-center bg-black/80 border border-white/10 rounded-2xl p-1 text-xs font-mono">
+          <div className="flex items-center bg-black/80 border-white/10 rounded-2xl p-1 text-xs font-mono">
             <button
               onClick={() => {
                 playTone(560, 0.03);
@@ -735,7 +735,7 @@ export const SovereignLegalConvergence: React.FC = () => {
               }}
               className={`px-3 py-1.5 rounded-xl font-bold transition-all ${
                 activeInteractiveSection === 'RADAR'
-                  ? 'bg-amber-500/25 text-amber-200 border border-amber-500/40 shadow-sm'
+                  ? 'bg-amber-500/25 text-amber-200 border-amber-500/40 shadow-sm'
                   : 'text-zinc-400 hover:text-zinc-200'
               }`}
             >
@@ -749,7 +749,7 @@ export const SovereignLegalConvergence: React.FC = () => {
               }}
               className={`px-3 py-1.5 rounded-xl font-bold transition-all ${
                 activeInteractiveSection === 'HANDOVER'
-                  ? 'bg-cyan-500/25 text-cyan-200 border border-cyan-500/40 shadow-sm'
+                  ? 'bg-cyan-500/25 text-cyan-200 border-cyan-500/40 shadow-sm'
                   : 'text-zinc-400 hover:text-zinc-200'
               }`}
             >
@@ -763,7 +763,7 @@ export const SovereignLegalConvergence: React.FC = () => {
               }}
               className={`px-3 py-1.5 rounded-xl font-bold transition-all ${
                 activeInteractiveSection === 'AUDIT_LOG'
-                  ? 'bg-rose-500/25 text-rose-200 border border-rose-500/40 shadow-sm'
+                  ? 'bg-rose-500/25 text-rose-200 border-rose-500/40 shadow-sm'
                   : 'text-zinc-400 hover:text-zinc-200'
               }`}
             >
@@ -776,7 +776,7 @@ export const SovereignLegalConvergence: React.FC = () => {
         {activeInteractiveSection === 'RADAR' && (
           <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 items-center">
             {/* SVG Radar */}
-            <div className="p-6 rounded-2xl bg-black/80 border border-amber-500/20 flex flex-col items-center justify-center space-y-4">
+            <div className="p-6 rounded-2xl bg-black/80 border-amber-500/20 flex flex-col items-center justify-center space-y-4">
               <div className="text-xs font-bold text-amber-300 uppercase tracking-wider flex items-center gap-1.5 self-start font-mono">
                 <Activity className="w-4 h-4 text-amber-400" />
                 <span>#EP-SOVEREIGN-01 Custody Chain Radar</span>
@@ -831,10 +831,10 @@ export const SovereignLegalConvergence: React.FC = () => {
                 { label: 'Audit Trail Integrity', val: '14,902 Seals', desc: 'บันทึกประวัติการใช้กุญแจย้อนหลังแบบแก้ไม่ได้' },
                 { label: 'Liability Safe Harbor', val: 'Court Proof', desc: 'ข้อสันนิษฐานเด็ดขาดตามมาตรา ๒๘ วรรคสอง' },
               ].map((item, idx) => (
-                <div key={idx} className="p-3.5 rounded-xl bg-white/[0.02] border border-amber-500/15 space-y-1">
+                <div key={idx} className="p-3.5 rounded-xl bg-white/[0.02] border-amber-500/15 space-y-1">
                   <div className="flex items-center justify-between">
                     <span className="font-bold text-zinc-200">{item.label}</span>
-                    <span className="text-[10px] text-amber-300 font-bold bg-amber-500/15 px-2 py-0.5 rounded border border-amber-500/30">
+                    <span className="text-[10px] text-amber-300 font-bold bg-amber-500/15 px-2 py-0.5 rounded border-amber-500/30">
                       {item.val}
                     </span>
                   </div>
@@ -848,7 +848,7 @@ export const SovereignLegalConvergence: React.FC = () => {
         {/* Section 28 Sub-View 2: Handover Simulator */}
         {activeInteractiveSection === 'HANDOVER' && (
           <div className="space-y-4 font-mono text-xs">
-            <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 p-4 rounded-xl bg-cyan-950/30 border border-cyan-500/30">
+            <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 p-4 rounded-xl bg-cyan-950/30 border-cyan-500/30">
               <div className="text-cyan-200 flex items-center gap-2">
                 <Zap className="w-4 h-4 text-cyan-300 shrink-0" />
                 <span>Simulate multi-signatory custody handover while maintaining continuous Section 28 Duty of Care trail.</span>
@@ -856,7 +856,7 @@ export const SovereignLegalConvergence: React.FC = () => {
               <button
                 onClick={handleSimulateHandover}
                 disabled={isSigning}
-                className="px-4 py-2 rounded-xl font-bold bg-cyan-500/20 hover:bg-cyan-500/30 text-cyan-200 border border-cyan-500/40 flex items-center gap-1.5 transition-all shrink-0"
+                className="px-4 py-2 rounded-xl font-bold bg-cyan-500/20 hover:bg-cyan-500/30 text-cyan-200 border-cyan-500/40 flex items-center gap-1.5 transition-all shrink-0"
               >
                 <Send className="w-3.5 h-3.5" />
                 <span>{isSigning ? 'Signing Block...' : 'Sign Custody Handover Tx'}</span>
@@ -865,7 +865,7 @@ export const SovereignLegalConvergence: React.FC = () => {
 
             <div className="space-y-2">
               {transactions.map((tx) => (
-                <div key={tx.id} className="p-3.5 rounded-xl bg-black/60 border border-white/8 space-y-1.5">
+                <div key={tx.id} className="p-3.5 rounded-xl bg-black/60 border-white/8 space-y-1.5">
                   <div className="flex items-center justify-between border-b border-white/5 pb-1">
                     <span className="text-cyan-300 font-bold">{tx.txHash}</span>
                     <span className="text-emerald-400 text-[10px]">DUTY OF CARE: {tx.dutyOfCareScore}%</span>
@@ -886,7 +886,7 @@ export const SovereignLegalConvergence: React.FC = () => {
         {activeInteractiveSection === 'AUDIT_LOG' && (
           <div className="space-y-3 font-mono text-xs">
             {nonComplianceAlerts.map((alert) => (
-              <div key={alert.id} className="p-3.5 rounded-xl bg-rose-950/20 border border-rose-500/30 space-y-1.5">
+              <div key={alert.id} className="p-3.5 rounded-xl bg-rose-950/20 border-rose-500/30 space-y-1.5">
                 <div className="flex items-center justify-between">
                   <span className="text-rose-300 font-bold flex items-center gap-1">
                     <AlertOctagon className="w-3.5 h-3.5" />
@@ -926,7 +926,7 @@ export const SovereignLegalConvergence: React.FC = () => {
         </div>
 
         <div className="flex items-center gap-2 shrink-0 font-mono text-[10px]">
-          <span className="px-3 py-1.5 rounded-xl bg-amber-500/20 text-amber-300 border border-amber-500/40 font-bold">
+          <span className="px-3 py-1.5 rounded-xl bg-amber-500/20 text-amber-300 border-amber-500/40 font-bold">
             MERKLE ROOT: 909ab814
           </span>
         </div>

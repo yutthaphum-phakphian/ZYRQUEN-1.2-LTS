@@ -144,7 +144,7 @@ export const ZeroDriftD3Chart: React.FC<ZeroDriftD3ChartProps> = ({
   }, [width, height]);
 
   return (
-    <div className={`flex items-center gap-3 px-3 py-1.5 rounded-xl bg-slate-900/90 border border-emerald-500/30 shadow-inner ${className}`}>
+    <div className={`flex items-center gap-3 px-3 py-1.5 rounded-xl bg-slate-900/90 border-emerald-500/30 shadow-inner ${className}`}>
       <div className="flex flex-col">
         <div className="flex items-center gap-1.5">
           <span className="w-2 h-2 rounded-full bg-emerald-400 animate-pulse" />

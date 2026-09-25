@@ -248,11 +248,11 @@ export const ThaiLegalRuntimeDashboard: React.FC = () => {
   const meta = getLayerMeta(selectedLayer);
 
   return (
-    <div className="rounded-[28px] bg-[#07080F]/95 border border-white/8 backdrop-blur-2xl p-6 sm:p-8 space-y-6 shadow-2xl font-mono">
+    <div className="rounded-[28px] bg-[#07080F]/95 border-white/8 backdrop-blur-2xl p-6 sm:p-8 space-y-6 shadow-2xl font-mono">
       {/* Top Banner */}
       <div className="flex flex-col lg:flex-row lg:items-center justify-between gap-4 border-b border-white/8 pb-6">
         <div className="flex items-center gap-3.5">
-          <div className="w-12 h-12 rounded-2xl bg-cyan-500/15 border border-cyan-500/30 flex items-center justify-center text-cyan-300 shadow-[0_0_25px_rgba(6,182,212,0.25)] shrink-0">
+          <div className="w-12 h-12 rounded-2xl bg-cyan-500/15 border-cyan-500/30 flex items-center justify-center text-cyan-300 shadow-[0_0_25px_rgba(6,182,212,0.25)] shrink-0">
             <Scale className="w-6 h-6" />
           </div>
           <div>
@@ -260,7 +260,7 @@ export const ThaiLegalRuntimeDashboard: React.FC = () => {
               <h3 className="text-base sm:text-lg font-bold text-white tracking-wide">
                 Thai Legal Runtime Dashboard (ETDA Sections 9, 26, 28)
               </h3>
-              <span className="text-[10px] px-2.5 py-0.5 rounded-full bg-emerald-500/15 text-emerald-300 border border-emerald-500/30 font-bold">
+              <span className="text-[10px] px-2.5 py-0.5 rounded-full bg-emerald-500/15 text-emerald-300 border-emerald-500/30 font-bold">
                 100% STATUTORY COMPLIANCE
               </span>
             </div>
@@ -371,7 +371,7 @@ export const ThaiLegalRuntimeDashboard: React.FC = () => {
                 >
                   <div className="flex items-center justify-between">
                     <span className="text-[10px] font-bold text-cyan-300 truncate max-w-[200px]">{m.statute}</span>
-                    <span className="text-[10px] font-mono text-emerald-400 bg-emerald-500/10 px-2 py-0.5 rounded-full border border-emerald-500/20">
+                    <span className="text-[10px] font-mono text-emerald-400 bg-emerald-500/10 px-2 py-0.5 rounded-full border-emerald-500/20">
                       {m.score}%
                     </span>
                   </div>
@@ -390,7 +390,7 @@ export const ThaiLegalRuntimeDashboard: React.FC = () => {
 
         {/* Right Column (2 spans): Deep Invariant Inspector & Legal Standing */}
         <div className="lg:col-span-2 space-y-4">
-          <div className="p-6 rounded-2xl bg-black/80 border border-white/10 space-y-4 shadow-xl">
+          <div className="p-6 rounded-2xl bg-black/80 border-white/10 space-y-4 shadow-xl">
             <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 border-b border-white/8 pb-4">
               <div className="flex items-center gap-3">
                 <div
@@ -409,14 +409,14 @@ export const ThaiLegalRuntimeDashboard: React.FC = () => {
                 </div>
               </div>
 
-              <span className="px-3 py-1 rounded-xl text-xs font-bold bg-emerald-500/15 text-emerald-300 border border-emerald-500/30 self-start sm:self-auto">
+              <span className="px-3 py-1 rounded-xl text-xs font-bold bg-emerald-500/15 text-emerald-300 border-emerald-500/30 self-start sm:self-auto">
                 COURT ADMISSIBLE 🇹🇭
               </span>
             </div>
 
             {/* Invariant & Statutory Analysis Grid */}
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4 text-xs">
-              <div className="p-4 rounded-xl bg-white/[0.02] border border-white/5 space-y-2">
+              <div className="p-4 rounded-xl bg-white/[0.02] border-white/5 space-y-2">
                 <span className="text-amber-300 font-bold flex items-center gap-1.5">
                   <Scale className="w-3.5 h-3.5" />
                   <span>คำอธิบายตามข้อกฎหมาย (Statutory Mandate):</span>
@@ -429,7 +429,7 @@ export const ThaiLegalRuntimeDashboard: React.FC = () => {
                 </p>
               </div>
 
-              <div className="p-4 rounded-xl bg-white/[0.02] border border-white/5 space-y-2">
+              <div className="p-4 rounded-xl bg-white/[0.02] border-white/5 space-y-2">
                 <span className="text-cyan-300 font-bold flex items-center gap-1.5">
                   <Cpu className="w-3.5 h-3.5" />
                   <span>กลไกการบังคับใช้เชิงรหัสลับ (Cryptographic Enforcement):</span>
@@ -437,14 +437,14 @@ export const ThaiLegalRuntimeDashboard: React.FC = () => {
                 <p className="text-zinc-300 font-mono text-xs leading-relaxed">
                   {activeMetric.technicalEnforcement}
                 </p>
-                <div className="p-2 rounded-lg bg-black/60 border border-white/5 text-[10px] text-zinc-400 font-sans">
+                <div className="p-2 rounded-lg bg-black/60 border-white/5 text-[10px] text-zinc-400 font-sans">
                   Standard: <strong className="text-zinc-200">{activeMetric.standard}</strong>
                 </div>
               </div>
             </div>
 
             {/* Proof Hash & Execution Snapshot */}
-            <div className="p-3.5 rounded-xl bg-gradient-to-r from-blue-950/30 to-black/60 border border-cyan-500/20 flex flex-col sm:flex-row sm:items-center justify-between gap-3 text-xs">
+            <div className="p-3.5 rounded-xl bg-gradient-to-r from-blue-950/30 to-black/60 border-cyan-500/20 flex flex-col sm:flex-row sm:items-center justify-between gap-3 text-xs">
               <div className="space-y-0.5 truncate">
                 <span className="text-[10px] text-zinc-400 block font-sans">IMMUTABLE STATUTORY PROOF HASH:</span>
                 <span className="text-cyan-300 font-mono text-xs select-all truncate block">
@@ -453,7 +453,7 @@ export const ThaiLegalRuntimeDashboard: React.FC = () => {
               </div>
 
               <div className="flex items-center gap-2 shrink-0">
-                <span className="px-2.5 py-1 rounded-lg bg-white/5 text-zinc-300 text-[10px] border border-white/10 font-bold">
+                <span className="px-2.5 py-1 rounded-lg bg-white/5 text-zinc-300 text-[10px] border-white/10 font-bold">
                   PASS: 0.00% DRIFT
                 </span>
               </div>

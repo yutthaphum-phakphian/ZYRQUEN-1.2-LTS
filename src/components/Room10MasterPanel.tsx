@@ -150,23 +150,23 @@ export const Room10MasterPanel: React.FC<Room10MasterPanelProps> = ({
   return (
     <div className="space-y-6 font-mono text-zinc-300">
       {/* Top Banner for Room 10 */}
-      <div className="p-6 sm:p-8 rounded-[28px] bg-gradient-to-br from-amber-950/40 via-[#181105]/95 to-black border border-amber-500/40 backdrop-blur-xl relative overflow-hidden shadow-2xl">
+      <div className="p-6 sm:p-8 rounded-[28px] bg-gradient-to-br from-amber-950/40 via-[#181105]/95 to-black border-amber-500/40 backdrop-blur-xl relative overflow-hidden shadow-2xl">
         <div className="absolute top-0 right-0 w-96 h-96 bg-gradient-to-bl from-amber-500/10 via-yellow-500/5 to-transparent rounded-full blur-3xl pointer-events-none" />
 
         <div className="relative z-10 flex flex-col lg:flex-row lg:items-center justify-between gap-6">
           <div className="space-y-3">
             <div className="flex flex-wrap items-center gap-2">
-              <span className="px-3 py-1 rounded-full bg-amber-500/15 text-amber-300 border border-amber-500/40 text-xs font-bold flex items-center gap-1.5 shadow-[0_0_12px_rgba(234,179,8,0.25)]">
+              <span className="px-3 py-1 rounded-full bg-amber-500/15 text-amber-300 border-amber-500/40 text-xs font-bold flex items-center gap-1.5 shadow-[0_0_12px_rgba(234,179,8,0.25)]">
                 <Landmark className="w-4 h-4 text-amber-400 animate-pulse" />
                 CHAMBER 10 • SOVEREIGN TREASURY & BUDGET GOVERNANCE
               </span>
-              <span className="px-2.5 py-0.5 rounded-full bg-emerald-500/15 text-emerald-300 border border-emerald-500/30 text-[11px] font-bold">
+              <span className="px-2.5 py-0.5 rounded-full bg-emerald-500/15 text-emerald-300 border-emerald-500/30 text-[11px] font-bold">
                 VARIANCE: ฿0.00 (0.00%)
               </span>
-              <span className="px-2.5 py-0.5 rounded-full bg-yellow-500/15 text-yellow-300 border border-yellow-500/30 text-[11px] font-bold">
+              <span className="px-2.5 py-0.5 rounded-full bg-yellow-500/15 text-yellow-300 border-yellow-500/30 text-[11px] font-bold">
                 14,902.00 oz LBMA GOLD
               </span>
-              <span className="px-2.5 py-0.5 rounded-full bg-cyan-500/15 text-cyan-300 border border-cyan-500/30 text-[11px] font-bold">
+              <span className="px-2.5 py-0.5 rounded-full bg-cyan-500/15 text-cyan-300 border-cyan-500/30 text-[11px] font-bold">
                 ฿1,490,200,000 THB-SOV
               </span>
             </div>
@@ -186,7 +186,7 @@ export const Room10MasterPanel: React.FC<Room10MasterPanelProps> = ({
             <button
               onClick={handleRunReconciliation}
               disabled={isReconciling}
-              className="px-4 py-2.5 rounded-xl bg-gradient-to-r from-amber-600/80 to-yellow-600/80 hover:from-amber-500 hover:to-yellow-500 text-white font-bold text-xs flex items-center gap-2 shadow-lg shadow-amber-500/20 border border-amber-400/40 transition-all transform hover:-translate-y-0.5"
+              className="px-4 py-2.5 rounded-xl bg-gradient-to-r from-amber-600/80 to-yellow-600/80 hover:from-amber-500 hover:to-yellow-500 text-white font-bold text-xs flex items-center gap-2 shadow-lg shadow-amber-500/20 border-amber-400/40 transition-all transform hover:-translate-y-0.5"
             >
               <RefreshCw className={`w-4 h-4 ${isReconciling ? 'animate-spin' : ''}`} />
               {isReconciling ? 'Auditing 14,902 Seals...' : 'Execute 100% Treasury Audit'}
@@ -200,22 +200,22 @@ export const Room10MasterPanel: React.FC<Room10MasterPanelProps> = ({
 
         {/* Quick KPI Cards */}
         <div className="grid grid-cols-2 sm:grid-cols-4 gap-3 mt-6 pt-6 border-t border-amber-500/20">
-          <div className="p-3 rounded-xl bg-black/40 border border-white/5 space-y-1">
+          <div className="p-3 rounded-xl bg-black/40 border-white/5 space-y-1">
             <div className="text-[10px] text-zinc-400 uppercase tracking-wider">THB-SOV Reserve</div>
             <div className="text-base sm:text-lg font-bold text-cyan-400">฿1,490,200,000</div>
             <div className="text-[10px] text-emerald-400 font-semibold">100% Backed</div>
           </div>
-          <div className="p-3 rounded-xl bg-black/40 border border-white/5 space-y-1">
+          <div className="p-3 rounded-xl bg-black/40 border-white/5 space-y-1">
             <div className="text-[10px] text-zinc-400 uppercase tracking-wider">Physical Gold (LBMA)</div>
             <div className="text-base sm:text-lg font-bold text-yellow-400">14,902.00 oz</div>
             <div className="text-[10px] text-amber-300 font-semibold">372 Bars (99.99%)</div>
           </div>
-          <div className="p-3 rounded-xl bg-black/40 border border-white/5 space-y-1">
+          <div className="p-3 rounded-xl bg-black/40 border-white/5 space-y-1">
             <div className="text-[10px] text-zinc-400 uppercase tracking-wider">RWA Tenants Active</div>
             <div className="text-base sm:text-lg font-bold text-emerald-400">400 Tenants</div>
             <div className="text-[10px] text-emerald-300">Ω601–Ω1000 Locked</div>
           </div>
-          <div className="p-3 rounded-xl bg-black/40 border border-white/5 space-y-1">
+          <div className="p-3 rounded-xl bg-black/40 border-white/5 space-y-1">
             <div className="text-[10px] text-zinc-400 uppercase tracking-wider">Fiduciary Variance</div>
             <div className="text-base sm:text-lg font-bold text-emerald-400">฿0.00 (0.00%)</div>
             <div className="text-[10px] text-zinc-400">Zero Discrepancy</div>
@@ -224,7 +224,7 @@ export const Room10MasterPanel: React.FC<Room10MasterPanelProps> = ({
       </div>
 
       {/* Sub-Tabs */}
-      <div className="flex flex-wrap items-center gap-2 p-1.5 rounded-2xl bg-[#0a0d16] border border-amber-500/20">
+      <div className="flex flex-wrap items-center gap-2 p-1.5 rounded-2xl bg-[#0a0d16] border-amber-500/20">
         <button
           onClick={() => {
             playTone(600, 0.04);
@@ -232,8 +232,8 @@ export const Room10MasterPanel: React.FC<Room10MasterPanelProps> = ({
           }}
           className={`px-4 py-2 rounded-xl text-xs font-bold transition-all flex items-center gap-2 ${
             activeTab === 'vault-matrix'
-              ? 'bg-amber-500/20 text-amber-200 border border-amber-500/40 shadow-[0_0_12px_rgba(245,158,11,0.2)]'
-              : 'text-zinc-400 hover:text-zinc-200 bg-transparent border border-transparent'
+              ? 'bg-amber-500/20 text-amber-200 border-amber-500/40 shadow-[0_0_12px_rgba(245,158,11,0.2)]'
+              : 'text-zinc-400 hover:text-zinc-200 bg-transparent border-transparent'
           }`}
         >
           <PieChartIcon className="w-3.5 h-3.5" />
@@ -247,8 +247,8 @@ export const Room10MasterPanel: React.FC<Room10MasterPanelProps> = ({
           }}
           className={`px-4 py-2 rounded-xl text-xs font-bold transition-all flex items-center gap-2 ${
             activeTab === 'gold-custody'
-              ? 'bg-yellow-500/20 text-yellow-200 border border-yellow-500/40 shadow-[0_0_12px_rgba(234,179,8,0.2)]'
-              : 'text-zinc-400 hover:text-zinc-200 bg-transparent border border-transparent'
+              ? 'bg-yellow-500/20 text-yellow-200 border-yellow-500/40 shadow-[0_0_12px_rgba(234,179,8,0.2)]'
+              : 'text-zinc-400 hover:text-zinc-200 bg-transparent border-transparent'
           }`}
         >
           <Award className="w-3.5 h-3.5" />
@@ -262,8 +262,8 @@ export const Room10MasterPanel: React.FC<Room10MasterPanelProps> = ({
           }}
           className={`px-4 py-2 rounded-xl text-xs font-bold transition-all flex items-center gap-2 ${
             activeTab === 'rwa-tenants'
-              ? 'bg-emerald-500/20 text-emerald-200 border border-emerald-500/40 shadow-[0_0_12px_rgba(16,185,129,0.2)]'
-              : 'text-zinc-400 hover:text-zinc-200 bg-transparent border border-transparent'
+              ? 'bg-emerald-500/20 text-emerald-200 border-emerald-500/40 shadow-[0_0_12px_rgba(16,185,129,0.2)]'
+              : 'text-zinc-400 hover:text-zinc-200 bg-transparent border-transparent'
           }`}
         >
           <Building2 className="w-3.5 h-3.5" />
@@ -277,8 +277,8 @@ export const Room10MasterPanel: React.FC<Room10MasterPanelProps> = ({
           }}
           className={`px-4 py-2 rounded-xl text-xs font-bold transition-all flex items-center gap-2 ${
             activeTab === 'fiduciary-audit'
-              ? 'bg-cyan-500/20 text-cyan-200 border border-cyan-500/40 shadow-[0_0_12px_rgba(6,182,212,0.2)]'
-              : 'text-zinc-400 hover:text-zinc-200 bg-transparent border border-transparent'
+              ? 'bg-cyan-500/20 text-cyan-200 border-cyan-500/40 shadow-[0_0_12px_rgba(6,182,212,0.2)]'
+              : 'text-zinc-400 hover:text-zinc-200 bg-transparent border-transparent'
           }`}
         >
           <Scale className="w-3.5 h-3.5" />
@@ -289,7 +289,7 @@ export const Room10MasterPanel: React.FC<Room10MasterPanelProps> = ({
       {/* Tab 1: Vault Allocation Matrix */}
       {activeTab === 'vault-matrix' && (
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-6">
-          <div className="lg:col-span-5 p-6 rounded-2xl bg-[#0a0d1a]/90 border border-amber-500/20 flex flex-col justify-between space-y-4">
+          <div className="lg:col-span-5 p-6 rounded-2xl bg-[#0a0d1a]/90 border-amber-500/20 flex flex-col justify-between space-y-4">
             <div>
               <h3 className="text-base font-bold text-white flex items-center gap-2">
                 <PieChartIcon className="w-4 h-4 text-amber-400" />
@@ -346,14 +346,14 @@ export const Room10MasterPanel: React.FC<Room10MasterPanelProps> = ({
             {TREASURY_ALLOCATIONS.map((item) => (
               <div
                 key={item.id}
-                className="p-5 rounded-2xl bg-[#0a0d1a]/80 border border-white/10 hover:border-amber-500/40 transition-all space-y-3"
+                className="p-5 rounded-2xl bg-[#0a0d1a]/80 border-white/10 hover:border-amber-500/40 transition-all space-y-3"
               >
                 <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2">
                   <div className="space-y-0.5">
                     <div className="text-xs font-bold text-white">{item.name}</div>
                     <div className="text-[11px] text-amber-300/80">{item.nameTh}</div>
                   </div>
-                  <span className="px-2.5 py-0.5 rounded-full bg-emerald-500/20 text-emerald-300 border border-emerald-500/30 text-[10px] font-bold self-start sm:self-auto">
+                  <span className="px-2.5 py-0.5 rounded-full bg-emerald-500/20 text-emerald-300 border-emerald-500/30 text-[10px] font-bold self-start sm:self-auto">
                     {item.status}
                   </span>
                 </div>
@@ -381,7 +381,7 @@ export const Room10MasterPanel: React.FC<Room10MasterPanelProps> = ({
       {/* Tab 2: LBMA Gold Batches */}
       {activeTab === 'gold-custody' && (
         <div className="space-y-6">
-          <div className="p-6 rounded-2xl bg-yellow-950/20 border border-yellow-500/30 space-y-3">
+          <div className="p-6 rounded-2xl bg-yellow-950/20 border-yellow-500/30 space-y-3">
             <div className="flex items-center justify-between">
               <span className="text-xs font-bold text-yellow-300 flex items-center gap-2">
                 <Award className="w-4 h-4 text-yellow-400" />
@@ -401,11 +401,11 @@ export const Room10MasterPanel: React.FC<Room10MasterPanelProps> = ({
             {goldLots.map((lot) => (
               <div
                 key={lot.lotId}
-                className="p-5 rounded-2xl bg-[#0a0d1a] border border-yellow-500/20 hover:border-yellow-500/50 transition-all space-y-3"
+                className="p-5 rounded-2xl bg-[#0a0d1a] border-yellow-500/20 hover:border-yellow-500/50 transition-all space-y-3"
               >
                 <div className="flex items-center justify-between">
                   <span className="text-xs font-bold text-yellow-400">{lot.lotId}</span>
-                  <span className="text-[10px] text-emerald-400 font-bold bg-emerald-500/10 px-2 py-0.5 rounded border border-emerald-500/20">
+                  <span className="text-[10px] text-emerald-400 font-bold bg-emerald-500/10 px-2 py-0.5 rounded border-emerald-500/20">
                     {lot.purity}
                   </span>
                 </div>
@@ -423,7 +423,7 @@ export const Room10MasterPanel: React.FC<Room10MasterPanelProps> = ({
       {/* Tab 3: 400 RWA Tenants */}
       {activeTab === 'rwa-tenants' && (
         <div className="space-y-6">
-          <div className="p-6 rounded-2xl bg-[#0a0d1a] border border-emerald-500/20 space-y-4">
+          <div className="p-6 rounded-2xl bg-[#0a0d1a] border-emerald-500/20 space-y-4">
             <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
               <div>
                 <h3 className="text-base font-bold text-white flex items-center gap-2">
@@ -434,25 +434,25 @@ export const Room10MasterPanel: React.FC<Room10MasterPanelProps> = ({
                   โครงสร้างสัญญาเช่าที่เข้ารหัสและบันทึกลงในบล็อก #849202 พร้อมการจัดสรรรายได้อัตโนมัติ
                 </p>
               </div>
-              <span className="px-3 py-1 rounded-full bg-emerald-500/20 text-emerald-300 border border-emerald-500/30 text-xs font-bold">
+              <span className="px-3 py-1 rounded-full bg-emerald-500/20 text-emerald-300 border-emerald-500/30 text-xs font-bold">
                 100% Active Tenants
               </span>
             </div>
 
             <div className="grid grid-cols-2 sm:grid-cols-4 gap-3 text-xs">
-              <div className="p-3 rounded-xl bg-black/40 border border-white/5">
+              <div className="p-3 rounded-xl bg-black/40 border-white/5">
                 <div className="text-zinc-500 text-[10px]">Contract Range</div>
                 <div className="text-emerald-400 font-bold">Ω601 to Ω1000</div>
               </div>
-              <div className="p-3 rounded-xl bg-black/40 border border-white/5">
+              <div className="p-3 rounded-xl bg-black/40 border-white/5">
                 <div className="text-zinc-500 text-[10px]">Monthly Yield Backing</div>
                 <div className="text-cyan-400 font-bold">฿12,450,000 / mo</div>
               </div>
-              <div className="p-3 rounded-xl bg-black/40 border border-white/5">
+              <div className="p-3 rounded-xl bg-black/40 border-white/5">
                 <div className="text-zinc-500 text-[10px]">Occupancy Rate</div>
                 <div className="text-yellow-400 font-bold">100.0% Fully Leased</div>
               </div>
-              <div className="p-3 rounded-xl bg-black/40 border border-white/5">
+              <div className="p-3 rounded-xl bg-black/40 border-white/5">
                 <div className="text-zinc-500 text-[10px]">Default Risk</div>
                 <div className="text-emerald-400 font-bold">0.00% Zero Default</div>
               </div>
@@ -464,7 +464,7 @@ export const Room10MasterPanel: React.FC<Room10MasterPanelProps> = ({
       {/* Tab 4: Fiduciary Audit */}
       {activeTab === 'fiduciary-audit' && (
         <div className="space-y-6">
-          <div className="p-6 rounded-2xl bg-[#0a0d1a] border border-amber-500/20 space-y-4">
+          <div className="p-6 rounded-2xl bg-[#0a0d1a] border-amber-500/20 space-y-4">
             <div className="flex items-center justify-between">
               <div>
                 <h3 className="text-base font-bold text-white flex items-center gap-2">
@@ -477,7 +477,7 @@ export const Room10MasterPanel: React.FC<Room10MasterPanelProps> = ({
               </div>
             </div>
 
-            <div className="p-4 rounded-xl bg-black/60 border border-white/10 font-mono text-xs text-zinc-300 space-y-2">
+            <div className="p-4 rounded-xl bg-black/60 border-white/10 font-mono text-xs text-zinc-300 space-y-2">
               <div className="text-amber-400 font-bold">--- ZYRQUEN Ω∞ CHAMBER 10 TREASURY RECONCILIATION ---</div>
               <div>Audit Certificate: <span className="text-yellow-400">ZQ-GOLD-DEP-849202-3908</span></div>
               <div>Total Sovereign Value: <span className="text-white">฿2,399,222,000 THB Equivalent</span></div>
@@ -494,7 +494,7 @@ export const Room10MasterPanel: React.FC<Room10MasterPanelProps> = ({
                     playTone(680, 0.05);
                     onOpenCertificate();
                   }}
-                  className="px-4 py-2 rounded-xl bg-gradient-to-r from-amber-500/20 to-yellow-500/20 text-yellow-300 border border-yellow-500/40 hover:bg-yellow-500/30 text-xs font-bold flex items-center gap-2 transition-all"
+                  className="px-4 py-2 rounded-xl bg-gradient-to-r from-amber-500/20 to-yellow-500/20 text-yellow-300 border-yellow-500/40 hover:bg-yellow-500/30 text-xs font-bold flex items-center gap-2 transition-all"
                 >
                   <Sparkles className="w-4 h-4 text-amber-400" />
                   View Sovereign Gold Certificate (ZQ-GOLD-DEP)
@@ -507,7 +507,7 @@ export const Room10MasterPanel: React.FC<Room10MasterPanelProps> = ({
                     playTone(640, 0.05);
                     onNavigate('vault');
                   }}
-                  className="px-4 py-2 rounded-xl bg-white/5 hover:bg-white/10 text-zinc-300 border border-white/10 text-xs font-bold flex items-center gap-2 transition-all"
+                  className="px-4 py-2 rounded-xl bg-white/5 hover:bg-white/10 text-zinc-300 border-white/10 text-xs font-bold flex items-center gap-2 transition-all"
                 >
                   <Coins className="w-4 h-4 text-amber-400" />
                   Open Full Treasury Vault Dashboard

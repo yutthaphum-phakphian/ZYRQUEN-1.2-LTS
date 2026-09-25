@@ -230,21 +230,21 @@ export const ForensicQuarantineLayer: React.FC = () => {
           <button
             onClick={handleVerifyQuarantineIntegrity}
             disabled={isVerifying}
-            className="px-3 py-1.5 rounded-xl bg-amber-500/20 hover:bg-amber-500/30 border border-amber-500/40 text-amber-300 font-bold text-xs flex items-center gap-1.5 transition-all"
+            className="px-3 py-1.5 rounded-xl bg-amber-500/20 hover:bg-amber-500/30 border-amber-500/40 text-amber-300 font-bold text-xs flex items-center gap-1.5 transition-all"
           >
             <RefreshCw className={`w-3.5 h-3.5 ${isVerifying ? 'animate-spin' : ''}`} />
             <span>{isVerifying ? 'VERIFYING...' : 'RE-VERIFY ZERO-LEAK'}</span>
           </button>
           <button
             onClick={handleExportReconciliationJson}
-            className="px-3 py-1.5 rounded-xl bg-white/5 hover:bg-white/10 border border-white/10 text-zinc-200 font-bold text-xs flex items-center gap-1.5 transition-all"
+            className="px-3 py-1.5 rounded-xl bg-white/5 hover:bg-white/10 border-white/10 text-zinc-200 font-bold text-xs flex items-center gap-1.5 transition-all"
           >
             <Download className="w-3.5 h-3.5 text-cyan-400" />
             <span>EXPORT AUDIT JSON</span>
           </button>
           <button
             onClick={handleExportMasterPdf}
-            className="px-3.5 py-1.5 rounded-xl bg-gradient-to-r from-amber-500/20 to-violet-500/20 hover:from-amber-500/30 hover:to-violet-500/30 border border-amber-500/40 text-amber-200 font-bold text-xs flex items-center gap-1.5 transition-all shadow-[0_0_15px_rgba(245,158,11,0.2)]"
+            className="px-3.5 py-1.5 rounded-xl bg-gradient-to-r from-amber-500/20 to-violet-500/20 hover:from-amber-500/30 hover:to-violet-500/30 border-amber-500/40 text-amber-200 font-bold text-xs flex items-center gap-1.5 transition-all shadow-[0_0_15px_rgba(245,158,11,0.2)]"
           >
             <FileCheck2 className="w-3.5 h-3.5 text-amber-400" />
             <span>MASTER AUDIT PDF</span>
@@ -254,22 +254,22 @@ export const ForensicQuarantineLayer: React.FC = () => {
 
       {/* Metric Highlights */}
       <div className="grid grid-cols-2 sm:grid-cols-4 gap-3">
-        <div className="p-3 rounded-xl bg-black/60 border border-cyan-500/30">
+        <div className="p-3 rounded-xl bg-black/60 border-cyan-500/30">
           <span className="text-[10px] text-zinc-500 block">CANONICAL SSoT SEALS</span>
           <strong className="text-cyan-300 text-sm block mt-0.5">{CANONICAL_SEALS.toLocaleString()} Seals</strong>
           <span className="text-[9px] text-zinc-400">100% Frozen &bull; Zero Drift</span>
         </div>
-        <div className="p-3 rounded-xl bg-black/60 border border-amber-500/30">
+        <div className="p-3 rounded-xl bg-black/60 border-amber-500/30">
           <span className="text-[10px] text-zinc-500 block">QUARANTINE BUFFER DELTA</span>
           <strong className="text-amber-300 text-sm block mt-0.5">+{QUARANTINE_COUNT} Isolated</strong>
           <span className="text-[9px] text-amber-400 font-bold">RING-04 Firewall Active</span>
         </div>
-        <div className="p-3 rounded-xl bg-black/60 border border-emerald-500/30">
+        <div className="p-3 rounded-xl bg-black/60 border-emerald-500/30">
           <span className="text-[10px] text-zinc-500 block">SSOT MUTATION COUNT</span>
           <strong className="text-emerald-400 text-sm block mt-0.5">{SSOT_MUTATION} (Zero Mutation)</strong>
           <span className="text-[9px] text-emerald-400">Core Write Denied</span>
         </div>
-        <div className="p-3 rounded-xl bg-black/60 border border-rose-500/30">
+        <div className="p-3 rounded-xl bg-black/60 border-rose-500/30">
           <span className="text-[10px] text-zinc-500 block">PROMOTION CIRCUIT</span>
           <strong className="text-rose-400 text-sm block mt-0.5">FAIL-CLOSED 🔒</strong>
           <span className="text-[9px] text-rose-300">Protected by Gates G11–G13</span>
@@ -303,14 +303,14 @@ export const ForensicQuarantineLayer: React.FC = () => {
                 >
                   <div className="flex items-center justify-between">
                     <div className="flex items-center gap-2">
-                      <span className="px-2 py-0.5 rounded bg-amber-500/20 text-amber-300 font-bold text-xs border border-amber-500/30">
+                      <span className="px-2 py-0.5 rounded bg-amber-500/20 text-amber-300 font-bold text-xs border-amber-500/30">
                         SEAL #{item.sealNumber.toLocaleString()}
                       </span>
                       <span className="text-[10px] text-zinc-400 truncate max-w-[130px] font-mono">
                         {item.timestamp}
                       </span>
                     </div>
-                    <span className="text-[10px] px-2 py-0.5 rounded font-bold bg-rose-500/20 text-rose-300 border border-rose-500/30">
+                    <span className="text-[10px] px-2 py-0.5 rounded font-bold bg-rose-500/20 text-rose-300 border-rose-500/30">
                       ISOLATED
                     </span>
                   </div>
@@ -324,7 +324,7 @@ export const ForensicQuarantineLayer: React.FC = () => {
 
         {/* Right Column: Deep Forensic Dossier & Differential Inspector */}
         <div className="lg:col-span-7 space-y-4">
-          <div className="p-5 rounded-2xl bg-black/80 border border-amber-500/30 space-y-4">
+          <div className="p-5 rounded-2xl bg-black/80 border-amber-500/30 space-y-4">
             {/* Tab Bar */}
             <div className="flex flex-wrap items-center justify-between gap-2 border-b border-white/10 pb-3">
               <div className="flex items-center gap-1.5">
@@ -341,15 +341,15 @@ export const ForensicQuarantineLayer: React.FC = () => {
                     }}
                     className={`px-3 py-1 rounded-xl text-xs font-bold transition-all ${
                       activeTab === tab.id
-                        ? 'bg-amber-500/20 text-amber-300 border border-amber-500/40'
-                        : 'bg-white/5 text-zinc-400 hover:text-zinc-200 border border-white/5'
+                        ? 'bg-amber-500/20 text-amber-300 border-amber-500/40'
+                        : 'bg-white/5 text-zinc-400 hover:text-zinc-200 border-white/5'
                     }`}
                   >
                     {tab.label}
                   </button>
                 ))}
               </div>
-              <span className="px-2.5 py-0.5 rounded text-[10px] font-bold bg-amber-500/20 text-amber-300 border border-amber-500/40 font-mono">
+              <span className="px-2.5 py-0.5 rounded text-[10px] font-bold bg-amber-500/20 text-amber-300 border-amber-500/40 font-mono">
                 {activeRecord.investigationStatus}
               </span>
             </div>
@@ -358,11 +358,11 @@ export const ForensicQuarantineLayer: React.FC = () => {
             {activeTab === 'DETAILS' && (
               <div className="space-y-3 animate-in fade-in duration-150">
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 text-[11px]">
-                  <div className="p-3 rounded-xl bg-white/[0.02] border border-white/5 space-y-1">
+                  <div className="p-3 rounded-xl bg-white/[0.02] border-white/5 space-y-1">
                     <span className="text-zinc-500 block text-[10px]">Anomaly Classification</span>
                     <strong className="text-amber-300 block">{activeRecord.anomalyClass}</strong>
                   </div>
-                  <div className="p-3 rounded-xl bg-white/[0.02] border border-white/5 space-y-1">
+                  <div className="p-3 rounded-xl bg-white/[0.02] border-white/5 space-y-1">
                     <span className="text-zinc-500 block text-[10px]">Signature Scheme Policy</span>
                     <strong className="text-rose-300 block">{activeRecord.signatureScheme}</strong>
                   </div>
@@ -370,14 +370,14 @@ export const ForensicQuarantineLayer: React.FC = () => {
 
                 <div className="space-y-1 text-[11px]">
                   <span className="text-zinc-500 block text-[10px]">Causal Block Height Inconsistency:</span>
-                  <div className="p-2.5 rounded-xl bg-rose-950/30 border border-rose-500/30 text-rose-200 font-mono text-[10px]">
+                  <div className="p-2.5 rounded-xl bg-rose-950/30 border-rose-500/30 text-rose-200 font-mono text-[10px]">
                     {activeRecord.causalBlockMismatch}
                   </div>
                 </div>
 
                 <div className="space-y-1 text-[11px]">
                   <span className="text-zinc-500 block text-[10px]">Forensic Quarantine Rationale:</span>
-                  <div className="p-2.5 rounded-xl bg-amber-950/20 border border-amber-500/20 text-zinc-300 text-[10px] leading-relaxed">
+                  <div className="p-2.5 rounded-xl bg-amber-950/20 border-amber-500/20 text-zinc-300 text-[10px] leading-relaxed">
                     {activeRecord.quarantineReason}
                   </div>
                 </div>
@@ -393,7 +393,7 @@ export const ForensicQuarantineLayer: React.FC = () => {
                       <span>{copiedId === `hash-${activeRecord.sealNumber}` ? 'COPIED' : 'COPY'}</span>
                     </button>
                   </div>
-                  <div className="p-2.5 rounded-xl bg-black border border-white/10 text-cyan-300 font-mono text-[10px] break-all select-all">
+                  <div className="p-2.5 rounded-xl bg-black border-white/10 text-cyan-300 font-mono text-[10px] break-all select-all">
                     {activeRecord.payloadDigest}
                   </div>
                 </div>
@@ -403,22 +403,22 @@ export const ForensicQuarantineLayer: React.FC = () => {
             {/* Sub-Tab 2: Diff View */}
             {activeTab === 'DIFF_VIEW' && (
               <div className="space-y-3 animate-in fade-in duration-150">
-                <div className="p-3 rounded-xl bg-black/60 border border-white/10 space-y-2">
+                <div className="p-3 rounded-xl bg-black/60 border-white/10 space-y-2">
                   <div className="flex items-center gap-2 text-zinc-300 font-bold text-xs">
                     <GitCompare className="w-4 h-4 text-amber-400" />
                     <span>Cryptographic Discrepancy Differential Analysis</span>
                   </div>
                   <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 text-[11px] pt-1">
-                    <div className="p-2.5 rounded-lg bg-emerald-950/20 border border-emerald-500/30 space-y-1">
+                    <div className="p-2.5 rounded-lg bg-emerald-950/20 border-emerald-500/30 space-y-1">
                       <span className="text-[10px] font-bold text-emerald-400">CANONICAL EXPECTED</span>
                       <p className="text-zinc-200 text-[11px] font-mono">{activeRecord.canonicalComparison.expected}</p>
                     </div>
-                    <div className="p-2.5 rounded-lg bg-rose-950/20 border border-rose-500/30 space-y-1">
+                    <div className="p-2.5 rounded-lg bg-rose-950/20 border-rose-500/30 space-y-1">
                       <span className="text-[10px] font-bold text-rose-400">OBSERVED QUARANTINE</span>
                       <p className="text-zinc-200 text-[11px] font-mono">{activeRecord.canonicalComparison.received}</p>
                     </div>
                   </div>
-                  <div className="p-2.5 rounded-lg bg-amber-950/20 border border-amber-500/20 text-[10px] text-amber-200">
+                  <div className="p-2.5 rounded-lg bg-amber-950/20 border-amber-500/20 text-[10px] text-amber-200">
                     <strong>Reconciliation Verdict:</strong> {activeRecord.canonicalComparison.impact}
                   </div>
                 </div>
@@ -428,7 +428,7 @@ export const ForensicQuarantineLayer: React.FC = () => {
             {/* Sub-Tab 3: Zero-Leak Proof */}
             {activeTab === 'RECONCILIATION_PROOF' && (
               <div className="space-y-3 animate-in fade-in duration-150">
-                <div className="p-3.5 rounded-xl bg-black/60 border border-emerald-500/30 space-y-2">
+                <div className="p-3.5 rounded-xl bg-black/60 border-emerald-500/30 space-y-2">
                   <div className="flex items-center gap-2 text-emerald-400 font-bold text-xs">
                     <CheckCircle2 className="w-4 h-4" />
                     <span>SSoT Inviolability Proof & Zero-Leak Audit</span>

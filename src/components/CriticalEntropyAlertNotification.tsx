@@ -87,10 +87,10 @@ export const CriticalEntropyAlertNotification: React.FC<CriticalEntropyAlertNoti
     return (
       <div
         id="critical-entropy-alert-banner"
-        className={`p-4 rounded-2xl bg-[#08151e]/80 border border-cyan-500/30 font-mono text-xs text-zinc-300 flex items-center justify-between gap-4 backdrop-blur-xl ${className}`}
+        className={`p-4 rounded-2xl bg-[#08151e]/80 border-cyan-500/30 font-mono text-xs text-zinc-300 flex items-center justify-between gap-4 backdrop-blur-xl ${className}`}
       >
         <div className="flex items-center gap-3">
-          <div className="w-8 h-8 rounded-xl bg-emerald-500/15 border border-emerald-500/30 flex items-center justify-center shrink-0">
+          <div className="w-8 h-8 rounded-xl bg-emerald-500/15 border-emerald-500/30 flex items-center justify-center shrink-0">
             <CheckCircle2 className="w-4 h-4 text-emerald-400" />
           </div>
           <div>
@@ -98,7 +98,7 @@ export const CriticalEntropyAlertNotification: React.FC<CriticalEntropyAlertNoti
               <span className="text-[11px] font-bold text-emerald-300 uppercase tracking-wider">
                 Active Entropy Nominal
               </span>
-              <span className="text-[10px] text-zinc-400 px-2 py-0.5 rounded bg-black/40 border border-white/5">
+              <span className="text-[10px] text-zinc-400 px-2 py-0.5 rounded bg-black/40 border-white/5">
                 {currentRateKBps.toLocaleString()} KBps &le; {thresholdKBps} KBps Threshold
               </span>
             </div>
@@ -111,7 +111,7 @@ export const CriticalEntropyAlertNotification: React.FC<CriticalEntropyAlertNoti
         {onToggleSimulatedLow && (
           <button
             onClick={() => onToggleSimulatedLow(false)}
-            className="px-3 py-1.5 rounded-xl bg-rose-500/10 hover:bg-rose-500/20 text-rose-300 border border-rose-500/30 text-[11px] font-bold transition-all"
+            className="px-3 py-1.5 rounded-xl bg-rose-500/10 hover:bg-rose-500/20 text-rose-300 border-rose-500/30 text-[11px] font-bold transition-all"
           >
             Simulate Rate &gt; 15,000 KBps
           </button>
@@ -124,7 +124,7 @@ export const CriticalEntropyAlertNotification: React.FC<CriticalEntropyAlertNoti
     return (
       <div
         id="critical-entropy-alert-banner"
-        className={`p-3 rounded-2xl bg-[#1a0f12]/80 border border-rose-500/30 font-mono text-xs flex items-center justify-between gap-3 ${className}`}
+        className={`p-3 rounded-2xl bg-[#1a0f12]/80 border-rose-500/30 font-mono text-xs flex items-center justify-between gap-3 ${className}`}
       >
         <div className="flex items-center gap-2 text-rose-300">
           <AlertTriangle className="w-4 h-4 text-rose-400 animate-pulse" />
@@ -166,7 +166,7 @@ export const CriticalEntropyAlertNotification: React.FC<CriticalEntropyAlertNoti
         {/* Left Column: Warning Icon & Information */}
         <div className="flex items-start sm:items-center gap-3.5">
           <div className="relative shrink-0">
-            <div className="w-11 h-11 rounded-2xl bg-rose-500/20 border border-rose-500/50 flex items-center justify-center shadow-[0_0_14px_rgba(244,63,94,0.4)]">
+            <div className="w-11 h-11 rounded-2xl bg-rose-500/20 border-rose-500/50 flex items-center justify-center shadow-[0_0_14px_rgba(244,63,94,0.4)]">
               <ShieldAlert className="w-6 h-6 text-rose-400 animate-pulse" />
             </div>
             <span className="absolute -top-1 -right-1 w-3.5 h-3.5 rounded-full bg-rose-500 animate-ping" />
@@ -174,21 +174,21 @@ export const CriticalEntropyAlertNotification: React.FC<CriticalEntropyAlertNoti
 
           <div className="space-y-1">
             <div className="flex items-center gap-2 flex-wrap">
-              <span className="px-2.5 py-0.5 rounded-full bg-rose-500/25 text-rose-200 border border-rose-500/50 text-[11px] font-bold flex items-center gap-1.5 tracking-wider">
+              <span className="px-2.5 py-0.5 rounded-full bg-rose-500/25 text-rose-200 border-rose-500/50 text-[11px] font-bold flex items-center gap-1.5 tracking-wider">
                 <AlertTriangle className="w-3.5 h-3.5 text-rose-300" />
                 CRITICAL ENTROPY ALERT
               </span>
-              <span className="px-2 py-0.5 rounded-full bg-rose-950/70 text-rose-300 border border-rose-500/30 text-[10px] font-bold">
+              <span className="px-2 py-0.5 rounded-full bg-rose-950/70 text-rose-300 border-rose-500/30 text-[10px] font-bold">
                 THRESHOLD: &gt; {thresholdKBps}.0 KBps EXCEEDED
               </span>
-              <span className="px-2 py-0.5 rounded-full bg-amber-500/15 text-amber-300 border border-amber-500/30 text-[10px]">
+              <span className="px-2 py-0.5 rounded-full bg-amber-500/15 text-amber-300 border-amber-500/30 text-[10px]">
                 {surgeMultiple}x CRITICAL CEILING
               </span>
             </div>
 
             <div className="text-sm font-bold text-white flex items-center gap-2 flex-wrap">
               <span>Active Entropy Rate:</span>
-              <span className="text-rose-300 font-mono text-base tracking-tight bg-black/60 px-2 py-0.5 rounded-lg border border-rose-500/30">
+              <span className="text-rose-300 font-mono text-base tracking-tight bg-black/60 px-2 py-0.5 rounded-lg border-rose-500/30">
                 {currentRateKBps.toLocaleString()} KBps
               </span>
               <span className="text-xs text-rose-400 font-normal">
@@ -208,7 +208,7 @@ export const CriticalEntropyAlertNotification: React.FC<CriticalEntropyAlertNoti
           {onOpenSidebar && (
             <button
               onClick={handleOpenSidebar}
-              className="px-3.5 py-2 rounded-xl bg-gradient-to-r from-cyan-500/20 to-blue-500/20 hover:from-cyan-500/30 hover:to-blue-500/30 border border-cyan-500/40 text-cyan-200 hover:text-white text-xs font-bold flex items-center gap-2 transition-all shadow-[0_0_12px_rgba(6,182,212,0.25)] hover:scale-105"
+              className="px-3.5 py-2 rounded-xl bg-gradient-to-r from-cyan-500/20 to-blue-500/20 hover:from-cyan-500/30 hover:to-blue-500/30 border-cyan-500/40 text-cyan-200 hover:text-white text-xs font-bold flex items-center gap-2 transition-all shadow-[0_0_12px_rgba(6,182,212,0.25)] hover:scale-105"
               title="Open System Events Sidebar to inspect the Critical Entropy Alert event"
             >
               <Bell className="w-3.5 h-3.5 text-cyan-300 animate-bounce" />
@@ -220,7 +220,7 @@ export const CriticalEntropyAlertNotification: React.FC<CriticalEntropyAlertNoti
           {/* Manual Retrigger / Dispatch Button */}
           <button
             onClick={handleManualRetrigger}
-            className="px-3 py-2 rounded-xl bg-rose-500/20 hover:bg-rose-500/30 border border-rose-500/40 text-rose-200 hover:text-white text-xs font-bold flex items-center gap-1.5 transition-all"
+            className="px-3 py-2 rounded-xl bg-rose-500/20 hover:bg-rose-500/30 border-rose-500/40 text-rose-200 hover:text-white text-xs font-bold flex items-center gap-1.5 transition-all"
             title="Dispatch a fresh Critical Entropy Alert audit event to System Events Sidebar"
           >
             <Zap className="w-3.5 h-3.5 text-rose-300" />
@@ -231,7 +231,7 @@ export const CriticalEntropyAlertNotification: React.FC<CriticalEntropyAlertNoti
           {onToggleSimulatedLow && (
             <button
               onClick={() => onToggleSimulatedLow(true)}
-              className="px-3 py-2 rounded-xl bg-black/50 hover:bg-black/80 border border-white/15 text-zinc-300 hover:text-white text-xs transition-colors flex items-center gap-1"
+              className="px-3 py-2 rounded-xl bg-black/50 hover:bg-black/80 border-white/15 text-zinc-300 hover:text-white text-xs transition-colors flex items-center gap-1"
               title="Simulate safe rate under 85 KBps to test alert recovery"
             >
               <Sliders className="w-3 h-3 text-emerald-400" />
@@ -242,7 +242,7 @@ export const CriticalEntropyAlertNotification: React.FC<CriticalEntropyAlertNoti
           {/* Mute Sound Button */}
           <button
             onClick={() => setSoundMuted(!soundMuted)}
-            className="p-2 rounded-xl bg-black/50 hover:bg-black/80 border border-white/15 text-zinc-400 hover:text-zinc-200 transition-colors"
+            className="p-2 rounded-xl bg-black/50 hover:bg-black/80 border-white/15 text-zinc-400 hover:text-zinc-200 transition-colors"
             title={soundMuted ? 'Unmute alert tone' : 'Mute alert tone'}
           >
             {soundMuted ? <VolumeX className="w-3.5 h-3.5" /> : <Volume2 className="w-3.5 h-3.5 text-rose-400" />}
@@ -251,7 +251,7 @@ export const CriticalEntropyAlertNotification: React.FC<CriticalEntropyAlertNoti
           {/* Dismiss / Acknowledge Banner */}
           <button
             onClick={() => setIsDismissed(true)}
-            className="px-2.5 py-2 rounded-xl bg-white/5 hover:bg-white/10 border border-white/10 text-zinc-400 hover:text-white text-xs transition-colors"
+            className="px-2.5 py-2 rounded-xl bg-white/5 hover:bg-white/10 border-white/10 text-zinc-400 hover:text-white text-xs transition-colors"
             title="Acknowledge and minimize this alert banner"
           >
             Acknowledge

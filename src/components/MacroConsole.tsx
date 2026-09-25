@@ -183,15 +183,15 @@ export const MacroConsole: React.FC<MacroConsoleProps> = ({ onExecuteCommand }) 
   return (
     <div className="space-y-4 font-mono text-xs select-text">
       {/* Macro Header and Recorder Toolbar */}
-      <div className="p-4 rounded-2xl bg-[#0b0e1a]/85 border border-white/8 backdrop-blur-xl flex flex-col md:flex-row items-center justify-between gap-3">
+      <div className="p-4 rounded-2xl bg-[#0b0e1a]/85 border-white/8 backdrop-blur-xl flex flex-col md:flex-row items-center justify-between gap-3">
         <div className="flex items-center gap-3">
-          <div className="w-9 h-9 rounded-xl bg-cyan-500/15 border border-cyan-500/30 flex items-center justify-center text-cyan-300 shrink-0">
+          <div className="w-9 h-9 rounded-xl bg-cyan-500/15 border-cyan-500/30 flex items-center justify-center text-cyan-300 shrink-0">
             <FileCode className="w-5 h-5" />
           </div>
           <div>
             <div className="flex items-center gap-2">
               <span className="font-bold text-white uppercase">Macro Console & Automation Scripts</span>
-              <span className="px-2 py-0.2 rounded-full bg-cyan-500/20 text-cyan-300 border border-cyan-500/30 text-[9px]">
+              <span className="px-2 py-0.2 rounded-full bg-cyan-500/20 text-cyan-300 border-cyan-500/30 text-[9px]">
                 {macros.length} SCRIPTS
               </span>
             </div>
@@ -219,7 +219,7 @@ export const MacroConsole: React.FC<MacroConsoleProps> = ({ onExecuteCommand }) 
 
       {/* Recording in Progress Panel */}
       {isRecording && (
-        <div className="p-4 rounded-2xl bg-rose-950/20 border border-rose-500/30 backdrop-blur-xl space-y-3 animate-in fade-in duration-200">
+        <div className="p-4 rounded-2xl bg-rose-950/20 border-rose-500/30 backdrop-blur-xl space-y-3 animate-in fade-in duration-200">
           <div className="flex items-center justify-between text-rose-300 font-bold text-xs">
             <span className="flex items-center gap-2">
               <span className="w-2 h-2 rounded-full bg-rose-500 animate-ping" />
@@ -236,7 +236,7 @@ export const MacroConsole: React.FC<MacroConsoleProps> = ({ onExecuteCommand }) 
               onChange={(e) => setCustomCmdInput(e.target.value)}
               onKeyDown={(e) => e.key === 'Enter' && handleAddCommandToRecording(customCmdInput)}
               placeholder="Enter command to append (e.g. audit, snapshot, cert, pentest)..."
-              className="flex-1 bg-black/60 border border-white/15 rounded-xl px-3 py-1.5 text-xs text-white placeholder-zinc-500 focus:outline-none focus:border-rose-500"
+              className="flex-1 bg-black/60 border-white/15 rounded-xl px-3 py-1.5 text-xs text-white placeholder-zinc-500 focus:outline-none focus:border-rose-500"
             />
             <button
               onClick={() => handleAddCommandToRecording(customCmdInput)}
@@ -253,7 +253,7 @@ export const MacroConsole: React.FC<MacroConsoleProps> = ({ onExecuteCommand }) 
               <button
                 key={cmd}
                 onClick={() => handleAddCommandToRecording(cmd)}
-                className="px-2 py-0.5 rounded bg-white/5 hover:bg-white/15 text-zinc-300 border border-white/10"
+                className="px-2 py-0.5 rounded bg-white/5 hover:bg-white/15 text-zinc-300 border-white/10"
               >
                 +{cmd}
               </button>
@@ -268,11 +268,11 @@ export const MacroConsole: React.FC<MacroConsoleProps> = ({ onExecuteCommand }) 
                 value={newMacroName}
                 onChange={(e) => setNewMacroName(e.target.value)}
                 placeholder="Script Name (e.g. Scheduled Nightly Audit)..."
-                className="flex-1 bg-black/60 border border-white/15 rounded-xl px-3 py-1.5 text-xs text-white placeholder-zinc-500"
+                className="flex-1 bg-black/60 border-white/15 rounded-xl px-3 py-1.5 text-xs text-white placeholder-zinc-500"
               />
               <button
                 onClick={handleSaveRecording}
-                className="px-4 py-1.5 rounded-xl bg-emerald-500/20 hover:bg-emerald-500/30 border border-emerald-500/40 text-emerald-300 font-bold flex items-center justify-center gap-1.5 shadow-[0_0_12px_rgba(16,185,129,0.2)]"
+                className="px-4 py-1.5 rounded-xl bg-emerald-500/20 hover:bg-emerald-500/30 border-emerald-500/40 text-emerald-300 font-bold flex items-center justify-center gap-1.5 shadow-[0_0_12px_rgba(16,185,129,0.2)]"
               >
                 <Save className="w-3.5 h-3.5" />
                 <span>Save Script</span>
@@ -329,7 +329,7 @@ export const MacroConsole: React.FC<MacroConsoleProps> = ({ onExecuteCommand }) 
 
         {/* Right 7 Cols: Selected Script Inspector & Execution Console */}
         <div className="lg:col-span-7 space-y-3">
-          <div className="p-4 rounded-2xl bg-[#0b0e1a]/85 border border-white/8 backdrop-blur-xl space-y-3">
+          <div className="p-4 rounded-2xl bg-[#0b0e1a]/85 border-white/8 backdrop-blur-xl space-y-3">
             <div className="flex items-center justify-between">
               <div>
                 <h4 className="text-xs font-bold text-white uppercase">{selectedMacro.name}</h4>
@@ -351,8 +351,8 @@ export const MacroConsole: React.FC<MacroConsoleProps> = ({ onExecuteCommand }) 
                   disabled={isRunningMacro}
                   className={`px-4 py-2 rounded-xl font-bold flex items-center gap-2 text-xs transition-all ${
                     isRunningMacro
-                      ? 'bg-cyan-500/20 text-cyan-300 border border-cyan-500/40 animate-pulse'
-                      : 'bg-cyan-500/20 hover:bg-cyan-500/30 border border-cyan-500/40 text-cyan-300 shadow-[0_0_15px_rgba(6,182,212,0.2)]'
+                      ? 'bg-cyan-500/20 text-cyan-300 border-cyan-500/40 animate-pulse'
+                      : 'bg-cyan-500/20 hover:bg-cyan-500/30 border-cyan-500/40 text-cyan-300 shadow-[0_0_15px_rgba(6,182,212,0.2)]'
                   }`}
                 >
                   <Play className={`w-3.5 h-3.5 ${isRunningMacro ? 'animate-spin' : ''}`} />
@@ -385,7 +385,7 @@ export const MacroConsole: React.FC<MacroConsoleProps> = ({ onExecuteCommand }) 
             </div>
 
             {/* Execution Terminal Log Window */}
-            <div className="p-3 bg-black/60 rounded-xl border border-white/5 space-y-1 max-h-[140px] overflow-y-auto text-[10px] text-zinc-400 font-mono">
+            <div className="p-3 bg-black/60 rounded-xl border-white/5 space-y-1 max-h-[140px] overflow-y-auto text-[10px] text-zinc-400 font-mono">
               <div className="text-zinc-600 text-[9px] uppercase border-b border-white/5 pb-1 flex justify-between">
                 <span>MACRO RUNTIME LOG</span>
                 <span>STATUS: {isRunningMacro ? 'ACTIVE' : 'IDLE'}</span>

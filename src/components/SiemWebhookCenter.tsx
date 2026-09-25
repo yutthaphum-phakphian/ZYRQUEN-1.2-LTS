@@ -102,10 +102,10 @@ export const SiemWebhookCenter: React.FC = () => {
   };
 
   return (
-    <div className="p-6 rounded-[24px] bg-[#070a12] border border-cyan-500/30 font-mono space-y-5">
+    <div className="p-6 rounded-[24px] bg-[#070a12] border-cyan-500/30 font-mono space-y-5">
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 pb-4 border-b border-white/10">
         <div className="flex items-center gap-3">
-          <div className="w-10 h-10 rounded-xl bg-cyan-500/20 border border-cyan-500/40 flex items-center justify-center text-cyan-400 text-xl">
+          <div className="w-10 h-10 rounded-xl bg-cyan-500/20 border-cyan-500/40 flex items-center justify-center text-cyan-400 text-xl">
             📡
           </div>
           <div>
@@ -143,7 +143,7 @@ export const SiemWebhookCenter: React.FC = () => {
             value={webhookUrl}
             onChange={(e) => setWebhookUrl(e.target.value)}
             disabled={isCurrentJobTerminal || isCurrentlyInFlight}
-            className="w-full px-3 py-2 rounded-xl bg-black/60 border border-white/15 text-zinc-200 text-xs focus:border-cyan-500/60 focus:outline-none disabled:opacity-50"
+            className="w-full px-3 py-2 rounded-xl bg-black/60 border-white/15 text-zinc-200 text-xs focus:border-cyan-500/60 focus:outline-none disabled:opacity-50"
           />
         </div>
 
@@ -153,7 +153,7 @@ export const SiemWebhookCenter: React.FC = () => {
             value={selectedEventType}
             onChange={(e) => setSelectedEventType(e.target.value as any)}
             disabled={isCurrentJobTerminal || isCurrentlyInFlight}
-            className="w-full px-3 py-2 rounded-xl bg-black/60 border border-white/15 text-zinc-200 text-xs focus:border-cyan-500/60 focus:outline-none disabled:opacity-50"
+            className="w-full px-3 py-2 rounded-xl bg-black/60 border-white/15 text-zinc-200 text-xs focus:border-cyan-500/60 focus:outline-none disabled:opacity-50"
           >
             <option value="CIRCUIT_BREAKER">🛡️ CH-06 Circuit Breaker Trip (&gt; 15,000 KBps)</option>
             <option value="PDPA_BREACH_SUSPECT">⚖️ PDPA Data Breach Suspect Alert (72-hr Clock)</option>
@@ -170,10 +170,10 @@ export const SiemWebhookCenter: React.FC = () => {
             disabled={isCurrentJobTerminal || isCurrentlyInFlight}
             className={`px-4 py-2 rounded-xl font-bold text-xs transition-all flex items-center gap-2 ${
               isCurrentJobTerminal
-                ? 'bg-zinc-800 text-zinc-500 border border-zinc-700 cursor-not-allowed'
+                ? 'bg-zinc-800 text-zinc-500 border-zinc-700 cursor-not-allowed'
                 : isCurrentlyInFlight
-                ? 'bg-amber-950 text-amber-300 border border-amber-600 animate-pulse cursor-wait'
-                : 'bg-cyan-500/20 hover:bg-cyan-500/30 text-cyan-300 border border-cyan-500/40 shadow-[0_0_15px_rgba(6,182,212,0.2)]'
+                ? 'bg-amber-950 text-amber-300 border-amber-600 animate-pulse cursor-wait'
+                : 'bg-cyan-500/20 hover:bg-cyan-500/30 text-cyan-300 border-cyan-500/40 shadow-[0_0_15px_rgba(6,182,212,0.2)]'
             }`}
           >
             <span>{isCurrentJobTerminal ? '🔒' : '🚀'}</span>
@@ -189,7 +189,7 @@ export const SiemWebhookCenter: React.FC = () => {
           {isCurrentJobTerminal && (
             <button
               onClick={handleCreateNewBatch}
-              className="px-3 py-2 rounded-xl bg-purple-950/40 hover:bg-purple-950/60 text-purple-300 border border-purple-500/40 text-xs font-bold transition-all flex items-center gap-1.5"
+              className="px-3 py-2 rounded-xl bg-purple-950/40 hover:bg-purple-950/60 text-purple-300 border-purple-500/40 text-xs font-bold transition-all flex items-center gap-1.5"
             >
               <span>✨</span>
               <span>สร้าง Dispatch Batch ใหม่ (New Idempotency Key)</span>
@@ -218,7 +218,7 @@ export const SiemWebhookCenter: React.FC = () => {
           {dispatchedLogs.map((log) => (
             <div
               key={log.id}
-              className="p-2.5 rounded-lg bg-black/40 border border-white/5 flex items-center justify-between text-[11px] text-zinc-300"
+              className="p-2.5 rounded-lg bg-black/40 border-white/5 flex items-center justify-between text-[11px] text-zinc-300"
             >
               <div className="flex items-center gap-2 font-mono">
                 <span className="text-cyan-300 font-bold">{log.id}</span>

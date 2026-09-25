@@ -538,7 +538,7 @@ export const CustodyChainIntegrityViewer: React.FC<CustodyChainIntegrityViewerPr
   return (
     <div className="space-y-5 animate-in fade-in duration-200 text-zinc-200">
       {/* 1. Header Banner with Sovereign Status */}
-      <div className="p-5 rounded-2xl bg-[#0a0f1e] border border-[#D4AF37] shadow-xl space-y-4">
+      <div className="p-5 rounded-2xl bg-[#0a0f1e] border-[#D4AF37] shadow-xl space-y-4">
         <div className="flex flex-col md:flex-row md:items-center justify-between gap-3 border-b border-zinc-800 pb-4">
           <div className="space-y-1">
             <div className="flex items-center gap-2 flex-wrap">
@@ -546,7 +546,7 @@ export const CustodyChainIntegrityViewer: React.FC<CustodyChainIntegrityViewerPr
               <h3 className="text-lg font-bold text-white tracking-wide">
                 Custody Chain Integrity Viewer
               </h3>
-              <span className="px-2.5 py-0.5 rounded-full text-xs font-mono font-bold bg-[#D4AF37]/20 text-[#D4AF37] border border-[#D4AF37]">
+              <span className="px-2.5 py-0.5 rounded-full text-xs font-mono font-bold bg-[#D4AF37]/20 text-[#D4AF37] border-[#D4AF37]">
                 V2.1 COURT-READY
               </span>
               <span
@@ -584,7 +584,7 @@ export const CustodyChainIntegrityViewer: React.FC<CustodyChainIntegrityViewerPr
                   playTone(660, 0.03);
                   onOpenTimelineGraph();
                 }}
-                className="px-3 py-1.5 rounded-xl bg-[#070a12] hover:bg-cyan-950/50 text-[#06B6D4] border border-[#06B6D4]/60 text-xs font-bold flex items-center gap-1.5 transition cursor-pointer"
+                className="px-3 py-1.5 rounded-xl bg-[#070a12] hover:bg-cyan-950/50 text-[#06B6D4] border-[#06B6D4]/60 text-xs font-bold flex items-center gap-1.5 transition cursor-pointer"
               >
                 <span>📜</span>
                 <span>Visual Timeline Graph</span>
@@ -596,7 +596,7 @@ export const CustodyChainIntegrityViewer: React.FC<CustodyChainIntegrityViewerPr
                 playTone(700, 0.03);
                 handleCopyJson();
               }}
-              className="px-3 py-1.5 rounded-xl bg-[#D4AF37]/20 hover:bg-[#D4AF37]/30 text-[#D4AF37] border border-[#D4AF37]/60 text-xs font-bold flex items-center gap-1.5 transition cursor-pointer"
+              className="px-3 py-1.5 rounded-xl bg-[#D4AF37]/20 hover:bg-[#D4AF37]/30 text-[#D4AF37] border-[#D4AF37]/60 text-xs font-bold flex items-center gap-1.5 transition cursor-pointer"
             >
               <span>📑</span>
               <span>Copy Canonical JSON</span>
@@ -608,7 +608,7 @@ export const CustodyChainIntegrityViewer: React.FC<CustodyChainIntegrityViewerPr
                   playTone(720, 0.03);
                   onViewCertificate();
                 }}
-                className="px-3 py-1.5 rounded-xl bg-[#070a12] hover:bg-zinc-800 text-zinc-200 border border-zinc-700 text-xs font-bold flex items-center gap-1.5 transition cursor-pointer"
+                className="px-3 py-1.5 rounded-xl bg-[#070a12] hover:bg-zinc-800 text-zinc-200 border-zinc-700 text-xs font-bold flex items-center gap-1.5 transition cursor-pointer"
               >
                 <span>⚖️</span>
                 <span>View Full Certificate</span>
@@ -619,27 +619,27 @@ export const CustodyChainIntegrityViewer: React.FC<CustodyChainIntegrityViewerPr
 
         {/* Top 6 Metadata Strips */}
         <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-2 text-xs font-mono">
-          <div className="bg-[#070a12] p-2 rounded-xl border border-zinc-800">
+          <div className="bg-[#070a12] p-2 rounded-xl border-zinc-800">
             <span className="text-zinc-500">BUNDLE ID:</span>
             <div className="text-white font-bold truncate">CEB-ZYRQUEN-Ω∞-V25</div>
           </div>
-          <div className="bg-[#070a12] p-2 rounded-xl border border-zinc-800">
+          <div className="bg-[#070a12] p-2 rounded-xl border-zinc-800">
             <span className="text-zinc-500">REF:</span>
             <div className="text-zinc-300 font-bold truncate">PKG-FIOS-MASTER-V2.1</div>
           </div>
-          <div className="bg-[#070a12] p-2 rounded-xl border border-zinc-800">
+          <div className="bg-[#070a12] p-2 rounded-xl border-zinc-800">
             <span className="text-zinc-500">BLOCK:</span>
             <div className="text-[#06B6D4] font-bold">#{blockHeight.toLocaleString()}</div>
           </div>
-          <div className="bg-[#070a12] p-2 rounded-xl border border-zinc-800">
+          <div className="bg-[#070a12] p-2 rounded-xl border-zinc-800">
             <span className="text-zinc-500">SEALS:</span>
             <div className="text-emerald-400 font-bold">{sealsCount.toLocaleString()}</div>
           </div>
-          <div className="bg-[#070a12] p-2 rounded-xl border border-zinc-800">
+          <div className="bg-[#070a12] p-2 rounded-xl border-zinc-800">
             <span className="text-zinc-500">STATE DRIFT:</span>
             <div className="text-emerald-400 font-bold">Δ0.00% (Zero)</div>
           </div>
-          <div className="bg-[#070a12] p-2 rounded-xl border border-zinc-800">
+          <div className="bg-[#070a12] p-2 rounded-xl border-zinc-800">
             <span className="text-zinc-500">BOUNDARY:</span>
             <div className="text-[#D4AF37] font-bold">Ω600_1000</div>
           </div>
@@ -647,7 +647,7 @@ export const CustodyChainIntegrityViewer: React.FC<CustodyChainIntegrityViewerPr
       </div>
 
       {/* 2. Primary Navigation Bar */}
-      <div className="flex items-center gap-2 overflow-x-auto p-2 rounded-xl bg-[#0a0f1e] border border-zinc-800 text-xs font-mono">
+      <div className="flex items-center gap-2 overflow-x-auto p-2 rounded-xl bg-[#0a0f1e] border-zinc-800 text-xs font-mono">
         <button
           onClick={() => {
             playTone(550, 0.03);
@@ -655,7 +655,7 @@ export const CustodyChainIntegrityViewer: React.FC<CustodyChainIntegrityViewerPr
           }}
           className={`px-3.5 py-2 rounded-lg font-bold flex items-center gap-1.5 transition cursor-pointer shrink-0 ${
             activeTab === 'dashboard'
-              ? 'bg-[#070a12] text-[#06B6D4] border border-[#06B6D4]'
+              ? 'bg-[#070a12] text-[#06B6D4] border-[#06B6D4]'
               : 'text-zinc-400 hover:text-white'
           }`}
         >
@@ -670,7 +670,7 @@ export const CustodyChainIntegrityViewer: React.FC<CustodyChainIntegrityViewerPr
           }}
           className={`px-3.5 py-2 rounded-lg font-bold flex items-center gap-1.5 transition cursor-pointer shrink-0 ${
             activeTab === 'flow'
-              ? 'bg-[#070a12] text-[#06B6D4] border border-[#06B6D4]'
+              ? 'bg-[#070a12] text-[#06B6D4] border-[#06B6D4]'
               : 'text-zinc-400 hover:text-white'
           }`}
         >
@@ -685,7 +685,7 @@ export const CustodyChainIntegrityViewer: React.FC<CustodyChainIntegrityViewerPr
           }}
           className={`px-3.5 py-2 rounded-lg font-bold flex items-center gap-1.5 transition cursor-pointer shrink-0 ${
             activeTab === 'certificate'
-              ? 'bg-[#070a12] text-[#D4AF37] border border-[#D4AF37]'
+              ? 'bg-[#070a12] text-[#D4AF37] border-[#D4AF37]'
               : 'text-zinc-400 hover:text-white'
           }`}
         >
@@ -700,7 +700,7 @@ export const CustodyChainIntegrityViewer: React.FC<CustodyChainIntegrityViewerPr
           }}
           className={`px-3.5 py-2 rounded-lg font-bold flex items-center gap-1.5 transition cursor-pointer shrink-0 ${
             activeTab === 'legal'
-              ? 'bg-[#070a12] text-emerald-400 border border-emerald-500'
+              ? 'bg-[#070a12] text-emerald-400 border-emerald-500'
               : 'text-zinc-400 hover:text-white'
           }`}
         >
@@ -715,7 +715,7 @@ export const CustodyChainIntegrityViewer: React.FC<CustodyChainIntegrityViewerPr
           }}
           className={`px-3.5 py-2 rounded-lg font-bold flex items-center gap-1.5 transition cursor-pointer shrink-0 ${
             activeTab === 'bundle'
-              ? 'bg-[#070a12] text-purple-300 border border-purple-500'
+              ? 'bg-[#070a12] text-purple-300 border-purple-500'
               : 'text-zinc-400 hover:text-white'
           }`}
         >
@@ -730,7 +730,7 @@ export const CustodyChainIntegrityViewer: React.FC<CustodyChainIntegrityViewerPr
           }}
           className={`px-3.5 py-2 rounded-lg font-bold flex items-center gap-1.5 transition cursor-pointer shrink-0 ${
             activeTab === 'passports'
-              ? 'bg-[#070a12] text-[#D4AF37] border border-[#D4AF37]'
+              ? 'bg-[#070a12] text-[#D4AF37] border-[#D4AF37]'
               : 'text-zinc-400 hover:text-white'
           }`}
         >
@@ -775,19 +775,19 @@ export const CustodyChainIntegrityViewer: React.FC<CustodyChainIntegrityViewerPr
             <div className="flex items-center gap-2 flex-wrap">
               <button
                 onClick={() => handleAutoSign(8)}
-                className="px-3 py-1.5 rounded-lg bg-[#0a0f1e] hover:bg-emerald-950/60 text-emerald-300 border border-emerald-500 text-xs font-bold font-mono transition cursor-pointer"
+                className="px-3 py-1.5 rounded-lg bg-[#0a0f1e] hover:bg-emerald-950/60 text-emerald-300 border-emerald-500 text-xs font-bold font-mono transition cursor-pointer"
               >
                 ⚡ Auto-Sign (8/10)
               </button>
               <button
                 onClick={() => handleAutoSign(10)}
-                className="px-3 py-1.5 rounded-lg bg-[#0a0f1e] hover:bg-amber-950/60 text-[#D4AF37] border border-[#D4AF37] text-xs font-bold font-mono transition cursor-pointer"
+                className="px-3 py-1.5 rounded-lg bg-[#0a0f1e] hover:bg-amber-950/60 text-[#D4AF37] border-[#D4AF37] text-xs font-bold font-mono transition cursor-pointer"
               >
                 👑 Full Ascension (10/10)
               </button>
               <button
                 onClick={handleResetBaseline}
-                className="px-3 py-1.5 rounded-lg bg-[#0a0f1e] hover:bg-zinc-800 text-zinc-400 border border-zinc-700 text-xs font-bold font-mono transition cursor-pointer"
+                className="px-3 py-1.5 rounded-lg bg-[#0a0f1e] hover:bg-zinc-800 text-zinc-400 border-zinc-700 text-xs font-bold font-mono transition cursor-pointer"
               >
                 ↺ Reset (4/10)
               </button>
@@ -797,14 +797,14 @@ export const CustodyChainIntegrityViewer: React.FC<CustodyChainIntegrityViewerPr
           {/* Meter & Quick Slots Overview */}
           <div className="grid grid-cols-1 lg:grid-cols-3 gap-4">
             {/* Gauge Meter Box */}
-            <div className="p-4 rounded-xl bg-[#0a0f1e] border border-zinc-800 flex flex-col items-center justify-between">
+            <div className="p-4 rounded-xl bg-[#0a0f1e] border-zinc-800 flex flex-col items-center justify-between">
               <div className="w-full flex items-center justify-between text-xs font-mono">
                 <span className="text-zinc-400">QUORUM METER</span>
                 <span
                   className={`px-2 py-0.5 rounded font-bold ${
                     isAscended
-                      ? 'bg-amber-950 text-[#D4AF37] border border-[#D4AF37]'
-                      : 'bg-emerald-950 text-emerald-300 border border-emerald-500'
+                      ? 'bg-amber-950 text-[#D4AF37] border-[#D4AF37]'
+                      : 'bg-emerald-950 text-emerald-300 border-emerald-500'
                   }`}
                 >
                   {verifiedCount * 10}% VERIFIED
@@ -820,11 +820,11 @@ export const CustodyChainIntegrityViewer: React.FC<CustodyChainIntegrityViewerPr
               </div>
 
               <div className="w-full grid grid-cols-2 gap-2 text-center text-[11px] font-mono pt-2 border-t border-zinc-800">
-                <div className="p-1.5 rounded bg-[#070a12] border border-zinc-800">
+                <div className="p-1.5 rounded bg-[#070a12] border-zinc-800">
                   <div className="text-zinc-500">TARGET</div>
                   <div className="text-[#06B6D4] font-bold">8 / 10 Super Majority</div>
                 </div>
-                <div className="p-1.5 rounded bg-[#070a12] border border-zinc-800">
+                <div className="p-1.5 rounded bg-[#070a12] border-zinc-800">
                   <div className="text-zinc-500">GATE STATUS</div>
                   <div
                     className={`font-bold ${
@@ -838,7 +838,7 @@ export const CustodyChainIntegrityViewer: React.FC<CustodyChainIntegrityViewerPr
             </div>
 
             {/* Quick 10 Slots Badges */}
-            <div className="lg:col-span-2 p-4 rounded-xl bg-[#0a0f1e] border border-zinc-800 flex flex-col justify-between space-y-3">
+            <div className="lg:col-span-2 p-4 rounded-xl bg-[#0a0f1e] border-zinc-800 flex flex-col justify-between space-y-3">
               <div className="flex items-center justify-between flex-wrap gap-2">
                 <div>
                   <h4 className="text-sm font-bold text-white flex items-center gap-1.5">
@@ -876,7 +876,7 @@ export const CustodyChainIntegrityViewer: React.FC<CustodyChainIntegrityViewerPr
           </div>
 
           {/* Detailed 10 Slot Cards Grid */}
-          <div className="p-4 rounded-xl bg-[#0a0f1e] border border-zinc-800 space-y-3">
+          <div className="p-4 rounded-xl bg-[#0a0f1e] border-zinc-800 space-y-3">
             <div className="flex items-center justify-between flex-wrap gap-2 border-b border-zinc-800 pb-3">
               <div>
                 <h4 className="text-sm font-bold text-white flex items-center gap-2">
@@ -904,7 +904,7 @@ export const CustodyChainIntegrityViewer: React.FC<CustodyChainIntegrityViewerPr
                       <span
                         className={`text-[9px] px-1.5 py-0.5 rounded font-bold uppercase ${
                           s.status === 'verified'
-                            ? 'bg-emerald-950 text-emerald-300 border border-emerald-500/50'
+                            ? 'bg-emerald-950 text-emerald-300 border-emerald-500/50'
                             : 'bg-zinc-800 text-zinc-400'
                         }`}
                       >
@@ -937,7 +937,7 @@ export const CustodyChainIntegrityViewer: React.FC<CustodyChainIntegrityViewerPr
           </div>
 
           {/* Terminal Audit Log Box */}
-          <div className="p-4 rounded-xl bg-[#070a12] border border-zinc-800 font-mono text-xs space-y-2">
+          <div className="p-4 rounded-xl bg-[#070a12] border-zinc-800 font-mono text-xs space-y-2">
             <div className="flex items-center justify-between border-b border-zinc-800 pb-2 text-zinc-400">
               <div className="flex items-center gap-2">
                 <span className="w-2 h-2 rounded-full bg-emerald-400"></span>
@@ -946,7 +946,7 @@ export const CustodyChainIntegrityViewer: React.FC<CustodyChainIntegrityViewerPr
               <div className="flex items-center gap-3">
                 <button
                   onClick={handleExportLogStream}
-                  className="px-2.5 py-1 rounded-lg bg-[#D4AF37]/10 hover:bg-[#D4AF37]/20 text-[#D4AF37] border border-[#D4AF37]/50 text-[10px] font-bold flex items-center gap-1.5 transition cursor-pointer"
+                  className="px-2.5 py-1 rounded-lg bg-[#D4AF37]/10 hover:bg-[#D4AF37]/20 text-[#D4AF37] border-[#D4AF37]/50 text-[10px] font-bold flex items-center gap-1.5 transition cursor-pointer"
                   title="Export Audit Log Stream as Signed JSON"
                 >
                   <span>📥</span>
@@ -974,7 +974,7 @@ export const CustodyChainIntegrityViewer: React.FC<CustodyChainIntegrityViewerPr
       {/* 4. TAB 2: CUSTODY CHAIN FLOW GRAPH */}
       {activeTab === 'flow' && (
         <div className="space-y-5 animate-in fade-in duration-150">
-          <div className="p-4 rounded-xl bg-[#0a0f1e] border border-zinc-800 space-y-4">
+          <div className="p-4 rounded-xl bg-[#0a0f1e] border-zinc-800 space-y-4">
             <div className="flex items-center justify-between border-b border-zinc-800 pb-3 flex-wrap gap-2">
               <div>
                 <h4 className="text-sm font-bold text-white flex items-center gap-2">
@@ -983,7 +983,7 @@ export const CustodyChainIntegrityViewer: React.FC<CustodyChainIntegrityViewerPr
                 </h4>
                 <p className="text-xs text-zinc-400">Intake → Attestation → Promotion Gate → Court-Ready Output</p>
               </div>
-              <span className="px-2 py-1 rounded bg-[#070a12] border border-[#D4AF37] text-xs font-mono text-[#D4AF37]">
+              <span className="px-2 py-1 rounded bg-[#070a12] border-[#D4AF37] text-xs font-mono text-[#D4AF37]">
                 Status: Court-Ready Ascended
               </span>
             </div>
@@ -991,7 +991,7 @@ export const CustodyChainIntegrityViewer: React.FC<CustodyChainIntegrityViewerPr
             {/* Pipeline Stage Cards */}
             <div className="grid grid-cols-1 md:grid-cols-4 gap-3 font-mono text-xs">
               {/* Step 1 */}
-              <div className="p-3.5 rounded-xl bg-[#070a12] border border-zinc-800 space-y-2">
+              <div className="p-3.5 rounded-xl bg-[#070a12] border-zinc-800 space-y-2">
                 <div className="flex items-center justify-between">
                   <span className="text-zinc-500 text-[10px]">PHASE 1</span>
                   <span className="px-1.5 py-0.5 rounded bg-emerald-950 text-emerald-400 text-[9px] font-bold">
@@ -1009,7 +1009,7 @@ export const CustodyChainIntegrityViewer: React.FC<CustodyChainIntegrityViewerPr
               </div>
 
               {/* Step 2 */}
-              <div className="p-3.5 rounded-xl bg-[#070a12] border border-zinc-800 space-y-2">
+              <div className="p-3.5 rounded-xl bg-[#070a12] border-zinc-800 space-y-2">
                 <div className="flex items-center justify-between">
                   <span className="text-zinc-500 text-[10px]">PHASE 2</span>
                   <span className="px-1.5 py-0.5 rounded bg-emerald-950 text-emerald-400 text-[9px] font-bold">
@@ -1080,7 +1080,7 @@ export const CustodyChainIntegrityViewer: React.FC<CustodyChainIntegrityViewerPr
             </div>
 
             {/* Real-time packet canvas simulation */}
-            <div className="p-3.5 rounded-xl bg-[#070a12] border border-zinc-800 space-y-2">
+            <div className="p-3.5 rounded-xl bg-[#070a12] border-zinc-800 space-y-2">
               <div className="flex items-center justify-between text-xs font-mono">
                 <span className="text-zinc-300 font-bold">REAL-TIME PACKET FLOW SIMULATION</span>
                 <span className="text-[#D4AF37]">Ascended Sovereign Stream Active</span>
@@ -1096,7 +1096,7 @@ export const CustodyChainIntegrityViewer: React.FC<CustodyChainIntegrityViewerPr
         <div className="p-6 rounded-2xl bg-[#0a0f1e] border-2 border-[#D4AF37] shadow-2xl space-y-6 animate-in fade-in duration-150">
           <div className="flex flex-col md:flex-row items-center justify-between border-b border-[#D4AF37]/50 pb-5 gap-3">
             <div className="flex items-center gap-3">
-              <div className="w-14 h-14 rounded-2xl bg-[#070a12] border border-[#D4AF37] flex items-center justify-center text-3xl">
+              <div className="w-14 h-14 rounded-2xl bg-[#070a12] border-[#D4AF37] flex items-center justify-center text-3xl">
                 👑
               </div>
               <div>
@@ -1105,7 +1105,7 @@ export const CustodyChainIntegrityViewer: React.FC<CustodyChainIntegrityViewerPr
               </div>
             </div>
             <div className="text-right font-mono text-xs">
-              <div className="px-3 py-1 rounded bg-[#070a12] border border-[#D4AF37] text-[#D4AF37] font-bold inline-block">
+              <div className="px-3 py-1 rounded bg-[#070a12] border-[#D4AF37] text-[#D4AF37] font-bold inline-block">
                 SOVEREIGN VERIFIED
               </div>
               <div className="text-zinc-500 mt-1">Date: 12 SEP 2026 • 17:47:05 UTC+7</div>
@@ -1118,7 +1118,7 @@ export const CustodyChainIntegrityViewer: React.FC<CustodyChainIntegrityViewerPr
             <div className="text-xs text-[#06B6D4]">Reference: PKG-FIOS-MASTER-V2.1</div>
           </div>
 
-          <div className="p-4 rounded-xl bg-[#070a12] border border-zinc-800 font-mono text-xs grid grid-cols-1 md:grid-cols-2 gap-3">
+          <div className="p-4 rounded-xl bg-[#070a12] border-zinc-800 font-mono text-xs grid grid-cols-1 md:grid-cols-2 gap-3">
             <div>
               <span className="text-zinc-500">Quorum State:</span>{' '}
               <span className="text-[#D4AF37] font-bold">{verifiedCount} / 10 Physical Proofs (100%)</span>
@@ -1150,7 +1150,7 @@ export const CustodyChainIntegrityViewer: React.FC<CustodyChainIntegrityViewerPr
             </div>
           </div>
 
-          <div className="p-4 rounded-xl bg-[#070a12] border border-zinc-800 text-xs font-mono text-zinc-300 space-y-2">
+          <div className="p-4 rounded-xl bg-[#070a12] border-zinc-800 text-xs font-mono text-zinc-300 space-y-2">
             <div className="font-bold text-[#D4AF37]">STATUTORY COMPLIANCE &amp; CRYPTOGRAPHIC PROOF</div>
             <p className="leading-relaxed text-zinc-400">
               The custody chain contained within this bundle complies strictly with Electronic Transactions Act (ETDA) Sections 9, 26, and 28 for electronic signature validity and non-repudiation, as well as Personal Data Protection Act (PDPA) Sections 19, 27, and 37. Cryptographic signatures are bound utilizing NIST Post-Quantum standard algorithms <strong>ML-KEM-1024</strong> (Key Encapsulation) and <strong>Dilithium-5</strong> (Digital Signature Scheme).
@@ -1158,17 +1158,17 @@ export const CustodyChainIntegrityViewer: React.FC<CustodyChainIntegrityViewerPr
           </div>
 
           <div className="grid grid-cols-1 md:grid-cols-3 gap-3 text-center font-mono text-xs">
-            <div className="p-3 rounded-xl bg-[#070a12] border border-zinc-800">
+            <div className="p-3 rounded-xl bg-[#070a12] border-zinc-800">
               <div className="text-zinc-500 text-[10px]">CUSTODIAN ATTESTATION</div>
               <div className="text-cyan-300 font-bold mt-1">HSM Node #01 Master Key</div>
               <div className="text-[10px] text-zinc-500 truncate mt-0.5">dilithium5_pk_99a81e...</div>
             </div>
-            <div className="p-3 rounded-xl bg-[#070a12] border border-zinc-800">
+            <div className="p-3 rounded-xl bg-[#070a12] border-zinc-800">
               <div className="text-zinc-500 text-[10px]">JUDICIAL WITNESS</div>
               <div className="text-emerald-400 font-bold mt-1">Judicial Registrar Node #01</div>
               <div className="text-[10px] text-zinc-500 truncate mt-0.5">dilithium5_pk_dde480...</div>
             </div>
-            <div className="p-3 rounded-xl bg-[#070a12] border border-zinc-800">
+            <div className="p-3 rounded-xl bg-[#070a12] border-zinc-800">
               <div className="text-zinc-500 text-[10px]">CONSENSUS STATUS</div>
               <div className="text-[#D4AF37] font-bold mt-1">10/10 Super Majority</div>
               <div className="text-[10px] text-zinc-500 mt-0.5">Ascended Sovereign</div>
@@ -1185,7 +1185,7 @@ export const CustodyChainIntegrityViewer: React.FC<CustodyChainIntegrityViewerPr
                   playTone(700, 0.04);
                   window.print?.();
                 }}
-                className="px-3 py-1.5 rounded-lg bg-[#070a12] hover:bg-zinc-800 text-white border border-zinc-700 font-bold cursor-pointer"
+                className="px-3 py-1.5 rounded-lg bg-[#070a12] hover:bg-zinc-800 text-white border-zinc-700 font-bold cursor-pointer"
               >
                 🖨️ Print Official Certificate
               </button>
@@ -1194,7 +1194,7 @@ export const CustodyChainIntegrityViewer: React.FC<CustodyChainIntegrityViewerPr
                   playTone(750, 0.04);
                   triggerToast('Exporting Sovereign Certified Bundle (.json / .pdf)...');
                 }}
-                className="px-3 py-1.5 rounded-lg bg-[#D4AF37]/20 hover:bg-[#D4AF37]/30 text-[#D4AF37] border border-[#D4AF37] font-bold cursor-pointer"
+                className="px-3 py-1.5 rounded-lg bg-[#D4AF37]/20 hover:bg-[#D4AF37]/30 text-[#D4AF37] border-[#D4AF37] font-bold cursor-pointer"
               >
                 📑 Export Signed Package
               </button>
@@ -1206,7 +1206,7 @@ export const CustodyChainIntegrityViewer: React.FC<CustodyChainIntegrityViewerPr
       {/* 6. TAB 4: LEGAL COMPLIANCE MATRIX */}
       {activeTab === 'legal' && (
         <div className="space-y-4 animate-in fade-in duration-150">
-          <div className="p-4 rounded-xl bg-[#0a0f1e] border border-zinc-800 space-y-4">
+          <div className="p-4 rounded-xl bg-[#0a0f1e] border-zinc-800 space-y-4">
             <div className="flex items-center justify-between border-b border-zinc-800 pb-3 flex-wrap gap-2">
               <div>
                 <h4 className="text-sm font-bold text-white flex items-center gap-2">
@@ -1215,14 +1215,14 @@ export const CustodyChainIntegrityViewer: React.FC<CustodyChainIntegrityViewerPr
                 </h4>
                 <p className="text-xs text-zinc-400">Verified alignment with ETDA (Thailand) &amp; PDPA Regulations</p>
               </div>
-              <span className="px-2.5 py-1 rounded bg-emerald-950 text-emerald-300 border border-emerald-500 text-xs font-mono font-bold">
+              <span className="px-2.5 py-1 rounded bg-emerald-950 text-emerald-300 border-emerald-500 text-xs font-mono font-bold">
                 ✓ FORENSIC READY
               </span>
             </div>
 
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4 font-mono text-xs">
               {/* ETDA Card */}
-              <div className="p-4 rounded-xl bg-[#070a12] border border-zinc-800 space-y-3">
+              <div className="p-4 rounded-xl bg-[#070a12] border-zinc-800 space-y-3">
                 <div className="flex items-center justify-between border-b border-zinc-800 pb-2">
                   <span className="text-white font-bold flex items-center gap-1.5">
                     <span>🏛️</span>
@@ -1231,7 +1231,7 @@ export const CustodyChainIntegrityViewer: React.FC<CustodyChainIntegrityViewerPr
                   <span className="text-[10px] text-[#06B6D4]">Thailand Standard</span>
                 </div>
                 <div className="space-y-2">
-                  <div className="p-2 rounded bg-[#0a0f1e] border border-zinc-800/80 flex items-start justify-between">
+                  <div className="p-2 rounded bg-[#0a0f1e] border-zinc-800/80 flex items-start justify-between">
                     <div>
                       <strong className="text-white">Sec 9 — E-Signature Integrity</strong>
                       <div className="text-[11px] text-zinc-400">Reliability &amp; non-repudiation of signatures</div>
@@ -1240,7 +1240,7 @@ export const CustodyChainIntegrityViewer: React.FC<CustodyChainIntegrityViewerPr
                       COMPLIANT
                     </span>
                   </div>
-                  <div className="p-2 rounded bg-[#0a0f1e] border border-zinc-800/80 flex items-start justify-between">
+                  <div className="p-2 rounded bg-[#0a0f1e] border-zinc-800/80 flex items-start justify-between">
                     <div>
                       <strong className="text-white">Sec 26 — Trusted Signature</strong>
                       <div className="text-[11px] text-zinc-400">Post-quantum Dilithium-5 key validation</div>
@@ -1249,7 +1249,7 @@ export const CustodyChainIntegrityViewer: React.FC<CustodyChainIntegrityViewerPr
                       VERIFIED
                     </span>
                   </div>
-                  <div className="p-2 rounded bg-[#0a0f1e] border border-zinc-800/80 flex items-start justify-between">
+                  <div className="p-2 rounded bg-[#0a0f1e] border-zinc-800/80 flex items-start justify-between">
                     <div>
                       <strong className="text-white">Sec 28 — Digital Certificate</strong>
                       <div className="text-[11px] text-zinc-400">Physical HSM Node #01 Attestation</div>
@@ -1262,7 +1262,7 @@ export const CustodyChainIntegrityViewer: React.FC<CustodyChainIntegrityViewerPr
               </div>
 
               {/* PDPA Card */}
-              <div className="p-4 rounded-xl bg-[#070a12] border border-zinc-800 space-y-3">
+              <div className="p-4 rounded-xl bg-[#070a12] border-zinc-800 space-y-3">
                 <div className="flex items-center justify-between border-b border-zinc-800 pb-2">
                   <span className="text-white font-bold flex items-center gap-1.5">
                     <span>🛡️</span>
@@ -1271,7 +1271,7 @@ export const CustodyChainIntegrityViewer: React.FC<CustodyChainIntegrityViewerPr
                   <span className="text-[10px] text-indigo-300">Privacy Matrix</span>
                 </div>
                 <div className="space-y-2">
-                  <div className="p-2 rounded bg-[#0a0f1e] border border-zinc-800/80 flex items-start justify-between">
+                  <div className="p-2 rounded bg-[#0a0f1e] border-zinc-800/80 flex items-start justify-between">
                     <div>
                       <strong className="text-white">Sec 19 — Consent &amp; Scope</strong>
                       <div className="text-[11px] text-zinc-400">Forensic evidence bound to judicial scope</div>
@@ -1280,7 +1280,7 @@ export const CustodyChainIntegrityViewer: React.FC<CustodyChainIntegrityViewerPr
                       BOUND
                     </span>
                   </div>
-                  <div className="p-2 rounded bg-[#0a0f1e] border border-zinc-800/80 flex items-start justify-between">
+                  <div className="p-2 rounded bg-[#0a0f1e] border-zinc-800/80 flex items-start justify-between">
                     <div>
                       <strong className="text-white">Sec 27 — No Unauthorized Disclosure</strong>
                       <div className="text-[11px] text-zinc-400">ML-KEM-1024 encrypted custody ledger payload</div>
@@ -1289,7 +1289,7 @@ export const CustodyChainIntegrityViewer: React.FC<CustodyChainIntegrityViewerPr
                       ENCRYPTED
                     </span>
                   </div>
-                  <div className="p-2 rounded bg-[#0a0f1e] border border-zinc-800/80 flex items-start justify-between">
+                  <div className="p-2 rounded bg-[#0a0f1e] border-zinc-800/80 flex items-start justify-between">
                     <div>
                       <strong className="text-white">Sec 37 — Security Measures</strong>
                       <div className="text-[11px] text-zinc-400">Tamper-evident Zero Drift (Δ0.00%) architecture</div>
@@ -1308,7 +1308,7 @@ export const CustodyChainIntegrityViewer: React.FC<CustodyChainIntegrityViewerPr
       {/* 7. TAB 5: FORENSIC BUNDLE INSPECTOR */}
       {activeTab === 'bundle' && (
         <div className="space-y-4 animate-in fade-in duration-150">
-          <div className="p-4 rounded-xl bg-[#0a0f1e] border border-zinc-800 space-y-4">
+          <div className="p-4 rounded-xl bg-[#0a0f1e] border-zinc-800 space-y-4">
             <div className="flex items-center justify-between border-b border-zinc-800 pb-3 flex-wrap gap-2">
               <div>
                 <h4 className="text-sm font-bold text-white flex items-center gap-2">
@@ -1320,7 +1320,7 @@ export const CustodyChainIntegrityViewer: React.FC<CustodyChainIntegrityViewerPr
               <div className="flex items-center gap-2">
                 <button
                   onClick={handleCopyJson}
-                  className="px-3 py-1.5 rounded-lg bg-[#070a12] hover:bg-zinc-800 text-white text-xs font-mono border border-zinc-700 cursor-pointer"
+                  className="px-3 py-1.5 rounded-lg bg-[#070a12] hover:bg-zinc-800 text-white text-xs font-mono border-zinc-700 cursor-pointer"
                 >
                   📋 Copy JSON
                 </button>
@@ -1329,7 +1329,7 @@ export const CustodyChainIntegrityViewer: React.FC<CustodyChainIntegrityViewerPr
                     playSuccessChime();
                     triggerToast('Court Presentation Dossier PDF Synthesized & Signed!');
                   }}
-                  className="px-3 py-1.5 rounded-lg bg-[#D4AF37]/20 hover:bg-[#D4AF37]/30 text-[#D4AF37] text-xs font-mono font-bold border border-[#D4AF37] cursor-pointer"
+                  className="px-3 py-1.5 rounded-lg bg-[#D4AF37]/20 hover:bg-[#D4AF37]/30 text-[#D4AF37] text-xs font-mono font-bold border-[#D4AF37] cursor-pointer"
                 >
                   ⚖️ Synthesize PDF Bundle
                 </button>
@@ -1338,24 +1338,24 @@ export const CustodyChainIntegrityViewer: React.FC<CustodyChainIntegrityViewerPr
 
             <div className="grid grid-cols-1 lg:grid-cols-2 gap-4 font-mono text-xs">
               {/* Code viewer */}
-              <div className="p-3 rounded-xl bg-[#070a12] border border-zinc-800 flex flex-col justify-between">
+              <div className="p-3 rounded-xl bg-[#070a12] border-zinc-800 flex flex-col justify-between">
                 <div className="flex items-center justify-between pb-2 border-b border-zinc-800 text-zinc-400 mb-2">
                   <span>canonical_evidence_bundle.json</span>
                   <span className="text-[#06B6D4] font-bold">ASCENDED READ-ONLY</span>
                 </div>
-                <pre className="h-80 overflow-y-auto text-[11px] text-cyan-300 p-2 bg-[#0a0f1e] rounded border border-zinc-800/80 leading-relaxed font-mono">
+                <pre className="h-80 overflow-y-auto text-[11px] text-cyan-300 p-2 bg-[#0a0f1e] rounded border-zinc-800/80 leading-relaxed font-mono">
                   {canonicalJson}
                 </pre>
               </div>
 
               {/* PDF Preview Mock */}
-              <div className="p-4 rounded-xl bg-[#070a12] border border-zinc-800 flex flex-col justify-between space-y-3">
+              <div className="p-4 rounded-xl bg-[#070a12] border-zinc-800 flex flex-col justify-between space-y-3">
                 <div className="flex items-center justify-between pb-2 border-b border-zinc-800 text-zinc-400">
                   <span>Court_Presentation_Dossier.pdf</span>
                   <span className="text-[#D4AF37] font-bold">Canonical Synthesis</span>
                 </div>
 
-                <div className="p-4 rounded-xl bg-[#0a0f1e] border border-zinc-800 space-y-3 flex-grow font-sans text-xs">
+                <div className="p-4 rounded-xl bg-[#0a0f1e] border-zinc-800 space-y-3 flex-grow font-sans text-xs">
                   <div className="text-center border-b border-zinc-800 pb-2">
                     <div className="font-bold text-white font-mono tracking-wider">FORENSIC EVIDENCE DOSSIER</div>
                     <div className="text-[10px] text-zinc-400 font-mono">HIGH COURT DIGITAL CUSTODY CHAIN RECORD</div>
@@ -1375,7 +1375,7 @@ export const CustodyChainIntegrityViewer: React.FC<CustodyChainIntegrityViewerPr
                     </p>
                   </div>
 
-                  <div className="p-3 rounded-lg bg-[#070a12] border border-[#D4AF37]/50 text-[11px] font-mono space-y-1">
+                  <div className="p-3 rounded-lg bg-[#070a12] border-[#D4AF37]/50 text-[11px] font-mono space-y-1">
                     <div className="text-[#D4AF37] font-bold">CURRENT STATUS: {verifiedCount} / 10 VERIFIED</div>
                     <div className="text-zinc-400">Super Majority (8/10): <span className="text-emerald-400 font-bold">ATTAINED (PASS)</span></div>
                     <div className="text-zinc-400">Ascension State: <span className="text-[#D4AF37] font-bold">FULL ASCENDED SOVEREIGN</span></div>
@@ -1387,7 +1387,7 @@ export const CustodyChainIntegrityViewer: React.FC<CustodyChainIntegrityViewerPr
                     playTone(600, 0.04);
                     triggerToast('Downloading Court Presentation Package (.pdf)...');
                   }}
-                  className="w-full py-2 rounded-lg bg-[#0a0f1e] hover:bg-zinc-800 text-white font-mono text-xs border border-zinc-700 cursor-pointer"
+                  className="w-full py-2 rounded-lg bg-[#0a0f1e] hover:bg-zinc-800 text-white font-mono text-xs border-zinc-700 cursor-pointer"
                 >
                   📥 Export PDF Package (.pdf)
                 </button>
@@ -1400,7 +1400,7 @@ export const CustodyChainIntegrityViewer: React.FC<CustodyChainIntegrityViewerPr
       {/* 8. TAB 6: 10 GOLD MASTER SEAL PASSPORTS MATRIX */}
       {activeTab === 'passports' && (
         <div className="space-y-4 animate-in fade-in duration-150">
-          <div className="p-4 rounded-xl bg-[#0a0f1e] border border-zinc-800 space-y-4">
+          <div className="p-4 rounded-xl bg-[#0a0f1e] border-zinc-800 space-y-4">
             <div className="flex items-center justify-between border-b border-zinc-800 pb-3 flex-wrap gap-2">
               <div>
                 <h4 className="text-sm font-bold text-white flex items-center gap-2">
@@ -1411,14 +1411,14 @@ export const CustodyChainIntegrityViewer: React.FC<CustodyChainIntegrityViewerPr
                   ทุก Custodian ผ่านการตรวจสอบ Post-Quantum Cryptography Key Signatures ครบ 10 ท่าน
                 </p>
               </div>
-              <span className="px-2.5 py-1 rounded bg-[#D4AF37]/20 text-[#D4AF37] border border-[#D4AF37] text-xs font-mono font-bold">
+              <span className="px-2.5 py-1 rounded bg-[#D4AF37]/20 text-[#D4AF37] border-[#D4AF37] text-xs font-mono font-bold">
                 10/10 Gold Master Quorum
               </span>
             </div>
 
             {/* Passports Table */}
             <div className="overflow-x-auto">
-              <table className="w-full text-left text-xs font-mono border border-zinc-800">
+              <table className="w-full text-left text-xs font-mono border-zinc-800">
                 <thead className="bg-[#070a12] text-zinc-400 border-b border-zinc-800">
                   <tr>
                     <th className="p-2.5 border-r border-zinc-800">Passport ID</th>
@@ -1442,7 +1442,7 @@ export const CustodyChainIntegrityViewer: React.FC<CustodyChainIntegrityViewerPr
                         <span
                           className={`px-2 py-0.5 rounded text-[10px] font-bold ${
                             p.clearance.includes('OMEGA-1')
-                              ? 'bg-amber-950 text-[#D4AF37] border border-[#D4AF37]'
+                              ? 'bg-amber-950 text-[#D4AF37] border-[#D4AF37]'
                               : 'bg-zinc-800 text-zinc-300'
                           }`}
                         >
@@ -1455,7 +1455,7 @@ export const CustodyChainIntegrityViewer: React.FC<CustodyChainIntegrityViewerPr
                         </span>
                       </td>
                       <td className="p-2.5 text-center whitespace-nowrap">
-                        <span className="px-2 py-0.5 rounded bg-emerald-950 text-emerald-300 border border-emerald-500/50 font-bold text-[10px]">
+                        <span className="px-2 py-0.5 rounded bg-emerald-950 text-emerald-300 border-emerald-500/50 font-bold text-[10px]">
                           🟢 VERIFIED
                         </span>
                       </td>
@@ -1466,27 +1466,27 @@ export const CustodyChainIntegrityViewer: React.FC<CustodyChainIntegrityViewerPr
             </div>
 
             {/* Forensic Quarantine Analysis (Ring-04 Buffer) */}
-            <div className="p-4 rounded-xl bg-[#070a12] border border-amber-500/40 space-y-2 font-mono text-xs">
+            <div className="p-4 rounded-xl bg-[#070a12] border-amber-500/40 space-y-2 font-mono text-xs">
               <div className="flex items-center gap-2 text-amber-400 font-bold">
                 <span>🧮</span>
                 <span>Forensic Quarantine Analysis (Ring-04 Buffer)</span>
               </div>
               <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-2 pt-1">
-                <div className="p-2 rounded bg-[#0a0f1e] border border-zinc-800">
+                <div className="p-2 rounded bg-[#0a0f1e] border-zinc-800">
                   <div className="text-zinc-500 text-[10px]">Quarantined Range:</div>
                   <div className="text-white font-bold">Seals #14,903 – #14,907 (5 Seals)</div>
                 </div>
-                <div className="p-2 rounded bg-[#0a0f1e] border border-zinc-800">
+                <div className="p-2 rounded bg-[#0a0f1e] border-zinc-800">
                   <div className="text-zinc-500 text-[10px]">Boundary:</div>
                   <div className="text-cyan-300 font-bold">RING-04-ISOLATED-BUFFER</div>
                 </div>
-                <div className="p-2 rounded bg-[#0a0f1e] border border-zinc-800">
+                <div className="p-2 rounded bg-[#0a0f1e] border-zinc-800">
                   <div className="text-zinc-500 text-[10px]">Reconciliation Status:</div>
                   <div className="text-emerald-400 font-bold truncate" title="FORENSICISOLATIONCONFIRMEDZEROLEAK">
                     CONFIRMED ZERO LEAK
                   </div>
                 </div>
-                <div className="p-2 rounded bg-[#0a0f1e] border border-zinc-800">
+                <div className="p-2 rounded bg-[#0a0f1e] border-zinc-800">
                   <div className="text-zinc-500 text-[10px]">Canonical Core Drift:</div>
                   <div className="text-[#D4AF37] font-bold">SSoT Mutation Δ = 0.00%</div>
                 </div>
@@ -1494,7 +1494,7 @@ export const CustodyChainIntegrityViewer: React.FC<CustodyChainIntegrityViewerPr
             </div>
 
             {/* Punchline Card */}
-            <div className="p-3.5 rounded-xl bg-[#070a12] border border-[#D4AF37]/60 text-xs font-mono text-zinc-300">
+            <div className="p-3.5 rounded-xl bg-[#070a12] border-[#D4AF37]/60 text-xs font-mono text-zinc-300">
               <span className="text-[#D4AF37] font-bold">🌌 Punchline:</span>{' '}
               รายงานนี้คือหลักฐานระดับ Gold Master Quorum ที่ยืนยันความสมบูรณ์ของระบบ ZYRQUEN Ω∞ — ทุกตราประทับได้รับการตรวจสอบและลงนามครบ 10/10 พร้อมการรับรองทางกฎหมายไทยและมาตรฐาน Post-Quantum Cryptography.
             </div>
@@ -1504,7 +1504,7 @@ export const CustodyChainIntegrityViewer: React.FC<CustodyChainIntegrityViewerPr
 
       {/* Toast popup */}
       {toastMessage && (
-        <div className="fixed bottom-5 right-5 z-50 p-3 rounded-xl bg-[#070a12] border border-[#D4AF37] text-white text-xs font-mono shadow-2xl flex items-center gap-2 animate-in fade-in slide-in-from-bottom-2 duration-150">
+        <div className="fixed bottom-5 right-5 z-50 p-3 rounded-xl bg-[#070a12] border-[#D4AF37] text-white text-xs font-mono shadow-2xl flex items-center gap-2 animate-in fade-in slide-in-from-bottom-2 duration-150">
           <span>🔔</span>
           <span>{toastMessage}</span>
         </div>

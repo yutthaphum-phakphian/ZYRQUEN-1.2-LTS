@@ -56,7 +56,7 @@ export const Last5SnapshotsSidePanel: React.FC<Last5SnapshotsSidePanelProps> = (
       aria-label="Hardware Snapshots Forensic Cross-Reference"
       className="w-full xl:w-80 shrink-0 space-y-3 font-mono"
     >
-      <div className="p-4 rounded-2xl bg-[#0a0f1e] border border-cyan-500/30 shadow-xl space-y-3">
+      <div className="p-4 rounded-2xl bg-[#0a0f1e] border-cyan-500/30 shadow-xl space-y-3">
         {/* Panel Header */}
         <div className="flex items-center justify-between border-b border-cyan-500/20 pb-2.5">
           <div className="flex items-center gap-2">
@@ -65,7 +65,7 @@ export const Last5SnapshotsSidePanel: React.FC<Last5SnapshotsSidePanelProps> = (
               Last 5 Snapshots
             </h3>
           </div>
-          <span className="px-2 py-0.5 rounded-full bg-cyan-950 text-cyan-300 border border-cyan-500/30 text-[10px] font-bold">
+          <span className="px-2 py-0.5 rounded-full bg-cyan-950 text-cyan-300 border-cyan-500/30 text-[10px] font-bold">
             FORENSIC REF
           </span>
         </div>
@@ -98,7 +98,7 @@ export const Last5SnapshotsSidePanel: React.FC<Last5SnapshotsSidePanelProps> = (
                       Snapshot {snap.snapshotNumber}
                     </span>
                     {isLatest && (
-                      <span className="px-1.5 py-0.2 rounded bg-emerald-950 text-emerald-300 border border-emerald-500/30 text-[9px]">
+                      <span className="px-1.5 py-0.2 rounded bg-emerald-950 text-emerald-300 border-emerald-500/30 text-[9px]">
                         LATEST
                       </span>
                     )}
@@ -110,7 +110,7 @@ export const Last5SnapshotsSidePanel: React.FC<Last5SnapshotsSidePanelProps> = (
                 </div>
 
                 {/* Hash Display & Copy */}
-                <div className="mt-2 bg-black/60 p-2 rounded-lg border border-white/5 flex items-center justify-between gap-1.5 font-mono text-[11px]">
+                <div className="mt-2 bg-black/60 p-2 rounded-lg border-white/5 flex items-center justify-between gap-1.5 font-mono text-[11px]">
                   <span className="text-zinc-300 truncate" title={snap.sealedHash}>
                     {hashShort}
                   </span>
@@ -156,7 +156,7 @@ export const Last5SnapshotsSidePanel: React.FC<Last5SnapshotsSidePanelProps> = (
         <div className="pt-2 border-t border-cyan-500/20">
           <button
             onClick={handleDownloadSimplifiedReport}
-            className="w-full px-3.5 py-2 rounded-xl bg-cyan-950 hover:bg-cyan-900 border border-cyan-500/40 text-cyan-200 text-xs font-bold flex items-center justify-center gap-2 transition-all shadow-md"
+            className="w-full px-3.5 py-2 rounded-xl bg-cyan-950 hover:bg-cyan-900 border-cyan-500/40 text-cyan-200 text-xs font-bold flex items-center justify-center gap-2 transition-all shadow-md"
             title="Download simplified human-readable forensic report (.txt)"
           >
             <Download className="w-3.5 h-3.5 text-cyan-400" />
@@ -165,7 +165,7 @@ export const Last5SnapshotsSidePanel: React.FC<Last5SnapshotsSidePanelProps> = (
         </div>
 
         {reportToast && (
-          <div className="p-2 rounded-lg bg-emerald-950/80 border border-emerald-500/40 text-emerald-200 text-[10px] font-mono animate-in fade-in">
+          <div className="p-2 rounded-lg bg-emerald-950/80 border-emerald-500/40 text-emerald-200 text-[10px] font-mono animate-in fade-in">
             ✓ Downloaded: <strong className="text-white">{reportToast}</strong>
           </div>
         )}

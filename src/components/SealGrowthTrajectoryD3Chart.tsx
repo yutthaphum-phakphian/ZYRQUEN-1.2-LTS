@@ -337,7 +337,7 @@ export const SealGrowthTrajectoryD3Chart: React.FC<SealGrowthTrajectoryD3ChartPr
   }, [containerRef, filterMode]);
 
   return (
-    <div className="p-4 sm:p-5 rounded-2xl bg-[#0a0f1e] border border-cyan-500/30 shadow-xl space-y-4 font-mono">
+    <div className="p-4 sm:p-5 rounded-2xl bg-[#0a0f1e] border-cyan-500/30 shadow-xl space-y-4 font-mono">
       {/* Header & Controls */}
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 border-b border-cyan-500/20 pb-3">
         <div>
@@ -345,7 +345,7 @@ export const SealGrowthTrajectoryD3Chart: React.FC<SealGrowthTrajectoryD3ChartPr
             <span className="text-base font-bold text-white tracking-wide flex items-center gap-2">
               <span>📈 14,902 SEAL GROWTH TRAJECTORY</span>
             </span>
-            <span className="px-2 py-0.5 rounded-full bg-emerald-950 text-emerald-300 border border-emerald-500/40 text-[10px] font-bold">
+            <span className="px-2 py-0.5 rounded-full bg-emerald-950 text-emerald-300 border-emerald-500/40 text-[10px] font-bold">
               100% VERIFIED
             </span>
           </div>
@@ -386,7 +386,7 @@ export const SealGrowthTrajectoryD3Chart: React.FC<SealGrowthTrajectoryD3ChartPr
 
       {/* KPI Cards Row */}
       <div className="grid grid-cols-2 sm:grid-cols-4 gap-2.5 text-xs">
-        <div className="p-2.5 rounded-xl bg-[#070a12] border border-cyan-500/20 space-y-0.5">
+        <div className="p-2.5 rounded-xl bg-[#070a12] border-cyan-500/20 space-y-0.5">
           <div className="text-zinc-400 text-[11px]">CUMULATIVE SEALS</div>
           <div className="text-lg font-bold text-emerald-300">
             {currentSealCount.toLocaleString()}
@@ -394,19 +394,19 @@ export const SealGrowthTrajectoryD3Chart: React.FC<SealGrowthTrajectoryD3ChartPr
           <div className="text-[10px] text-zinc-500">SSoT Invariant Δ0.00%</div>
         </div>
 
-        <div className="p-2.5 rounded-xl bg-[#070a12] border border-amber-500/20 space-y-0.5">
+        <div className="p-2.5 rounded-xl bg-[#070a12] border-amber-500/20 space-y-0.5">
           <div className="text-amber-400 text-[11px]">PEAK THROUGHPUT</div>
           <div className="text-lg font-bold text-amber-300">2,120 seals/s</div>
           <div className="text-[10px] text-amber-500/80">Block #847400 Burst</div>
         </div>
 
-        <div className="p-2.5 rounded-xl bg-[#070a12] border border-cyan-500/20 space-y-0.5">
+        <div className="p-2.5 rounded-xl bg-[#070a12] border-cyan-500/20 space-y-0.5">
           <div className="text-cyan-400 text-[11px]">CANONICAL ANCHOR</div>
           <div className="text-lg font-bold text-white">#849202</div>
           <div className="text-[10px] text-zinc-500">Gold Master Seal Locked</div>
         </div>
 
-        <div className="p-2.5 rounded-xl bg-[#070a12] border border-purple-500/20 space-y-0.5">
+        <div className="p-2.5 rounded-xl bg-[#070a12] border-purple-500/20 space-y-0.5">
           <div className="text-purple-400 text-[11px]">PQC ATTESTATION</div>
           <div className="text-lg font-bold text-purple-200">ML-DSA-87</div>
           <div className="text-[10px] text-emerald-400">10/10 REAL_HSM Quorum</div>
@@ -414,25 +414,25 @@ export const SealGrowthTrajectoryD3Chart: React.FC<SealGrowthTrajectoryD3ChartPr
       </div>
 
       {/* SVG Canvas Container */}
-      <div ref={containerRef} className="w-full relative overflow-hidden bg-[#070a12] rounded-xl p-2 border border-white/5">
+      <div ref={containerRef} className="w-full relative overflow-hidden bg-[#070a12] rounded-xl p-2 border-white/5">
         <svg ref={svgRef} className="w-full block" />
       </div>
 
       {/* Hover / Selected Milestone Detail Card */}
       {selectedPoint ? (
-        <div className="p-3 rounded-xl bg-[#070a12] border border-cyan-500/40 flex flex-col md:flex-row md:items-center justify-between gap-3 text-xs animate-in fade-in">
+        <div className="p-3 rounded-xl bg-[#070a12] border-cyan-500/40 flex flex-col md:flex-row md:items-center justify-between gap-3 text-xs animate-in fade-in">
           <div className="space-y-1">
             <div className="flex items-center gap-2">
               <span className="font-bold text-white text-sm">
                 {selectedPoint.blockLabel} • {selectedPoint.stage}
               </span>
               {selectedPoint.isHighThroughput && (
-                <span className="px-2 py-0.5 rounded bg-amber-950 text-amber-300 border border-amber-500/40 text-[10px] font-bold">
+                <span className="px-2 py-0.5 rounded bg-amber-950 text-amber-300 border-amber-500/40 text-[10px] font-bold">
                   🔥 {selectedPoint.throughput} SEALS/SEC
                 </span>
               )}
               {selectedPoint.block === 849202 && (
-                <span className="px-2 py-0.5 rounded bg-emerald-950 text-emerald-300 border border-emerald-500/40 text-[10px] font-bold">
+                <span className="px-2 py-0.5 rounded bg-emerald-950 text-emerald-300 border-emerald-500/40 text-[10px] font-bold">
                   💎 FROZEN v1.2 SSoT
                 </span>
               )}
@@ -452,13 +452,13 @@ export const SealGrowthTrajectoryD3Chart: React.FC<SealGrowthTrajectoryD3ChartPr
                 onSelectSeal(selectedPoint);
               }
             }}
-            className="px-3 py-1.5 rounded-lg bg-cyan-950 hover:bg-cyan-900 border border-cyan-400 text-cyan-200 text-xs font-bold shrink-0 transition-all"
+            className="px-3 py-1.5 rounded-lg bg-cyan-950 hover:bg-cyan-900 border-cyan-400 text-cyan-200 text-xs font-bold shrink-0 transition-all"
           >
             🔍 Audit Merkle Path
           </button>
         </div>
       ) : (
-        <div className="p-2.5 rounded-xl bg-[#070a12]/60 border border-white/5 text-[11px] text-zinc-400 flex items-center justify-between">
+        <div className="p-2.5 rounded-xl bg-[#070a12]/60 border-white/5 text-[11px] text-zinc-400 flex items-center justify-between">
           <span>💡 Click any data milestone or high-throughput burst node to inspect its cryptographic Merkle chain.</span>
           <span className="text-cyan-400 font-bold">14,902 Canonical Seals Anchored</span>
         </div>

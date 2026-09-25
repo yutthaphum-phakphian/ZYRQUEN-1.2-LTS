@@ -84,17 +84,17 @@ export const KeyboardShortcutsModal: React.FC<KeyboardShortcutsModalProps> = ({
 
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/80 backdrop-blur-md animate-in fade-in duration-200">
-      <div className="relative w-full max-w-2xl rounded-[28px] bg-[#07080F] border border-cyan-500/30 shadow-[0_0_50px_rgba(6,182,212,0.2)] overflow-hidden font-mono">
+      <div className="relative w-full max-w-2xl rounded-[28px] bg-[#07080F] border-cyan-500/30 shadow-[0_0_50px_rgba(6,182,212,0.2)] overflow-hidden font-mono">
         {/* Header */}
         <div className="p-6 bg-gradient-to-r from-cyan-950/40 via-violet-950/30 to-black/80 border-b border-white/10 flex items-center justify-between">
           <div className="flex items-center gap-3">
-            <div className="p-2.5 rounded-2xl bg-cyan-500/10 border border-cyan-500/30 text-cyan-400">
+            <div className="p-2.5 rounded-2xl bg-cyan-500/10 border-cyan-500/30 text-cyan-400">
               <Keyboard className="w-5 h-5" />
             </div>
             <div>
               <div className="flex items-center gap-2">
                 <h3 className="text-base font-bold text-white">Global Keyboard Shortcuts & Fast Switcher</h3>
-                <span className="text-[10px] px-2 py-0.5 rounded-full bg-cyan-500/10 text-cyan-300 border border-cyan-500/20">
+                <span className="text-[10px] px-2 py-0.5 rounded-full bg-cyan-500/10 text-cyan-300 border-cyan-500/20">
                   SYSTEM HOTKEYS
                 </span>
               </div>
@@ -130,7 +130,7 @@ export const KeyboardShortcutsModal: React.FC<KeyboardShortcutsModalProps> = ({
                     playTone(600, 0.05);
                     sc.action();
                   }}
-                  className="p-3 rounded-2xl bg-[#0b0e1a]/80 hover:bg-cyan-950/40 border border-white/8 hover:border-cyan-500/40 flex items-center justify-between text-left transition-all group"
+                  className="p-3 rounded-2xl bg-[#0b0e1a]/80 hover:bg-cyan-950/40 border-white/8 hover:border-cyan-500/40 flex items-center justify-between text-left transition-all group"
                 >
                   <div>
                     <div className="text-xs text-zinc-200 group-hover:text-white font-medium">
@@ -138,7 +138,7 @@ export const KeyboardShortcutsModal: React.FC<KeyboardShortcutsModalProps> = ({
                     </div>
                     <div className="text-[10px] text-zinc-500 mt-0.5">{sc.tag}</div>
                   </div>
-                  <span className="px-2.5 py-1 rounded-xl bg-white/5 border border-white/10 text-cyan-300 group-hover:bg-cyan-500/20 text-[11px] font-bold shrink-0">
+                  <span className="px-2.5 py-1 rounded-xl bg-white/5 border-white/10 text-cyan-300 group-hover:bg-cyan-500/20 text-[11px] font-bold shrink-0">
                     {sc.keyCombo}
                   </span>
                 </button>
@@ -164,7 +164,7 @@ export const KeyboardShortcutsModal: React.FC<KeyboardShortcutsModalProps> = ({
                     onClose();
                     onSelectView?.(item.view);
                   }}
-                  className="p-2.5 rounded-xl bg-white/5 hover:bg-cyan-500/10 border border-white/8 hover:border-cyan-500/30 flex items-center justify-between text-left transition-all"
+                  className="p-2.5 rounded-xl bg-white/5 hover:bg-cyan-500/10 border-white/8 hover:border-cyan-500/30 flex items-center justify-between text-left transition-all"
                 >
                   <span className="text-xs text-zinc-300 font-medium truncate">{item.name}</span>
                   <span className="w-5 h-5 rounded-lg bg-white/10 text-cyan-300 flex items-center justify-center text-xs font-bold shrink-0">
@@ -176,7 +176,7 @@ export const KeyboardShortcutsModal: React.FC<KeyboardShortcutsModalProps> = ({
           </div>
 
           {/* Tips Footer */}
-          <div className="p-3.5 rounded-2xl bg-cyan-950/20 border border-cyan-500/20 text-xs text-zinc-400 flex items-center justify-between">
+          <div className="p-3.5 rounded-2xl bg-cyan-950/20 border-cyan-500/20 text-xs text-zinc-400 flex items-center justify-between">
             <span className="flex items-center gap-2">
               <Sparkles className="w-4 h-4 text-cyan-400" />
               <span>Press <strong className="text-cyan-300">?</strong> anytime to toggle this helper modal.</span>

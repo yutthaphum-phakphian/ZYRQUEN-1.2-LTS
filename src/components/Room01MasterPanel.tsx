@@ -407,7 +407,7 @@ export const Room01MasterPanel: React.FC<Room01MasterPanelProps> = ({
   };
 
   return (
-    <div id="room01-master-panel" className="p-6 sm:p-8 rounded-[28px] bg-gradient-to-br from-[#0a0d1a]/95 via-[#080b16]/90 to-[#04060c] border border-cyan-500/20 backdrop-blur-2xl relative overflow-hidden shadow-[0_0_50px_rgba(6,182,212,0.12)] space-y-6">
+    <div id="room01-master-panel" className="p-6 sm:p-8 rounded-[28px] bg-gradient-to-br from-[#0a0d1a]/95 via-[#080b16]/90 to-[#04060c] border-cyan-500/20 backdrop-blur-2xl relative overflow-hidden shadow-[0_0_50px_rgba(6,182,212,0.12)] space-y-6">
       {/* Background Ambience Glow */}
       <div className="absolute top-0 right-1/4 w-96 h-96 bg-gradient-to-b from-cyan-500/10 via-emerald-500/5 to-transparent rounded-full blur-3xl pointer-events-none" />
       <div className="absolute bottom-0 left-10 w-80 h-80 bg-gradient-to-t from-violet-500/10 to-transparent rounded-full blur-3xl pointer-events-none" />
@@ -419,7 +419,7 @@ export const Room01MasterPanel: React.FC<Room01MasterPanelProps> = ({
             initial={{ opacity: 0, y: -20, scale: 0.95 }}
             animate={{ opacity: 1, y: 0, scale: 1 }}
             exit={{ opacity: 0, y: -20, scale: 0.95 }}
-            className="fixed top-6 right-6 z-50 px-4 py-3 rounded-2xl bg-cyan-950/90 border border-cyan-400/50 text-cyan-200 text-xs font-mono shadow-2xl flex items-center gap-2.5 backdrop-blur-xl"
+            className="fixed top-6 right-6 z-50 px-4 py-3 rounded-2xl bg-cyan-950/90 border-cyan-400/50 text-cyan-200 text-xs font-mono shadow-2xl flex items-center gap-2.5 backdrop-blur-xl"
           >
             <Sparkles className="w-4 h-4 text-cyan-300 animate-pulse" />
             <span>{toastMessage}</span>
@@ -431,25 +431,25 @@ export const Room01MasterPanel: React.FC<Room01MasterPanelProps> = ({
       <div className="relative z-10 flex flex-col lg:flex-row lg:items-center justify-between gap-5 border-b border-white/10 pb-6">
         <div className="space-y-2">
           <div className="flex flex-wrap items-center gap-2">
-            <span className="px-3 py-1 rounded-full bg-cyan-500/15 text-cyan-300 border border-cyan-500/30 text-[11px] font-mono font-bold tracking-wider flex items-center gap-1.5 shadow-[0_0_15px_rgba(6,182,212,0.2)]">
+            <span className="px-3 py-1 rounded-full bg-cyan-500/15 text-cyan-300 border-cyan-500/30 text-[11px] font-mono font-bold tracking-wider flex items-center gap-1.5 shadow-[0_0_15px_rgba(6,182,212,0.2)]">
               <span className="w-2 h-2 rounded-full bg-cyan-400 animate-pulse" />
               CHAMBER 01 / ROOM 01
             </span>
-            <span className="px-2.5 py-1 rounded-full bg-emerald-500/15 text-emerald-300 border border-emerald-500/30 text-[11px] font-mono font-bold flex items-center gap-1">
+            <span className="px-2.5 py-1 rounded-full bg-emerald-500/15 text-emerald-300 border-emerald-500/30 text-[11px] font-mono font-bold flex items-center gap-1">
               <ShieldCheck className="w-3.5 h-3.5 text-emerald-400" />
               10/10 REAL_HSM QUORUM
             </span>
-            <span className="px-2.5 py-1 rounded-full bg-violet-500/15 text-violet-300 border border-violet-500/30 text-[11px] font-mono font-bold flex items-center gap-1">
+            <span className="px-2.5 py-1 rounded-full bg-violet-500/15 text-violet-300 border-violet-500/30 text-[11px] font-mono font-bold flex items-center gap-1">
               <Lock className="w-3.5 h-3.5 text-violet-400" />
               FIPS 140-3 LEVEL 4
             </span>
-            <span className="px-2.5 py-1 rounded-full bg-amber-500/15 text-amber-300 border border-amber-500/30 text-[11px] font-mono font-bold">
+            <span className="px-2.5 py-1 rounded-full bg-amber-500/15 text-amber-300 border-amber-500/30 text-[11px] font-mono font-bold">
               SSoT Δ0.0% ZERO DRIFT
             </span>
           </div>
 
           <div className="flex items-center gap-3 pt-1">
-            <div className="w-10 h-10 rounded-2xl bg-cyan-500/20 border border-cyan-400/40 flex items-center justify-center shadow-[0_0_20px_rgba(6,182,212,0.3)]">
+            <div className="w-10 h-10 rounded-2xl bg-cyan-500/20 border-cyan-400/40 flex items-center justify-center shadow-[0_0_20px_rgba(6,182,212,0.3)]">
               <Cpu className="w-5 h-5 text-cyan-300" />
             </div>
             <div>
@@ -485,7 +485,7 @@ export const Room01MasterPanel: React.FC<Room01MasterPanelProps> = ({
 
           <button
             onClick={handleExportConsensusManifestJson}
-            className="px-3.5 py-2.5 rounded-2xl font-mono text-xs font-bold bg-white/5 hover:bg-white/10 border border-white/10 hover:border-cyan-400/40 text-zinc-200 hover:text-white flex items-center gap-1.5 transition-all shadow-md"
+            className="px-3.5 py-2.5 rounded-2xl font-mono text-xs font-bold bg-white/5 hover:bg-white/10 border-white/10 hover:border-cyan-400/40 text-zinc-200 hover:text-white flex items-center gap-1.5 transition-all shadow-md"
             title="Export G11 Consensus Evidence Manifest as JSON"
           >
             <Download className="w-3.5 h-3.5 text-cyan-400" />
@@ -494,7 +494,7 @@ export const Room01MasterPanel: React.FC<Room01MasterPanelProps> = ({
 
           <button
             onClick={handleExportLatencyCsv}
-            className="px-3.5 py-2.5 rounded-2xl font-mono text-xs font-bold bg-teal-500/10 hover:bg-teal-500/20 border border-teal-500/30 hover:border-teal-400/50 text-teal-200 hover:text-white flex items-center gap-1.5 transition-all shadow-md"
+            className="px-3.5 py-2.5 rounded-2xl font-mono text-xs font-bold bg-teal-500/10 hover:bg-teal-500/20 border-teal-500/30 hover:border-teal-400/50 text-teal-200 hover:text-white flex items-center gap-1.5 transition-all shadow-md"
             title="Export Consensus Latency Time-Series as CSV"
           >
             <FileSpreadsheet className="w-3.5 h-3.5 text-teal-300" />
@@ -505,7 +505,7 @@ export const Room01MasterPanel: React.FC<Room01MasterPanelProps> = ({
 
       {/* Invariants Telemetry Strip */}
       <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-3 font-mono">
-        <div className="p-3.5 rounded-2xl bg-black/40 border border-white/5 space-y-1">
+        <div className="p-3.5 rounded-2xl bg-black/40 border-white/5 space-y-1">
           <div className="text-[10px] text-zinc-400 flex items-center gap-1">
             <Layers className="w-3 h-3 text-cyan-400" />
             <span>BLOCK HEIGHT</span>
@@ -514,7 +514,7 @@ export const Room01MasterPanel: React.FC<Room01MasterPanelProps> = ({
           <div className="text-[9px] text-cyan-400">Genesis Parent Node</div>
         </div>
 
-        <div className="p-3.5 rounded-2xl bg-black/40 border border-white/5 space-y-1">
+        <div className="p-3.5 rounded-2xl bg-black/40 border-white/5 space-y-1">
           <div className="text-[10px] text-zinc-400 flex items-center gap-1">
             <Fingerprint className="w-3 h-3 text-emerald-400" />
             <span>CANONICAL SEALS</span>
@@ -523,7 +523,7 @@ export const Room01MasterPanel: React.FC<Room01MasterPanelProps> = ({
           <div className="text-[9px] text-zinc-400">SSoT Δ0 Involatile</div>
         </div>
 
-        <div className="p-3.5 rounded-2xl bg-black/40 border border-white/5 space-y-1">
+        <div className="p-3.5 rounded-2xl bg-black/40 border-white/5 space-y-1">
           <div className="text-[10px] text-zinc-400 flex items-center gap-1">
             <Clock className="w-3 h-3 text-amber-400" />
             <span>CONSENSUS LATENCY</span>
@@ -532,7 +532,7 @@ export const Room01MasterPanel: React.FC<Room01MasterPanelProps> = ({
           <div className="text-[9px] text-emerald-400">SLA &lt; 142ms PASS</div>
         </div>
 
-        <div className="p-3.5 rounded-2xl bg-black/40 border border-white/5 space-y-1">
+        <div className="p-3.5 rounded-2xl bg-black/40 border-white/5 space-y-1">
           <div className="text-[10px] text-zinc-400 flex items-center gap-1">
             <Zap className="w-3 h-3 text-violet-400" />
             <span>QOPS THROUGHPUT</span>
@@ -541,7 +541,7 @@ export const Room01MasterPanel: React.FC<Room01MasterPanelProps> = ({
           <div className="text-[9px] text-violet-400">Coherence 99.992%</div>
         </div>
 
-        <div className="p-3.5 rounded-2xl bg-black/40 border border-white/5 space-y-1">
+        <div className="p-3.5 rounded-2xl bg-black/40 border-white/5 space-y-1">
           <div className="text-[10px] text-zinc-400 flex items-center gap-1">
             <Activity className="w-3 h-3 text-blue-400" />
             <span>CRYO TEMP</span>
@@ -550,7 +550,7 @@ export const Room01MasterPanel: React.FC<Room01MasterPanelProps> = ({
           <div className="text-[9px] text-blue-400">He-4 Subzero Loop</div>
         </div>
 
-        <div className="p-3.5 rounded-2xl bg-black/40 border border-white/5 space-y-1">
+        <div className="p-3.5 rounded-2xl bg-black/40 border-white/5 space-y-1">
           <div className="text-[10px] text-zinc-400 flex items-center gap-1">
             <Scale className="w-3 h-3 text-pink-400" />
             <span>LEGAL STATUS</span>
@@ -570,8 +570,8 @@ export const Room01MasterPanel: React.FC<Room01MasterPanelProps> = ({
             }}
             className={`px-3.5 py-2 rounded-xl flex items-center gap-2 transition-all font-bold ${
               activeSubTab === 'REACTOR'
-                ? 'bg-cyan-500/20 text-cyan-200 border border-cyan-500/40 shadow-[0_0_15px_rgba(6,182,212,0.2)]'
-                : 'bg-white/5 text-zinc-400 hover:text-zinc-200 border border-white/5'
+                ? 'bg-cyan-500/20 text-cyan-200 border-cyan-500/40 shadow-[0_0_15px_rgba(6,182,212,0.2)]'
+                : 'bg-white/5 text-zinc-400 hover:text-zinc-200 border-white/5'
             }`}
           >
             <Cpu className="w-3.5 h-3.5" />
@@ -585,8 +585,8 @@ export const Room01MasterPanel: React.FC<Room01MasterPanelProps> = ({
             }}
             className={`px-3.5 py-2 rounded-xl flex items-center gap-2 transition-all font-bold ${
               activeSubTab === 'HSM_MATRIX'
-                ? 'bg-emerald-500/20 text-emerald-200 border border-emerald-500/40 shadow-[0_0_15px_rgba(16,185,129,0.2)]'
-                : 'bg-white/5 text-zinc-400 hover:text-zinc-200 border border-white/5'
+                ? 'bg-emerald-500/20 text-emerald-200 border-emerald-500/40 shadow-[0_0_15px_rgba(16,185,129,0.2)]'
+                : 'bg-white/5 text-zinc-400 hover:text-zinc-200 border-white/5'
             }`}
           >
             <KeyRound className="w-3.5 h-3.5" />
@@ -600,8 +600,8 @@ export const Room01MasterPanel: React.FC<Room01MasterPanelProps> = ({
             }}
             className={`px-3.5 py-2 rounded-xl flex items-center gap-2 transition-all font-bold ${
               activeSubTab === 'SENTINEL_V2'
-                ? 'bg-amber-500/20 text-amber-200 border border-amber-500/40 shadow-[0_0_15px_rgba(245,158,11,0.2)]'
-                : 'bg-white/5 text-zinc-400 hover:text-zinc-200 border border-white/5'
+                ? 'bg-amber-500/20 text-amber-200 border-amber-500/40 shadow-[0_0_15px_rgba(245,158,11,0.2)]'
+                : 'bg-white/5 text-zinc-400 hover:text-zinc-200 border-white/5'
             }`}
           >
             <ShieldAlert className="w-3.5 h-3.5" />
@@ -615,8 +615,8 @@ export const Room01MasterPanel: React.FC<Room01MasterPanelProps> = ({
             }}
             className={`px-3.5 py-2 rounded-xl flex items-center gap-2 transition-all font-bold ${
               activeSubTab === 'UTIMACO_GAUGE'
-                ? 'bg-gradient-to-r from-amber-500/30 to-rose-500/30 text-amber-200 border border-amber-500/50 shadow-[0_0_15px_rgba(245,158,11,0.25)]'
-                : 'bg-white/5 text-zinc-400 hover:text-zinc-200 border border-white/5'
+                ? 'bg-gradient-to-r from-amber-500/30 to-rose-500/30 text-amber-200 border-amber-500/50 shadow-[0_0_15px_rgba(245,158,11,0.25)]'
+                : 'bg-white/5 text-zinc-400 hover:text-zinc-200 border-white/5'
             }`}
           >
             <Gauge className="w-3.5 h-3.5 text-amber-400" />
@@ -630,8 +630,8 @@ export const Room01MasterPanel: React.FC<Room01MasterPanelProps> = ({
             }}
             className={`px-3.5 py-2 rounded-xl flex items-center gap-2 transition-all font-bold ${
               activeSubTab === 'LOGS'
-                ? 'bg-purple-500/20 text-purple-200 border border-purple-500/40 shadow-[0_0_15px_rgba(168,85,247,0.2)]'
-                : 'bg-white/5 text-zinc-400 hover:text-zinc-200 border border-white/5'
+                ? 'bg-purple-500/20 text-purple-200 border-purple-500/40 shadow-[0_0_15px_rgba(168,85,247,0.2)]'
+                : 'bg-white/5 text-zinc-400 hover:text-zinc-200 border-white/5'
             }`}
           >
             <Terminal className="w-3.5 h-3.5" />
@@ -643,7 +643,7 @@ export const Room01MasterPanel: React.FC<Room01MasterPanelProps> = ({
           <span>Genesis Merkle:</span>
           <code
             onClick={() => handleCopy(CANONICAL_MERKLE_ROOT, 'Genesis Merkle Root')}
-            className="px-2 py-1 rounded bg-black/60 border border-white/10 text-cyan-300 cursor-pointer hover:border-cyan-400 transition-all font-mono"
+            className="px-2 py-1 rounded bg-black/60 border-white/10 text-cyan-300 cursor-pointer hover:border-cyan-400 transition-all font-mono"
             title="Click to copy full 256-bit Merkle root"
           >
             {CANONICAL_MERKLE_ROOT.slice(0, 10)}...{CANONICAL_MERKLE_ROOT.slice(-8)}
@@ -657,7 +657,7 @@ export const Room01MasterPanel: React.FC<Room01MasterPanelProps> = ({
           {/* Top Row: Latency Trend Chart + Real Reactor Overview */}
           <div className="grid grid-cols-1 lg:grid-cols-12 gap-6">
             {/* Left 7 Columns: Real-Time Latency vs SLA Chart */}
-            <div className="lg:col-span-7 p-5 rounded-2xl bg-black/40 border border-white/8 space-y-4">
+            <div className="lg:col-span-7 p-5 rounded-2xl bg-black/40 border-white/8 space-y-4">
               <div className="flex items-center justify-between font-mono">
                 <div className="space-y-0.5">
                   <div className="text-xs font-bold text-zinc-100 flex items-center gap-2">
@@ -705,7 +705,7 @@ export const Room01MasterPanel: React.FC<Room01MasterPanelProps> = ({
                 </ResponsiveContainer>
               </div>
 
-              <div className="p-3 rounded-xl bg-cyan-950/20 border border-cyan-500/20 text-[11px] font-mono text-cyan-200 flex items-center justify-between">
+              <div className="p-3 rounded-xl bg-cyan-950/20 border-cyan-500/20 text-[11px] font-mono text-cyan-200 flex items-center justify-between">
                 <span>⚡ Current Epoch Latency: <strong>35.8ms</strong></span>
                 <span>Coherence: <strong>99.992%</strong></span>
                 <span>Cryo: <strong>14.98 mK</strong></span>
@@ -713,28 +713,28 @@ export const Room01MasterPanel: React.FC<Room01MasterPanelProps> = ({
             </div>
 
             {/* Right 5 Columns: G11 Consensus Engine Architecture */}
-            <div className="lg:col-span-5 p-5 rounded-2xl bg-black/40 border border-white/8 space-y-4 font-mono">
+            <div className="lg:col-span-5 p-5 rounded-2xl bg-black/40 border-white/8 space-y-4 font-mono">
               <div className="text-xs font-bold text-zinc-100 flex items-center gap-2">
                 <Network className="w-4 h-4 text-emerald-400" />
                 <span>G11 Consensus Reactor Architecture</span>
               </div>
 
               <div className="space-y-2.5 text-xs">
-                <div className="p-3 rounded-xl bg-white/5 border border-white/5 space-y-1">
+                <div className="p-3 rounded-xl bg-white/5 border-white/5 space-y-1">
                   <div className="text-cyan-300 font-bold text-[11px]">1. Deca-Key Quorum Aggregation</div>
                   <div className="text-zinc-400 text-[11px]">
                     รวบรวมฉันทามติเอกฉันท์ 10/10 จากโหนดผู้พิทักษ์ (TC-01 ถึง TC-10) บนตู้ FIPS 140-3 L4 Real HSMs
                   </div>
                 </div>
 
-                <div className="p-3 rounded-xl bg-white/5 border border-white/5 space-y-1">
+                <div className="p-3 rounded-xl bg-white/5 border-white/5 space-y-1">
                   <div className="text-emerald-300 font-bold text-[11px]">2. Atomic Merkle Sealing & BLAKE3 Fusion</div>
                   <div className="text-zinc-400 text-[11px]">
                     หลอมรวมข้อมูลทราฟฟิกด้วย BLAKE3 + SHA3-512 Dual Hash ปิดผนึกตราประจำบล็อกไม่ให้เกิดการแก้ไข
                   </div>
                 </div>
 
-                <div className="p-3 rounded-xl bg-white/5 border border-white/5 space-y-1">
+                <div className="p-3 rounded-xl bg-white/5 border-white/5 space-y-1">
                   <div className="text-violet-300 font-bold text-[11px]">3. Post-Quantum Crypto Armor</div>
                   <div className="text-zinc-400 text-[11px]">
                     รับรองด้วย NIST FIPS 204 ML-DSA-87 (Dilithium-5) พร้อมระบบ Fallback สู่ SPHINCS+ โดยไม่มี Downtime
@@ -747,7 +747,7 @@ export const Room01MasterPanel: React.FC<Room01MasterPanelProps> = ({
                   playTone(750, 0.05);
                   onNavigate?.('council');
                 }}
-                className="w-full py-2.5 rounded-xl bg-gradient-to-r from-cyan-600/20 to-emerald-600/20 hover:from-cyan-600/30 hover:to-emerald-600/30 border border-cyan-500/30 text-cyan-200 text-xs font-bold flex items-center justify-center gap-2 transition-all"
+                className="w-full py-2.5 rounded-xl bg-gradient-to-r from-cyan-600/20 to-emerald-600/20 hover:from-cyan-600/30 hover:to-emerald-600/30 border-cyan-500/30 text-cyan-200 text-xs font-bold flex items-center justify-center gap-2 transition-all"
               >
                 <span>Inspect 10/10 Sovereign Council Matrix</span>
                 <ArrowRight className="w-3.5 h-3.5" />
@@ -756,7 +756,7 @@ export const Room01MasterPanel: React.FC<Room01MasterPanelProps> = ({
           </div>
 
           {/* 12-Stage Deterministic Pipeline Flow */}
-          <div className="p-5 rounded-2xl bg-black/40 border border-white/8 space-y-4 font-mono">
+          <div className="p-5 rounded-2xl bg-black/40 border-white/8 space-y-4 font-mono">
             <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
               <div className="space-y-0.5">
                 <div className="text-xs font-bold text-zinc-100 flex items-center gap-2">
@@ -772,7 +772,7 @@ export const Room01MasterPanel: React.FC<Room01MasterPanelProps> = ({
                 <button
                   onClick={handleExecute12StagePipeline}
                   disabled={isExecutingPipeline}
-                  className="px-3 py-1.5 rounded-xl bg-cyan-500/20 hover:bg-cyan-500/30 text-cyan-200 border border-cyan-500/40 text-xs font-bold flex items-center gap-1.5 transition-all"
+                  className="px-3 py-1.5 rounded-xl bg-cyan-500/20 hover:bg-cyan-500/30 text-cyan-200 border-cyan-500/40 text-xs font-bold flex items-center gap-1.5 transition-all"
                 >
                   <Play className="w-3 h-3" />
                   <span>{isExecutingPipeline ? 'Replaying...' : 'Replay All 12 Stages'}</span>
@@ -799,7 +799,7 @@ export const Room01MasterPanel: React.FC<Room01MasterPanelProps> = ({
                   >
                     <div className="flex items-center justify-between text-xs font-bold">
                       <span className="text-cyan-300">STAGE {stg.stage.toString().padStart(2, '0')}</span>
-                      <span className="px-2 py-0.5 rounded text-[10px] bg-emerald-500/10 text-emerald-300 border border-emerald-500/20 flex items-center gap-1">
+                      <span className="px-2 py-0.5 rounded text-[10px] bg-emerald-500/10 text-emerald-300 border-emerald-500/20 flex items-center gap-1">
                         <Check className="w-2.5 h-2.5" />
                         {stg.actualMs}ms
                       </span>
@@ -819,7 +819,7 @@ export const Room01MasterPanel: React.FC<Room01MasterPanelProps> = ({
 
                     <div
                       onClick={() => handleCopy(stg.hashProof, `Proof Hash for ${stg.code}`)}
-                      className="mt-2 text-[9px] text-zinc-500 bg-black/60 p-1.5 rounded border border-white/5 truncate cursor-pointer hover:text-cyan-300 hover:border-cyan-500/30 transition-all flex items-center justify-between"
+                      className="mt-2 text-[9px] text-zinc-500 bg-black/60 p-1.5 rounded border-white/5 truncate cursor-pointer hover:text-cyan-300 hover:border-cyan-500/30 transition-all flex items-center justify-between"
                       title="Click to copy stage proof hash"
                     >
                       <span className="truncate">{stg.hashProof.slice(0, 16)}...</span>
@@ -836,7 +836,7 @@ export const Room01MasterPanel: React.FC<Room01MasterPanelProps> = ({
       {/* TAB CONTENT 2: 10/10 DECA-KEY REAL HSMs MATRIX */}
       {activeSubTab === 'HSM_MATRIX' && (
         <div className="space-y-5 animate-in fade-in duration-200">
-          <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 p-4 rounded-2xl bg-black/40 border border-white/8 font-mono">
+          <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 p-4 rounded-2xl bg-black/40 border-white/8 font-mono">
             <div>
               <div className="text-xs font-bold text-zinc-100 flex items-center gap-2">
                 <ShieldCheck className="w-4 h-4 text-emerald-400" />
@@ -850,7 +850,7 @@ export const Room01MasterPanel: React.FC<Room01MasterPanelProps> = ({
             <button
               onClick={handlePingAllHsms}
               disabled={isPingingHsm}
-              className="px-4 py-2 rounded-xl bg-gradient-to-r from-emerald-600/30 to-cyan-600/30 hover:from-emerald-500/40 hover:to-cyan-500/40 border border-emerald-400/50 text-emerald-100 text-xs font-bold flex items-center gap-2 transition-all shadow-md shrink-0"
+              className="px-4 py-2 rounded-xl bg-gradient-to-r from-emerald-600/30 to-cyan-600/30 hover:from-emerald-500/40 hover:to-cyan-500/40 border-emerald-400/50 text-emerald-100 text-xs font-bold flex items-center gap-2 transition-all shadow-md shrink-0"
             >
               <Activity className={`w-3.5 h-3.5 text-emerald-300 ${isPingingHsm ? 'animate-spin' : ''}`} />
               <span>{isPingingHsm ? 'Pinging Hardware...' : 'Ping All 10 Deca-Keys'}</span>
@@ -864,11 +864,11 @@ export const Room01MasterPanel: React.FC<Room01MasterPanelProps> = ({
               return (
                 <div
                   key={custodian.id}
-                  className="p-4 rounded-2xl bg-black/50 border border-white/10 hover:border-emerald-500/30 transition-all space-y-2.5"
+                  className="p-4 rounded-2xl bg-black/50 border-white/10 hover:border-emerald-500/30 transition-all space-y-2.5"
                 >
                   <div className="flex items-start justify-between gap-2">
                     <div className="flex items-center gap-2.5">
-                      <span className="w-8 h-8 rounded-xl bg-emerald-500/10 border border-emerald-500/30 text-emerald-300 flex items-center justify-center font-bold text-xs">
+                      <span className="w-8 h-8 rounded-xl bg-emerald-500/10 border-emerald-500/30 text-emerald-300 flex items-center justify-center font-bold text-xs">
                         TC-0{idx + 1}
                       </span>
                       <div>
@@ -880,13 +880,13 @@ export const Room01MasterPanel: React.FC<Room01MasterPanelProps> = ({
                       </div>
                     </div>
 
-                    <span className="px-2 py-0.5 rounded text-[10px] bg-emerald-500/10 text-emerald-300 border border-emerald-500/20 font-bold shrink-0 flex items-center gap-1">
+                    <span className="px-2 py-0.5 rounded text-[10px] bg-emerald-500/10 text-emerald-300 border-emerald-500/20 font-bold shrink-0 flex items-center gap-1">
                       <span className="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse" />
                       {pingMs}ms
                     </span>
                   </div>
 
-                  <div className="p-2.5 rounded-xl bg-black/60 border border-white/5 space-y-1 text-[11px]">
+                  <div className="p-2.5 rounded-xl bg-black/60 border-white/5 space-y-1 text-[11px]">
                     <div className="flex items-center justify-between text-zinc-400 text-[10px]">
                       <span>Clearance: <strong className="text-emerald-300">{custodian.clearanceLevel}</strong></span>
                       <span>Hardware: <strong className="text-zinc-200">Utimaco FIPS 140-3 L4</strong></span>
@@ -894,7 +894,7 @@ export const Room01MasterPanel: React.FC<Room01MasterPanelProps> = ({
 
                     <div
                       onClick={() => handleCopy(custodian.keyFingerprint, `Fingerprint for ${custodian.nameTh}`)}
-                      className="text-[10px] text-zinc-400 font-mono flex items-center justify-between bg-black/40 p-1.5 rounded border border-white/5 cursor-pointer hover:text-cyan-300 hover:border-cyan-500/30 transition-all"
+                      className="text-[10px] text-zinc-400 font-mono flex items-center justify-between bg-black/40 p-1.5 rounded border-white/5 cursor-pointer hover:text-cyan-300 hover:border-cyan-500/30 transition-all"
                       title="Click to copy Dilithium-5 key fingerprint"
                     >
                       <span className="truncate">Key: {custodian.keyFingerprint.slice(0, 24)}...</span>
@@ -914,22 +914,22 @@ export const Room01MasterPanel: React.FC<Room01MasterPanelProps> = ({
           {/* Top Row: Thermal Sentinel + Smart Contract Security */}
           <div className="grid grid-cols-1 lg:grid-cols-12 gap-6">
             {/* Left 6 Columns: Thermal Sentinel Gauge */}
-            <div className="lg:col-span-6 p-5 rounded-2xl bg-black/40 border border-white/8 space-y-4">
+            <div className="lg:col-span-6 p-5 rounded-2xl bg-black/40 border-white/8 space-y-4">
               <div className="flex items-center justify-between">
                 <div className="text-xs font-bold text-zinc-100 flex items-center gap-2">
                   <Flame className={`w-4 h-4 ${simulatedTemp > thermalThreshold ? 'text-rose-400 animate-bounce' : 'text-amber-400'}`} />
                   <span>Utimaco Secondary HSM Gauge & Thermal Sentinel</span>
                 </div>
                 {isZeroized ? (
-                  <span className="px-2 py-0.5 rounded-full text-[10px] font-bold bg-rose-500/20 text-rose-300 border border-rose-500/40 animate-pulse">
+                  <span className="px-2 py-0.5 rounded-full text-[10px] font-bold bg-rose-500/20 text-rose-300 border-rose-500/40 animate-pulse">
                     ZEROIZED
                   </span>
                 ) : simulatedTemp > thermalThreshold ? (
-                  <span className="px-2 py-0.5 rounded-full text-[10px] font-bold bg-rose-500/20 text-rose-300 border border-rose-500/40 animate-pulse">
+                  <span className="px-2 py-0.5 rounded-full text-[10px] font-bold bg-rose-500/20 text-rose-300 border-rose-500/40 animate-pulse">
                     QUARANTINE ALERT
                   </span>
                 ) : (
-                  <span className="px-2 py-0.5 rounded-full text-[10px] font-bold bg-emerald-500/20 text-emerald-300 border border-emerald-500/30">
+                  <span className="px-2 py-0.5 rounded-full text-[10px] font-bold bg-emerald-500/20 text-emerald-300 border-emerald-500/30">
                     NOMINAL 140-3 L4
                   </span>
                 )}
@@ -961,7 +961,7 @@ export const Room01MasterPanel: React.FC<Room01MasterPanelProps> = ({
                     </div>
 
                     {/* Progress Bar with smooth color interpolation */}
-                    <div className="w-full bg-black/60 rounded-full h-3 overflow-hidden border border-white/10 p-0.5">
+                    <div className="w-full bg-black/60 rounded-full h-3 overflow-hidden border-white/10 p-0.5">
                       <div
                         className="h-full rounded-full transition-all duration-300"
                         style={{
@@ -990,7 +990,7 @@ export const Room01MasterPanel: React.FC<Room01MasterPanelProps> = ({
                           max="150"
                           value={thermalThreshold}
                           onChange={(e) => handleUpdateThermalThreshold(parseFloat(e.target.value))}
-                          className="w-20 px-2 py-1 rounded-lg bg-black/70 border border-white/20 text-white font-mono text-xs focus:outline-none focus:border-cyan-400"
+                          className="w-20 px-2 py-1 rounded-lg bg-black/70 border-white/20 text-white font-mono text-xs focus:outline-none focus:border-cyan-400"
                         />
                       </div>
 
@@ -1002,7 +1002,7 @@ export const Room01MasterPanel: React.FC<Room01MasterPanelProps> = ({
                             setSimulatedTemp(14.98);
                             playTone(720, 0.03);
                           }}
-                          className="px-2 py-0.5 rounded bg-cyan-500/20 text-cyan-300 border border-cyan-500/30 text-[10px] hover:bg-cyan-500/30 transition"
+                          className="px-2 py-0.5 rounded bg-cyan-500/20 text-cyan-300 border-cyan-500/30 text-[10px] hover:bg-cyan-500/30 transition"
                         >
                           14.98 mK (Nominal)
                         </button>
@@ -1011,7 +1011,7 @@ export const Room01MasterPanel: React.FC<Room01MasterPanelProps> = ({
                             setSimulatedTemp(88.5);
                             playTone(350, 0.04);
                           }}
-                          className="px-2 py-0.5 rounded bg-amber-500/20 text-amber-300 border border-amber-500/30 text-[10px] hover:bg-amber-500/30 transition"
+                          className="px-2 py-0.5 rounded bg-amber-500/20 text-amber-300 border-amber-500/30 text-[10px] hover:bg-amber-500/30 transition"
                         >
                           88.5°C (Quarantine)
                         </button>
@@ -1020,7 +1020,7 @@ export const Room01MasterPanel: React.FC<Room01MasterPanelProps> = ({
                             setSimulatedTemp(96.0);
                             playTone(280, 0.06);
                           }}
-                          className="px-2 py-0.5 rounded bg-rose-500/20 text-rose-300 border border-rose-500/30 text-[10px] hover:bg-rose-500/30 transition"
+                          className="px-2 py-0.5 rounded bg-rose-500/20 text-rose-300 border-rose-500/30 text-[10px] hover:bg-rose-500/30 transition"
                         >
                           96.0°C (Critical)
                         </button>
@@ -1032,7 +1032,7 @@ export const Room01MasterPanel: React.FC<Room01MasterPanelProps> = ({
                       <div className="pt-2 animate-in fade-in zoom-in-95 duration-200">
                         <button
                           onClick={handleEmergencyZeroize}
-                          className="w-full py-2.5 px-4 rounded-xl bg-gradient-to-r from-rose-600 to-red-700 hover:from-rose-500 hover:to-red-600 text-white text-xs font-bold font-mono flex items-center justify-center gap-2 shadow-[0_0_25px_rgba(244,63,94,0.6)] border border-rose-400 animate-pulse transition"
+                          className="w-full py-2.5 px-4 rounded-xl bg-gradient-to-r from-rose-600 to-red-700 hover:from-rose-500 hover:to-red-600 text-white text-xs font-bold font-mono flex items-center justify-center gap-2 shadow-[0_0_25px_rgba(244,63,94,0.6)] border-rose-400 animate-pulse transition"
                         >
                           <Flame className="w-4 h-4 text-white" />
                           <span>EMERGENCY ZEROIZE (PURGE ENCLAVE CREDENTIALS)</span>
@@ -1044,7 +1044,7 @@ export const Room01MasterPanel: React.FC<Room01MasterPanelProps> = ({
               })()}
 
               <div className="space-y-2 text-xs text-zinc-300">
-                <div className="p-3 rounded-xl bg-white/5 border border-white/5 flex items-start gap-2.5">
+                <div className="p-3 rounded-xl bg-white/5 border-white/5 flex items-start gap-2.5">
                   <ShieldCheck className="w-4 h-4 text-emerald-400 shrink-0 mt-0.5" />
                   <div>
                     <div className="font-bold text-white">Tamper-Resistant Mesh Foil Technology</div>
@@ -1054,7 +1054,7 @@ export const Room01MasterPanel: React.FC<Room01MasterPanelProps> = ({
                   </div>
                 </div>
 
-                <div className="p-3 rounded-xl bg-white/5 border border-white/5 flex items-start gap-2.5">
+                <div className="p-3 rounded-xl bg-white/5 border-white/5 flex items-start gap-2.5">
                   <Lock className="w-4 h-4 text-cyan-400 shrink-0 mt-0.5" />
                   <div>
                     <div className="font-bold text-white">Zero Ambient Mutation Authority</div>
@@ -1067,14 +1067,14 @@ export const Room01MasterPanel: React.FC<Room01MasterPanelProps> = ({
             </div>
 
             {/* Right 6 Columns: Smart Contract v2 Audited Patches */}
-            <div className="lg:col-span-6 p-5 rounded-2xl bg-black/40 border border-white/8 space-y-4">
+            <div className="lg:col-span-6 p-5 rounded-2xl bg-black/40 border-white/8 space-y-4">
               <div className="text-xs font-bold text-zinc-100 flex items-center gap-2">
                 <FileCheck2 className="w-4 h-4 text-emerald-400" />
                 <span>Smart Contract v2 Audited Patches (100% Non-Vulnerable)</span>
               </div>
 
               <div className="space-y-2.5 text-xs">
-                <div className="p-3 rounded-xl bg-emerald-950/20 border border-emerald-500/30 space-y-1">
+                <div className="p-3 rounded-xl bg-emerald-950/20 border-emerald-500/30 space-y-1">
                   <div className="text-emerald-300 font-bold flex items-center justify-between text-[11px]">
                     <span>ZYR-01: onlySovereign Lockout Fixed</span>
                     <span className="text-[10px] bg-emerald-500/20 text-emerald-300 px-1.5 py-0.5 rounded">RESOLVED</span>
@@ -1084,7 +1084,7 @@ export const Room01MasterPanel: React.FC<Room01MasterPanelProps> = ({
                   </div>
                 </div>
 
-                <div className="p-3 rounded-xl bg-emerald-950/20 border border-emerald-500/30 space-y-1">
+                <div className="p-3 rounded-xl bg-emerald-950/20 border-emerald-500/30 space-y-1">
                   <div className="text-emerald-300 font-bold flex items-center justify-between text-[11px]">
                     <span>ZYR-02: triggerFailClosed Griefing DoS Fixed</span>
                     <span className="text-[10px] bg-emerald-500/20 text-emerald-300 px-1.5 py-0.5 rounded">RESOLVED</span>
@@ -1094,7 +1094,7 @@ export const Room01MasterPanel: React.FC<Room01MasterPanelProps> = ({
                   </div>
                 </div>
 
-                <div className="p-3 rounded-xl bg-emerald-950/20 border border-emerald-500/30 space-y-1">
+                <div className="p-3 rounded-xl bg-emerald-950/20 border-emerald-500/30 space-y-1">
                   <div className="text-emerald-300 font-bold flex items-center justify-between text-[11px]">
                     <span>ZYR-03: Cardinality Seal Inflation Fixed</span>
                     <span className="text-[10px] bg-emerald-500/20 text-emerald-300 px-1.5 py-0.5 rounded">RESOLVED</span>
@@ -1119,7 +1119,7 @@ export const Room01MasterPanel: React.FC<Room01MasterPanelProps> = ({
       {/* TAB CONTENT 4: EXECUTION CHRONICLE */}
       {activeSubTab === 'LOGS' && (
         <div className="space-y-4 animate-in fade-in duration-200 font-mono">
-          <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 p-4 rounded-2xl bg-black/40 border border-white/8">
+          <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 p-4 rounded-2xl bg-black/40 border-white/8">
             <div className="relative flex-1 max-w-md">
               <Search className="w-4 h-4 text-zinc-400 absolute left-3 top-1/2 -translate-y-1/2" />
               <input
@@ -1127,7 +1127,7 @@ export const Room01MasterPanel: React.FC<Room01MasterPanelProps> = ({
                 value={searchLogQuery}
                 onChange={(e) => setSearchLogQuery(e.target.value)}
                 placeholder="Filter logs by stage, hash, or legal basis..."
-                className="w-full pl-9 pr-4 py-2 bg-black/50 border border-white/10 rounded-xl text-zinc-200 placeholder-zinc-500 focus:outline-none focus:border-cyan-500/50 text-xs"
+                className="w-full pl-9 pr-4 py-2 bg-black/50 border-white/10 rounded-xl text-zinc-200 placeholder-zinc-500 focus:outline-none focus:border-cyan-500/50 text-xs"
               />
               {searchLogQuery && (
                 <button
@@ -1142,7 +1142,7 @@ export const Room01MasterPanel: React.FC<Room01MasterPanelProps> = ({
             <div className="flex items-center gap-2">
               <button
                 onClick={handleExportConsensusManifestJson}
-                className="px-3 py-1.5 rounded-xl bg-purple-500/20 hover:bg-purple-500/30 text-purple-200 border border-purple-500/40 text-xs flex items-center gap-1.5 transition-all"
+                className="px-3 py-1.5 rounded-xl bg-purple-500/20 hover:bg-purple-500/30 text-purple-200 border-purple-500/40 text-xs flex items-center gap-1.5 transition-all"
               >
                 <Download className="w-3.5 h-3.5 text-purple-300" />
                 <span>Export Chronicle JSON</span>
@@ -1160,7 +1160,7 @@ export const Room01MasterPanel: React.FC<Room01MasterPanelProps> = ({
             ).map((stg) => (
               <div
                 key={stg.code}
-                className="p-3.5 rounded-xl bg-black/50 border border-white/5 hover:border-cyan-500/30 transition-all flex flex-col sm:flex-row sm:items-center justify-between gap-3 text-xs"
+                className="p-3.5 rounded-xl bg-black/50 border-white/5 hover:border-cyan-500/30 transition-all flex flex-col sm:flex-row sm:items-center justify-between gap-3 text-xs"
               >
                 <div className="space-y-1">
                   <div className="font-bold text-white flex items-center gap-2">
@@ -1180,7 +1180,7 @@ export const Room01MasterPanel: React.FC<Room01MasterPanelProps> = ({
 
                 <div className="flex items-center gap-3 shrink-0">
                   <span className="text-emerald-300 font-bold text-xs">{stg.actualMs}ms</span>
-                  <span className="px-2.5 py-1 rounded bg-emerald-500/10 text-emerald-300 border border-emerald-500/20 text-[10px] font-bold">
+                  <span className="px-2.5 py-1 rounded bg-emerald-500/10 text-emerald-300 border-emerald-500/20 text-[10px] font-bold">
                     VERIFIED
                   </span>
                 </div>

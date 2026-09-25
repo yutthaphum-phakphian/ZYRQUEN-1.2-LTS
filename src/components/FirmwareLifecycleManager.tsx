@@ -190,11 +190,11 @@ export const FirmwareLifecycleManager: React.FC<FirmwareLifecycleManagerProps> =
   }, [isAutoCheckEnabled, checkIntervalSec, runIntegrityCheck]);
 
   return (
-    <div className="p-6 rounded-[28px] bg-gradient-to-br from-[#070914]/90 via-[#0b0e1e]/85 to-[#070914]/90 border border-cyan-500/25 shadow-[0_8px_30px_-10px_rgba(6,182,212,0.15)] backdrop-blur-2xl space-y-6">
+    <div className="p-6 rounded-[28px] bg-gradient-to-br from-[#070914]/90 via-[#0b0e1e]/85 to-[#070914]/90 border-cyan-500/25 shadow-[0_8px_30px_-10px_rgba(6,182,212,0.15)] backdrop-blur-2xl space-y-6">
       {/* Header with status badges */}
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 border-b border-white/8 pb-4">
         <div className="flex items-center gap-3">
-          <div className="w-10 h-10 rounded-2xl bg-cyan-500/15 border border-cyan-500/30 flex items-center justify-center text-cyan-300 shadow-[0_0_20px_rgba(6,182,212,0.2)]">
+          <div className="w-10 h-10 rounded-2xl bg-cyan-500/15 border-cyan-500/30 flex items-center justify-center text-cyan-300 shadow-[0_0_20px_rgba(6,182,212,0.2)]">
             <RefreshCw
               className={`w-5 h-5 ${isChecking ? 'animate-spin text-cyan-300' : 'text-cyan-400'}`}
             />
@@ -204,7 +204,7 @@ export const FirmwareLifecycleManager: React.FC<FirmwareLifecycleManagerProps> =
               <h3 className="text-sm font-mono font-bold text-white uppercase tracking-wider">
                 Firmware Lifecycle & Invariant Integrity Manager
               </h3>
-              <span className="text-[10px] font-mono bg-cyan-500/15 text-cyan-300 px-2.5 py-0.5 rounded-full border border-cyan-500/30 font-semibold">
+              <span className="text-[10px] font-mono bg-cyan-500/15 text-cyan-300 px-2.5 py-0.5 rounded-full border-cyan-500/30 font-semibold">
                 SSoT Δ0 LOCKED
               </span>
             </div>
@@ -248,7 +248,7 @@ export const FirmwareLifecycleManager: React.FC<FirmwareLifecycleManagerProps> =
               setCheckIntervalSec(val);
               setCountdown(val);
             }}
-            className="bg-black/60 border border-white/10 text-zinc-300 font-mono text-xs rounded-xl px-2.5 py-1.5 focus:outline-none focus:border-cyan-500/40"
+            className="bg-black/60 border-white/10 text-zinc-300 font-mono text-xs rounded-xl px-2.5 py-1.5 focus:outline-none focus:border-cyan-500/40"
           >
             <option value={15}>15s Interval</option>
             <option value={30}>30s Interval</option>
@@ -260,8 +260,8 @@ export const FirmwareLifecycleManager: React.FC<FirmwareLifecycleManagerProps> =
             disabled={isChecking}
             className={`px-4 py-1.5 rounded-xl font-mono text-xs font-bold transition-all shadow-md flex items-center gap-2 ${
               isChecking
-                ? 'bg-cyan-500/20 text-cyan-300 border border-cyan-500/30 opacity-60 cursor-not-allowed'
-                : 'bg-cyan-500/25 hover:bg-cyan-500/35 text-cyan-100 border border-cyan-500/40 hover:border-cyan-400 shadow-[0_0_15px_rgba(6,182,212,0.25)]'
+                ? 'bg-cyan-500/20 text-cyan-300 border-cyan-500/30 opacity-60 cursor-not-allowed'
+                : 'bg-cyan-500/25 hover:bg-cyan-500/35 text-cyan-100 border-cyan-500/40 hover:border-cyan-400 shadow-[0_0_15px_rgba(6,182,212,0.25)]'
             }`}
           >
             <RefreshCw
@@ -274,7 +274,7 @@ export const FirmwareLifecycleManager: React.FC<FirmwareLifecycleManagerProps> =
 
       {/* Real-time Stage Verification Progress Bar */}
       {isChecking ? (
-        <div className="p-4 rounded-2xl bg-cyan-950/20 border border-cyan-500/30 space-y-2.5 animate-in fade-in">
+        <div className="p-4 rounded-2xl bg-cyan-950/20 border-cyan-500/30 space-y-2.5 animate-in fade-in">
           <div className="flex items-center justify-between text-xs font-mono">
             <span className="text-cyan-300 font-bold flex items-center gap-2">
               <Activity className="w-4 h-4 text-cyan-400 animate-pulse" />
@@ -282,7 +282,7 @@ export const FirmwareLifecycleManager: React.FC<FirmwareLifecycleManagerProps> =
             </span>
             <span className="text-cyan-400 font-bold">{progressPercent}%</span>
           </div>
-          <div className="w-full h-2 bg-zinc-900 rounded-full overflow-hidden border border-cyan-500/20">
+          <div className="w-full h-2 bg-zinc-900 rounded-full overflow-hidden border-cyan-500/20">
             <div
               className="h-full bg-gradient-to-r from-cyan-500 via-teal-400 to-indigo-500 transition-all duration-300 shadow-[0_0_12px_rgba(6,182,212,0.8)]"
               style={{ width: `${progressPercent}%` }}
@@ -291,7 +291,7 @@ export const FirmwareLifecycleManager: React.FC<FirmwareLifecycleManagerProps> =
         </div>
       ) : (
         <div className="grid grid-cols-1 md:grid-cols-4 gap-3">
-          <div className="p-3.5 rounded-2xl bg-black/40 border border-white/8 space-y-1">
+          <div className="p-3.5 rounded-2xl bg-black/40 border-white/8 space-y-1">
             <span className="text-[10px] font-mono text-zinc-400 uppercase">Genesis Root</span>
             <div className="flex items-center gap-1.5">
               <ShieldCheck className="w-4 h-4 text-emerald-400 shrink-0" />
@@ -302,7 +302,7 @@ export const FirmwareLifecycleManager: React.FC<FirmwareLifecycleManagerProps> =
             <span className="text-[10px] font-mono text-emerald-400 block">FROZEN MERKLE ROOT</span>
           </div>
 
-          <div className="p-3.5 rounded-2xl bg-black/40 border border-white/8 space-y-1">
+          <div className="p-3.5 rounded-2xl bg-black/40 border-white/8 space-y-1">
             <span className="text-[10px] font-mono text-zinc-400 uppercase">Post-Quantum Sig</span>
             <div className="flex items-center gap-1.5">
               <Lock className="w-4 h-4 text-cyan-400 shrink-0" />
@@ -311,7 +311,7 @@ export const FirmwareLifecycleManager: React.FC<FirmwareLifecycleManagerProps> =
             <span className="text-[10px] font-mono text-cyan-400 block">FIPS 204 DILITHIUM-5</span>
           </div>
 
-          <div className="p-3.5 rounded-2xl bg-black/40 border border-white/8 space-y-1">
+          <div className="p-3.5 rounded-2xl bg-black/40 border-white/8 space-y-1">
             <span className="text-[10px] font-mono text-zinc-400 uppercase">Hardware Chambers</span>
             <div className="flex items-center gap-1.5">
               <Cpu className="w-4 h-4 text-indigo-400 shrink-0" />
@@ -320,7 +320,7 @@ export const FirmwareLifecycleManager: React.FC<FirmwareLifecycleManagerProps> =
             <span className="text-[10px] font-mono text-indigo-400 block">14,902 SEALS ACTIVE</span>
           </div>
 
-          <div className="p-3.5 rounded-2xl bg-black/40 border border-white/8 space-y-1">
+          <div className="p-3.5 rounded-2xl bg-black/40 border-white/8 space-y-1">
             <span className="text-[10px] font-mono text-zinc-400 uppercase">Auto-Schedule</span>
             <div className="flex items-center gap-1.5">
               <Clock className="w-4 h-4 text-amber-400 shrink-0" />
@@ -347,7 +347,7 @@ export const FirmwareLifecycleManager: React.FC<FirmwareLifecycleManagerProps> =
           </span>
         </div>
 
-        <div className="overflow-x-auto rounded-2xl border border-white/8 bg-black/40">
+        <div className="overflow-x-auto rounded-2xl border-white/8 bg-black/40">
           <table className="w-full text-left font-mono text-xs">
             <thead>
               <tr className="border-b border-white/8 text-[11px] text-zinc-400 bg-white/[0.02]">
@@ -366,7 +366,7 @@ export const FirmwareLifecycleManager: React.FC<FirmwareLifecycleManagerProps> =
                   <td className="py-2 px-3 text-cyan-300 font-mono text-[11px]">{rec.hash}</td>
                   <td className="py-2 px-3 text-zinc-400">{rec.executionMs}ms</td>
                   <td className="py-2 px-3 text-right">
-                    <span className="px-2 py-0.5 rounded-full bg-emerald-500/15 text-emerald-300 border border-emerald-500/30 text-[10px] font-bold">
+                    <span className="px-2 py-0.5 rounded-full bg-emerald-500/15 text-emerald-300 border-emerald-500/30 text-[10px] font-bold">
                       {rec.status}
                     </span>
                   </td>

@@ -125,22 +125,22 @@ export const UnifiedQrEvidenceDossierModal: React.FC<UnifiedQrEvidenceDossierMod
 
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center p-4 sm:p-6 bg-black/85 backdrop-blur-md overflow-y-auto animate-in fade-in duration-200">
-      <div className="relative w-full max-w-5xl rounded-[32px] bg-gradient-to-br from-[#0c1628] via-[#090e1c] to-[#05070e] border border-cyan-500/30 shadow-[0_0_60px_rgba(6,182,212,0.25)] overflow-hidden flex flex-col max-h-[90vh]">
+      <div className="relative w-full max-w-5xl rounded-[32px] bg-gradient-to-br from-[#0c1628] via-[#090e1c] to-[#05070e] border-cyan-500/30 shadow-[0_0_60px_rgba(6,182,212,0.25)] overflow-hidden flex flex-col max-h-[90vh]">
         {/* Modal Top Header */}
         <div className="p-6 sm:p-7 border-b border-white/10 flex items-center justify-between gap-4 bg-black/40 backdrop-blur-xl shrink-0">
           <div className="flex items-center gap-4">
-            <div className="w-12 h-12 rounded-2xl bg-cyan-500/15 border border-cyan-400/40 flex items-center justify-center text-cyan-300 shadow-[0_0_25px_rgba(6,182,212,0.3)] shrink-0">
+            <div className="w-12 h-12 rounded-2xl bg-cyan-500/15 border-cyan-400/40 flex items-center justify-center text-cyan-300 shadow-[0_0_25px_rgba(6,182,212,0.3)] shrink-0">
               <QrCode className="w-6 h-6 animate-pulse" />
             </div>
             <div>
               <div className="flex items-center gap-2 flex-wrap">
-                <span className="px-2.5 py-0.5 rounded-full bg-cyan-500/10 text-cyan-300 border border-cyan-500/20 text-[10px] font-mono tracking-wider font-bold">
+                <span className="px-2.5 py-0.5 rounded-full bg-cyan-500/10 text-cyan-300 border-cyan-500/20 text-[10px] font-mono tracking-wider font-bold">
                   COURT-ADMISSIBLE UNIFIED DOSSIER
                 </span>
-                <span className="px-2 py-0.5 rounded-full bg-amber-500/10 text-amber-300 border border-amber-500/20 text-[10px] font-mono">
+                <span className="px-2 py-0.5 rounded-full bg-amber-500/10 text-amber-300 border-amber-500/20 text-[10px] font-mono">
                   ETDA SEC 9, 26, 28
                 </span>
-                <span className="px-2 py-0.5 rounded-full bg-emerald-500/10 text-emerald-300 border border-emerald-500/20 text-[10px] font-mono">
+                <span className="px-2 py-0.5 rounded-full bg-emerald-500/10 text-emerald-300 border-emerald-500/20 text-[10px] font-mono">
                   14,902 SEALS VERIFIED
                 </span>
               </div>
@@ -155,7 +155,7 @@ export const UnifiedQrEvidenceDossierModal: React.FC<UnifiedQrEvidenceDossierMod
 
           <button
             onClick={onClose}
-            className="p-2.5 rounded-2xl bg-white/5 hover:bg-white/10 border border-white/10 text-zinc-400 hover:text-white transition-all shrink-0"
+            className="p-2.5 rounded-2xl bg-white/5 hover:bg-white/10 border-white/10 text-zinc-400 hover:text-white transition-all shrink-0"
           >
             <X className="w-5 h-5" />
           </button>
@@ -214,9 +214,9 @@ export const UnifiedQrEvidenceDossierModal: React.FC<UnifiedQrEvidenceDossierMod
           {activeTab === 'qr-passport' && (
             <div className="space-y-6">
               {/* QR Code & Attestation Summary Card */}
-              <div className="grid grid-cols-1 md:grid-cols-12 gap-6 p-6 rounded-3xl bg-black/40 border border-white/10 backdrop-blur-xl">
+              <div className="grid grid-cols-1 md:grid-cols-12 gap-6 p-6 rounded-3xl bg-black/40 border-white/10 backdrop-blur-xl">
                 {/* QR Visual Frame */}
-                <div className="md:col-span-4 flex flex-col items-center justify-center p-6 rounded-2xl bg-white/[0.03] border border-cyan-500/20 text-center space-y-3">
+                <div className="md:col-span-4 flex flex-col items-center justify-center p-6 rounded-2xl bg-white/[0.03] border-cyan-500/20 text-center space-y-3">
                   <div className="relative p-4 rounded-2xl bg-white text-black shadow-[0_0_30px_rgba(6,182,212,0.3)]">
                     {/* SVG High-Res QR Visual Representation */}
                     <svg
@@ -273,7 +273,7 @@ export const UnifiedQrEvidenceDossierModal: React.FC<UnifiedQrEvidenceDossierMod
                       Digest: 909ab814...a4c68
                     </div>
                   </div>
-                  <div className="px-2.5 py-1 rounded-full bg-emerald-500/10 text-emerald-300 border border-emerald-500/30 text-[10px] font-bold">
+                  <div className="px-2.5 py-1 rounded-full bg-emerald-500/10 text-emerald-300 border-emerald-500/30 text-[10px] font-bold">
                     ✓ COURT-READY VERIFIED
                   </div>
                 </div>
@@ -290,25 +290,25 @@ export const UnifiedQrEvidenceDossierModal: React.FC<UnifiedQrEvidenceDossierMod
                   </div>
 
                   <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 text-xs">
-                    <div className="p-3 rounded-xl bg-black/40 border border-white/5 space-y-1">
+                    <div className="p-3 rounded-xl bg-black/40 border-white/5 space-y-1">
                       <div className="text-zinc-500 text-[10px]">ผู้ถือสิทธิ์และสถาปนิกสูงสุด</div>
                       <div className="text-amber-300 font-bold">{SYSTEM_METADATA.sovereignPrincipal}</div>
                       <div className="text-zinc-400 text-[10px]">Clearance: OMEGA-1 SUPREME</div>
                     </div>
 
-                    <div className="p-3 rounded-xl bg-black/40 border border-white/5 space-y-1">
+                    <div className="p-3 rounded-xl bg-black/40 border-white/5 space-y-1">
                       <div className="text-zinc-500 text-[10px]">หมายเลขบล็อกสัจธรรม</div>
                       <div className="text-cyan-300 font-bold">Block #{SYSTEM_METADATA.sealedBlock} (Range #849198–#849202)</div>
                       <div className="text-zinc-400 text-[10px]">Genesis Hash: 00000000000000000001f3e8...</div>
                     </div>
 
-                    <div className="p-3 rounded-xl bg-black/40 border border-white/5 space-y-1">
+                    <div className="p-3 rounded-xl bg-black/40 border-white/5 space-y-1">
                       <div className="text-zinc-500 text-[10px]">สถิติตราประทับ Merkle (Canonical Seals)</div>
                       <div className="text-emerald-400 font-bold">14,902 / 14,902 Seals (100.00%)</div>
                       <div className="text-zinc-400 text-[10px]">Quarantined: 80 | Raw Total: 14,982</div>
                     </div>
 
-                    <div className="p-3 rounded-xl bg-black/40 border border-white/5 space-y-1">
+                    <div className="p-3 rounded-xl bg-black/40 border-white/5 space-y-1">
                       <div className="text-zinc-500 text-[10px]">สิทธิอำนาจการกลายพันธุ์ (SSoT Mutation)</div>
                       <div className="text-emerald-300 font-bold">0 Mutation (Δ 0.00% Zero Drift)</div>
                       <div className="text-zinc-400 text-[10px]">Read-Only Immutable Kernel</div>
@@ -316,7 +316,7 @@ export const UnifiedQrEvidenceDossierModal: React.FC<UnifiedQrEvidenceDossierMod
                   </div>
 
                   {/* Merkle Root Copy Bar */}
-                  <div className="p-3 rounded-xl bg-cyan-950/20 border border-cyan-500/30 flex items-center justify-between gap-3">
+                  <div className="p-3 rounded-xl bg-cyan-950/20 border-cyan-500/30 flex items-center justify-between gap-3">
                     <div className="truncate space-y-0.5">
                       <div className="text-[10px] text-cyan-400 font-bold">CANONICAL GENESIS MERKLE ROOT:</div>
                       <div className="text-[11px] text-cyan-200 font-mono truncate select-all">
@@ -337,10 +337,10 @@ export const UnifiedQrEvidenceDossierModal: React.FC<UnifiedQrEvidenceDossierMod
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                 <button
                   onClick={handleExportJson}
-                  className="p-4 rounded-2xl bg-gradient-to-r from-violet-600/30 to-indigo-600/30 hover:from-violet-600/40 hover:to-indigo-600/40 border border-violet-400/40 text-white flex items-center justify-between group transition-all shadow-[0_0_20px_rgba(139,92,246,0.2)]"
+                  className="p-4 rounded-2xl bg-gradient-to-r from-violet-600/30 to-indigo-600/30 hover:from-violet-600/40 hover:to-indigo-600/40 border-violet-400/40 text-white flex items-center justify-between group transition-all shadow-[0_0_20px_rgba(139,92,246,0.2)]"
                 >
                   <div className="flex items-center gap-3">
-                    <div className="w-10 h-10 rounded-xl bg-violet-500/20 border border-violet-400/40 flex items-center justify-center text-violet-300">
+                    <div className="w-10 h-10 rounded-xl bg-violet-500/20 border-violet-400/40 flex items-center justify-center text-violet-300">
                       <Lock className="w-5 h-5" />
                     </div>
                     <div className="text-left">
@@ -354,10 +354,10 @@ export const UnifiedQrEvidenceDossierModal: React.FC<UnifiedQrEvidenceDossierMod
                 <button
                   onClick={handleExportPdf}
                   disabled={isExportingPdf}
-                  className="p-4 rounded-2xl bg-gradient-to-r from-blue-600/30 to-cyan-600/30 hover:from-blue-600/40 hover:to-cyan-600/40 border border-blue-400/40 text-white flex items-center justify-between group transition-all shadow-[0_0_20px_rgba(37,99,235,0.2)]"
+                  className="p-4 rounded-2xl bg-gradient-to-r from-blue-600/30 to-cyan-600/30 hover:from-blue-600/40 hover:to-cyan-600/40 border-blue-400/40 text-white flex items-center justify-between group transition-all shadow-[0_0_20px_rgba(37,99,235,0.2)]"
                 >
                   <div className="flex items-center gap-3">
-                    <div className="w-10 h-10 rounded-xl bg-blue-500/20 border border-blue-400/40 flex items-center justify-center text-blue-300">
+                    <div className="w-10 h-10 rounded-xl bg-blue-500/20 border-blue-400/40 flex items-center justify-center text-blue-300">
                       <FileText className="w-5 h-5" />
                     </div>
                     <div className="text-left">
@@ -375,7 +375,7 @@ export const UnifiedQrEvidenceDossierModal: React.FC<UnifiedQrEvidenceDossierMod
 
           {activeTab === 'pqc-signatures' && (
             <div className="space-y-4">
-              <div className="p-5 rounded-2xl bg-violet-950/20 border border-violet-500/30 space-y-2">
+              <div className="p-5 rounded-2xl bg-violet-950/20 border-violet-500/30 space-y-2">
                 <div className="flex items-center gap-2 text-violet-300 font-bold text-xs">
                   <ShieldCheck className="w-4 h-4" />
                   <span>NIST Post-Quantum Cryptography Suite & Legal Safe Harbor</span>
@@ -386,7 +386,7 @@ export const UnifiedQrEvidenceDossierModal: React.FC<UnifiedQrEvidenceDossierMod
               </div>
 
               <div className="space-y-3">
-                <div className="p-4 rounded-2xl bg-black/40 border border-white/5 space-y-2">
+                <div className="p-4 rounded-2xl bg-black/40 border-white/5 space-y-2">
                   <div className="flex items-center justify-between">
                     <span className="font-bold text-cyan-300 text-xs">1. NIST FIPS 204: ML-DSA-87 (Dilithium-5)</span>
                     <span className="px-2 py-0.5 rounded-full bg-cyan-500/10 text-cyan-300 text-[10px]">PRIMARY SEAL SIGNATURE</span>
@@ -399,7 +399,7 @@ export const UnifiedQrEvidenceDossierModal: React.FC<UnifiedQrEvidenceDossierMod
                   </div>
                 </div>
 
-                <div className="p-4 rounded-2xl bg-black/40 border border-white/5 space-y-2">
+                <div className="p-4 rounded-2xl bg-black/40 border-white/5 space-y-2">
                   <div className="flex items-center justify-between">
                     <span className="font-bold text-emerald-300 text-xs">2. NIST FIPS 203: ML-KEM-1024 (Kyber-1024)</span>
                     <span className="px-2 py-0.5 rounded-full bg-emerald-500/10 text-emerald-300 text-[10px]">KEY ENCAPSULATION</span>
@@ -412,7 +412,7 @@ export const UnifiedQrEvidenceDossierModal: React.FC<UnifiedQrEvidenceDossierMod
                   </div>
                 </div>
 
-                <div className="p-4 rounded-2xl bg-black/40 border border-white/5 space-y-2">
+                <div className="p-4 rounded-2xl bg-black/40 border-white/5 space-y-2">
                   <div className="flex items-center justify-between">
                     <span className="font-bold text-amber-300 text-xs">3. NIST FIPS 205: SLH-DSA (SPHINCS+)</span>
                     <span className="px-2 py-0.5 rounded-full bg-amber-500/10 text-amber-300 text-[10px]">STATELESS FALLBACK</span>
@@ -425,7 +425,7 @@ export const UnifiedQrEvidenceDossierModal: React.FC<UnifiedQrEvidenceDossierMod
                   </div>
                 </div>
 
-                <div className="p-4 rounded-2xl bg-black/40 border border-white/5 space-y-2">
+                <div className="p-4 rounded-2xl bg-black/40 border-white/5 space-y-2">
                   <div className="font-bold text-blue-300 text-xs">4. สิทธิสภาพตามกฎหมายไทย (Thai Statutory Grounding)</div>
                   <ul className="text-[11px] text-zinc-400 space-y-1 list-disc list-inside">
                     <li><strong className="text-zinc-300">พ.ร.บ. ธุรกรรมทางอิเล็กทรอนิกส์ พ.ศ. ๒๕๔๔:</strong> มาตรา ๙, ๒๖, ๒๘, ๒๙ (Safe Harbor)</li>
@@ -439,14 +439,14 @@ export const UnifiedQrEvidenceDossierModal: React.FC<UnifiedQrEvidenceDossierMod
 
           {activeTab === 'chambers-matrix' && (
             <div className="space-y-4">
-              <div className="p-4 rounded-2xl bg-emerald-950/20 border border-emerald-500/30 flex items-center justify-between gap-4">
+              <div className="p-4 rounded-2xl bg-emerald-950/20 border-emerald-500/30 flex items-center justify-between gap-4">
                 <div>
                   <div className="font-bold text-emerald-300 text-xs">18-Chamber Civilization Matrix (CH-00 ถึง CH-17)</div>
                   <div className="text-[11px] text-zinc-400 mt-0.5">
                     สถานะการเชื่อมต่อห้องปฏิบัติการ 18 ห้อง เพื่อธำรงความเสถียรและสัจธรรมแห่งอารยธรรม (Δ0.00% Zero Drift)
                   </div>
                 </div>
-                <span className="px-3 py-1 rounded-full bg-emerald-500/20 text-emerald-300 border border-emerald-500/30 text-[10px] font-bold shrink-0">
+                <span className="px-3 py-1 rounded-full bg-emerald-500/20 text-emerald-300 border-emerald-500/30 text-[10px] font-bold shrink-0">
                   ALL 18 ACTIVE / SEALED
                 </span>
               </div>
@@ -455,7 +455,7 @@ export const UnifiedQrEvidenceDossierModal: React.FC<UnifiedQrEvidenceDossierMod
                 {CHAMBERS_BRIEF.map((ch) => (
                   <div
                     key={ch.id}
-                    className="p-3 rounded-2xl bg-black/40 border border-white/5 space-y-1.5 hover:border-cyan-500/30 transition-all"
+                    className="p-3 rounded-2xl bg-black/40 border-white/5 space-y-1.5 hover:border-cyan-500/30 transition-all"
                   >
                     <div className="flex items-center justify-between">
                       <span className="px-2 py-0.5 rounded-md bg-white/5 text-cyan-300 font-bold text-[10px]">
@@ -464,10 +464,10 @@ export const UnifiedQrEvidenceDossierModal: React.FC<UnifiedQrEvidenceDossierMod
                       <span
                         className={`px-2 py-0.5 rounded-full text-[9px] font-bold ${
                           ch.status === 'SEALED'
-                            ? 'bg-amber-500/15 text-amber-300 border border-amber-500/30'
+                            ? 'bg-amber-500/15 text-amber-300 border-amber-500/30'
                             : ch.status === 'QUARANTINED'
-                            ? 'bg-red-500/15 text-red-300 border border-red-500/30'
-                            : 'bg-emerald-500/15 text-emerald-300 border border-emerald-500/30'
+                            ? 'bg-red-500/15 text-red-300 border-red-500/30'
+                            : 'bg-emerald-500/15 text-emerald-300 border-emerald-500/30'
                         }`}
                       >
                         {ch.status}

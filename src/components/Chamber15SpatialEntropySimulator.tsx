@@ -386,18 +386,18 @@ export const Chamber15SpatialEntropySimulator: React.FC = () => {
   return (
     <div className="space-y-6 animate-in fade-in duration-300">
       {/* Top Banner & Control Deck */}
-      <div className="p-6 rounded-[28px] bg-gradient-to-br from-[#0c1222]/95 via-[#080d1a]/90 to-[#050811]/95 border border-cyan-500/30 backdrop-blur-2xl shadow-[0_10px_35px_-10px_rgba(6,182,212,0.2)]">
+      <div className="p-6 rounded-[28px] bg-gradient-to-br from-[#0c1222]/95 via-[#080d1a]/90 to-[#050811]/95 border-cyan-500/30 backdrop-blur-2xl shadow-[0_10px_35px_-10px_rgba(6,182,212,0.2)]">
         <div className="flex flex-col lg:flex-row lg:items-center justify-between gap-5">
           <div className="space-y-1.5">
             <div className="flex flex-wrap items-center gap-2">
-              <span className="px-2.5 py-0.5 rounded-full bg-cyan-500/15 text-cyan-300 border border-cyan-500/30 text-xs font-mono font-bold flex items-center gap-1.5">
+              <span className="px-2.5 py-0.5 rounded-full bg-cyan-500/15 text-cyan-300 border-cyan-500/30 text-xs font-mono font-bold flex items-center gap-1.5">
                 <Compass className="w-3.5 h-3.5 text-cyan-400" />
                 CHAMBER 15: SPATIAL ENTROPY CORE
               </span>
-              <span className="px-2.5 py-0.5 rounded-full bg-emerald-500/15 text-emerald-300 border border-emerald-500/30 text-xs font-mono font-bold">
+              <span className="px-2.5 py-0.5 rounded-full bg-emerald-500/15 text-emerald-300 border-emerald-500/30 text-xs font-mono font-bold">
                 SSoT Δ0.00% ZERO DRIFT
               </span>
-              <span className="px-2.5 py-0.5 rounded-full bg-purple-500/15 text-purple-300 border border-purple-500/30 text-xs font-mono font-bold">
+              <span className="px-2.5 py-0.5 rounded-full bg-purple-500/15 text-purple-300 border-purple-500/30 text-xs font-mono font-bold">
                 10/10 DECA-KEY QUORUM
               </span>
             </div>
@@ -415,7 +415,7 @@ export const Chamber15SpatialEntropySimulator: React.FC = () => {
             <button
               onClick={handleDownloadEvidence}
               disabled={isExportingEvidence}
-              className="px-4 py-2.5 rounded-2xl font-mono text-xs font-bold flex items-center gap-2 bg-emerald-500/20 hover:bg-emerald-500/30 border border-emerald-500/40 text-emerald-300 transition-all cursor-pointer shadow-[0_0_15px_rgba(16,185,129,0.2)]"
+              className="px-4 py-2.5 rounded-2xl font-mono text-xs font-bold flex items-center gap-2 bg-emerald-500/20 hover:bg-emerald-500/30 border-emerald-500/40 text-emerald-300 transition-all cursor-pointer shadow-[0_0_15px_rgba(16,185,129,0.2)]"
               title="ดาวน์โหลดประจักษ์พยานดิจิทัล Chamber 15 (JSON Attestation Evidence)"
             >
               <Download className={`w-4 h-4 text-emerald-400 ${isExportingEvidence ? 'animate-bounce' : ''}`} />
@@ -427,7 +427,7 @@ export const Chamber15SpatialEntropySimulator: React.FC = () => {
               disabled={isSimulating}
               className={`px-5 py-2.5 rounded-2xl font-mono text-xs font-bold flex items-center gap-2 transition-all cursor-pointer shadow-[0_0_20px_rgba(6,182,212,0.3)] ${
                 isSimulating
-                  ? 'bg-cyan-500/20 text-cyan-300 border border-cyan-500/40 animate-pulse'
+                  ? 'bg-cyan-500/20 text-cyan-300 border-cyan-500/40 animate-pulse'
                   : 'bg-gradient-to-r from-cyan-500 to-blue-600 hover:from-cyan-400 hover:to-blue-500 text-black font-extrabold'
               }`}
             >
@@ -447,7 +447,7 @@ export const Chamber15SpatialEntropySimulator: React.FC = () => {
             <button
               onClick={handleReset}
               disabled={isSimulating}
-              className="p-2.5 rounded-2xl bg-white/5 hover:bg-white/10 border border-white/10 text-zinc-400 hover:text-white transition-all cursor-pointer"
+              className="p-2.5 rounded-2xl bg-white/5 hover:bg-white/10 border-white/10 text-zinc-400 hover:text-white transition-all cursor-pointer"
               title="Reset Simulation State"
             >
               <RotateCcw className="w-4 h-4" />
@@ -457,7 +457,7 @@ export const Chamber15SpatialEntropySimulator: React.FC = () => {
 
         {/* Real-time Progress & Telemetry Metrics */}
         <div className="mt-6 pt-5 border-t border-white/10 grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-3 font-mono text-xs">
-          <div className="p-3 rounded-2xl bg-black/40 border border-white/5 space-y-1">
+          <div className="p-3 rounded-2xl bg-black/40 border-white/5 space-y-1">
             <span className="text-[10px] text-zinc-400 uppercase">Cryogenic Temp</span>
             <div className="text-sm sm:text-base font-bold text-cyan-300 flex items-center gap-1">
               <Zap className="w-3.5 h-3.5 text-cyan-400 shrink-0" />
@@ -466,7 +466,7 @@ export const Chamber15SpatialEntropySimulator: React.FC = () => {
             <span className="text-[9px] text-emerald-400">Sub-Kelvin Locked</span>
           </div>
 
-          <div className="p-3 rounded-2xl bg-black/40 border border-white/5 space-y-1">
+          <div className="p-3 rounded-2xl bg-black/40 border-white/5 space-y-1">
             <span className="text-[10px] text-zinc-400 uppercase">Coherence Level</span>
             <div className="text-sm sm:text-base font-bold text-emerald-300 flex items-center gap-1">
               <Activity className="w-3.5 h-3.5 text-emerald-400 shrink-0" />
@@ -475,7 +475,7 @@ export const Chamber15SpatialEntropySimulator: React.FC = () => {
             <span className="text-[9px] text-zinc-500">768 Qubits Aligned</span>
           </div>
 
-          <div className="p-3 rounded-2xl bg-black/40 border border-white/5 space-y-1">
+          <div className="p-3 rounded-2xl bg-black/40 border-white/5 space-y-1">
             <span className="text-[10px] text-zinc-400 uppercase">Current QOps</span>
             <div className="text-sm sm:text-base font-bold text-blue-300 flex items-center gap-1">
               <Cpu className="w-3.5 h-3.5 text-blue-400 shrink-0" />
@@ -484,7 +484,7 @@ export const Chamber15SpatialEntropySimulator: React.FC = () => {
             <span className="text-[9px] text-blue-400">Quantum Processing</span>
           </div>
 
-          <div className="p-3 rounded-2xl bg-black/40 border border-white/5 space-y-1">
+          <div className="p-3 rounded-2xl bg-black/40 border-white/5 space-y-1">
             <span className="text-[10px] text-zinc-400 uppercase">Antimatter Fuel Burn</span>
             <div className="text-sm sm:text-base font-bold text-rose-300 flex items-center gap-1">
               <Flame className="w-3.5 h-3.5 text-rose-400 shrink-0" />
@@ -493,7 +493,7 @@ export const Chamber15SpatialEntropySimulator: React.FC = () => {
             <span className="text-[9px] text-emerald-400">Steady Reaction</span>
           </div>
 
-          <div className="p-3 rounded-2xl bg-black/40 border border-white/5 space-y-1">
+          <div className="p-3 rounded-2xl bg-black/40 border-white/5 space-y-1">
             <span className="text-[10px] text-zinc-400 uppercase">Signal-to-Noise (SNR)</span>
             <div className="text-sm sm:text-base font-bold text-amber-300 flex items-center gap-1">
               <Radio className="w-3.5 h-3.5 text-amber-400 shrink-0" />
@@ -502,7 +502,7 @@ export const Chamber15SpatialEntropySimulator: React.FC = () => {
             <span className="text-[9px] text-emerald-400">&gt;99.5 dB Passed</span>
           </div>
 
-          <div className="p-3 rounded-2xl bg-black/40 border border-white/5 space-y-1">
+          <div className="p-3 rounded-2xl bg-black/40 border-white/5 space-y-1">
             <span className="text-[10px] text-zinc-400 uppercase">Deca-Key Handshake</span>
             <div className="text-sm sm:text-base font-bold text-purple-300 flex items-center gap-1">
               <ShieldCheck className="w-3.5 h-3.5 text-purple-400 shrink-0" />
@@ -521,7 +521,7 @@ export const Chamber15SpatialEntropySimulator: React.FC = () => {
               <span className="text-cyan-300">Phase: {simStage}</span>
               <span>{progress}%</span>
             </div>
-            <div className="w-full h-2 rounded-full bg-black/60 border border-white/10 overflow-hidden">
+            <div className="w-full h-2 rounded-full bg-black/60 border-white/10 overflow-hidden">
               <motion.div
                 className="h-full bg-gradient-to-r from-cyan-500 via-blue-500 to-purple-500"
                 initial={{ width: '0%' }}
@@ -536,7 +536,7 @@ export const Chamber15SpatialEntropySimulator: React.FC = () => {
       {/* Main Grid: D3 Map + Deca-Key Live Custodian Quorum Matrix */}
       <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 items-start">
         {/* Left: 2D D3 Heat Map Stage */}
-        <div className="lg:col-span-7 bg-[#0a0f1d]/90 border border-white/10 rounded-[28px] p-5 space-y-4">
+        <div className="lg:col-span-7 bg-[#0a0f1d]/90 border-white/10 rounded-[28px] p-5 space-y-4">
           <div className="flex items-center justify-between border-b border-white/5 pb-3">
             <div className="flex items-center gap-2">
               <Layers className="w-4 h-4 text-cyan-400" />
@@ -549,10 +549,10 @@ export const Chamber15SpatialEntropySimulator: React.FC = () => {
             </div>
           </div>
 
-          <div ref={containerRef} className="w-full h-[380px] relative bg-black/40 rounded-2xl border border-white/5 overflow-hidden flex items-center justify-center">
+          <div ref={containerRef} className="w-full h-[380px] relative bg-black/40 rounded-2xl border-white/5 overflow-hidden flex items-center justify-center">
             <svg ref={svgRef} className="w-full h-full" />
 
-            <div className="absolute bottom-3 left-3 bg-black/80 backdrop-blur-md rounded-xl px-3 py-1.5 flex items-center gap-3 text-[10px] font-mono text-zinc-400 border border-white/10 pointer-events-none">
+            <div className="absolute bottom-3 left-3 bg-black/80 backdrop-blur-md rounded-xl px-3 py-1.5 flex items-center gap-3 text-[10px] font-mono text-zinc-400 border-white/10 pointer-events-none">
               <span className="flex items-center gap-1"><span className="w-2 h-2 rounded-full bg-[#06b6d4]"></span> Low (&lt;0.20)</span>
               <span className="flex items-center gap-1"><span className="w-2 h-2 rounded-full bg-[#10b981]"></span> Nominal (0.35)</span>
               <span className="flex items-center gap-1"><span className="w-2 h-2 rounded-full bg-[#f59e0b]"></span> Elevated (0.55)</span>
@@ -560,10 +560,10 @@ export const Chamber15SpatialEntropySimulator: React.FC = () => {
           </div>
 
           {/* Selected Chamber Detail Box */}
-          <div className="p-4 rounded-2xl bg-black/50 border border-cyan-500/20 font-mono text-xs space-y-2">
+          <div className="p-4 rounded-2xl bg-black/50 border-cyan-500/20 font-mono text-xs space-y-2">
             <div className="flex items-center justify-between">
               <span className="text-cyan-300 font-bold">{selectedChamber.name}</span>
-              <span className="px-2 py-0.5 rounded bg-emerald-500/20 text-emerald-300 text-[10px] border border-emerald-500/30">
+              <span className="px-2 py-0.5 rounded bg-emerald-500/20 text-emerald-300 text-[10px] border-emerald-500/30">
                 {selectedChamber.status}
               </span>
             </div>
@@ -579,7 +579,7 @@ export const Chamber15SpatialEntropySimulator: React.FC = () => {
         {/* Right: 10/10 Deca-Key REAL_HSM Handshake Pulse & Live Telemetry Logs */}
         <div className="lg:col-span-5 space-y-5">
           {/* Deca-Key 10/10 Grid */}
-          <div className="p-5 rounded-[28px] bg-[#0a0f1d]/90 border border-purple-500/20 space-y-3">
+          <div className="p-5 rounded-[28px] bg-[#0a0f1d]/90 border-purple-500/20 space-y-3">
             <div className="flex items-center justify-between border-b border-white/5 pb-2.5">
               <div className="flex items-center gap-2">
                 <ShieldCheck className="w-4 h-4 text-purple-400" />
@@ -587,7 +587,7 @@ export const Chamber15SpatialEntropySimulator: React.FC = () => {
                   10/10 REAL_HSM Deca-Key Custodians
                 </h3>
               </div>
-              <span className="text-[10px] font-mono px-2 py-0.5 rounded bg-purple-500/20 text-purple-300 border border-purple-500/30">
+              <span className="text-[10px] font-mono px-2 py-0.5 rounded bg-purple-500/20 text-purple-300 border-purple-500/30">
                 FIPS 140-3 L4
               </span>
             </div>
@@ -619,7 +619,7 @@ export const Chamber15SpatialEntropySimulator: React.FC = () => {
           </div>
 
           {/* OTel Forensic Log Stream */}
-          <div className="p-5 rounded-[28px] bg-black/60 border border-white/10 space-y-3 font-mono text-xs">
+          <div className="p-5 rounded-[28px] bg-black/60 border-white/10 space-y-3 font-mono text-xs">
             <div className="flex items-center justify-between border-b border-white/5 pb-2">
               <span className="text-zinc-400 flex items-center gap-1.5 text-[11px]">
                 <Terminal className="w-3.5 h-3.5 text-cyan-400" />

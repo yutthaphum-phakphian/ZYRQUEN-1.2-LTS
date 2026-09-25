@@ -103,20 +103,20 @@ export const Room04MasterPanel: React.FC<Room04MasterPanelProps> = ({
   return (
     <div className="space-y-6 font-mono text-zinc-300">
       {/* Top Banner for Room 04 */}
-      <div className="p-6 sm:p-8 rounded-[28px] bg-gradient-to-br from-emerald-950/40 via-[#07130e]/95 to-black border border-emerald-500/40 backdrop-blur-xl relative overflow-hidden shadow-2xl">
+      <div className="p-6 sm:p-8 rounded-[28px] bg-gradient-to-br from-emerald-950/40 via-[#07130e]/95 to-black border-emerald-500/40 backdrop-blur-xl relative overflow-hidden shadow-2xl">
         <div className="absolute top-0 right-0 w-96 h-96 bg-gradient-to-bl from-emerald-500/10 via-cyan-500/5 to-transparent rounded-full blur-3xl pointer-events-none" />
 
         <div className="relative z-10 flex flex-col lg:flex-row lg:items-center justify-between gap-6">
           <div className="space-y-3">
             <div className="flex flex-wrap items-center gap-2">
-              <span className="px-3 py-1 rounded-full bg-emerald-500/15 text-emerald-300 border border-emerald-500/40 text-xs font-bold flex items-center gap-1.5 shadow-[0_0_12px_rgba(16,185,129,0.25)]">
+              <span className="px-3 py-1 rounded-full bg-emerald-500/15 text-emerald-300 border-emerald-500/40 text-xs font-bold flex items-center gap-1.5 shadow-[0_0_12px_rgba(16,185,129,0.25)]">
                 <Shield className="w-4 h-4 text-emerald-400 animate-pulse" />
                 CHAMBER 04 • INVARIANTS 10/10 STATE PROTECTION
               </span>
-              <span className="px-2.5 py-0.5 rounded-full bg-cyan-500/15 text-cyan-300 border border-cyan-500/30 text-[11px] font-bold">
+              <span className="px-2.5 py-0.5 rounded-full bg-cyan-500/15 text-cyan-300 border-cyan-500/30 text-[11px] font-bold">
                 100 Hz CONTINUOUS SCAN
               </span>
-              <span className="px-2.5 py-0.5 rounded-full bg-amber-500/15 text-amber-300 border border-amber-500/30 text-[11px] font-bold">
+              <span className="px-2.5 py-0.5 rounded-full bg-amber-500/15 text-amber-300 border-amber-500/30 text-[11px] font-bold">
                 ZERO DRIFT: Δ0.00%
               </span>
             </div>
@@ -132,19 +132,19 @@ export const Room04MasterPanel: React.FC<Room04MasterPanelProps> = ({
 
             {/* Quick Metrics Bar */}
             <div className="flex flex-wrap items-center gap-4 pt-2 text-xs">
-              <div className="px-3 py-1.5 rounded-xl bg-white/5 border border-white/10 flex items-center gap-2">
+              <div className="px-3 py-1.5 rounded-xl bg-white/5 border-white/10 flex items-center gap-2">
                 <span className="text-zinc-500">Invariants:</span>
                 <span className="text-emerald-300 font-bold">10/10 Passed (100%)</span>
               </div>
-              <div className="px-3 py-1.5 rounded-xl bg-white/5 border border-white/10 flex items-center gap-2">
+              <div className="px-3 py-1.5 rounded-xl bg-white/5 border-white/10 flex items-center gap-2">
                 <span className="text-zinc-500">Scan Frequency:</span>
                 <span className="text-cyan-300 font-bold">100 Hz Loop</span>
               </div>
-              <div className="px-3 py-1.5 rounded-xl bg-white/5 border border-white/10 flex items-center gap-2">
+              <div className="px-3 py-1.5 rounded-xl bg-white/5 border-white/10 flex items-center gap-2">
                 <span className="text-zinc-500">Violations:</span>
                 <span className="text-emerald-400 font-bold">0 Anomaly</span>
               </div>
-              <div className="px-3 py-1.5 rounded-xl bg-white/5 border border-white/10 flex items-center gap-2">
+              <div className="px-3 py-1.5 rounded-xl bg-white/5 border-white/10 flex items-center gap-2">
                 <span className="text-zinc-500">Cardinality Shield:</span>
                 <span className="text-amber-300 font-bold">14,902 Locked</span>
               </div>
@@ -175,7 +175,7 @@ export const Room04MasterPanel: React.FC<Room04MasterPanelProps> = ({
                 playTone(720, 0.04);
                 if (onOpenCertificate) onOpenCertificate();
               }}
-              className="px-4 py-2.5 rounded-xl bg-white/5 hover:bg-white/10 border border-white/10 text-white font-bold text-xs transition-all flex items-center justify-center gap-2"
+              className="px-4 py-2.5 rounded-xl bg-white/5 hover:bg-white/10 border-white/10 text-white font-bold text-xs transition-all flex items-center justify-center gap-2"
             >
               <FileCheck2 className="w-4 h-4 text-emerald-400" />
               <span>Audit Certificate</span>
@@ -185,7 +185,7 @@ export const Room04MasterPanel: React.FC<Room04MasterPanelProps> = ({
       </div>
 
       {/* Tabs Navigation */}
-      <div className="flex flex-wrap items-center gap-2 p-1.5 rounded-2xl bg-black/50 border border-white/10 text-xs font-bold">
+      <div className="flex flex-wrap items-center gap-2 p-1.5 rounded-2xl bg-black/50 border-white/10 text-xs font-bold">
         <button
           onClick={() => {
             playTone(600, 0.03);
@@ -193,8 +193,8 @@ export const Room04MasterPanel: React.FC<Room04MasterPanelProps> = ({
           }}
           className={`px-4 py-2 rounded-xl transition-all flex items-center gap-2 ${
             activeTab === 'invariants'
-              ? 'bg-emerald-500/20 text-emerald-200 border border-emerald-500/40 shadow-[0_0_12px_rgba(16,185,129,0.2)]'
-              : 'text-zinc-400 hover:text-zinc-200 bg-white/5 border border-transparent'
+              ? 'bg-emerald-500/20 text-emerald-200 border-emerald-500/40 shadow-[0_0_12px_rgba(16,185,129,0.2)]'
+              : 'text-zinc-400 hover:text-zinc-200 bg-white/5 border-transparent'
           }`}
         >
           <Shield className="w-4 h-4" />
@@ -208,8 +208,8 @@ export const Room04MasterPanel: React.FC<Room04MasterPanelProps> = ({
           }}
           className={`px-4 py-2 rounded-xl transition-all flex items-center gap-2 ${
             activeTab === 'drift'
-              ? 'bg-emerald-500/20 text-emerald-200 border border-emerald-500/40 shadow-[0_0_12px_rgba(16,185,129,0.2)]'
-              : 'text-zinc-400 hover:text-zinc-200 bg-white/5 border border-transparent'
+              ? 'bg-emerald-500/20 text-emerald-200 border-emerald-500/40 shadow-[0_0_12px_rgba(16,185,129,0.2)]'
+              : 'text-zinc-400 hover:text-zinc-200 bg-white/5 border-transparent'
           }`}
         >
           <Activity className="w-4 h-4" />
@@ -223,8 +223,8 @@ export const Room04MasterPanel: React.FC<Room04MasterPanelProps> = ({
           }}
           className={`px-4 py-2 rounded-xl transition-all flex items-center gap-2 ${
             activeTab === 'quarantine-guard'
-              ? 'bg-emerald-500/20 text-emerald-200 border border-emerald-500/40 shadow-[0_0_12px_rgba(16,185,129,0.2)]'
-              : 'text-zinc-400 hover:text-zinc-200 bg-white/5 border border-transparent'
+              ? 'bg-emerald-500/20 text-emerald-200 border-emerald-500/40 shadow-[0_0_12px_rgba(16,185,129,0.2)]'
+              : 'text-zinc-400 hover:text-zinc-200 bg-white/5 border-transparent'
           }`}
         >
           <Lock className="w-4 h-4" />
@@ -236,7 +236,7 @@ export const Room04MasterPanel: React.FC<Room04MasterPanelProps> = ({
       {activeTab === 'invariants' && (
         <div className="space-y-6 animate-in fade-in duration-200">
           {/* Search bar */}
-          <div className="flex items-center gap-3 p-3 rounded-2xl bg-black/60 border border-white/10">
+          <div className="flex items-center gap-3 p-3 rounded-2xl bg-black/60 border-white/10">
             <Search className="w-4 h-4 text-zinc-400 shrink-0" />
             <input
               type="text"
@@ -266,7 +266,7 @@ export const Room04MasterPanel: React.FC<Room04MasterPanelProps> = ({
                 >
                   <div className="flex items-start justify-between gap-3 mb-2">
                     <div className="flex items-center gap-2">
-                      <span className="px-2.5 py-0.5 rounded-full bg-emerald-500/20 text-emerald-300 font-bold text-[10px] border border-emerald-500/30">
+                      <span className="px-2.5 py-0.5 rounded-full bg-emerald-500/20 text-emerald-300 font-bold text-[10px] border-emerald-500/30">
                         {inv.code}
                       </span>
                       <span className="text-[10px] text-zinc-400 font-mono font-bold">
@@ -309,7 +309,7 @@ export const Room04MasterPanel: React.FC<Room04MasterPanelProps> = ({
       {/* TAB 2: Zero-Drift Monitor */}
       {activeTab === 'drift' && (
         <div className="space-y-6 animate-in fade-in duration-200">
-          <div className="p-5 rounded-2xl bg-black/60 border border-white/10 space-y-4">
+          <div className="p-5 rounded-2xl bg-black/60 border-white/10 space-y-4">
             <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
               <div>
                 <h3 className="text-sm font-bold text-white flex items-center gap-2">
@@ -320,7 +320,7 @@ export const Room04MasterPanel: React.FC<Room04MasterPanelProps> = ({
                   Continuous mathematical comparison against the Genesis Merkle Root #849202
                 </p>
               </div>
-              <span className="px-3 py-1 rounded-full bg-emerald-500/15 text-emerald-300 border border-emerald-500/30 text-xs font-bold">
+              <span className="px-3 py-1 rounded-full bg-emerald-500/15 text-emerald-300 border-emerald-500/30 text-xs font-bold">
                 0.00% ZERO DRIFT LOCKED
               </span>
             </div>
@@ -346,7 +346,7 @@ export const Room04MasterPanel: React.FC<Room04MasterPanelProps> = ({
 
       {/* TAB 3: ZYR-03 Cardinality Guard */}
       {activeTab === 'quarantine-guard' && (
-        <div className="p-6 rounded-2xl bg-black/60 border border-white/10 space-y-4 animate-in fade-in duration-200">
+        <div className="p-6 rounded-2xl bg-black/60 border-white/10 space-y-4 animate-in fade-in duration-200">
           <div className="flex items-center gap-2.5">
             <ShieldAlert className="w-5 h-5 text-amber-400" />
             <h3 className="text-sm font-bold text-white">INV-CARDINALITY-14902 & ZYR-03 Security Shield</h3>
@@ -357,15 +357,15 @@ export const Room04MasterPanel: React.FC<Room04MasterPanelProps> = ({
           </p>
 
           <div className="grid grid-cols-1 sm:grid-cols-3 gap-3 pt-2 text-xs">
-            <div className="p-4 rounded-xl bg-white/5 border border-white/5">
+            <div className="p-4 rounded-xl bg-white/5 border-white/5">
               <span className="text-zinc-500 block text-[10px]">Canonical Seals Count:</span>
               <span className="text-amber-300 font-bold">14,902 Verified</span>
             </div>
-            <div className="p-4 rounded-xl bg-white/5 border border-white/5">
+            <div className="p-4 rounded-xl bg-white/5 border-white/5">
               <span className="text-zinc-500 block text-[10px]">Quarantine Max Delta:</span>
               <span className="text-emerald-400 font-bold">0.00% Zero Leakage</span>
             </div>
-            <div className="p-4 rounded-xl bg-white/5 border border-white/5">
+            <div className="p-4 rounded-xl bg-white/5 border-white/5">
               <span className="text-zinc-500 block text-[10px]">Fail-Closed Trigger:</span>
               <span className="text-rose-400 font-bold">Active Instant Lock</span>
             </div>

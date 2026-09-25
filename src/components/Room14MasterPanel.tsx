@@ -105,20 +105,20 @@ export const Room14MasterPanel: React.FC<Room14MasterPanelProps> = ({
   return (
     <div className="space-y-6 font-mono text-zinc-300">
       {/* Top Banner for Room 14 */}
-      <div className="p-6 sm:p-8 rounded-[28px] bg-gradient-to-br from-teal-950/40 via-[#061719]/95 to-black border border-teal-500/40 backdrop-blur-xl relative overflow-hidden shadow-2xl">
+      <div className="p-6 sm:p-8 rounded-[28px] bg-gradient-to-br from-teal-950/40 via-[#061719]/95 to-black border-teal-500/40 backdrop-blur-xl relative overflow-hidden shadow-2xl">
         <div className="absolute top-0 right-0 w-96 h-96 bg-gradient-to-bl from-teal-500/10 via-emerald-500/5 to-transparent rounded-full blur-3xl pointer-events-none" />
 
         <div className="relative z-10 flex flex-col lg:flex-row lg:items-center justify-between gap-6">
           <div className="space-y-3">
             <div className="flex flex-wrap items-center gap-2">
-              <span className="px-3 py-1 rounded-full bg-teal-500/15 text-teal-300 border border-teal-500/40 text-xs font-bold flex items-center gap-1.5 shadow-[0_0_12px_rgba(20,184,166,0.25)]">
+              <span className="px-3 py-1 rounded-full bg-teal-500/15 text-teal-300 border-teal-500/40 text-xs font-bold flex items-center gap-1.5 shadow-[0_0_12px_rgba(20,184,166,0.25)]">
                 <Brain className="w-4 h-4 text-teal-400 animate-pulse" />
                 CHAMBER 14 • NEURAL & HEURISTIC ANOMALY DIAGNOSTIC OBSERVER
               </span>
-              <span className="px-2.5 py-0.5 rounded-full bg-emerald-500/15 text-emerald-300 border border-emerald-500/30 text-[11px] font-bold">
+              <span className="px-2.5 py-0.5 rounded-full bg-emerald-500/15 text-emerald-300 border-emerald-500/30 text-[11px] font-bold">
                 ANOMALY INDEX: 0.0000
               </span>
-              <span className="px-2.5 py-0.5 rounded-full bg-cyan-500/15 text-cyan-300 border border-cyan-500/30 text-[11px] font-bold">
+              <span className="px-2.5 py-0.5 rounded-full bg-cyan-500/15 text-cyan-300 border-cyan-500/30 text-[11px] font-bold">
                 7.9998 BITS/BYTE ENTROPY
               </span>
             </div>
@@ -138,7 +138,7 @@ export const Room14MasterPanel: React.FC<Room14MasterPanelProps> = ({
             <button
               onClick={handleRunNeuralScan}
               disabled={isScanning}
-              className="px-4 py-2.5 rounded-xl bg-gradient-to-r from-teal-600/80 to-emerald-600/80 hover:from-teal-500 hover:to-emerald-500 text-white font-bold text-xs flex items-center gap-2 shadow-lg shadow-teal-500/20 border border-teal-400/40 transition-all transform hover:-translate-y-0.5"
+              className="px-4 py-2.5 rounded-xl bg-gradient-to-r from-teal-600/80 to-emerald-600/80 hover:from-teal-500 hover:to-emerald-500 text-white font-bold text-xs flex items-center gap-2 shadow-lg shadow-teal-500/20 border-teal-400/40 transition-all transform hover:-translate-y-0.5"
             >
               <Radar className={`w-4 h-4 ${isScanning ? 'animate-spin' : ''}`} />
               {isScanning ? 'Neural Scanning...' : 'Execute Deep Anomaly Scan'}
@@ -152,22 +152,22 @@ export const Room14MasterPanel: React.FC<Room14MasterPanelProps> = ({
 
         {/* Quick KPI Cards */}
         <div className="grid grid-cols-2 sm:grid-cols-4 gap-3 mt-6 pt-6 border-t border-teal-500/20">
-          <div className="p-3 rounded-xl bg-black/40 border border-white/5 space-y-1">
+          <div className="p-3 rounded-xl bg-black/40 border-white/5 space-y-1">
             <div className="text-[10px] text-zinc-400 uppercase tracking-wider">Anomaly Score</div>
             <div className="text-base sm:text-lg font-bold text-emerald-400">0.0000</div>
             <div className="text-[10px] text-emerald-300 font-semibold">Zero Anomaly</div>
           </div>
-          <div className="p-3 rounded-xl bg-black/40 border border-white/5 space-y-1">
+          <div className="p-3 rounded-xl bg-black/40 border-white/5 space-y-1">
             <div className="text-[10px] text-zinc-400 uppercase tracking-wider">Entropy Quality</div>
             <div className="text-base sm:text-lg font-bold text-teal-400">7.9998 bits</div>
             <div className="text-[10px] text-zinc-400">Pure Randomness</div>
           </div>
-          <div className="p-3 rounded-xl bg-black/40 border border-white/5 space-y-1">
+          <div className="p-3 rounded-xl bg-black/40 border-white/5 space-y-1">
             <div className="text-[10px] text-zinc-400 uppercase tracking-wider">Mythic Engines</div>
             <div className="text-base sm:text-lg font-bold text-cyan-400">3 Engines</div>
             <div className="text-[10px] text-cyan-300">Inference 100%</div>
           </div>
-          <div className="p-3 rounded-xl bg-black/40 border border-white/5 space-y-1">
+          <div className="p-3 rounded-xl bg-black/40 border-white/5 space-y-1">
             <div className="text-[10px] text-zinc-400 uppercase tracking-wider">Threat Horizon</div>
             <div className="text-base sm:text-lg font-bold text-emerald-400">CLEARED</div>
             <div className="text-[10px] text-zinc-400">0 Active Threats</div>
@@ -176,7 +176,7 @@ export const Room14MasterPanel: React.FC<Room14MasterPanelProps> = ({
       </div>
 
       {/* Sub-Tabs */}
-      <div className="flex flex-wrap items-center gap-2 p-1.5 rounded-2xl bg-[#0a0d16] border border-teal-500/20">
+      <div className="flex flex-wrap items-center gap-2 p-1.5 rounded-2xl bg-[#0a0d16] border-teal-500/20">
         <button
           onClick={() => {
             playTone(600, 0.04);
@@ -184,8 +184,8 @@ export const Room14MasterPanel: React.FC<Room14MasterPanelProps> = ({
           }}
           className={`px-4 py-2 rounded-xl text-xs font-bold transition-all flex items-center gap-2 ${
             activeTab === 'neural-stream'
-              ? 'bg-teal-500/20 text-teal-200 border border-teal-500/40 shadow-[0_0_12px_rgba(20,184,166,0.2)]'
-              : 'text-zinc-400 hover:text-zinc-200 bg-transparent border border-transparent'
+              ? 'bg-teal-500/20 text-teal-200 border-teal-500/40 shadow-[0_0_12px_rgba(20,184,166,0.2)]'
+              : 'text-zinc-400 hover:text-zinc-200 bg-transparent border-transparent'
           }`}
         >
           <Radar className="w-3.5 h-3.5" />
@@ -199,8 +199,8 @@ export const Room14MasterPanel: React.FC<Room14MasterPanelProps> = ({
           }}
           className={`px-4 py-2 rounded-xl text-xs font-bold transition-all flex items-center gap-2 ${
             activeTab === 'entropy-spectrograph'
-              ? 'bg-cyan-500/20 text-cyan-200 border border-cyan-500/40 shadow-[0_0_12px_rgba(6,182,212,0.2)]'
-              : 'text-zinc-400 hover:text-zinc-200 bg-transparent border border-transparent'
+              ? 'bg-cyan-500/20 text-cyan-200 border-cyan-500/40 shadow-[0_0_12px_rgba(6,182,212,0.2)]'
+              : 'text-zinc-400 hover:text-zinc-200 bg-transparent border-transparent'
           }`}
         >
           <TrendingUp className="w-3.5 h-3.5" />
@@ -214,8 +214,8 @@ export const Room14MasterPanel: React.FC<Room14MasterPanelProps> = ({
           }}
           className={`px-4 py-2 rounded-xl text-xs font-bold transition-all flex items-center gap-2 ${
             activeTab === 'timing-audit'
-              ? 'bg-emerald-500/20 text-emerald-200 border border-emerald-500/40 shadow-[0_0_12px_rgba(16,185,129,0.2)]'
-              : 'text-zinc-400 hover:text-zinc-200 bg-transparent border border-transparent'
+              ? 'bg-emerald-500/20 text-emerald-200 border-emerald-500/40 shadow-[0_0_12px_rgba(16,185,129,0.2)]'
+              : 'text-zinc-400 hover:text-zinc-200 bg-transparent border-transparent'
           }`}
         >
           <Activity className="w-3.5 h-3.5" />
@@ -229,8 +229,8 @@ export const Room14MasterPanel: React.FC<Room14MasterPanelProps> = ({
           }}
           className={`px-4 py-2 rounded-xl text-xs font-bold transition-all flex items-center gap-2 ${
             activeTab === 'threat-matrix'
-              ? 'bg-purple-500/20 text-purple-200 border border-purple-500/40 shadow-[0_0_12px_rgba(168,85,247,0.2)]'
-              : 'text-zinc-400 hover:text-zinc-200 bg-transparent border border-transparent'
+              ? 'bg-purple-500/20 text-purple-200 border-purple-500/40 shadow-[0_0_12px_rgba(168,85,247,0.2)]'
+              : 'text-zinc-400 hover:text-zinc-200 bg-transparent border-transparent'
           }`}
         >
           <ShieldCheck className="w-3.5 h-3.5" />
@@ -244,11 +244,11 @@ export const Room14MasterPanel: React.FC<Room14MasterPanelProps> = ({
           {ANOMALY_VECTORS.map((vec) => (
             <div
               key={vec.id}
-              className="p-5 rounded-2xl bg-[#0a0d1a] border border-teal-500/20 hover:border-teal-500/50 transition-all space-y-3"
+              className="p-5 rounded-2xl bg-[#0a0d1a] border-teal-500/20 hover:border-teal-500/50 transition-all space-y-3"
             >
               <div className="flex items-center justify-between">
                 <span className="text-xs font-bold text-teal-300">{vec.name}</span>
-                <span className="px-2.5 py-0.5 rounded-full bg-emerald-500/20 text-emerald-300 border border-emerald-500/30 text-[10px] font-bold">
+                <span className="px-2.5 py-0.5 rounded-full bg-emerald-500/20 text-emerald-300 border-emerald-500/30 text-[10px] font-bold">
                   {vec.status}
                 </span>
               </div>
@@ -271,7 +271,7 @@ export const Room14MasterPanel: React.FC<Room14MasterPanelProps> = ({
 
       {/* Tab 2: Entropy Spectrograph */}
       {activeTab === 'entropy-spectrograph' && (
-        <div className="p-6 rounded-2xl bg-[#0a0d1a] border border-teal-500/20 space-y-4">
+        <div className="p-6 rounded-2xl bg-[#0a0d1a] border-teal-500/20 space-y-4">
           <h3 className="text-base font-bold text-white flex items-center gap-2">
             <TrendingUp className="w-4 h-4 text-teal-400" />
             การสแกนความสม่ำเสมอของเอนโทรปีควอนตัม (Quantum Entropy Stability Curve)
@@ -307,12 +307,12 @@ export const Room14MasterPanel: React.FC<Room14MasterPanelProps> = ({
 
       {/* Tab 3: Timing Audit */}
       {activeTab === 'timing-audit' && (
-        <div className="p-6 rounded-2xl bg-[#0a0d1a] border border-emerald-500/20 space-y-4">
+        <div className="p-6 rounded-2xl bg-[#0a0d1a] border-emerald-500/20 space-y-4">
           <h3 className="text-base font-bold text-white flex items-center gap-2">
             <Activity className="w-4 h-4 text-emerald-400" />
             ผลการตรวจสอบช่องสัญญาณลอบข้างด้านเวลา (Side-Channel Timing Audit)
           </h3>
-          <div className="p-4 rounded-xl bg-black/60 border border-white/10 font-mono text-xs text-zinc-300 space-y-2">
+          <div className="p-4 rounded-xl bg-black/60 border-white/10 font-mono text-xs text-zinc-300 space-y-2">
             <div>Clock Jitter Tolerance: <span className="text-emerald-400">&lt; 0.002 ms (NIST SP 800-90B Compliant)</span></div>
             <div>Constant-Time Crypto Operations: <span className="text-cyan-300">100% Enforced (Dilithium-5 / Kyber-1024)</span></div>
             <div>Side-Channel Leakage Probability: <span className="text-emerald-400">0.000000% (Mathematically Bounded)</span></div>
@@ -322,12 +322,12 @@ export const Room14MasterPanel: React.FC<Room14MasterPanelProps> = ({
 
       {/* Tab 4: Threat Matrix */}
       {activeTab === 'threat-matrix' && (
-        <div className="p-6 rounded-2xl bg-[#0a0d1a] border border-purple-500/20 space-y-4">
+        <div className="p-6 rounded-2xl bg-[#0a0d1a] border-purple-500/20 space-y-4">
           <h3 className="text-base font-bold text-white flex items-center gap-2">
             <ShieldCheck className="w-4 h-4 text-purple-400" />
             ใบรับรองความปลอดภัยเชิงฮิวริสติก (Heuristic Threat Clearance Attestation)
           </h3>
-          <div className="p-4 rounded-xl bg-black/60 border border-white/10 font-mono text-xs text-zinc-300 space-y-1.5">
+          <div className="p-4 rounded-xl bg-black/60 border-white/10 font-mono text-xs text-zinc-300 space-y-1.5">
             <div>Attestation Authority: <span className="text-purple-300">ZYRQUEN Ω∞ Heuristic Neural Core</span></div>
             <div>Scanned Blocks: <span className="text-white">Block #{CANONICAL_BLOCK}</span></div>
             <div>Verified Invariants: <span className="text-emerald-400">10/10 Invariants NOMINAL</span></div>

@@ -7,6 +7,7 @@ import { AnimatePresence, motion, animate } from 'motion/react';
 import { HashRouter, useLocation, useNavigate } from '@/lib/router';
 import jsPDF from 'jspdf';
 import autoTable from 'jspdf-autotable';
+import { getAutoTableFinalY } from '@/utils/pdfAutoTable';
 import {
   Shield,
   Terminal,
@@ -2216,7 +2217,7 @@ function SovereignAppContent() {
       bodyStyles: { fontSize: 7 },
     });
 
-    const finalY = (doc as any).lastAutoTable.finalY || 80;
+    const finalY = getAutoTableFinalY(doc, 80);
     doc.setFontSize(7);
     doc.setTextColor(100, 116, 139);
     autoTable(doc, {

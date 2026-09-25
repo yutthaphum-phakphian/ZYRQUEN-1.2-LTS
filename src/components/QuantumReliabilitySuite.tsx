@@ -20,12 +20,12 @@ export const QuantumReliabilitySuite: React.FC<QuantumReliabilitySuiteProps> = (
 
   return (
     <div
-      className={`bg-zinc-950 border border-cyan-500/50 rounded-3xl p-5 sm:p-6 shadow-2xl space-y-6 text-zinc-100 backdrop-blur-xl ${className}`}
+      className={`bg-zinc-950 border-cyan-500/50 rounded-3xl p-5 sm:p-6 shadow-2xl space-y-6 text-zinc-100 backdrop-blur-xl ${className}`}
     >
       {/* Top Banner */}
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 border-b border-zinc-800 pb-4">
         <div className="flex items-center gap-3">
-          <div className="w-10 h-10 rounded-2xl bg-cyan-500/15 border border-cyan-500/60 flex items-center justify-center text-cyan-400">
+          <div className="w-10 h-10 rounded-2xl bg-cyan-500/15 border-cyan-500/60 flex items-center justify-center text-cyan-400">
             <Layers className="w-5 h-5" />
           </div>
           <div>
@@ -33,7 +33,7 @@ export const QuantumReliabilitySuite: React.FC<QuantumReliabilitySuiteProps> = (
               <span className="text-[10px] font-mono font-bold uppercase tracking-wider text-cyan-400">
                 QUANTUM RELIABILITY SUITE v∞
               </span>
-              <span className="px-2 py-0.5 rounded-full bg-emerald-950 text-emerald-300 border border-emerald-700/60 text-[10px] font-mono font-bold">
+              <span className="px-2 py-0.5 rounded-full bg-emerald-950 text-emerald-300 border-emerald-700/60 text-[10px] font-mono font-bold">
                 AUDIT &bull; TELEMETRY &bull; FORENSICS
               </span>
             </div>
@@ -44,7 +44,7 @@ export const QuantumReliabilitySuite: React.FC<QuantumReliabilitySuiteProps> = (
         </div>
 
         <div className="flex flex-wrap items-center gap-2 font-mono text-xs text-zinc-400">
-          <div className="px-3 py-1.5 rounded-xl bg-zinc-900 border border-zinc-800 flex items-center gap-2">
+          <div className="px-3 py-1.5 rounded-xl bg-zinc-900 border-zinc-800 flex items-center gap-2">
             <ShieldCheck className="w-4 h-4 text-yellow-400" />
             <span>Block #{SSOT.canonicalBlockHeight} &bull; 14,902 Seals Invariant</span>
           </div>
@@ -130,7 +130,7 @@ export const QuantumReliabilitySuite: React.FC<QuantumReliabilitySuiteProps> = (
       )}
 
       {/* Footer Reliability Attestation */}
-      <div className="p-4 bg-black/90 border border-cyan-900/50 rounded-2xl flex flex-col sm:flex-row items-center justify-between gap-3 text-center sm:text-left font-mono text-xs text-cyan-300">
+      <div className="p-4 bg-black/90 border-cyan-900/50 rounded-2xl flex flex-col sm:flex-row items-center justify-between gap-3 text-center sm:text-left font-mono text-xs text-cyan-300">
         <div className="flex items-center gap-2">
           <Sparkles className="w-4 h-4 text-yellow-400" />
           <span>

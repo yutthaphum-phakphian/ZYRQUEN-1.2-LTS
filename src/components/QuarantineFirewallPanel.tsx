@@ -77,7 +77,7 @@ export const QuarantineFirewallPanel: React.FC = () => {
       {/* Header */}
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 border-b border-rose-500/20 pb-4">
         <div className="flex items-center gap-3">
-          <div className="w-11 h-11 rounded-2xl bg-rose-500/20 border border-rose-400 text-rose-300 flex items-center justify-center shrink-0 shadow-[0_0_20px_rgba(244,63,94,0.3)]">
+          <div className="w-11 h-11 rounded-2xl bg-rose-500/20 border-rose-400 text-rose-300 flex items-center justify-center shrink-0 shadow-[0_0_20px_rgba(244,63,94,0.3)]">
             <ShieldAlert className="w-5 h-5" />
           </div>
           <div>
@@ -85,7 +85,7 @@ export const QuarantineFirewallPanel: React.FC = () => {
               <h3 className="text-base font-bold text-rose-100 font-serif">
                 MODULE 2: EVIDENCE QUARANTINE &amp; FAIL-CLOSED FIREWALL
               </h3>
-              <span className="text-[10px] px-2 py-0.5 rounded bg-rose-500/20 text-rose-300 border border-rose-400/40 font-bold">
+              <span className="text-[10px] px-2 py-0.5 rounded bg-rose-500/20 text-rose-300 border-rose-400/40 font-bold">
                 FAIL-CLOSED ACTIVE
               </span>
             </div>
@@ -109,7 +109,7 @@ export const QuarantineFirewallPanel: React.FC = () => {
 
       {/* 3 Status Core Pillars */}
       <div className="grid grid-cols-1 md:grid-cols-3 gap-3 text-xs">
-        <div className="p-3.5 rounded-xl bg-black/60 border border-rose-500/30 space-y-1">
+        <div className="p-3.5 rounded-xl bg-black/60 border-rose-500/30 space-y-1">
           <div className="text-[10px] text-zinc-400 font-bold flex items-center justify-between">
             <span>FIREWALL RULE 7</span>
             <AlertOctagon className="w-3.5 h-3.5 text-rose-400" />
@@ -120,7 +120,7 @@ export const QuarantineFirewallPanel: React.FC = () => {
           </p>
         </div>
 
-        <div className="p-3.5 rounded-xl bg-black/60 border border-emerald-500/30 space-y-1">
+        <div className="p-3.5 rounded-xl bg-black/60 border-emerald-500/30 space-y-1">
           <div className="text-[10px] text-zinc-400 font-bold flex items-center justify-between">
             <span>CANONICAL IMMUTABILITY</span>
             <Lock className="w-3.5 h-3.5 text-emerald-400" />
@@ -131,7 +131,7 @@ export const QuarantineFirewallPanel: React.FC = () => {
           </p>
         </div>
 
-        <div className="p-3.5 rounded-xl bg-black/60 border border-amber-500/30 space-y-1">
+        <div className="p-3.5 rounded-xl bg-black/60 border-amber-500/30 space-y-1">
           <div className="text-[10px] text-zinc-400 font-bold flex items-center justify-between">
             <span>ARTIFACT INTEGRITY</span>
             <FileWarning className="w-3.5 h-3.5 text-amber-400" />
@@ -144,7 +144,7 @@ export const QuarantineFirewallPanel: React.FC = () => {
       </div>
 
       {/* Quarantined Incident Table */}
-      <div className="p-4 rounded-2xl bg-black/70 border border-rose-500/30 space-y-3">
+      <div className="p-4 rounded-2xl bg-black/70 border-rose-500/30 space-y-3">
         <div className="flex items-center justify-between border-b border-white/5 pb-2.5">
           <div className="flex items-center gap-2">
             <Radio className="w-4 h-4 text-rose-400 animate-pulse" />
@@ -172,12 +172,12 @@ export const QuarantineFirewallPanel: React.FC = () => {
             {quarantineIncidents.map((inc) => (
               <div
                 key={inc.incidentId}
-                className="p-3 rounded-xl bg-rose-950/30 border border-rose-500/30 space-y-2"
+                className="p-3 rounded-xl bg-rose-950/30 border-rose-500/30 space-y-2"
               >
                 <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-1">
                   <div className="flex items-center gap-2">
                     <span className="font-bold text-rose-200">{inc.incidentId}</span>
-                    <span className="text-[10px] px-2 py-0.2 rounded bg-rose-500/20 text-rose-300 border border-rose-500/40 font-bold">
+                    <span className="text-[10px] px-2 py-0.2 rounded bg-rose-500/20 text-rose-300 border-rose-500/40 font-bold">
                       {inc.mismatchType}
                     </span>
                   </div>
@@ -185,11 +185,11 @@ export const QuarantineFirewallPanel: React.FC = () => {
                 </div>
 
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-2 text-[11px]">
-                  <div className="p-2 rounded bg-black/60 border border-white/5">
+                  <div className="p-2 rounded bg-black/60 border-white/5">
                     <span className="text-zinc-500">Claimed Payload: </span>
                     <span className="text-rose-300 font-mono font-bold">{inc.claimedValue}</span>
                   </div>
-                  <div className="p-2 rounded bg-black/60 border border-white/5">
+                  <div className="p-2 rounded bg-black/60 border-white/5">
                     <span className="text-zinc-500">Canonical Lock: </span>
                     <span className="text-emerald-400 font-mono font-bold">{inc.canonicalInvariant}</span>
                   </div>

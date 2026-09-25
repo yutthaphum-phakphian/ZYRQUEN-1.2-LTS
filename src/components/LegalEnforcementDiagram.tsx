@@ -328,11 +328,11 @@ export const LegalEnforcementDiagram: React.FC = () => {
   });
 
   return (
-    <div className="p-6 sm:p-8 rounded-[28px] bg-[#070913]/90 border border-white/8 backdrop-blur-2xl space-y-6 shadow-2xl">
+    <div className="p-6 sm:p-8 rounded-[28px] bg-[#070913]/90 border-white/8 backdrop-blur-2xl space-y-6 shadow-2xl">
       {/* Diagram Header */}
       <div className="flex flex-col lg:flex-row lg:items-center justify-between gap-4 border-b border-white/8 pb-5">
         <div className="flex items-center gap-3.5">
-          <div className="w-12 h-12 rounded-2xl bg-cyan-500/15 border border-cyan-500/30 flex items-center justify-center text-cyan-300 shadow-[0_0_20px_rgba(6,182,212,0.15)] shrink-0">
+          <div className="w-12 h-12 rounded-2xl bg-cyan-500/15 border-cyan-500/30 flex items-center justify-center text-cyan-300 shadow-[0_0_20px_rgba(6,182,212,0.15)] shrink-0">
             <Layers className="w-6 h-6" />
           </div>
           <div>
@@ -340,7 +340,7 @@ export const LegalEnforcementDiagram: React.FC = () => {
               <h3 className="text-base sm:text-lg font-mono font-bold text-white tracking-wide">
                 Legal Enforcement Flow Graph & Sovereign Seal Chain Architecture
               </h3>
-              <span className="text-[10px] px-2.5 py-0.5 rounded-full bg-cyan-500/15 text-cyan-300 border border-cyan-500/30 font-mono font-bold">
+              <span className="text-[10px] px-2.5 py-0.5 rounded-full bg-cyan-500/15 text-cyan-300 border-cyan-500/30 font-mono font-bold">
                 INTERACTIVE GRAPH
               </span>
             </div>
@@ -365,7 +365,7 @@ export const LegalEnforcementDiagram: React.FC = () => {
           </button>
 
           {/* Filter Pills */}
-          <div className="flex items-center bg-black/40 border border-white/10 rounded-2xl p-1 font-mono text-xs">
+          <div className="flex items-center bg-black/40 border-white/10 rounded-2xl p-1 font-mono text-xs">
             {(['ALL', 'STATUTE', 'SOVEREIGN_LAYER', 'VERIFICATION_OUTCOME'] as const).map((f) => (
               <button
                 key={f}
@@ -388,22 +388,22 @@ export const LegalEnforcementDiagram: React.FC = () => {
 
       {/* Column Headers Legend */}
       <div className="grid grid-cols-1 md:grid-cols-3 gap-3 text-xs font-mono">
-        <div className="p-3 rounded-2xl bg-blue-500/10 border border-blue-500/20 flex items-center gap-2 text-blue-300">
+        <div className="p-3 rounded-2xl bg-blue-500/10 border-blue-500/20 flex items-center gap-2 text-blue-300">
           <Scale className="w-4 h-4 shrink-0" />
           <span className="font-bold">1. Thai Statutes & Standards</span>
         </div>
-        <div className="p-3 rounded-2xl bg-cyan-500/10 border border-cyan-500/20 flex items-center gap-2 text-cyan-300">
+        <div className="p-3 rounded-2xl bg-cyan-500/10 border-cyan-500/20 flex items-center gap-2 text-cyan-300">
           <Cpu className="w-4 h-4 shrink-0" />
           <span className="font-bold">2. ZYRQUEN Ω∞ Sovereign Layers</span>
         </div>
-        <div className="p-3 rounded-2xl bg-emerald-500/10 border border-emerald-500/20 flex items-center gap-2 text-emerald-300">
+        <div className="p-3 rounded-2xl bg-emerald-500/10 border-emerald-500/20 flex items-center gap-2 text-emerald-300">
           <ShieldCheck className="w-4 h-4 shrink-0" />
           <span className="font-bold">3. Admissible Legal Outcomes</span>
         </div>
       </div>
 
       {/* Interactive SVG Canvas */}
-      <div className="relative w-full overflow-x-auto rounded-2xl bg-black/60 border border-white/10 p-4 min-h-[640px]">
+      <div className="relative w-full overflow-x-auto rounded-2xl bg-black/60 border-white/10 p-4 min-h-[640px]">
         <svg
           viewBox="0 0 960 650"
           className="w-full min-w-[760px] h-auto select-none"
@@ -576,7 +576,7 @@ export const LegalEnforcementDiagram: React.FC = () => {
       </div>
 
       {/* Selected Node Detailed Inspector Card */}
-      <div className="p-5 sm:p-6 rounded-2xl bg-black/75 border border-white/10 space-y-4 font-mono">
+      <div className="p-5 sm:p-6 rounded-2xl bg-black/75 border-white/10 space-y-4 font-mono">
         <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 border-b border-white/8 pb-4">
           <div className="flex items-center gap-3">
             <div
@@ -612,7 +612,7 @@ export const LegalEnforcementDiagram: React.FC = () => {
 
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4 text-xs">
           {/* Left: Principle */}
-          <div className="p-4 rounded-xl bg-white/[0.02] border border-white/6 space-y-2">
+          <div className="p-4 rounded-xl bg-white/[0.02] border-white/6 space-y-2">
             <span className="text-cyan-300 font-bold flex items-center gap-1.5">
               <Scale className="w-3.5 h-3.5" />
               <span>หลักการและข้อกำหนดทางกฎหมาย (Legal Mandate):</span>
@@ -623,7 +623,7 @@ export const LegalEnforcementDiagram: React.FC = () => {
           </div>
 
           {/* Right: Technical Sovereign Enforcement */}
-          <div className="p-4 rounded-xl bg-white/[0.02] border border-white/6 space-y-2">
+          <div className="p-4 rounded-xl bg-white/[0.02] border-white/6 space-y-2">
             <span className="text-emerald-400 font-bold flex items-center gap-1.5">
               <Cpu className="w-3.5 h-3.5" />
               <span>การบังคับใช้เชิงคริปโตกราฟิก (Cryptographic Enforcement):</span>
@@ -635,7 +635,7 @@ export const LegalEnforcementDiagram: React.FC = () => {
         </div>
 
         {/* Invariant Cert Footer */}
-        <div className="p-3 rounded-xl bg-gradient-to-r from-cyan-500/10 to-emerald-500/10 border border-cyan-500/20 flex flex-col sm:flex-row sm:items-center justify-between gap-2 text-[11px] text-zinc-300">
+        <div className="p-3 rounded-xl bg-gradient-to-r from-cyan-500/10 to-emerald-500/10 border-cyan-500/20 flex flex-col sm:flex-row sm:items-center justify-between gap-2 text-[11px] text-zinc-300">
           <span>
             Certified under Sovereign Principal: <strong className="text-white">{SYSTEM_METADATA.sovereignPrincipal}</strong> (#EP-SOVEREIGN-01)
           </span>

@@ -60,17 +60,17 @@ git push origin main`;
 
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center bg-[#07080F]/90 backdrop-blur-md p-3 sm:p-6 overflow-y-auto">
-      <div className="relative w-full max-w-4xl rounded-2xl bg-[#0b0e1a] border border-cyan-500/30 shadow-2xl overflow-hidden font-sans my-auto">
+      <div className="relative w-full max-w-4xl rounded-2xl bg-[#0b0e1a] border-cyan-500/30 shadow-2xl overflow-hidden font-sans my-auto">
         {/* Header */}
         <div className="flex items-center justify-between px-5 py-4 border-b border-white/10 bg-black/40">
           <div className="flex items-center gap-3">
-            <div className="p-2 rounded-xl bg-cyan-500/10 border border-cyan-500/30 text-cyan-400">
+            <div className="p-2 rounded-xl bg-cyan-500/10 border-cyan-500/30 text-cyan-400">
               <Github className="w-5 h-5" />
             </div>
             <div>
               <h2 className="text-base sm:text-lg font-bold text-white flex items-center gap-2">
                 GitHub Push & PWA Mobile Setup Center
-                <span className="text-[10px] font-mono px-2 py-0.5 rounded-full bg-emerald-500/10 text-emerald-300 border border-emerald-500/30">
+                <span className="text-[10px] font-mono px-2 py-0.5 rounded-full bg-emerald-500/10 text-emerald-300 border-emerald-500/30">
                   READY
                 </span>
               </h2>
@@ -130,7 +130,7 @@ git push origin main`;
           {activeTab === 'github' && (
             <div className="space-y-5">
               {/* Context Callout */}
-              <div className="p-4 rounded-xl bg-cyan-950/30 border border-cyan-500/20 text-xs text-cyan-200 space-y-1.5 leading-relaxed">
+              <div className="p-4 rounded-xl bg-cyan-950/30 border-cyan-500/20 text-xs text-cyan-200 space-y-1.5 leading-relaxed">
                 <p className="font-semibold flex items-center gap-1.5 text-cyan-300">
                   <Info className="w-4 h-4" />
                   คำแนะนำการนำไฟล์ขึ้น GitHub จากสภาพแวดล้อม AI Studio
@@ -141,7 +141,7 @@ git push origin main`;
               </div>
 
               {/* Method 1: Git CLI */}
-              <div className="rounded-xl bg-black/50 border border-white/10 p-4 space-y-3">
+              <div className="rounded-xl bg-black/50 border-white/10 p-4 space-y-3">
                 <div className="flex items-center justify-between">
                   <span className="text-xs font-mono font-bold text-white flex items-center gap-2">
                     <Terminal className="w-4 h-4 text-cyan-400" />
@@ -149,19 +149,19 @@ git push origin main`;
                   </span>
                   <button
                     onClick={() => copyToClipboard(gitCliScript, 'gitCli')}
-                    className="flex items-center gap-1.5 px-2.5 py-1 rounded bg-cyan-500/10 hover:bg-cyan-500/20 text-cyan-300 text-xs font-mono border border-cyan-500/30 transition"
+                    className="flex items-center gap-1.5 px-2.5 py-1 rounded bg-cyan-500/10 hover:bg-cyan-500/20 text-cyan-300 text-xs font-mono border-cyan-500/30 transition"
                   >
                     {copiedKey === 'gitCli' ? <Check className="w-3.5 h-3.5 text-emerald-400" /> : <Copy className="w-3.5 h-3.5" />}
                     {copiedKey === 'gitCli' ? 'Copied!' : 'Copy Commands'}
                   </button>
                 </div>
-                <pre className="p-3.5 rounded-lg bg-zinc-950 text-cyan-300 font-mono text-[11px] overflow-x-auto border border-white/5 leading-relaxed">
+                <pre className="p-3.5 rounded-lg bg-zinc-950 text-cyan-300 font-mono text-[11px] overflow-x-auto border-white/5 leading-relaxed">
                   {gitCliScript}
                 </pre>
               </div>
 
               {/* Method 2: Web Upload */}
-              <div className="rounded-xl bg-black/50 border border-white/10 p-4 space-y-2 text-xs text-zinc-300">
+              <div className="rounded-xl bg-black/50 border-white/10 p-4 space-y-2 text-xs text-zinc-300">
                 <span className="font-mono font-bold text-white flex items-center gap-2 mb-2">
                   <FileCode className="w-4 h-4 text-emerald-400" />
                   วิธีที่ 2: อัปโหลดผ่านหน้าเว็บ GitHub (เหมาะกับไฟล์จำนวนน้อย)
@@ -175,7 +175,7 @@ git push origin main`;
               </div>
 
               {/* Vercel CI/CD Auto-Deploy (.github/workflows/deploy.yml) */}
-              <div className="rounded-xl bg-black/50 border border-emerald-500/30 p-4 space-y-3">
+              <div className="rounded-xl bg-black/50 border-emerald-500/30 p-4 space-y-3">
                 <div className="flex items-center justify-between">
                   <span className="text-xs font-mono font-bold text-white flex items-center gap-2">
                     <CheckCircle2 className="w-4 h-4 text-emerald-400" />
@@ -188,7 +188,7 @@ git push origin main`;
                         'vercelYml'
                       )
                     }
-                    className="flex items-center gap-1.5 px-2.5 py-1 rounded bg-emerald-500/10 hover:bg-emerald-500/20 text-emerald-300 text-xs font-mono border border-emerald-500/30 transition"
+                    className="flex items-center gap-1.5 px-2.5 py-1 rounded bg-emerald-500/10 hover:bg-emerald-500/20 text-emerald-300 text-xs font-mono border-emerald-500/30 transition"
                   >
                     {copiedKey === 'vercelYml' ? <Check className="w-3.5 h-3.5 text-emerald-400" /> : <Copy className="w-3.5 h-3.5" />}
                     {copiedKey === 'vercelYml' ? 'Copied!' : 'Copy deploy.yml'}
@@ -197,7 +197,7 @@ git push origin main`;
                 <p className="text-[11px] text-zinc-300">
                   ไฟล์ <code className="text-emerald-300 font-mono">.github/workflows/deploy.yml</code> ถูกสร้างไว้ในโปรเจกต์แล้ว พร้อมระบบ Auto-Deploy ขึ้น Vercel ทันทีเมื่อ Push บรันช์ main
                 </p>
-                <div className="p-3 rounded-lg bg-zinc-950/80 border border-white/5 space-y-1 text-[11px] text-zinc-400 font-mono">
+                <div className="p-3 rounded-lg bg-zinc-950/80 border-white/5 space-y-1 text-[11px] text-zinc-400 font-mono">
                   <div>1. ล็อกอิน Vercel.com ด้วย GitHub &gt; "Add New..." &gt; "Project"</div>
                   <div>2. เลือก Repository &gt; Framework Preset: <strong>Vite</strong></div>
                   <div>3. ตั้งค่า Secrets: <span className="text-cyan-300">VERCEL_TOKEN</span>, <span className="text-cyan-300">VERCEL_ORG_ID</span>, <span className="text-cyan-300">VERCEL_PROJECT_ID</span> ใน GitHub Settings &gt; Secrets and variables &gt; Actions</div>
@@ -205,16 +205,16 @@ git push origin main`;
               </div>
 
               {/* Deployment Targets */}
-              <div className="p-4 rounded-xl bg-slate-900/60 border border-white/10 flex flex-wrap items-center justify-between gap-3 text-xs">
+              <div className="p-4 rounded-xl bg-slate-900/60 border-white/10 flex flex-wrap items-center justify-between gap-3 text-xs">
                 <div>
                   <span className="font-bold text-white block">Hosting แนะนำสำหรับ PWA (ต้องมี HTTPS):</span>
                   <span className="text-zinc-400 font-mono text-[11px]">Vercel, Netlify, Cloudflare Pages หรือ GitHub Pages</span>
                 </div>
                 <div className="flex gap-2">
-                  <span className="px-2.5 py-1 rounded bg-white/5 border border-white/10 text-zinc-300 font-mono text-[11px]">
+                  <span className="px-2.5 py-1 rounded bg-white/5 border-white/10 text-zinc-300 font-mono text-[11px]">
                     HTTPS Automatic
                   </span>
-                  <span className="px-2.5 py-1 rounded bg-emerald-500/10 border border-emerald-500/20 text-emerald-400 font-mono text-[11px]">
+                  <span className="px-2.5 py-1 rounded bg-emerald-500/10 border-emerald-500/20 text-emerald-400 font-mono text-[11px]">
                     PWA Certified
                   </span>
                 </div>
@@ -226,7 +226,7 @@ git push origin main`;
             <div className="space-y-5">
               {/* PWA Verification Checklist */}
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
-                <div className="p-3.5 rounded-xl bg-black/40 border border-emerald-500/20 flex items-start gap-3">
+                <div className="p-3.5 rounded-xl bg-black/40 border-emerald-500/20 flex items-start gap-3">
                   <CheckCircle2 className="w-5 h-5 text-emerald-400 shrink-0 mt-0.5" />
                   <div>
                     <span className="text-xs font-mono font-bold text-white block">public/manifest.json</span>
@@ -234,7 +234,7 @@ git push origin main`;
                   </div>
                 </div>
 
-                <div className="p-3.5 rounded-xl bg-black/40 border border-emerald-500/20 flex items-start gap-3">
+                <div className="p-3.5 rounded-xl bg-black/40 border-emerald-500/20 flex items-start gap-3">
                   <CheckCircle2 className="w-5 h-5 text-emerald-400 shrink-0 mt-0.5" />
                   <div>
                     <span className="text-xs font-mono font-bold text-white block">public/sw.js (Service Worker)</span>
@@ -242,7 +242,7 @@ git push origin main`;
                   </div>
                 </div>
 
-                <div className="p-3.5 rounded-xl bg-black/40 border border-emerald-500/20 flex items-start gap-3">
+                <div className="p-3.5 rounded-xl bg-black/40 border-emerald-500/20 flex items-start gap-3">
                   <CheckCircle2 className="w-5 h-5 text-emerald-400 shrink-0 mt-0.5" />
                   <div>
                     <span className="text-xs font-mono font-bold text-white block">Icons (192px, 512px &amp; Maskable)</span>
@@ -250,7 +250,7 @@ git push origin main`;
                   </div>
                 </div>
 
-                <div className="p-3.5 rounded-xl bg-black/40 border border-emerald-500/20 flex items-start gap-3">
+                <div className="p-3.5 rounded-xl bg-black/40 border-emerald-500/20 flex items-start gap-3">
                   <CheckCircle2 className="w-5 h-5 text-emerald-400 shrink-0 mt-0.5" />
                   <div>
                     <span className="text-xs font-mono font-bold text-white block">index.html &amp; Meta Tags</span>
@@ -260,7 +260,7 @@ git push origin main`;
               </div>
 
               {/* Install Status & In-App Prompt */}
-              <div className="p-4 rounded-xl bg-black/50 border border-white/10 flex flex-wrap items-center justify-between gap-4">
+              <div className="p-4 rounded-xl bg-black/50 border-white/10 flex flex-wrap items-center justify-between gap-4">
                 <div>
                   <span className="text-xs font-mono font-bold text-white block">In-App Install Prompt Status:</span>
                   <span className="text-xs text-zinc-400">
@@ -289,7 +289,7 @@ git push origin main`;
 
           {activeTab === 'responsive' && (
             <div className="space-y-4">
-              <div className="p-4 rounded-xl bg-purple-950/30 border border-purple-500/20 text-xs text-purple-200 leading-relaxed space-y-2">
+              <div className="p-4 rounded-xl bg-purple-950/30 border-purple-500/20 text-xs text-purple-200 leading-relaxed space-y-2">
                 <p className="font-semibold text-purple-300 flex items-center gap-1.5">
                   <Smartphone className="w-4 h-4" />
                   Mobile-First Responsive Layout Component
@@ -300,15 +300,15 @@ git push origin main`;
               </div>
 
               <div className="grid grid-cols-1 sm:grid-cols-3 gap-3 text-xs font-mono">
-                <div className="p-3.5 rounded-xl bg-black/40 border border-white/10">
+                <div className="p-3.5 rounded-xl bg-black/40 border-white/10">
                   <span className="text-cyan-400 font-bold block mb-1">Mobile (&lt; lg)</span>
                   <p className="text-[11px] text-zinc-400">Sticky Top Header 53px, Slide-out Drawer w-72, 1-Column Auto-Stacked Cards</p>
                 </div>
-                <div className="p-3.5 rounded-xl bg-black/40 border border-white/10">
+                <div className="p-3.5 rounded-xl bg-black/40 border-white/10">
                   <span className="text-emerald-400 font-bold block mb-1">Tablet (sm-md)</span>
                   <p className="text-[11px] text-zinc-400">2-Column Metric Grid, Horizontal Scrolling Table Containers with overflow-x-auto</p>
                 </div>
-                <div className="p-3.5 rounded-xl bg-black/40 border border-white/10">
+                <div className="p-3.5 rounded-xl bg-black/40 border-white/10">
                   <span className="text-amber-400 font-bold block mb-1">Desktop (&ge; lg)</span>
                   <p className="text-[11px] text-zinc-400">Full 4-Column Metric Grid, Collapsible Multi-Plane Navigation &amp; 3D Quantum Stage</p>
                 </div>

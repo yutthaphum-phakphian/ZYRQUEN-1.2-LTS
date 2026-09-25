@@ -141,7 +141,7 @@ export const ChamberSparkline: React.FC<{ data: number[]; trend: string }> = ({ 
   const latestVal = data.length > 0 ? ((data[data.length - 1]) * 100).toFixed(1) : '0.0';
 
   return (
-    <div className="bg-slate-950/80 p-2 rounded-lg border border-slate-800">
+    <div className="bg-slate-950/80 p-2 rounded-lg border-slate-800">
       <div className="flex justify-between items-center text-[9px] font-mono text-slate-400 mb-1">
         <span>24H Coherence Telemetry</span>
         <span className="font-bold text-slate-200">{latestVal}%</span>
@@ -184,7 +184,7 @@ export const MiniD3StabilityChart: React.FC<{ data: StabilityDataPoint[] }> = ({
   }, [data]);
 
   return (
-    <div className="bg-slate-950 border border-slate-800 rounded-xl p-4">
+    <div className="bg-slate-950 border-slate-800 rounded-xl p-4">
       <div className="flex justify-between items-center mb-2">
         <div className="flex items-center gap-2">
           <Activity className="w-4 h-4 text-cyan-400" />
@@ -273,7 +273,7 @@ export const ChamberDetailModal: React.FC<{
 
   return (
     <div className="fixed inset-0 bg-slate-950/85 backdrop-blur-md flex items-center justify-center p-4 z-50">
-      <div className="bg-slate-900 border border-cyan-500/40 rounded-2xl w-full max-w-2xl p-6 shadow-2xl relative text-slate-100 max-h-[90vh] overflow-y-auto space-y-5">
+      <div className="bg-slate-900 border-cyan-500/40 rounded-2xl w-full max-w-2xl p-6 shadow-2xl relative text-slate-100 max-h-[90vh] overflow-y-auto space-y-5">
         {/* Header */}
         <div className="flex items-start justify-between border-b border-slate-800 pb-3">
           <div className="flex items-center gap-3">
@@ -301,7 +301,7 @@ export const ChamberDetailModal: React.FC<{
 
         {/* Telemetry Summary Cards */}
         <div className="grid grid-cols-2 sm:grid-cols-4 gap-2.5 font-mono text-xs">
-          <div className="bg-slate-950 p-2.5 rounded-xl border border-slate-800">
+          <div className="bg-slate-950 p-2.5 rounded-xl border-slate-800">
             <span className="text-slate-500 text-[10px] block">Coherence</span>
             <div className={`text-base font-bold flex items-center gap-1 ${isLowCoherence ? 'text-rose-400' : isPure ? 'text-emerald-400' : 'text-amber-400'}`}>
               {(chamber.coherence * 100).toFixed(1)}%
@@ -310,22 +310,22 @@ export const ChamberDetailModal: React.FC<{
               {chamber.coherenceTrend === 'stable' && <Minus className="w-3.5 h-3.5 text-cyan-400" />}
             </div>
           </div>
-          <div className="bg-slate-950 p-2.5 rounded-xl border border-slate-800">
+          <div className="bg-slate-950 p-2.5 rounded-xl border-slate-800">
             <span className="text-slate-500 text-[10px] block">Cryo Temp</span>
             <div className="text-base font-bold text-cyan-300">{chamber.temperature.toFixed(2)} mK</div>
           </div>
-          <div className="bg-slate-950 p-2.5 rounded-xl border border-slate-800">
+          <div className="bg-slate-950 p-2.5 rounded-xl border-slate-800">
             <span className="text-slate-500 text-[10px] block">24H Mean</span>
             <div className="text-base font-bold text-purple-300">{(avgCoherence * 100).toFixed(1)}%</div>
           </div>
-          <div className="bg-slate-950 p-2.5 rounded-xl border border-slate-800">
+          <div className="bg-slate-950 p-2.5 rounded-xl border-slate-800">
             <span className="text-slate-500 text-[10px] block">Last Sync</span>
             <div className="text-base font-bold text-amber-300">{chamber.lastSync}</div>
           </div>
         </div>
 
         {/* 24h Graph */}
-        <div className="bg-slate-950 border border-slate-800 rounded-xl p-3 space-y-2">
+        <div className="bg-slate-950 border-slate-800 rounded-xl p-3 space-y-2">
           <div className="flex justify-between items-center text-xs font-mono">
             <div className="flex items-center gap-1.5 text-cyan-400 font-bold">
               <Activity className="w-3.5 h-3.5" />
@@ -355,7 +355,7 @@ export const ChamberDetailModal: React.FC<{
         </div>
 
         {/* Cryptographic Merkle Proof */}
-        <div className="bg-slate-950 border border-purple-500/30 rounded-xl p-3 space-y-2 font-mono text-xs">
+        <div className="bg-slate-950 border-purple-500/30 rounded-xl p-3 space-y-2 font-mono text-xs">
           <div className="flex justify-between items-center border-b border-slate-800 pb-1.5">
             <div className="flex items-center gap-1.5 text-purple-400 font-bold">
               <KeyRound className="w-3.5 h-3.5" />
@@ -367,7 +367,7 @@ export const ChamberDetailModal: React.FC<{
           </div>
           <div>
             <span className="text-slate-500 text-[10px]">Genesis Merkle Root Anchor:</span>
-            <p className="text-cyan-400 font-bold break-all bg-slate-900 p-1.5 rounded border border-slate-800 mt-0.5 text-[11px]">
+            <p className="text-cyan-400 font-bold break-all bg-slate-900 p-1.5 rounded border-slate-800 mt-0.5 text-[11px]">
               0x909ab814479844d8a14816bed34cdbb07528e18501da86fc4691763a43fa4c68 (Block #849202)
             </p>
           </div>
@@ -378,7 +378,7 @@ export const ChamberDetailModal: React.FC<{
                 {copied ? 'Copied! ✓' : 'Copy Hash'}
               </button>
             </div>
-            <p className="text-amber-300 font-bold break-all bg-slate-900 p-1.5 rounded border border-slate-800 text-[11px]">
+            <p className="text-amber-300 font-bold break-all bg-slate-900 p-1.5 rounded border-slate-800 text-[11px]">
               {chamber.merkleHash}
             </p>
           </div>

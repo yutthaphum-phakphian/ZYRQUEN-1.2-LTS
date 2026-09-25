@@ -60,18 +60,18 @@ export const ForensicEvidenceMatrix: React.FC = () => {
   return (
     <div className="space-y-6 font-mono text-xs text-zinc-300">
       {/* Top Banner */}
-      <div className="p-5 rounded-[24px] bg-gradient-to-br from-indigo-950/40 via-[#0a0d18]/90 to-black border border-indigo-500/40 backdrop-blur-xl flex flex-col md:flex-row md:items-center justify-between gap-4 shadow-xl">
+      <div className="p-5 rounded-[24px] bg-gradient-to-br from-indigo-950/40 via-[#0a0d18]/90 to-black border-indigo-500/40 backdrop-blur-xl flex flex-col md:flex-row md:items-center justify-between gap-4 shadow-xl">
         <div className="flex items-center gap-3.5">
-          <div className="w-11 h-11 rounded-2xl bg-indigo-500/15 border border-indigo-500/40 text-indigo-300 flex items-center justify-center shrink-0 shadow-[0_0_15px_rgba(99,102,241,0.25)]">
+          <div className="w-11 h-11 rounded-2xl bg-indigo-500/15 border-indigo-500/40 text-indigo-300 flex items-center justify-center shrink-0 shadow-[0_0_15px_rgba(99,102,241,0.25)]">
             <FileSearch className="w-6 h-6" />
           </div>
           <div>
             <div className="flex items-center gap-2">
               <h3 className="text-base font-bold text-white tracking-wide">FORENSIC EVIDENCE MATRIX</h3>
-              <span className="px-2 py-0.5 rounded-full bg-indigo-500/20 text-indigo-300 border border-indigo-500/40 text-[10px] font-bold">
+              <span className="px-2 py-0.5 rounded-full bg-indigo-500/20 text-indigo-300 border-indigo-500/40 text-[10px] font-bold">
                 5 CRITICAL CHECKS
               </span>
-              <span className="px-2 py-0.5 rounded-full bg-rose-500/20 text-rose-300 border border-rose-500/40 text-[10px] font-bold">
+              <span className="px-2 py-0.5 rounded-full bg-rose-500/20 text-rose-300 border-rose-500/40 text-[10px] font-bold">
                 FAIL-CLOSED
               </span>
             </div>
@@ -87,7 +87,7 @@ export const ForensicEvidenceMatrix: React.FC = () => {
           </div>
           <button
             onClick={handleExportSignedSealChain}
-            className="px-3 py-2 rounded-xl bg-gradient-to-r from-indigo-600/40 via-cyan-600/30 to-fuchsia-600/40 hover:from-indigo-500/50 hover:to-cyan-500/50 border border-cyan-400/50 text-white font-mono text-[11px] font-bold flex items-center gap-1.5 transition shadow-lg shadow-cyan-500/20"
+            className="px-3 py-2 rounded-xl bg-gradient-to-r from-indigo-600/40 via-cyan-600/30 to-fuchsia-600/40 hover:from-indigo-500/50 hover:to-cyan-500/50 border-cyan-400/50 text-white font-mono text-[11px] font-bold flex items-center gap-1.5 transition shadow-lg shadow-cyan-500/20"
             title="Export full 14,902 Seal Chain & Evidence Log as Signed JSON for Off-Chain Storage"
           >
             <Lock className="w-3.5 h-3.5 text-cyan-300" />
@@ -97,7 +97,7 @@ export const ForensicEvidenceMatrix: React.FC = () => {
       </div>
 
       {/* Forensic Evidence Matrix Table */}
-      <div className="overflow-x-auto rounded-2xl border border-white/10 bg-black/60 shadow-xl">
+      <div className="overflow-x-auto rounded-2xl border-white/10 bg-black/60 shadow-xl">
         <table className="w-full text-left text-[11px] font-mono border-collapse">
           <thead>
             <tr className="bg-white/5 border-b border-white/10 text-zinc-400">
@@ -133,7 +133,7 @@ export const ForensicEvidenceMatrix: React.FC = () => {
 
                   {/* 1. Provenance Check */}
                   <td className="p-3.5">
-                    <span className="px-2 py-0.5 rounded bg-rose-500/20 text-rose-300 border border-rose-500/30 text-[10px] font-bold flex items-center gap-1 w-fit">
+                    <span className="px-2 py-0.5 rounded bg-rose-500/20 text-rose-300 border-rose-500/30 text-[10px] font-bold flex items-center gap-1 w-fit">
                       <AlertTriangle className="w-3 h-3 text-rose-400" />
                       {item.provenanceStatus}
                     </span>
@@ -151,7 +151,7 @@ export const ForensicEvidenceMatrix: React.FC = () => {
 
                   {/* 3. Merkle Proof */}
                   <td className="p-3.5">
-                    <span className="px-2 py-0.5 rounded bg-rose-500/20 text-rose-300 border border-rose-500/30 text-[10px] font-bold flex items-center gap-1 w-fit">
+                    <span className="px-2 py-0.5 rounded bg-rose-500/20 text-rose-300 border-rose-500/30 text-[10px] font-bold flex items-center gap-1 w-fit">
                       <XCircle className="w-3 h-3 text-rose-400" />
                       {item.merkleProofStatus}
                     </span>
@@ -171,14 +171,14 @@ export const ForensicEvidenceMatrix: React.FC = () => {
 
                   {/* Classification */}
                   <td className="p-3.5">
-                    <span className="px-2 py-0.5 rounded bg-amber-500/20 text-amber-300 border border-amber-500/30 text-[10px] font-bold">
+                    <span className="px-2 py-0.5 rounded bg-amber-500/20 text-amber-300 border-amber-500/30 text-[10px] font-bold">
                       {item.classification}
                     </span>
                   </td>
 
                   {/* Promotion */}
                   <td className="p-3.5">
-                    <span className="px-2 py-0.5 rounded bg-rose-500/20 text-rose-300 border border-rose-500/30 text-[10px] font-bold">
+                    <span className="px-2 py-0.5 rounded bg-rose-500/20 text-rose-300 border-rose-500/30 text-[10px] font-bold">
                       {item.promotionStatus}
                     </span>
                   </td>
@@ -191,7 +191,7 @@ export const ForensicEvidenceMatrix: React.FC = () => {
                         handleVerify(item);
                       }}
                       disabled={isVerifying}
-                      className="px-2.5 py-1.5 rounded-lg bg-indigo-500/20 hover:bg-indigo-500/30 text-indigo-200 border border-indigo-500/40 text-[10px] font-bold transition-all disabled:opacity-50 flex items-center gap-1 ml-auto shadow-[0_0_10px_rgba(99,102,241,0.2)]"
+                      className="px-2.5 py-1.5 rounded-lg bg-indigo-500/20 hover:bg-indigo-500/30 text-indigo-200 border-indigo-500/40 text-[10px] font-bold transition-all disabled:opacity-50 flex items-center gap-1 ml-auto shadow-[0_0_10px_rgba(99,102,241,0.2)]"
                     >
                       <RefreshCw className={`w-3 h-3 ${isVerifying ? 'animate-spin' : ''}`} />
                       <span>{isVerifying ? 'Probing...' : 'Run Forensic Step'}</span>
@@ -210,8 +210,8 @@ export const ForensicEvidenceMatrix: React.FC = () => {
           onClick={() => setActiveDossierTab('matrix')}
           className={`px-3 py-1.5 rounded-xl text-xs font-bold transition-all ${
             activeDossierTab === 'matrix'
-              ? 'bg-indigo-500/25 text-indigo-200 border border-indigo-500/40'
-              : 'text-zinc-400 hover:text-white bg-white/5 border border-transparent'
+              ? 'bg-indigo-500/25 text-indigo-200 border-indigo-500/40'
+              : 'text-zinc-400 hover:text-white bg-white/5 border-transparent'
           }`}
         >
           Detailed Dossier (P3)
@@ -220,8 +220,8 @@ export const ForensicEvidenceMatrix: React.FC = () => {
           onClick={() => setActiveDossierTab('provenance_gate')}
           className={`px-3 py-1.5 rounded-xl text-xs font-bold transition-all ${
             activeDossierTab === 'provenance_gate'
-              ? 'bg-rose-500/25 text-rose-200 border border-rose-500/40'
-              : 'text-zinc-400 hover:text-white bg-white/5 border border-transparent'
+              ? 'bg-rose-500/25 text-rose-200 border-rose-500/40'
+              : 'text-zinc-400 hover:text-white bg-white/5 border-transparent'
           }`}
         >
           6-Layer Provenance Gate (P4)
@@ -230,8 +230,8 @@ export const ForensicEvidenceMatrix: React.FC = () => {
           onClick={() => setActiveDossierTab('audit_log')}
           className={`px-3 py-1.5 rounded-xl text-xs font-bold transition-all ${
             activeDossierTab === 'audit_log'
-              ? 'bg-cyan-500/25 text-cyan-200 border border-cyan-500/40'
-              : 'text-zinc-400 hover:text-white bg-white/5 border border-transparent'
+              ? 'bg-cyan-500/25 text-cyan-200 border-cyan-500/40'
+              : 'text-zinc-400 hover:text-white bg-white/5 border-transparent'
           }`}
         >
           Audit Ledger Stream ({auditLog.length})
@@ -240,7 +240,7 @@ export const ForensicEvidenceMatrix: React.FC = () => {
 
       {/* Selected Row Detail View: Dossier */}
       {activeDossierTab === 'matrix' && selectedRecord && (
-        <div className="p-5 rounded-[24px] bg-black/60 border border-indigo-500/30 backdrop-blur-xl space-y-3 shadow-xl animate-in fade-in duration-150">
+        <div className="p-5 rounded-[24px] bg-black/60 border-indigo-500/30 backdrop-blur-xl space-y-3 shadow-xl animate-in fade-in duration-150">
           <div className="flex items-center justify-between border-b border-white/10 pb-2">
             <div className="flex items-center gap-2">
               <FileCheck2 className="w-4 h-4 text-indigo-400" />
@@ -254,7 +254,7 @@ export const ForensicEvidenceMatrix: React.FC = () => {
           </div>
 
           <div className="grid grid-cols-1 md:grid-cols-3 gap-3 text-[11px]">
-            <div className="p-3 rounded-xl bg-black/40 border border-white/5 space-y-1.5">
+            <div className="p-3 rounded-xl bg-black/40 border-white/5 space-y-1.5">
               <div className="text-[10px] text-zinc-500 uppercase font-bold">1. Origin & Causality</div>
               <div>
                 <span className="text-zinc-500">Evidence ID:</span> <span className="text-white font-mono">{selectedRecord.evidenceId}</span>
@@ -274,7 +274,7 @@ export const ForensicEvidenceMatrix: React.FC = () => {
               </div>
             </div>
 
-            <div className="p-3 rounded-xl bg-black/40 border border-white/5 space-y-1.5">
+            <div className="p-3 rounded-xl bg-black/40 border-white/5 space-y-1.5">
               <div className="text-[10px] text-zinc-500 uppercase font-bold">2. Genesis & Merkle Anchors</div>
               <div>
                 <span className="text-zinc-500">Genesis Block:</span>{' '}
@@ -292,7 +292,7 @@ export const ForensicEvidenceMatrix: React.FC = () => {
               </div>
             </div>
 
-            <div className="p-3 rounded-xl bg-black/40 border border-white/5 space-y-1.5">
+            <div className="p-3 rounded-xl bg-black/40 border-white/5 space-y-1.5">
               <div className="text-[10px] text-zinc-500 uppercase font-bold">3. Crypto & Promotion Gate</div>
               <div>
                 <span className="text-zinc-500">Algorithm:</span> {selectedRecord.signatureAlgorithm}
@@ -317,7 +317,7 @@ export const ForensicEvidenceMatrix: React.FC = () => {
 
       {/* 6-Layer Provenance Gate View (P4) */}
       {activeDossierTab === 'provenance_gate' && selectedRecord && (
-        <div className="p-5 rounded-[24px] bg-black/60 border border-rose-500/30 backdrop-blur-xl space-y-3 shadow-xl animate-in fade-in duration-150">
+        <div className="p-5 rounded-[24px] bg-black/60 border-rose-500/30 backdrop-blur-xl space-y-3 shadow-xl animate-in fade-in duration-150">
           <div className="flex items-center justify-between border-b border-white/10 pb-2">
             <div className="flex items-center gap-2">
               <ShieldAlert className="w-4 h-4 text-rose-400" />
@@ -325,14 +325,14 @@ export const ForensicEvidenceMatrix: React.FC = () => {
                 P4 — 6-Layer Provenance Gate Evaluation (Seal #{selectedRecord.observedSeal})
               </span>
             </div>
-            <span className="px-2 py-0.5 rounded bg-rose-500/20 text-rose-300 border border-rose-500/40 text-[10px] font-bold">
+            <span className="px-2 py-0.5 rounded bg-rose-500/20 text-rose-300 border-rose-500/40 text-[10px] font-bold">
               PROVENANCE = INCOMPLETE &rarr; PROMOTION = BLOCKED
             </span>
           </div>
 
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3 text-[11px]">
             {/* Layer 1: Source Identity */}
-            <div className="p-3 rounded-xl bg-black/40 border border-white/5 space-y-1">
+            <div className="p-3 rounded-xl bg-black/40 border-white/5 space-y-1">
               <div className="flex items-center justify-between">
                 <span className="text-zinc-400 font-bold">1. Source Identity</span>
                 <span className="text-[10px] text-amber-300">UNATTESTED</span>
@@ -343,7 +343,7 @@ export const ForensicEvidenceMatrix: React.FC = () => {
             </div>
 
             {/* Layer 2: Timestamp Integrity */}
-            <div className="p-3 rounded-xl bg-black/40 border border-white/5 space-y-1">
+            <div className="p-3 rounded-xl bg-black/40 border-white/5 space-y-1">
               <div className="flex items-center justify-between">
                 <span className="text-zinc-400 font-bold">2. Timestamp Integrity</span>
                 <span className="text-[10px] text-emerald-400">SYNCHRONIZED</span>
@@ -354,7 +354,7 @@ export const ForensicEvidenceMatrix: React.FC = () => {
             </div>
 
             {/* Layer 3: Artifact SHA-256 */}
-            <div className="p-3 rounded-xl bg-black/40 border border-white/5 space-y-1">
+            <div className="p-3 rounded-xl bg-black/40 border-white/5 space-y-1">
               <div className="flex items-center justify-between">
                 <span className="text-zinc-400 font-bold">3. Artifact SHA-256</span>
                 <span className="text-[10px] text-cyan-300">{selectedRecord.digestStatus}</span>
@@ -365,7 +365,7 @@ export const ForensicEvidenceMatrix: React.FC = () => {
             </div>
 
             {/* Layer 4: Parent Evidence */}
-            <div className="p-3 rounded-xl bg-black/40 border border-white/5 space-y-1">
+            <div className="p-3 rounded-xl bg-black/40 border-white/5 space-y-1">
               <div className="flex items-center justify-between">
                 <span className="text-zinc-400 font-bold">4. Parent Evidence</span>
                 <span className="text-[10px] text-amber-300">{selectedRecord.causalityStatus}</span>
@@ -376,7 +376,7 @@ export const ForensicEvidenceMatrix: React.FC = () => {
             </div>
 
             {/* Layer 5: Genesis Anchor */}
-            <div className="p-3 rounded-xl bg-black/40 border border-rose-500/30 space-y-1">
+            <div className="p-3 rounded-xl bg-black/40 border-rose-500/30 space-y-1">
               <div className="flex items-center justify-between">
                 <span className="text-rose-300 font-bold">5. Genesis Anchor</span>
                 <span className="text-[10px] text-rose-400 font-bold">{selectedRecord.genesisAnchorStatus}</span>
@@ -387,7 +387,7 @@ export const ForensicEvidenceMatrix: React.FC = () => {
             </div>
 
             {/* Layer 6: Cryptographic Signature */}
-            <div className="p-3 rounded-xl bg-black/40 border border-rose-500/30 space-y-1">
+            <div className="p-3 rounded-xl bg-black/40 border-rose-500/30 space-y-1">
               <div className="flex items-center justify-between">
                 <span className="text-rose-300 font-bold">6. Cryptographic Signature</span>
                 <span className="text-[10px] text-rose-400 font-bold">{selectedRecord.signatureStatus}</span>
@@ -402,7 +402,7 @@ export const ForensicEvidenceMatrix: React.FC = () => {
 
       {/* Audit Log Stream */}
       {activeDossierTab === 'audit_log' && (
-        <div className="p-5 rounded-[24px] bg-black/60 border border-cyan-500/30 backdrop-blur-xl space-y-3 shadow-xl animate-in fade-in duration-150">
+        <div className="p-5 rounded-[24px] bg-black/60 border-cyan-500/30 backdrop-blur-xl space-y-3 shadow-xl animate-in fade-in duration-150">
           <div className="flex items-center justify-between border-b border-white/10 pb-2">
             <div className="flex items-center gap-2">
               <Activity className="w-4 h-4 text-cyan-400" />
@@ -419,7 +419,7 @@ export const ForensicEvidenceMatrix: React.FC = () => {
             {auditLog.map((ev) => (
               <div
                 key={ev.eventId}
-                className="p-2.5 rounded-xl bg-black/40 border border-white/5 flex flex-col sm:flex-row sm:items-center justify-between gap-2 text-[11px]"
+                className="p-2.5 rounded-xl bg-black/40 border-white/5 flex flex-col sm:flex-row sm:items-center justify-between gap-2 text-[11px]"
               >
                 <div className="space-y-0.5">
                   <div className="flex items-center gap-2">
@@ -435,8 +435,8 @@ export const ForensicEvidenceMatrix: React.FC = () => {
                 <div className="flex items-center gap-3 shrink-0 text-right">
                   <span className={`px-2 py-0.5 rounded text-[10px] font-bold ${
                     ev.result.includes('BLOCKED') || ev.result.includes('INVALID')
-                      ? 'bg-rose-500/20 text-rose-300 border border-rose-500/30'
-                      : 'bg-emerald-500/20 text-emerald-300 border border-emerald-500/30'
+                      ? 'bg-rose-500/20 text-rose-300 border-rose-500/30'
+                      : 'bg-emerald-500/20 text-emerald-300 border-emerald-500/30'
                   }`}>
                     {ev.result}
                   </span>

@@ -24,7 +24,7 @@ export const VoiceCommandOverlay: React.FC<VoiceCommandOverlayProps> = ({
   const controls = (
     <>
       {isListening && (
-        <div className="bg-[#070a12]/95 border border-cyan-500/40 text-cyan-300 px-3 py-1.5 rounded-xl shadow-[0_0_20px_rgba(6,182,212,0.3)] font-mono text-[11px] flex items-center gap-2 backdrop-blur-xl animate-in fade-in slide-in-from-right-3 shrink-0">
+        <div className="bg-[#070a12]/95 border-cyan-500/40 text-cyan-300 px-3 py-1.5 rounded-xl shadow-[0_0_20px_rgba(6,182,212,0.3)] font-mono text-[11px] flex items-center gap-2 backdrop-blur-xl animate-in fade-in slide-in-from-right-3 shrink-0">
           <span className="relative flex h-2 w-2">
             <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-cyan-400 opacity-75"></span>
             <span className="relative inline-flex rounded-full h-2 w-2 bg-cyan-500"></span>

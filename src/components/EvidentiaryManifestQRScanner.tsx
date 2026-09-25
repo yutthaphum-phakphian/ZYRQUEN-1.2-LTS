@@ -346,19 +346,19 @@ export const EvidentiaryManifestQRScanner: React.FC<EvidentiaryManifestQRScanner
   return (
     <div
       id="evidentiary-manifest-qr-scanner"
-      className="p-4 sm:p-5 rounded-2xl bg-[#080d1a] border border-cyan-500/30 shadow-[0_0_35px_rgba(6,182,212,0.15)] space-y-4 font-mono text-white"
+      className="p-4 sm:p-5 rounded-2xl bg-[#080d1a] border-cyan-500/30 shadow-[0_0_35px_rgba(6,182,212,0.15)] space-y-4 font-mono text-white"
     >
       {/* Header Bar */}
       <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3 pb-3 border-b border-cyan-500/20">
         <div className="flex items-center gap-3">
-          <div className="w-10 h-10 rounded-xl bg-cyan-950/80 border border-cyan-500/40 flex items-center justify-center text-cyan-400 shadow-[0_0_15px_rgba(6,182,212,0.25)]">
+          <div className="w-10 h-10 rounded-xl bg-cyan-950/80 border-cyan-500/40 flex items-center justify-center text-cyan-400 shadow-[0_0_15px_rgba(6,182,212,0.25)]">
             <QrCode className="w-5 h-5" />
           </div>
           <div>
             <div className="flex items-center gap-2">
               <h2 className="text-sm sm:text-base font-bold text-white tracking-wide flex items-center gap-2">
                 Evidentiary Manifest QR Ingestion
-                <span className="px-2 py-0.5 rounded text-[10px] font-bold bg-cyan-950 text-cyan-300 border border-cyan-500/40">
+                <span className="px-2 py-0.5 rounded text-[10px] font-bold bg-cyan-950 text-cyan-300 border-cyan-500/40">
                   COURT-READY
                 </span>
               </h2>
@@ -370,7 +370,7 @@ export const EvidentiaryManifestQRScanner: React.FC<EvidentiaryManifestQRScanner
         </div>
 
         {/* Input Mode Switcher */}
-        <div className="flex items-center bg-[#050811] border border-zinc-800 rounded-xl p-1 text-xs">
+        <div className="flex items-center bg-[#050811] border-zinc-800 rounded-xl p-1 text-xs">
           <button
             onClick={() => {
               playTone(520, 0.02);
@@ -433,7 +433,7 @@ export const EvidentiaryManifestQRScanner: React.FC<EvidentiaryManifestQRScanner
 
       {/* Error / Warning Alert */}
       {cameraError && (
-        <div className="p-3 rounded-xl bg-amber-950/40 border border-amber-500/40 text-amber-200 text-xs flex items-start gap-2.5">
+        <div className="p-3 rounded-xl bg-amber-950/40 border-amber-500/40 text-amber-200 text-xs flex items-start gap-2.5">
           <AlertTriangle className="w-4 h-4 text-amber-400 shrink-0 mt-0.5" />
           <div className="flex-1">
             <span className="font-bold">Scanner Notice:</span> {cameraError}
@@ -463,7 +463,7 @@ export const EvidentiaryManifestQRScanner: React.FC<EvidentiaryManifestQRScanner
                 {/* Laser Scanning Animation Overlay */}
                 <div className="absolute inset-0 pointer-events-none border-2 border-cyan-500/30">
                   <div className="absolute top-0 left-0 right-0 h-1 bg-gradient-to-r from-transparent via-cyan-400 to-transparent shadow-[0_0_15px_#06b6d4] animate-bounce" />
-                  <div className="absolute inset-6 border border-cyan-500/50 rounded-xl" />
+                  <div className="absolute inset-6 border-cyan-500/50 rounded-xl" />
                   <div className="absolute top-8 left-8 w-6 h-6 border-t-2 border-l-2 border-cyan-400" />
                   <div className="absolute top-8 right-8 w-6 h-6 border-t-2 border-r-2 border-cyan-400" />
                   <div className="absolute bottom-8 left-8 w-6 h-6 border-b-2 border-l-2 border-cyan-400" />
@@ -493,14 +493,14 @@ export const EvidentiaryManifestQRScanner: React.FC<EvidentiaryManifestQRScanner
                 playTone(550, 0.02);
                 setFacingMode(facingMode === 'environment' ? 'user' : 'environment');
               }}
-              className="flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-[#070b14] border border-zinc-800 hover:border-cyan-500/40 text-zinc-300 text-xs cursor-pointer"
+              className="flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-[#070b14] border-zinc-800 hover:border-cyan-500/40 text-zinc-300 text-xs cursor-pointer"
             >
               <RefreshCw className="w-3.5 h-3.5 text-cyan-400" />
               <span>Flip Camera ({facingMode})</span>
             </button>
             <button
               onClick={() => setCameraActive(!cameraActive)}
-              className="flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-[#070b14] border border-zinc-800 hover:border-cyan-500/40 text-zinc-300 text-xs cursor-pointer"
+              className="flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-[#070b14] border-zinc-800 hover:border-cyan-500/40 text-zinc-300 text-xs cursor-pointer"
             >
               <Camera className="w-3.5 h-3.5 text-cyan-400" />
               <span>{cameraActive ? 'Pause Camera' : 'Start Camera'}</span>
@@ -542,7 +542,7 @@ export const EvidentiaryManifestQRScanner: React.FC<EvidentiaryManifestQRScanner
               }
             }}
           />
-          <div className="w-12 h-12 rounded-2xl bg-cyan-950/60 border border-cyan-500/40 flex items-center justify-center text-cyan-400">
+          <div className="w-12 h-12 rounded-2xl bg-cyan-950/60 border-cyan-500/40 flex items-center justify-center text-cyan-400">
             <Upload className="w-6 h-6" />
           </div>
           <div>
@@ -551,7 +551,7 @@ export const EvidentiaryManifestQRScanner: React.FC<EvidentiaryManifestQRScanner
               Supports PNG, JPG, SVG with micro-etched physical tamper seals
             </p>
           </div>
-          <span className="px-3 py-1 rounded-xl bg-cyan-950 text-cyan-300 border border-cyan-500/40 text-xs font-bold mt-2">
+          <span className="px-3 py-1 rounded-xl bg-cyan-950 text-cyan-300 border-cyan-500/40 text-xs font-bold mt-2">
             Browse Image File
           </span>
         </div>
@@ -571,7 +571,7 @@ export const EvidentiaryManifestQRScanner: React.FC<EvidentiaryManifestQRScanner
                 }
               }}
               placeholder="Paste manifest JSON, seal ID, or zyrquen:// code..."
-              className="flex-1 px-4 py-2.5 rounded-xl bg-[#060a14] border border-cyan-500/30 text-white font-mono text-xs focus:outline-none focus:border-cyan-400"
+              className="flex-1 px-4 py-2.5 rounded-xl bg-[#060a14] border-cyan-500/30 text-white font-mono text-xs focus:outline-none focus:border-cyan-400"
             />
             <button
               onClick={() => handleIngestPayload(manualCodeInput)}
@@ -602,13 +602,13 @@ export const EvidentiaryManifestQRScanner: React.FC<EvidentiaryManifestQRScanner
                   playTone(620, 0.03);
                   handleIngestPayload(preset.payload);
                 }}
-                className="p-3 rounded-xl bg-[#060a14] border border-zinc-800 hover:border-violet-500/50 text-left transition-all hover:bg-violet-950/20 group cursor-pointer"
+                className="p-3 rounded-xl bg-[#060a14] border-zinc-800 hover:border-violet-500/50 text-left transition-all hover:bg-violet-950/20 group cursor-pointer"
               >
                 <div className="flex items-center justify-between">
                   <span className="text-xs font-bold text-violet-300 group-hover:text-white">
                     {preset.label}
                   </span>
-                  <span className="text-[10px] px-1.5 py-0.2 rounded bg-violet-950 text-violet-300 border border-violet-500/40">
+                  <span className="text-[10px] px-1.5 py-0.2 rounded bg-violet-950 text-violet-300 border-violet-500/40">
                     {preset.category}
                   </span>
                 </div>
@@ -623,7 +623,7 @@ export const EvidentiaryManifestQRScanner: React.FC<EvidentiaryManifestQRScanner
 
       {/* Verification Result Card */}
       {lastVerifiedManifest && (
-        <div className="p-4 rounded-2xl bg-[#060a14] border border-cyan-500/40 space-y-3 shadow-lg">
+        <div className="p-4 rounded-2xl bg-[#060a14] border-cyan-500/40 space-y-3 shadow-lg">
           <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2 pb-2 border-b border-cyan-500/20">
             <div className="flex items-center gap-2">
               <ShieldCheck className="w-5 h-5 text-emerald-400 shrink-0" />
@@ -635,8 +635,8 @@ export const EvidentiaryManifestQRScanner: React.FC<EvidentiaryManifestQRScanner
                   <span
                     className={`px-2 py-0.2 rounded text-[9.5px] font-bold uppercase ${
                       lastVerifiedManifest.status === 'VERIFIED_INTACT'
-                        ? 'bg-emerald-950 text-emerald-300 border border-emerald-500/40'
-                        : 'bg-rose-950 text-rose-300 border border-rose-500/40'
+                        ? 'bg-emerald-950 text-emerald-300 border-emerald-500/40'
+                        : 'bg-rose-950 text-rose-300 border-rose-500/40'
                     }`}
                   >
                     {lastVerifiedManifest.status}
@@ -666,25 +666,25 @@ export const EvidentiaryManifestQRScanner: React.FC<EvidentiaryManifestQRScanner
           </div>
 
           <div className="grid grid-cols-2 sm:grid-cols-4 gap-2 text-xs">
-            <div className="p-2.5 rounded-xl bg-black/40 border border-zinc-800">
+            <div className="p-2.5 rounded-xl bg-black/40 border-zinc-800">
               <span className="text-[10px] text-zinc-400 block mb-0.5">Manifest ID</span>
               <span className="font-bold text-cyan-300 truncate block">
                 {lastVerifiedManifest.manifestId}
               </span>
             </div>
-            <div className="p-2.5 rounded-xl bg-black/40 border border-zinc-800">
+            <div className="p-2.5 rounded-xl bg-black/40 border-zinc-800">
               <span className="text-[10px] text-zinc-400 block mb-0.5">Block Height</span>
               <span className="font-bold text-white block">
                 #{lastVerifiedManifest.blockHeight}
               </span>
             </div>
-            <div className="p-2.5 rounded-xl bg-black/40 border border-zinc-800">
+            <div className="p-2.5 rounded-xl bg-black/40 border-zinc-800">
               <span className="text-[10px] text-zinc-400 block mb-0.5">Drift Delta</span>
               <span className="font-bold text-emerald-400 block">
                 {lastVerifiedManifest.driftDelta}
               </span>
             </div>
-            <div className="p-2.5 rounded-xl bg-black/40 border border-zinc-800">
+            <div className="p-2.5 rounded-xl bg-black/40 border-zinc-800">
               <span className="text-[10px] text-zinc-400 block mb-0.5">Custody Quorum</span>
               <span className="font-bold text-cyan-300 truncate block">
                 {lastVerifiedManifest.custodyAttestation}
@@ -692,7 +692,7 @@ export const EvidentiaryManifestQRScanner: React.FC<EvidentiaryManifestQRScanner
             </div>
           </div>
 
-          <div className="p-2.5 rounded-xl bg-black/40 border border-zinc-800 text-[11px] space-y-1">
+          <div className="p-2.5 rounded-xl bg-black/40 border-zinc-800 text-[11px] space-y-1">
             <div className="flex items-center justify-between text-zinc-400">
               <span>Merkle Root:</span>
               <span className="font-bold text-cyan-300 truncate max-w-[280px]">

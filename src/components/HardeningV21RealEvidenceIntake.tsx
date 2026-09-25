@@ -5,7 +5,7 @@ export const HardeningV21RealEvidenceIntake: React.FC = () => {
   return (
     <div className="space-y-6 font-mono text-zinc-300 select-none animate-in fade-in duration-500">
       {/* Header Section */}
-      <div className="p-6 bg-[#0b0d18] border border-cyan-500/30 rounded-2xl shadow-[0_0_30px_rgba(6,182,212,0.1)] relative overflow-hidden">
+      <div className="p-6 bg-[#0b0d18] border-cyan-500/30 rounded-2xl shadow-[0_0_30px_rgba(6,182,212,0.1)] relative overflow-hidden">
         <div className="absolute top-0 right-0 p-6 opacity-20 pointer-events-none">
           <ShieldCheck className="w-32 h-32 text-cyan-500" />
         </div>
@@ -13,7 +13,7 @@ export const HardeningV21RealEvidenceIntake: React.FC = () => {
           <div>
             <div className="flex items-center gap-3 mb-2">
               <h2 className="text-2xl font-bold text-cyan-300 tracking-widest">REAL EVIDENCE INTAKE</h2>
-              <span className="px-2.5 py-0.5 bg-rose-500/20 text-rose-400 border border-rose-500/50 rounded text-xs font-bold tracking-wider">
+              <span className="px-2.5 py-0.5 bg-rose-500/20 text-rose-400 border-rose-500/50 rounded text-xs font-bold tracking-wider">
                 HARDENING v2.1
               </span>
             </div>
@@ -22,15 +22,15 @@ export const HardeningV21RealEvidenceIntake: React.FC = () => {
             </p>
           </div>
           <div className="flex flex-col items-end gap-2">
-            <div className="px-4 py-1.5 bg-emerald-500/20 text-emerald-400 border border-emerald-500/40 rounded-lg text-sm font-bold flex items-center gap-2">
+            <div className="px-4 py-1.5 bg-emerald-500/20 text-emerald-400 border-emerald-500/40 rounded-lg text-sm font-bold flex items-center gap-2">
               <Lock className="w-4 h-4" />
               SSOT MUTATION = 0
             </div>
             <div className="flex gap-2">
-              <button className="px-3 py-1 bg-white/5 hover:bg-white/10 border border-white/10 rounded text-xs transition-colors">
+              <button className="px-3 py-1 bg-white/5 hover:bg-white/10 border-white/10 rounded text-xs transition-colors">
                 PHASE 3 MANIFEST
               </button>
-              <button className="px-3 py-1 bg-cyan-500/20 hover:bg-cyan-500/30 text-cyan-300 border border-cyan-500/40 rounded text-xs transition-colors">
+              <button className="px-3 py-1 bg-cyan-500/20 hover:bg-cyan-500/30 text-cyan-300 border-cyan-500/40 rounded text-xs transition-colors">
                 EXPORT INTAKE LEDGER
               </button>
             </div>
@@ -39,7 +39,7 @@ export const HardeningV21RealEvidenceIntake: React.FC = () => {
       </div>
 
       {/* Taxonomy Section */}
-      <div className="p-5 bg-black/40 border border-white/10 rounded-2xl">
+      <div className="p-5 bg-black/40 border-white/10 rounded-2xl">
         <h3 className="text-xs text-zinc-500 font-bold mb-3 tracking-widest uppercase">Provenance & Verification Taxonomy</h3>
         <p className="text-[10px] text-zinc-600 mb-4 uppercase">Explicit Visual Boundaries Enforced</p>
         <div className="flex flex-wrap gap-2">
@@ -62,16 +62,16 @@ export const HardeningV21RealEvidenceIntake: React.FC = () => {
       </div>
 
       {/* Module 1: Deterministic Crypto Verify */}
-      <div className="mt-8 border border-white/10 rounded-2xl overflow-hidden bg-[#070a12]">
+      <div className="mt-8 border-white/10 rounded-2xl overflow-hidden bg-[#070a12]">
         <div className="p-4 bg-white/5 border-b border-white/10 flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
           <div>
             <div className="flex items-center gap-2 mb-1">
               <span className="text-emerald-400 font-bold tracking-widest text-sm">MODULE 1: DETERMINISTIC CRYPTOGRAPHIC VERIFICATION GATE</span>
-              <span className="px-2 py-0.5 bg-emerald-500/20 text-emerald-300 text-[10px] rounded border border-emerald-500/30">WEBCRYPTO SHA-256</span>
+              <span className="px-2 py-0.5 bg-emerald-500/20 text-emerald-300 text-[10px] rounded border-emerald-500/30">WEBCRYPTO SHA-256</span>
             </div>
             <div className="text-[11px] text-zinc-400">Live Hardware Digest Engine • Field-by-Field Attestation • Zero Canonical Overwrite</div>
           </div>
-          <div className="px-3 py-1.5 bg-emerald-500/10 border border-emerald-500/30 text-emerald-400 rounded flex items-center gap-2 text-xs font-bold">
+          <div className="px-3 py-1.5 bg-emerald-500/10 border-emerald-500/30 text-emerald-400 rounded flex items-center gap-2 text-xs font-bold">
             <CheckCircle2 className="w-4 h-4" />
             ALL ARTIFACTS VERIFIED
           </div>
@@ -135,7 +135,7 @@ const StatCard = ({ title, val1, val2, icon, color }: any) => {
   };
   
   return (
-    <div className="p-4 bg-white/[0.02] border border-white/5 rounded-xl hover:bg-white/[0.04] transition-colors relative overflow-hidden group">
+    <div className="p-4 bg-white/[0.02] border-white/5 rounded-xl hover:bg-white/[0.04] transition-colors relative overflow-hidden group">
       <div className={`absolute -right-4 -bottom-4 opacity-10 group-hover:opacity-20 transition-opacity ${colorStyles[color]}`}>
         {React.cloneElement(icon, { className: 'w-24 h-24' })}
       </div>
@@ -148,12 +148,12 @@ const StatCard = ({ title, val1, val2, icon, color }: any) => {
 
 const ArtifactCard = ({ code, type, filename, bytes, hash, slot, time, status }: any) => {
   return (
-    <div className="bg-black/60 border border-white/10 rounded-xl overflow-hidden flex flex-col">
+    <div className="bg-black/60 border-white/10 rounded-xl overflow-hidden flex flex-col">
       <div className="p-4 border-b border-white/5 bg-white/[0.02] flex justify-between items-start">
         <div>
           <div className="flex items-center gap-2 mb-1">
             <span className="text-sm font-bold text-zinc-100">{code}</span>
-            <span className="px-2 py-0.5 bg-emerald-500/20 text-emerald-400 text-[9px] rounded border border-emerald-500/30">VERIFIED (READ-ONLY)</span>
+            <span className="px-2 py-0.5 bg-emerald-500/20 text-emerald-400 text-[9px] rounded border-emerald-500/30">VERIFIED (READ-ONLY)</span>
           </div>
           <div className="text-xs text-zinc-400">{type}</div>
           <div className="text-[11px] text-cyan-400/80 mt-2 font-mono flex items-center gap-1.5">
@@ -166,7 +166,7 @@ const ArtifactCard = ({ code, type, filename, bytes, hash, slot, time, status }:
       <div className="p-4 space-y-4 flex-1">
         <div>
           <div className="text-[10px] text-zinc-500 mb-1">COMPUTED SHA-256 DIGEST: {bytes} BYTES</div>
-          <div className="p-2.5 bg-[#0a0f1e] border border-cyan-500/20 rounded-lg text-[10px] text-cyan-300 font-mono break-all leading-relaxed shadow-[inset_0_0_10px_rgba(6,182,212,0.05)]">
+          <div className="p-2.5 bg-[#0a0f1e] border-cyan-500/20 rounded-lg text-[10px] text-cyan-300 font-mono break-all leading-relaxed shadow-[inset_0_0_10px_rgba(6,182,212,0.05)]">
             {hash}
           </div>
         </div>

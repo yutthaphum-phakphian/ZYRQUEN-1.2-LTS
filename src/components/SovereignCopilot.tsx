@@ -222,18 +222,18 @@ const gasFeeRefundPool = 12500000.00;     // ฿12.5M THB (0.00% Drift)`;
   if (!isOpen) return null;
 
   return (
-    <div className="flex flex-col h-full bg-zinc-950 border border-zinc-800 rounded-2xl shadow-2xl overflow-hidden font-mono text-xs">
+    <div className="flex flex-col h-full bg-zinc-950 border-zinc-800 rounded-2xl shadow-2xl overflow-hidden font-mono text-xs">
       
       {/* Copilot Header */}
       <div className="flex items-center justify-between px-4 py-3 bg-zinc-900/90 border-b border-zinc-800 backdrop-blur-md">
         <div className="flex items-center gap-2.5">
-          <div className="p-2 rounded-xl bg-cyan-950/80 border border-cyan-700/60 text-cyan-400 shadow-md shadow-cyan-950/50">
+          <div className="p-2 rounded-xl bg-cyan-950/80 border-cyan-700/60 text-cyan-400 shadow-md shadow-cyan-950/50">
             <Bot className="w-4 h-4 animate-bounce" />
           </div>
           <div>
             <div className="flex items-center gap-2">
               <span className="font-bold text-zinc-100 tracking-wide">SOVEREIGN COPILOT</span>
-              <span className="text-[9px] px-1.5 py-0.5 rounded bg-cyan-950 text-cyan-300 border border-cyan-800 font-semibold uppercase">
+              <span className="text-[9px] px-1.5 py-0.5 rounded bg-cyan-950 text-cyan-300 border-cyan-800 font-semibold uppercase">
                 v4.16 AI
               </span>
             </div>
@@ -244,7 +244,7 @@ const gasFeeRefundPool = 12500000.00;     // ฿12.5M THB (0.00% Drift)`;
         </div>
 
         <div className="flex items-center gap-2">
-          <span className="flex items-center gap-1 text-[10px] text-emerald-400 bg-emerald-950/60 border border-emerald-800/60 px-2 py-0.5 rounded">
+          <span className="flex items-center gap-1 text-[10px] text-emerald-400 bg-emerald-950/60 border-emerald-800/60 px-2 py-0.5 rounded">
             <span className="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse" />
             SSoT Δ0
           </span>
@@ -267,7 +267,7 @@ const gasFeeRefundPool = 12500000.00;     // ฿12.5M THB (0.00% Drift)`;
             type="button"
             onClick={() => handlePromptClick(qp.prompt)}
             disabled={isThinking}
-            className="flex items-center gap-1.5 px-2.5 py-1.5 rounded-xl bg-zinc-900 border border-zinc-800 text-zinc-300 hover:text-zinc-100 hover:border-zinc-700 text-[11px] whitespace-nowrap transition-all cursor-pointer disabled:opacity-50 shrink-0"
+            className="flex items-center gap-1.5 px-2.5 py-1.5 rounded-xl bg-zinc-900 border-zinc-800 text-zinc-300 hover:text-zinc-100 hover:border-zinc-700 text-[11px] whitespace-nowrap transition-all cursor-pointer disabled:opacity-50 shrink-0"
           >
             {qp.icon}
             <span>{qp.label}</span>
@@ -288,7 +288,7 @@ const gasFeeRefundPool = 12500000.00;     // ฿12.5M THB (0.00% Drift)`;
             <div className="flex items-center gap-2 mb-1 px-1">
               <span className="text-[10px] text-zinc-500">{msg.timestamp}</span>
               {msg.badge && (
-                <span className="text-[9px] px-1.5 py-0.2 rounded bg-cyan-950/80 border border-cyan-800/60 text-cyan-300 font-bold">
+                <span className="text-[9px] px-1.5 py-0.2 rounded bg-cyan-950/80 border-cyan-800/60 text-cyan-300 font-bold">
                   {msg.badge}
                 </span>
               )}
@@ -319,7 +319,7 @@ const gasFeeRefundPool = 12500000.00;     // ฿12.5M THB (0.00% Drift)`;
 
               {/* Code Snippet Block */}
               {msg.codeSnippet && (
-                <div className="mt-2 rounded-xl bg-zinc-950 border border-zinc-800 p-2.5 relative group">
+                <div className="mt-2 rounded-xl bg-zinc-950 border-zinc-800 p-2.5 relative group">
                   <div className="flex justify-between items-center text-[10px] text-zinc-500 mb-1.5 border-b border-zinc-800/80 pb-1">
                     <span className="flex items-center gap-1 font-mono text-cyan-400">
                       <Terminal className="w-3 h-3" /> System Code Verification
@@ -352,7 +352,7 @@ const gasFeeRefundPool = 12500000.00;     // ฿12.5M THB (0.00% Drift)`;
               {msg.metadata && (
                 <div className="mt-2 grid grid-cols-3 gap-2 pt-2 border-t border-zinc-800/80 text-[10px] font-mono">
                   {Object.entries(msg.metadata).map(([k, v]) => (
-                    <div key={k} className="bg-zinc-950/80 p-1.5 rounded border border-zinc-800">
+                    <div key={k} className="bg-zinc-950/80 p-1.5 rounded border-zinc-800">
                       <span className="text-zinc-500 block truncate">{k}</span>
                       <span className="text-cyan-300 font-bold">{v}</span>
                     </div>
@@ -366,10 +366,10 @@ const gasFeeRefundPool = 12500000.00;     // ฿12.5M THB (0.00% Drift)`;
         {/* Thinking Indicator */}
         {isThinking && (
           <div className="flex items-start gap-2 animate-pulse">
-            <div className="p-2 rounded-xl bg-cyan-950 border border-cyan-800 text-cyan-400">
+            <div className="p-2 rounded-xl bg-cyan-950 border-cyan-800 text-cyan-400">
               <RefreshCw className="w-3.5 h-3.5 animate-spin" />
             </div>
-            <div className="p-3 rounded-2xl bg-zinc-900 border border-zinc-800 text-zinc-400 text-xs flex items-center gap-2">
+            <div className="p-3 rounded-2xl bg-zinc-900 border-zinc-800 text-zinc-400 text-xs flex items-center gap-2">
               <span>กำลังประมวลผลคำสั่งด้วยเอนจิน ZYRQUEN Ω∞ AI...</span>
             </div>
           </div>
@@ -387,7 +387,7 @@ const gasFeeRefundPool = 12500000.00;     // ฿12.5M THB (0.00% Drift)`;
             onChange={e => setInputText(e.target.value)}
             placeholder="พิมพ์คำถามหรือคำสั่งควบคุมระบบ (เช่น Audit HSM, Run 12-Stage Trace, ETDA...)"
             disabled={isThinking}
-            className="w-full pl-3.5 pr-10 py-2.5 rounded-xl bg-zinc-950 border border-zinc-800 text-zinc-100 placeholder-zinc-500 text-xs focus:outline-none focus:border-cyan-500 transition-all font-mono"
+            className="w-full pl-3.5 pr-10 py-2.5 rounded-xl bg-zinc-950 border-zinc-800 text-zinc-100 placeholder-zinc-500 text-xs focus:outline-none focus:border-cyan-500 transition-all font-mono"
           />
           <button
             type="submit"
