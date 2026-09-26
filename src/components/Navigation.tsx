@@ -56,6 +56,7 @@ interface NavigationProps {
   currentView: ViewType;
   onSelectView: (view: ViewType) => void;
   onOpenCertificate: () => void;
+  onOpenForensicDossier?: () => void;
   onOpenChecklist?: () => void;
   onOpenLegalSearch: () => void;
   onOpenCommandSearch?: () => void;
@@ -126,6 +127,7 @@ export const Navigation: React.FC<NavigationProps> = ({
   currentView,
   onSelectView,
   onOpenCertificate,
+  onOpenForensicDossier,
   onOpenChecklist,
   onOpenLegalSearch,
   onOpenCommandSearch,
@@ -650,6 +652,37 @@ export const Navigation: React.FC<NavigationProps> = ({
               </span>
             )}
           </div>
+
+          {/* Master Forensic Dossier Button (Exhibits จพ.๐๑-๐๗ with 1-Click PDF Export) */}
+          {onOpenForensicDossier && (
+            <button
+              onClick={() => {
+                playTone(740, 0.08);
+                onOpenForensicDossier();
+              }}
+              className="hidden lg:flex group items-center gap-1.5 px-3 py-1.5 rounded-xl bg-gradient-to-r from-purple-500/20 via-indigo-500/15 to-cyan-500/20 border border-purple-500/40 text-purple-200 hover:text-white font-mono text-xs hover:border-purple-400/60 transition-all shadow-[0_0_15px_rgba(168,85,247,0.2)] hover:shadow-[0_0_20px_rgba(168,85,247,0.35)] active:scale-95 cursor-pointer ml-1"
+              title="เปิดสำนวนพยานหลักฐานดิจิทัลสำหรับยื่นศาล (Master Forensic Dossier DOC-SOV-HSM-1010-2026-V9 พร้อม Export PDF/JSON)"
+            >
+              <Scale className="w-4 h-4 text-purple-400 group-hover:scale-110 transition-transform" />
+              <span className="font-bold tracking-wide">Dossier</span>
+              <span className="hidden xl:inline-block px-1.5 py-0.2 rounded-full bg-purple-500/25 text-[9px] text-purple-300 border border-purple-500/30">จพ.๐๑-๐๗</span>
+            </button>
+          )}
+
+          {/* PWA Mobile & Offline Hub Button */}
+          {onOpenGitHubPwa && (
+            <button
+              onClick={() => {
+                playTone(680, 0.08);
+                onOpenGitHubPwa();
+              }}
+              className="hidden xl:flex group items-center gap-1.5 px-3 py-1.5 rounded-xl bg-cyan-950/40 hover:bg-cyan-900/50 border border-cyan-500/40 text-cyan-300 hover:text-cyan-100 font-mono text-xs hover:border-cyan-400/60 transition-all shadow-sm active:scale-95 cursor-pointer ml-1"
+              title="PWA Mobile Install & GitHub Synchronization Center"
+            >
+              <Smartphone className="w-4 h-4 text-cyan-400 group-hover:scale-110 transition-transform" />
+              <span className="font-bold tracking-wide">PWA / Mobile</span>
+            </button>
+          )}
 
           {onOpenChecklist && (
             <button

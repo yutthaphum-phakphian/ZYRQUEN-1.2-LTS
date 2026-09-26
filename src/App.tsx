@@ -2409,6 +2409,7 @@ function SovereignAppContent() {
         currentView={currentView}
         onSelectView={setCurrentView}
         onOpenCertificate={() => setIsCertificateOpen(true)}
+        onOpenForensicDossier={() => setIsForensicMasterDossierOpen(true)}
         onOpenGitHubPwa={() => setIsGitHubPwaOpen(true)}
         onOpenLegalSearch={() => setIsLegalSearchOpen(true)}
         onOpenCommandSearch={() => setIsCommandSearchOpen(true)}
@@ -2480,16 +2481,45 @@ function SovereignAppContent() {
                     id="verification-gate-status"
                     type="button"
                     onClick={() => setIsGateDetailsExpanded((prev) => !prev)}
-                    className={`px-2 py-0.5 rounded text-[10px] font-bold border flex items-center gap-1 transition-all cursor-pointer ${
+                    className={`px-2 py-0.5 rounded text-[10px] font-bold border flex items-center gap-1.5 transition-all cursor-pointer ${
                       verificationGateStatus.status === 'PASSED' 
                         ? 'bg-emerald-500/10 text-emerald-300 border-emerald-500/30 hover:bg-emerald-500/20' 
                         : verificationGateStatus.status === 'BLOCKED' 
                           ? 'bg-rose-500/20 text-rose-200 border-rose-500/60 hover:bg-rose-500/30 animate-pulse shadow-[0_0_15px_rgba(244,63,94,0.45)] ring-1 ring-rose-500/50' 
                           : 'bg-cyan-500/10 text-cyan-300 border-cyan-500/30 hover:bg-cyan-500/20'
                     }`}
-                    title="Hover for summary / Click to toggle legal triggers breakdown"
+                    title={`Hover for HSM Quorum & Legal summary / Click to toggle (${activeHsmNodes}/10 Nodes Online - ${(activeHsmNodes * 10).toFixed(0)}%)`}
                   >
-                    {verificationGateStatus.status}
+                    {/* Mini SVG Circular Progress Ring on Status Pill */}
+                    <svg className="w-3.5 h-3.5 -rotate-90 shrink-0" viewBox="0 0 24 24">
+                      <circle
+                        cx="12"
+                        cy="12"
+                        r="9"
+                        className="stroke-white/20"
+                        strokeWidth="2.5"
+                        fill="transparent"
+                      />
+                      <circle
+                        cx="12"
+                        cy="12"
+                        r="9"
+                        className={`${
+                          activeHsmNodes === 10
+                            ? 'stroke-emerald-400 drop-shadow-[0_0_3px_rgba(52,211,153,0.8)]'
+                            : activeHsmNodes >= 8
+                            ? 'stroke-amber-400 drop-shadow-[0_0_3px_rgba(251,191,36,0.8)]'
+                            : 'stroke-rose-400 drop-shadow-[0_0_3px_rgba(244,63,94,0.8)]'
+                        } transition-all duration-300 ease-out`}
+                        strokeWidth="2.5"
+                        strokeDasharray={2 * Math.PI * 9}
+                        strokeDashoffset={2 * Math.PI * 9 * (1 - activeHsmNodes / 10)}
+                        strokeLinecap="round"
+                        fill="transparent"
+                      />
+                    </svg>
+                    <span>{verificationGateStatus.status}</span>
+                    <span className="text-[9px] font-mono opacity-85">({(activeHsmNodes * 10).toFixed(0)}%)</span>
                     <Info className="w-2.5 h-2.5 opacity-70" />
                   </button>
 
