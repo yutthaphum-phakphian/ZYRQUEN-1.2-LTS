@@ -1,17 +1,6 @@
 import { defineConfig } from 'vitest/config';
 import path from 'node:path';
 
-// ใช้ Safe Fallback ป้องกันกรณีหาไฟล์ sovereign.config ไม่พบ
-let maxTimeoutMs = 10000;
-try {
-  const { SOVEREIGN_CONFIG } = require('./src/config/sovereign.config');
-  if (SOVEREIGN_CONFIG?.traceReplaySLA?.maxExecutionMs) {
-    maxTimeoutMs = SOVEREIGN_CONFIG.traceReplaySLA.maxExecutionMs;
-  }
-} catch (e) {
-  // หากหาไฟล์ไม่เจอ ให้ใช้ค่าเริ่มต้น 10 วินาที เพื่อไม่ให้ Build พัง
-}
-
 export default defineConfig({
   resolve: {
     alias: {
@@ -32,9 +21,7 @@ export default defineConfig({
     mockReset: true,
     restoreMocks: true,
     clearMocks: true,
-    
-    // ตั้งค่า Timeout ตามหน่วย ms มาตรฐานของ Vitest
-    testTimeout: maxTimeoutMs,
+    testTimeout: 10000,
     hookTimeout: 10000,
     isolate: true,
     setupFiles: [],
@@ -49,7 +36,6 @@ export default defineConfig({
         'src/**/*.stories.{ts,tsx}',
         'src/**/index.ts',
       ],
-      // ลดเกณฑ์ชั่วคราวเพื่อให้ระบบ Deploy ผ่านก่อน
       lines: 50,
       functions: 50,
       branches: 50,
