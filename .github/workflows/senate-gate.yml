@@ -24,7 +24,7 @@ jobs:
       - name: 📦 Install Node & Dev Dependencies
         run: |
           if [ -f "package.json" ]; then
-            npm ci || npm install --legacy-peer-deps
+            npm ci --legacy-peer-deps || npm install --legacy-peer-deps
           else
             echo "⚠️ package.json not found in root directory. Skipping npm install."
           fi

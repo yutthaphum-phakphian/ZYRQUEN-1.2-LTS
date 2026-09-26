@@ -2488,7 +2488,21 @@ function SovereignAppContent() {
                           ? 'bg-rose-500/20 text-rose-200 border-rose-500/60 hover:bg-rose-500/30 animate-pulse shadow-[0_0_15px_rgba(244,63,94,0.45)] ring-1 ring-rose-500/50' 
                           : 'bg-cyan-500/10 text-cyan-300 border-cyan-500/30 hover:bg-cyan-500/20'
                     }`}
-                    title={`Hover for HSM Quorum & Legal summary / Click to toggle (${activeHsmNodes}/10 Nodes Online - ${(activeHsmNodes * 10).toFixed(0)}%)`}
+                    title={`10/10 REAL_HSM QUORUM STATUS: ${activeHsmNodes}/10 Nodes Online (${(activeHsmNodes * 10).toFixed(0)}%)\n\nIndividual HSM Nodes Breakdown:\n` +
+                      [
+                        'TC-01 (Alpha • Kyber-1024)',
+                        'TC-02 (Beta • Dilithium-5)',
+                        'TC-03 (Gamma • SPHINCS+)',
+                        'TC-04 (Delta • Kyber-1024)',
+                        'TC-05 (Epsilon • Dilithium-5)',
+                        'TC-06 (Zeta • SPHINCS+)',
+                        'TC-07 (Eta • Kyber-1024)',
+                        'TC-08 (Theta • Dilithium-5)',
+                        'TC-09 (Iota • SPHINCS+)',
+                        'TC-10 (Kappa • Kyber-1024)'
+                      ].map((name, idx) => `  [${idx < activeHsmNodes ? 'ONLINE 🟢' : 'OFFLINE 🔴'}] Node #${idx + 1}: ${name} - ${idx < activeHsmNodes ? '14.98 mK (Active Ratified)' : 'Simulated Fault / Cold'}`).join('\n') +
+                      `\n\nClick to toggle Verification Gate Details & Forensic Dossier.`
+                    }
                   >
                     {/* Mini SVG Circular Progress Ring on Status Pill */}
                     <svg className="w-3.5 h-3.5 -rotate-90 shrink-0" viewBox="0 0 24 24">
@@ -2651,17 +2665,18 @@ function SovereignAppContent() {
                         {(() => {
                           const totalNodes = 10;
                           const currentActiveNodes = activeHsmNodes;
-                          const radius = 20;
-                          const circumference = 2 * Math.PI * radius; // ~125.66
+                          const radius = 22;
+                          const circumference = 2 * Math.PI * radius; // ~138.23
                           const healthPercent = Math.max(0, Math.min(100, (currentActiveNodes / totalNodes) * 100));
                           const strokeDashoffset = circumference - (healthPercent / 100) * circumference;
 
+                          const strokeGradientId = `hsm-ring-grad-${currentActiveNodes}`;
                           const strokeColorClass =
                             currentActiveNodes === 10
-                              ? 'stroke-emerald-400 drop-shadow-[0_0_6px_rgba(52,211,153,0.8)]'
+                              ? 'text-emerald-400 drop-shadow-[0_0_8px_rgba(52,211,153,0.85)]'
                               : currentActiveNodes >= 8
-                              ? 'stroke-amber-400 drop-shadow-[0_0_6px_rgba(251,191,36,0.8)]'
-                              : 'stroke-rose-500 drop-shadow-[0_0_6px_rgba(244,63,94,0.8)]';
+                              ? 'text-amber-400 drop-shadow-[0_0_8px_rgba(251,191,36,0.85)]'
+                              : 'text-rose-500 drop-shadow-[0_0_8px_rgba(244,63,94,0.85)]';
 
                           const textColorClass =
                             currentActiveNodes === 10
@@ -2692,7 +2707,7 @@ function SovereignAppContent() {
                                   <Shield className="w-3.5 h-3.5 text-cyan-400" />
                                   10/10 REAL_HSM QUORUM STATUS
                                 </span>
-                                <div className={`flex items-center gap-1.5 px-2 py-0.5 rounded-full border font-bold text-[9px] shadow-sm ${badgeBgClass}`}>
+                                <div className={`flex items-center gap-1.5 px-2.5 py-1 rounded-full border font-bold text-[9px] shadow-sm ${badgeBgClass}`}>
                                   <span
                                     className={`w-1.5 h-1.5 rounded-full animate-pulse ${
                                       currentActiveNodes === 10
@@ -2707,42 +2722,66 @@ function SovereignAppContent() {
                               </div>
 
                               {/* Visual Cluster Health Dynamic Circular SVG Progress Ring & Operational Metrics */}
-                              <div className="flex items-center gap-3 p-2 rounded-lg bg-zinc-950/80 border border-emerald-500/25">
-                                {/* Circular SVG Progress Ring (Dynamically fills based on activeNodes) */}
+                              <div className="flex items-center gap-3.5 p-2.5 rounded-lg bg-zinc-950/80 border border-cyan-500/25">
+                                {/* Circular SVG Progress Ring (Dynamically fills from 0% to 100% based on activeHsmNodes) */}
                                 <div
-                                  className="relative w-12 h-12 flex-shrink-0 flex items-center justify-center cursor-pointer group/ring"
-                                  title={`Click to cycle simulated active HSM nodes (Current: ${currentActiveNodes}/10)`}
+                                  className="relative w-14 h-14 flex-shrink-0 flex items-center justify-center cursor-pointer group/ring"
+                                  title={`Dynamic 10/10 HSM Node Health Ring • Click to cycle test values (Current: ${currentActiveNodes}/10 Nodes = ${healthPercent.toFixed(0)}%)`}
                                   onClick={() => {
                                     triggerVibration('click');
-                                    setActiveHsmNodes((prev) => (prev <= 7 ? 10 : prev - 1));
+                                    setActiveHsmNodes((prev) => (prev <= 0 ? 10 : prev - 1));
                                   }}
                                 >
-                                  <svg className="w-12 h-12 -rotate-90" viewBox="0 0 48 48">
+                                  <svg className="w-14 h-14 -rotate-90" viewBox="0 0 52 52">
+                                    <defs>
+                                      <linearGradient id={strokeGradientId} x1="0%" y1="0%" x2="100%" y2="100%">
+                                        {currentActiveNodes === 10 ? (
+                                          <>
+                                            <stop offset="0%" stopColor="#10b981" />
+                                            <stop offset="100%" stopColor="#34d399" />
+                                          </>
+                                        ) : currentActiveNodes >= 8 ? (
+                                          <>
+                                            <stop offset="0%" stopColor="#f59e0b" />
+                                            <stop offset="100%" stopColor="#fbbf24" />
+                                          </>
+                                        ) : (
+                                          <>
+                                            <stop offset="0%" stopColor="#ef4444" />
+                                            <stop offset="100%" stopColor="#f43f5e" />
+                                          </>
+                                        )}
+                                      </linearGradient>
+                                    </defs>
+                                    {/* Background Track */}
                                     <circle
-                                      cx="24"
-                                      cy="24"
+                                      cx="26"
+                                      cy="26"
                                       r={radius}
-                                      className="stroke-zinc-800"
-                                      strokeWidth="3.5"
+                                      className="stroke-zinc-800/90"
+                                      strokeWidth="4"
                                       fill="transparent"
                                     />
+                                    {/* Dynamic Active Progress Ring */}
                                     <circle
-                                      cx="24"
-                                      cy="24"
+                                      cx="26"
+                                      cy="26"
                                       r={radius}
+                                      stroke={`url(#${strokeGradientId})`}
                                       className={`${strokeColorClass} transition-all duration-500 ease-out`}
-                                      strokeWidth="3.5"
+                                      strokeWidth="4"
                                       strokeDasharray={circumference}
                                       strokeDashoffset={strokeDashoffset}
                                       strokeLinecap="round"
                                       fill="transparent"
                                     />
                                   </svg>
+                                  {/* Center Percentage & Health Label */}
                                   <div className="absolute inset-0 flex flex-col items-center justify-center font-mono select-none pointer-events-none">
-                                    <span className={`text-[10px] font-black leading-none ${textColorClass}`}>
+                                    <span className={`text-[11px] font-black leading-none ${textColorClass}`}>
                                       {healthPercent.toFixed(0)}%
                                     </span>
-                                    <span className="text-[7px] text-zinc-400 uppercase font-medium">HEALTH</span>
+                                    <span className="text-[6.5px] text-zinc-400 uppercase font-semibold tracking-wider mt-0.5">HSM</span>
                                   </div>
                                 </div>
 
@@ -2781,17 +2820,19 @@ function SovereignAppContent() {
                                 </div>
                               </div>
 
-                              {/* HSM Cluster Health Visual Array (10 Nodes) */}
-                              <div className="space-y-1.5">
+                              {/* HSM Cluster Health Visual Array & Individual Node Breakdown (10 Nodes) */}
+                              <div className="space-y-2">
                                 <div className="flex items-center justify-between text-[9px] font-mono text-zinc-400">
                                   <span className="flex items-center gap-1 text-cyan-300 font-semibold">
                                     <Cpu className="w-3 h-3 text-cyan-400" />
-                                    HSM ENCLAVE NODES HEALTH (TC-01..TC-10)
+                                    HSM ENCLAVE NODES BREAKDOWN (TC-01..TC-10)
                                   </span>
                                   <span className={currentActiveNodes === 10 ? 'text-emerald-400 font-medium' : 'text-amber-400 font-medium'}>
                                     {currentActiveNodes}/10 ONLINE • 0 TAMPER DRIFT
                                   </span>
                                 </div>
+
+                                {/* Compact 10-Node Grid */}
                                 <div className="grid grid-cols-5 sm:grid-cols-10 gap-1">
                                   {[
                                     { id: 'TC-01', name: 'Alpha', algo: 'Kyber-1024', temp: '14.98 mK', lat: '0.28ms' },
@@ -2843,9 +2884,60 @@ function SovereignAppContent() {
                                     );
                                   })}
                                 </div>
+
+                                {/* Individual HSM Nodes Breakdown Detailed List */}
+                                <div className="p-2 rounded-lg bg-zinc-950/90 border border-zinc-800 text-[9px] font-mono space-y-1 max-h-32 overflow-y-auto pr-1">
+                                  <div className="text-[8px] text-zinc-400 uppercase font-semibold pb-1 border-b border-zinc-800/80 flex items-center justify-between">
+                                    <span>Individual Node Roster & PQC Spec</span>
+                                    <span>State / Status</span>
+                                  </div>
+                                  {[
+                                    { id: 'TC-01', name: 'Alpha', algo: 'FIPS 203 ML-KEM-1024', role: 'Key Encapsulation' },
+                                    { id: 'TC-02', name: 'Beta', algo: 'FIPS 204 ML-DSA-87', role: 'Dilithium-5 Signature' },
+                                    { id: 'TC-03', name: 'Gamma', algo: 'FIPS 205 SLH-DSA', role: 'SPHINCS+ Stateless Hash' },
+                                    { id: 'TC-04', name: 'Delta', algo: 'FIPS 203 ML-KEM-1024', role: 'Key Encapsulation' },
+                                    { id: 'TC-05', name: 'Epsilon', algo: 'FIPS 204 ML-DSA-87', role: 'Dilithium-5 Signature' },
+                                    { id: 'TC-06', name: 'Zeta', algo: 'FIPS 205 SLH-DSA', role: 'SPHINCS+ Stateless Hash' },
+                                    { id: 'TC-07', name: 'Eta', algo: 'FIPS 203 ML-KEM-1024', role: 'Key Encapsulation' },
+                                    { id: 'TC-08', name: 'Theta', algo: 'FIPS 204 ML-DSA-87', role: 'Dilithium-5 Signature' },
+                                    { id: 'TC-09', name: 'Iota', algo: 'FIPS 205 SLH-DSA', role: 'SPHINCS+ Stateless Hash' },
+                                    { id: 'TC-10', name: 'Kappa', algo: 'FIPS 203 ML-KEM-1024', role: 'Key Encapsulation' },
+                                  ].map((node, index) => {
+                                    const isOnline = index < currentActiveNodes;
+                                    return (
+                                      <div
+                                        key={node.id}
+                                        className={`flex items-center justify-between py-0.5 px-1.5 rounded transition-colors ${
+                                          isOnline ? 'bg-emerald-950/20 text-zinc-300' : 'bg-rose-950/20 text-zinc-500'
+                                        }`}
+                                      >
+                                        <div className="flex items-center gap-1.5 min-w-0">
+                                          <span
+                                            className={`w-1.5 h-1.5 rounded-full shrink-0 ${
+                                              isOnline ? 'bg-emerald-400 shadow-[0_0_4px_rgba(52,211,153,0.8)]' : 'bg-rose-500'
+                                            }`}
+                                          />
+                                          <span className="font-bold text-white shrink-0">{node.id}</span>
+                                          <span className="text-zinc-400 truncate">({node.name} • {node.algo})</span>
+                                        </div>
+                                        <div className="flex items-center gap-1.5 shrink-0">
+                                          <span
+                                            className={`px-1.5 py-0.2 rounded font-bold text-[8px] ${
+                                              isOnline
+                                                ? 'bg-emerald-500/20 text-emerald-300 border border-emerald-500/40'
+                                                : 'bg-rose-500/20 text-rose-300 border border-rose-500/40'
+                                            }`}
+                                          >
+                                            {isOnline ? 'ONLINE 🟢' : 'OFFLINE 🔴'}
+                                          </span>
+                                        </div>
+                                      </div>
+                                    );
+                                  })}
+                                </div>
                               </div>
 
-                              {/* Expandable List of Last 3 Status Changes for Each of the 10 HSM Nodes */}
+                              {/* Time-Stamped Log Table of the Last 3 State Changes for Each of the 10 HSM Nodes */}
                               <div className="pt-1">
                                 <button
                                   type="button"
@@ -2857,7 +2949,7 @@ function SovereignAppContent() {
                                 >
                                   <span className="flex items-center gap-1.5 text-cyan-300 font-bold">
                                     <History className="w-3.5 h-3.5 text-cyan-400" />
-                                    <span>HSM NODES STATUS HISTORY (LAST 3 EVENTS / NODE)</span>
+                                    <span>HSM STATE CHANGES LOG TABLE (LAST 3 EVENTS / NODE)</span>
                                   </span>
                                   <span className="flex items-center gap-1.5 text-[9px]">
                                     <span
@@ -2867,7 +2959,7 @@ function SovereignAppContent() {
                                           : 'bg-amber-500/15 border-amber-500/40 text-amber-300'
                                       }`}
                                     >
-                                      {currentActiveNodes}/10 ACTIVE
+                                      30 LOG ENTRIES • {currentActiveNodes}/10 ACTIVE
                                     </span>
                                     {isHsmHistoryExpanded ? (
                                       <ChevronUp className="w-3.5 h-3.5 text-cyan-400" />
@@ -2882,218 +2974,218 @@ function SovereignAppContent() {
                                     initial={{ opacity: 0, height: 0 }}
                                     animate={{ opacity: 1, height: 'auto' }}
                                     exit={{ opacity: 0, height: 0 }}
-                                    className="mt-2 space-y-2 max-h-56 overflow-y-auto pr-1 font-mono text-[9px]"
+                                    className="mt-2 space-y-2 max-h-64 overflow-y-auto pr-1 font-mono text-[9px]"
                                   >
-                                    {[
-                                      {
-                                        id: 'TC-01',
-                                        name: 'Alpha',
-                                        algo: 'Kyber-1024',
-                                        temp: '14.98 mK',
-                                        events: [
-                                          { text: 'FIPS 203 ML-KEM-1024 Key Encapsulation Verified', time: '1m ago', code: 'PASS' },
-                                          { text: 'Cryo-Bus Thermal Lock @ 14.98 mK Stabilized', time: '4m ago', code: 'PASS' },
-                                          { text: 'Genesis #849202 Quorum Signature Ratified', time: '8m ago', code: 'RATIFIED' },
-                                        ],
-                                      },
-                                      {
-                                        id: 'TC-02',
-                                        name: 'Beta',
-                                        algo: 'Dilithium-5',
-                                        temp: '14.97 mK',
-                                        events: [
-                                          { text: 'FIPS 204 ML-DSA-87 Lattice Signature Anchor', time: '2m ago', code: 'PASS' },
-                                          { text: 'Memory Bus Parity Check (0 Tamper Drift)', time: '5m ago', code: 'PASS' },
-                                          { text: 'ETDA Section 26 Sole Custody Verified', time: '9m ago', code: 'RATIFIED' },
-                                        ],
-                                      },
-                                      {
-                                        id: 'TC-03',
-                                        name: 'Gamma',
-                                        algo: 'SPHINCS+',
-                                        temp: '14.99 mK',
-                                        events: [
-                                          { text: 'FIPS 205 SLH-DSA Hash-Based Signature Ratified', time: '1m ago', code: 'PASS' },
-                                          { text: 'Chamber 02 Buffer Gamma Quarantine Verified', time: '6m ago', code: 'PASS' },
-                                          { text: 'Canonical Merkle Root 0x909ab8... Reconciled', time: '11m ago', code: 'RATIFIED' },
-                                        ],
-                                      },
-                                      {
-                                        id: 'TC-04',
-                                        name: 'Delta',
-                                        algo: 'Kyber-1024',
-                                        temp: '14.98 mK',
-                                        events: [
-                                          { text: 'Key Encapsulation Ring-04 Reseed Complete', time: '3m ago', code: 'PASS' },
-                                          { text: 'Sub-Kelvin Cryo-Loop Micro-Jitter < 0.015ms', time: '7m ago', code: 'PASS' },
-                                          { text: 'WORM Immutable Audit Seal #14902 Stamped', time: '12m ago', code: 'RATIFIED' },
-                                        ],
-                                      },
-                                      {
-                                        id: 'TC-05',
-                                        name: 'Epsilon',
-                                        algo: 'Dilithium-5',
-                                        temp: '14.96 mK',
-                                        events: [
-                                          { text: 'Non-Repudiation Signature Bound to Sovereign ID', time: '2m ago', code: 'PASS' },
-                                          { text: 'Active Tamper Response Zeroization Ready (<1.2µs)', time: '8m ago', code: 'PASS' },
-                                          { text: 'PDPA Sec 37 zk-Proof Enclave Cleared', time: '14m ago', code: 'RATIFIED' },
-                                        ],
-                                      },
-                                      {
-                                        id: 'TC-06',
-                                        name: 'Zeta',
-                                        algo: 'SPHINCS+',
-                                        temp: '14.98 mK',
-                                        events: [
-                                          { text: 'Stateless Hash Signature Tree Verified', time: '1m ago', code: 'PASS' },
-                                          { text: 'Fail-Closed Thermal Cutoff Armed (< 85.0°C)', time: '6m ago', code: 'PASS' },
-                                          { text: 'Deca-Key Quorum Consensus Hash Recorded', time: '15m ago', code: 'RATIFIED' },
-                                        ],
-                                      },
-                                      {
-                                        id: 'TC-07',
-                                        name: 'Eta',
-                                        algo: 'Kyber-1024',
-                                        temp: '15.01 mK',
-                                        events: [
-                                          { text: 'Quantum Lattice Key Synchronization Healthy', time: '3m ago', code: 'PASS' },
-                                          { text: 'Cryo-Bus Variance Micro-Compensated', time: '9m ago', code: 'PASS' },
-                                          { text: 'Court Evidence Annex จพ.๐๓ Certified', time: '16m ago', code: 'RATIFIED' },
-                                        ],
-                                      },
-                                      {
-                                        id: 'TC-08',
-                                        name: 'Theta',
-                                        algo: 'Dilithium-5',
-                                        temp: '14.98 mK',
-                                        events: [
-                                          { text: 'Dual-Sig Matrix Attestation Ratified', time: '2m ago', code: 'PASS' },
-                                          { text: 'Physical Hardware Entropy Rate 99.992%', time: '10m ago', code: 'PASS' },
-                                          { text: 'ISO/IEC 27037 Custody Stamp Appended', time: '18m ago', code: 'RATIFIED' },
-                                        ],
-                                      },
-                                      {
-                                        id: 'TC-09',
-                                        name: 'Iota',
-                                        algo: 'SPHINCS+',
-                                        temp: '14.97 mK',
-                                        events: [
-                                          { text: 'Stateless Hash Primary Validator Confirmed', time: '4m ago', code: 'PASS' },
-                                          { text: 'Zeroization Relay Path Ping: 0.28ms', time: '11m ago', code: 'PASS' },
-                                          { text: 'Replay Execution SLA Verified (35.8ms < 142ms)', time: '20m ago', code: 'RATIFIED' },
-                                        ],
-                                      },
-                                      {
-                                        id: 'TC-10',
-                                        name: 'Kappa',
-                                        algo: 'Kyber-1024',
-                                        temp: '14.99 mK',
-                                        events: [
-                                          { text: 'PQC Category 5 Cryptographic Enclave Ratified', time: '1m ago', code: 'PASS' },
-                                          { text: 'FIPS 140-3 Level 4 Boundary Lock Solid', time: '12m ago', code: 'PASS' },
-                                          { text: 'Final Deca-Custodian Consensus Stamped', time: '22m ago', code: 'RATIFIED' },
-                                        ],
-                                      },
-                                    ].map((nodeItem, nodeIdx) => {
-                                      const isNodeOnline = nodeIdx < currentActiveNodes;
-                                      const nodeBorderColor = isNodeOnline
-                                        ? 'border-emerald-500/30 bg-emerald-950/20'
-                                        : 'border-rose-500/40 bg-rose-950/20';
+                                    {/* Structured Time-Stamped Log Table Header */}
+                                    <div className="rounded-lg border border-zinc-800 bg-zinc-950/95 overflow-hidden shadow-inner">
+                                      <div className="grid grid-cols-12 gap-1 px-2.5 py-1.5 bg-zinc-900/90 border-b border-zinc-800 text-[8px] font-bold text-zinc-400 uppercase tracking-wider select-none">
+                                        <div className="col-span-2 text-left">TIMESTAMP</div>
+                                        <div className="col-span-3 text-left">NODE ID & ALGO</div>
+                                        <div className="col-span-5 text-left">STATE TRANSITION / EVENT</div>
+                                        <div className="col-span-2 text-right">STATUS</div>
+                                      </div>
 
-                                      const displayEvents = isNodeOnline
-                                        ? nodeItem.events
-                                        : [
-                                            { text: 'Simulated Hardware Standby / Disconnect', time: 'Just now', code: 'OFFLINE' },
-                                            nodeItem.events[0],
-                                            nodeItem.events[1],
-                                          ];
+                                      <div className="divide-y divide-zinc-800/60 max-h-56 overflow-y-auto">
+                                        {[
+                                          {
+                                            id: 'TC-01',
+                                            name: 'Alpha',
+                                            algo: 'Kyber-1024',
+                                            temp: '14.98 mK',
+                                            events: [
+                                              { text: 'FIPS 203 ML-KEM-1024 Key Encapsulation Verified', time: '05:58:20 UTC', code: 'PASS' },
+                                              { text: 'Cryo-Bus Thermal Lock @ 14.98 mK Stabilized', time: '05:55:12 UTC', code: 'PASS' },
+                                              { text: 'Genesis #849202 Quorum Signature Ratified', time: '05:51:00 UTC', code: 'RATIFIED' },
+                                            ],
+                                          },
+                                          {
+                                            id: 'TC-02',
+                                            name: 'Beta',
+                                            algo: 'Dilithium-5',
+                                            temp: '14.97 mK',
+                                            events: [
+                                              { text: 'FIPS 204 ML-DSA-87 Lattice Signature Anchor', time: '05:57:45 UTC', code: 'PASS' },
+                                              { text: 'Memory Bus Parity Check (0 Tamper Drift)', time: '05:54:30 UTC', code: 'PASS' },
+                                              { text: 'ETDA Section 26 Sole Custody Verified', time: '05:50:18 UTC', code: 'RATIFIED' },
+                                            ],
+                                          },
+                                          {
+                                            id: 'TC-03',
+                                            name: 'Gamma',
+                                            algo: 'SPHINCS+',
+                                            temp: '14.99 mK',
+                                            events: [
+                                              { text: 'FIPS 205 SLH-DSA Hash-Based Signature Ratified', time: '05:58:05 UTC', code: 'PASS' },
+                                              { text: 'Chamber 02 Buffer Gamma Quarantine Verified', time: '05:53:22 UTC', code: 'PASS' },
+                                              { text: 'Canonical Merkle Root 0x909ab8... Reconciled', time: '05:48:55 UTC', code: 'RATIFIED' },
+                                            ],
+                                          },
+                                          {
+                                            id: 'TC-04',
+                                            name: 'Delta',
+                                            algo: 'Kyber-1024',
+                                            temp: '14.98 mK',
+                                            events: [
+                                              { text: 'Key Encapsulation Ring-04 Reseed Complete', time: '05:56:40 UTC', code: 'PASS' },
+                                              { text: 'Sub-Kelvin Cryo-Loop Micro-Jitter < 0.015ms', time: '05:52:10 UTC', code: 'PASS' },
+                                              { text: 'WORM Immutable Audit Seal #14902 Stamped', time: '05:47:30 UTC', code: 'RATIFIED' },
+                                            ],
+                                          },
+                                          {
+                                            id: 'TC-05',
+                                            name: 'Epsilon',
+                                            algo: 'Dilithium-5',
+                                            temp: '14.96 mK',
+                                            events: [
+                                              { text: 'Non-Repudiation Signature Bound to Sovereign ID', time: '05:57:12 UTC', code: 'PASS' },
+                                              { text: 'Active Tamper Response Zeroization Ready (<1.2µs)', time: '05:51:44 UTC', code: 'PASS' },
+                                              { text: 'PDPA Sec 37 zk-Proof Enclave Cleared', time: '05:45:19 UTC', code: 'RATIFIED' },
+                                            ],
+                                          },
+                                          {
+                                            id: 'TC-06',
+                                            name: 'Zeta',
+                                            algo: 'SPHINCS+',
+                                            temp: '14.98 mK',
+                                            events: [
+                                              { text: 'Stateless Hash Signature Tree Verified', time: '05:58:32 UTC', code: 'PASS' },
+                                              { text: 'Fail-Closed Thermal Cutoff Armed (< 85.0°C)', time: '05:53:50 UTC', code: 'PASS' },
+                                              { text: 'Deca-Key Quorum Consensus Hash Recorded', time: '05:44:02 UTC', code: 'RATIFIED' },
+                                            ],
+                                          },
+                                          {
+                                            id: 'TC-07',
+                                            name: 'Eta',
+                                            algo: 'Kyber-1024',
+                                            temp: '15.01 mK',
+                                            events: [
+                                              { text: 'Quantum Lattice Key Synchronization Healthy', time: '05:56:15 UTC', code: 'PASS' },
+                                              { text: 'Cryo-Bus Variance Micro-Compensated', time: '05:50:28 UTC', code: 'PASS' },
+                                              { text: 'Court Evidence Annex จพ.๐๓ Certified', time: '05:43:10 UTC', code: 'RATIFIED' },
+                                            ],
+                                          },
+                                          {
+                                            id: 'TC-08',
+                                            name: 'Theta',
+                                            algo: 'Dilithium-5',
+                                            temp: '14.98 mK',
+                                            events: [
+                                              { text: 'Dual-Sig Matrix Attestation Ratified', time: '05:57:50 UTC', code: 'PASS' },
+                                              { text: 'Physical Hardware Entropy Rate 99.992%', time: '05:49:15 UTC', code: 'PASS' },
+                                              { text: 'ISO/IEC 27037 Custody Stamp Appended', time: '05:41:40 UTC', code: 'RATIFIED' },
+                                            ],
+                                          },
+                                          {
+                                            id: 'TC-09',
+                                            name: 'Iota',
+                                            algo: 'SPHINCS+',
+                                            temp: '14.97 mK',
+                                            events: [
+                                              { text: 'Stateless Hash Primary Validator Confirmed', time: '05:55:00 UTC', code: 'PASS' },
+                                              { text: 'Zeroization Relay Path Ping: 0.28ms', time: '05:48:05 UTC', code: 'PASS' },
+                                              { text: 'Replay Execution SLA Verified (35.8ms < 142ms)', time: '05:39:20 UTC', code: 'RATIFIED' },
+                                            ],
+                                          },
+                                          {
+                                            id: 'TC-10',
+                                            name: 'Kappa',
+                                            algo: 'Kyber-1024',
+                                            temp: '14.99 mK',
+                                            events: [
+                                              { text: 'PQC Category 5 Cryptographic Enclave Ratified', time: '05:58:40 UTC', code: 'PASS' },
+                                              { text: 'FIPS 140-3 Level 4 Boundary Lock Solid', time: '05:47:11 UTC', code: 'PASS' },
+                                              { text: 'Final Deca-Custodian Consensus Stamped', time: '05:37:45 UTC', code: 'RATIFIED' },
+                                            ],
+                                          },
+                                        ].map((nodeItem, nodeIdx) => {
+                                          const isNodeOnline = nodeIdx < currentActiveNodes;
+                                          const displayEvents = isNodeOnline
+                                            ? nodeItem.events
+                                            : [
+                                                { text: 'Simulated Hardware Standby / Cold Disconnect', time: '05:59:01 UTC', code: 'OFFLINE' },
+                                                nodeItem.events[0],
+                                                nodeItem.events[1],
+                                              ];
 
-                                      return (
-                                        <div
-                                          key={nodeItem.id}
-                                          className={`p-2 rounded-lg border ${nodeBorderColor} transition-all`}
-                                        >
-                                          {/* Node Summary Header */}
-                                          <div className="flex items-center justify-between pb-1 mb-1 border-b border-white/5">
-                                            <div className="flex items-center gap-1.5">
-                                              <span
-                                                className={`w-1.5 h-1.5 rounded-full ${
-                                                  isNodeOnline
-                                                    ? 'bg-emerald-400 animate-pulse shadow-[0_0_6px_rgba(52,211,153,0.9)]'
-                                                    : 'bg-rose-500 shadow-[0_0_6px_rgba(244,63,94,0.9)]'
-                                                }`}
-                                              />
-                                              <span className="font-bold text-white">{nodeItem.id}: {nodeItem.name}</span>
-                                              <span className="text-zinc-400 text-[8px]">({nodeItem.algo})</span>
-                                            </div>
-                                            <div className="flex items-center gap-1.5">
-                                              <span className="text-zinc-400 text-[8px]">{nodeItem.temp}</span>
-                                              <span
-                                                className={`px-1.5 py-0.2 rounded text-[8px] font-bold ${
-                                                  isNodeOnline
-                                                    ? 'bg-emerald-500/20 text-emerald-300 border border-emerald-500/40'
-                                                    : 'bg-rose-500/20 text-rose-300 border border-rose-500/40'
-                                                }`}
-                                              >
-                                                {isNodeOnline ? 'ONLINE' : 'STANDBY'}
-                                              </span>
-                                            </div>
-                                          </div>
-
-                                          {/* Last 3 Status Changes Timeline */}
-                                          <div className="space-y-1 pl-1">
-                                            {displayEvents.map((evt, evtIdx) => (
-                                              <div
-                                                key={evtIdx}
-                                                className="flex items-center justify-between text-[8px] gap-1"
-                                              >
-                                                <div className="flex items-center gap-1.5 truncate">
-                                                  <span
-                                                    className={`w-1 h-1 rounded-full ${
-                                                      evt.code === 'OFFLINE'
-                                                        ? 'bg-rose-400'
-                                                        : evtIdx === 0
-                                                        ? 'bg-emerald-400'
-                                                        : 'bg-cyan-400/70'
-                                                    }`}
-                                                  />
-                                                  <span
-                                                    className={`truncate ${
-                                                      evt.code === 'OFFLINE'
-                                                        ? 'text-rose-300 font-semibold'
-                                                        : evtIdx === 0
-                                                        ? 'text-zinc-200 font-medium'
-                                                        : 'text-zinc-400'
+                                          return (
+                                            <React.Fragment key={nodeItem.id}>
+                                              {displayEvents.map((evt, evtIdx) => {
+                                                const isFirstOfNode = evtIdx === 0;
+                                                return (
+                                                  <div
+                                                    key={`${nodeItem.id}-${evtIdx}`}
+                                                    className={`grid grid-cols-12 gap-1 px-2.5 py-1 items-center text-[8px] transition-colors ${
+                                                      !isNodeOnline
+                                                        ? 'bg-rose-950/15 text-rose-300/80 hover:bg-rose-950/25'
+                                                        : evtIdx % 2 === 0
+                                                        ? 'bg-zinc-950/40 text-zinc-300 hover:bg-zinc-800/40'
+                                                        : 'bg-zinc-900/20 text-zinc-300 hover:bg-zinc-800/40'
                                                     }`}
                                                   >
-                                                    {evt.text}
-                                                  </span>
-                                                </div>
-                                                <div className="flex items-center gap-1 shrink-0">
-                                                  <span className="text-zinc-500 text-[7px]">{evt.time}</span>
-                                                  <span
-                                                    className={`px-1 py-0.2 rounded text-[7px] font-mono ${
-                                                      evt.code === 'OFFLINE'
-                                                        ? 'bg-rose-500/25 text-rose-300 border border-rose-500/40 font-bold'
-                                                        : evt.code === 'RATIFIED'
-                                                        ? 'bg-cyan-500/20 text-cyan-300 border border-cyan-500/30'
-                                                        : 'bg-emerald-500/20 text-emerald-300 border border-emerald-500/30'
-                                                    }`}
-                                                  >
-                                                    {evt.code}
-                                                  </span>
-                                                </div>
-                                              </div>
-                                            ))}
-                                          </div>
-                                        </div>
-                                      );
-                                    })}
+                                                    {/* Timestamp */}
+                                                    <div className="col-span-2 text-zinc-400 font-mono text-[7.5px] whitespace-nowrap">
+                                                      {evt.time}
+                                                    </div>
+
+                                                    {/* Node ID & Algo */}
+                                                    <div className="col-span-3 flex items-center gap-1 min-w-0">
+                                                      <span
+                                                        className={`w-1.5 h-1.5 rounded-full shrink-0 ${
+                                                          isNodeOnline
+                                                            ? 'bg-emerald-400 shadow-[0_0_4px_rgba(52,211,153,0.8)]'
+                                                            : 'bg-rose-500'
+                                                        }`}
+                                                      />
+                                                      <span className="font-bold text-white shrink-0">{nodeItem.id}</span>
+                                                      <span className="text-zinc-500 text-[7px] truncate hidden sm:inline">
+                                                        {nodeItem.name}
+                                                      </span>
+                                                      <span className="text-cyan-400/80 text-[7px] truncate">
+                                                        ({nodeItem.algo})
+                                                      </span>
+                                                    </div>
+
+                                                    {/* State Transition / Event Description */}
+                                                    <div className="col-span-5 flex items-center gap-1 min-w-0">
+                                                      <span
+                                                        className={`truncate ${
+                                                          evt.code === 'OFFLINE'
+                                                            ? 'text-rose-300 font-semibold'
+                                                            : isFirstOfNode
+                                                            ? 'text-zinc-100 font-medium'
+                                                            : 'text-zinc-400'
+                                                        }`}
+                                                        title={evt.text}
+                                                      >
+                                                        {evt.text}
+                                                      </span>
+                                                    </div>
+
+                                                    {/* Status Pill */}
+                                                    <div className="col-span-2 flex justify-end">
+                                                      <span
+                                                        className={`px-1.5 py-0.2 rounded text-[7px] font-mono font-bold tracking-tight ${
+                                                          evt.code === 'OFFLINE'
+                                                            ? 'bg-rose-500/25 text-rose-300 border border-rose-500/40'
+                                                            : evt.code === 'RATIFIED'
+                                                            ? 'bg-cyan-500/20 text-cyan-300 border border-cyan-500/30'
+                                                            : 'bg-emerald-500/20 text-emerald-300 border border-emerald-500/30'
+                                                        }`}
+                                                      >
+                                                        {evt.code}
+                                                      </span>
+                                                    </div>
+                                                  </div>
+                                                );
+                                              })}
+                                            </React.Fragment>
+                                          );
+                                        })}
+                                      </div>
+                                    </div>
                                   </motion.div>
                                 )}
                               </div>
-
                               {/* Cluster Health Metrics Grid */}
                               <div className="grid grid-cols-2 gap-1.5 font-mono text-[10px]">
                                 <div className="p-1.5 rounded-lg bg-zinc-900/70 border border-zinc-800 flex items-center justify-between">
