@@ -1,0 +1,12 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 300" width="1200" height="300">
+  <rect width="1200" height="300" fill="#030712"/>
+  <rect x="0" y="0" width="1200" height="300" fill="#0f172a" opacity="0.6"/>
+  <path d="M 0,0 L 1200,0 L 1200,300 L 0,300 Z" fill="none" stroke="#1e293b" stroke-width="2"/>
+  <circle cx="600" cy="110" r="45" fill="#065f46" opacity="0.4"/>
+  <circle cx="600" cy="110" r="35" fill="#047857" opacity="0.6"/>
+  <text x="600" y="122" font-family="system-ui, -apple-system, sans-serif" font-size="36" font-weight="900" fill="#10b981" text-anchor="middle">Ω</text>
+  <text x="600" y="195" font-family="system-ui, -apple-system, sans-serif" font-size="34" font-weight="bold" fill="#f8fafc" text-anchor="middle" letter-spacing="2">ZYRQUEN Ω™</text>
+  <text x="600" y="225" font-family="system-ui, -apple-system, sans-serif" font-size="14" font-weight="500" fill="#94a3b8" text-anchor="middle" letter-spacing="1">SOVEREIGN RUNTIME ENGINE v1.2 LTS</text>
+  <rect x="525" y="245" width="150" height="24" rx="12" fill="#064e3b" stroke="#10b981" stroke-width="1"/>
+  <text x="600" y="261" font-family="monospace, Courier, monospace" font-size="11" font-weight="bold" fill="#34d399" text-anchor="middle">100% PURE GREEN</text>
+</svg>

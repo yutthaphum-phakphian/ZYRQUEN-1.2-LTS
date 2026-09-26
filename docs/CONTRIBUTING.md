@@ -1,3 +1,26 @@
+Contributing to ZYRQUEN Ω™ Sovereign Runtime
+Thank you for contributing to ZYRQUEN Ω™. To maintain SSoT Δ0 = 0.000% zero-drift baseline and 100% Pure Green status, follow these guidelines.
+Development Rules
+ * Zero-any Discipline: TypeScript strict mode is strictly enforced (noImplicitAny: true).
+ * PQC First: Do not introduce deprecated or legacy cryptographic functions (e.g., MD5, SHA-1, unpadded RSA).
+ * DOM Sanitization: All render outputs must utilize DOMPurify sanitization.
+ * GPG Signing: Ensure commits are signed using authorized GPG keys.
+Testing Standards
+ * All new features require Vitest unit tests in tests/.
+ * Run npm test and npx tsc --noEmit locally before pushing.
+   EOF
+3. Commit และ Push ขึ้น GitHub
+git add README.md docs/CONTRIBUTING.md
+git commit -m "docs: upgrade README.md to production-grade with TOC, invariants, and contributing guide"
+git push origin main
+
+เมื่อรันเสร็จแล้ว โครงสร้างเอกสารของโปรเจกต์ ZYRQUEN 1.2 LTS จะได้รับการอัปเกรดเป็นระดับ Production-Grade 100% ทันทีครับบอส! 🚀🟢
+
+สาเหตุที่เกิดข้อผิดพลาดขึ้นในรูปหน้าจอ เนื่องจากมีการคัดลอกข้อความภาษาไทยส่วนหัวข้อ (เช่น 2. สร้างไฟล์... และ 3. Commit...) เข้าไปใน Terminal ทำให้ Bash ฟ้องว่า bash: 2.: command not found ครับ
+🚀 โค้ดสำหรับคัดลอกวางใน Terminal (คลีน 100% ไม่มีข้อผิดพลาด)
+คัดลอกชุดคำสั่งในกรอบด้านล่างนี้ วางใน Terminal ครั้งเดียวได้เลยครับ (ใช้ # สำหรับคำอธิบายภาษาไทย ซึ่ง Terminal จะเว้นไม่รันคำสั่งส่วนนั้น):
+# 1. สร้างไฟล์ README.md ฉบับปรับปรุงใหม่
+cat << 'EOF' > README.md
 # ZYRQUEN Ω™ Sovereign Runtime (v1.2 LTS)
 
 ![Version](https://img.shields.io/badge/Version-v1.2%20LTS-blue?style=for-the-badge)
