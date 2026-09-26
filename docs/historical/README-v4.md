@@ -88,7 +88,7 @@
 
 1. **Clone & Install Dependencies:**
    ```bash
-   git clone https://github.com/yutthaphum-phakphian/ZYRQUEN-1.2-LTS.git
+   git clone https://github.com/yuththaphum-phakphian/ZYRQUEN-1.2-LTS.git
    cd ZYRQUEN-1.2-LTS
    npm install
    ```

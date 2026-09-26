@@ -54,7 +54,7 @@ export const ManifestoCard: React.FC<ManifestoCardProps> = ({ onOpenCertificate 
     canonicalBlock: SSOT.canonicalBlockHeight || SYSTEM_METADATA.sealedBlock || 849202,
     merkleRoot: SSOT.merkleRoot || SYSTEM_METADATA.merkleRoot || '909ab814479844d8a14816bed34cdbb07528e18501da86fc4691763a43fa4c68',
     certificateId: 'ZQ-GOLD-DEP-849202-3908',
-    liveUrl: typeof window !== 'undefined' ? window.location.origin : 'https://github.com/yutthaphum-phakphian/ZYRQUEN-1.2-LTS',
+    liveUrl: typeof window !== 'undefined' ? window.location.origin : 'https://github.com/yuththaphum-phakphian/ZYRQUEN-1.2-LTS',
     engine: 'v4.16',
     npmVersion: 'v4.16.0',
     canonicalSeals: SSOT.canonicalSealsCount || SYSTEM_METADATA.canonicalSeals || 14902,

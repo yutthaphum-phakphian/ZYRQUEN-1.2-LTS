@@ -8,7 +8,7 @@ export interface GitHubCommitInfo {
   status: 'LIVE' | 'CACHED_FALLBACK';
 }
 
-const REPO_PATH = 'yutthaphum-phakphian/ZYRQUEN-1.2-LTS';
+const REPO_PATH = 'yuththaphum-phakphian/ZYRQUEN-1.2-LTS';
 const REPO_URL = `https://github.com/${REPO_PATH}`;
 const GITHUB_API_ENDPOINT = `https://api.github.com/repos/${REPO_PATH}/commits?per_page=1`;
 

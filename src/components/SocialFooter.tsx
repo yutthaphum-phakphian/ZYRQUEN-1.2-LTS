@@ -1,7 +1,7 @@
 import React from 'react';
 import { Github, ExternalLink } from 'lucide-react';
 
-const GITHUB_REPO_URL = 'https://github.com/yutthaphum-phakphian/ZYRQUEN-1.2-LTS';
+const GITHUB_REPO_URL = 'https://github.com/yuththaphum-phakphian/ZYRQUEN-1.2-LTS';
 
 export const SocialFooter: React.FC = () => {
   return (

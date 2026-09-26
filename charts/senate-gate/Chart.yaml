@@ -5,10 +5,10 @@ type: application
 version: 5.0.1
 appVersion: "5.0.0-LTS"
 kubeVersion: ">= 1.28.0-0"
-home: https://github.com/yutthaphum-phakphian/ZYRQUEN-1.2-LTS
+home: https://github.com/yuththaphum-phakphian/ZYRQUEN-1.2-LTS
 sources:
-  - https://github.com/yutthaphum-phakphian/ZYRQUEN-1.2-LTS
-icon: https://raw.githubusercontent.com/yutthaphum-phakphian/ZYRQUEN-1.2-LTS/main/.assets/zyrquen-logo.png
+  - https://github.com/yuththaphum-phakphian/ZYRQUEN-1.2-LTS
+icon: https://raw.githubusercontent.com/yuththaphum-phakphian/ZYRQUEN-1.2-LTS/main/.assets/zyrquen-logo.png
 keywords:
   - zyrquen
   - governance
@@ -29,6 +29,6 @@ annotations:
   artifacthub.io/license: Apache-2.0
   artifacthub.io/links: |
     - name: Project homepage
-      url: https://github.com/yutthaphum-phakphian/ZYRQUEN-1.2-LTS
+      url: https://github.com/yuththaphum-phakphian/ZYRQUEN-1.2-LTS
     - name: Documentation
-      url: https://github.com/yutthaphum-phakphian/ZYRQUEN-1.2-LTS/tree/main/docs
+      url: https://github.com/yuththaphum-phakphian/ZYRQUEN-1.2-LTS/tree/main/docs

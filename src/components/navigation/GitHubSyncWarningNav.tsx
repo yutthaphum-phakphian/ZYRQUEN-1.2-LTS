@@ -103,7 +103,7 @@ export const GitHubSyncWarningNav: React.FC = () => {
             <span className="text-[10px] text-zinc-500 hover:text-cyan-300 ml-0.5" title="Inspect sync details">⚙️</span>
             {/* Direct Open GitHub Link button */}
             <a
-              href="https://github.com/yutthaphum-phakphian/ZYRQUEN-1.2-LTS"
+              href="https://github.com/yuththaphum-phakphian/ZYRQUEN-1.2-LTS"
               target="_blank"
               rel="noopener noreferrer"
               onClick={(e) => {
@@ -111,7 +111,7 @@ export const GitHubSyncWarningNav: React.FC = () => {
                 playTone(740, 0.04);
               }}
               className="p-1 rounded-md hover:bg-cyan-500/25 text-cyan-400 hover:text-white transition-all flex items-center gap-0.5 ml-0.5"
-              title="เปิดลิงก์ Canonical GitHub Repository (yutthaphum-phakphian/ZYRQUEN-1.2-LTS)"
+              title="เปิดลิงก์ Canonical GitHub Repository (yuththaphum-phakphian/ZYRQUEN-1.2-LTS)"
             >
               <ExternalLink className="w-3 h-3" />
             </a>
@@ -260,17 +260,17 @@ export const GitHubSyncWarningNav: React.FC = () => {
                 </div>
                 <div className="flex flex-wrap items-center gap-2 pt-1">
                   <a
-                    href="https://github.com/yutthaphum-phakphian/ZYRQUEN-1.2-LTS"
+                    href="https://github.com/yuththaphum-phakphian/ZYRQUEN-1.2-LTS"
                     target="_blank"
                     rel="noopener noreferrer"
                     onClick={() => playTone(780, 0.04)}
                     className="px-3 py-1.5 rounded-lg bg-cyan-500/20 hover:bg-cyan-500/30 border border-cyan-500/40 text-cyan-200 text-xs font-bold flex items-center gap-1.5 transition-all shadow-[0_0_10px_rgba(6,182,212,0.2)]"
                   >
                     <ExternalLink className="w-3.5 h-3.5 text-cyan-400" />
-                    <span>Open Official GitHub Repository (yutthaphum-phakphian/ZYRQUEN-1.2-LTS)</span>
+                    <span>Open Official GitHub Repository (yuththaphum-phakphian/ZYRQUEN-1.2-LTS)</span>
                   </a>
                   <a
-                    href="https://github.com/yutthaphum-phakphian"
+                    href="https://github.com/yuththaphum-phakphian"
                     target="_blank"
                     rel="noopener noreferrer"
                     onClick={() => playTone(740, 0.04)}

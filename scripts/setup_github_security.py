@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 """
 ZYRQUEN Ω∞ GitHub Security & Branch Protection Automation Script (setup_github_security.py)
-Repository: yutthaphum-phakphian/ZYRQUEN-1.2-LTS
+Repository: yuththaphum-phakphian/ZYRQUEN-1.2-LTS
 Branch: main
 
 Automated validation of GitHub PAT / GITHUB_TOKEN permissions against GitHub REST API v3
@@ -14,7 +14,7 @@ import json
 import urllib.request
 import urllib.error
 
-REPO_OWNER = "yutthaphum-phakphian"
+REPO_OWNER = "yuththaphum-phakphian"
 REPO_NAME = "ZYRQUEN-1.2-LTS"
 BRANCH = "main"
 
