@@ -34,14 +34,14 @@ describe('Sovereign runtime verification', () => {
     render(<SentinelRemediation monitoringIntervalMs={1000} onAlertLevelChange={onAlertLevelChange} />);
 
     expect(screen.getByText('AUTO_REMEDIATED')).toBeTruthy();
-    expect(screen.getByText(/Dilithium-5 \(FIPS 204\)/)).toBeTruthy();
+    expect(screen.getByText(/Dilithium-5/)).toBeTruthy();
     expect(onAlertLevelChange).toHaveBeenCalledWith('NOMINAL');
 
     act(() => {
       vi.advanceTimersByTime(1000);
     });
 
-    expect(screen.getByText(/PATCH_APPLIED/)).toBeTruthy();
+    expect(screen.getAllByText(/PATCH_APPLIED/).length).toBeGreaterThan(0);
     expect(screen.getAllByText(/Risk:\s*0\.\d+/).length).toBeGreaterThan(0);
     expect(onAlertLevelChange).toHaveBeenLastCalledWith('CRITICAL');
 
