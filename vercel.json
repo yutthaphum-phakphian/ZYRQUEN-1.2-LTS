@@ -3,8 +3,16 @@
   "trailingSlash": false,
   "rewrites": [
     {
-      "source": "/api/(.*)",
-      "destination": "/api/$1"
+      "source": "/api/v1/(.*)",
+      "destination": "/api/v1/$1"
+    },
+    {
+      "source": "/api/sovereign/(.*)",
+      "destination": "/api/sovereign/$1"
+    },
+    {
+      "source": "/api/chamber-02/(.*)",
+      "destination": "/api/chamber-02/$1"
     },
     {
       "source": "/(.*)",
@@ -33,11 +41,27 @@
         },
         {
           "key": "Content-Security-Policy",
-          "value": "default-src 'self'; img-src 'self' data: https:; script-src 'self' 'unsafe-inline'; style-src 'self' 'unsafe-inline'; connect-src 'self' https:; font-src 'self' data:; object-src 'none'; base-uri 'self'; frame-ancestors 'none'"
+          "value": "default-src 'self'; img-src 'self' data: https:; script-src 'self' 'unsafe-inline' https://cdn.jsdelivr.net; style-src 'self' 'unsafe-inline'; connect-src 'self' https: wss:; font-src 'self' data:; object-src 'none'; base-uri 'self'; frame-ancestors 'none'; upgrade-insecure-requests; block-all-mixed-content"
         },
         {
           "key": "Strict-Transport-Security",
-          "value": "max-age=31536000; includeSubDomains"
+          "value": "max-age=31536000; includeSubDomains; preload"
+        },
+        {
+          "key": "X-Sentinel-Risk-Threshold",
+          "value": "0.85"
+        },
+        {
+          "key": "X-Risk-Evaluation-Policy",
+          "value": "reject-if-exceeded;quarantine:chamber-02"
+        },
+        {
+          "key": "X-Sovereign-Config-Version",
+          "value": "1.2.0-LTS"
+        },
+        {
+          "key": "X-PQC-Enabled",
+          "value": "true"
         }
       ]
     },
@@ -47,6 +71,10 @@
         {
           "key": "Cache-Control",
           "value": "public, max-age=0, must-revalidate"
+        },
+        {
+          "key": "X-Content-Type-Options",
+          "value": "nosniff"
         }
       ]
     },
@@ -69,6 +97,10 @@
         {
           "key": "Service-Worker-Allowed",
           "value": "/"
+        },
+        {
+          "key": "X-Content-Type-Options",
+          "value": "nosniff"
         }
       ]
     },
