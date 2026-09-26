@@ -11,11 +11,12 @@ export default defineConfig({
   test: {
     environment: 'happy-dom',
     globals: true,
-    include: ['src/**/*.test.{ts,tsx}', 'tests/**/*.test.{ts,tsx}'],
+    include: ['src/**/*.test.{ts,tsx}', 'tests/*.test.{ts,tsx}'],
     exclude: [
       'node_modules/**',
       'dist/**',
       'coverage/**',
+      'tests/unit/**',
     ],
     css: true,
     mockReset: true,

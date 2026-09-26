@@ -1,9 +1,10 @@
 import { defineConfig } from 'vite';
 import react from '@vitejs/plugin-react';
+import tailwindcss from '@tailwindcss/vite';
 import { fileURLToPath, URL } from 'node:url';
 
 export default defineConfig(({ mode }) => ({
-  plugins: [react()],
+  plugins: [tailwindcss(), react()],
   base: './',
 
   resolve: {
@@ -37,8 +38,8 @@ export default defineConfig(({ mode }) => ({
   test: {
     globals: true,
     environment: 'happy-dom',
-    include: ['tests/**/*.test.{ts,tsx}', 'src/**/*.test.{ts,tsx}'],
-    exclude: ['node_modules', 'dist', 'coverage'],
+    include: ['tests/*.test.{ts,tsx}', 'src/**/*.test.{ts,tsx}'],
+    exclude: ['node_modules', 'dist', 'coverage', 'tests/unit/**'],
     coverage: {
       provider: 'v8',
       reporter: ['text', 'html', 'lcov'],

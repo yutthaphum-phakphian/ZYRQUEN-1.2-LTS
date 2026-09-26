@@ -29,6 +29,7 @@ import { SovereignAuditEvent, isAnomalyEvent } from '../services/anomalyDetector
 import { AnomalyDetailModal } from './AnomalyDetailModal';
 import { playTone, playAuditChime } from './AudioSynthesizer';
 import { HardwareHeartbeatStabilityTrend } from './HardwareHeartbeatStabilityTrend';
+import { ThirtyDayTelemetryVolatilityD3Chart } from './ThirtyDayTelemetryVolatilityD3Chart';
 
 export type TimeframeOption = '24h' | '7d' | '30d';
 
@@ -320,6 +321,9 @@ export const AuditAnalyticsDashboard: React.FC = () => {
           </div>
         )}
       </div>
+
+      {/* 30-Day D3.js Telemetry Volatility & Baseline Drift Component */}
+      <ThirtyDayTelemetryVolatilityD3Chart />
 
       {/* Hardware Heartbeat Stability 60-Minute Trend Line Component */}
       <HardwareHeartbeatStabilityTrend />

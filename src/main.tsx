@@ -1,6 +1,7 @@
 import { StrictMode } from 'react';
 import { createRoot } from 'react-dom/client';
 import App from './App';
+import './index.css';
 import { unlockAudioContext } from './components/AudioSynthesizer';
 
 // ป้องกันปัญหา ResizeObserver Loop Error ในเบราว์เซอร์
