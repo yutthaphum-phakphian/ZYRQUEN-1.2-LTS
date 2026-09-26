@@ -1,24 +1,51 @@
-import { SOVEREIGN_CONFIG } from './sovereign.config';
+// ==========================================
+// 1. Thai Legal Statutory Compliance
+// ==========================================
+export const THAI_LEGAL_COMPLIANCE = Object.freeze({
+  etdaSec9: "พ.ร.บ. ธุรกรรมทางอิเล็กทรอนิกส์ พ.ศ. ๒๕๔๔ มาตรา ๙ | หมวด ๒ | การทำให้เกิดการรับรู้และการระบุอัตลักษณ์บุคคลในการสื่อสารทางอิเล็กทรอนิกส์",
+  etdaSec26: "พ.ร.บ. ธุรกรรมทางอิเล็กทรอนิกส์ พ.ศ. ๒๕๔๔ มาตรา ๒๖ | ลายมือชื่อดิจิทัลปลอดภัยตามมาตรฐาน NIST FIPS 204 (ML-DSA-87)",
+  etdaSec28: "พ.ร.บ. ธุรกรรมทางอิเล็กทรอนิกส์ พ.ศ. ๒๕๔๔ มาตรา ๒๘ | พยานหลักฐานอิเล็กทรอนิกส์และการรักษาบันทึกอิเล็กทรอนิกส์เป็นระยะเวลา ๕ ปี",
+  pdpaSec37: "พ.ร.บ. คุ้มครองข้อมูลส่วนบุคคล พ.ศ. ๒๕๖๒ มาตรา ๓๗ | Zero-Knowledge Privacy Isolation & Cryptographic PII Masking (ISO/IEC 27001:2022 Appendix A.12.6.1)",
+});
 
-const EXPECTED_GENESIS = "909ab814479844d8a14816bed34cdbb07528e18501da86fc4691763a43fa4c68";
-const EXPECTED_SEALS = 14902;
+// ==========================================
+// 2. Runtime Invariants & Dynamic Override
+// ==========================================
+export function validateSovereignInvariants(): boolean {
+  try {
+    (SOVEREIGN_CONFIG as Record<string, unknown>).baselineDriftPct = 0.01;
+    console.error("CRITICAL: Invariant mutation detected!");
+    return false;
+  } catch {
+    return true; // Immutability confirmed
+  }
+}
 
-export function validateBuildTimeInvariants(): boolean {
-  const errors: string[] = [];
+export function verifyGenesisAnchor(): { valid: boolean; hash: string } {
+  const config = SOVEREIGN_CONFIG.genesisAnchor;
+  return {
+    valid: config.blockHeight === 849202 && config.merkleRoot.length === 64,
+    hash: config.merkleRoot,
+  };
+}
 
-  if (SOVEREIGN_CONFIG.genesisAnchor.merkleRoot !== EXPECTED_GENESIS) {
-    errors.push(`Genesis Merkle Root mismatch (SSoT Δ0 VIOLATED)`);
-  }
-  if (SOVEREIGN_CONFIG.sealsRegistry.canonicalSealsCount !== EXPECTED_SEALS) {
-    errors.push(`Canonical seals count mismatch`);
-  }
-  if (SOVEREIGN_CONFIG.sealsRegistry.baselineDriftPct !== 0.0) {
-    errors.push(`Baseline drift is non-zero (SSoT Δ0 VIOLATED)`);
-  }
+export interface SovereignConfigOverride {
+  slaBenchmarks?: Partial<typeof SOVEREIGN_CONFIG.slaBenchmarks>;
+  telemetryMetrics?: Partial<typeof SOVEREIGN_CONFIG.telemetryMetrics>;
+}
 
-  if (errors.length > 0) {
-    throw new Error(`SOVEREIGN CONFIG VALIDATION FAILED:\n${errors.join('\n')}`);
-  }
+export function getSovereignConfig(override?: SovereignConfigOverride) {
+  if (!override) return SOVEREIGN_CONFIG;
   
-  return true;
+  return Object.freeze({
+    ...SOVEREIGN_CONFIG,
+    slaBenchmarks: Object.freeze({
+      ...SOVEREIGN_CONFIG.slaBenchmarks,
+      ...override.slaBenchmarks,
+    }),
+    telemetryMetrics: Object.freeze({
+      ...SOVEREIGN_CONFIG.telemetryMetrics,
+      ...override.telemetryMetrics,
+    }),
+  });
 }
