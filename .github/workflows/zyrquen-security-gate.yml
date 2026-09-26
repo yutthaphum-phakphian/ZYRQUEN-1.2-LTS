@@ -1,4 +1,4 @@
-name: 🛡️ ZYRQUEN Ω∞ — Sovereign Pre-Commit & Pre-Deploy Security Gate
+Name: 🛡️ ZYRQUEN Ω∞ — Sovereign Pre-Commit & Pre-Deploy Security Gate
 
 on:
   push:
@@ -33,6 +33,7 @@ jobs:
         uses: actions/setup-python@v5
         with:
           python-version: '3.12'
+          cache: '' # ปิดการค้นหาไฟล์ requirements.txt เพื่อป้องกัน Error
 
       - name: 🟩 Set up Node.js 20 LTS Environment
         uses: actions/setup-node@v4
