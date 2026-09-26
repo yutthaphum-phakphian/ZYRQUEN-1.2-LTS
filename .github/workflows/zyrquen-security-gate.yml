@@ -1,4 +1,4 @@
-Name: 🛡️ ZYRQUEN Ω∞ — Sovereign Pre-Commit & Pre-Deploy Security Gate
+name: 🛡️ ZYRQUEN Ω∞ — Sovereign Pre-Commit & Pre-Deploy Security Gate
 
 on:
   push:
