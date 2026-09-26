@@ -37,6 +37,10 @@ import {
   Settings,
   Sparkles,
   SlidersHorizontal,
+  Cpu,
+  Radio,
+  Zap,
+  History,
 } from 'lucide-react';
 import { MerkleRootQrCodeModal } from '@/components/MerkleRootQrCodeModal';
 import { CANONICAL_GENESIS_BLOCK, CANONICAL_MERKLE_ROOT } from '@/data/canonicalData';
@@ -963,6 +967,9 @@ function SovereignAppContent() {
   const [isCopilotOpen, setIsCopilotOpen] = useState(false);
   const [isControlDockOpen, setIsControlDockOpen] = useState(false);
   const [isAudioActive, setIsAudioActive] = useState(false);
+  const [activeHsmNodes, setActiveHsmNodes] = useState<number>(10);
+  const [disabledHsmNodeIds, setDisabledHsmNodeIds] = useState<Record<string, boolean>>({});
+  const [isHsmHistoryExpanded, setIsHsmHistoryExpanded] = useState<boolean>(false);
 
   const [toasts, setToasts] = useState<ToastMessage[]>([]);
   const showToast = useCallback((message: string, type: ToastMessage['type'] = 'info') => {
@@ -2470,6 +2477,7 @@ function SovereignAppContent() {
                   }}
                 >
                   <button
+                    id="verification-gate-status"
                     type="button"
                     onClick={() => setIsGateDetailsExpanded((prev) => !prev)}
                     className={`px-2 py-0.5 rounded text-[10px] font-bold border flex items-center gap-1 transition-all cursor-pointer ${
@@ -2512,6 +2520,7 @@ function SovereignAppContent() {
                   <AnimatePresence>
                     {isGateTooltipVisible && (
                       <motion.div
+                        id="verification-gate-status-tooltip"
                         initial={{ opacity: 0, y: -8, scale: 0.97, filter: 'blur(4px)' }}
                         animate={{ opacity: 1, y: 0, scale: 1, filter: 'blur(0px)' }}
                         exit={{ opacity: 0, y: -6, scale: 0.97, filter: 'blur(3px)' }}
@@ -2608,30 +2617,484 @@ function SovereignAppContent() {
                           {verificationGateStatus.message}
                         </p>
 
-                        {/* 1. 10/10 REAL_HSM Quorum Status Breakdown */}
-                        <div className="p-2.5 rounded-xl bg-black/50 border border-cyan-500/20 mb-2.5 space-y-2">
-                          <div className="flex items-center justify-between font-mono text-[10px]">
-                            <span className="text-cyan-300 font-bold flex items-center gap-1.5">
-                              <Shield className="w-3.5 h-3.5 text-cyan-400" />
-                              10/10 REAL_HSM QUORUM STATUS
-                            </span>
-                            <span className="text-emerald-400 font-bold">100% UNANIMOUS RATIFIED</span>
-                          </div>
-                          <div className="grid grid-cols-2 gap-1.5 font-mono text-[10px]">
-                            <div className="p-1.5 rounded-lg bg-zinc-900/60 border border-zinc-800">
-                              <span className="text-zinc-400 block text-[9px]">GOVERNANCE PLANE</span>
-                              <span className="text-emerald-300 font-semibold">10/10 PASS (Statutory)</span>
+                        {/* 1. 10/10 REAL_HSM Quorum Status Breakdown & Cluster Health Visualizer */}
+                        {(() => {
+                          const totalNodes = 10;
+                          const currentActiveNodes = activeHsmNodes;
+                          const radius = 20;
+                          const circumference = 2 * Math.PI * radius; // ~125.66
+                          const healthPercent = Math.max(0, Math.min(100, (currentActiveNodes / totalNodes) * 100));
+                          const strokeDashoffset = circumference - (healthPercent / 100) * circumference;
+
+                          const strokeColorClass =
+                            currentActiveNodes === 10
+                              ? 'stroke-emerald-400 drop-shadow-[0_0_6px_rgba(52,211,153,0.8)]'
+                              : currentActiveNodes >= 8
+                              ? 'stroke-amber-400 drop-shadow-[0_0_6px_rgba(251,191,36,0.8)]'
+                              : 'stroke-rose-500 drop-shadow-[0_0_6px_rgba(244,63,94,0.8)]';
+
+                          const textColorClass =
+                            currentActiveNodes === 10
+                              ? 'text-emerald-300'
+                              : currentActiveNodes >= 8
+                              ? 'text-amber-300'
+                              : 'text-rose-400';
+
+                          const statusText =
+                            currentActiveNodes === 10
+                              ? '100.0% OPTIMAL'
+                              : currentActiveNodes >= 8
+                              ? `${healthPercent.toFixed(0)}% DEGRADED QUORUM`
+                              : `${healthPercent.toFixed(0)}% QUORUM VIOLATION`;
+
+                          const badgeBgClass =
+                            currentActiveNodes === 10
+                              ? 'bg-emerald-500/15 border-emerald-500/40 text-emerald-300'
+                              : currentActiveNodes >= 8
+                              ? 'bg-amber-500/15 border-amber-500/40 text-amber-300'
+                              : 'bg-rose-500/15 border-rose-500/40 text-rose-300';
+
+                          return (
+                            <div className="p-3 rounded-xl bg-black/70 border border-cyan-500/30 mb-2.5 space-y-2.5 shadow-lg shadow-cyan-950/20">
+                              {/* Header with Dynamic Cluster Health Badge */}
+                              <div className="flex items-center justify-between font-mono text-[10px] pb-1.5 border-b border-cyan-500/20">
+                                <span className="text-cyan-300 font-bold flex items-center gap-1.5">
+                                  <Shield className="w-3.5 h-3.5 text-cyan-400" />
+                                  10/10 REAL_HSM QUORUM STATUS
+                                </span>
+                                <div className={`flex items-center gap-1.5 px-2 py-0.5 rounded-full border font-bold text-[9px] shadow-sm ${badgeBgClass}`}>
+                                  <span
+                                    className={`w-1.5 h-1.5 rounded-full animate-pulse ${
+                                      currentActiveNodes === 10
+                                        ? 'bg-emerald-400 shadow-[0_0_6px_rgba(52,211,153,0.9)]'
+                                        : currentActiveNodes >= 8
+                                        ? 'bg-amber-400 shadow-[0_0_6px_rgba(251,191,36,0.9)]'
+                                        : 'bg-rose-500 shadow-[0_0_6px_rgba(244,63,94,0.9)]'
+                                    }`}
+                                  />
+                                  CLUSTER HEALTH: {statusText}
+                                </div>
+                              </div>
+
+                              {/* Visual Cluster Health Dynamic Circular SVG Progress Ring & Operational Metrics */}
+                              <div className="flex items-center gap-3 p-2 rounded-lg bg-zinc-950/80 border border-emerald-500/25">
+                                {/* Circular SVG Progress Ring (Dynamically fills based on activeNodes) */}
+                                <div
+                                  className="relative w-12 h-12 flex-shrink-0 flex items-center justify-center cursor-pointer group/ring"
+                                  title={`Click to cycle simulated active HSM nodes (Current: ${currentActiveNodes}/10)`}
+                                  onClick={() => {
+                                    triggerVibration('click');
+                                    setActiveHsmNodes((prev) => (prev <= 7 ? 10 : prev - 1));
+                                  }}
+                                >
+                                  <svg className="w-12 h-12 -rotate-90" viewBox="0 0 48 48">
+                                    <circle
+                                      cx="24"
+                                      cy="24"
+                                      r={radius}
+                                      className="stroke-zinc-800"
+                                      strokeWidth="3.5"
+                                      fill="transparent"
+                                    />
+                                    <circle
+                                      cx="24"
+                                      cy="24"
+                                      r={radius}
+                                      className={`${strokeColorClass} transition-all duration-500 ease-out`}
+                                      strokeWidth="3.5"
+                                      strokeDasharray={circumference}
+                                      strokeDashoffset={strokeDashoffset}
+                                      strokeLinecap="round"
+                                      fill="transparent"
+                                    />
+                                  </svg>
+                                  <div className="absolute inset-0 flex flex-col items-center justify-center font-mono select-none pointer-events-none">
+                                    <span className={`text-[10px] font-black leading-none ${textColorClass}`}>
+                                      {healthPercent.toFixed(0)}%
+                                    </span>
+                                    <span className="text-[7px] text-zinc-400 uppercase font-medium">HEALTH</span>
+                                  </div>
+                                </div>
+
+                                {/* Status Bar & Node Cluster Health */}
+                                <div className="flex-1 space-y-1.5 font-mono">
+                                  <div className="flex items-center justify-between text-[9px]">
+                                    <span className="text-zinc-300 font-semibold flex items-center gap-1">
+                                      <Activity className="w-3 h-3 text-emerald-400" />
+                                      {currentActiveNodes}/10 HARDWARE NODES ONLINE
+                                    </span>
+                                    <span className={`font-bold ${currentActiveNodes >= 8 ? 'text-emerald-400' : 'text-rose-400'}`}>
+                                      {currentActiveNodes}/10 {currentActiveNodes >= 8 ? 'RATIFIED' : 'FAILED'}
+                                    </span>
+                                  </div>
+                                  {/* 10-Segment Progress Status Bar */}
+                                  <div className="flex items-center gap-0.5 w-full h-2 bg-zinc-900 rounded p-0.5 border border-zinc-800">
+                                    {[...Array(10)].map((_, i) => {
+                                      const isNodeActive = i < currentActiveNodes;
+                                      return (
+                                        <div
+                                          key={i}
+                                          className={`flex-1 h-full rounded-sm transition-all duration-300 ${
+                                            isNodeActive
+                                              ? 'bg-gradient-to-t from-emerald-600 to-emerald-400 shadow-[0_0_4px_rgba(52,211,153,0.6)]'
+                                              : 'bg-zinc-800/80 border border-zinc-700/40 opacity-30'
+                                          }`}
+                                          title={`HSM Unit TC-0${i + 1}: ${isNodeActive ? '100% Operational • 14.98 mK' : 'OFFLINE / SIMULATED FAULT'}`}
+                                        />
+                                      );
+                                    })}
+                                  </div>
+                                  <div className="flex items-center justify-between text-[8px] text-zinc-400">
+                                    <span>Cryo Stability: 14.98 mK</span>
+                                    <span className="text-cyan-300">Quorum Jitter: &lt; 0.02 ms</span>
+                                  </div>
+                                </div>
+                              </div>
+
+                              {/* HSM Cluster Health Visual Array (10 Nodes) */}
+                              <div className="space-y-1.5">
+                                <div className="flex items-center justify-between text-[9px] font-mono text-zinc-400">
+                                  <span className="flex items-center gap-1 text-cyan-300 font-semibold">
+                                    <Cpu className="w-3 h-3 text-cyan-400" />
+                                    HSM ENCLAVE NODES HEALTH (TC-01..TC-10)
+                                  </span>
+                                  <span className={currentActiveNodes === 10 ? 'text-emerald-400 font-medium' : 'text-amber-400 font-medium'}>
+                                    {currentActiveNodes}/10 ONLINE • 0 TAMPER DRIFT
+                                  </span>
+                                </div>
+                                <div className="grid grid-cols-5 sm:grid-cols-10 gap-1">
+                                  {[
+                                    { id: 'TC-01', name: 'Alpha', algo: 'Kyber-1024', temp: '14.98 mK', lat: '0.28ms' },
+                                    { id: 'TC-02', name: 'Beta', algo: 'Dilithium-5', temp: '14.97 mK', lat: '0.30ms' },
+                                    { id: 'TC-03', name: 'Gamma', algo: 'SPHINCS+', temp: '14.99 mK', lat: '0.31ms' },
+                                    { id: 'TC-04', name: 'Delta', algo: 'Kyber-1024', temp: '14.98 mK', lat: '0.29ms' },
+                                    { id: 'TC-05', name: 'Epsilon', algo: 'Dilithium-5', temp: '14.96 mK', lat: '0.32ms' },
+                                    { id: 'TC-06', name: 'Zeta', algo: 'SPHINCS+', temp: '14.98 mK', lat: '0.30ms' },
+                                    { id: 'TC-07', name: 'Eta', algo: 'Kyber-1024', temp: '15.01 mK', lat: '0.33ms' },
+                                    { id: 'TC-08', name: 'Theta', algo: 'Dilithium-5', temp: '14.98 mK', lat: '0.29ms' },
+                                    { id: 'TC-09', name: 'Iota', algo: 'SPHINCS+', temp: '14.97 mK', lat: '0.31ms' },
+                                    { id: 'TC-10', name: 'Kappa', algo: 'Kyber-1024', temp: '14.99 mK', lat: '0.30ms' },
+                                  ].map((node, index) => {
+                                    const isOnline = index < currentActiveNodes;
+                                    return (
+                                      <div
+                                        key={node.id}
+                                        onClick={() => {
+                                          triggerVibration('click');
+                                          setActiveHsmNodes((prev) => {
+                                            if (isOnline) {
+                                              return Math.max(1, index);
+                                            } else {
+                                              return Math.min(10, index + 1);
+                                            }
+                                          });
+                                        }}
+                                        className={`group relative p-1 rounded-md transition-all text-center flex flex-col items-center justify-center cursor-pointer ${
+                                          isOnline
+                                            ? 'bg-zinc-900/80 border border-emerald-500/30 hover:border-emerald-400'
+                                            : 'bg-zinc-950/60 border border-rose-500/30 opacity-60 hover:opacity-100 hover:border-rose-400'
+                                        }`}
+                                        title={`Node ${node.id} (${node.name}): Status ${isOnline ? 'REAL_HSM_ONLINE' : 'OFFLINE_SIMULATION'} | ${node.algo} | Temp: ${node.temp} | Latency: ${node.lat} | FIPS 140-3 Level 4 (Click to toggle)`}
+                                      >
+                                        <div className="flex items-center gap-1 mb-0.5">
+                                          <span
+                                            className={`w-1.5 h-1.5 rounded-full ${
+                                              isOnline
+                                                ? 'bg-emerald-400 animate-pulse shadow-[0_0_5px_rgba(52,211,153,0.9)]'
+                                                : 'bg-rose-500 shadow-[0_0_5px_rgba(244,63,94,0.9)]'
+                                            }`}
+                                          />
+                                          <span className="text-[8px] font-bold text-zinc-200">{node.id}</span>
+                                        </div>
+                                        <span className={`text-[7px] font-mono scale-90 ${isOnline ? 'text-emerald-400' : 'text-rose-400'}`}>
+                                          {isOnline ? '14.98mK' : 'OFFLINE'}
+                                        </span>
+                                      </div>
+                                    );
+                                  })}
+                                </div>
+                              </div>
+
+                              {/* Expandable List of Last 3 Status Changes for Each of the 10 HSM Nodes */}
+                              <div className="pt-1">
+                                <button
+                                  type="button"
+                                  onClick={() => {
+                                    triggerVibration('click');
+                                    setIsHsmHistoryExpanded((prev) => !prev);
+                                  }}
+                                  className="w-full flex items-center justify-between px-2.5 py-1.5 rounded-lg bg-zinc-950/90 border border-cyan-500/30 hover:border-cyan-400 text-[10px] font-mono transition-all cursor-pointer shadow-sm hover:shadow-[0_0_10px_rgba(6,182,212,0.15)]"
+                                >
+                                  <span className="flex items-center gap-1.5 text-cyan-300 font-bold">
+                                    <History className="w-3.5 h-3.5 text-cyan-400" />
+                                    <span>HSM NODES STATUS HISTORY (LAST 3 EVENTS / NODE)</span>
+                                  </span>
+                                  <span className="flex items-center gap-1.5 text-[9px]">
+                                    <span
+                                      className={`px-1.5 py-0.2 rounded border font-semibold ${
+                                        currentActiveNodes === 10
+                                          ? 'bg-emerald-500/15 border-emerald-500/40 text-emerald-300'
+                                          : 'bg-amber-500/15 border-amber-500/40 text-amber-300'
+                                      }`}
+                                    >
+                                      {currentActiveNodes}/10 ACTIVE
+                                    </span>
+                                    {isHsmHistoryExpanded ? (
+                                      <ChevronUp className="w-3.5 h-3.5 text-cyan-400" />
+                                    ) : (
+                                      <ChevronDown className="w-3.5 h-3.5 text-zinc-400" />
+                                    )}
+                                  </span>
+                                </button>
+
+                                {isHsmHistoryExpanded && (
+                                  <motion.div
+                                    initial={{ opacity: 0, height: 0 }}
+                                    animate={{ opacity: 1, height: 'auto' }}
+                                    exit={{ opacity: 0, height: 0 }}
+                                    className="mt-2 space-y-2 max-h-56 overflow-y-auto pr-1 font-mono text-[9px]"
+                                  >
+                                    {[
+                                      {
+                                        id: 'TC-01',
+                                        name: 'Alpha',
+                                        algo: 'Kyber-1024',
+                                        temp: '14.98 mK',
+                                        events: [
+                                          { text: 'FIPS 203 ML-KEM-1024 Key Encapsulation Verified', time: '1m ago', code: 'PASS' },
+                                          { text: 'Cryo-Bus Thermal Lock @ 14.98 mK Stabilized', time: '4m ago', code: 'PASS' },
+                                          { text: 'Genesis #849202 Quorum Signature Ratified', time: '8m ago', code: 'RATIFIED' },
+                                        ],
+                                      },
+                                      {
+                                        id: 'TC-02',
+                                        name: 'Beta',
+                                        algo: 'Dilithium-5',
+                                        temp: '14.97 mK',
+                                        events: [
+                                          { text: 'FIPS 204 ML-DSA-87 Lattice Signature Anchor', time: '2m ago', code: 'PASS' },
+                                          { text: 'Memory Bus Parity Check (0 Tamper Drift)', time: '5m ago', code: 'PASS' },
+                                          { text: 'ETDA Section 26 Sole Custody Verified', time: '9m ago', code: 'RATIFIED' },
+                                        ],
+                                      },
+                                      {
+                                        id: 'TC-03',
+                                        name: 'Gamma',
+                                        algo: 'SPHINCS+',
+                                        temp: '14.99 mK',
+                                        events: [
+                                          { text: 'FIPS 205 SLH-DSA Hash-Based Signature Ratified', time: '1m ago', code: 'PASS' },
+                                          { text: 'Chamber 02 Buffer Gamma Quarantine Verified', time: '6m ago', code: 'PASS' },
+                                          { text: 'Canonical Merkle Root 0x909ab8... Reconciled', time: '11m ago', code: 'RATIFIED' },
+                                        ],
+                                      },
+                                      {
+                                        id: 'TC-04',
+                                        name: 'Delta',
+                                        algo: 'Kyber-1024',
+                                        temp: '14.98 mK',
+                                        events: [
+                                          { text: 'Key Encapsulation Ring-04 Reseed Complete', time: '3m ago', code: 'PASS' },
+                                          { text: 'Sub-Kelvin Cryo-Loop Micro-Jitter < 0.015ms', time: '7m ago', code: 'PASS' },
+                                          { text: 'WORM Immutable Audit Seal #14902 Stamped', time: '12m ago', code: 'RATIFIED' },
+                                        ],
+                                      },
+                                      {
+                                        id: 'TC-05',
+                                        name: 'Epsilon',
+                                        algo: 'Dilithium-5',
+                                        temp: '14.96 mK',
+                                        events: [
+                                          { text: 'Non-Repudiation Signature Bound to Sovereign ID', time: '2m ago', code: 'PASS' },
+                                          { text: 'Active Tamper Response Zeroization Ready (<1.2µs)', time: '8m ago', code: 'PASS' },
+                                          { text: 'PDPA Sec 37 zk-Proof Enclave Cleared', time: '14m ago', code: 'RATIFIED' },
+                                        ],
+                                      },
+                                      {
+                                        id: 'TC-06',
+                                        name: 'Zeta',
+                                        algo: 'SPHINCS+',
+                                        temp: '14.98 mK',
+                                        events: [
+                                          { text: 'Stateless Hash Signature Tree Verified', time: '1m ago', code: 'PASS' },
+                                          { text: 'Fail-Closed Thermal Cutoff Armed (< 85.0°C)', time: '6m ago', code: 'PASS' },
+                                          { text: 'Deca-Key Quorum Consensus Hash Recorded', time: '15m ago', code: 'RATIFIED' },
+                                        ],
+                                      },
+                                      {
+                                        id: 'TC-07',
+                                        name: 'Eta',
+                                        algo: 'Kyber-1024',
+                                        temp: '15.01 mK',
+                                        events: [
+                                          { text: 'Quantum Lattice Key Synchronization Healthy', time: '3m ago', code: 'PASS' },
+                                          { text: 'Cryo-Bus Variance Micro-Compensated', time: '9m ago', code: 'PASS' },
+                                          { text: 'Court Evidence Annex จพ.๐๓ Certified', time: '16m ago', code: 'RATIFIED' },
+                                        ],
+                                      },
+                                      {
+                                        id: 'TC-08',
+                                        name: 'Theta',
+                                        algo: 'Dilithium-5',
+                                        temp: '14.98 mK',
+                                        events: [
+                                          { text: 'Dual-Sig Matrix Attestation Ratified', time: '2m ago', code: 'PASS' },
+                                          { text: 'Physical Hardware Entropy Rate 99.992%', time: '10m ago', code: 'PASS' },
+                                          { text: 'ISO/IEC 27037 Custody Stamp Appended', time: '18m ago', code: 'RATIFIED' },
+                                        ],
+                                      },
+                                      {
+                                        id: 'TC-09',
+                                        name: 'Iota',
+                                        algo: 'SPHINCS+',
+                                        temp: '14.97 mK',
+                                        events: [
+                                          { text: 'Stateless Hash Primary Validator Confirmed', time: '4m ago', code: 'PASS' },
+                                          { text: 'Zeroization Relay Path Ping: 0.28ms', time: '11m ago', code: 'PASS' },
+                                          { text: 'Replay Execution SLA Verified (35.8ms < 142ms)', time: '20m ago', code: 'RATIFIED' },
+                                        ],
+                                      },
+                                      {
+                                        id: 'TC-10',
+                                        name: 'Kappa',
+                                        algo: 'Kyber-1024',
+                                        temp: '14.99 mK',
+                                        events: [
+                                          { text: 'PQC Category 5 Cryptographic Enclave Ratified', time: '1m ago', code: 'PASS' },
+                                          { text: 'FIPS 140-3 Level 4 Boundary Lock Solid', time: '12m ago', code: 'PASS' },
+                                          { text: 'Final Deca-Custodian Consensus Stamped', time: '22m ago', code: 'RATIFIED' },
+                                        ],
+                                      },
+                                    ].map((nodeItem, nodeIdx) => {
+                                      const isNodeOnline = nodeIdx < currentActiveNodes;
+                                      const nodeBorderColor = isNodeOnline
+                                        ? 'border-emerald-500/30 bg-emerald-950/20'
+                                        : 'border-rose-500/40 bg-rose-950/20';
+
+                                      const displayEvents = isNodeOnline
+                                        ? nodeItem.events
+                                        : [
+                                            { text: 'Simulated Hardware Standby / Disconnect', time: 'Just now', code: 'OFFLINE' },
+                                            nodeItem.events[0],
+                                            nodeItem.events[1],
+                                          ];
+
+                                      return (
+                                        <div
+                                          key={nodeItem.id}
+                                          className={`p-2 rounded-lg border ${nodeBorderColor} transition-all`}
+                                        >
+                                          {/* Node Summary Header */}
+                                          <div className="flex items-center justify-between pb-1 mb-1 border-b border-white/5">
+                                            <div className="flex items-center gap-1.5">
+                                              <span
+                                                className={`w-1.5 h-1.5 rounded-full ${
+                                                  isNodeOnline
+                                                    ? 'bg-emerald-400 animate-pulse shadow-[0_0_6px_rgba(52,211,153,0.9)]'
+                                                    : 'bg-rose-500 shadow-[0_0_6px_rgba(244,63,94,0.9)]'
+                                                }`}
+                                              />
+                                              <span className="font-bold text-white">{nodeItem.id}: {nodeItem.name}</span>
+                                              <span className="text-zinc-400 text-[8px]">({nodeItem.algo})</span>
+                                            </div>
+                                            <div className="flex items-center gap-1.5">
+                                              <span className="text-zinc-400 text-[8px]">{nodeItem.temp}</span>
+                                              <span
+                                                className={`px-1.5 py-0.2 rounded text-[8px] font-bold ${
+                                                  isNodeOnline
+                                                    ? 'bg-emerald-500/20 text-emerald-300 border border-emerald-500/40'
+                                                    : 'bg-rose-500/20 text-rose-300 border border-rose-500/40'
+                                                }`}
+                                              >
+                                                {isNodeOnline ? 'ONLINE' : 'STANDBY'}
+                                              </span>
+                                            </div>
+                                          </div>
+
+                                          {/* Last 3 Status Changes Timeline */}
+                                          <div className="space-y-1 pl-1">
+                                            {displayEvents.map((evt, evtIdx) => (
+                                              <div
+                                                key={evtIdx}
+                                                className="flex items-center justify-between text-[8px] gap-1"
+                                              >
+                                                <div className="flex items-center gap-1.5 truncate">
+                                                  <span
+                                                    className={`w-1 h-1 rounded-full ${
+                                                      evt.code === 'OFFLINE'
+                                                        ? 'bg-rose-400'
+                                                        : evtIdx === 0
+                                                        ? 'bg-emerald-400'
+                                                        : 'bg-cyan-400/70'
+                                                    }`}
+                                                  />
+                                                  <span
+                                                    className={`truncate ${
+                                                      evt.code === 'OFFLINE'
+                                                        ? 'text-rose-300 font-semibold'
+                                                        : evtIdx === 0
+                                                        ? 'text-zinc-200 font-medium'
+                                                        : 'text-zinc-400'
+                                                    }`}
+                                                  >
+                                                    {evt.text}
+                                                  </span>
+                                                </div>
+                                                <div className="flex items-center gap-1 shrink-0">
+                                                  <span className="text-zinc-500 text-[7px]">{evt.time}</span>
+                                                  <span
+                                                    className={`px-1 py-0.2 rounded text-[7px] font-mono ${
+                                                      evt.code === 'OFFLINE'
+                                                        ? 'bg-rose-500/25 text-rose-300 border border-rose-500/40 font-bold'
+                                                        : evt.code === 'RATIFIED'
+                                                        ? 'bg-cyan-500/20 text-cyan-300 border border-cyan-500/30'
+                                                        : 'bg-emerald-500/20 text-emerald-300 border border-emerald-500/30'
+                                                    }`}
+                                                  >
+                                                    {evt.code}
+                                                  </span>
+                                                </div>
+                                              </div>
+                                            ))}
+                                          </div>
+                                        </div>
+                                      );
+                                    })}
+                                  </motion.div>
+                                )}
+                              </div>
+
+                              {/* Cluster Health Metrics Grid */}
+                              <div className="grid grid-cols-2 gap-1.5 font-mono text-[10px]">
+                                <div className="p-1.5 rounded-lg bg-zinc-900/70 border border-zinc-800 flex items-center justify-between">
+                                  <div>
+                                    <span className="text-zinc-400 block text-[8px] uppercase tracking-wider">Governance Quorum</span>
+                                    <span className={`font-semibold text-[10px] ${currentActiveNodes >= 8 ? 'text-emerald-300' : 'text-rose-400'}`}>
+                                      {currentActiveNodes}/10 {currentActiveNodes >= 8 ? 'PASS (Statutory)' : 'QUORUM LOSS'}
+                                    </span>
+                                  </div>
+                                  <Activity className="w-3.5 h-3.5 text-emerald-400/70" />
+                                </div>
+                                <div className="p-1.5 rounded-lg bg-zinc-900/70 border border-zinc-800 flex items-center justify-between">
+                                  <div>
+                                    <span className="text-zinc-400 block text-[8px] uppercase tracking-wider">Physical Hardware</span>
+                                    <span className="text-emerald-300 font-semibold text-[10px]">10/10 FIPS 140-3 L4</span>
+                                  </div>
+                                  <Radio className="w-3.5 h-3.5 text-cyan-400/70" />
+                                </div>
+                              </div>
+
+                              {/* Health Cluster Summary Footer */}
+                              <div className="text-[9px] font-mono text-zinc-400 flex items-center justify-between pt-1 border-t border-white/5">
+                                <span className="flex items-center gap-1 text-zinc-300">
+                                  <Zap className="w-2.5 h-2.5 text-amber-400" />
+                                  Cryo-Bus: <strong className="text-emerald-300">14.98 mK</strong> • Zeroization: <strong className="text-cyan-300">&lt;1.2 μs</strong>
+                                </span>
+                                <span className="text-cyan-300 font-semibold">Cluster Mean Latency: 0.31 ms</span>
+                              </div>
                             </div>
-                            <div className="p-1.5 rounded-lg bg-zinc-900/60 border border-zinc-800">
-                              <span className="text-zinc-400 block text-[9px]">PHYSICAL HARDWARE</span>
-                              <span className="text-emerald-300 font-semibold">10/10 FIPS 140-3 L4</span>
-                            </div>
-                          </div>
-                          <div className="text-[10px] font-mono text-zinc-400 flex items-center justify-between pt-0.5 border-t border-white/5">
-                            <span>Nodes: TC-01 Sovereign Hub + 9 Custodians</span>
-                            <span className="text-cyan-300">Mean Latency: 0.31 ms</span>
-                          </div>
-                        </div>
+                          );
+                        })()}
 
                         {/* 2. Active Cryptographic Schemes (3-Tiered Hybrid Shield) */}
                         <div className="p-2.5 rounded-xl bg-black/50 border border-purple-500/20 mb-2.5 space-y-1.5">
@@ -3324,9 +3787,11 @@ function SovereignAppContent() {
 
 export default function App() {
   return (
-    <HashRouter>
-      <SovereignAppContent />
-    </HashRouter>
+    <ErrorBoundary fallbackViewName="Sovereign Core">
+      <HashRouter>
+        <SovereignAppContent />
+      </HashRouter>
+    </ErrorBoundary>
   );
 }
 

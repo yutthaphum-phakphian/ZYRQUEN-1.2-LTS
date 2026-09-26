@@ -14,6 +14,10 @@ import {
   PinOff,
   QrCode,
   X,
+  Activity,
+  Cpu,
+  Radio,
+  Zap,
 } from 'lucide-react';
 import { BannerAnimatedSealCount } from '@/components/layout/BannerAnimatedSealCount';
 import { LegalTriggerMatrixSection } from '@/components/layout/LegalTriggerMatrixSection';
@@ -231,28 +235,139 @@ export const VerificationGateBar: React.FC<VerificationGateBarProps> = ({
                     {verificationGateStatus.message}
                   </p>
 
-                  {/* 1. 10/10 REAL_HSM Quorum Status Breakdown */}
-                  <div className="p-2.5 rounded-xl bg-black/50 border border-cyan-500/20 mb-2.5 space-y-2">
-                    <div className="flex items-center justify-between font-mono text-[10px]">
+                  {/* 1. 10/10 REAL_HSM Quorum Status Breakdown & Cluster Health Visualizer */}
+                  <div className="p-3 rounded-xl bg-black/70 border border-cyan-500/30 mb-2.5 space-y-2.5 shadow-lg shadow-cyan-950/20">
+                    {/* Header with Cluster Health Badge */}
+                    <div className="flex items-center justify-between font-mono text-[10px] pb-1.5 border-b border-cyan-500/20">
                       <span className="text-cyan-300 font-bold flex items-center gap-1.5">
                         <Shield className="w-3.5 h-3.5 text-cyan-400" />
                         10/10 REAL_HSM QUORUM STATUS
                       </span>
-                      <span className="text-emerald-400 font-bold">100% UNANIMOUS RATIFIED</span>
+                      <div className="flex items-center gap-1.5 px-2 py-0.5 rounded-full bg-emerald-500/15 border border-emerald-500/40 text-emerald-300 font-bold text-[9px] shadow-[0_0_8px_rgba(16,185,129,0.25)]">
+                        <span className="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse shadow-[0_0_6px_rgba(52,211,153,0.9)]" />
+                        CLUSTER HEALTH: 100.0% OPTIMAL
+                      </div>
                     </div>
+
+                    {/* Visual Cluster Health Progress Ring & Operational Metrics */}
+                    <div className="flex items-center gap-3 p-2 rounded-lg bg-zinc-950/80 border border-emerald-500/25">
+                      {/* Circular SVG Progress Ring */}
+                      <div className="relative w-12 h-12 flex-shrink-0 flex items-center justify-center">
+                        <svg className="w-12 h-12 -rotate-90" viewBox="0 0 48 48">
+                          <circle
+                            cx="24"
+                            cy="24"
+                            r="20"
+                            className="stroke-zinc-800"
+                            strokeWidth="3.5"
+                            fill="transparent"
+                          />
+                          <circle
+                            cx="24"
+                            cy="24"
+                            r="20"
+                            className="stroke-emerald-400 drop-shadow-[0_0_6px_rgba(52,211,153,0.8)] transition-all duration-500"
+                            strokeWidth="3.5"
+                            strokeDasharray={2 * Math.PI * 20}
+                            strokeDashoffset={0}
+                            strokeLinecap="round"
+                            fill="transparent"
+                          />
+                        </svg>
+                        <div className="absolute inset-0 flex flex-col items-center justify-center font-mono">
+                          <span className="text-[10px] font-black text-emerald-300 leading-none">100%</span>
+                          <span className="text-[7px] text-zinc-400 uppercase font-medium">HEALTH</span>
+                        </div>
+                      </div>
+
+                      {/* Status Bar & Node Cluster Health */}
+                      <div className="flex-1 space-y-1.5 font-mono">
+                        <div className="flex items-center justify-between text-[9px]">
+                          <span className="text-zinc-300 font-semibold flex items-center gap-1">
+                            <Activity className="w-3 h-3 text-emerald-400" />
+                            10/10 HARDWARE NODES ONLINE
+                          </span>
+                          <span className="text-emerald-400 font-bold">10/10 RATIFIED</span>
+                        </div>
+                        {/* 10-Segment Progress Status Bar */}
+                        <div className="flex items-center gap-0.5 w-full h-2 bg-zinc-900 rounded p-0.5 border border-zinc-800">
+                          {[...Array(10)].map((_, i) => (
+                            <div
+                              key={i}
+                              className="flex-1 h-full rounded-sm bg-gradient-to-t from-emerald-600 to-emerald-400 shadow-[0_0_4px_rgba(52,211,153,0.6)]"
+                              title={`HSM Unit ${i + 1}: 100% Operational • 14.98 mK`}
+                            />
+                          ))}
+                        </div>
+                        <div className="flex items-center justify-between text-[8px] text-zinc-400">
+                          <span>Cryo Stability: 14.98 mK</span>
+                          <span className="text-cyan-300">Quorum Jitter: &lt; 0.02 ms</span>
+                        </div>
+                      </div>
+                    </div>
+
+                    {/* HSM Cluster Health Visual Array (10 Nodes) */}
+                    <div className="space-y-1.5">
+                      <div className="flex items-center justify-between text-[9px] font-mono text-zinc-400">
+                        <span className="flex items-center gap-1 text-cyan-300 font-semibold">
+                          <Cpu className="w-3 h-3 text-cyan-400" />
+                          HSM ENCLAVE NODES HEALTH (TC-01..TC-10)
+                        </span>
+                        <span className="text-emerald-400 font-medium">10/10 ONLINE • 0 TAMPER DRIFT</span>
+                      </div>
+                      <div className="grid grid-cols-5 sm:grid-cols-10 gap-1">
+                        {[
+                          { id: 'TC-01', name: 'Alpha', algo: 'Kyber-1024', temp: '14.98 mK', lat: '0.28ms' },
+                          { id: 'TC-02', name: 'Beta', algo: 'Dilithium-5', temp: '14.97 mK', lat: '0.30ms' },
+                          { id: 'TC-03', name: 'Gamma', algo: 'SPHINCS+', temp: '14.99 mK', lat: '0.31ms' },
+                          { id: 'TC-04', name: 'Delta', algo: 'Kyber-1024', temp: '14.98 mK', lat: '0.29ms' },
+                          { id: 'TC-05', name: 'Epsilon', algo: 'Dilithium-5', temp: '14.96 mK', lat: '0.32ms' },
+                          { id: 'TC-06', name: 'Zeta', algo: 'SPHINCS+', temp: '14.98 mK', lat: '0.30ms' },
+                          { id: 'TC-07', name: 'Eta', algo: 'Kyber-1024', temp: '15.01 mK', lat: '0.33ms' },
+                          { id: 'TC-08', name: 'Theta', algo: 'Dilithium-5', temp: '14.98 mK', lat: '0.29ms' },
+                          { id: 'TC-09', name: 'Iota', algo: 'SPHINCS+', temp: '14.97 mK', lat: '0.31ms' },
+                          { id: 'TC-10', name: 'Kappa', algo: 'Kyber-1024', temp: '14.99 mK', lat: '0.30ms' },
+                        ].map((node) => (
+                          <div
+                            key={node.id}
+                            className="group relative p-1 rounded-md bg-zinc-900/80 border border-emerald-500/30 hover:border-emerald-400 transition-all text-center flex flex-col items-center justify-center cursor-help"
+                            title={`Node ${node.id} (${node.name}): Status REAL_HSM_ONLINE | ${node.algo} | Temp: ${node.temp} | Latency: ${node.lat} | FIPS 140-3 Level 4`}
+                          >
+                            <div className="flex items-center gap-1 mb-0.5">
+                              <span className="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse shadow-[0_0_5px_rgba(52,211,153,0.9)]" />
+                              <span className="text-[8px] font-bold text-zinc-200">{node.id}</span>
+                            </div>
+                            <span className="text-[7px] text-emerald-400 font-mono scale-90">14.98mK</span>
+                          </div>
+                        ))}
+                      </div>
+                    </div>
+
+                    {/* Cluster Health Metrics Grid */}
                     <div className="grid grid-cols-2 gap-1.5 font-mono text-[10px]">
-                      <div className="p-1.5 rounded-lg bg-zinc-900/60 border border-zinc-800">
-                        <span className="text-zinc-400 block text-[9px]">GOVERNANCE PLANE</span>
-                        <span className="text-emerald-300 font-semibold">10/10 PASS (Statutory)</span>
+                      <div className="p-1.5 rounded-lg bg-zinc-900/70 border border-zinc-800 flex items-center justify-between">
+                        <div>
+                          <span className="text-zinc-400 block text-[8px] uppercase tracking-wider">Governance Quorum</span>
+                          <span className="text-emerald-300 font-semibold text-[10px]">10/10 PASS (Statutory)</span>
+                        </div>
+                        <Activity className="w-3.5 h-3.5 text-emerald-400/70" />
                       </div>
-                      <div className="p-1.5 rounded-lg bg-zinc-900/60 border border-zinc-800">
-                        <span className="text-zinc-400 block text-[9px]">PHYSICAL HARDWARE</span>
-                        <span className="text-emerald-300 font-semibold">10/10 FIPS 140-3 L4</span>
+                      <div className="p-1.5 rounded-lg bg-zinc-900/70 border border-zinc-800 flex items-center justify-between">
+                        <div>
+                          <span className="text-zinc-400 block text-[8px] uppercase tracking-wider">Physical Hardware</span>
+                          <span className="text-emerald-300 font-semibold text-[10px]">10/10 FIPS 140-3 L4</span>
+                        </div>
+                        <Radio className="w-3.5 h-3.5 text-cyan-400/70" />
                       </div>
                     </div>
-                    <div className="text-[10px] font-mono text-zinc-400 flex items-center justify-between pt-0.5 border-t border-white/5">
-                      <span>Nodes: TC-01 Sovereign Hub + 9 Custodians</span>
-                      <span className="text-cyan-300">Mean Latency: 0.31 ms</span>
+
+                    {/* Health Cluster Summary Footer */}
+                    <div className="text-[9px] font-mono text-zinc-400 flex items-center justify-between pt-1 border-t border-white/5">
+                      <span className="flex items-center gap-1 text-zinc-300">
+                        <Zap className="w-2.5 h-2.5 text-amber-400" />
+                        Cryo-Bus: <strong className="text-emerald-300">14.98 mK</strong> • Zeroization: <strong className="text-cyan-300">&lt;1.2 μs</strong>
+                      </span>
+                      <span className="text-cyan-300 font-semibold">Cluster Mean Latency: 0.31 ms</span>
                     </div>
                   </div>
 

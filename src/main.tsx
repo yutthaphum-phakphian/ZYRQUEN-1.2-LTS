@@ -20,7 +20,11 @@ if (typeof window !== 'undefined') {
 
   // ปลดล็อก Web Audio Context เมื่อผู้ใช้มีปฏิสัมพันธ์กับหน้าจอครั้งแรก
   const unlockAudioOnInteraction = () => {
-    unlockAudioContext();
+    try {
+      unlockAudioContext();
+    } catch {
+      // safe fallback if audio is not permitted yet
+    }
     window.removeEventListener('pointerdown', unlockAudioOnInteraction);
     window.removeEventListener('keydown', unlockAudioOnInteraction);
     window.removeEventListener('touchstart', unlockAudioOnInteraction);
