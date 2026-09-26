@@ -40,6 +40,8 @@ export const SovereignBottomStatusBar: React.FC = () => {
       if (syncNow) await syncNow();
 
       // Step 3: Animate to 100% and trigger Sync Complete pulse effect
+      setSyncProgress(96);
+      await new Promise((res) => setTimeout(res, 120));
       setSyncProgress(100);
       setShowPulseEffect(true);
       playAuditChime();
@@ -48,11 +50,11 @@ export const SovereignBottomStatusBar: React.FC = () => {
 
       setTimeout(() => {
         setShowPulseEffect(false);
-      }, 2500);
+      }, 3000);
 
       setTimeout(() => {
         setJustSynced(false);
-      }, 4000);
+      }, 4500);
     } catch (e) {
       console.warn('Manual sync failed or network disconnected:', e);
       setSyncProgress(100);
@@ -66,10 +68,10 @@ export const SovereignBottomStatusBar: React.FC = () => {
       {/* Top Animated Progress Bar */}
       <div className="absolute top-0 left-0 right-0 h-1 bg-slate-900/90 overflow-hidden">
         <div
-          className={`h-full transition-all duration-500 ease-out ${
+          className={`h-full transition-all duration-700 ease-out ${
             syncProgress === 100
-              ? 'bg-gradient-to-r from-emerald-500 via-cyan-400 to-emerald-400 shadow-[0_0_12px_rgba(52,211,153,0.8)]'
-              : 'bg-gradient-to-r from-cyan-600 to-cyan-400 shadow-[0_0_8px_rgba(6,182,212,0.6)]'
+              ? 'bg-gradient-to-r from-emerald-500 via-cyan-300 to-emerald-400 shadow-[0_0_16px_rgba(52,211,153,0.9)]'
+              : 'bg-gradient-to-r from-cyan-600 via-cyan-400 to-emerald-500 shadow-[0_0_10px_rgba(6,182,212,0.8)]'
           }`}
           style={{ width: `${syncProgress}%` }}
         />
@@ -83,6 +85,8 @@ export const SovereignBottomStatusBar: React.FC = () => {
                 ? 'bg-cyan-400 animate-ping'
                 : pendingCount > 0
                 ? 'bg-amber-400 animate-ping'
+                : showPulseEffect
+                ? 'bg-emerald-300 animate-ping shadow-[0_0_10px_rgba(52,211,153,1)]'
                 : 'bg-emerald-400 animate-pulse'
             }`}
           />
@@ -99,9 +103,9 @@ export const SovereignBottomStatusBar: React.FC = () => {
 
             {/* Sync Complete Pulse Badge Effect */}
             {showPulseEffect && (
-              <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-[9px] font-bold bg-emerald-500/25 border border-emerald-400/80 text-emerald-300 animate-bounce shadow-[0_0_12px_rgba(16,185,129,0.5)]">
-                <ShieldCheck className="w-3 h-3 text-emerald-300" />
-                SYNC COMPLETE!
+              <span className="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full text-[9px] font-black bg-emerald-500/30 border border-emerald-400 text-emerald-200 animate-pulse shadow-[0_0_16px_rgba(16,185,129,0.7)] tracking-wider">
+                <ShieldCheck className="w-3.5 h-3.5 text-emerald-300 animate-spin" />
+                SYNC COMPLETE (100%)
               </span>
             )}
           </div>
