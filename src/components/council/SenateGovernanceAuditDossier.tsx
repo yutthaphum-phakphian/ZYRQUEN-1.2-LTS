@@ -85,12 +85,14 @@ export const SenateGovernanceAuditDossier: React.FC = () => {
   const handleDownloadPdf = () => {
     playAuditChime();
     const pdfUrl = generateSenateAuditPdfDataUrl();
-    const win = window.open(pdfUrl, '_blank');
-    if (!win) {
+    try {
       const link = document.createElement('a');
       link.href = pdfUrl;
+      link.download = 'senate-governance-audit.pdf';
       link.target = '_blank';
       link.click();
+    } catch {
+      // safe fallback
     }
   };
 
