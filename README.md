@@ -1,3 +1,5 @@
+<div align="center">
+
 # ZYRQUEN Ω™ Sovereign Runtime (v1.2 LTS)
 
 ![Version](https://img.shields.io/badge/Version-v1.2%20LTS-blue?style=for-the-badge)
@@ -8,13 +10,15 @@
 
 > Autonomous SRE and Technical Architect Runtime Engine with 100% Pure Green Security & Invariant Enforcement.
 
+</div>
+
 ---
 
 ## 📖 Table of Contents
 - [Overview](#overview)
 - [Quick Start](#-quick-start)
 - [Project Structure](#-project-structure)
-- [Core Invariants (SSoT Δ0)](#core-invariants-ssot-Δ0)
+- [Core Invariants (SSoT Δ0)](#core-invariants-ssot-δ0)
 - [CI/CD Pipelines](#cicd-pipelines)
 - [Security & Compliance](#security--compliance)
 - [Contributing](#contributing)
