@@ -285,24 +285,40 @@ export const CONTRACT_REMEDIATIONS = [
     title: 'Type-Mismatched String Keccak Hash Check Remediated',
     severity: 'CRITICAL',
     description:
-      'Replaced fragile string hash comparison in `onlySovereign` modifier with direct canonical address comparison (`msg.sender == sovereignAddress`) to completely prevent sovereign lockout.',
+      'Replaced fragile string hash comparison in `onlySovereign` modifier with direct canonical address comparison (`msg.sender == sovereignOwner`) to completely prevent sovereign lockout.',
     impact: 'Prevents unauthorized impersonation and guarantees sovereign access.',
   },
   {
     code: 'ZYR-02',
-    title: 'Fail-Closed DoS Prevention Patch',
+    title: 'Fail-Closed DoS Prevention & Quorum Enforcement',
     severity: 'HIGH',
     description:
-      'Applied strict `onlySovereign` access control on `triggerFailClosed()` preventing unauthenticated external actors from causing Denial of Service locks.',
-    impact: 'Enforces sovereign-only authorization for panic-mode fail-closed circuit locks.',
+      'Applied strict `onlySovereignCore` access control on `triggerFailClosed()` and mandated 10/10 Deca-Key Quorum signature verification before circuit lock engagement.',
+    impact: 'Enforces sovereign-only authorization and 10/10 Quorum for panic-mode fail-closed circuit locks.',
   },
   {
     code: 'ZYR-03',
-    title: 'Seal Quarantine Registration Authorization Patch',
+    title: 'Sentinel AI Oracle Quarantine Authorization Patch',
     severity: 'HIGH',
     description:
-      'Restricted `quarantineSeal()` state mutation authority to Sovereign Principal or authorized Sentinel Oracle, protecting total seal cardinality (14,902) from rogue inflation.',
+      'Restricted `updateQuarantineSeal()` state mutation authority to authorized Sentinel AI Oracle (`onlySentinelOracle`), protecting total seal cardinality (14,902) from rogue inflation.',
     impact: 'Preserves SSoT integrity and prevents rogue seal creation.',
+  },
+  {
+    code: 'ZYR-04',
+    title: 'Reentrancy Vulnerability Protection (ReentrancyGuard)',
+    severity: 'CRITICAL',
+    description:
+      'Implemented robust `ReentrancyGuard` modifier (`_status != _ENTERED`) across all treasury withdrawal and distribution routines.',
+    impact: 'Completely eliminates recursive call reentrancy attack vectors on sovereign treasury pools.',
+  },
+  {
+    code: 'ZYR-05',
+    title: 'Gas-Stipend DoS Remediation (Low-Level Call with Reentrancy Guard)',
+    severity: 'HIGH',
+    description:
+      'Replaced hardcoded 2300 gas `.transfer()` with low-level `.call{value: _amount}("")` combined with `nonReentrant` modifier to support modern smart contract wallets and multisigs.',
+    impact: 'Eliminates unexpected out-of-gas reverts when transferring funds to smart contract receivers.',
   },
 ];
 

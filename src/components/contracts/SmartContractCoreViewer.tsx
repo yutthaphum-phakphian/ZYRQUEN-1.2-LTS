@@ -205,7 +205,7 @@ export const SmartContractCoreViewer: React.FC = () => {
             </span>
             <span className="px-2.5 py-0.5 rounded-full bg-emerald-500/15 text-emerald-300 border border-emerald-500/30 text-xs font-bold flex items-center gap-1.5">
               <ShieldCheck className="w-3.5 h-3.5" />
-              ZYR-01, ZYR-02, ZYR-03 REMEDIATED
+              ZYR-01 TO ZYR-05 REMEDIATED (5/5 PATCHED)
             </span>
             <span className="px-2.5 py-0.5 rounded-full bg-purple-500/15 text-purple-300 border border-purple-500/30 text-xs font-bold">
               ETDA SEC 9, 26, 28 BOUND
@@ -245,7 +245,7 @@ export const SmartContractCoreViewer: React.FC = () => {
         {[
           { id: 'overview', label: 'Contract Overview & State', icon: Layers },
           { id: 'simulator', label: 'EVM Method Execution Sandbox', icon: Zap },
-          { id: 'remediations', label: 'Security Patches (ZYR 01-03)', icon: ShieldCheck },
+          { id: 'remediations', label: 'Security Patches (ZYR 01-05)', icon: ShieldCheck },
           { id: 'source', label: 'Source Code (Solidity)', icon: FileCode },
           { id: 'abi', label: 'Contract ABI & Signatures', icon: Terminal },
         ].map((tab) => {

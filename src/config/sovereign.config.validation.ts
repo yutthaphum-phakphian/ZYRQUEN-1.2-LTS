@@ -1,3 +1,5 @@
+import { SOVEREIGN_CONFIG } from '../sovereign.config';
+
 // ==========================================
 // 1. Thai Legal Statutory Compliance
 // ==========================================
