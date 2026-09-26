@@ -296,6 +296,7 @@ export const ChamberRuntimeAtlas3D: React.FC<ChamberRuntimeAtlas3DProps> = ({
   const [showGrid, setShowGrid] = useState<boolean>(true);
   const [wireframeMode, setWireframeMode] = useState<boolean>(false);
   const [cameraZoom, setCameraZoom] = useState<number>(100);
+  const [hasWebGLError, setHasWebGLError] = useState<boolean>(false);
 
   // Telemetry Simulation Dataset (for Recharts HUD)
   const [entropyTelemetry, setEntropyTelemetry] = useState(() => [
@@ -355,17 +356,24 @@ export const ChamberRuntimeAtlas3D: React.FC<ChamberRuntimeAtlas3DProps> = ({
     cameraRef.current = camera;
 
     // 3. Renderer with antialiasing and sRGB encoding
-    const renderer = new THREE.WebGLRenderer({
-      antialias: true,
-      powerPreference: 'high-performance',
-      alpha: false,
-    });
-    renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
-    renderer.setSize(mount.clientWidth, mount.clientHeight || 450);
-    renderer.toneMapping = THREE.ACESFilmicToneMapping;
-    renderer.toneMappingExposure = 1.25;
-    mount.appendChild(renderer.domElement);
-    rendererRef.current = renderer;
+    let renderer: THREE.WebGLRenderer;
+    try {
+      renderer = new THREE.WebGLRenderer({
+        antialias: true,
+        powerPreference: 'high-performance',
+        alpha: false,
+      });
+      renderer.setPixelRatio(Math.min(window.devicePixelRatio || 1, 2));
+      renderer.setSize(mount.clientWidth || 300, mount.clientHeight || 450);
+      renderer.toneMapping = THREE.ACESFilmicToneMapping;
+      renderer.toneMappingExposure = 1.25;
+      mount.appendChild(renderer.domElement);
+      rendererRef.current = renderer;
+    } catch (e) {
+      console.warn('[ChamberRuntimeAtlas3D] WebGL context creation failed, engaging 2D fallback:', e);
+      setHasWebGLError(true);
+      return;
+    }
 
     // 4. Lighting Rig
     const ambientLight = new THREE.AmbientLight('#0a1128', 2.0);
@@ -891,8 +899,56 @@ export const ChamberRuntimeAtlas3D: React.FC<ChamberRuntimeAtlas3DProps> = ({
         expanded ? 'h-[85vh] sm:h-[88vh]' : 'h-[540px] sm:h-[620px]'
       } ${className}`}
     >
-      {/* 3D WebGL Mount Canvas */}
-      <div ref={mountRef} className="absolute inset-0 w-full h-full cursor-grab active:cursor-grabbing z-0" />
+      {/* 3D WebGL Mount Canvas or 2D Vector Fallback */}
+      {hasWebGLError ? (
+        <div className="absolute inset-0 w-full h-full flex flex-col items-center justify-center p-6 text-center z-0 bg-[#070a12]">
+          <div className="relative w-52 h-52 sm:w-60 sm:h-60 flex items-center justify-center mb-4">
+            <div className="absolute inset-0 rounded-full border border-cyan-500/30 animate-spin" style={{ animationDuration: '30s' }} />
+            <div className="absolute inset-3 rounded-full border border-amber-500/25 border-dashed animate-spin" style={{ animationDuration: '22s', animationDirection: 'reverse' }} />
+            <div className="absolute inset-8 rounded-full border border-emerald-500/30 animate-spin" style={{ animationDuration: '18s' }} />
+            
+            <div className="w-20 h-20 rounded-2xl bg-cyan-950/80 border border-cyan-400 flex flex-col items-center justify-center shadow-[0_0_30px_rgba(6,182,212,0.4)] z-10">
+              <span className="text-[10px] font-mono font-bold text-amber-400">#849202</span>
+              <span className="text-[8px] font-mono text-cyan-300">GENESIS</span>
+            </div>
+
+            {CHAMBER_NODES.map((node, idx) => {
+              const angle = (idx / CHAMBER_NODES.length) * 2 * Math.PI;
+              const x = 50 + 40 * Math.cos(angle);
+              const y = 50 + 40 * Math.sin(angle);
+              const isSelected = selectedNode?.id === node.id;
+              return (
+                <button
+                  key={node.id}
+                  type="button"
+                  onClick={() => {
+                    setSelectedNode(node);
+                    onSelectChamber?.(node.id);
+                  }}
+                  style={{ left: `${x}%`, top: `${y}%`, transform: 'translate(-50%, -50%)' }}
+                  className={`absolute w-6 h-6 rounded-full flex items-center justify-center text-[8.5px] font-mono font-bold transition-all cursor-pointer ${
+                    isSelected
+                      ? 'bg-cyan-400 text-black scale-125 shadow-[0_0_12px_rgba(6,182,212,1)] z-20'
+                      : 'bg-zinc-900 border border-cyan-500/50 text-cyan-300 hover:scale-110'
+                  }`}
+                  title={`${node.chamberNum} - ${node.nameEn}`}
+                >
+                  {node.chamberNum}
+                </button>
+              );
+            })}
+          </div>
+          <div className="text-xs font-mono font-bold text-cyan-300 flex items-center gap-1.5">
+            <ShieldCheck className="w-4 h-4 text-emerald-400" />
+            <span>Chamber Runtime Atlas — 2D High-Reliability Radar</span>
+          </div>
+          <p className="text-[10px] sm:text-[11px] text-zinc-400 mt-1 max-w-sm">
+            18 Canonical Chambers, live telemetry &amp; 10/10 REAL_HSM Quorum operational in fail-closed 2D vector mode.
+          </p>
+        </div>
+      ) : (
+        <div ref={mountRef} className="absolute inset-0 w-full h-full cursor-grab active:cursor-grabbing z-0" />
+      )}
 
       {/* Top HUD Header: Sovereign Deck & Quantum Telemetry Bar */}
       <div className="relative z-10 p-4 sm:p-5 flex flex-col sm:flex-row sm:items-center justify-between gap-3 bg-[#070a12]/90 border-b border-[#06B6D4]/20 pointer-events-none">

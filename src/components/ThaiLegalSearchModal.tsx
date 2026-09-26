@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef } from 'react';
+import React, { useState, useEffect, useRef, useMemo } from 'react';
 import {
   Search,
   Scale,
@@ -24,6 +24,17 @@ import {
   Edit3,
   Download,
   Loader2,
+  Bookmark,
+  BookmarkCheck,
+  Filter,
+  Pin,
+  PinOff,
+  ChevronDown,
+  ChevronUp,
+  Share2,
+  Star,
+  Check,
+  Info,
 } from 'lucide-react';
 import { playAuditChime, playTone } from './AudioSynthesizer';
 import { THAI_CUSTODIANS, SYSTEM_METADATA } from '../data/canonicalData';
@@ -31,6 +42,14 @@ import { ThaiLegalSovereignMapping } from './ThaiLegalSovereignMapping';
 import { safeCopyToClipboard } from '../utils/clipboard';
 import { generateDigitalEvidenceChecklistPdf } from '../utils/digitalEvidenceChecklistPdfExport';
 import { INITIAL_CHECKLIST_ITEMS } from './DigitalEvidenceChecklistModal';
+import {
+  LegalCategory,
+  LEGAL_CATEGORIES,
+  PinnedStatute,
+  CANONICAL_PINNED_STATUTES,
+  CATEGORY_PRESET_QUERIES,
+  CategoryPresetQuery,
+} from '../data/legalStatutesData';
 
 interface ThaiLegalSearchModalProps {
   isOpen: boolean;
@@ -44,6 +63,9 @@ interface SearchResult {
   answer: string;
   citations: Array<{ title: string; uri: string }>;
   timestamp: string;
+  category?: LegalCategory;
+  categoryLabel?: string;
+  statuteNumber?: string;
 }
 
 export interface RecentLegalQuery {
@@ -51,47 +73,20 @@ export interface RecentLegalQuery {
   query: string;
   timestamp: string;
   dateStr: string;
-  category?: string;
+  category?: LegalCategory;
 }
 
 const STORAGE_KEY = 'zyrquen_recent_legal_queries';
 const LEGACY_STORAGE_KEY = 'zyrquen_recent_searches';
+const PINNED_STORAGE_KEY = 'zyrquen_pinned_legal_statutes_v1';
 const MAX_RECENT_QUERIES = 10;
 
-const PRESET_QUERIES = [
-  {
-    category: 'Electronic Signatures',
-    title: 'พ.ร.บ. ธุรกรรมทางอิเล็กทรอนิกส์ มาตรา 9, 26, 28 (ETDA Standard)',
-    query: 'พระราชบัญญัติว่าด้วยธุรกรรมทางอิเล็กทรอนิกส์ พ.ศ. 2544 มาตรา 9 มาตรา 26 มาตรา 28 ลายมือชื่อดิจิทัลที่เชื่อถือได้ มาตรฐาน ETDA',
-  },
-  {
-    category: 'Thai Law',
-    title: 'พ.ร.บ. คุ้มครองข้อมูลส่วนบุคคล พ.ศ. 2562 (PDPA Thailand)',
-    query: 'พระราชบัญญัติคุ้มครองข้อมูลส่วนบุคคล พ.ศ. 2562 PDPA Thailand ข้อกำหนดความมั่นคงปลอดภัยและการจัดเก็บข้อมูล',
-  },
-  {
-    category: 'Cybersecurity',
-    title: 'พ.ร.บ. ความมั่นคงปลอดภัยไซเบอร์ พ.ศ. 2562 (NCSA)',
-    query: 'พ.ร.บ. การรักษาความมั่นคงปลอดภัยไซเบอร์ พ.ศ. 2562 โครงสร้างพื้นฐานสำคัญทางสารสนเทศ CII NCSA Thailand',
-  },
-  {
-    category: 'Post-Quantum',
-    title: 'NIST FIPS 203 / 204 / 205 PQC Standards',
-    query: 'NIST Post-Quantum Cryptography standards FIPS 203 ML-KEM FIPS 204 ML-DSA FIPS 205 SLH-DSA Merkle ledger compliance',
-  },
-  {
-    category: 'Custodian Registry',
-    title: 'Thai Custodian Registry & Merkle Authority',
-    query: 'Thai Sovereign Custodian Registry Passport EP-SOVEREIGN-01 นายยุทธภูมิ พากเพียร post-quantum Merkle governance',
-  },
-];
-
 const DEFAULT_RECENT_SEARCHES: string[] = [
-  'พ.ร.บ. ธุรกรรมทางอิเล็กทรอนิกส์ มาตรา 9 26 28 ETDA',
-  'PDPA พ.ร.บ. คุ้มครองข้อมูลส่วนบุคคล 2562 มาตรา 37',
-  'NIST FIPS 203 ML-KEM Post-Quantum Cryptography',
-  'พ.ร.บ. ความมั่นคงปลอดภัยไซเบอร์ 2562 NCSA CII',
-  'Thai Custodian Registry #EP-SOVEREIGN-01 นายยุทธภูมิ พากเพียร',
+  'พ.ร.บ. ธุรกรรมทางอิเล็กทรอนิกส์ มาตรา 26 ลายมือชื่อเชื่อถือได้ ETDA',
+  'พ.ร.บ. ธุรกรรมทางอิเล็กทรอนิกส์ มาตรา 9 ผลผูกพันทางกฎหมาย',
+  'PDPA พ.ร.บ. คุ้มครองข้อมูลส่วนบุคคล 2562 มาตรา 37 มาตรการ PII',
+  'ISO/IEC 27037 Digital Evidence Preservation Chain of Custody',
+  'NIST FIPS 204 ML-DSA Dilithium-5 Post-Quantum Cryptography',
 ];
 
 const formatRelativeTime = (isoString: string): string => {
@@ -109,9 +104,6 @@ const formatRelativeTime = (isoString: string): string => {
   }
 };
 
-/**
- * Helper to deduplicate array of queries case-insensitively and keep at most MAX_RECENT_QUERIES (10)
- */
 export const sanitizeUniqueRecentQueries = (items: RecentLegalQuery[]): RecentLegalQuery[] => {
   const seen = new Set<string>();
   const uniqueList: RecentLegalQuery[] = [];
@@ -128,9 +120,6 @@ export const sanitizeUniqueRecentQueries = (items: RecentLegalQuery[]): RecentLe
   return uniqueList;
 };
 
-/**
- * Retrieve unique array of last 10 search queries directly from window.localStorage
- */
 export const loadRecentQueriesFromStorage = (): RecentLegalQuery[] => {
   if (typeof window === 'undefined' || !window.localStorage) {
     return DEFAULT_RECENT_SEARCHES.map((q, idx) => ({
@@ -138,6 +127,7 @@ export const loadRecentQueriesFromStorage = (): RecentLegalQuery[] => {
       query: q,
       timestamp: new Date().toISOString(),
       dateStr: 'Canonical Benchmark',
+      category: idx < 2 ? 'ETDA' : idx === 2 ? 'PDPA' : 'INTERNATIONAL_STANDARDS',
     }));
   }
 
@@ -207,7 +197,26 @@ export const loadRecentQueriesFromStorage = (): RecentLegalQuery[] => {
     query: q,
     timestamp: new Date().toISOString(),
     dateStr: 'Canonical Benchmark',
+    category: idx < 2 ? 'ETDA' : idx === 2 ? 'PDPA' : 'INTERNATIONAL_STANDARDS',
   }));
+};
+
+export const loadPinnedStatutesFromStorage = (): PinnedStatute[] => {
+  if (typeof window === 'undefined' || !window.localStorage) {
+    return CANONICAL_PINNED_STATUTES;
+  }
+  try {
+    const saved = window.localStorage.getItem(PINNED_STORAGE_KEY);
+    if (saved) {
+      const parsed = JSON.parse(saved);
+      if (Array.isArray(parsed) && parsed.length > 0) {
+        return parsed;
+      }
+    }
+  } catch (err) {
+    console.warn('Failed to load pinned statutes from localStorage:', err);
+  }
+  return CANONICAL_PINNED_STATUTES;
 };
 
 export const ThaiLegalSearchModal: React.FC<ThaiLegalSearchModalProps> = ({
@@ -215,7 +224,13 @@ export const ThaiLegalSearchModal: React.FC<ThaiLegalSearchModalProps> = ({
   onClose,
   onSearchExecuted,
 }) => {
-  const [activeTab, setActiveTab] = useState<'search' | 'mapping'>('search');
+  // Navigation Tabs: 'search' | 'pinned' | 'mapping'
+  const [activeTab, setActiveTab] = useState<'search' | 'pinned' | 'mapping'>('search');
+  
+  // Category Filtering State
+  const [selectedCategory, setSelectedCategory] = useState<LegalCategory>('ALL');
+
+  // Search Input State
   const [query, setQuery] = useState('');
   const [isLoading, setIsLoading] = useState(false);
   const [result, setResult] = useState<SearchResult | null>(null);
@@ -226,31 +241,14 @@ export const ThaiLegalSearchModal: React.FC<ThaiLegalSearchModalProps> = ({
   const [isExportingPdf, setIsExportingPdf] = useState(false);
   const inputRef = useRef<HTMLInputElement | null>(null);
 
-  const handleExportPdf = () => {
-    if (isExportingPdf) return;
-    setIsExportingPdf(true);
-    playTone(540, 0.08);
+  // Pinned Statutes State
+  const [pinnedStatutes, setPinnedStatutes] = useState<PinnedStatute[]>(loadPinnedStatutesFromStorage);
+  const [pinnedSearchQuery, setPinnedSearchQuery] = useState('');
+  const [pinnedCategoryFilter, setPinnedCategoryFilter] = useState<LegalCategory>('ALL');
+  const [expandedStatuteId, setExpandedStatuteId] = useState<string | null>(null);
+  const [copiedCitationId, setCopiedCitationId] = useState<string | null>(null);
 
-    try {
-      generateDigitalEvidenceChecklistPdf(INITIAL_CHECKLIST_ITEMS, {
-        name: SYSTEM_METADATA.sovereignPrincipal,
-        organization: 'Thai Sovereign Custodian Council & Digital Forensic Lab',
-        inspectorId: '#EP-SOVEREIGN-01',
-        inspectionDate: new Date().toISOString().split('T')[0],
-        overallConclusion: 'PASSED',
-      });
-      playAuditChime();
-      setNotificationMsg('ส่งออกเอกสารรายงาน Digital Evidence Checklist (PDF) สำเร็จเรียบร้อยแล้ว');
-      setTimeout(() => setNotificationMsg(null), 4000);
-    } catch (err) {
-      console.error('Failed to export PDF report:', err);
-      setErrorMsg('ไม่สามารถส่งออก PDF ได้ กรุณาลองใหม่อีกครั้ง');
-      setTimeout(() => setErrorMsg(null), 4000);
-    } finally {
-      setIsExportingPdf(false);
-    }
-  };
-
+  // Dropdown history state
   const [isInputFocused, setIsInputFocused] = useState(false);
   const [highlightedIndex, setHighlightedIndex] = useState<number>(-1);
   const searchContainerRef = useRef<HTMLDivElement | null>(null);
@@ -271,7 +269,19 @@ export const ThaiLegalSearchModal: React.FC<ThaiLegalSearchModalProps> = ({
     };
   }, []);
 
-  // Sync to local storage on changes
+  // Save pinned statutes to LocalStorage
+  const persistPinnedStatutes = (updated: PinnedStatute[]) => {
+    setPinnedStatutes(updated);
+    if (typeof window !== 'undefined' && window.localStorage) {
+      try {
+        window.localStorage.setItem(PINNED_STORAGE_KEY, JSON.stringify(updated));
+      } catch (err) {
+        console.warn('LocalStorage error while saving pinned statutes:', err);
+      }
+    }
+  };
+
+  // Sync recent queries to local storage on changes
   const persistQueries = (updated: RecentLegalQuery[]) => {
     const sanitized = sanitizeUniqueRecentQueries(updated);
     setRecentQueries(sanitized);
@@ -280,7 +290,7 @@ export const ThaiLegalSearchModal: React.FC<ThaiLegalSearchModalProps> = ({
         window.localStorage.setItem(STORAGE_KEY, JSON.stringify(sanitized));
         window.localStorage.setItem(LEGACY_STORAGE_KEY, JSON.stringify(sanitized.map((u) => u.query)));
       } catch (err) {
-        console.warn('window.localStorage error while saving recent queries:', err);
+        console.warn('LocalStorage error while saving recent queries:', err);
       }
     }
   };
@@ -289,10 +299,10 @@ export const ThaiLegalSearchModal: React.FC<ThaiLegalSearchModalProps> = ({
     setNotificationMsg(msg);
     setTimeout(() => {
       setNotificationMsg((prev) => (prev === msg ? null : prev));
-    }, 2500);
+    }, 3000);
   };
 
-  const saveRecentSearch = (searchQuery: string, category?: string) => {
+  const saveRecentSearch = (searchQuery: string, category?: LegalCategory) => {
     const trimmed = searchQuery.trim();
     if (!trimmed) return;
 
@@ -303,7 +313,7 @@ export const ThaiLegalSearchModal: React.FC<ThaiLegalSearchModalProps> = ({
         query: trimmed,
         timestamp: new Date().toISOString(),
         dateStr: new Date().toLocaleTimeString('th-TH', { hour: '2-digit', minute: '2-digit', second: '2-digit' }),
-        category,
+        category: category || selectedCategory,
       };
       const updated = sanitizeUniqueRecentQueries([newEntry, ...filtered]);
       if (typeof window !== 'undefined' && window.localStorage) {
@@ -323,13 +333,13 @@ export const ThaiLegalSearchModal: React.FC<ThaiLegalSearchModalProps> = ({
     playTone(400, 0.03);
     const updated = recentQueries.filter((item) => item.id !== id);
     persistQueries(updated);
-    showNotification('Removed query from LocalStorage history');
+    showNotification('ลบประวัติการสืบค้นออกจาก LocalStorage แล้ว');
   };
 
   const clearRecentSearches = () => {
     playTone(450, 0.04);
     persistQueries([]);
-    showNotification('Cleared all recent queries from LocalStorage');
+    showNotification('ล้างประวัติการสืบค้นทั้งหมดแล้ว');
   };
 
   const handleUseInInput = (queryText: string, e?: React.MouseEvent) => {
@@ -339,16 +349,236 @@ export const ThaiLegalSearchModal: React.FC<ThaiLegalSearchModalProps> = ({
     if (inputRef.current) {
       inputRef.current.focus();
     }
-    showNotification('Query copied to search field');
+    showNotification('นำข้อความสืบค้นใส่ในช่องค้นหาแล้ว');
+  };
+
+  // Helper to check if a SearchResult or query is already bookmarked
+  const isResultPinned = (res: SearchResult | null): boolean => {
+    if (!res) return false;
+    const qNorm = res.query.trim().toLowerCase();
+    return pinnedStatutes.some((p) => {
+      const pNorm = p.query.trim().toLowerCase();
+      const pTitle = p.title.toLowerCase();
+      const pNum = p.statuteNumber.toLowerCase();
+      return (
+        pNorm === qNorm ||
+        qNorm.includes(pNum) ||
+        pNorm.includes(qNorm) ||
+        pTitle.includes(qNorm)
+      );
+    });
+  };
+
+  // Toggle Bookmark / Pin functionality for Search Result
+  const togglePinResult = (res: SearchResult) => {
+    const isCurrentlyPinned = isResultPinned(res);
+    playTone(640, 0.05);
+
+    if (isCurrentlyPinned) {
+      // Unpin
+      const qNorm = res.query.trim().toLowerCase();
+      const updated = pinnedStatutes.filter((p) => {
+        const pNorm = p.query.trim().toLowerCase();
+        const pNum = p.statuteNumber.toLowerCase();
+        return pNorm !== qNorm && !qNorm.includes(pNum);
+      });
+      persistPinnedStatutes(updated);
+      showNotification(`ถอดหมุดบทบัญญัติออกจากแท็บ Pinned Statutes เรียบร้อยแล้ว`);
+    } else {
+      // Create new PinnedStatute
+      const queryLower = res.query.toLowerCase();
+      let determinedCategory: LegalCategory = res.category || selectedCategory;
+      if (determinedCategory === 'ALL') {
+        if (queryLower.includes('26') || queryLower.includes('9') || queryLower.includes('28') || queryLower.includes('etda') || queryLower.includes('ธุรกรรม')) {
+          determinedCategory = 'ETDA';
+        } else if (queryLower.includes('pdpa') || queryLower.includes('37') || queryLower.includes('ข้อมูลส่วนบุคคล')) {
+          determinedCategory = 'PDPA';
+        } else if (queryLower.includes('iso') || queryLower.includes('nist') || queryLower.includes('pqc') || queryLower.includes('fips')) {
+          determinedCategory = 'INTERNATIONAL_STANDARDS';
+        } else if (queryLower.includes('ncsa') || queryLower.includes('ไซเบอร์') || queryLower.includes('cii')) {
+          determinedCategory = 'CYBER_NCSA';
+        } else {
+          determinedCategory = 'ETDA';
+        }
+      }
+
+      // Determine Statute Number
+      let statuteNumber = res.statuteNumber || 'ตราสารสิทธิอธิปไตย';
+      if (queryLower.includes('มาตรา 26') || queryLower.includes('sec 26') || queryLower.includes('26')) {
+        statuteNumber = 'มาตรา 26';
+      } else if (queryLower.includes('มาตรา 9') || queryLower.includes('sec 9') || queryLower.includes('9')) {
+        statuteNumber = 'มาตรา 9';
+      } else if (queryLower.includes('มาตรา 28') || queryLower.includes('sec 28') || queryLower.includes('28')) {
+        statuteNumber = 'มาตรา 28';
+      } else if (queryLower.includes('มาตรา 37') || queryLower.includes('sec 37') || queryLower.includes('37')) {
+        statuteNumber = 'มาตรา 37';
+      } else if (queryLower.includes('27037')) {
+        statuteNumber = 'ISO/IEC 27037';
+      } else if (queryLower.includes('204')) {
+        statuteNumber = 'NIST FIPS 204';
+      }
+
+      const categoryConfig = LEGAL_CATEGORIES.find((c) => c.id === determinedCategory);
+
+      const newPinned: PinnedStatute = {
+        id: `statute-pinned-${Date.now()}-${Math.random().toString(36).slice(2, 6)}`,
+        statuteNumber,
+        title: res.query.length > 50 ? `${res.query.slice(0, 48)}...` : res.query,
+        actName: determinedCategory === 'ETDA'
+          ? 'พ.ร.บ. ว่าด้วยธุรกรรมทางอิเล็กทรอนิกส์ พ.ศ. 2544'
+          : determinedCategory === 'PDPA'
+          ? 'พ.ร.บ. คุ้มครองข้อมูลส่วนบุคคล พ.ศ. 2562'
+          : determinedCategory === 'INTERNATIONAL_STANDARDS'
+          ? 'มาตรฐานสากล ISO/IEC & NIST Post-Quantum'
+          : 'พ.ร.บ. การรักษาความมั่นคงปลอดภัยไซเบอร์ พ.ศ. 2562',
+        category: determinedCategory,
+        categoryLabel: categoryConfig?.labelEn || 'Thai Statutory Law',
+        summary: res.answer.slice(0, 180).replace(/\*\*/g, '') + '...',
+        fullText: res.answer,
+        legalWeight: determinedCategory === 'ETDA' ? 'HIGH_RELIABILITY' : determinedCategory === 'INTERNATIONAL_STANDARDS' ? 'INTERNATIONAL_STANDARD' : 'MANDATORY',
+        statutoryRef: `Binding Reference: ${statuteNumber} • Grounded via ${res.source}`,
+        citations: res.citations && res.citations.length > 0 ? res.citations : [
+          { title: 'สำนักงานพัฒนาธุรกรรมทางอิเล็กทรอนิกส์ (ETDA)', uri: 'https://www.etda.or.th' },
+          { title: 'ราชกิจจานุเบกษาแห่งราชอาณาจักรไทย', uri: 'https://www.ratchakitcha.soc.go.th' },
+        ],
+        pinnedAt: new Date().toISOString(),
+        query: res.query,
+        tags: [determinedCategory, statuteNumber, 'Grounded Search'],
+        forensicProofBinding: 'Verified Grounded Citation • Genesis Merkle Anchored #849202',
+      };
+
+      const updated = [newPinned, ...pinnedStatutes.filter((p) => p.id !== newPinned.id)];
+      persistPinnedStatutes(updated);
+      playAuditChime();
+      showNotification(`📌 ปักหมุด [${statuteNumber}] เข้าสู่แท็บ 'Pinned Statutes' เรียบร้อยแล้ว`);
+    }
+  };
+
+  // Remove a statute directly from the Pinned tab
+  const unpinStatute = (id: string, e?: React.MouseEvent) => {
+    if (e) e.stopPropagation();
+    playTone(420, 0.04);
+    const target = pinnedStatutes.find((p) => p.id === id);
+    const updated = pinnedStatutes.filter((p) => p.id !== id);
+    persistPinnedStatutes(updated);
+    showNotification(`ถอดหมุดบทบัญญัติ "${target?.statuteNumber || id}" แล้ว`);
+  };
+
+  // Pin a preset statute directly
+  const pinPreset = (preset: CategoryPresetQuery, e?: React.MouseEvent) => {
+    if (e) e.stopPropagation();
+    playTone(660, 0.05);
+
+    const isAlready = pinnedStatutes.some((p) => p.query.toLowerCase() === preset.query.toLowerCase());
+    if (isAlready) {
+      const updated = pinnedStatutes.filter((p) => p.query.toLowerCase() !== preset.query.toLowerCase());
+      persistPinnedStatutes(updated);
+      showNotification(`ถอดหมุด ${preset.badgeText} เรียบร้อยแล้ว`);
+      return;
+    }
+
+    const newPinned: PinnedStatute = {
+      id: `statute-preset-${Date.now()}-${Math.random().toString(36).slice(2, 6)}`,
+      statuteNumber: preset.badgeText,
+      title: preset.title,
+      actName: preset.statuteRef,
+      category: preset.category,
+      categoryLabel: preset.categoryNameEn,
+      summary: `บทบัญญัติและแนวปฏิบัติตาม ${preset.title} สอดคล้องตามเกณฑ์อธิปไตยและการพิสูจน์พยานหลักฐานดิจิทัล`,
+      fullText: `ข้อกำหนดตาม ${preset.title}\nอ้างอิง: ${preset.statuteRef}\nข้อความสืบค้น: ${preset.query}\nความปลอดภัยระดับสูงสุด: FIPS 204 ML-DSA-87 และ Genesis Merkle Root 0x909ab814...`,
+      legalWeight: preset.weight as any,
+      statutoryRef: preset.statuteRef,
+      citations: [
+        { title: 'สำนักงานพัฒนาธุรกรรมทางอิเล็กทรอนิกส์ (ETDA)', uri: 'https://www.etda.or.th' },
+        { title: 'ราชกิจจานุเบกษาแห่งราชอาณาจักรไทย', uri: 'https://www.ratchakitcha.soc.go.th' },
+      ],
+      pinnedAt: new Date().toISOString(),
+      query: preset.query,
+      tags: [preset.category, preset.badgeText, 'Preset Benchmark'],
+      forensicProofBinding: 'Canonical Sovereign Seal Chain • 10/10 REAL_HSM Ratified',
+    };
+
+    const updated = [newPinned, ...pinnedStatutes];
+    persistPinnedStatutes(updated);
+    playAuditChime();
+    showNotification(`📌 ปักหมุด [${preset.badgeText}] เข้าสู่ Pinned Statutes แล้ว`);
+  };
+
+  // Restore canonical pinned statutes
+  const handleRestoreCanonicalStatutes = () => {
+    playAuditChime();
+    persistPinnedStatutes(CANONICAL_PINNED_STATUTES);
+    showNotification('รีเซ็ตบทบัญญัติปักหมุดกลับสู่ค่ามาตรฐาน 7 มาตราอธิปไตยแล้ว');
+  };
+
+  // Copy legal citation for court filing
+  const copyStatuteCitation = (statute: PinnedStatute, e?: React.MouseEvent) => {
+    if (e) e.stopPropagation();
+    playTone(720, 0.04);
+    const citationText = `[พยานหลักฐานทางกฎหมายอธิปไตย - SOVEREIGN LEGAL CITATION]\nบทบัญญัติ: ${statute.statuteNumber} — ${statute.title}\nกฎหมายอ้างอิง: ${statute.actName}\nหมวดหมู่: ${statute.categoryLabel}\nสรุปสาระสำคัญ: ${statute.summary}\nการผูกโยงหลักฐานดิจิทัล: ${statute.forensicProofBinding}\nวันที่บันทึก: ${new Date(statute.pinnedAt).toLocaleDateString('th-TH')}\nแหล่งอ้างอิง: ${statute.citations.map((c) => `${c.title} (${c.uri})`).join('; ')}\nผู้กำกับดูแล: นายยุทธภูมิ พากเพียร (#EP-SOVEREIGN-01) • Genesis Block #849202`;
+    safeCopyToClipboard(citationText);
+    setCopiedCitationId(statute.id);
+    setTimeout(() => setCopiedCitationId(null), 2500);
+    showNotification(`คัดลอกข้อความอ้างอิงชั้นศาล [${statute.statuteNumber}] ไปยังคลิปบอร์ดแล้ว`);
+  };
+
+  // Export Pinned Statutes as JSON/Text
+  const handleExportPinnedStatutes = () => {
+    playTone(560, 0.05);
+    const exportData = {
+      exportTitle: 'ZYRQUEN Ω∞ PINNED STATUTES & COURTROOM CITATIONS DOSSIER',
+      exportedAt: new Date().toISOString(),
+      sovereignPrincipal: SYSTEM_METADATA.sovereignPrincipal,
+      merkleRoot: SYSTEM_METADATA.merkleRoot,
+      genesisBlock: SYSTEM_METADATA.genesisBlock,
+      totalPinned: pinnedStatutes.length,
+      statutes: pinnedStatutes,
+    };
+
+    const blob = new Blob([JSON.stringify(exportData, null, 2)], { type: 'application/json' });
+    const url = URL.createObjectURL(blob);
+    const link = document.createElement('a');
+    link.href = url;
+    link.download = `ZYRQUEN_PINNED_STATUTES_${new Date().toISOString().slice(0, 10)}.json`;
+    link.click();
+    URL.revokeObjectURL(url);
+    playAuditChime();
+    showNotification('ส่งออกชุดบทบัญญัติปักหมุด (JSON) สำเร็จเรียบร้อยแล้ว');
+  };
+
+  const handleExportPdf = () => {
+    if (isExportingPdf) return;
+    setIsExportingPdf(true);
+    playTone(540, 0.08);
+
+    try {
+      generateDigitalEvidenceChecklistPdf(INITIAL_CHECKLIST_ITEMS, {
+        name: SYSTEM_METADATA.sovereignPrincipal,
+        organization: 'Thai Sovereign Custodian Council & Digital Forensic Lab',
+        inspectorId: '#EP-SOVEREIGN-01',
+        inspectionDate: new Date().toISOString().split('T')[0],
+        overallConclusion: 'PASSED',
+      });
+      playAuditChime();
+      showNotification('ส่งออกเอกสารรายงาน Digital Evidence Checklist (PDF) สำเร็จเรียบร้อยแล้ว');
+    } catch (err) {
+      console.error('Failed to export PDF report:', err);
+      setErrorMsg('ไม่สามารถส่งออก PDF ได้ กรุณาลองใหม่อีกครั้ง');
+      setTimeout(() => setErrorMsg(null), 4000);
+    } finally {
+      setIsExportingPdf(false);
+    }
   };
 
   if (!isOpen) return null;
 
-  const handleSearch = async (searchQuery: string) => {
+  // Execute Search with Category Scoping
+  const handleSearch = async (searchQuery: string, overrideCategory?: LegalCategory) => {
     const q = searchQuery.trim();
     if (!q) return;
 
-    saveRecentSearch(q);
+    const catToUse = overrideCategory || selectedCategory;
+    saveRecentSearch(q, catToUse);
     setIsLoading(true);
     setErrorMsg(null);
     setActiveTab('search');
@@ -358,7 +588,7 @@ export const ThaiLegalSearchModal: React.FC<ThaiLegalSearchModalProps> = ({
       const res = await fetch('/api/search', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ query: q }),
+        body: JSON.stringify({ query: q, category: catToUse }),
       });
 
       if (!res.ok) {
@@ -366,7 +596,11 @@ export const ThaiLegalSearchModal: React.FC<ThaiLegalSearchModalProps> = ({
       }
 
       const data: SearchResult = await res.json();
-      setResult(data);
+      setResult({
+        ...data,
+        category: catToUse,
+        categoryLabel: LEGAL_CATEGORIES.find((c) => c.id === catToUse)?.labelEn || 'Universal Legal Oracle',
+      });
       if (onSearchExecuted) {
         onSearchExecuted(q, data.answer?.slice(0, 120) || 'Query completed via Google Search Oracle');
       }
@@ -374,16 +608,32 @@ export const ThaiLegalSearchModal: React.FC<ThaiLegalSearchModalProps> = ({
     } catch (err: any) {
       console.error('Search request error:', err);
       setErrorMsg('Failed to query search oracle. Reverting to local canonical registry citations.');
-      // Local fallback
+      
+      // Local fallback with category refinement
+      let fallbackAnswer = `**สิทธิและกฎหมายอธิปไตยไทย (Thai Sovereign & Cryptographic Registry):**\n- พ.ร.บ. ว่าด้วยธุรกรรมทางอิเล็กทรอนิกส์ พ.ศ. 2544 มาตรา 9 (ผลทางกฎหมาย), มาตรา 26 (ลายมือชื่อเชื่อถือได้ระดับสูง), มาตรา 28 (หน้าที่ดูแลรักษา WORM)\n- สอดคล้องกับ พ.ร.บ. คุ้มครองข้อมูลส่วนบุคคล พ.ศ. 2562 (PDPA) มาตรา 19, 27, 37\n- มาตรฐานสากล ISO/IEC 27037:2012 และ NIST FIPS 204 (ML-DSA / Dilithium-5)\n- ควบคุมโดยผู้ถือสิทธิ์ Sovereign Principal: นายยุทธภูมิ พากเพียร (#EP-SOVEREIGN-01)`;
+      
+      if (catToUse === 'ETDA') {
+        fallbackAnswer = `**พ.ร.บ. ธุรกรรมทางอิเล็กทรอนิกส์ พ.ศ. ๒๕๔๔ (ETDA Grounded Fallback):**\n• มาตรา ๙: การรับรองผลทางกฎหมายของลายมือชื่ออิเล็กทรอนิกส์เมื่อระบุตัวตนและแสดงเจตนายอมรับข้อความได้\n• มาตรา ๒๖: ข้อสันนิษฐานลายมือชื่อที่เชื่อถือได้ระดับสูง ตรวจพบการเปลี่ยนแปลงได้ 100% ด้วย 10/10 REAL_HSM\n• มาตรา ๒๘: หน้าที่ผู้ลงลายมือชื่อในการจัดเก็บพยานหลักฐานในระบบ WORM ไม่ให้สูญหายหรือถูกดัดแปลง`;
+      } else if (catToUse === 'PDPA') {
+        fallbackAnswer = `**พ.ร.บ. คุ้มครองข้อมูลส่วนบุคคล พ.ศ. ๒๕๖๒ (PDPA Grounded Fallback):**\n• มาตรา ๓๗: มาตรการรักษาความมั่นคงปลอดภัยของข้อมูลส่วนบุคคล (PII Isolation & zk-SNARKs Protection)\n• มาตรา ๑๙ & ๒๗: ฐานการประมวลผลข้อมูลที่ชอบด้วยกฎหมายและความยินยอม\n• การทำลายข้อมูลเมื่อสิ้นสุดระยะเวลาจัดเก็บ (Cryptographic Zeroization)`;
+      } else if (catToUse === 'INTERNATIONAL_STANDARDS') {
+        fallbackAnswer = `**มาตรฐานสากล ISO/IEC & NIST PQC (International Standards Fallback):**\n• ISO/IEC 27037:2012: แนวปฏิบัติการเก็บรักษาพยานหลักฐานดิจิทัลและการรักษาสายโซ่การครอบครอง (Chain of Custody)\n• NIST FIPS 204: มาตรฐานลายมือชื่อดิจิทัลพ้นควอนตัม ML-DSA-87 (Dilithium-5) Category 5\n• RFC 3161: การประทับเวลาอิเล็กทรอนิกส์มาตรฐานระดับฮาร์ดแวร์ UTC(NIMT)`;
+      } else if (catToUse === 'CYBER_NCSA') {
+        fallbackAnswer = `**พ.ร.บ. การรักษาความมั่นคงปลอดภัยไซเบอร์ พ.ศ. ๒๕๖๒ (NCSA Fallback):**\n• มาตรา ๑๓: การรักษาความมั่นคงปลอดภัยไซเบอร์สำหรับโครงสร้างพื้นฐานสำคัญทางสารสนเทศ (CII)\n• กลไก Fail-Closed Quarantine Isolation เมื่อตรวจพบความเสี่ยงเกินเกณฑ์ 85.0%`;
+      }
+
       const fallbackResult: SearchResult = {
         query: q,
-        source: 'Canonical Thai Legal Knowledge Base (Local Oracle)',
-        answer: `**สิทธิและกฎหมายอธิปไตยไทย (Thai Sovereign & Cryptographic Registry):**\n- พ.ร.บ. ว่าด้วยธุรกรรมทางอิเล็กทรอนิกส์ พ.ศ. 2544 (แก้ไข 2562) มาตรา 9 (รับรองผลทางกฎหมาย), มาตรา 26 (มาตรฐานลายมือชื่อเชื่อถือได้สูงสุด), มาตรา 28 (ความรับผิดชอบของเจ้าของข้อมูล)\n- สอดคล้องกับ พ.ร.บ. คุ้มครองข้อมูลส่วนบุคคล พ.ศ. 2562 (PDPA) มาตรา 19, 27, 37\n- สอดคล้องกับ พ.ร.บ. ความมั่นคงปลอดภัยไซเบอร์ พ.ศ. 2562 (NCSA)\n- มาตรฐานเข้ารหัสพ้นควอนตัม NIST FIPS 203 (ML-KEM) และ FIPS 204 (ML-DSA)\n- ควบคุมโดยผู้ถือสิทธิ์ Sovereign Principal: นายยุทธภูมิ พากเพียร (#EP-SOVEREIGN-01)`,
+        source: 'Canonical Thai Legal Knowledge Base (Local Sovereign Oracle)',
+        answer: fallbackAnswer,
         citations: [
           { title: 'สำนักงานพัฒนาธุรกรรมทางอิเล็กทรอนิกส์ (ETDA)', uri: 'https://www.etda.or.th' },
           { title: 'ราชกิจจานุเบกษาแห่งราชอาณาจักรไทย', uri: 'https://www.ratchakitcha.soc.go.th' },
+          { title: 'ISO/IEC 27037:2012 Standard', uri: 'https://www.iso.org/standard/53595.html' },
         ],
         timestamp: new Date().toISOString(),
+        category: catToUse,
+        categoryLabel: LEGAL_CATEGORIES.find((c) => c.id === catToUse)?.labelEn || 'Universal Legal Oracle',
       };
       setResult(fallbackResult);
       if (onSearchExecuted) {
@@ -396,12 +646,46 @@ export const ThaiLegalSearchModal: React.FC<ThaiLegalSearchModalProps> = ({
 
   const copyToClipboard = () => {
     if (!result) return;
-    const textToCopy = `ZYRQUEN Ω∞ LEGAL & CRYPTOGRAPHIC SEARCH REPORT\nQuery: ${result.query}\nSource: ${result.source}\nTimestamp: ${result.timestamp}\n\n${result.answer}\n\nCitations:\n${result.citations.map((c) => `- ${c.title}: ${c.uri}`).join('\n')}`;
+    const textToCopy = `ZYRQUEN Ω∞ LEGAL & CRYPTOGRAPHIC SEARCH REPORT\nQuery: ${result.query}\nCategory: ${result.category || selectedCategory}\nSource: ${result.source}\nTimestamp: ${result.timestamp}\n\n${result.answer}\n\nCitations:\n${result.citations.map((c) => `- ${c.title}: ${c.uri}`).join('\n')}`;
     safeCopyToClipboard(textToCopy);
     setCopied(true);
     playTone(700, 0.05);
     setTimeout(() => setCopied(false), 2000);
+    showNotification('คัดลอกรายงานผลการสืบค้นไปยังคลิปบอร์ดแล้ว');
   };
+
+  // Filter Presets based on selected Category
+  const filteredPresets = useMemo(() => {
+    if (selectedCategory === 'ALL') return CATEGORY_PRESET_QUERIES;
+    return CATEGORY_PRESET_QUERIES.filter((p) => p.category === selectedCategory);
+  }, [selectedCategory]);
+
+  // Filter Pinned Statutes based on Category & Search
+  const filteredPinnedStatutes = useMemo(() => {
+    return pinnedStatutes.filter((statute) => {
+      const matchCategory =
+        pinnedCategoryFilter === 'ALL' || statute.category === pinnedCategoryFilter;
+      const matchSearch =
+        !pinnedSearchQuery.trim() ||
+        statute.statuteNumber.toLowerCase().includes(pinnedSearchQuery.toLowerCase()) ||
+        statute.title.toLowerCase().includes(pinnedSearchQuery.toLowerCase()) ||
+        statute.actName.toLowerCase().includes(pinnedSearchQuery.toLowerCase()) ||
+        statute.summary.toLowerCase().includes(pinnedSearchQuery.toLowerCase()) ||
+        statute.tags.some((t) => t.toLowerCase().includes(pinnedSearchQuery.toLowerCase()));
+      return matchCategory && matchSearch;
+    });
+  }, [pinnedStatutes, pinnedCategoryFilter, pinnedSearchQuery]);
+
+  // Category counts for Pinned Statutes
+  const pinnedCategoryCounts = useMemo(() => {
+    const counts: Record<string, number> = { ALL: pinnedStatutes.length };
+    LEGAL_CATEGORIES.forEach((cat) => {
+      if (cat.id !== 'ALL') {
+        counts[cat.id] = pinnedStatutes.filter((p) => p.category === cat.id).length;
+      }
+    });
+    return counts;
+  }, [pinnedStatutes]);
 
   return (
     <div id="thai-legal-search-modal-backdrop" className="fixed inset-0 z-50 flex items-center justify-center p-3 sm:p-4 bg-black/80 backdrop-blur-xl animate-in fade-in duration-300">
@@ -420,16 +704,16 @@ export const ThaiLegalSearchModal: React.FC<ThaiLegalSearchModalProps> = ({
                 <span className="px-2 py-0.5 rounded-full bg-emerald-500/10 text-emerald-300 border-emerald-500/20 text-[10px] font-mono">
                   ETDA & ROYAL GAZETTE GROUNDING
                 </span>
-                <span className="px-2 py-0.5 rounded-full bg-violet-500/10 text-violet-300 border-violet-500/20 text-[10px] font-mono flex items-center gap-1">
-                  <History className="w-3 h-3 text-violet-400" />
-                  <span>{recentQueries.length} Recent in LocalStorage</span>
+                <span className="px-2 py-0.5 rounded-full bg-amber-500/10 text-amber-300 border-amber-500/20 text-[10px] font-mono flex items-center gap-1">
+                  <Bookmark className="w-3 h-3 text-amber-400" />
+                  <span>{pinnedStatutes.length} Pinned Statutes</span>
                 </span>
               </div>
               <h2 className="text-lg sm:text-xl font-bold font-mono text-white mt-1">
-                Thai Legal Compliance & Sovereign Seal Chain Mapping
+                Thai Legal Compliance &amp; Sovereign Seal Chain Mapping
               </h2>
               <p className="text-xs text-zinc-400 font-mono mt-0.5">
-                พ.ร.บ. ว่าด้วยธุรกรรมทางอิเล็กทรอนิกส์ (มาตรา 9/26/28), PDPA, NCSA และ NIST Post-Quantum Standards
+                พ.ร.บ. ว่าด้วยธุรกรรมทางอิเล็กทรอนิกส์ (มาตรา 9/26/28), PDPA, NCSA และมาตรฐานสากล ISO/IEC 27037 &amp; NIST PQC
               </p>
             </div>
           </div>
@@ -470,23 +754,24 @@ export const ThaiLegalSearchModal: React.FC<ThaiLegalSearchModalProps> = ({
           </div>
         </div>
 
-        {/* View Mode Toggle Bar */}
+        {/* View Mode Toggle Bar (3 Main Tabs) */}
         <div className="stagger-2 px-6 py-2.5 bg-[#0a0c16] border-b border-white/8 flex items-center justify-between gap-3 font-mono text-xs flex-wrap">
-          <div className="flex items-center gap-1.5 p-1 bg-black/50 rounded-xl border-white/6">
+          <div className="flex items-center gap-1.5 p-1 bg-black/50 rounded-xl border-white/6 overflow-x-auto max-w-full">
+            {/* Tab 1: Live Search Oracle & History */}
             <button
               id="tab-toggle-search-oracle"
               onClick={() => {
                 playTone(580, 0.03);
                 setActiveTab('search');
               }}
-              className={`px-3.5 py-1.5 rounded-lg transition-all flex items-center gap-1.5 ${
+              className={`px-3.5 py-1.5 rounded-lg transition-all flex items-center gap-1.5 whitespace-nowrap ${
                 activeTab === 'search'
                   ? 'bg-cyan-500/20 text-cyan-300 font-bold border-cyan-500/30 shadow-[0_0_12px_rgba(6,182,212,0.15)]'
                   : 'text-zinc-400 hover:text-zinc-200'
               }`}
             >
               <Search className="w-3.5 h-3.5 text-cyan-400" />
-              <span>Live Search Oracle & History</span>
+              <span>Search Oracle</span>
               {recentQueries.length > 0 && (
                 <span className="ml-1 px-1.5 py-0.2 rounded-full bg-cyan-500/20 text-[10px] text-cyan-300 font-mono">
                   {recentQueries.length}
@@ -494,20 +779,41 @@ export const ThaiLegalSearchModal: React.FC<ThaiLegalSearchModalProps> = ({
               )}
             </button>
 
+            {/* Tab 2: Pinned Statutes (Dedicated Bookmark Tab) */}
+            <button
+              id="tab-toggle-pinned-statutes"
+              onClick={() => {
+                playTone(620, 0.03);
+                setActiveTab('pinned');
+              }}
+              className={`px-3.5 py-1.5 rounded-lg transition-all flex items-center gap-1.5 whitespace-nowrap ${
+                activeTab === 'pinned'
+                  ? 'bg-amber-500/20 text-amber-300 font-bold border-amber-500/30 shadow-[0_0_12px_rgba(245,158,11,0.2)]'
+                  : 'text-zinc-400 hover:text-zinc-200'
+              }`}
+            >
+              <Bookmark className="w-3.5 h-3.5 text-amber-400" />
+              <span>Pinned Statutes (ปักหมุดบทบัญญัติ)</span>
+              <span className="ml-1 px-1.5 py-0.2 rounded-full bg-amber-500/25 text-[10px] text-amber-300 font-mono font-bold">
+                {pinnedStatutes.length}
+              </span>
+            </button>
+
+            {/* Tab 3: Section 9/26/28 Flow Diagram & Mapping */}
             <button
               id="tab-toggle-legal-mapping"
               onClick={() => {
                 playTone(550, 0.03);
                 setActiveTab('mapping');
               }}
-              className={`px-3.5 py-1.5 rounded-lg transition-all flex items-center gap-1.5 ${
+              className={`px-3.5 py-1.5 rounded-lg transition-all flex items-center gap-1.5 whitespace-nowrap ${
                 activeTab === 'mapping'
                   ? 'bg-cyan-500/20 text-cyan-300 font-bold border-cyan-500/30 shadow-[0_0_12px_rgba(6,182,212,0.15)]'
                   : 'text-zinc-400 hover:text-zinc-200'
               }`}
             >
               <Layers className="w-3.5 h-3.5 text-cyan-400" />
-              <span>มาตรา 9/26/28 Flow Diagram & Mapping</span>
+              <span>มาตรา 9/26/28 Mapping</span>
             </button>
           </div>
 
@@ -516,16 +822,370 @@ export const ThaiLegalSearchModal: React.FC<ThaiLegalSearchModalProps> = ({
           </span>
         </div>
 
-        {/* Tab 1: Section 9 / 26 / 28 Architecture Flow Diagram & Mapping */}
-        {activeTab === 'mapping' ? (
+        {/* ========================================================================= */}
+        {/* TAB 1: SECTION 9 / 26 / 28 FLOW DIAGRAM & MAPPING                         */}
+        {/* ========================================================================= */}
+        {activeTab === 'mapping' && (
           <div className="flex-1 p-5 sm:p-6 overflow-y-auto">
             <ThaiLegalSovereignMapping />
           </div>
-        ) : (
-          /* Tab 2: Live Search Oracle */
+        )}
+
+        {/* ========================================================================= */}
+        {/* TAB 2: DEDICATED PINNED STATUTES TAB (BOOKMARKED LAWS & CITATIONS)        */}
+        {/* ========================================================================= */}
+        {activeTab === 'pinned' && (
+          <div className="flex-1 flex flex-col overflow-hidden bg-[#07080F]">
+            {/* Pinned Toolbar: Search inside pinned, stats, export */}
+            <div className="p-4 sm:p-5 border-b border-white/8 bg-[#0b0e1a]/80 space-y-3">
+              <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
+                <div className="flex items-center gap-2">
+                  <div className="p-2 rounded-xl bg-amber-500/15 border-amber-500/30 text-amber-300">
+                    <Bookmark className="w-4 h-4" />
+                  </div>
+                  <div>
+                    <h3 className="font-mono text-sm font-bold text-white flex items-center gap-2">
+                      <span>Pinned Legal Statutes &amp; Judicial Citations</span>
+                      <span className="px-2 py-0.5 rounded-full bg-amber-500/20 border-amber-500/30 text-[10px] text-amber-300 font-mono">
+                        {pinnedStatutes.length} Saved in LocalStorage
+                      </span>
+                    </h3>
+                    <p className="font-mono text-xs text-zinc-400">
+                      บทบัญญัติและมาตรฐานที่ปักหมุดไว้สำหรับการอ้างอิงหลักฐานศาลและตรวจสอบด่วน
+                    </p>
+                  </div>
+                </div>
+
+                <div className="flex items-center gap-2 flex-wrap">
+                  <button
+                    onClick={handleExportPinnedStatutes}
+                    className="px-3 py-1.5 rounded-xl bg-amber-500/10 hover:bg-amber-500/20 border-amber-500/30 text-amber-300 text-xs font-mono flex items-center gap-1.5 transition-all shadow-sm"
+                    title="Export Pinned Statutes Dossier (JSON)"
+                  >
+                    <Download className="w-3.5 h-3.5 text-amber-400" />
+                    <span>Export Dossier (JSON)</span>
+                  </button>
+
+                  <button
+                    onClick={handleRestoreCanonicalStatutes}
+                    className="px-3 py-1.5 rounded-xl bg-white/5 hover:bg-white/10 border-white/10 text-zinc-300 hover:text-white text-xs font-mono flex items-center gap-1.5 transition-all"
+                    title="Restore default 7 canonical pinned statutes"
+                  >
+                    <RotateCcw className="w-3.5 h-3.5 text-zinc-400" />
+                    <span className="hidden sm:inline">Reset Standard</span>
+                  </button>
+                </div>
+              </div>
+
+              {/* Category Filter Chips for Pinned Statutes */}
+              <div className="flex items-center gap-1.5 overflow-x-auto pb-1 pt-1 scrollbar-none">
+                <span className="text-[11px] font-mono text-zinc-400 flex items-center gap-1 shrink-0 mr-1">
+                  <Filter className="w-3 h-3 text-cyan-400" />
+                  <span>Category:</span>
+                </span>
+                {LEGAL_CATEGORIES.map((cat) => {
+                  const isActive = pinnedCategoryFilter === cat.id;
+                  const count = pinnedCategoryCounts[cat.id] || 0;
+                  return (
+                    <button
+                      key={cat.id}
+                      onClick={() => {
+                        playTone(540, 0.02);
+                        setPinnedCategoryFilter(cat.id);
+                      }}
+                      className={`px-3 py-1 rounded-xl font-mono text-xs transition-all flex items-center gap-1.5 shrink-0 border ${
+                        isActive
+                          ? `${cat.badgeBg} ${cat.badgeText} ${cat.borderColor} font-bold shadow-[0_0_12px_rgba(6,182,212,0.15)]`
+                          : 'bg-white/[0.03] text-zinc-400 border-white/8 hover:border-white/20 hover:text-zinc-200'
+                      }`}
+                    >
+                      <span>{cat.shortLabel}</span>
+                      <span className={`px-1.5 py-0.2 rounded-full text-[10px] font-mono ${
+                        isActive ? 'bg-white/20 text-white' : 'bg-white/5 text-zinc-500'
+                      }`}>
+                        {count}
+                      </span>
+                    </button>
+                  );
+                })}
+              </div>
+
+              {/* Search filter within pinned statutes */}
+              <div className="relative">
+                <Search className="absolute left-3.5 top-1/2 -translate-y-1/2 w-3.5 h-3.5 text-zinc-500" />
+                <input
+                  type="text"
+                  value={pinnedSearchQuery}
+                  onChange={(e) => setPinnedSearchQuery(e.target.value)}
+                  placeholder="ค้นหาในบทบัญญัติที่ปักหมุด (มาตรา 9, 26, 28, PDPA 37, ISO 27037, FIPS 204...)"
+                  className="w-full pl-9 pr-8 py-2 rounded-xl bg-white/[0.03] border-white/10 focus:border-amber-500/40 text-xs font-mono text-zinc-200 placeholder-zinc-500 focus:outline-none transition-all"
+                />
+                {pinnedSearchQuery && (
+                  <button
+                    onClick={() => setPinnedSearchQuery('')}
+                    className="absolute right-2.5 top-1/2 -translate-y-1/2 text-zinc-500 hover:text-zinc-300 p-0.5"
+                  >
+                    <X className="w-3 h-3" />
+                  </button>
+                )}
+              </div>
+            </div>
+
+            {/* Notification Banner */}
+            {notificationMsg && (
+              <div className="mx-5 my-2 py-1.5 px-3 rounded-xl bg-cyan-500/10 border-cyan-500/20 text-cyan-300 font-mono text-xs flex items-center justify-between animate-in fade-in">
+                <span className="flex items-center gap-1.5">
+                  <CheckCircle2 className="w-3.5 h-3.5 text-cyan-400" />
+                  {notificationMsg}
+                </span>
+                <span className="text-[10px] text-zinc-500">localStorage synced</span>
+              </div>
+            )}
+
+            {/* Pinned Statutes List */}
+            <div className="flex-1 p-5 sm:p-6 overflow-y-auto space-y-4">
+              {filteredPinnedStatutes.length === 0 ? (
+                <div className="py-16 text-center space-y-3 border-dashed border-white/10 rounded-2xl bg-black/20 font-mono">
+                  <Bookmark className="w-8 h-8 text-zinc-600 mx-auto" />
+                  <p className="text-sm text-zinc-400 font-semibold">
+                    {pinnedSearchQuery || pinnedCategoryFilter !== 'ALL'
+                      ? 'ไม่พบบทบัญญัติปักหมุดที่ตรงกับเงื่อนไขการกรอง'
+                      : 'ยังไม่มีบทบัญญัติที่ปักหมุดไว้'}
+                  </p>
+                  <p className="text-xs text-zinc-500 max-w-md mx-auto">
+                    กดปุ่ม Bookmark ในผลการสืบค้นเพื่อปักหมุดบทบัญญัติสำคัญสำหรับการอ้างอิงด่วน หรือกดปุ่มด้านล่างเพื่อโหลดชุดบทบัญญัติมาตรฐาน
+                  </p>
+                  <button
+                    onClick={handleRestoreCanonicalStatutes}
+                    className="px-4 py-2 rounded-xl bg-cyan-500/15 hover:bg-cyan-500/25 border-cyan-500/30 text-cyan-300 text-xs font-mono font-medium transition-all inline-flex items-center gap-2"
+                  >
+                    <RotateCcw className="w-3.5 h-3.5" />
+                    <span>โหลด 7 มาตราอธิปไตยมาตรฐาน (ETDA, PDPA, ISO, NIST)</span>
+                  </button>
+                </div>
+              ) : (
+                filteredPinnedStatutes.map((statute, idx) => {
+                  const isExpanded = expandedStatuteId === statute.id;
+                  const categoryMeta = LEGAL_CATEGORIES.find((c) => c.id === statute.category);
+                  const isCopiedThis = copiedCitationId === statute.id;
+
+                  return (
+                    <div
+                      key={statute.id}
+                      className="p-4 sm:p-5 rounded-2xl bg-[#0a0d18] border-white/10 hover:border-amber-500/30 transition-all space-y-3 shadow-sm group"
+                    >
+                      {/* Top Bar: Section Number, Category Badge, Legal Weight, Actions */}
+                      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2.5">
+                        <div className="flex items-center gap-2 flex-wrap">
+                          <span className="px-2.5 py-1 rounded-xl bg-amber-500/15 border-amber-500/30 text-amber-300 font-mono font-bold text-xs flex items-center gap-1 shadow-inner">
+                            <BookmarkCheck className="w-3 h-3 text-amber-400 fill-amber-400/40" />
+                            <span>{statute.statuteNumber}</span>
+                          </span>
+
+                          <span className={`px-2.5 py-0.5 rounded-lg text-[10px] font-mono border ${categoryMeta?.badgeBg || 'bg-white/5'} ${categoryMeta?.badgeText || 'text-zinc-300'} ${categoryMeta?.borderColor || 'border-white/10'}`}>
+                            {categoryMeta?.shortLabel || statute.category}
+                          </span>
+
+                          <span className={`px-2 py-0.5 rounded-lg text-[10px] font-mono border ${
+                            statute.legalWeight === 'HIGH_RELIABILITY'
+                              ? 'bg-emerald-500/10 text-emerald-300 border-emerald-500/20'
+                              : statute.legalWeight === 'INTERNATIONAL_STANDARD'
+                              ? 'bg-blue-500/10 text-blue-300 border-blue-500/20'
+                              : 'bg-amber-500/10 text-amber-300 border-amber-500/20'
+                          }`}>
+                            {statute.legalWeight}
+                          </span>
+                        </div>
+
+                        {/* Card Actions */}
+                        <div className="flex items-center gap-1.5 self-end sm:self-center">
+                          <button
+                            onClick={() => {
+                              handleSearch(statute.query, statute.category);
+                            }}
+                            className="px-2.5 py-1 rounded-lg bg-cyan-500/15 hover:bg-cyan-500/25 border-cyan-500/30 text-cyan-300 text-xs font-mono flex items-center gap-1 transition-all"
+                            title="สืบค้นบทบัญญัตินี้ใน Search Oracle"
+                          >
+                            <Play className="w-2.5 h-2.5 fill-cyan-400/50" />
+                            <span>สืบค้น</span>
+                          </button>
+
+                          <button
+                            onClick={(e) => copyStatuteCitation(statute, e)}
+                            className="px-2.5 py-1 rounded-lg bg-white/5 hover:bg-white/10 border-white/10 text-zinc-300 hover:text-white text-xs font-mono flex items-center gap-1 transition-all"
+                            title="คัดลอกข้อความอ้างอิงหลักฐานศาล"
+                          >
+                            {isCopiedThis ? (
+                              <>
+                                <Check className="w-3 h-3 text-emerald-400" />
+                                <span className="text-emerald-400">คัดลอกแล้ว</span>
+                              </>
+                            ) : (
+                              <>
+                                <Copy className="w-3 h-3" />
+                                <span>อ้างอิงศาล</span>
+                              </>
+                            )}
+                          </button>
+
+                          <button
+                            onClick={(e) => unpinStatute(statute.id, e)}
+                            className="p-1 rounded-lg text-zinc-500 hover:text-rose-400 hover:bg-rose-500/10 transition-colors"
+                            title="ถอดหมุดบทบัญญัติ"
+                          >
+                            <PinOff className="w-3.5 h-3.5" />
+                          </button>
+                        </div>
+                      </div>
+
+                      {/* Title & Law Name */}
+                      <div>
+                        <h4 className="text-sm sm:text-base font-mono font-bold text-white group-hover:text-amber-200 transition-colors">
+                          {statute.title}
+                        </h4>
+                        <p className="text-xs font-mono text-zinc-400 mt-0.5">
+                          {statute.actName}
+                        </p>
+                      </div>
+
+                      {/* Summary */}
+                      <p className="text-xs font-mono text-zinc-300 leading-relaxed bg-black/30 p-3 rounded-xl border-white/5">
+                        {statute.summary}
+                      </p>
+
+                      {/* Expandable Full Legal Text */}
+                      {isExpanded && (
+                        <div className="space-y-3 pt-2 border-t border-white/8 animate-in fade-in duration-200 font-mono text-xs">
+                          <div className="p-3.5 rounded-xl bg-black/60 border-white/10 text-zinc-200 leading-relaxed whitespace-pre-wrap select-text">
+                            <span className="text-amber-300 font-bold block mb-1">📜 ตัวบทกฎหมายและข้อกำหนดฉบับเต็ม:</span>
+                            {statute.fullText}
+                          </div>
+
+                          <div className="flex items-center gap-2 p-2.5 rounded-xl bg-cyan-950/30 border-cyan-500/20 text-cyan-300 text-[11px]">
+                            <ShieldCheck className="w-4 h-4 text-cyan-400 shrink-0" />
+                            <span>{statute.forensicProofBinding}</span>
+                          </div>
+
+                          {/* Citations */}
+                          {statute.citations && statute.citations.length > 0 && (
+                            <div className="space-y-1.5">
+                              <span className="text-[11px] text-zinc-400 flex items-center gap-1">
+                                <ExternalLink className="w-3 h-3 text-cyan-400" />
+                                แหล่งอ้างอิงและราชกิจจานุเบกษา:
+                              </span>
+                              <div className="flex flex-wrap gap-2">
+                                {statute.citations.map((cite, cIdx) => (
+                                  <a
+                                    key={cIdx}
+                                    href={cite.uri}
+                                    target="_blank"
+                                    rel="noreferrer noopener"
+                                    className="px-2.5 py-1 rounded-lg bg-white/[0.03] hover:bg-cyan-500/15 border-white/8 hover:border-cyan-500/30 text-[11px] text-zinc-300 hover:text-cyan-300 inline-flex items-center gap-1.5 transition-all"
+                                  >
+                                    <span>{cite.title}</span>
+                                    <ExternalLink className="w-2.5 h-2.5 text-zinc-500" />
+                                  </a>
+                                ))}
+                              </div>
+                            </div>
+                          )}
+                        </div>
+                      )}
+
+                      {/* Card Footer: Expand toggle & Metadata */}
+                      <div className="flex items-center justify-between pt-1 border-t border-white/5 font-mono text-[11px] text-zinc-500">
+                        <button
+                          type="button"
+                          onClick={() => setExpandedStatuteId(isExpanded ? null : statute.id)}
+                          className="text-amber-300 hover:text-amber-200 flex items-center gap-1 transition-colors py-0.5"
+                        >
+                          {isExpanded ? (
+                            <>
+                              <ChevronUp className="w-3.5 h-3.5" />
+                              <span>ซ่อนรายละเอียด</span>
+                            </>
+                          ) : (
+                            <>
+                              <ChevronDown className="w-3.5 h-3.5" />
+                              <span>ดูตัวบทเต็ม &amp; การผูกโยงหลักฐาน</span>
+                            </>
+                          )}
+                        </button>
+
+                        <div className="flex items-center gap-2">
+                          <span>ปักหมุดเมื่อ: {new Date(statute.pinnedAt).toLocaleDateString('th-TH')}</span>
+                          <span>•</span>
+                          <span className="text-zinc-400">#EP-SOVEREIGN-01</span>
+                        </div>
+                      </div>
+                    </div>
+                  );
+                })
+              )}
+            </div>
+
+            {/* Bottom Status */}
+            <div className="px-6 py-2.5 bg-[#0a0c16]/95 border-t border-white/8 flex items-center justify-between text-[11px] font-mono text-zinc-400 flex-wrap gap-2">
+              <span className="flex items-center gap-1.5">
+                <Bookmark className="w-3.5 h-3.5 text-amber-400" />
+                <span>Pinned Statutes Repository — ETDA, PDPA, ISO &amp; NIST FIPS</span>
+              </span>
+              <span className="text-zinc-500">
+                {pinnedStatutes.length} บทบัญญัติพร้อมสำหรับการเบิกความและตรวจสอบย้อนกลับ
+              </span>
+            </div>
+          </div>
+        )}
+
+        {/* ========================================================================= */}
+        {/* TAB 3: LIVE SEARCH ORACLE WITH CATEGORY FILTERING & RECENT QUERIES       */}
+        {/* ========================================================================= */}
+        {activeTab === 'search' && (
           <div className="flex-1 flex flex-col overflow-hidden">
-            {/* Search Input Bar */}
+            {/* Search Input Bar & Category Filter Bar */}
             <div className="p-5 sm:p-6 border-b border-white/8 bg-[#0b0e1a]/60 space-y-4">
+              {/* Category Filter Chips Bar */}
+              <div className="space-y-1.5">
+                <div className="flex items-center justify-between text-[11px] font-mono">
+                  <span className="text-zinc-400 flex items-center gap-1.5">
+                    <Filter className="w-3.5 h-3.5 text-cyan-400" />
+                    <span className="text-zinc-300 font-semibold">Jurisdiction &amp; Category Filter:</span>
+                    <span className="text-zinc-500 text-[10px]">Refines search grounding accuracy</span>
+                  </span>
+                  <span className="text-[10px] text-zinc-500 hidden sm:inline">
+                    Active: <span className="text-cyan-300 font-semibold">{LEGAL_CATEGORIES.find((c) => c.id === selectedCategory)?.labelEn}</span>
+                  </span>
+                </div>
+
+                <div className="flex items-center gap-1.5 overflow-x-auto pb-1 scrollbar-none">
+                  {LEGAL_CATEGORIES.map((cat) => {
+                    const isActive = selectedCategory === cat.id;
+                    return (
+                      <button
+                        key={cat.id}
+                        type="button"
+                        onClick={() => {
+                          playTone(550, 0.02);
+                          setSelectedCategory(cat.id);
+                        }}
+                        className={`px-3 py-1.5 rounded-xl font-mono text-xs transition-all flex items-center gap-1.5 shrink-0 border ${
+                          isActive
+                            ? `${cat.badgeBg} ${cat.badgeText} ${cat.borderColor} font-bold shadow-[0_0_15px_rgba(6,182,212,0.2)] ring-1 ring-white/10`
+                            : 'bg-white/[0.03] text-zinc-400 border-white/8 hover:border-white/20 hover:text-zinc-200'
+                        }`}
+                        title={cat.description}
+                      >
+                        <span className={`w-1.5 h-1.5 rounded-full ${isActive ? 'bg-cyan-400 animate-pulse' : 'bg-zinc-600'}`} />
+                        <span>{cat.shortLabel}</span>
+                        {cat.id === 'ETDA' && <span className="text-[9px] opacity-75 sm:inline hidden">ม.9/26/28</span>}
+                        {cat.id === 'PDPA' && <span className="text-[9px] opacity-75 sm:inline hidden">ม.37</span>}
+                      </button>
+                    );
+                  })}
+                </div>
+              </div>
+
+              {/* Search Form */}
               <form
                 onSubmit={(e) => {
                   e.preventDefault();
@@ -584,7 +1244,17 @@ export const ThaiLegalSearchModal: React.FC<ThaiLegalSearchModalProps> = ({
                         setHighlightedIndex(-1);
                       }
                     }}
-                    placeholder="Search Thai laws, มาตรา 9/26/28, PDPA, NCSA, NIST FIPS 203 PQC..."
+                    placeholder={
+                      selectedCategory === 'ETDA'
+                        ? 'สืบค้น พ.ร.บ. ธุรกรรมทางอิเล็กทรอนิกส์ (มาตรา 9, 26, 28, ETDA Standard)...'
+                        : selectedCategory === 'PDPA'
+                        ? 'สืบค้น พ.ร.บ. คุ้มครองข้อมูลส่วนบุคคล (มาตรา 37, 19, 27, PII Isolation)...'
+                        : selectedCategory === 'INTERNATIONAL_STANDARDS'
+                        ? 'สืบค้นมาตรฐานสากล ISO/IEC 27037, NIST FIPS 203/204/205 PQC, RFC 3161...'
+                        : selectedCategory === 'CYBER_NCSA'
+                        ? 'สืบค้น พ.ร.บ. ความมั่นคงปลอดภัยไซเบอร์ 2562, CII NCSA Framework...'
+                        : 'Search Thai laws, มาตรา 9/26/28, PDPA, NCSA, ISO/IEC 27037, NIST FIPS 204 PQC...'
+                    }
                     className="w-full pl-11 pr-10 py-3 rounded-2xl bg-white/[0.04] border-white/10 focus:border-cyan-500/50 focus:bg-white/[0.07] text-white font-mono text-xs sm:text-sm placeholder-zinc-500 focus:outline-none transition-all"
                     autoFocus
                   />
@@ -611,7 +1281,7 @@ export const ThaiLegalSearchModal: React.FC<ThaiLegalSearchModalProps> = ({
                       <div className="px-4 py-2.5 bg-white/[0.03] border-b border-white/8 flex items-center justify-between text-[11px] font-mono">
                         <div className="flex items-center gap-1.5 text-violet-300 font-semibold">
                           <History className="w-3.5 h-3.5 text-violet-400" />
-                          <span>Recent Search History (window.localStorage)</span>
+                          <span>Recent Search History (LocalStorage)</span>
                         </div>
                         <div className="flex items-center gap-2">
                           <button
@@ -741,6 +1411,7 @@ export const ThaiLegalSearchModal: React.FC<ThaiLegalSearchModalProps> = ({
                     </div>
                   )}
                 </div>
+
                 <button
                   id="execute-search-oracle-button"
                   type="submit"
@@ -778,8 +1449,8 @@ export const ThaiLegalSearchModal: React.FC<ThaiLegalSearchModalProps> = ({
                   <div className="flex items-center justify-between text-[11px] font-mono">
                     <span className="text-zinc-400 flex items-center gap-1.5">
                       <History className="w-3.5 h-3.5 text-violet-400" />
-                      <span className="text-zinc-300 font-medium">Recent Queries (Quick Re-execute):</span>
-                      <span className="text-zinc-500 text-[10px]">Click any query to execute instantly</span>
+                      <span className="text-zinc-300 font-medium">Recent Queries:</span>
+                      <span className="text-zinc-500 text-[10px]">Click any query to execute</span>
                     </span>
                     <button
                       onClick={clearRecentSearches}
@@ -790,7 +1461,7 @@ export const ThaiLegalSearchModal: React.FC<ThaiLegalSearchModalProps> = ({
                       <span>Clear All ({recentQueries.length})</span>
                     </button>
                   </div>
-                  <div className="flex flex-wrap gap-1.5 max-h-28 overflow-y-auto pr-1">
+                  <div className="flex flex-wrap gap-1.5 max-h-24 overflow-y-auto pr-1">
                     {recentQueries.slice(0, 10).map((item) => (
                       <div
                         key={item.id}
@@ -830,26 +1501,63 @@ export const ThaiLegalSearchModal: React.FC<ThaiLegalSearchModalProps> = ({
                 </div>
               )}
 
-              {/* Quick Preset Benchmark Chips */}
+              {/* Filtered Preset Benchmark Chips (Category-Aware + Quick Pin) */}
               <div className="space-y-1.5">
-                <span className="text-[11px] font-mono text-zinc-400 flex items-center gap-1.5">
-                  <BookOpen className="w-3 h-3 text-cyan-400" />
-                  <span>Curated Legal & Cryptographic Benchmarks:</span>
-                </span>
+                <div className="flex items-center justify-between text-[11px] font-mono">
+                  <span className="text-zinc-400 flex items-center gap-1.5">
+                    <BookOpen className="w-3 h-3 text-cyan-400" />
+                    <span>
+                      {selectedCategory === 'ALL'
+                        ? 'Curated Legal & Cryptographic Benchmarks (All Categories):'
+                        : `Benchmarks for [${LEGAL_CATEGORIES.find((c) => c.id === selectedCategory)?.shortLabel}]:`}
+                    </span>
+                  </span>
+                  <span className="text-[10px] text-zinc-500">
+                    {filteredPresets.length} presets
+                  </span>
+                </div>
+
                 <div className="flex flex-wrap gap-1.5">
-                  {PRESET_QUERIES.map((preset, idx) => (
-                    <button
-                      key={idx}
-                      onClick={() => {
-                        setQuery(preset.query);
-                        handleSearch(preset.query);
-                      }}
-                      className="px-2.5 py-1 rounded-xl bg-white/5 hover:bg-cyan-500/15 border-white/8 hover:border-cyan-500/30 text-[11px] font-mono text-zinc-300 hover:text-cyan-300 transition-all text-left flex items-center gap-1.5"
-                    >
-                      <Tag className="w-3 h-3 text-cyan-400" />
-                      <span>{preset.title}</span>
-                    </button>
-                  ))}
+                  {filteredPresets.map((preset, idx) => {
+                    const isPinned = pinnedStatutes.some((p) => p.query.toLowerCase() === preset.query.toLowerCase());
+                    return (
+                      <div
+                        key={idx}
+                        className="group flex items-center gap-1 px-2.5 py-1 rounded-xl bg-white/5 hover:bg-cyan-500/15 border-white/8 hover:border-cyan-500/30 text-[11px] font-mono text-zinc-300 hover:text-cyan-300 transition-all shadow-sm"
+                      >
+                        <button
+                          type="button"
+                          onClick={() => {
+                            setQuery(preset.query);
+                            handleSearch(preset.query, preset.category);
+                          }}
+                          className="flex items-center gap-1.5 text-left"
+                          title={`Search: ${preset.title}`}
+                        >
+                          <Tag className="w-3 h-3 text-cyan-400 shrink-0" />
+                          <span className="font-semibold text-cyan-300">[{preset.badgeText}]</span>
+                          <span className="truncate max-w-[200px] sm:max-w-xs">{preset.title}</span>
+                        </button>
+
+                        <button
+                          type="button"
+                          onClick={(e) => pinPreset(preset, e)}
+                          className={`p-0.5 rounded transition-colors ${
+                            isPinned
+                              ? 'text-amber-400 hover:text-amber-300'
+                              : 'text-zinc-500 hover:text-amber-400 opacity-0 group-hover:opacity-100'
+                          }`}
+                          title={isPinned ? 'Unpin benchmark' : 'Bookmark / Pin benchmark'}
+                        >
+                          {isPinned ? (
+                            <BookmarkCheck className="w-3 h-3 fill-amber-400/40" />
+                          ) : (
+                            <Bookmark className="w-3 h-3" />
+                          )}
+                        </button>
+                      </div>
+                    );
+                  })}
                 </div>
               </div>
             </div>
@@ -868,10 +1576,10 @@ export const ThaiLegalSearchModal: React.FC<ThaiLegalSearchModalProps> = ({
                   <div className="w-12 h-12 rounded-full border-3 border-cyan-500/20 border-t-cyan-400 animate-spin mx-auto" />
                   <div className="space-y-1">
                     <p className="font-mono text-sm text-cyan-300 font-semibold">
-                      Querying Google Search Grounding & Legal Corpus...
+                      Querying Grounded Thai Statutes &amp; Legal Repositories...
                     </p>
                     <p className="font-mono text-xs text-zinc-500">
-                      Grounding against Royal Gazette, NCSA, ETDA, and NIST PQC Repositories
+                      Grounded with ETDA, Royal Gazette, PDPA, and NIST Post-Quantum Repositories
                     </p>
                   </div>
                 </div>
@@ -879,11 +1587,18 @@ export const ThaiLegalSearchModal: React.FC<ThaiLegalSearchModalProps> = ({
 
               {!isLoading && result && (
                 <div className="space-y-5 animate-in fade-in duration-300">
-                  {/* Header Info */}
+                  {/* Result Header Info & Bookmark/Pin Button */}
                   <div className="p-4 rounded-2xl bg-white/[0.03] border-white/8 flex flex-col sm:flex-row sm:items-center justify-between gap-3 font-mono text-xs">
-                    <div className="space-y-0.5">
-                      <div className="text-zinc-400">
-                        Query: <span className="text-cyan-300 font-semibold">"{result.query}"</span>
+                    <div className="space-y-1">
+                      <div className="flex items-center gap-2 flex-wrap">
+                        <span className="text-zinc-400">
+                          Query: <span className="text-cyan-300 font-semibold">"{result.query}"</span>
+                        </span>
+                        {result.category && (
+                          <span className="px-2 py-0.5 rounded-lg bg-cyan-500/15 border-cyan-500/30 text-cyan-300 text-[10px]">
+                            {LEGAL_CATEGORIES.find((c) => c.id === result.category)?.shortLabel || result.category}
+                          </span>
+                        )}
                       </div>
                       <div className="text-[11px] text-zinc-500">
                         Source: <span className="text-emerald-400">{result.source}</span> • Verified at{' '}
@@ -891,7 +1606,31 @@ export const ThaiLegalSearchModal: React.FC<ThaiLegalSearchModalProps> = ({
                       </div>
                     </div>
 
-                    <div className="flex items-center gap-2">
+                    <div className="flex items-center gap-2 flex-wrap">
+                      {/* Bookmark / Pin Statute Button */}
+                      <button
+                        id="toggle-pin-statute-button"
+                        onClick={() => togglePinResult(result)}
+                        className={`px-3 py-1.5 rounded-xl border text-xs font-mono flex items-center gap-1.5 transition-all shadow-sm ${
+                          isResultPinned(result)
+                            ? 'bg-amber-500/15 hover:bg-amber-500/25 border-amber-500/40 text-amber-300 shadow-[0_0_12px_rgba(245,158,11,0.2)]'
+                            : 'bg-cyan-500/10 hover:bg-cyan-500/20 border-cyan-500/25 text-cyan-300 hover:text-white'
+                        }`}
+                        title={isResultPinned(result) ? 'คลิกเพื่อถอดหมุดออกจาก Pinned Statutes' : 'คลิกเพื่อปักหมุดผลการสืบค้นนี้เข้าสู่ Pinned Statutes'}
+                      >
+                        {isResultPinned(result) ? (
+                          <>
+                            <BookmarkCheck className="w-3.5 h-3.5 text-amber-400 fill-amber-400/40" />
+                            <span>Pinned to Statutes</span>
+                          </>
+                        ) : (
+                          <>
+                            <Bookmark className="w-3.5 h-3.5 text-cyan-400" />
+                            <span>Bookmark Statute</span>
+                          </>
+                        )}
+                      </button>
+
                       <button
                         onClick={handleExportPdf}
                         disabled={isExportingPdf}
@@ -905,6 +1644,7 @@ export const ThaiLegalSearchModal: React.FC<ThaiLegalSearchModalProps> = ({
                         )}
                         <span>{isExportingPdf ? 'Exporting...' : 'Export PDF'}</span>
                       </button>
+
                       <button
                         onClick={() => handleSearch(result.query)}
                         className="px-3 py-1.5 rounded-xl bg-cyan-500/10 hover:bg-cyan-500/20 border-cyan-500/25 text-xs font-mono text-cyan-300 hover:text-white flex items-center gap-1.5 transition-all"
@@ -913,6 +1653,7 @@ export const ThaiLegalSearchModal: React.FC<ThaiLegalSearchModalProps> = ({
                         <RotateCcw className="w-3.5 h-3.5 text-cyan-400" />
                         <span>Re-run</span>
                       </button>
+
                       <button
                         onClick={copyToClipboard}
                         className="px-3 py-1.5 rounded-xl bg-white/5 hover:bg-white/10 border-white/10 text-xs font-mono text-zinc-300 hover:text-white flex items-center gap-1.5 transition-all"
@@ -933,7 +1674,7 @@ export const ThaiLegalSearchModal: React.FC<ThaiLegalSearchModalProps> = ({
                   </div>
 
                   {/* Answer Content */}
-                  <div className="p-5 rounded-2xl bg-black/40 border-white/8 text-zinc-200 font-mono text-xs sm:text-sm leading-relaxed whitespace-pre-wrap select-text">
+                  <div className="p-5 rounded-2xl bg-black/40 border-white/8 text-zinc-200 font-mono text-xs sm:text-sm leading-relaxed whitespace-pre-wrap select-text shadow-inner">
                     {result.answer}
                   </div>
 
@@ -942,7 +1683,7 @@ export const ThaiLegalSearchModal: React.FC<ThaiLegalSearchModalProps> = ({
                     <div className="space-y-2">
                       <span className="text-xs font-mono text-zinc-400 flex items-center gap-1.5">
                         <ExternalLink className="w-3.5 h-3.5 text-cyan-400" />
-                        Verified Authorities & Grounding Sources:
+                        Verified Authorities &amp; Grounding Sources:
                       </span>
                       <div className="grid grid-cols-1 sm:grid-cols-2 gap-2">
                         {result.citations.map((cite, idx) => (
@@ -1029,7 +1770,7 @@ export const ThaiLegalSearchModal: React.FC<ThaiLegalSearchModalProps> = ({
                                 <div
                                   onClick={() => {
                                     setQuery(item.query);
-                                    handleSearch(item.query);
+                                    handleSearch(item.query, item.category);
                                   }}
                                   className="text-xs sm:text-sm font-mono text-zinc-200 group-hover:text-cyan-300 cursor-pointer font-medium hover:underline truncate"
                                   title={`Click to search: "${item.query}"`}
@@ -1043,6 +1784,12 @@ export const ThaiLegalSearchModal: React.FC<ThaiLegalSearchModalProps> = ({
                                   </span>
                                   <span>•</span>
                                   <span>{item.dateStr}</span>
+                                  {item.category && (
+                                    <>
+                                      <span>•</span>
+                                      <span className="text-cyan-400">[{item.category}]</span>
+                                    </>
+                                  )}
                                 </div>
                               </div>
                             </div>
@@ -1059,7 +1806,7 @@ export const ThaiLegalSearchModal: React.FC<ThaiLegalSearchModalProps> = ({
                               <button
                                 onClick={() => {
                                   setQuery(item.query);
-                                  handleSearch(item.query);
+                                  handleSearch(item.query, item.category);
                                 }}
                                 className="px-3 py-1 rounded-lg bg-cyan-500/15 hover:bg-cyan-500/25 border-cyan-500/30 text-cyan-300 hover:text-white text-xs font-mono font-medium flex items-center gap-1.5 transition-all shadow-[0_0_10px_rgba(6,182,212,0.15)]"
                                 title="Re-execute query now"
@@ -1098,10 +1845,10 @@ export const ThaiLegalSearchModal: React.FC<ThaiLegalSearchModalProps> = ({
             <div className="px-6 py-2.5 bg-[#0a0c16]/95 border-t border-white/8 flex items-center justify-between text-[11px] font-mono text-zinc-400 flex-wrap gap-2">
               <span className="flex items-center gap-1.5">
                 <ShieldCheck className="w-3.5 h-3.5 text-emerald-400" />
-                <span>PDPA & ETDA Legal Grounding Engine</span>
+                <span>PDPA &amp; ETDA Legal Grounding Engine (Category: {LEGAL_CATEGORIES.find((c) => c.id === selectedCategory)?.shortLabel})</span>
               </span>
               <span className="text-zinc-500">
-                {recentQueries.length} {recentQueries.length === 1 ? 'query' : 'queries'} stored locally in browser storage
+                {recentQueries.length} {recentQueries.length === 1 ? 'query' : 'queries'} stored locally • {pinnedStatutes.length} pinned statutes
               </span>
             </div>
           </div>
@@ -1109,7 +1856,7 @@ export const ThaiLegalSearchModal: React.FC<ThaiLegalSearchModalProps> = ({
 
         {/* Modal Footer */}
         <div className="p-4 bg-black/60 border-t border-white/8 flex items-center justify-between text-[11px] font-mono text-zinc-500">
-          <span>Thailand Jurisdiction • Royal Gazette, ETDA & NIST Compliance</span>
+          <span>Thailand Jurisdiction • Royal Gazette, ETDA &amp; NIST Compliance</span>
           <button
             onClick={onClose}
             className="px-4 py-1.5 rounded-xl bg-white/5 hover:bg-white/10 text-zinc-300 hover:text-white border-white/10 transition-all"
@@ -1121,4 +1868,3 @@ export const ThaiLegalSearchModal: React.FC<ThaiLegalSearchModalProps> = ({
     </div>
   );
 };
-

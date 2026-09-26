@@ -969,7 +969,7 @@ function SovereignAppContent() {
   const [isAudioActive, setIsAudioActive] = useState(false);
   const [activeHsmNodes, setActiveHsmNodes] = useState<number>(10);
   const [disabledHsmNodeIds, setDisabledHsmNodeIds] = useState<Record<string, boolean>>({});
-  const [isHsmHistoryExpanded, setIsHsmHistoryExpanded] = useState<boolean>(false);
+  const [isHsmHistoryExpanded, setIsHsmHistoryExpanded] = useState<boolean>(true);
 
   const [toasts, setToasts] = useState<ToastMessage[]>([]);
   const showToast = useCallback((message: string, type: ToastMessage['type'] = 'info') => {
@@ -2582,11 +2582,66 @@ function SovereignAppContent() {
                               <ShieldCheck className="w-4 h-4" />
                             </div>
                             <div className="min-w-0">
-                              <div className="font-bold text-white flex items-center gap-1.5 flex-wrap">
+                              <div className="font-bold text-white flex items-center gap-2 flex-wrap">
                                 <span>VERIFICATION GATE</span>
-                                <span className="px-1.5 py-0.5 rounded bg-emerald-500/20 text-emerald-300 text-[9px] border border-emerald-500/40 font-mono">
-                                  {verificationGateStatus.status} • MAINNET LIVE
-                                </span>
+                                {/* SVG Circular Progress Ring Visualizer (10/10 HSM Node Health Percentage: 0% to 100% dynamic fill) */}
+                                <div
+                                  className="inline-flex items-center gap-1.5 px-2 py-0.5 rounded-full bg-zinc-950/90 border border-cyan-500/40 shadow-inner group/hsm-ring"
+                                  title={`10/10 HSM Health: ${activeHsmNodes}/10 Nodes Online (${((activeHsmNodes / 10) * 100).toFixed(0)}%)`}
+                                >
+                                  <div className="relative w-5 h-5 flex items-center justify-center shrink-0">
+                                    <svg className="w-5 h-5 -rotate-90" viewBox="0 0 24 24">
+                                      <circle
+                                        cx="12"
+                                        cy="12"
+                                        r="9"
+                                        className="stroke-zinc-800"
+                                        strokeWidth="2.5"
+                                        fill="transparent"
+                                      />
+                                      <circle
+                                        cx="12"
+                                        cy="12"
+                                        r="9"
+                                        className={`${
+                                          activeHsmNodes === 10
+                                            ? 'stroke-emerald-400 drop-shadow-[0_0_4px_rgba(52,211,153,0.85)]'
+                                            : activeHsmNodes >= 8
+                                            ? 'stroke-amber-400 drop-shadow-[0_0_4px_rgba(251,191,36,0.85)]'
+                                            : 'stroke-rose-500 drop-shadow-[0_0_4px_rgba(244,63,94,0.85)]'
+                                        } transition-all duration-500 ease-out`}
+                                        strokeWidth="2.5"
+                                        strokeDasharray={2 * Math.PI * 9}
+                                        strokeDashoffset={2 * Math.PI * 9 * (1 - activeHsmNodes / 10)}
+                                        strokeLinecap="round"
+                                        fill="transparent"
+                                      />
+                                    </svg>
+                                    <span
+                                      className={`absolute text-[7px] font-mono font-black ${
+                                        activeHsmNodes === 10
+                                          ? 'text-emerald-300'
+                                          : activeHsmNodes >= 8
+                                          ? 'text-amber-300'
+                                          : 'text-rose-400'
+                                      }`}
+                                    >
+                                      {((activeHsmNodes / 10) * 100).toFixed(0)}%
+                                    </span>
+                                  </div>
+                                  <span className="text-[9px] font-mono font-bold text-zinc-100 flex items-center gap-1">
+                                    <span
+                                      className={`w-1.5 h-1.5 rounded-full ${
+                                        activeHsmNodes === 10
+                                          ? 'bg-emerald-400 animate-pulse'
+                                          : activeHsmNodes >= 8
+                                          ? 'bg-amber-400'
+                                          : 'bg-rose-500'
+                                      }`}
+                                    />
+                                    {activeHsmNodes}/10 HSM
+                                  </span>
+                                </div>
                                 {isGateTooltipPinned && (
                                   <span className="px-1.5 py-0.5 rounded-full bg-cyan-500/20 text-cyan-300 text-[9px] border border-cyan-400/50 font-mono font-bold flex items-center gap-1 shadow-[0_0_8px_rgba(6,182,212,0.3)] animate-pulse">
                                     <Pin className="w-2.5 h-2.5 text-cyan-300 rotate-45" />

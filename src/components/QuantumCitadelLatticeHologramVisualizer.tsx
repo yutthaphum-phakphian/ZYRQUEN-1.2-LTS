@@ -452,17 +452,23 @@ export const QuantumCitadelLatticeHologramVisualizer: React.FC<QuantumCitadelLat
     cameraRef.current = camera;
 
     // Renderer
-    const renderer = new THREE.WebGLRenderer({
-      canvas: canvasRef.current,
-      antialias: true,
-      alpha: true,
-      powerPreference: 'high-performance'
-    });
-    renderer.setSize(width, height);
-    renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
-    renderer.toneMapping = THREE.ACESFilmicToneMapping;
-    renderer.toneMappingExposure = 1.2;
-    rendererRef.current = renderer;
+    let renderer: THREE.WebGLRenderer;
+    try {
+      renderer = new THREE.WebGLRenderer({
+        canvas: canvasRef.current,
+        antialias: true,
+        alpha: true,
+        powerPreference: 'high-performance'
+      });
+      renderer.setSize(width, height);
+      renderer.setPixelRatio(Math.min(window.devicePixelRatio || 1, 2));
+      renderer.toneMapping = THREE.ACESFilmicToneMapping;
+      renderer.toneMappingExposure = 1.2;
+      rendererRef.current = renderer;
+    } catch (e) {
+      console.warn('[QuantumCitadelLatticeHologramVisualizer] WebGL context failed:', e);
+      return;
+    }
 
     // Lighting
     const ambientLight = new THREE.AmbientLight(0x0a1026, 2.5);
