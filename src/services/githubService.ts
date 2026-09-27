@@ -8,8 +8,9 @@ export interface GitHubCommitInfo {
   status: 'LIVE' | 'CACHED_FALLBACK';
 }
 
-const REPO_PATH = 'yuththaphum-phakphian/ZYRQUEN-1.2-LTS';
-const REPO_URL = `https://github.com/${REPO_PATH}`;
+export const REPO_PATH = 'yutthaphum-phakphian/ZYRQUEN-1.2-LTS';
+export const REPO_URL = `https://github.com/${REPO_PATH}`;
+export const GITHUB_PAGES_URL = 'https://yutthaphum-phakphian.github.io/ZYRQUEN-1.2-LTS/';
 const GITHUB_API_ENDPOINT = `https://api.github.com/repos/${REPO_PATH}/commits?per_page=1`;
 
 let cachedCommit: { data: GitHubCommitInfo; timestamp: number } | null = null;

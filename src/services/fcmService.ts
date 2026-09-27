@@ -99,9 +99,7 @@ export class FcmService {
       // Register Service Worker in browser / PWA context if supported
       if (typeof window !== 'undefined' && 'serviceWorker' in navigator) {
         try {
-          await navigator.serviceWorker.register('/firebase-messaging-sw.js', {
-            scope: '/',
-          });
+          await navigator.serviceWorker.register('./firebase-messaging-sw.js');
         } catch (swErr) {
           console.warn('[FCM] Service worker registration deferred:', swErr);
         }

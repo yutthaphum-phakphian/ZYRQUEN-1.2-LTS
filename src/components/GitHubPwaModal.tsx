@@ -47,8 +47,8 @@ git commit -m "feat: initial commit from AI Studio with PWA setup"
 # 4. เปลี่ยนชื่อบรันช์หลักเป็น main
 git branch -M main
 
-# 5. เชื่อมไปยัง Repository บน GitHub (yuththaphum-phakphian/ZYRQUEN-1.2-LTS)
-git remote add origin https://github.com/yuththaphum-phakphian/ZYRQUEN-1.2-LTS.git
+# 5. เชื่อมไปยัง Repository บน GitHub (yutthaphum-phakphian/ZYRQUEN-1.2-LTS)
+git remote add origin https://github.com/yutthaphum-phakphian/ZYRQUEN-1.2-LTS.git
 
 # 6. อัปโหลดไฟล์ขึ้น GitHub
 git push -u origin main`;
@@ -130,11 +130,34 @@ git push origin main`;
           {activeTab === 'github' && (
             <div className="space-y-5">
               {/* Context Callout */}
-              <div className="p-4 rounded-xl bg-cyan-950/30 border-cyan-500/20 text-xs text-cyan-200 space-y-1.5 leading-relaxed">
-                <p className="font-semibold flex items-center gap-1.5 text-cyan-300">
-                  <Info className="w-4 h-4" />
-                  คำแนะนำการนำไฟล์ขึ้น GitHub จากสภาพแวดล้อม AI Studio
-                </p>
+              <div className="p-4 rounded-xl bg-cyan-950/30 border-cyan-500/20 text-xs text-cyan-200 space-y-2.5 leading-relaxed">
+                <div className="flex flex-wrap items-center justify-between gap-2">
+                  <p className="font-semibold flex items-center gap-1.5 text-cyan-300">
+                    <Info className="w-4 h-4" />
+                    คำแนะนำการนำไฟล์ขึ้น GitHub จากสภาพแวดล้อม AI Studio
+                  </p>
+                  <div className="flex flex-wrap items-center gap-2">
+                    <a
+                      href="https://github.com/yutthaphum-phakphian/ZYRQUEN-1.2-LTS"
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-lg bg-cyan-500/20 hover:bg-cyan-500/30 border border-cyan-500/40 text-cyan-200 font-mono text-[11px] font-bold transition"
+                    >
+                      <Github className="w-3.5 h-3.5" />
+                      <span>Open GitHub Repo</span>
+                      <ExternalLink className="w-3 h-3" />
+                    </a>
+                    <a
+                      href="https://yutthaphum-phakphian.github.io/ZYRQUEN-1.2-LTS/"
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-lg bg-emerald-500/20 hover:bg-emerald-500/30 border border-emerald-500/40 text-emerald-200 font-mono text-[11px] font-bold transition"
+                    >
+                      <span>Open GitHub Pages</span>
+                      <ExternalLink className="w-3 h-3" />
+                    </a>
+                  </div>
+                </div>
                 <p>
                   เนื่องจากสภาพแวดล้อม AI Studio ทำงานบน Container แบบ Web Simulator จึงแนะนำให้ดาวน์โหลดหรือคัดลอกโฟลเดอร์โปรเจกต์ลงบนเครื่อง หรือส่งออกผ่านเมนู Settings ของ AI Studio แล้วนำขึ้น GitHub ด้วยคำสั่ง Git CLI หรือ Web Upload ดังนี้:
                 </p>

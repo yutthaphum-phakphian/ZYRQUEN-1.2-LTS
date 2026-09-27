@@ -3,7 +3,7 @@
     "event": "PULL_REQUEST_INGRESS_MONITORING",
     "target_branch": "sovereign-gate-27chambers-v1.2",
     "pull_request_title": "Sovereign Integration: Consolidate 27-Chamber Spectrum under LOCKED_FROZEN_v1.2_LTS",
-    "pull_request_url": "https://github.com/hugeplease66-debug/zyrquen-frozen-v1.2-lts/tree/sovereign-gate-27chambers-v1.2",
+    "pull_request_url": "https://github.com/yutthaphum-phakphian/ZYRQUEN-1.2-LTS/tree/sovereign-gate-27chambers-v1.2",
     "validation_timestamp": "2026-09-04T15:20:00Z",
     "genesis_root_verification": {
         "expected_hash": "909ab814479844d8a14816bed34cdbb07528e18501da86fc4691763a43fa4c68",

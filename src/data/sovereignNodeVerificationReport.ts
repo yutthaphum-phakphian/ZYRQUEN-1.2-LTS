@@ -68,7 +68,7 @@ export const SOVEREIGN_NODE_VERIFICATION_REPORT: SovereignVerificationReportData
   date: '2026-05-13',
   status: '14,902 SEALS LOCKED | Δ_0 = 0.00% | SYSTEM INTEGRITY LOCKED',
   executiveSummary:
-    'ZYRQUEN FROZEN v1.2 LTS is a sovereign operating system that implements 14,902 cryptographic seals as its Single Source of Truth (SSoT). The system achieves a 0.00% mutation rate (Δ_0 = 0.00%) and maintains 99.9996% operational availability. Verification is performed through a 6-node Byzantine Fault Tolerant (BFT) mesh network. The sovereign instance is air-gapped and strictly enforces a No Mutation Authorized policy. All claims in this report are verifiable through the Google AI Studio dashboard zyrquen-frozen-v1.2-lts and associated forensic artifacts [1, 2].',
+    'ZYRQUEN FROZEN v1.2 LTS is a sovereign operating system that implements 14,902 cryptographic seals as its Single Source of Truth (SSoT). The system achieves a 0.00% mutation rate (Δ_0 = 0.00%) and maintains 99.9996% operational availability. Verification is performed through a 6-node Byzantine Fault Tolerant (BFT) mesh network. The sovereign instance is air-gapped and strictly enforces a No Mutation Authorized policy. All claims in this report are verifiable through the canonical repository yutthaphum-phakphian/ZYRQUEN-1.2-LTS and associated forensic artifacts [1, 2].',
   systemIdentity: {
     zyrquenFrozenDefinition:
       'ZYRQUEN FROZEN is defined as a frozen Long-Term Support (LTS) release. Frozen indicates that the codebase is immutable after sealing. LTS denotes extended support for maintaining this frozen state.',
@@ -245,8 +245,8 @@ export const SOVEREIGN_NODE_VERIFICATION_REPORT: SovereignVerificationReportData
   references: [
     {
       refId: '[1]',
-      title: 'Google AI Studio Sovereign Dashboard Instance: zyrquen-frozen-v1.2-lts',
-      uriOrCitation: 'https://ai.studio/build/zyrquen-frozen-v1.2-lts',
+      title: 'Canonical Sovereign Repository & Dashboard Instance: yutthaphum-phakphian/ZYRQUEN-1.2-LTS',
+      uriOrCitation: 'https://github.com/yutthaphum-phakphian/ZYRQUEN-1.2-LTS',
     },
     {
       refId: '[2]',
@@ -472,7 +472,7 @@ metadata:
     app.kubernetes.io/version: v1.2-lts
     sovereign.zyrquen.org/classification: air-gapped-sovereign-instance
     sovereign.zyrquen.org/author: manus-ai
-    sovereign.zyrquen.org/custodian: yuttaphum-phakphian-ep-sovereign-01
+    sovereign.zyrquen.org/custodian: yutthaphum-phakphian-ep-sovereign-01
   annotations:
     sovereign.zyrquen.org/date: "${data.date}"
     sovereign.zyrquen.org/status: "${data.status}"

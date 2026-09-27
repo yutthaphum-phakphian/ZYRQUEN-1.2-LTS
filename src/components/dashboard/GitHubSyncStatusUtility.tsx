@@ -247,7 +247,25 @@ export const GitHubSyncStatusUtility: React.FC = () => {
               </div>
               <div className="text-[10px] text-zinc-400 space-y-1">
                 <div>Branch: <span className="text-white">{syncState.remoteBranch}</span></div>
-                <div>Repository: <span className="text-white">{syncState.remoteRepo}</span></div>
+                <div className="flex items-center flex-wrap gap-1.5">
+                  <span>Repository:</span>
+                  <a
+                    href={`https://github.com/${syncState.remoteRepo}`}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="text-cyan-300 hover:text-cyan-200 underline decoration-cyan-500/40 font-bold"
+                  >
+                    {syncState.remoteRepo} ↗
+                  </a>
+                  <a
+                    href="https://yutthaphum-phakphian.github.io/ZYRQUEN-1.2-LTS/"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="px-1.5 py-0.5 rounded bg-emerald-500/15 border border-emerald-500/30 text-emerald-300 hover:bg-emerald-500/25 font-bold"
+                  >
+                    GitHub Pages ↗
+                  </a>
+                </div>
                 <div>
                   Consensus Drift:{' '}
                   <span className={hasDrift ? 'text-[#EF4444] font-bold' : 'text-[#10B981]'}>

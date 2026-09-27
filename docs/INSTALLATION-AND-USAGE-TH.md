@@ -45,15 +45,15 @@ npm --version
 หากได้รับไฟล์ ZIP ให้แตกไฟล์ก่อน เช่น:
 
 ```bash
-unzip zyrquen-frozen-v1.2-lts-mobile-ui.zip
-cd zyrquen-frozen-v1.2-lts-mobile-ui
+unzip ZYRQUEN-1.2-LTS.zip
+cd ZYRQUEN-1.2-LTS
 ```
 
 หากใช้ Git ให้ clone repository แล้วเข้าสู่โฟลเดอร์โปรเจกต์:
 
 ```bash
-git clone <repository-url>
-cd <repository-directory>
+git clone https://github.com/yutthaphum-phakphian/ZYRQUEN-1.2-LTS.git
+cd ZYRQUEN-1.2-LTS
 ```
 
 ไม่ควรนำโฟลเดอร์ `node_modules` จากเครื่องอื่นมาใช้แทนการติดตั้งใหม่ เพราะ binary และ dependency บางรายการอาจแตกต่างตามระบบปฏิบัติการ
@@ -371,8 +371,8 @@ ss -ltnp | grep :3000
 ## 19. สรุปขั้นตอนเริ่มต้นแบบย่อ
 
 ```bash
-unzip zyrquen-frozen-v1.2-lts-mobile-ui.zip
-cd zyrquen-frozen-v1.2-lts-mobile-ui
+git clone https://github.com/yutthaphum-phakphian/ZYRQUEN-1.2-LTS.git
+cd ZYRQUEN-1.2-LTS
 npm ci
 npm audit --audit-level=moderate
 npm test

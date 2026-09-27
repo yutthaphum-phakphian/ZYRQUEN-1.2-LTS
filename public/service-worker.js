@@ -15,17 +15,17 @@ const SYNC_TAG = 'sync-audit-logs';
 
 // 1. CRITICAL ASSETS TO PRECACHE
 const CRITICAL_ASSETS = [
-  '/',
-  '/index.html',
-  '/manifest.json',
-  '/favicon.ico',
-  '/logo192.png',
-  '/logo512.png',
-  '/pwa-192x192.png',
-  '/pwa-512x512.png',
-  '/pwa-maskable-512x512.png',
-  '/apple-touch-icon.png',
-  '/icon.svg'
+  './',
+  './index.html',
+  './manifest.json',
+  './favicon.ico',
+  './logo192.png',
+  './logo512.png',
+  './pwa-192x192.png',
+  './pwa-512x512.png',
+  './pwa-maskable-512x512.png',
+  './apple-touch-icon.png',
+  './icon.svg'
 ];
 
 // Broadcast channel for notifying frontend UI of sync events
@@ -292,8 +292,8 @@ self.addEventListener('fetch', (event) => {
           return response;
         })
         .catch(() => {
-          return caches.match('/index.html').then((cached) => {
-            return cached || caches.match('/');
+          return caches.match('./index.html').then((cached) => {
+            return cached || caches.match('./') || caches.match('/index.html') || caches.match('/');
           });
         })
     );
@@ -320,7 +320,7 @@ self.addEventListener('fetch', (event) => {
         .catch(() => {
           // If network fails and no cached response, check fallback assets
           if (!cachedResponse && request.destination === 'image') {
-            return caches.match('/logo192.png');
+            return caches.match('./logo192.png') || caches.match('/logo192.png');
           }
           return cachedResponse;
         });

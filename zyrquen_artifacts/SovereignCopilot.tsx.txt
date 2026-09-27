@@ -1,7 +1,7 @@
 import React from 'react';
 import { ExternalLink, Github, Bot } from 'lucide-react';
 
-const REPO_URL = 'https://github.com/hugeplease66-debug/zyrquen-frozen-v1.2-lts';
+const REPO_URL = 'https://github.com/yutthaphum-phakphian/ZYRQUEN-1.2-LTS';
 
 export const SovereignCopilot: React.FC = () => {
   const handleViewSource = () => {

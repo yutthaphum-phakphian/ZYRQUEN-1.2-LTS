@@ -41,16 +41,20 @@ jobs:
           CI: false
           GITHUB_PAGES: 'true'
 
-      # 4. Create 404 fallback for SPA routing on GitHub Pages
-      - name: Prepare SPA 404 Fallback
+      # 4. Create 404 fallback and .nojekyll for SPA routing on GitHub Pages
+      - name: Prepare SPA 404 Fallback & .nojekyll
         run: |
           if [ -d "dist" ]; then
+            touch dist/.nojekyll
             cp dist/index.html dist/404.html 2>/dev/null || true
           fi
 
-      # 5. Setup Pages
+      # 5. Setup Pages (auto-enable GitHub Pages if not yet configured)
       - name: Setup Pages
         uses: actions/configure-pages@v5
+        with:
+          enablement: true
+        continue-on-error: true
 
       # 6. Upload Artifact
       - name: Upload Artifact

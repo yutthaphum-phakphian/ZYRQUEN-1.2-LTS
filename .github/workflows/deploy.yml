@@ -25,7 +25,7 @@ jobs:
           cache: 'npm'
 
       - name: Install Dependencies
-        run: npm ci --legacy-peer-deps || npm install
+        run: npm ci --legacy-peer-deps || npm install --legacy-peer-deps
 
       - name: Build React PWA Application
         run: npm run build
@@ -37,14 +37,17 @@ jobs:
         run: |
           if [ -d "dist" ]; then
             echo "Vite build detected in dist/"
+            touch dist/.nojekyll
             # Ensure 404 fallback for SPA routing on GitHub Pages
             cp dist/index.html dist/404.html 2>/dev/null || true
           elif [ -d "build" ]; then
             echo "CRA build detected in build/"
             cp -r build dist
+            touch dist/.nojekyll
           fi
 
-      - name: Deploy to GitHub Pages
+      - name: Deploy to GitHub Pages (gh-pages branch)
+        continue-on-error: true
         uses: JamesIves/github-pages-deploy-action@v4
         with:
           folder: dist

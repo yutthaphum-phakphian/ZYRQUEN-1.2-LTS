@@ -32,6 +32,15 @@ if (typeof window !== 'undefined') {
   window.addEventListener('pointerdown', unlockAudioOnInteraction, { passive: true });
   window.addEventListener('keydown', unlockAudioOnInteraction, { passive: true });
   window.addEventListener('touchstart', unlockAudioOnInteraction, { passive: true });
+
+  // Register PWA Service Worker with relative path for both root and GitHub Pages subpaths
+  if ('serviceWorker' in navigator && import.meta.env.PROD) {
+    window.addEventListener('load', () => {
+      navigator.serviceWorker.register('./sw.js').catch((err) => {
+        console.warn('[PWA] ServiceWorker registration skipped:', err);
+      });
+    });
+  }
 }
 
 const rootElement = document.getElementById('root');
