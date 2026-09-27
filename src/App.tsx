@@ -105,6 +105,10 @@ import { LiveQuantumEntropyTicker } from '@/components/LiveQuantumEntropyTicker'
 import { ToastNotification, ToastMessage } from '@/components/ToastNotification';
 import { RemediationProgressToast } from '@/components/RemediationProgressToast';
 import {
+  NodeRemediationEngine,
+  type RemediationProgressPayload,
+} from '@/services/NodeRemediationEngine';
+import {
   SsotDriftWarning,
   SsotDriftToggleButton,
   QuantumAggregateEntropyIndicator,
@@ -1005,6 +1009,17 @@ function SovereignAppContent() {
 
   // Connect to Node.js WebSocket Notification Service and pipe incoming alerts to toasts
   useNotificationWebSocket(showToast);
+
+  // Subscribe to NodeRemediationEngine to automatically surface RemediationProgressToast for any node
+  const [remediationToastPayload, setRemediationToastPayload] =
+    useState<RemediationProgressPayload | null>(null);
+
+  useEffect(() => {
+    const unsubscribe = NodeRemediationEngine.subscribeProgress((payload) => {
+      setRemediationToastPayload(payload);
+    });
+    return unsubscribe;
+  }, []);
 
   // Auto-open Forensic Master Dossier Modal on dedicated legal routes
   useEffect(() => {
@@ -3671,7 +3686,16 @@ function SovereignAppContent() {
 
       {/* Certificate Modal */}
       <ToastNotification toasts={toasts} removeToast={removeToast} />
-      <RemediationProgressToast />
+      <RemediationProgressToast
+        isOpen={remediationToastPayload ? true : undefined}
+        nodeId={remediationToastPayload?.nodeId}
+        phase={remediationToastPayload?.phase}
+        progressPercent={remediationToastPayload?.progressPercent}
+        statusMessage={remediationToastPayload?.statusMessage}
+        logLine={remediationToastPayload?.logLine}
+        latencyMs={remediationToastPayload?.latencyMs}
+        onDismiss={() => setRemediationToastPayload(null)}
+      />
       <AuditCertificateModal
         isOpen={isCertificateOpen}
         onClose={() => {

@@ -12,6 +12,7 @@ import { Room18MasterPanel } from '../components/Room18MasterPanel';
 import { SecurityView, HSM_NODES_DATA } from '../components/views/SecurityView';
 import { TelemetryStreamEngine } from '../services/TelemetryStreamEngine';
 import { RemediationProgressToast } from '../components/RemediationProgressToast';
+import { CriticalNodesDashboard } from '../components/dashboard/CriticalNodesDashboard';
 import { NodeRemediationEngine, BK01_DETECTED_ANOMALIES } from '../services/NodeRemediationEngine';
 
 if (typeof Animation !== 'undefined' && Animation.prototype) {
@@ -345,6 +346,39 @@ describe('🛡️ ZYRQUEN Ω∞ — Sovereign Canonical Resolver, Room18MasterPa
       expect(screen.getByTestId('remediation-step-isolation').getAttribute('data-status')).toBe('DONE');
       expect(screen.getByTestId('remediation-step-recalibration').getAttribute('data-status')).toBe('DONE');
       expect(screen.getByTestId('remediation-step-verification').getAttribute('data-status')).toBe('DONE');
+    });
+
+    it('activates CSS-based Isolation Zone pulsing warning border and animated background overlay for node BK01 when QUARANTINED', async () => {
+      render(<CriticalNodesDashboard />);
+
+      const bk01Card = screen.getByTestId('node-status-card-BK01');
+      expect(bk01Card.getAttribute('data-isolation-zone')).toBe('INACTIVE');
+      expect(screen.queryByTestId('isolation-zone-overlay-BK01')).toBeNull();
+
+      // Quarantine BK01
+      const quarantineBtn = screen.getByTestId('btn-simulate-bk01-quarantine');
+      fireEvent.click(quarantineBtn);
+
+      expect(bk01Card.getAttribute('data-status')).toBe('QUARANTINED');
+      expect(bk01Card.getAttribute('data-isolation-zone')).toBe('ACTIVE');
+      expect(bk01Card.className).toContain('isolation-zone-pulse');
+      expect(bk01Card.className).toContain('bk01-isolation-zone');
+
+      const overlay = screen.getByTestId('isolation-zone-overlay-BK01');
+      expect(overlay).toBeTruthy();
+      expect(overlay.className).toContain('isolation-zone-overlay');
+      expect(screen.getByTestId('isolation-zone-banner-BK01').textContent).toContain(
+        'ISOLATION ZONE'
+      );
+
+      // Restore BK01 to PURE GREEN via NodeRemediationEngine
+      await act(async () => {
+        await NodeRemediationEngine.triggerRemediation('BK01');
+      });
+
+      expect(bk01Card.getAttribute('data-status')).toBe('PURE GREEN');
+      expect(bk01Card.getAttribute('data-isolation-zone')).toBe('INACTIVE');
+      expect(screen.queryByTestId('isolation-zone-overlay-BK01')).toBeNull();
     });
   });
 });

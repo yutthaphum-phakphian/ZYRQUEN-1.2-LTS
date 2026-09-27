@@ -19,6 +19,80 @@
   animation: anomalyStrobeFlash 0.6s infinite cubic-bezier(0.4, 0, 0.6, 1);
 }
 
+/* BK01 Quarantined Isolation Zone — Pulsing Warning Border & Animated Background Overlay */
+@keyframes isolationZoneBorderPulse {
+  0%, 100% {
+    border-color: rgba(244, 63, 94, 0.95);
+    box-shadow:
+      0 0 0 1px rgba(244, 63, 94, 0.55),
+      0 0 22px rgba(225, 29, 72, 0.45),
+      inset 0 0 18px rgba(244, 63, 94, 0.22);
+  }
+  50% {
+    border-color: rgba(245, 158, 11, 0.95);
+    box-shadow:
+      0 0 0 3px rgba(245, 158, 11, 0.35),
+      0 0 34px rgba(244, 63, 94, 0.65),
+      inset 0 0 28px rgba(245, 158, 11, 0.28);
+  }
+}
+
+@keyframes isolationZoneOverlayPulse {
+  0% {
+    opacity: 0.45;
+    background-position: 0 0, center center;
+  }
+  50% {
+    opacity: 0.85;
+    background-position: 28px 0, center center;
+  }
+  100% {
+    opacity: 0.45;
+    background-position: 56px 0, center center;
+  }
+}
+
+.isolation-zone-pulse,
+.bk01-isolation-zone {
+  position: relative;
+  overflow: hidden;
+  border-color: rgba(244, 63, 94, 0.9);
+  animation: isolationZoneBorderPulse 1.6s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+}
+
+.isolation-zone-overlay,
+.bk01-isolation-zone-overlay {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  z-index: 0;
+  background-image:
+    repeating-linear-gradient(
+      -45deg,
+      rgba(244, 63, 94, 0.16) 0px,
+      rgba(244, 63, 94, 0.16) 10px,
+      rgba(245, 158, 11, 0.07) 10px,
+      rgba(245, 158, 11, 0.07) 20px
+    ),
+    radial-gradient(
+      circle at 85% 15%,
+      rgba(244, 63, 94, 0.28) 0%,
+      rgba(245, 158, 11, 0.12) 45%,
+      transparent 75%
+    );
+  background-size: 28px 28px, 100% 100%;
+  animation: isolationZoneOverlayPulse 2.2s linear infinite;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .isolation-zone-pulse,
+  .bk01-isolation-zone,
+  .isolation-zone-overlay,
+  .bk01-isolation-zone-overlay {
+    animation: none;
+  }
+}
+
 .chamber-11-quantum-radar {
   position: relative;
 }

@@ -230,99 +230,129 @@ export const CriticalNodesDashboard: React.FC<CriticalNodesDashboardProps> = ({
             <div
               key={node.nodeId}
               data-testid={`node-status-card-${node.nodeId}`}
-              className={`p-4 rounded-xl border transition-all space-y-3 ${
+              data-status={node.badgeStatus}
+              data-isolation-zone={isQuarantined ? 'ACTIVE' : 'INACTIVE'}
+              className={`relative overflow-hidden p-4 rounded-xl border transition-all space-y-3 ${
                 isQuarantined
-                  ? 'bg-rose-950/25 border-rose-500/60 shadow-lg shadow-rose-950/30'
+                  ? `isolation-zone-pulse ${
+                      isBk01 ? 'bk01-isolation-zone' : ''
+                    } bg-rose-950/35 border-amber-500/80 shadow-lg shadow-rose-950/40`
                   : isBk01
                     ? 'bg-slate-950 border-emerald-500/50 shadow-lg shadow-emerald-950/20'
                     : 'bg-slate-950/90 border-slate-800'
               }`}
             >
-              <div className="flex items-start justify-between gap-2">
-                <div>
-                  <div className="flex items-center gap-2">
-                    <span className="text-sm font-black text-white">{node.nodeId}</span>
-                    {isBk01 && (
-                      <span className="text-[9px] px-1.5 py-0.5 rounded bg-indigo-500/20 text-indigo-300 border border-indigo-500/40 font-bold">
-                        MONITORED PRIMARY
-                      </span>
-                    )}
-                  </div>
-                  <div className="text-[11px] text-slate-300 font-semibold mt-0.5">
-                    {node.nodeName}
-                  </div>
-                  <div className="text-[10px] text-slate-500">{node.role}</div>
-                </div>
-
-                {/* Status Badge ('PURE GREEN' or 'QUARANTINED') */}
-                {isQuarantined ? (
-                  <span
-                    data-testid={`badge-${node.nodeId}-quarantined`}
-                    className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-[10px] font-bold bg-rose-500/20 text-rose-300 border border-rose-500/50"
-                  >
-                    <span className="w-2 h-2 rounded-full bg-rose-500 animate-ping" />
-                    QUARANTINED
-                  </span>
-                ) : (
-                  <span
-                    data-testid={`badge-${node.nodeId}-pure-green`}
-                    className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-[10px] font-bold bg-emerald-500/20 text-emerald-300 border border-emerald-500/50"
-                  >
-                    <span className="w-2 h-2 rounded-full bg-emerald-400 animate-pulse shadow-[0_0_8px_#34d399]" />
-                    PURE GREEN
-                  </span>
-                )}
-              </div>
-
-              {/* Real-Time Node Telemetry */}
-              <div className="grid grid-cols-3 gap-2 pt-2 border-t border-slate-800/80 text-[10px]">
-                <div className="bg-slate-900/70 p-2 rounded border border-slate-800/60">
-                  <div className="text-slate-500">PHASE JITTER</div>
-                  <div
-                    className={`font-bold mt-0.5 ${
-                      node.phaseJitterFs > 3.0 ? 'text-rose-400' : 'text-cyan-300'
-                    }`}
-                  >
-                    {node.phaseJitterFs.toFixed(2)} fs
-                  </div>
-                </div>
-                <div className="bg-slate-900/70 p-2 rounded border border-slate-800/60">
-                  <div className="text-slate-500">PORT 8443</div>
-                  <div
-                    className={`font-bold mt-0.5 ${
-                      node.latencyMs > 100 ? 'text-amber-400' : 'text-emerald-300'
-                    }`}
-                  >
-                    {node.latencyMs.toFixed(1)} ms
-                  </div>
-                </div>
-                <div className="bg-slate-900/70 p-2 rounded border border-slate-800/60">
-                  <div className="text-slate-500">SSoT DRIFT</div>
-                  <div className="font-bold text-emerald-400 mt-0.5">{node.ssotDrift}</div>
-                </div>
-              </div>
-
-              <div className="flex items-center justify-between text-[10px] pt-1">
-                <span
-                  className={`font-semibold ${
-                    node.pqcLatticeState === 'ML-DSA-87 ALIGNED'
-                      ? 'text-emerald-400'
-                      : 'text-rose-400'
+              {/* Animated Background Overlay for QUARANTINED Isolation Zone */}
+              {isQuarantined && (
+                <div
+                  data-testid={`isolation-zone-overlay-${node.nodeId}`}
+                  aria-hidden="true"
+                  className={`isolation-zone-overlay ${
+                    isBk01 ? 'bk01-isolation-zone-overlay' : ''
                   }`}
-                >
-                  PQC: {node.pqcLatticeState}
-                </span>
-                <div className="flex items-center gap-2">
-                  <span className="text-slate-400">HSM: {node.hsmQuorum}</span>
-                  <button
-                    type="button"
-                    data-testid={`btn-remediate-node-${node.nodeId}`}
-                    onClick={() => handleTriggerNodeRemediation(node.nodeId)}
-                    disabled={isRemediating}
-                    className="px-2 py-0.5 rounded bg-cyan-500/15 hover:bg-cyan-500/25 disabled:opacity-40 text-cyan-300 border border-cyan-500/40 font-bold text-[9px] transition-colors cursor-pointer"
+                />
+              )}
+
+              <div className="relative z-10 space-y-3">
+                {isQuarantined && (
+                  <div
+                    data-testid={`isolation-zone-banner-${node.nodeId}`}
+                    className="flex items-center justify-between gap-2 px-2.5 py-1 rounded-lg bg-rose-950/80 border border-amber-500/60 text-[9px] font-bold tracking-wider uppercase text-amber-300"
                   >
-                    Remediate
-                  </button>
+                    <span className="flex items-center gap-1.5">
+                      <Lock className="w-3 h-3 text-rose-400 animate-pulse shrink-0" />
+                      <span>ISOLATION ZONE • CHAMBER 02 QUARANTINE</span>
+                    </span>
+                    <span className="text-rose-300">RING-04</span>
+                  </div>
+                )}
+
+                <div className="flex items-start justify-between gap-2">
+                  <div>
+                    <div className="flex items-center gap-2">
+                      <span className="text-sm font-black text-white">{node.nodeId}</span>
+                      {isBk01 && (
+                        <span className="text-[9px] px-1.5 py-0.5 rounded bg-indigo-500/20 text-indigo-300 border border-indigo-500/40 font-bold">
+                          MONITORED PRIMARY
+                        </span>
+                      )}
+                    </div>
+                    <div className="text-[11px] text-slate-300 font-semibold mt-0.5">
+                      {node.nodeName}
+                    </div>
+                    <div className="text-[10px] text-slate-500">{node.role}</div>
+                  </div>
+
+                  {/* Status Badge ('PURE GREEN' or 'QUARANTINED') */}
+                  {isQuarantined ? (
+                    <span
+                      data-testid={`badge-${node.nodeId}-quarantined`}
+                      className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-[10px] font-bold bg-rose-500/25 text-amber-200 border border-amber-500/60"
+                    >
+                      <span className="w-2 h-2 rounded-full bg-rose-500 animate-ping" />
+                      QUARANTINED
+                    </span>
+                  ) : (
+                    <span
+                      data-testid={`badge-${node.nodeId}-pure-green`}
+                      className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-[10px] font-bold bg-emerald-500/20 text-emerald-300 border border-emerald-500/50"
+                    >
+                      <span className="w-2 h-2 rounded-full bg-emerald-400 animate-pulse shadow-[0_0_8px_#34d399]" />
+                      PURE GREEN
+                    </span>
+                  )}
+                </div>
+
+                {/* Real-Time Node Telemetry */}
+                <div className="grid grid-cols-3 gap-2 pt-2 border-t border-slate-800/80 text-[10px]">
+                  <div className="bg-slate-900/70 p-2 rounded border border-slate-800/60">
+                    <div className="text-slate-500">PHASE JITTER</div>
+                    <div
+                      className={`font-bold mt-0.5 ${
+                        node.phaseJitterFs > 3.0 ? 'text-rose-400' : 'text-cyan-300'
+                      }`}
+                    >
+                      {node.phaseJitterFs.toFixed(2)} fs
+                    </div>
+                  </div>
+                  <div className="bg-slate-900/70 p-2 rounded border border-slate-800/60">
+                    <div className="text-slate-500">PORT 8443</div>
+                    <div
+                      className={`font-bold mt-0.5 ${
+                        node.latencyMs > 100 ? 'text-amber-400' : 'text-emerald-300'
+                      }`}
+                    >
+                      {node.latencyMs.toFixed(1)} ms
+                    </div>
+                  </div>
+                  <div className="bg-slate-900/70 p-2 rounded border border-slate-800/60">
+                    <div className="text-slate-500">SSoT DRIFT</div>
+                    <div className="font-bold text-emerald-400 mt-0.5">{node.ssotDrift}</div>
+                  </div>
+                </div>
+
+                <div className="flex items-center justify-between text-[10px] pt-1">
+                  <span
+                    className={`font-semibold ${
+                      node.pqcLatticeState === 'ML-DSA-87 ALIGNED'
+                        ? 'text-emerald-400'
+                        : 'text-rose-400'
+                    }`}
+                  >
+                    PQC: {node.pqcLatticeState}
+                  </span>
+                  <div className="flex items-center gap-2">
+                    <span className="text-slate-400">HSM: {node.hsmQuorum}</span>
+                    <button
+                      type="button"
+                      data-testid={`btn-remediate-node-${node.nodeId}`}
+                      onClick={() => handleTriggerNodeRemediation(node.nodeId)}
+                      disabled={isRemediating}
+                      className="px-2 py-0.5 rounded bg-cyan-500/15 hover:bg-cyan-500/25 disabled:opacity-40 text-cyan-300 border border-cyan-500/40 font-bold text-[9px] transition-colors cursor-pointer"
+                    >
+                      Remediate
+                    </button>
+                  </div>
                 </div>
               </div>
             </div>
