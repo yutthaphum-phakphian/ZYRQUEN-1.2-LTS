@@ -15,11 +15,16 @@ jobs:
     steps:
       - name: 📥 Checkout Repository
         uses: actions/checkout@v4
+        with:
+          sparse-checkout: |
+            /*
+            !cloud-workspace-command-center/
+          sparse-checkout-cone-mode: false
 
       - name: ⚙️ Setup Node.js Environment
         uses: actions/setup-node@v4
         with:
-          node-version: '20'
+          node-version: '22'
 
       - name: 📦 Install Node & Dev Dependencies
         run: |

@@ -1,11 +1,15 @@
 import { SecurityGateLevel3Simulator } from "../SecurityGateLevel3Simulator";
-import React, { useState, useEffect, useCallback } from 'react';
+import React, { useState, useEffect, useCallback, useRef } from 'react';
+import { motion } from 'motion/react';
 import {
   ShieldCheck,
   ShieldAlert,
   Lock,
   CheckCircle2,
   AlertOctagon,
+  AlertTriangle,
+  BellRing,
+  X,
   Key,
   RefreshCw,
   Scale,
@@ -75,6 +79,20 @@ import { UtimacoSecondaryHSMGauge } from '../UtimacoSecondaryHSMGauge';
 import { VerificationPassRatesChart } from '../VerificationPassRatesChart';
 import { LiveFlowVisualizerView } from './Security/LiveFlowVisualizerView';
 import { SecurityAnalyticsDashboard } from '../SecurityAnalyticsDashboard';
+import { toast } from '../../utils/toast';
+
+export const HSM_HIGH_SEVERITY_QUORUM_THRESHOLD = 8;
+
+export interface HsmQuorumHighSeverityToast {
+  id: string;
+  severity: 'HIGH';
+  activeNodes: number;
+  totalNodes: number;
+  offlineNodes: string[];
+  title: string;
+  message: string;
+  timestamp: string;
+}
 
 export type SecuritySubTab =
   | 'security-analytics'
@@ -140,10 +158,113 @@ export const SecurityView: React.FC<SecurityViewProps> = ({
   const [liveIsQuorumReached, setLiveIsQuorumReached] = useState<boolean>(true);
   const [liveIsProvenanceValid, setLiveIsProvenanceValid] = useState<boolean>(true);
 
-  const handleQuorumChange = useCallback((count: number, reached: boolean) => {
-    setLiveCustodianCount(count);
-    setLiveIsQuorumReached(reached);
-  }, []);
+  // Interactive 10-node Hardware HSM Quorum Monitor & Real-Time High-Severity Alert Toast (< 8/10 nodes)
+  const [disabledHsmNodeIds, setDisabledHsmNodeIds] = useState<number[]>([]);
+  const [handshakingNodeId, setHandshakingNodeId] = useState<number | null>(null);
+  const [hsmQuorumToast, setHsmQuorumToast] = useState<HsmQuorumHighSeverityToast | null>(null);
+  const prevActiveHsmNodesRef = useRef<number>(10);
+
+  const activeHsmNodes = 10 - disabledHsmNodeIds.length;
+  const isHsmQuorumValid = activeHsmNodes >= HSM_HIGH_SEVERITY_QUORUM_THRESHOLD;
+
+  const triggerHighSeverityQuorumToast = useCallback(
+    (activeCount: number, isolatedNodeLabels: string[]) => {
+      const offlineLabel =
+        isolatedNodeLabels.length > 0 ? isolatedNodeLabels.join(', ') : `${10 - activeCount} HSM slot(s)`;
+      const alertPayload: HsmQuorumHighSeverityToast = {
+        id: `HSM-QUORUM-ALERT-${Date.now()}`,
+        severity: 'HIGH',
+        activeNodes: activeCount,
+        totalNodes: 10,
+        offlineNodes: isolatedNodeLabels,
+        title: `HIGH-SEVERITY ALERT: HSM Quorum Dropped Below 8/10 (${activeCount}/10 Active)`,
+        message: `Sub-Kelvin Hardware HSM Quorum breached required 8/10 super-majority threshold. Isolated nodes: ${offlineLabel}. Fail-closed veto protection engaged.`,
+        timestamp: new Date().toISOString().replace('T', ' ').slice(0, 19) + ' UTC',
+      };
+
+      setHsmQuorumToast(alertPayload);
+      playTone(260, 0.12);
+
+      toast.error(
+        `[HIGH SEVERITY] HSM Quorum Health dropped to ${activeCount}/10 nodes (< 8/10 threshold). Isolated: ${offlineLabel}`,
+        {
+          toastId: `hsm-quorum-breach-${activeCount}-${isolatedNodeLabels.join('-')}`,
+          durationMs: 6000,
+        }
+      );
+
+      onAddSystemEvent?.(
+        'HARDWARE',
+        alertPayload.title,
+        alertPayload.message,
+        '0x909ab814',
+        'critical',
+        'ETDA Sec 26 / FIPS 140-3 L4 Quorum Breach',
+        'security'
+      );
+    },
+    [onAddSystemEvent]
+  );
+
+  // Real-time HSM Quorum threshold observer (< 8/10 nodes triggers high-severity alert toast)
+  useEffect(() => {
+    const prevNodes = prevActiveHsmNodesRef.current;
+    prevActiveHsmNodesRef.current = activeHsmNodes;
+
+    if (activeHsmNodes < HSM_HIGH_SEVERITY_QUORUM_THRESHOLD) {
+      if (prevNodes >= HSM_HIGH_SEVERITY_QUORUM_THRESHOLD || activeHsmNodes < prevNodes) {
+        const offlineNodes = [...disabledHsmNodeIds]
+          .sort((a, b) => a - b)
+          .map((id) => `HSM-NODE-${String(id).padStart(2, '0')}`);
+        triggerHighSeverityQuorumToast(activeHsmNodes, offlineNodes);
+      }
+    } else if (activeHsmNodes >= HSM_HIGH_SEVERITY_QUORUM_THRESHOLD && hsmQuorumToast !== null) {
+      setHsmQuorumToast(null);
+    }
+  }, [activeHsmNodes, disabledHsmNodeIds, hsmQuorumToast, triggerHighSeverityQuorumToast]);
+
+  const toggleHsmNode = (nodeId: number) => {
+    playTone(580, 0.04);
+    setHandshakingNodeId(nodeId);
+    setTimeout(() => {
+      setHandshakingNodeId((prev) => (prev === nodeId ? null : prev));
+    }, 350);
+
+    setDisabledHsmNodeIds((prev) => {
+      const next = prev.includes(nodeId) ? prev.filter((id) => id !== nodeId) : [...prev, nodeId];
+      const nextActive = 10 - next.length;
+      setLiveCustodianCount(nextActive);
+      setLiveIsQuorumReached(nextActive >= HSM_HIGH_SEVERITY_QUORUM_THRESHOLD);
+      return next;
+    });
+  };
+
+  const restoreHsmQuorum = () => {
+    playAuditChime();
+    setDisabledHsmNodeIds([]);
+    setHandshakingNodeId(null);
+    setHsmQuorumToast(null);
+    setLiveCustodianCount(10);
+    setLiveIsQuorumReached(true);
+    toast.success('HSM Quorum restored to 10/10 VALID. All hardware custodian nodes synchronized.', {
+      toastId: 'hsm-quorum-restored-10',
+      durationMs: 4000,
+    });
+  };
+
+  const handleQuorumChange = useCallback(
+    (count: number, reached: boolean) => {
+      setLiveCustodianCount(count);
+      setLiveIsQuorumReached(reached);
+      if (count < HSM_HIGH_SEVERITY_QUORUM_THRESHOLD) {
+        const offlineSlots = Array.from({ length: 10 - count }, (_, idx) => `HSM-SLOT-${String(10 - idx).padStart(2, '0')}`);
+        triggerHighSeverityQuorumToast(count, offlineSlots);
+      } else {
+        setHsmQuorumToast(null);
+      }
+    },
+    [triggerHighSeverityQuorumToast]
+  );
 
   const handleProvenanceStateChange = useCallback((isValid: boolean) => {
     setLiveIsProvenanceValid(isValid);
@@ -373,6 +494,143 @@ export const SecurityView: React.FC<SecurityViewProps> = ({
         </div>
       </div>
 
+      {/* Real-Time High-Severity HSM Quorum Alert Toast (< 8/10 Nodes) */}
+      {hsmQuorumToast && (
+        <motion.div
+          key={hsmQuorumToast.id}
+          data-testid="hsm-quorum-high-severity-toast"
+          data-severity={hsmQuorumToast.severity}
+          role="alert"
+          aria-live="assertive"
+          initial={{ opacity: 0, y: -16, scale: 0.97 }}
+          animate={{ opacity: 1, y: 0, scale: 1 }}
+          transition={{ type: 'spring', bounce: 0, duration: 0.25 }}
+          className="p-4 sm:p-5 rounded-2xl bg-gradient-to-r from-rose-950/95 via-[#1a0910]/95 to-[#0b0710]/95 border-2 border-rose-500/70 shadow-[0_0_35px_rgba(244,63,94,0.35)] backdrop-blur-2xl flex flex-col lg:flex-row lg:items-center justify-between gap-4 font-mono relative overflow-hidden"
+        >
+          <div className="flex items-start gap-3.5">
+            <div className="p-2.5 rounded-xl bg-rose-500/20 border border-rose-400/50 text-rose-300 shrink-0 animate-pulse">
+              <BellRing className="w-5 h-5" />
+            </div>
+            <div className="space-y-1">
+              <div className="flex flex-wrap items-center gap-2">
+                <span className="px-2 py-0.5 rounded-md bg-rose-500/30 border border-rose-400/60 text-[10px] font-bold text-rose-200 uppercase tracking-widest">
+                  HIGH SEVERITY ALERT
+                </span>
+                <span className="px-2 py-0.5 rounded-md bg-amber-500/20 border border-amber-400/40 text-[10px] font-bold text-amber-300">
+                  QUORUM {hsmQuorumToast.activeNodes}/{hsmQuorumToast.totalNodes} (&lt;8/10)
+                </span>
+                <span className="text-[10px] text-rose-300/70">{hsmQuorumToast.timestamp}</span>
+              </div>
+              <div className="text-xs sm:text-sm font-bold text-white">
+                {hsmQuorumToast.title}
+              </div>
+              <p className="text-[11px] sm:text-xs text-rose-200/90 leading-relaxed font-sans">
+                {hsmQuorumToast.message}
+              </p>
+            </div>
+          </div>
+
+          <div className="flex items-center gap-2.5 shrink-0 self-end lg:self-center">
+            <button
+              type="button"
+              data-testid="btn-restore-hsm-quorum-toast"
+              onClick={restoreHsmQuorum}
+              className="px-3.5 py-2 rounded-xl bg-emerald-500/20 hover:bg-emerald-500/30 border border-emerald-400/50 text-emerald-200 text-xs font-bold transition-all cursor-pointer flex items-center gap-1.5"
+            >
+              <RefreshCw className="w-3.5 h-3.5" />
+              <span>Restore 10/10 Quorum</span>
+            </button>
+            <button
+              type="button"
+              data-testid="btn-dismiss-hsm-quorum-toast"
+              onClick={() => setHsmQuorumToast(null)}
+              aria-label="Dismiss High Severity Quorum Alert"
+              className="p-2 rounded-xl bg-white/5 hover:bg-white/15 border border-white/10 text-zinc-300 hover:text-white transition-all cursor-pointer"
+            >
+              <X className="w-4 h-4" />
+            </button>
+          </div>
+        </motion.div>
+      )}
+
+      {/* Interactive 10-Node Hardware HSM Quorum Health Monitor */}
+      <div
+        data-testid="hardware-hsm-quorum-monitor"
+        className={`p-5 rounded-[24px] border backdrop-blur-2xl font-mono transition-all ${
+          isHsmQuorumValid
+            ? 'bg-[#070914]/90 border-cyan-500/25 shadow-[0_0_25px_rgba(6,182,212,0.1)]'
+            : 'bg-rose-950/25 border-rose-500/50 shadow-[0_0_30px_rgba(244,63,94,0.2)]'
+        }`}
+      >
+        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 mb-4">
+          <div className="flex items-center gap-2.5 flex-wrap">
+            <Cpu className={`w-4 h-4 ${isHsmQuorumValid ? 'text-cyan-400' : 'text-rose-400 animate-pulse'}`} />
+            <span className="text-xs sm:text-sm font-bold text-white uppercase tracking-wider">
+              Hardware HSM Quorum Monitor (10-Node FIPS 140-3 L4 Array)
+            </span>
+            <span
+              data-testid="hsm-quorum-status-badge"
+              className={`px-2.5 py-0.5 rounded-full text-[10px] font-bold border ${
+                isHsmQuorumValid
+                  ? 'bg-emerald-500/15 text-emerald-300 border-emerald-500/30'
+                  : 'bg-rose-500/20 text-rose-300 border-rose-500/40 animate-pulse'
+              }`}
+            >
+              QUORUM STATUS: {activeHsmNodes}/10 {isHsmQuorumValid ? 'VALID' : 'DEGRADED (<8/10)'}
+            </span>
+          </div>
+
+          <div className="flex items-center gap-2">
+            {disabledHsmNodeIds.length > 0 && (
+              <button
+                type="button"
+                onClick={restoreHsmQuorum}
+                className="px-3 py-1.5 rounded-xl bg-emerald-500/15 hover:bg-emerald-500/25 border border-emerald-500/40 text-emerald-300 text-[11px] font-bold transition-all cursor-pointer flex items-center gap-1.5"
+              >
+                <RefreshCw className="w-3.5 h-3.5" />
+                <span>Restore 10/10 Quorum</span>
+              </button>
+            )}
+          </div>
+        </div>
+
+        <div className="grid grid-cols-2 sm:grid-cols-5 lg:grid-cols-10 gap-2">
+          {Array.from({ length: 10 }, (_, idx) => {
+            const nodeId = idx + 1;
+            const nodeLabel = `HSM-NODE-${String(nodeId).padStart(2, '0')}`;
+            const isOffline = disabledHsmNodeIds.includes(nodeId);
+            const isHandshaking = handshakingNodeId === nodeId;
+
+            return (
+              <button
+                key={nodeId}
+                type="button"
+                onClick={() => toggleHsmNode(nodeId)}
+                className={`p-2.5 rounded-xl border text-left transition-all cursor-pointer flex flex-col justify-between gap-1.5 ${
+                  isOffline
+                    ? 'bg-rose-950/40 border-rose-500/40 text-rose-300 hover:bg-rose-900/40'
+                    : 'bg-white/[0.03] border-white/10 text-zinc-200 hover:border-cyan-400/40 hover:bg-cyan-500/10'
+                }`}
+              >
+                <div className="flex items-center justify-between gap-1">
+                  <span className="text-[10px] font-bold tracking-tight">{nodeLabel}</span>
+                  <span
+                    className={`w-2 h-2 rounded-full ${
+                      isOffline ? 'bg-rose-500' : 'bg-emerald-400'
+                    }`}
+                  />
+                </div>
+                <div className="text-[9px] text-zinc-400 flex items-center justify-between">
+                  <span>{isOffline ? 'ISOLATED' : 'ONLINE'}</span>
+                  {isHandshaking && (
+                    <span className="text-amber-300 font-bold animate-pulse">SYN...</span>
+                  )}
+                </div>
+              </button>
+            );
+          })}
+        </div>
+      </div>
 
       {/* Unified Tab Switcher Navigation Bar */}
       <div className="flex items-center bg-[#070914]/90 backdrop-blur-xl border border-cyan-500/20 rounded-2xl p-2 font-mono text-xs shadow-inner flex-wrap gap-2 relative overflow-hidden">

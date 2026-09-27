@@ -5,6 +5,7 @@ import { afterEach, describe, expect, it, vi } from 'vitest';
 import { SovereignGateways } from '../src/components/SovereignGateways';
 import { SentinelRemediation } from '../src/components/SentinelRemediation';
 import SovereignDashboard from '../src/pages/SovereignDashboard';
+import { SecurityView } from '../src/components/views/SecurityView';
 import { SOVEREIGN_CONFIG } from '../src/config/sovereign.config';
 
 afterEach(() => {
@@ -59,5 +60,41 @@ describe('Sovereign runtime verification', () => {
     });
 
     expect(screen.getAllByText('ALERT')).toHaveLength(3);
+  });
+
+  it('triggers a real-time high-severity toast notification in SecurityView whenever HSM Quorum health drops below 8/10 nodes', () => {
+    const onAddSystemEvent = vi.fn();
+    render(<SecurityView onAddSystemEvent={onAddSystemEvent} />);
+
+    expect(screen.queryByTestId('hsm-quorum-high-severity-toast')).toBeNull();
+    expect(screen.getByText(/QUORUM STATUS:\s*10\/10\s*VALID/i)).toBeTruthy();
+
+    fireEvent.click(screen.getByText('HSM-NODE-01').closest('button')!);
+    fireEvent.click(screen.getByText('HSM-NODE-02').closest('button')!);
+    expect(screen.getByText(/QUORUM STATUS:\s*8\/10\s*VALID/i)).toBeTruthy();
+    expect(screen.queryByTestId('hsm-quorum-high-severity-toast')).toBeNull();
+
+    fireEvent.click(screen.getByText('HSM-NODE-03').closest('button')!);
+    expect(screen.getByText(/QUORUM STATUS:\s*7\/10\s*DEGRADED/i)).toBeTruthy();
+
+    const highSeverityToast = screen.getByTestId('hsm-quorum-high-severity-toast');
+    expect(highSeverityToast).toBeTruthy();
+    expect(highSeverityToast.getAttribute('data-severity')).toBe('HIGH');
+    expect(highSeverityToast.textContent).toMatch(/HIGH SEVERITY ALERT/i);
+    expect(highSeverityToast.textContent).toMatch(/7\/10/i);
+
+    expect(onAddSystemEvent).toHaveBeenCalledWith(
+      'HARDWARE',
+      expect.stringMatching(/HIGH-SEVERITY ALERT: HSM Quorum Dropped Below 8\/10/i),
+      expect.stringMatching(/HSM-NODE-01, HSM-NODE-02, HSM-NODE-03/i),
+      '0x909ab814',
+      'critical',
+      expect.any(String),
+      'security'
+    );
+
+    fireEvent.click(screen.getByTestId('btn-restore-hsm-quorum-toast'));
+    expect(screen.getByText(/QUORUM STATUS:\s*10\/10\s*VALID/i)).toBeTruthy();
+    expect(screen.queryByTestId('hsm-quorum-high-severity-toast')).toBeNull();
   });
 });

@@ -14,3 +14,8 @@ rendered-manifests.yaml
 !.env.example
 *.pem
 *.key
+__pycache__/
+*.pyc
+cloud-workspace-command-center/
+.aistudio/
+

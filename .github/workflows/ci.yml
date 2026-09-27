@@ -19,11 +19,17 @@ jobs:
     steps:
       - name: Checkout Codebase
         uses: actions/checkout@v4
+        with:
+          sparse-checkout: |
+            /*
+            !cloud-workspace-command-center/
+          sparse-checkout-cone-mode: false
 
       - name: Setup Node.js Runtime
         uses: actions/setup-node@v4
         with:
-          node-version: 20
+          node-version: 22
+          cache: 'npm'
 
       - name: Setup Python Runtime
         uses: actions/setup-python@v5
