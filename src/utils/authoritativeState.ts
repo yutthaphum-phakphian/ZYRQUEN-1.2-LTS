@@ -19,6 +19,19 @@
  * ======================================================================
  */
 
+import {
+  SOVEREIGN_CONFIG,
+  AUTHORITATIVE_BLOCK_HEIGHT,
+  AUTHORITATIVE_BLOCK_TAG,
+  AUTHORITATIVE_MERKLE_ROOT,
+  AUTHORITATIVE_CANONICAL_SEALS,
+  AUTHORITATIVE_QUARANTINED_SEALS,
+  AUTHORITATIVE_RAW_SEALS_TOTAL,
+  AUTHORITATIVE_DEPLOYMENT_CERT,
+  AUTHORITATIVE_SSOT_MUTATION,
+} from '../sovereign.config';
+import { CANONICAL_CONSTANTS, STATE_AUTHORITY } from '../data/sovereignData';
+
 export type ProvenanceClassification =
   | 'CANONICAL_FROZEN'
   | 'OBSERVED_QUARANTINED'
@@ -40,16 +53,16 @@ export interface AuthoritativeSystemState {
   readonly clearance: 'OMEGA-1 SUPREME CLEARANCE';
   readonly boundary: 'Ω601-Ω1000 Strict (Ω600_1000 Locked, 400 Tenants)';
 
-  // Canonical SSoT Baseline (Read-Only)
+  // Canonical SSoT Baseline (Read-Only, Reconciled with src/sovereign.config.ts)
   readonly canonical: {
-    readonly blockHeight: 849202;
-    readonly blockTag: '#849202';
-    readonly merkleRoot: '909ab814479844d8a14816bed34cdbb07528e18501da86fc4691763a43fa4c68';
-    readonly cert: 'ZQ-GREEN-DEP-849202-3908';
-    readonly seals: 14902;
-    readonly quarantinedSeals: 80;
-    readonly rawTotal: 14982;
-    readonly ssotMutation: 0;
+    readonly blockHeight: typeof AUTHORITATIVE_BLOCK_HEIGHT;
+    readonly blockTag: typeof AUTHORITATIVE_BLOCK_TAG;
+    readonly merkleRoot: typeof AUTHORITATIVE_MERKLE_ROOT;
+    readonly cert: typeof AUTHORITATIVE_DEPLOYMENT_CERT;
+    readonly seals: typeof AUTHORITATIVE_CANONICAL_SEALS;
+    readonly quarantinedSeals: typeof AUTHORITATIVE_QUARANTINED_SEALS;
+    readonly rawTotal: typeof AUTHORITATIVE_RAW_SEALS_TOTAL;
+    readonly ssotMutation: typeof AUTHORITATIVE_SSOT_MUTATION;
     readonly ssotDrift: 'Δ0.00%';
     readonly writeAuthority: 'NONE';
     readonly manualOverride: 'NONE';
@@ -162,14 +175,14 @@ export const AUTHORITATIVE_STATE: AuthoritativeSystemState = Object.freeze({
   boundary: 'Ω601-Ω1000 Strict (Ω600_1000 Locked, 400 Tenants)',
 
   canonical: Object.freeze({
-    blockHeight: 849202,
-    blockTag: '#849202',
-    merkleRoot: '909ab814479844d8a14816bed34cdbb07528e18501da86fc4691763a43fa4c68',
-    cert: 'ZQ-GREEN-DEP-849202-3908',
-    seals: 14902,
-    quarantinedSeals: 80,
-    rawTotal: 14982,
-    ssotMutation: 0,
+    blockHeight: AUTHORITATIVE_BLOCK_HEIGHT,
+    blockTag: AUTHORITATIVE_BLOCK_TAG,
+    merkleRoot: AUTHORITATIVE_MERKLE_ROOT,
+    cert: AUTHORITATIVE_DEPLOYMENT_CERT,
+    seals: AUTHORITATIVE_CANONICAL_SEALS,
+    quarantinedSeals: AUTHORITATIVE_QUARANTINED_SEALS,
+    rawTotal: AUTHORITATIVE_RAW_SEALS_TOTAL,
+    ssotMutation: AUTHORITATIVE_SSOT_MUTATION,
     ssotDrift: 'Δ0.00%',
     writeAuthority: 'NONE',
     manualOverride: 'NONE',
@@ -285,23 +298,29 @@ export function runAuthoritativeInvariantChecks(): {
       id: 'INV-01',
       name: 'Canonical Merkle Root Unchanged',
       domain: 'CANONICAL',
-      passed: state.canonical.merkleRoot === '909ab814479844d8a14816bed34cdbb07528e18501da86fc4691763a43fa4c68',
-      expected: '909ab814479844d8a14816bed34cdbb07528e18501da86fc4691763a43fa4c68',
+      passed:
+        state.canonical.merkleRoot === SOVEREIGN_CONFIG.genesisAnchor.merkleRoot &&
+        CANONICAL_CONSTANTS.GENESIS_MERKLE_ROOT === SOVEREIGN_CONFIG.genesisAnchor.merkleRoot,
+      expected: SOVEREIGN_CONFIG.genesisAnchor.merkleRoot,
       actual: state.canonical.merkleRoot,
     },
     {
       id: 'INV-02',
       name: 'Block #849202 Genesis Invariant',
       domain: 'CANONICAL',
-      passed: state.canonical.blockHeight === 849202,
-      expected: '849202',
+      passed:
+        state.canonical.blockHeight === SOVEREIGN_CONFIG.genesisAnchor.blockHeight &&
+        CANONICAL_CONSTANTS.CANONICAL_BLOCK === SOVEREIGN_CONFIG.genesisAnchor.blockHeight,
+      expected: String(SOVEREIGN_CONFIG.genesisAnchor.blockHeight),
       actual: String(state.canonical.blockHeight),
     },
     {
       id: 'INV-03',
       name: 'Canonical Seals Count === 14,902',
       domain: 'CANONICAL',
-      passed: state.canonical.seals === 14902,
+      passed:
+        state.canonical.seals === SOVEREIGN_CONFIG.sealsRegistry.canonicalSealsCount &&
+        CANONICAL_CONSTANTS.CANONICAL_SEALS === SOVEREIGN_CONFIG.sealsRegistry.canonicalSealsCount,
       expected: '14,902',
       actual: String(state.canonical.seals),
     },
@@ -309,7 +328,10 @@ export function runAuthoritativeInvariantChecks(): {
       id: 'INV-04',
       name: 'SSoT Mutation Delta === 0 (Strict Read-Only Δ0.00%)',
       domain: 'CANONICAL',
-      passed: state.canonical.ssotMutation === 0 && state.canonical.writeAuthority === 'NONE',
+      passed:
+        state.canonical.ssotMutation === 0 &&
+        state.canonical.writeAuthority === 'NONE' &&
+        STATE_AUTHORITY.SSOT_MUTATION_COUNT === 0,
       expected: 'Mutation: 0, Authority: NONE',
       actual: `Mutation: ${state.canonical.ssotMutation}, Authority: ${state.canonical.writeAuthority}`,
     },
@@ -317,7 +339,9 @@ export function runAuthoritativeInvariantChecks(): {
       id: 'INV-05',
       name: 'Quarantined Seals === 80 (Raw Total 14,982)',
       domain: 'CANONICAL',
-      passed: state.canonical.quarantinedSeals === 80 && state.canonical.rawTotal === 14982,
+      passed:
+        state.canonical.quarantinedSeals === SOVEREIGN_CONFIG.sealsRegistry.quarantinedSealsCount &&
+        state.canonical.rawTotal === SOVEREIGN_CONFIG.sealsRegistry.totalRawSeals,
       expected: 'Quarantine: 80, Raw: 14,982',
       actual: `Quarantine: ${state.canonical.quarantinedSeals}, Raw: ${state.canonical.rawTotal}`,
     },
@@ -357,8 +381,11 @@ export function runAuthoritativeInvariantChecks(): {
       id: 'INV-10',
       name: 'Verification Gate Status === PASSED (Cert ZQ-GREEN-DEP-849202-3908)',
       domain: 'LEGAL',
-      passed: state.verificationGateStatus === 'PASSED' && state.canonical.cert === 'ZQ-GREEN-DEP-849202-3908',
-      expected: 'PASSED with ZQ-GREEN-DEP-849202-3908',
+      passed:
+        state.verificationGateStatus === 'PASSED' &&
+        state.canonical.cert === SOVEREIGN_CONFIG.genesisAnchor.deploymentCertCode &&
+        CANONICAL_CONSTANTS.DEPLOYMENT_CERTIFICATE === SOVEREIGN_CONFIG.genesisAnchor.deploymentCertCode,
+      expected: `PASSED with ${SOVEREIGN_CONFIG.genesisAnchor.deploymentCertCode}`,
       actual: `${state.verificationGateStatus} with ${state.canonical.cert}`,
     },
   ];
@@ -366,5 +393,67 @@ export function runAuthoritativeInvariantChecks(): {
   return {
     allPassed: checks.every((c) => c.passed),
     checks,
+  };
+}
+
+export interface CanonicalReconciliationReport {
+  reconciled: boolean;
+  authoritativeBlockHeight: number;
+  authoritativeMerkleRoot: string;
+  authoritativeSeals: number;
+  authoritativeCert: string;
+  sources: {
+    module: string;
+    blockHeight: number;
+    merkleRoot: string;
+    seals: number;
+    cert: string;
+    matched: boolean;
+  }[];
+}
+
+export function verifyCanonicalReconciliation(): CanonicalReconciliationReport {
+  const sources = [
+    {
+      module: 'src/sovereign.config.ts',
+      blockHeight: SOVEREIGN_CONFIG.genesisAnchor.blockHeight,
+      merkleRoot: SOVEREIGN_CONFIG.genesisAnchor.merkleRoot,
+      seals: SOVEREIGN_CONFIG.sealsRegistry.canonicalSealsCount,
+      cert: SOVEREIGN_CONFIG.genesisAnchor.deploymentCertCode,
+      matched: true,
+    },
+    {
+      module: 'src/data/sovereignData.ts',
+      blockHeight: CANONICAL_CONSTANTS.CANONICAL_BLOCK,
+      merkleRoot: CANONICAL_CONSTANTS.GENESIS_MERKLE_ROOT,
+      seals: CANONICAL_CONSTANTS.CANONICAL_SEALS,
+      cert: CANONICAL_CONSTANTS.DEPLOYMENT_CERTIFICATE,
+      matched:
+        CANONICAL_CONSTANTS.CANONICAL_BLOCK === AUTHORITATIVE_BLOCK_HEIGHT &&
+        CANONICAL_CONSTANTS.GENESIS_MERKLE_ROOT === AUTHORITATIVE_MERKLE_ROOT &&
+        CANONICAL_CONSTANTS.CANONICAL_SEALS === AUTHORITATIVE_CANONICAL_SEALS &&
+        CANONICAL_CONSTANTS.DEPLOYMENT_CERTIFICATE === AUTHORITATIVE_DEPLOYMENT_CERT,
+    },
+    {
+      module: 'src/utils/authoritativeState.ts',
+      blockHeight: AUTHORITATIVE_STATE.canonical.blockHeight,
+      merkleRoot: AUTHORITATIVE_STATE.canonical.merkleRoot,
+      seals: AUTHORITATIVE_STATE.canonical.seals,
+      cert: AUTHORITATIVE_STATE.canonical.cert,
+      matched:
+        AUTHORITATIVE_STATE.canonical.blockHeight === AUTHORITATIVE_BLOCK_HEIGHT &&
+        AUTHORITATIVE_STATE.canonical.merkleRoot === AUTHORITATIVE_MERKLE_ROOT &&
+        AUTHORITATIVE_STATE.canonical.seals === AUTHORITATIVE_CANONICAL_SEALS &&
+        AUTHORITATIVE_STATE.canonical.cert === AUTHORITATIVE_DEPLOYMENT_CERT,
+    },
+  ];
+
+  return {
+    reconciled: sources.every((s) => s.matched),
+    authoritativeBlockHeight: AUTHORITATIVE_BLOCK_HEIGHT,
+    authoritativeMerkleRoot: AUTHORITATIVE_MERKLE_ROOT,
+    authoritativeSeals: AUTHORITATIVE_CANONICAL_SEALS,
+    authoritativeCert: AUTHORITATIVE_DEPLOYMENT_CERT,
+    sources,
   };
 }

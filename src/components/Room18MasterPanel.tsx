@@ -23,14 +23,28 @@ import {
   globalChamber18Engine,
 } from '../chambers/chamber18/neuralSentinelEngine';
 import { CANONICAL_SSOT_CORE } from '../core/canonicalSSoT';
+import {
+  SOVEREIGN_CONFIG,
+  AUTHORITATIVE_BLOCK_HEIGHT,
+  AUTHORITATIVE_MERKLE_ROOT,
+  AUTHORITATIVE_CANONICAL_SEALS,
+} from '../sovereign.config';
+import { verifyCanonicalReconciliation } from '../utils/authoritativeState';
 
-interface Room18MasterPanelProps {
+export const CANONICAL_FROZEN_SEALS = AUTHORITATIVE_CANONICAL_SEALS;
+export const CANONICAL_BLOCK = AUTHORITATIVE_BLOCK_HEIGHT;
+export const CANONICAL_MERKLE_ROOT = AUTHORITATIVE_MERKLE_ROOT;
+export const CANONICAL_VERSION = SOVEREIGN_CONFIG.version;
+export const CANONICAL_PRINCIPAL = `${SOVEREIGN_CONFIG.sovereignPrincipal.nameTh} (${SOVEREIGN_CONFIG.sovereignPrincipal.passportId})`;
+
+export interface Room18MasterPanelProps {
   snapshots?: HardwareSnapshot[];
   onNavigate?: (view: ViewType) => void;
   onOpenCertificate?: () => void;
 }
 
 export const Room18MasterPanel: React.FC<Room18MasterPanelProps> = ({
+  snapshots = [],
   onNavigate,
   onOpenCertificate,
 }) => {
@@ -39,6 +53,8 @@ export const Room18MasterPanel: React.FC<Room18MasterPanelProps> = ({
   const [verificationStatus, setVerificationStatus] = useState<string>(
     'CH-18 NEURAL SENTINEL • 12,480 SPANS/M • 1.33 fs JITTER BASELINE • Δ0.00% SSoT'
   );
+  const reconciliation = verifyCanonicalReconciliation();
+  const activeSnapshotCount = snapshots.length;
 
   const invariantAttestations = globalChamber18Engine.getInvariantAttestations();
 
@@ -192,9 +208,15 @@ export const Room18MasterPanel: React.FC<Room18MasterPanelProps> = ({
 
         {/* Quick Navigation Bar */}
         <div className="flex flex-wrap items-center justify-between gap-3 mt-5 pt-4 border-t border-white/10">
-          <div className="text-xs text-zinc-400 flex items-center gap-2">
+          <div className="text-xs text-zinc-400 flex flex-wrap items-center gap-2">
             <CheckCircle2 className="w-4 h-4 text-emerald-400" />
-            <span>Mounted in Registry: src/data/sovereignData.ts &amp; src/lib/ssot-data.ts (CH-18)</span>
+            <span>
+              Mounted in Registry: src/data/sovereignData.ts &amp; src/lib/ssot-data.ts (CH-18) · SSoT Reconciliation:{' '}
+              <strong className={reconciliation.reconciled ? 'text-emerald-300' : 'text-rose-400'}>
+                {reconciliation.reconciled ? '3/3 MATCHED' : 'DRIFT'}
+              </strong>{' '}
+              · Snapshots: {activeSnapshotCount}
+            </span>
           </div>
           <div className="flex flex-wrap items-center gap-2">
             {onNavigate && (

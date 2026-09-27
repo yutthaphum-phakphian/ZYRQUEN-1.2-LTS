@@ -1181,6 +1181,11 @@ export const DashboardView: React.FC<DashboardViewProps> = ({
             previousScore={prevIntegrityScore}
           />
           <GitHubSyncStatusUtility />
+          <Room18MasterPanel
+            snapshots={snapshots}
+            onNavigate={onNavigate}
+            onOpenCertificate={onOpenCertificate}
+          />
           <HealthDashboard snapshots={snapshots} />
           <LiveAutomatedHealthWidget />
           <SystemResourceGrid />

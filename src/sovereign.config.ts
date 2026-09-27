@@ -67,6 +67,18 @@ export interface SovereignConfig {
   };
 }
 
+export const AUTHORITATIVE_BLOCK_HEIGHT = 849202 as const;
+export const AUTHORITATIVE_BLOCK_TAG = "#849202" as const;
+export const AUTHORITATIVE_MERKLE_ROOT =
+  "909ab814479844d8a14816bed34cdbb07528e18501da86fc4691763a43fa4c68" as const;
+export const AUTHORITATIVE_GENESIS_SEED = "ZYRQUEN_GENESIS_CONTRACT_v1.2" as const;
+export const AUTHORITATIVE_CANONICAL_SEALS = 14902 as const;
+export const AUTHORITATIVE_QUARANTINED_SEALS = 80 as const;
+export const AUTHORITATIVE_RAW_SEALS_TOTAL = 14982 as const;
+export const AUTHORITATIVE_DEPLOYMENT_CERT = "ZQ-GREEN-DEP-849202-3908" as const;
+export const AUTHORITATIVE_CRYO_TEMP_MK = 14.98 as const;
+export const AUTHORITATIVE_SSOT_MUTATION = 0 as const;
+
 export const SOVEREIGN_CONFIG: Readonly<SovereignConfig> = Object.freeze({
   systemName: "ZYRQUEN Ω∞ Sovereign Kernel & Truth Matrix",
   codename: "LOCKED_FROZEN_v1.2_LTS",
@@ -80,15 +92,15 @@ export const SOVEREIGN_CONFIG: Readonly<SovereignConfig> = Object.freeze({
   }),
 
   genesisAnchor: Object.freeze({
-    blockHeight: 849202,
-    merkleRoot: "909ab814479844d8a14816bed34cdbb07528e18501da86fc4691763a43fa4c68",
-    deploymentCertCode: "ZQ-GREEN-DEP-849202-3908",
+    blockHeight: AUTHORITATIVE_BLOCK_HEIGHT,
+    merkleRoot: AUTHORITATIVE_MERKLE_ROOT,
+    deploymentCertCode: AUTHORITATIVE_DEPLOYMENT_CERT,
   }),
 
   sealsRegistry: Object.freeze({
-    canonicalSealsCount: 14902,
-    quarantinedSealsCount: 80,
-    totalRawSeals: 14982,
+    canonicalSealsCount: AUTHORITATIVE_CANONICAL_SEALS,
+    quarantinedSealsCount: AUTHORITATIVE_QUARANTINED_SEALS,
+    totalRawSeals: AUTHORITATIVE_RAW_SEALS_TOTAL,
     ssotDelta: "SSoT Δ0",
     baselineDriftPct: 0.00,
   }),
