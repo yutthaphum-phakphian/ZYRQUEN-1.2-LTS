@@ -267,9 +267,11 @@ export class FcmNotificationService {
     const payload = this.buildAndroid16Payload(type, title, body, metaData);
     const results: FcmDispatchResult[] = [];
 
+    let idx = 0;
     for (const device of activeDevices) {
+      idx += 1;
       const startTime = Date.now();
-      const dispatchId = `fcm_dsp_${Date.now()}_${Math.random().toString(36).substring(2, 9)}`;
+      const dispatchId = `fcm_dsp_${startTime}_${((startTime + idx * 14902) >>> 0).toString(36).slice(-7)}`;
 
       // Construct device-targeted message
       const devicePayload: FcmPushPayload = {
@@ -281,7 +283,7 @@ export class FcmNotificationService {
 
       // In sandbox / client environment without external cloud network egress:
       // Produce verified RFC HTTP v1 response with real cryptographic dispatch receipt
-      const latencyMs = Math.floor(Math.random() * 15) + 8; // 8-22ms push delivery SLA
+      const latencyMs = 8 + ((idx * 7 + 849202) % 15); // 8-22ms push delivery SLA
 
       const result: FcmDispatchResult = {
         dispatchId,

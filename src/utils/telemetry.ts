@@ -88,11 +88,15 @@ export function sanitizeTelemetryAttributes(
   return sanitized;
 }
 
+let hexSeqCounter = 0;
 function generateHex(length: number): string {
   const chars = '0123456789abcdef';
+  hexSeqCounter += 1;
+  let seed = (849202 + hexSeqCounter * 14902) >>> 0;
   let result = '';
   for (let i = 0; i < length; i++) {
-    result += chars[Math.floor(Math.random() * chars.length)];
+    seed = (seed * 1664525 + 1013904223) >>> 0;
+    result += chars[seed % chars.length];
   }
   return result;
 }
@@ -141,7 +145,8 @@ class OpenTelemetryCollector {
     for (let i = 0; i < 40; i++) {
       const plane = planes[i % planes.length];
       const op = ops[i % ops.length];
-      const duration = Math.max(0.4, Number((plane.baseLat + (Math.random() * 2 - 1)).toFixed(2)));
+      const offset = (((i * 37) % 200) - 100) / 100;
+      const duration = Math.max(0.4, Number((plane.baseLat + offset).toFixed(2)));
       const spanTime = now - (40 - i) * 3500;
 
       this.spans.push({
@@ -287,7 +292,7 @@ class OpenTelemetryCollector {
       p50LatencyMs: latencies[p50Idx] || 1.5,
       p95LatencyMs: latencies[p95Idx] || 3.5,
       p99LatencyMs: latencies[p99Idx] || 5.5,
-      throughputOpsSec: Math.round(800 + Math.random() * 800),
+      throughputOpsSec: 800 + ((planeSpans.length * 137) % 800),
       errorRatePercent: Number(((errors / planeSpans.length) * 100).toFixed(2)),
       lastUpdated: new Date().toISOString(),
     };

@@ -122,8 +122,9 @@ export class WriteFirewallEngine {
     else if (target === 'blockHeight' || target === 'canonicalBlock' || target === 'block') canonicalValStr = '#849202';
     else if (target === 'ssotMutation') canonicalValStr = '0';
 
+    const nowMs = Date.now();
     const auditRecord: WriteFirewallAuditRecord = {
-      auditId: `WF-AUDIT-${Date.now()}-${Math.random().toString(36).slice(2, 6).toUpperCase()}`,
+      auditId: `WF-AUDIT-${nowMs}-${((nowMs ^ 849202) >>> 0).toString(36).slice(-4).toUpperCase()}`,
       timestamp,
       targetField: target,
       requestedValue: requestedValStr,

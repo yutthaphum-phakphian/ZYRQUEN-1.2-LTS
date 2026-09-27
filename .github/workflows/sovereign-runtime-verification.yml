@@ -28,4 +28,4 @@ jobs:
         run: npx tsc --noEmit --skipLibCheck --noEmit
 
       - name: Run Sovereign Runtime Verification
-        run: npx vitest run tests/sovereign-runtime-verification.test.tsx --coverage
+        run: npx vitest run tests/sovereign-runtime-verification.test.tsx src/tests/sovereign-integration.test.tsx --coverage

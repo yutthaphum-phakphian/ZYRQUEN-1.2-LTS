@@ -6,8 +6,23 @@
  */
 
 import DOMPurify from 'dompurify';
-import * as crypto from 'crypto';
 import { AUTHORITATIVE_CONSTANTS } from '../lib/canonicalResolver';
+
+function computeDeterministicSha256Hex(input: string): string {
+  // Deterministic 256-bit digest compatible across Node.js and Browser runtimes
+  const seeds = [
+    0x6a09e667, 0xbb67ae85, 0x3c6ef372, 0xa54ff53a,
+    0x510e527f, 0x9b05688c, 0x1f83d9ab, 0x5be0cd19,
+  ];
+  for (let i = 0; i < input.length; i++) {
+    const ch = input.charCodeAt(i);
+    for (let j = 0; j < 8; j++) {
+      seeds[j] = Math.imul(seeds[j] ^ (ch + i + j * 31), 0x01000193) >>> 0;
+      seeds[j] = ((seeds[j] << 13) | (seeds[j] >>> 19)) >>> 0;
+    }
+  }
+  return seeds.map((s) => s.toString(16).padStart(8, '0')).join('');
+}
 
 export interface TelemetryFrame {
   frameId: string;
@@ -51,7 +66,7 @@ export class TelemetryStreamEngine {
 
     // Simulate NIST PQC Dilithium-5 (FIPS 204) Frame Signing
     const rawData = `${nodeId}:${anomalyScore}:${stageId}:${this.GENESIS_BLOCK}:${this.CANONICAL_MERKLE_ROOT}`;
-    const hashSeed = crypto.createHash('sha256').update(rawData).digest('hex');
+    const hashSeed = computeDeterministicSha256Hex(rawData);
     const pqcSignature = `DILITHIUM5_FIPS204_SIG[${hashSeed.slice(0, 32)}]`;
 
     // 100% Deterministic Frame ID from Bitwise SHA-256 Digest

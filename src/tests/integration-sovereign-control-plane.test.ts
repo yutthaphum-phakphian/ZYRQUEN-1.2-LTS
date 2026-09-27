@@ -2,10 +2,12 @@ import { describe, it, expect } from 'vitest';
 import request from 'supertest';
 import app from '../server';
 import { TelemetryStreamEngine } from '../services/TelemetryStreamEngine';
+import { NodeRemediationEngine, BK01_DETECTED_ANOMALIES } from '../services/NodeRemediationEngine';
 import { AUTHORITATIVE_CONSTANTS } from '../lib/canonicalResolver';
 
 describe('🧪 ZYRQUEN Ω∞ — Integration Test Suite ภาษาไทย', () => {
   const telemetryEngine = new TelemetryStreamEngine();
+  const remediationEngine = new NodeRemediationEngine();
 
   it('1. ตรวจสอบ Healthz API ว่ารายงานสถานะระบบถูกต้อง', async () => {
     const res = await request(app).get('/healthz');
@@ -46,5 +48,17 @@ describe('🧪 ZYRQUEN Ω∞ — Integration Test Suite ภาษาไทย', 
     const zkProofVerified = true;
     expect(piiExposed).toBe(false);
     expect(zkProofVerified).toBe(true);
+  });
+
+  it('7. ตรวจสอบระบบ Auto-Remediation 4 ขั้นตอน สำหรับโหนด BK01 (PAT-1790495585177-01..03)', async () => {
+    const result = await remediationEngine.executeRemediation('BK01', BK01_DETECTED_ANOMALIES);
+    expect(result.nodeId).toBe('BK01');
+    expect(result.quarantineExecuted).toBe(true);
+    expect(result.pqcRecalibrated).toBe(true);
+    expect(result.hsmQuorumVerified).toBe(true);
+    expect(result.ssoTDriftRatio).toBe('SSoT Δ0 0.00%');
+    expect(result.nodeStatus).toBe('PURE GREEN');
+    expect(result.latencyMs).toBeLessThan(AUTHORITATIVE_CONSTANTS.REPLAY_SLA_MS);
+    expect(result.remediationLog.length).toBeGreaterThanOrEqual(7);
   });
 });

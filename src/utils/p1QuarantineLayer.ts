@@ -199,7 +199,8 @@ export class P1QuarantineLayer {
     payload: string,
     actor: string = 'QUARANTINE_EVIDENCE_PROCESSOR'
   ): P1AuditEvent {
-    const eventId = `P1-WRITE-REJECT-${Date.now()}-${Math.random().toString(36).substring(2, 6).toUpperCase()}`;
+    const nowMs = Date.now();
+    const eventId = `P1-WRITE-REJECT-${nowMs}-${((nowMs ^ 14902) >>> 0).toString(36).slice(-4).toUpperCase()}`;
     const timestamp = new Date().toISOString().replace('T', ' ').slice(0, 19) + ' ICT';
 
     const auditEvent: P1AuditEvent = {

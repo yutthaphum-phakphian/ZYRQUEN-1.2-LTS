@@ -29,7 +29,7 @@ export const StressTestIndicatorD3Chart: React.FC<StressTestIndicatorD3ChartProp
   const [isStressRunning, setIsStressRunning] = useState<boolean>(false);
   const [history, setHistory] = useState<LatencySample[]>(() => {
     return Array.from({ length: 24 }, (_, i) => {
-      const baseJitter = 35.80 + (Math.sin(i * 0.8) * 2.4) + (Math.random() * 1.8 - 0.9);
+      const baseJitter = 35.80 + (Math.sin(i * 0.8) * 2.4) + (((i * 23) % 180) / 100 - 0.9);
       const d = new Date(Date.now() - (24 - i) * 1200);
       const timeLabel = d.toLocaleTimeString('en-GB', { hour12: false });
       return {
@@ -43,17 +43,19 @@ export const StressTestIndicatorD3Chart: React.FC<StressTestIndicatorD3ChartProp
 
   // Real-time jitter tick effect
   useEffect(() => {
+    let stressTick = 0;
     const timer = setInterval(() => {
+      stressTick += 1;
       setHistory((prev) => {
         const last = prev[prev.length - 1]?.latencyMs || 35.80;
         let nextLatency: number;
 
         if (isStressRunning) {
           // Synthetic stress test load under high PQC replay
-          nextLatency = Number((48.20 + Math.random() * 18.5).toFixed(2));
+          nextLatency = Number((48.20 + ((stressTick * 37) % 185) / 10).toFixed(2));
         } else {
           // Normal nominal sub-Kelvin execution ~34.50 - 37.80 ms
-          const noise = (Math.random() - 0.5) * 1.6;
+          const noise = (((stressTick * 19) % 100) / 100 - 0.5) * 1.6;
           nextLatency = Number(Math.max(32.10, Math.min(41.50, (last * 0.7) + (35.80 * 0.3) + noise)).toFixed(2));
         }
 

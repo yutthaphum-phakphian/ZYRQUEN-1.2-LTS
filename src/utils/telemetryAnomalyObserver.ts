@@ -227,8 +227,9 @@ export class TelemetryAnomalyObserver {
         description += ` Exceeded hard safety threshold bound (${hardThreshold} ${unit}). Fail-closed circuit armed.`;
       }
 
+      const nowMs = Date.now();
       return {
-        id: `anomaly-${Date.now()}-${Math.floor(Math.random() * 1000)}`,
+        id: `anomaly-${nowMs}-${(nowMs + 849202) % 1000}`,
         metric: metricKey,
         metricLabel,
         observedValue: Number(currentValue.toFixed(2)),

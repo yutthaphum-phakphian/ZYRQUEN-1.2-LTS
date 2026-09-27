@@ -615,8 +615,10 @@ class SystemStateStore {
 
   private startDrift() {
     if (typeof window !== 'undefined') {
+      let driftTick = 0;
       this.driftTimer = setInterval(() => {
-        const drift = (Math.random() - 0.49) * 2.8;
+        driftTick += 1;
+        const drift = (((driftTick * 37) % 100) / 100 - 0.49) * 2.8;
         const next = Math.max(26, Math.min(78, this.state.aggregateEntropy + drift));
         this.state = {
           ...this.state,
@@ -771,9 +773,10 @@ class SystemStateStore {
     severity: string = 'HARDWARE',
     handler?: () => void
   ) {
+    const seqSuffix = ((this.state.events.length + 1) * 14902 + 849202).toString(36).slice(-5);
     if (typeof eventOrTitle === 'object' && eventOrTitle !== null) {
       const evt: SystemEvent = {
-        id: 'id' in eventOrTitle && eventOrTitle.id ? eventOrTitle.id : `evt-hw-${Date.now()}-${Math.random().toString(36).substring(2, 7)}`,
+        id: 'id' in eventOrTitle && eventOrTitle.id ? eventOrTitle.id : `evt-hw-${Date.now()}-${seqSuffix}`,
         title: eventOrTitle.title,
         description: eventOrTitle.description || '',
         severity: eventOrTitle.severity || 'HARDWARE',
@@ -782,7 +785,7 @@ class SystemStateStore {
       this.addEvent(evt);
     } else {
       const evt: SystemEvent = {
-        id: `evt-hw-${Date.now()}-${Math.random().toString(36).substring(2, 7)}`,
+        id: `evt-hw-${Date.now()}-${seqSuffix}`,
         title: eventOrTitle,
         description: description || '',
         severity: severity || 'HARDWARE',

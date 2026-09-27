@@ -132,7 +132,7 @@ export const QrReader: React.FC<QrReaderProps> = ({
               lastScanTimestampRef.current = now;
 
               const newRecord: ScannedRecord = {
-                id: `qr-${now}-${Math.random().toString(36).substring(2, 6)}`,
+                id: `qr-${now}-${((now ^ 849202) >>> 0).toString(36).slice(-4)}`,
                 text: rawText,
                 timestamp: new Date(now).toLocaleTimeString('th-TH', { hour12: false }),
                 scannedAt: now,

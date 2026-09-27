@@ -8,6 +8,7 @@ import express, { Request, Response, NextFunction } from 'express';
 import cors from 'cors';
 import * as crypto from 'crypto';
 import { AUTHORITATIVE_CONSTANTS } from './lib/canonicalResolver';
+import { markStaticReference } from './contracts/evidenceContract';
 
 // ============================================================================
 // INVARIANT ARCHITECTURAL CONSTANTS (SSoT Δ0 from Canonical Resolver)
@@ -232,7 +233,7 @@ app.get('/api/v1/evidence/exhibits', (_req: Request, res: Response) => {
       'พ.ร.บ. คุ้มครองข้อมูลส่วนบุคคล (PDPA) มาตรา ๓๗',
       'ISO/IEC 27037 Digital Evidence Forensics Standard',
     ],
-    exhibits: COURT_EXHIBITS,
+    exhibits: COURT_EXHIBITS.map(markStaticReference),
   });
 });
 

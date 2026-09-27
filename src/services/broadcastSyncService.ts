@@ -85,7 +85,8 @@ class SovereignBroadcastSyncService {
   private lastLockState: GlobalLockStatePayload | null = null;
 
   constructor() {
-    this.tabId = `tab_${Date.now()}_${Math.random().toString(36).substring(2, 7)}`;
+    const nowMs = Date.now();
+    this.tabId = `tab_${nowMs}_${((nowMs ^ 849202) >>> 0).toString(36).slice(-5)}`;
   }
 
   private getSelfNode(): SovereignSyncPeerNode {

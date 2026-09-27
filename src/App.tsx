@@ -103,6 +103,7 @@ import { EmergencySovereignLockdown } from '@/components/EmergencySovereignLockd
 import { SovereignWatermarkOverlay } from '@/components/SovereignWatermark';
 import { LiveQuantumEntropyTicker } from '@/components/LiveQuantumEntropyTicker';
 import { ToastNotification, ToastMessage } from '@/components/ToastNotification';
+import { RemediationProgressToast } from '@/components/RemediationProgressToast';
 import {
   SsotDriftWarning,
   SsotDriftToggleButton,
@@ -706,8 +707,9 @@ function createNormalizedSystemEvent(
     metaHash = `merkle:root:ingest:${Date.now().toString(16)}`;
   }
 
+  const nowMs = Date.now();
   return {
-    id: `evt-${Date.now()}-${Math.floor(Math.random() * 10000)}`,
+    id: `evt-${nowMs}-${(nowMs + 849202 + (sealCounter ?? 14902)) % 10000}`,
     type: payload.type,
     title: payload.title.trim(),
     description: payload.description.trim(),
@@ -972,8 +974,10 @@ function SovereignAppContent() {
   const [isHsmHistoryExpanded, setIsHsmHistoryExpanded] = useState<boolean>(false);
 
   const [toasts, setToasts] = useState<ToastMessage[]>([]);
+  const toastSeqRef = useRef(0);
   const showToast = useCallback((message: string, type: ToastMessage['type'] = 'info') => {
-    const id = Math.random().toString(36).substring(2, 9);
+    toastSeqRef.current += 1;
+    const id = `tst-${Date.now().toString(36)}-${toastSeqRef.current}`;
     setToasts((prev) => [...prev, { id, message, type }]);
     setTimeout(() => {
       setToasts((prev) => prev.filter((t) => t.id !== id));
@@ -1402,12 +1406,13 @@ function SovereignAppContent() {
         if (isSystemActivityFrozenRef.current) return;
 
         const currentSnaps = snapshotsRef.current;
+        const snapSeed = record.snapshotNumber + currentSnaps.length;
         const newSnap = createTelemetrySnapshot(
           {
-            core0: 41 + Math.floor(Math.random() * 5),
-            core1: 39 + Math.floor(Math.random() * 4),
-            core2: 43 + Math.floor(Math.random() * 6),
-            core3: 38 + Math.floor(Math.random() * 5),
+            core0: 41 + (snapSeed % 5),
+            core1: 39 + ((snapSeed * 3) % 4),
+            core2: 43 + ((snapSeed * 7) % 6),
+            core3: 38 + ((snapSeed * 11) % 5),
           },
           currentSnaps.length,
           currentSnaps[0]?.sealedHash
@@ -3666,6 +3671,7 @@ function SovereignAppContent() {
 
       {/* Certificate Modal */}
       <ToastNotification toasts={toasts} removeToast={removeToast} />
+      <RemediationProgressToast />
       <AuditCertificateModal
         isOpen={isCertificateOpen}
         onClose={() => {

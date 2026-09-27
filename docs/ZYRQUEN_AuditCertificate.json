@@ -5,7 +5,7 @@
   "status": "FROZEN v1.2.1 LTS",
   "genesisBlock": 849202,
   "canonicalSeals": 14902,
-  "merkleRoot": "909ab814957e3c53282902e63ff9c9a2797e8e0a15c1371a2f7f3d9c5e71984d",
+  "merkleRoot": "909ab814479844d8a14816bed34cdbb07528e18501da86fc4691763a43fa4c68",
   "ssotDrift": "0.00%",
   "hsmQuorum": "10/10 REAL_HSM",
   "pqcSuite": [

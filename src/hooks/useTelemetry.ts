@@ -32,15 +32,17 @@ export const useTelemetry = (): UseTelemetryReturn => {
   const [snapshots, setSnapshots] = useState<TelemetrySnapshot[]>(generateInitialSnapshots);
 
   useEffect(() => {
+    let tick = 1;
     const interval = setInterval(() => {
       setSnapshots((prev) => {
         const now = Date.now();
-        const baseQops = 850 + (Math.random() * 80 - 40);
+        tick += 1;
+        const baseQops = 850 + Math.sin(tick * 0.5) * 35;
         const coherence = 99.98;
         const drift = getEntropyDrift({ qopsThroughput: baseQops, coherence });
         const newSnap: TelemetrySnapshot = {
           timestamp: now,
-          cpuLoad: +(40 + Math.random() * 6).toFixed(1),
+          cpuLoad: +(40 + ((tick * 13) % 60) / 10).toFixed(1),
           memoryUsage: 5240,
           qopsThroughput: +baseQops.toFixed(1),
           coherence: +coherence.toFixed(2),

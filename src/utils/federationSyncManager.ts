@@ -60,16 +60,19 @@ const notifyListeners = () => {
 /**
  * Triggers an Active Ledger Merkle-Root Handshake animation and verification cycle
  */
+let fedSyncCounter = 0;
 export const triggerFederationSync = (
   packetDetails?: Partial<KnowledgePacket>,
   onStageChange?: (stage: string, progress: number) => void
 ): Promise<KnowledgePacket> => {
-  const packetId = packetDetails?.id || `PK-${Math.floor(10000 + Math.random() * 90000)}`;
+  fedSyncCounter += 1;
+  const seed = 849202 + fedSyncCounter * 14902;
+  const packetId = packetDetails?.id || `PK-${10000 + (seed % 90000)}`;
   const packetName = packetDetails?.packetName || 'Constitutional Adaptive Knowledge Shard';
   const sourceNode = packetDetails?.sourceNode || 'CIV-FED-001 (Bangkok)';
   const nowIso = new Date().toISOString();
 
-  const leafHash = `0x${Array.from({ length: 16 }, () => Math.floor(Math.random() * 16).toString(16)).join('')}...${packetId}`;
+  const leafHash = `0x${Array.from({ length: 16 }, (_, i) => ((seed + i * 7) % 16).toString(16)).join('')}...${packetId}`;
 
   const packet: KnowledgePacket = {
     id: packetId,
@@ -78,11 +81,11 @@ export const triggerFederationSync = (
     targetNodes: packetDetails?.targetNodes || ['CIV-FED-002 (SG)', 'CIV-FED-003 (TY)', 'CIV-FED-004 (FR)'],
     merkleLeaf: leafHash,
     pqcSignature: `DILITHIUM-5:FIPS204:${packetId}:BLOCK#849202`,
-    driftSigma: packetDetails?.driftSigma ?? +(0.001 + Math.random() * 0.008).toFixed(4),
-    entropyScore: +(0.02 + Math.random() * 0.04).toFixed(3),
+    driftSigma: packetDetails?.driftSigma ?? +(0.001 + ((seed % 80) / 10000)).toFixed(4),
+    entropyScore: +(0.02 + ((seed % 40) / 1000)).toFixed(3),
     timestamp: nowIso,
     status: 'INGESTING',
-    payloadSizeKb: packetDetails?.payloadSizeKb || Math.floor(256 + Math.random() * 512),
+    payloadSizeKb: packetDetails?.payloadSizeKb || (256 + (seed % 512)),
     complianceCert: 'ETDA-SEC26-28-PDPA-INVARIANT-OK',
   };
 

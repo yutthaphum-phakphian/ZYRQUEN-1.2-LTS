@@ -6,6 +6,7 @@ import path from 'path';
 import fs from 'fs';
 import { createServer as createViteServer } from 'vite';
 import { AUTHORITATIVE_CONSTANTS } from './src/lib/canonicalResolver';
+import { markStaticReference } from './src/contracts/evidenceContract';
 
 // ============================================================================
 // TYPES & INTERFACES (DOC-SOV-HSM-1010-2026-V9)
@@ -14,6 +15,7 @@ import { AUTHORITATIVE_CONSTANTS } from './src/lib/canonicalResolver';
 export interface ExhibitItem {
   id: string; // e.g. "จพ.๐๑"
   title: string;
+  legalBasis: string;
   lawSection: string;
   techMechanism: string;
   legalEffect: string;
@@ -66,6 +68,7 @@ const COURT_EXHIBITS: ExhibitItem[] = [
   {
     id: 'จพ.๐๑',
     title: 'Genesis Anchor',
+    legalBasis: 'พ.ร.บ. ธุรกรรมฯ มาตรา ๒๘',
     lawSection: 'พ.ร.บ. ธุรกรรมทางอิเล็กทรอนิกส์ มาตรา ๒๘',
     techMechanism: 'Genesis Block #849202 • Merkle Root 0x909ab8...',
     legalEffect: 'พยานหลักฐานปฐมภูมิ คงสภาพถาวร Zero Drift Δ0.00%',
@@ -77,6 +80,7 @@ const COURT_EXHIBITS: ExhibitItem[] = [
   {
     id: 'จพ.๐๒',
     title: 'Hardware TSA RFC 3161',
+    legalBasis: 'พ.ร.บ. ธุรกรรมฯ มาตรา ๙',
     lawSection: 'พ.ร.บ. ธุรกรรมทางอิเล็กทรอนิกส์ มาตรา ๙',
     techMechanism: 'UTC(NIMT) Timestamp • Deca-Key Certificates',
     legalEffect: 'พิสูจน์การมีอยู่ ณ เวลาที่ระบุ Anti-Backdating 100%',
@@ -88,6 +92,7 @@ const COURT_EXHIBITS: ExhibitItem[] = [
   {
     id: 'จพ.๐๓',
     title: 'Deca-Key Quorum',
+    legalBasis: 'พ.ร.บ. ธุรกรรมฯ มาตรา ๒๖',
     lawSection: 'พ.ร.บ. ธุรกรรมทางอิเล็กทรอนิกส์ มาตรา ๒๖',
     techMechanism: 'Dilithium-5 + SPHINCS+ • 10/10 REAL_HSM Quorum',
     legalEffect: 'การลงนามดิจิทัลระดับควอนตัม ห้ามปฏิเสธความรับผิด (Non-repudiation)',
@@ -99,6 +104,7 @@ const COURT_EXHIBITS: ExhibitItem[] = [
   {
     id: 'จพ.๐๔',
     title: 'Chamber 02 WORM Vault',
+    legalBasis: 'พ.ร.บ. ธุรกรรมฯ มาตรา ๒๘',
     lawSection: 'พ.ร.บ. ธุรกรรมทางอิเล็กทรอนิกส์ มาตรา ๒๘',
     techMechanism: 'WORM Storage 14,902 Seals • Fail-Closed Lock',
     legalEffect: 'การันตีบันทึกถาวร ห้ามลบหรือแก้ไขย้อนหลัง (Zero-Deletion Guarantee)',
@@ -110,6 +116,7 @@ const COURT_EXHIBITS: ExhibitItem[] = [
   {
     id: 'จพ.๐๕',
     title: 'Trace Replay SLA',
+    legalBasis: 'ISO/IEC 27037:2012 Standard',
     lawSection: 'พ.ร.บ. ธุรกรรมทางอิเล็กทรอนิกส์ มาตรา ๒๖',
     techMechanism: '12-Stage Replay 35.80 ms • SLA < 142 ms',
     legalEffect: 'ผลตรวจสอบย้อนรอยทางนิติวิทยาศาสตร์ดิจิทัลสด (SLA PASS)',
@@ -121,6 +128,7 @@ const COURT_EXHIBITS: ExhibitItem[] = [
   {
     id: 'จพ.๐๖',
     title: 'Immutable Ledger',
+    legalBasis: 'พ.ร.บ. ธุรกรรมฯ มาตรา ๙, ๒๖',
     lawSection: 'พ.ร.บ. ธุรกรรมทางอิเล็กทรอนิกส์ มาตรา ๒๘',
     techMechanism: 'Merkle Tree Multi-Chain Ledger',
     legalEffect: 'ห่วงโซ่พยานหลักฐานที่ไม่สามารถเปลี่ยนแปลงหรือแทรกแซงได้',
@@ -132,6 +140,7 @@ const COURT_EXHIBITS: ExhibitItem[] = [
   {
     id: 'จพ.๐๗',
     title: 'zk-SNARKs Privacy Vault',
+    legalBasis: 'พ.ร.บ. PDPA พ.ศ. ๒๕๖๒ มาตรา ๓๗',
     lawSection: 'พ.ร.บ. คุ้มครองข้อมูลส่วนบุคคล (PDPA) มาตรา ๓๗',
     techMechanism: 'zk-SNARKs PII Redaction • Zero-Knowledge Proof',
     legalEffect: 'ปกปิดข้อมูลส่วนบุคคลตามกฎหมาย โดยไม่เสียความถูกต้องทางนิติวิทยาศาสตร์',
@@ -422,7 +431,7 @@ async function startServer() {
         'พ.ร.บ. คุ้มครองข้อมูลส่วนบุคคล (PDPA) มาตรา ๓๗',
         'ISO/IEC 27037 Digital Evidence Forensics Standard',
       ],
-      exhibits: COURT_EXHIBITS,
+    exhibits: COURT_EXHIBITS.map(markStaticReference),
     });
   });
 

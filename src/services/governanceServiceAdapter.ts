@@ -32,9 +32,11 @@ export class GovernanceServiceAdapter {
   /**
    * Generates a valid Court Evidence Dossier payload adhering strictly to SSoT invariants
    */
+  private static dossierSeq = 0;
   public static generateDossier(canonicalBlock: number = GovernanceServiceAdapter.CANONICAL_BLOCK): GovernanceDossier {
-    const randomSuffix = Math.floor(100000 + Math.random() * 900000).toString();
-    const dossierId = `DOS-SOV-${canonicalBlock}-${randomSuffix}`;
+    GovernanceServiceAdapter.dossierSeq += 1;
+    const detSuffix = (100000 + ((canonicalBlock + GovernanceServiceAdapter.dossierSeq * 14902) % 900000)).toString();
+    const dossierId = `DOS-SOV-${canonicalBlock}-${detSuffix}`;
 
     return {
       dossierId,

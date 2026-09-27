@@ -17,16 +17,16 @@
     "dev": "tsx server.ts",
     "build": "vite build",
     "lint": "tsc --noEmit",
-    "test": "npm run test:unit && vitest run",
+    "test": "npm run test:unit && npm run test:smoke && vitest run",
     "test:unit": "tsx --test tests/unit/*.test.ts",
+    "test:smoke": "tsx --test tests/production-entrypoint-smoke.ts",
     "preview": "vite preview",
     "deploy:sovereign": "echo 'Sovereign Control Plane v1.2.1 LTS Deployed (100% PURE GREEN)'",
-    "start": "node server.ts"
+    "start": "tsx server.ts"
   },
   "dependencies": {
     "@google/genai": "^2.24.0",
     "@tailwindcss/vite": "^4.0.0",
-    "@types/dompurify": "^3.2.0",
     "clsx": "^2.1.1",
     "cors": "^2.8.5",
     "d3": "^7.9.0",

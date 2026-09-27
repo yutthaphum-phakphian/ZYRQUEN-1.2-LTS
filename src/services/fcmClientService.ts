@@ -48,7 +48,8 @@ export class FcmClientService {
   private generateDeviceId(): string {
     const nav = typeof navigator !== 'undefined' ? navigator.userAgent : 'generic';
     const isAndroid = /Android/i.test(nav);
-    return `zyrquen-${isAndroid ? 'android16' : 'browser'}-${Math.random().toString(36).substring(2, 10)}`;
+    const detSuffix = ((Date.now() ^ 849202) >>> 0).toString(36).padStart(8, '0').slice(-8);
+    return `zyrquen-${isAndroid ? 'android16' : 'browser'}-${detSuffix}`;
   }
 
   private generateMockFcmToken(): string {

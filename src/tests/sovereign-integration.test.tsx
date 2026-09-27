@@ -11,6 +11,12 @@ import { verifyCrossModuleSSoTParity } from '../core/canonicalSSoT';
 import { Room18MasterPanel } from '../components/Room18MasterPanel';
 import { SecurityView, HSM_NODES_DATA } from '../components/views/SecurityView';
 import { TelemetryStreamEngine } from '../services/TelemetryStreamEngine';
+import { RemediationProgressToast } from '../components/RemediationProgressToast';
+import { NodeRemediationEngine, BK01_DETECTED_ANOMALIES } from '../services/NodeRemediationEngine';
+
+if (typeof Animation !== 'undefined' && Animation.prototype) {
+  Animation.prototype.cancel = function () {};
+}
 
 beforeEach(() => {
   // Ensure global fetch mock resolves cleanly for any background telemetry polls
@@ -258,6 +264,87 @@ describe('🛡️ ZYRQUEN Ω∞ — Sovereign Canonical Resolver, Room18MasterPa
       const sanitizedHtml = engine.formatFrameForCourtDOM(highRiskFrame);
       expect(sanitizedHtml).toContain('(CHAMBER 02 QUARANTINE)');
       expect(sanitizedHtml).toContain(highRiskFrame.frameId);
+    });
+  });
+
+  // ==========================================================================
+  // 5. REMEDIATION PROGRESS TOAST (MOTION/REACT SEQUENTIAL STATUS UPDATES)
+  // ==========================================================================
+  describe('5. RemediationProgressToast & NodeRemediationEngine Sequential Status Updates', () => {
+    it('displays animated progress bar and sequential status updates for Isolation, Recalibration, and Verification when NodeRemediationEngine is triggered', async () => {
+      render(<RemediationProgressToast />);
+
+      // Initially hidden before NodeRemediationEngine is triggered
+      expect(screen.queryByTestId('remediation-progress-toast')).toBeNull();
+
+      // Step 1: Emit Isolation (33%)
+      act(() => {
+        NodeRemediationEngine.emitProgress({
+          nodeId: 'BK01',
+          phase: 'Isolation',
+          stepIndex: 1,
+          totalSteps: 3,
+          progressPercent: 33,
+          statusMessage: 'Isolation: Chamber 02 Quarantine (BK01)',
+          logLine: '[STAGE 1] Isolating BK01 to Chamber 02...',
+          nodeStatus: 'QUARANTINED',
+        });
+      });
+
+      expect(screen.getByTestId('remediation-progress-toast')).toBeTruthy();
+      expect(screen.getByTestId('remediation-motion-progress-bar').style.width).toBe('33%');
+      expect(screen.getByTestId('remediation-step-isolation').getAttribute('data-status')).toBe('ACTIVE');
+      expect(screen.getByTestId('remediation-step-recalibration').getAttribute('data-status')).toBe('PENDING');
+      expect(screen.getByTestId('remediation-step-verification').getAttribute('data-status')).toBe('PENDING');
+
+      // Step 2: Emit Recalibration (67%)
+      act(() => {
+        NodeRemediationEngine.emitProgress({
+          nodeId: 'BK01',
+          phase: 'Recalibration',
+          stepIndex: 2,
+          totalSteps: 3,
+          progressPercent: 67,
+          statusMessage: 'Recalibration: NIST PQC ML-DSA-87 Lattice & Phase Jitter',
+          logLine: '[STAGE 2] Re-aligning NIST PQC ML-DSA-87 Lattice...',
+          nodeStatus: 'QUARANTINED',
+        });
+      });
+
+      expect(screen.getByTestId('remediation-motion-progress-bar').style.width).toBe('67%');
+      expect(screen.getByTestId('remediation-step-isolation').getAttribute('data-status')).toBe('DONE');
+      expect(screen.getByTestId('remediation-step-recalibration').getAttribute('data-status')).toBe('ACTIVE');
+      expect(screen.getByTestId('remediation-step-verification').getAttribute('data-status')).toBe('PENDING');
+
+      // Step 3: Trigger full NodeRemediationEngine execution completing Verification (100%)
+      const engine = new NodeRemediationEngine();
+      await act(async () => {
+        await engine.executeRemediation('BK01', BK01_DETECTED_ANOMALIES);
+      });
+
+      expect(screen.getByTestId('remediation-motion-progress-bar').style.width).toBe('100%');
+      expect(screen.getByTestId('remediation-step-isolation').getAttribute('data-status')).toBe('DONE');
+      expect(screen.getByTestId('remediation-step-recalibration').getAttribute('data-status')).toBe('DONE');
+      expect(screen.getByTestId('remediation-step-verification').getAttribute('data-status')).toBe('DONE');
+      expect(screen.getByTestId('remediation-status-update-isolation').textContent).toContain('Isolation');
+      expect(screen.getByTestId('remediation-status-update-recalibration').textContent).toContain('Recalibration');
+      expect(screen.getByTestId('remediation-status-update-verification').textContent).toContain('Verification');
+    });
+
+    it('automatically appears and updates for any node when remediation is initiated via NodeRemediationEngine', async () => {
+      render(<RemediationProgressToast />);
+
+      await act(async () => {
+        await NodeRemediationEngine.triggerRemediation('SG02');
+      });
+
+      const toast = screen.getByTestId('remediation-progress-toast');
+      expect(toast).toBeTruthy();
+      expect(toast.textContent).toContain('NODE SG02');
+      expect(screen.getByTestId('remediation-motion-progress-bar').style.width).toBe('100%');
+      expect(screen.getByTestId('remediation-step-isolation').getAttribute('data-status')).toBe('DONE');
+      expect(screen.getByTestId('remediation-step-recalibration').getAttribute('data-status')).toBe('DONE');
+      expect(screen.getByTestId('remediation-step-verification').getAttribute('data-status')).toBe('DONE');
     });
   });
 });

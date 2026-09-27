@@ -66,7 +66,7 @@ git init
 git add .
 
 # 3. บันทึก Commit
-git commit -m "feat: initial commit from AI Studio with PWA setup"
+git commit -m "feat: integrate RemediationProgressToast (motion/react) into App.tsx for NodeRemediationEngine"
 
 # 4. เปลี่ยนชื่อบรันช์หลักเป็น main
 git branch -M main

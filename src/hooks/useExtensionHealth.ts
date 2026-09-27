@@ -249,8 +249,9 @@ class HealthStateManager {
 
   public triggerChaosDrill(planeId: string): SecurityIncident {
     const plane = this.planes.find((p) => p.planeId === planeId) || this.planes[0];
-    const incidentId = `INC-CHAOS-${Date.now().toString().slice(-4)}`;
-    const traceId = `TRACE-P20-${Math.random().toString(16).slice(2, 10)}`;
+    const nowMs = Date.now();
+    const incidentId = `INC-CHAOS-${nowMs.toString().slice(-4)}`;
+    const traceId = `TRACE-P20-${(nowMs ^ 849202).toString(16).padStart(8, '0').slice(-8)}`;
 
     const { finish } = telemetry.startSpan('CHAOS_DRILL_INJECTION', planeId, {
       'chaos.incident_id': incidentId,
@@ -299,8 +300,9 @@ class HealthStateManager {
     affectedPlaneId: string,
     description: string
   ): SecurityIncident {
-    const incidentId = `INC-SEC-${Date.now().toString().slice(-4)}`;
-    const traceId = `TRACE-P20-${Math.random().toString(16).slice(2, 10)}`;
+    const nowMs = Date.now();
+    const incidentId = `INC-SEC-${nowMs.toString().slice(-4)}`;
+    const traceId = `TRACE-P20-${(nowMs ^ 14902).toString(16).padStart(8, '0').slice(-8)}`;
 
     const { finish } = telemetry.startSpan('REPORT_INCIDENT', affectedPlaneId, {
       'incident.severity': severity,

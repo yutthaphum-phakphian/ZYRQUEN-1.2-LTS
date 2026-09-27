@@ -17,3 +17,9 @@ global.fetch = vi.fn().mockImplementation((url) => {
     text: () => Promise.resolve(''),
   });
 });
+
+// Prevent happy-dom's experimental WAAPI Animation.cancel() from throwing unhandled AbortError rejections when motion/react unmounts
+if (typeof Animation !== 'undefined' && Animation.prototype) {
+  Animation.prototype.cancel = function () {};
+}
+

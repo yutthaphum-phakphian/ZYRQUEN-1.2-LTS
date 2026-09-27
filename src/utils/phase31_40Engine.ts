@@ -487,8 +487,9 @@ class Phase31_40Engine {
     operation: string;
   }): RuntimePolicyEvaluation {
     const start = performance.now();
-    const requestId = `REQ-P32-${Date.now().toString(16).slice(-6)}`;
-    const traceId = `TRACE-P32-${Math.random().toString(16).slice(2, 10)}`;
+    const nowMs = Date.now();
+    const requestId = `REQ-P32-${nowMs.toString(16).slice(-6)}`;
+    const traceId = `TRACE-P32-${((nowMs ^ 849202) >>> 0).toString(16).padStart(8, '0').slice(-8)}`;
 
     const isCanonicalWrite =
       params.operation.includes('WRITE') ||

@@ -523,7 +523,7 @@ class SovereignWebAuthnService {
     authenticatorType: 'platform' | 'cross-platform',
     fallbackReason?: string
   ): Promise<WebAuthnRegistrationResult> {
-    const rawSeed = `${userName}:${Date.now()}:${Math.random()}`;
+    const rawSeed = `${userName}:${Date.now()}:849202`;
     const rawIdHex = await sha256Hex(rawSeed);
     const credentialIdBase64 = bufferToBase64Url(hexToBuffer(rawIdHex));
 
@@ -567,7 +567,7 @@ class SovereignWebAuthnService {
     customChallenge?: string,
     fallbackReason?: string
   ): Promise<WebAuthnAuthenticationResult> {
-    const challengeSeed = customChallenge || `${Date.now()}:${Math.random()}`;
+    const challengeSeed = customChallenge || `${Date.now()}:849202:${credentialId}`;
     const challengeHash = await sha256Hex(challengeSeed);
     const signatureDigest = await sha256Hex(`WEBAUTHN_SIG_ASSERTION_${credentialId}_${challengeHash}`);
 

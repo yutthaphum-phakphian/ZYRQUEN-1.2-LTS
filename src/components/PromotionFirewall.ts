@@ -43,7 +43,8 @@ export class PromotionFirewall {
    */
   public static evaluatePromotion(request: PromotionEvaluationRequest): PromotionDecision {
     const timestamp = new Date().toISOString();
-    const traceId = `TRACE-PRM-${Date.now()}-${Math.random().toString(36).substring(2, 7).toUpperCase()}`;
+    const nowMs = Date.now();
+    const traceId = `TRACE-PRM-${nowMs}-${((nowMs ^ 849202) >>> 0).toString(36).slice(-5).toUpperCase()}`;
     const policyViolations: string[] = [];
 
     // Rule 1: Verification status MUST be strictly 'VERIFIED'

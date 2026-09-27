@@ -131,13 +131,15 @@ export const FederationMeshVisualizer: React.FC = () => {
   useEffect(() => {
     if (!isSimulating) return;
 
+    let meshTick = 0;
     const interval = setInterval(() => {
+      meshTick += 1;
       setNodes(prev =>
-        prev.map(n => ({
+        prev.map((n, idx) => ({
           ...n,
-          latency: +(n.latency + (Math.random() * 0.2 - 0.1)).toFixed(2),
-          heartbeat: +(62.0 + (Math.random() * 2 - 1)).toFixed(1),
-          packetsSent: n.packetsSent + Math.floor(Math.random() * 15 + 5),
+          latency: +(n.latency + ((((meshTick + idx) * 17) % 20) - 10) / 100).toFixed(2),
+          heartbeat: +(62.0 + ((((meshTick + idx) * 13) % 20) - 10) / 10).toFixed(1),
+          packetsSent: n.packetsSent + 5 + (((meshTick + idx) * 7) % 15),
         }))
       );
     }, 2500);

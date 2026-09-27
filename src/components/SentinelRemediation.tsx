@@ -105,18 +105,22 @@ export const SentinelRemediation: React.FC<SentinelRemediationProps> = ({
   // Live Auto-Remediation Stream Tick
   useEffect(() => {
     onAlertLevelChange?.('NOMINAL');
+    let sentinelTick = 0;
     const interval = setInterval(() => {
       if (!isShieldActive || isUpgrading) {
         return;
       }
 
-      const randomRisk = Number((Math.random() * 0.12 + 0.85).toFixed(2));
+      sentinelTick += 1;
+      const randomRisk = Number((0.85 + ((sentinelTick * 7) % 12) / 100).toFixed(2));
       if (randomRisk < 0.85) {
         return;
       }
 
-      const randomNum = Math.floor(1000 + Math.random() * 9000);
-      const chamberNum = Math.floor(Math.random() * 18).toString().padStart(2, '0');
+      const nowMs = Date.now();
+      const randomNum = 1000 + ((nowMs + sentinelTick * 137) % 9000);
+      const chamberNum = ((sentinelTick * 5) % 18).toString().padStart(2, '0');
+      const detHex = ((nowMs ^ (849202 + sentinelTick * 14902)) >>> 0).toString(16).padStart(8, '0');
       const newAnomaly: AnomalyEvent = {
         id: `ANOM-${randomNum}`,
         timestamp: new Date().toISOString(),
@@ -124,16 +128,16 @@ export const SentinelRemediation: React.FC<SentinelRemediationProps> = ({
         riskScore: randomRisk,
         description: 'High-risk drift payload intercepted. Fail-closed auto-remediation and patch triggered.',
         status: 'PATCH_APPLIED',
-        pqcAlgorithm: Math.random() > 0.5
+        pqcAlgorithm: sentinelTick % 2 === 0
           ? 'Dilithium-5 (ML-DSA-87 / FIPS 204)'
           : 'SPHINCS+ (FIPS 205 Fallback)',
-        zkProofHash: `0x${Math.random().toString(16).substring(2, 10)}...${Math.random().toString(16).substring(2, 6)}`,
-        thermalReading: `${(14.95 + Math.random() * 0.08).toFixed(2)} mK`,
-        mitigationLatencyMs: Number((0.24 + Math.random() * 0.12).toFixed(2)),
+        zkProofHash: `0x${detHex}...${detHex.slice(0, 4)}`,
+        thermalReading: `${(14.95 + ((sentinelTick * 3) % 8) / 100).toFixed(2)} mK`,
+        mitigationLatencyMs: Number((0.24 + ((sentinelTick * 5) % 12) / 100).toFixed(2)),
         statuteRef: 'ETDA Sec 9/26/28 & PDPA Sec 37',
       };
 
-      setAnomalies((previous) => [newAnomaly, ...previous.slice(0, 7)]);
+      setAnomalies((previous) => [newAnomaly, ...previous.filter((a) => a.id !== newAnomaly.id)].slice(0, 8));
       onAlertLevelChange?.('CRITICAL');
       setRemediationCount((previous) => previous + 1);
       setCiCdStatus(`PATCH EXECUTED [${newAnomaly.id}]`);

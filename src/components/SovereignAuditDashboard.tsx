@@ -133,7 +133,7 @@ export const SovereignAuditDashboard: React.FC<{
     const now = Date.now();
     for (let i = 15; i >= 0; i--) {
       const d = new Date(now - i * 2000);
-      const val = Math.round(48 + Math.sin(i * 0.7) * 16 + (Math.random() * 8 - 4));
+      const val = Math.round(48 + Math.sin(i * 0.7) * 16 + (((i * 19) % 80) / 10 - 4));
       const clamped = Math.max(26, Math.min(78, val));
       points.push({
         time: d.toLocaleTimeString('en-GB', { hour12: false }),
@@ -150,7 +150,7 @@ export const SovereignAuditDashboard: React.FC<{
     const initialTiles: SystemEntropyHeatmapTile[] = [];
     HEATMAP_SUBSYSTEMS.forEach((sub) => {
       TIME_BUCKETS.forEach((bucket, tIdx) => {
-        const jitter = Math.sin((tIdx + 1) * 1.3 + sub.baseEntropy) * 14 + (Math.random() * 6 - 3);
+        const jitter = Math.sin((tIdx + 1) * 1.3 + sub.baseEntropy) * 14 + ((((tIdx + sub.baseEntropy) * 17) % 60) / 10 - 3);
         const entropyVal = Math.max(26, Math.min(78, Math.round(sub.baseEntropy + jitter)));
         const deltaNum = (entropyVal - sub.baseEntropy);
         const delta = `${deltaNum >= 0 ? '+' : ''}${deltaNum.toFixed(1)}%`;
@@ -239,11 +239,13 @@ export const SovereignAuditDashboard: React.FC<{
       stopStream = startContinuumStream(60);
     }
 
+    let auditTick = 0;
     const interval = setInterval(() => {
+      auditTick += 1;
       const now = new Date();
       const timeStr = now.toLocaleTimeString('en-GB', { hour12: false });
       // Strictly constrained between 26% and 78%
-      const raw = Math.round(52 + Math.sin(Date.now() / 4000) * 18 + (Math.random() * 8 - 4));
+      const raw = Math.round(52 + Math.sin(Date.now() / 4000) * 18 + (((auditTick * 23) % 80) / 10 - 4));
       const clamped = Math.max(26, Math.min(78, raw));
 
       setCurrentEntropy(clamped);
@@ -262,7 +264,7 @@ export const SovereignAuditDashboard: React.FC<{
         return prev.map((tile) => {
           if (tile.timeBucket === 'NOW (Live)') {
             const sub = HEATMAP_SUBSYSTEMS.find((s) => s.id === tile.subsystemId) || { baseEntropy: 40 };
-            const deltaFluctuation = Math.sin(Date.now() / 2500 + sub.baseEntropy) * 12 + (Math.random() * 6 - 3);
+            const deltaFluctuation = Math.sin(Date.now() / 2500 + sub.baseEntropy) * 12 + (((auditTick * 13 + sub.baseEntropy) % 60) / 10 - 3);
             const freshEntropy = Math.max(26, Math.min(78, Math.round(sub.baseEntropy + deltaFluctuation)));
             const deltaNum = freshEntropy - sub.baseEntropy;
             const delta = `${deltaNum >= 0 ? '+' : ''}${deltaNum.toFixed(1)}%`;
@@ -281,15 +283,15 @@ export const SovereignAuditDashboard: React.FC<{
       });
 
       // Periodically inject realistic audit telemetry
-      if (Math.random() > 0.65) {
-        const randChamber = CHAMBERS_18[Math.floor(Math.random() * CHAMBERS_18.length)];
+      if (auditTick % 3 === 0) {
+        const randChamber = CHAMBERS_18[auditTick % CHAMBERS_18.length];
         const newLog: TelemetryLogEntry = {
           id: `LOG-${Date.now().toString().slice(-4)}`,
-          timestamp: `${timeStr}.${Math.floor(Math.random() * 900 + 100)} ICT`,
+          timestamp: `${timeStr}.${100 + ((auditTick * 137) % 900)} ICT`,
           chamber: `${randChamber.num} ${randChamber.emoji} ${randChamber.title}`,
           event: `Continuum telemetry heartbeat: ${randChamber.subtitle} — Δ0.00% Zero Drift verified.`,
           status: 'PASS',
-          hash: `${Math.random().toString(16).slice(2, 8)}...`,
+          hash: `${((849202 + auditTick * 14902) >>> 0).toString(16).padStart(6, '0').slice(-6)}...`,
         };
         setLogs((prev) => [newLog, ...prev.slice(0, 39)]);
       }

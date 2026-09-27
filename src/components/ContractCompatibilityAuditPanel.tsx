@@ -21,6 +21,7 @@ import {
 import { verifyGenesisMerkleRoot, generateSealProof } from '../services/cryptoEngine';
 import { copyToClipboard } from '../utils/clipboard';
 import { playAuditChime, playTone } from './AudioSynthesizer';
+import { NimbusOsCommandCenterPanel } from '../nimbusos/NimbusOsCommandCenterPanel';
 
 export const ContractCompatibilityAuditPanel: React.FC<{
   onSelectRoom?: (roomCode: string) => void;
@@ -29,7 +30,7 @@ export const ContractCompatibilityAuditPanel: React.FC<{
     runContractCompatibilityAudit()
   );
   const [activeTab, setActiveTab] = useState<
-    'SSOT_PARITY' | 'CRYPTO_PROVENANCE' | 'CHAMBERS_00_18' | 'FOUNDATION_PHASES'
+    'SSOT_PARITY' | 'CRYPTO_PROVENANCE' | 'CHAMBERS_00_18' | 'FOUNDATION_PHASES' | 'NIMBUSOS_CORE'
   >('SSOT_PARITY');
   const [copiedKey, setCopiedKey] = useState<string | null>(null);
   const [liveCryptoProof, setLiveCryptoProof] = useState<{
@@ -206,6 +207,7 @@ export const ContractCompatibilityAuditPanel: React.FC<{
           { id: 'CRYPTO_PROVENANCE', label: '2. Cryptographic vs Simulation Provenance', icon: Lock },
           { id: 'CHAMBERS_00_18', label: '3. ROOM00–ROOM18 Inventory (19 Chambers)', icon: Layers },
           { id: 'FOUNDATION_PHASES', label: '4. Foundation Phase 01–10 Contracts', icon: FileCode },
+          { id: 'NIMBUSOS_CORE', label: '5. nimbusOS Workspace Core (Phase 01–10)', icon: Terminal },
         ].map((tab) => {
           const Icon = tab.icon;
           const isActive = activeTab === tab.id;
@@ -393,6 +395,9 @@ export const ContractCompatibilityAuditPanel: React.FC<{
           ))}
         </div>
       )}
+
+      {/* TAB 5: NIMBUSOS FOUNDATION PHASE 01-10 WORKSPACE CORE */}
+      {activeTab === 'NIMBUSOS_CORE' && <NimbusOsCommandCenterPanel />}
     </div>
   );
 };

@@ -172,12 +172,12 @@ class SovereignChamberQueueService {
     const currentPendingIds = new Set(this.queue.map((c) => c.id));
     const available = pool.filter((c) => !currentPendingIds.has(c.id));
 
-    available.slice(0, count).forEach((c) => {
+    available.slice(0, count).forEach((c, idx) => {
       this.enqueueChamber({
         id: c.id,
         name: c.name,
         priority: 'NORMAL',
-        anomalyScore: parseFloat((Math.random() * 0.05).toFixed(3)),
+        anomalyScore: parseFloat((((idx + 1) * 7 % 50) / 1000).toFixed(3)),
       });
     });
   }

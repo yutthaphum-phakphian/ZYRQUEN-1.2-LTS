@@ -508,7 +508,7 @@ const processSwarmTasks = () => {
         changed = true;
       }
     } else if (task.status === 'PROCESSING') {
-      task.progress += Math.floor(Math.random() * 20) + 10;
+      task.progress += 20;
       if (task.progress >= 100) {
         task.progress = 100;
         task.status = 'COMPLETED';
@@ -588,14 +588,16 @@ githubSyncService.subscribe((syncState: GitHubSyncState) => {
 });
 
 // Continuous Autonomy Monitor Loop (Evaluates every 4 seconds)
+let autonomyTick = 0;
 setInterval(() => {
   if (!state.monitoringActive || !state.autonomyNodeEnabled) return;
 
   const sync = githubSyncService.getState();
   const nowStr = new Date().toISOString();
+  autonomyTick += 1;
 
-  // Fluctuate entropy slightly around baseline
-  const jitter = (Math.random() * 40 - 20);
+  // Deterministic fluctuation around baseline
+  const jitter = ((autonomyTick * 17) % 40) - 20;
   const currentEntropyRate = Math.round(state.entropyStats.currentKBps + jitter);
 
   state = {

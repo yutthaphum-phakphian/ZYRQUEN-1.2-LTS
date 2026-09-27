@@ -99,10 +99,11 @@ export const CryptographyStream: React.FC = () => {
       'ZK_SNARK',
       'BLAS_VERIFY',
     ];
-    const type = types[Math.floor(Math.random() * types.length)];
-    const index = Math.floor(Math.random() * 16);
-    const leafSeed = `leaf-${Date.now()}-${Math.random()}`;
-    const sibSeed = `sib-${Date.now()}-${Math.random()}`;
+    const seq = verifiedCount + 1;
+    const type = types[seq % types.length];
+    const index = seq % 16;
+    const leafSeed = `leaf-${Date.now()}-${seq}-849202`;
+    const sibSeed = `sib-${Date.now()}-${seq}-14902`;
     const now = new Date();
     const timeStr =
       now.toLocaleTimeString('th-TH', { hour12: false }) +
@@ -110,15 +111,15 @@ export const CryptographyStream: React.FC = () => {
       String(now.getMilliseconds()).padStart(3, '0');
 
     return {
-      id: `PRF-849202-${String(Math.floor(100 + Math.random() * 900))}`,
+      id: `PRF-849202-${now.getTime().toString().slice(-4)}-${seq}`,
       blockHeight: 849202,
       type,
       leafIndex: index,
       leafHash: generateSha256Hash(leafSeed),
       siblingHash: generateSha256Hash(sibSeed),
       rootHash: SYSTEM_METADATA.merkleRoot,
-      proofValidity: Math.random() > 0.3 ? 'VALID' : 'PQC_SEALED',
-      latencyMicros: Math.floor(35 + Math.random() * 60),
+      proofValidity: seq % 3 !== 0 ? 'VALID' : 'PQC_SEALED',
+      latencyMicros: 35 + ((seq * 13) % 60),
       timestamp: timeStr,
     };
   };

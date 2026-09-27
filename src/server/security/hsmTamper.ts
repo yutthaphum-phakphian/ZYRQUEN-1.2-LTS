@@ -42,7 +42,7 @@ export function simulateTamperDetection() {
   // Active Zeroization in RAM <1.2ms
   // Simulate wiping keys
   const keysWiped = 10; // 10/10 HSM
-  const zeroizationMs = Math.random() * 0.3 + 0.33; // 0.33-0.63ms avg 0.48ms
+  const zeroizationMs = 0.33 + ((tamperCount * 7) % 30) / 100; // 0.33-0.62ms avg 0.48ms
   lastZeroization = {
     timestamp: new Date().toISOString(),
     zeroizationMs: Math.round(zeroizationMs * 100) / 100,
@@ -58,7 +58,7 @@ export function phoenixRecovery() {
   const previousScheme = activeScheme;
   activeScheme = HSM_CONFIG.backupPQC;
   // Stateless hash switch
-  const recoveryMs = Math.random() * 0.5 + 2.7; // 2.7-3.2ms
+  const recoveryMs = 2.7 + ((tamperCount * 13) % 50) / 100; // 2.7-3.19ms
   console.log(`[PHOENIX] Recovery ${previousScheme} -> ${activeScheme} in ${recoveryMs.toFixed(2)}ms <${HSM_CONFIG.phoenixRecoverySLAms}ms SLA zero downtime`);
   return {
     previousScheme,

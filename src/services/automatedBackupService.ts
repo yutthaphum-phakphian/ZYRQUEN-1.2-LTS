@@ -463,7 +463,7 @@ class AutomatedBackupEngine {
       genesisMerkleRoot: SYSTEM_METADATA.merkleRoot,
       sealsCount: 14902,
       status: 'SEALED_VALID',
-      qopsThroughput: 894000 + Math.floor(Math.random() * 800),
+      qopsThroughput: 894000 + ((this.totalBackupsCount * 137) % 800),
       cryoTempMk: 12.4,
       coherencePct: 99.97,
       memoryBandwidthGbs: 18.4,

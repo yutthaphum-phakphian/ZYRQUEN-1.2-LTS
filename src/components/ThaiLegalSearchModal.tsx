@@ -298,8 +298,9 @@ export const ThaiLegalSearchModal: React.FC<ThaiLegalSearchModalProps> = ({
 
     setRecentQueries((prev) => {
       const filtered = prev.filter((item) => item.query.trim().toLowerCase() !== trimmed.toLowerCase());
+      const nowMs = Date.now();
       const newEntry: RecentLegalQuery = {
-        id: `q-${Date.now()}-${Math.random().toString(36).slice(2, 6)}`,
+        id: `q-${nowMs}-${((nowMs ^ 849202) >>> 0).toString(36).slice(-4)}`,
         query: trimmed,
         timestamp: new Date().toISOString(),
         dateStr: new Date().toLocaleTimeString('th-TH', { hour: '2-digit', minute: '2-digit', second: '2-digit' }),

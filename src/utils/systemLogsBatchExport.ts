@@ -85,7 +85,8 @@ export function generateCryptographicLogBatch(
   }
 
   const exportTimestamp = new Date().toISOString();
-  const batchId = `BATCH-${Date.now().toString(36).toUpperCase()}-${Math.random().toString(36).substring(2, 7).toUpperCase()}`;
+  const nowMs = Date.now();
+  const batchId = `BATCH-${nowMs.toString(36).toUpperCase()}-${((nowMs + targetEvents.length * 14902) >>> 0).toString(36).slice(-5).toUpperCase()}`;
 
   let prevHash = SYSTEM_METADATA.merkleRoot;
   const records: LogBatchItem[] = [];
