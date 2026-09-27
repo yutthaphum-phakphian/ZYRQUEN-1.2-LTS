@@ -158,7 +158,7 @@ const GENERATE_HEATMAP_DATA = (): HeatmapCellData[] => {
         asn: region.asn,
         defenseGate: vector.defenseGate,
         severity: vector.severity,
-        lastAttemptTime: `${1 + ((rIdx * 7 + vIdx * 13) % 45)}s ago`,
+        lastAttemptTime: `${Math.floor(Math.random() * 45 + 1)}s ago`,
         samplePacketHash: packetHash,
       });
     });
@@ -187,12 +187,12 @@ const GENERATE_24H_GEO_TREND = (): HourlyGeoFailureRecord[] => {
 
   return hours.map((hour, idx) => {
     const diurnalFactor = Math.sin((idx / 12) * Math.PI * 2);
-    const na = Math.round(180 + diurnalFactor * 60 + ((idx * 7) % 20));
-    const eu = Math.round(120 + Math.cos((idx / 12) * Math.PI * 2) * 45 + ((idx * 11) % 15));
-    const ea = Math.round(140 + Math.sin((idx / 12 + 0.3) * Math.PI * 2) * 50 + ((idx * 13) % 18));
-    const sea = Math.round(45 + ((idx * 5) % 12));
-    const ee = Math.round(160 + diurnalFactor * 40 + ((idx * 17) % 25));
-    const lame = Math.round(55 + ((idx * 9) % 15));
+    const na = Math.round(180 + diurnalFactor * 60 + Math.random() * 20);
+    const eu = Math.round(120 + Math.cos((idx / 12) * Math.PI * 2) * 45 + Math.random() * 15);
+    const ea = Math.round(140 + Math.sin((idx / 12 + 0.3) * Math.PI * 2) * 50 + Math.random() * 18);
+    const sea = Math.round(45 + Math.random() * 12);
+    const ee = Math.round(160 + diurnalFactor * 40 + Math.random() * 25);
+    const lame = Math.round(55 + Math.random() * 15);
 
     return {
       hour,
@@ -277,13 +277,12 @@ export const GatewayAuthHeatmap: React.FC = () => {
     setIsSimulatingBurst(true);
     playTone(850, 0.08, 'sawtooth');
 
-    // Pick deterministic region and vector
-    const nowSeed = Date.now();
-    const randomRegionIdx = nowSeed % GEO_REGIONS.length;
-    const randomVectorIdx = (nowSeed * 7) % ATTACK_VECTORS.length;
+    // Pick random region and vector
+    const randomRegionIdx = Math.floor(Math.random() * GEO_REGIONS.length);
+    const randomVectorIdx = Math.floor(Math.random() * ATTACK_VECTORS.length);
     const targetRegion = GEO_REGIONS[randomRegionIdx];
     const targetVector = ATTACK_VECTORS[randomVectorIdx];
-    const burstVolume = 60 + (nowSeed % 120);
+    const burstVolume = Math.floor(Math.random() * 120 + 60);
 
     setTimeout(() => {
       setHeatmapData((prev) =>

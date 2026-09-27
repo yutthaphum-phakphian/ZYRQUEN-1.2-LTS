@@ -500,17 +500,15 @@ export const Room03MasterPanel: React.FC<Room03MasterPanelProps> = ({
                   type="button"
                   onClick={() => {
                     playTone(550, 0.04);
-                    const nowMs = Date.now();
-                    const det = (nowMs + threatEvents.length * 37) % 100;
                     const newNormal = {
-                      id: `evt-${nowMs}`,
-                      deviceId: `device_user_${100 + ((nowMs + 849202) % 900)}`,
+                      id: `evt-${Date.now()}`,
+                      deviceId: `device_user_${Math.floor(100 + Math.random() * 900)}`,
                       timestamp: 'Just now',
-                      appScore: +(0.02 + (det % 8) / 100).toFixed(2),
-                      networkScore: +(0.05 + (det % 10) / 100).toFixed(2),
+                      appScore: +(0.02 + Math.random() * 0.08).toFixed(2),
+                      networkScore: +(0.05 + Math.random() * 0.1).toFixed(2),
                       integrityScore: 0.0,
-                      signalsCount: +(1 + (det % 3)).toFixed(1),
-                      anomalyScore: +(0.35 + (det % 15) / 100).toFixed(4),
+                      signalsCount: +(1 + Math.floor(Math.random() * 3)).toFixed(1),
+                      anomalyScore: +(0.35 + Math.random() * 0.15).toFixed(4),
                       prediction: 'NORMAL' as const,
                       status: 'VERIFIED_INLIER',
                     };
@@ -526,17 +524,15 @@ export const Room03MasterPanel: React.FC<Room03MasterPanelProps> = ({
                   type="button"
                   onClick={() => {
                     playTone(280, 0.1);
-                    const nowMs = Date.now();
-                    const det = (nowMs + threatEvents.length * 73) % 100;
                     const anomaly = {
-                      id: `evt-${nowMs}`,
-                      deviceId: `device_threat_attack_${100 + ((nowMs + 14902) % 900)}`,
+                      id: `evt-${Date.now()}`,
+                      deviceId: `device_threat_attack_${Math.floor(100 + Math.random() * 900)}`,
                       timestamp: 'Just now',
-                      appScore: +(0.85 + (det % 14) / 100).toFixed(2),
-                      networkScore: +(0.88 + (det % 10) / 100).toFixed(2),
-                      integrityScore: +(0.9 + (det % 9) / 100).toFixed(2),
-                      signalsCount: +(35 + (det % 40)).toFixed(1),
-                      anomalyScore: -(0.55 + (det % 35) / 100).toFixed(4),
+                      appScore: +(0.85 + Math.random() * 0.14).toFixed(2),
+                      networkScore: +(0.88 + Math.random() * 0.1).toFixed(2),
+                      integrityScore: +(0.9 + Math.random() * 0.09).toFixed(2),
+                      signalsCount: +(35 + Math.floor(Math.random() * 40)).toFixed(1),
+                      anomalyScore: -(0.55 + Math.random() * 0.35).toFixed(4),
                       prediction: 'ANOMALY_DETECTED' as const,
                       status: 'ISOLATED_QUARANTINED',
                     };

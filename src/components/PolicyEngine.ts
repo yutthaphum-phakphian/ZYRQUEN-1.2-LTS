@@ -108,8 +108,7 @@ export class PolicyEngine {
    */
   public static evaluate(context: PolicyAuthorizationContext): PolicyEvaluationResult {
     const timestamp = new Date().toISOString();
-    const nowMs = Date.now();
-    const traceId = `POL-TRACE-${nowMs}-${((nowMs ^ 14902) >>> 0).toString(36).slice(-5).toUpperCase()}`;
+    const traceId = `POL-TRACE-${Date.now()}-${Math.random().toString(36).substring(2, 7).toUpperCase()}`;
     const reasons: string[] = [];
 
     // 1. Permanent Fail-Closed Check on Canonical Write

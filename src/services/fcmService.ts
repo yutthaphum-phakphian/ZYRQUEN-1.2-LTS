@@ -78,8 +78,8 @@ export class FcmService {
       const cached = window.localStorage.getItem('zyrquen_fcm_device_id');
       if (cached) return cached;
     }
-    const detRand = ((Date.now() ^ 849202) >>> 0).toString(36).padStart(8, '0').slice(-8);
-    const newId = `zyrquen-android16-${detRand}`;
+    const rand = Math.random().toString(36).substring(2, 10);
+    const newId = `zyrquen-android16-${rand}`;
     if (typeof window !== 'undefined' && window.localStorage) {
       window.localStorage.setItem('zyrquen_fcm_device_id', newId);
     }
@@ -99,7 +99,9 @@ export class FcmService {
       // Register Service Worker in browser / PWA context if supported
       if (typeof window !== 'undefined' && 'serviceWorker' in navigator) {
         try {
-          await navigator.serviceWorker.register('./firebase-messaging-sw.js');
+          await navigator.serviceWorker.register('/firebase-messaging-sw.js', {
+            scope: '/',
+          });
         } catch (swErr) {
           console.warn('[FCM] Service worker registration deferred:', swErr);
         }
@@ -127,7 +129,7 @@ export class FcmService {
         .map((b) => b.toString(16).padStart(2, '0'))
         .join('');
     } else {
-      entropyBytes = '909ab814479844d8a14816bed34cdbb07528e18501da86fc4691763a43fa4c68';
+      entropyBytes = Math.random().toString(36).substring(2) + Math.random().toString(36).substring(2);
     }
     return `fcm_bk36_${timestampHex}_${entropyBytes.substring(0, 36)}`;
   }

@@ -195,8 +195,8 @@ class TerminalJobLifecycleEngine {
     }
 
     const now = new Date().toISOString();
+    const jobId = `JOB-${Date.now()}-${Math.random().toString(36).substring(2, 7).toUpperCase()}`;
     const payloadHash = this.computePayloadHash(opts.payload);
-    const jobId = `JOB-${Date.now()}-${payloadHash.slice(0, 5).toUpperCase()}`;
 
     const newJob: JobLifecycleRecord = {
       jobId,

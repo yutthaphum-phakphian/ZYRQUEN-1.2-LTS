@@ -33,8 +33,6 @@ import { Room14MasterPanel } from '../Room14MasterPanel';
 import { Room15MasterPanel } from '../Room15MasterPanel';
 import { Room16MasterPanel } from '../Room16MasterPanel';
 import { Room17MasterPanel } from '../Room17MasterPanel';
-import { Room18MasterPanel } from '../Room18MasterPanel';
-import { ContractCompatibilityAuditPanel } from '../ContractCompatibilityAuditPanel';
 import { RealtimeVerifiedSealTelemetry } from '../RealtimeVerifiedSealTelemetry';
 import { SystemResourceGrid } from '../SystemResourceGrid';
 import { HealthDashboard } from '../HealthDashboard';
@@ -229,7 +227,6 @@ export const DashboardView: React.FC<DashboardViewProps> = ({
     { id: 'ROOM15', num: '15', titleEn: 'Sonic Alert', titleTh: 'ระบบแจ้งเตือนเสียง 882Hz', emoji: '🔊' },
     { id: 'ROOM16', num: '16', titleEn: '3D Quantum Viz', titleTh: 'ทัศนภาพควอนตัม 3 มิติ', emoji: '🎮' },
     { id: 'ROOM17', num: '17', titleEn: 'Supreme Command', titleTh: 'ศูนย์บัญชาการสูงสุด', emoji: '👑' },
-    { id: 'ROOM18', num: '18', titleEn: 'Neural Sentinel', titleTh: 'ผู้พิทักษ์โครงข่ายประสาท', emoji: '🛰️' },
   ];
 
   return (
@@ -999,15 +996,6 @@ export const DashboardView: React.FC<DashboardViewProps> = ({
             </div>
           </div>
 
-          {/* Complete Coverage: ROOM18 Neural Sentinel & Predictive Governance Register */}
-          <section id="room-18-sentinel" className="w-full">
-            <Room18MasterPanel
-              snapshots={snapshots}
-              onNavigate={onNavigate}
-              onOpenCertificate={onOpenCertificate}
-            />
-          </section>
-
           {/* Zyrquen Manifesto Terminal */}
           <ManifestoCard onOpenCertificate={onOpenCertificate} />
         </div>
@@ -1149,18 +1137,7 @@ export const DashboardView: React.FC<DashboardViewProps> = ({
             {selectedChamber === 'ROOM17' && (
               <Room17MasterPanel snapshots={snapshots} onNavigate={onNavigate} onOpenCertificate={onOpenCertificate} />
             )}
-            {selectedChamber === 'ROOM18' && (
-              <Room18MasterPanel snapshots={snapshots} onNavigate={onNavigate} onOpenCertificate={onOpenCertificate} />
-            )}
           </div>
-
-          {/* Source Inventory & Contract-Level Compatibility Audit Matrix */}
-          <ContractCompatibilityAuditPanel
-            onSelectRoom={(room) => {
-              playTone(640, 0.04);
-              setSelectedChamber(room);
-            }}
-          />
 
           {/* 18 Chambers Full Compliance Grid */}
           <ChamberStatusGrid onNavigate={onNavigate} />
@@ -1190,11 +1167,6 @@ export const DashboardView: React.FC<DashboardViewProps> = ({
             previousScore={prevIntegrityScore}
           />
           <GitHubSyncStatusUtility />
-          <Room18MasterPanel
-            snapshots={snapshots}
-            onNavigate={onNavigate}
-            onOpenCertificate={onOpenCertificate}
-          />
           <HealthDashboard snapshots={snapshots} />
           <LiveAutomatedHealthWidget />
           <SystemResourceGrid />
@@ -1223,12 +1195,6 @@ export const DashboardView: React.FC<DashboardViewProps> = ({
       {/* TAB 5: SOVEREIGN AUDIT DASHBOARD */}
       {(dashboardSection === 'AUDIT' || (dashboardSection as string) === 'SOVEREIGN_AUDIT') && (
         <div className="space-y-4 sm:space-y-5 animate-in fade-in duration-200 w-full min-w-0 max-w-full overflow-x-hidden max-[479px]:p-[12px] max-[479px]:space-y-3">
-          <ContractCompatibilityAuditPanel
-            onSelectRoom={(room) => {
-              setSelectedChamber(room);
-              setDashboardSection('CHAMBERS');
-            }}
-          />
           <SovereignAuditDashboard />
         </div>
       )}

@@ -30,8 +30,8 @@ self.addEventListener('push', (event) => {
   const title = notification.title || '🚨 ZYRQUEN Sovereign System Alert';
   const options = {
     body: notification.body || 'Post-quantum security event detected.',
-    icon: './icon.svg',
-    badge: './apple-touch-icon.png',
+    icon: '/icon.svg',
+    badge: '/apple-touch-icon.png',
     tag: androidNotif.tag || 'zyrquen_system_alert',
     data: data,
     vibrate: [0, 250, 150, 250],
@@ -60,7 +60,7 @@ self.addEventListener('notificationclick', (event) => {
         }
       }
       if (self.clients.openWindow) {
-        return self.clients.openWindow('./');
+        return self.clients.openWindow('/');
       }
     })
   );

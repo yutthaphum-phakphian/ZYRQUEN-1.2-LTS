@@ -8,7 +8,7 @@ const additionalRoutes = `
 // NEW GITHUB SERVICE / VERSION (v6.1)
 // ============================================================================
 
-const GITHUB_REPO = "yutthaphum-phakphian/ZYRQUEN-1.2-LTS";
+const GITHUB_REPO = "hugeplease66-debug/zyrquen-frozen-v1.2-lts";
 const GITHUB_API_URL = "https://api.github.com/repos/" + GITHUB_REPO + "/commits?per_page=1";
 let _commit_cache = { data: null, fetched_at: 0 };
 const CACHE_TTL_SEC = 300; // 5 min

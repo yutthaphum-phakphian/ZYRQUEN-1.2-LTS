@@ -43,7 +43,6 @@ export interface MutationRequestPayload {
   readonly actor?: string;
   readonly origin?: string;
   readonly reason?: string;
-  readonly silentVerification?: boolean;
 }
 
 export class WriteFirewallEngine {
@@ -122,9 +121,8 @@ export class WriteFirewallEngine {
     else if (target === 'blockHeight' || target === 'canonicalBlock' || target === 'block') canonicalValStr = '#849202';
     else if (target === 'ssotMutation') canonicalValStr = '0';
 
-    const nowMs = Date.now();
     const auditRecord: WriteFirewallAuditRecord = {
-      auditId: `WF-AUDIT-${nowMs}-${((nowMs ^ 849202) >>> 0).toString(36).slice(-4).toUpperCase()}`,
+      auditId: `WF-AUDIT-${Date.now()}-${Math.random().toString(36).slice(2, 6).toUpperCase()}`,
       timestamp,
       targetField: target,
       requestedValue: requestedValStr,
@@ -137,49 +135,42 @@ export class WriteFirewallEngine {
       reason: `Write Firewall blocked illegal mutation attempt to ${target}. Canonical SSoT remains inviolable.`,
     };
 
-    const isSilentProbe = Boolean(request.silentVerification || origin === 'internal://gate-verifier');
+    // Immutable append to audit ledger
+    this.auditLedger.unshift(auditRecord);
 
-    if (!isSilentProbe) {
-      // Immutable append to audit ledger
-      this.auditLedger.unshift(auditRecord);
+    // Trigger system alert
+    alertEngine.triggerAlert({
+      category: 'CANONICAL_WRITE_ATTEMPT',
+      severity: 'CRITICAL',
+      sourcePlaneId: 'CANONICAL_WRITE_FIREWALL',
+      title: `Write Firewall: Intercepted ${target} Modification`,
+      description: `Actor "${actor}" attempted to write value "${requestedValStr}" to canonical ${target}. Mutation blocked (Delta = 0).`,
+    });
 
-      // Trigger system alert
-      alertEngine.triggerAlert({
-        category: 'CANONICAL_WRITE_ATTEMPT',
-        severity: 'CRITICAL',
-        sourcePlaneId: 'CANONICAL_WRITE_FIREWALL',
-        title: `Write Firewall: Intercepted ${target} Modification`,
-        description: `Actor "${actor}" attempted to write value "${requestedValStr}" to canonical ${target}. Mutation blocked (Delta = 0).`,
-      });
-
-      if (this.onSystemEventCallback) {
-        const cb = this.onSystemEventCallback;
-        setTimeout(() => {
-          cb(
-            'SECURITY',
-            `Write Firewall Intercepted ${target} Mutation`,
-            `Actor "${actor}" attempted write "${requestedValStr}". Blocked fail-closed (SSoT Mutation = 0).`,
-            `sha256:${auditRecord.auditId}`,
-            'critical',
-            'Canonical Frozen Core Invariant (ETDA Sec 26 & 28)',
-            'ledger'
-          );
-        }, 0);
-      }
-
-      logTrace({
-        operationName: 'WRITE_FIREWALL_INTERCEPT',
-        planeId: 'CANONICAL_WRITE_FIREWALL',
-        latencyMs: 0.1,
-        resultState: 'FAIL_CLOSED',
-        attributes: {
-          target,
-          requestedValue: requestedValStr,
-          mutationDelta: 0,
-          actor,
-        },
-      });
+    if (this.onSystemEventCallback) {
+      this.onSystemEventCallback(
+        'SECURITY',
+        `Write Firewall Intercepted ${target} Mutation`,
+        `Actor "${actor}" attempted write "${requestedValStr}". Blocked fail-closed (SSoT Mutation = 0).`,
+        `sha256:${auditRecord.auditId}`,
+        'critical',
+        'Canonical Frozen Core Invariant (ETDA Sec 26 & 28)',
+        'ledger'
+      );
     }
+
+    logTrace({
+      operationName: 'WRITE_FIREWALL_INTERCEPT',
+      planeId: 'CANONICAL_WRITE_FIREWALL',
+      latencyMs: 0.1,
+      resultState: 'FAIL_CLOSED',
+      attributes: {
+        target,
+        requestedValue: requestedValStr,
+        mutationDelta: 0,
+        actor,
+      },
+    });
 
     return {
       allowed: false,

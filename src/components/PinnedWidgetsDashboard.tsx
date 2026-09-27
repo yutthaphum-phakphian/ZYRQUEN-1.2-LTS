@@ -273,9 +273,9 @@ export const PinnedWidgetsDashboard: React.FC<PinnedWidgetsDashboardProps> = ({ 
     const hours = ['00:00', '04:00', '08:00', '12:00', '16:00', '20:00', '23:59'];
     return hours.map((h, i) => ({
       time: h,
-      qops: +(840 + Math.sin(i) * 15 + ((i * 3) % 8)).toFixed(1),
-      cryo: +(14.8 + ((i * 7) % 40) / 100).toFixed(2),
-      coherence: +(99.92 + ((i * 11) % 60) / 1000).toFixed(3),
+      qops: 840 + Math.sin(i) * 15 + Math.random() * 8,
+      cryo: +(14.8 + Math.random() * 0.4).toFixed(2),
+      coherence: +(99.92 + Math.random() * 0.06).toFixed(3),
     }));
   });
 

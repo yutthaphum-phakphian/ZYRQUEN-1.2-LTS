@@ -292,7 +292,7 @@ export const Room01MasterPanel: React.FC<Room01MasterPanelProps> = ({
     const newPings: Record<string, number> = {};
     THAI_CUSTODIANS.forEach((custodian, index) => {
       setTimeout(() => {
-        newPings[custodian.id] = 12 + ((index * 3 + 5) % 8); // 12ms - 19ms deterministic
+        newPings[custodian.id] = Math.floor(12 + Math.random() * 8); // 12ms - 20ms
         playTone(680 + index * 30, 0.03);
         if (index === THAI_CUSTODIANS.length - 1) {
           setHsmPingResults({ ...newPings });

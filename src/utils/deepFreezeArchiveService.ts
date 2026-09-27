@@ -96,7 +96,7 @@ export function evaluateAndTriggerDeepFreeze(currentLedgerCount: number): {
     const endBlock = globalArchiveState.deepFrozenEntries + countToFreeze;
 
     const uncompressedBytes = countToFreeze * 3084;
-    const compressionRatio = +(77.8 + ((globalArchiveState.partitions.length * 7) % 15) / 10).toFixed(1);
+    const compressionRatio = +(77.8 + Math.random() * 1.5).toFixed(1);
     const compressedBytes = Math.round(uncompressedBytes * (1 - compressionRatio / 100));
     const bytesSavedMb = +((uncompressedBytes - compressedBytes) / (1024 * 1024)).toFixed(2);
 
@@ -148,7 +148,7 @@ export function triggerManualDeepFreeze(amountToFreeze: number = 400): DeepFreez
   const startBlock = globalArchiveState.deepFrozenEntries + 1;
   const endBlock = globalArchiveState.deepFrozenEntries + amountToFreeze;
   const uncompressedBytes = amountToFreeze * 3084;
-  const compressionRatio = +(78.2 + ((globalArchiveState.partitions.length * 5) % 12) / 10).toFixed(1);
+  const compressionRatio = +(78.2 + Math.random() * 1.2).toFixed(1);
   const compressedBytes = Math.round(uncompressedBytes * (1 - compressionRatio / 100));
   const bytesSavedMb = +((uncompressedBytes - compressedBytes) / (1024 * 1024)).toFixed(2);
 

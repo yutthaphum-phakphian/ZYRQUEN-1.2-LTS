@@ -130,7 +130,7 @@ export const ConsoleHardwareTelemetryGrid: React.FC<ConsoleHardwareTelemetryGrid
       const t = new Date(now - i * 20000);
       points.push({
         time: t.toLocaleTimeString('th-TH', { hour12: false, minute: '2-digit', second: '2-digit' }),
-        load: +(38 + ((i * 17) % 80) / 10).toFixed(1),
+        load: +(38 + Math.random() * 8).toFixed(1),
       });
     }
     return points;
@@ -173,9 +173,7 @@ export const ConsoleHardwareTelemetryGrid: React.FC<ConsoleHardwareTelemetryGrid
 
   // Real-time ticking and telemetry fluctuation
   useEffect(() => {
-    let hwTick = 0;
     const interval = setInterval(() => {
-      hwTick += 1;
       const now = new Date();
       const ictTime = now.toLocaleTimeString('th-TH', { timeZone: 'Asia/Bangkok', hour12: false });
       setTime({
@@ -184,10 +182,10 @@ export const ConsoleHardwareTelemetryGrid: React.FC<ConsoleHardwareTelemetryGrid
         epoch: now.getTime(),
       });
 
-      const core0 = +(40 + ((hwTick * 11) % 50) / 10).toFixed(1);
-      const core1 = +(38 + ((hwTick * 13) % 40) / 10).toFixed(1);
-      const core2 = +(42 + ((hwTick * 17) % 60) / 10).toFixed(1);
-      const core3 = +(37 + ((hwTick * 19) % 50) / 10).toFixed(1);
+      const core0 = +(40 + Math.random() * 5).toFixed(1);
+      const core1 = +(38 + Math.random() * 4).toFixed(1);
+      const core2 = +(42 + Math.random() * 6).toFixed(1);
+      const core3 = +(37 + Math.random() * 5).toFixed(1);
       const cpuAvg = +((core0 + core1 + core2 + core3) / 4).toFixed(1);
 
       const nextTelemetry = {
@@ -195,15 +193,15 @@ export const ConsoleHardwareTelemetryGrid: React.FC<ConsoleHardwareTelemetryGrid
         core1,
         core2,
         core3,
-        memUsedMb: 5200 + ((hwTick * 7) % 50),
+        memUsedMb: Math.round(5200 + Math.random() * 50),
         memTotalMb: 8192,
-        cryoTempMk: +(14.95 + ((hwTick * 3) % 6) / 100).toFixed(2),
+        cryoTempMk: +(14.95 + Math.random() * 0.06).toFixed(2),
         heliumPressureAtm: 1.02,
         heliumFlowPct: 99.8,
-        networkRxMbps: +(82 + ((hwTick * 11) % 50) / 10).toFixed(1),
-        networkTxMbps: +(110 + ((hwTick * 13) % 70) / 10).toFixed(1),
-        otelSpansSec: 2400 + ((hwTick * 23) % 100),
-        qopsThroughput: +(850 + ((hwTick * 9) % 40) / 10).toFixed(1),
+        networkRxMbps: +(82 + Math.random() * 5).toFixed(1),
+        networkTxMbps: +(110 + Math.random() * 7).toFixed(1),
+        otelSpansSec: Math.round(2400 + Math.random() * 100),
+        qopsThroughput: +(850 + Math.random() * 4).toFixed(1),
         coherencePct: 99.98,
         syndromeRate: 0.0004,
         circuitBreakers: 'ARMED_FAIL_CLOSED',
@@ -225,14 +223,14 @@ export const ConsoleHardwareTelemetryGrid: React.FC<ConsoleHardwareTelemetryGrid
       ]);
 
       // Fluctuate simulated quantum cooling power draw
-      const amps = +(14.6 + ((hwTick * 7) % 40) / 100).toFixed(2);
+      const amps = +(14.6 + Math.random() * 0.4).toFixed(2);
       const kw = +((amps * 240) / 1000).toFixed(2);
       setPowerState((prev) => ({
         ...prev,
         currentDrawAmps: amps,
         powerKw: kw,
-        voltageVolts: +(240.0 + (((hwTick * 9) % 40) - 20) / 100).toFixed(1),
-        tempCryoMk: +(14.95 + ((hwTick * 3) % 6) / 100).toFixed(2),
+        voltageVolts: +(240.0 + (Math.random() * 0.4 - 0.2)).toFixed(1),
+        tempCryoMk: +(14.95 + Math.random() * 0.06).toFixed(2),
       }));
     }, 1000);
 

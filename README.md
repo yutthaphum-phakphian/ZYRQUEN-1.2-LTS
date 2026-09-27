@@ -59,15 +59,8 @@ ZYRQUEN Ω™ is a sovereign autonomous SRE and Technical Architect agent engine
 ### Installation & Development
 
 ```bash
-# Option 1: Clone via HTTPS
-git clone https://github.com/yutthaphum-phakphian/ZYRQUEN-1.2-LTS.git
-
-# Option 2: Clone via SSH
-git clone git@github.com:yutthaphum-phakphian/ZYRQUEN-1.2-LTS.git
-
-# Option 3: Clone via GitHub CLI
-gh repo clone yutthaphum-phakphian/ZYRQUEN-1.2-LTS
-
+# Clone repository
+git clone https://github.com/yuththaphum-phakphian/ZYRQUEN-1.2-LTS.git
 cd ZYRQUEN-1.2-LTS
 
 # Install dependencies

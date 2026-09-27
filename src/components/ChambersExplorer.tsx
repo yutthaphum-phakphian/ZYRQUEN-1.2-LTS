@@ -54,8 +54,8 @@ export const CHAMBER_GROUPS: ChamberGroup[] = [
     idx: 4,
     nameEn: '4. DATA / INTELLIGENCE',
     nameTh: 'ข้อมูลและปัญญาประดิษฐ์',
-    roomsCount: 4,
-    chamberNums: ['00', '07', '11', '18'],
+    roomsCount: 3,
+    chamberNums: ['00', '07', '11'],
   },
   {
     id: 'grp-5',
@@ -95,7 +95,6 @@ export const CHAMBER_METAS: Record<string, ChamberMetaInfo> = {
   '15': { num: '15', codeName: 'QUANTUM FUEL CORE', thaiSub: 'แหล่งพลังงานฟิวชั่น Cryo', badgeType: 'TELEMETRY', badgeColor: 'border-blue-600/50 bg-blue-950/40 text-blue-300' },
   '16': { num: '16', codeName: 'RUNTIME DECK FROZEN', thaiSub: 'รันไทม์เด็คระดับ Core', badgeType: 'FROZEN', badgeColor: 'border-amber-600/50 bg-amber-950/40 text-amber-300' },
   '17': { num: '17', codeName: 'AUDIT TRAIL LEDGER', thaiSub: 'บัญชีรอยประทับตรวจสอบ Replay', badgeType: 'CANONICAL', badgeColor: 'border-emerald-600/50 bg-emerald-950/40 text-emerald-300' },
-  '18': { num: '18', codeName: 'NEURAL SENTINEL', thaiSub: 'ผู้พิทักษ์โครงข่ายประสาท 1.33fs', badgeType: 'TELEMETRY', badgeColor: 'border-cyan-600/50 bg-cyan-950/40 text-cyan-300' },
 };
 
 // 17 Canonical Modules Toggle Items

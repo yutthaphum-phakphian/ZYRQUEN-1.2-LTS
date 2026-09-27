@@ -29,7 +29,6 @@ export class SovereignTelemetryStreamer {
   private listeners: Array<(frame: TelemetryFrame) => void> = [];
   private currentFrame: TelemetryFrame;
   private isLoadTesting = false;
-  private frameSeq = 0;
 
   public constructor(url = 'wss://nexus.zyrquen.internal/v4/omni-stream') {
     this.url = url;
@@ -37,18 +36,16 @@ export class SovereignTelemetryStreamer {
   }
 
   private generateFrame(customQops?: number): TelemetryFrame {
-    this.frameSeq += 1;
-    const seqMod = (849202 + this.frameSeq * 37) % 100;
-    const jitter = ((seqMod % 60) - 30) / 1000;
-    const latency = parseFloat((0.26 + (seqMod % 7) * 0.01).toFixed(3)); // < 0.35ms guaranteed
-    const riskScore = parseFloat((0.01 + (seqMod % 20) * 0.001).toFixed(3)); // 0.01% - 0.03% nominal
+    const jitter = Math.random() * 0.06 - 0.03;
+    const latency = parseFloat((0.26 + Math.random() * 0.07).toFixed(3)); // < 0.35ms guaranteed
+    const riskScore = parseFloat((0.01 + Math.random() * 0.02).toFixed(3)); // 0.01% - 0.03% nominal
 
     return {
       timestamp: new Date().toISOString(),
       blockHeight: 849202,
-      cryoTemperature: parseFloat((14.98 + (((seqMod % 40) - 20) / 1000)).toFixed(3)),
+      cryoTemperature: parseFloat((14.98 + (Math.random() * 0.04 - 0.02)).toFixed(3)),
       coherenceScore: 0.9989,
-      qopsThroughput: customQops ?? parseFloat((851.9 + (((seqMod % 80) - 40) / 10)).toFixed(1)),
+      qopsThroughput: customQops ?? parseFloat((851.9 + (Math.random() * 8 - 4)).toFixed(1)),
       latencyMs: latency,
       protocol: 'mTLS 1.3 (ChaCha20-Poly1305 + Kyber-1024)',
       isCoreFrozen: true,
@@ -111,9 +108,8 @@ export class SovereignTelemetryStreamer {
           return;
         }
 
-        const offset = ((this.frameSeq * 73) % 500) - 250;
-        const simulatedFrame = this.generateFrame(targetRps + offset);
-        simulatedFrame.latencyMs = parseFloat((0.29 + ((this.frameSeq % 4) * 0.01)).toFixed(3));
+        const simulatedFrame = this.generateFrame(targetRps + Math.floor(Math.random() * 500 - 250));
+        simulatedFrame.latencyMs = parseFloat((0.29 + Math.random() * 0.04).toFixed(3));
         this.currentFrame = simulatedFrame;
         this.notify(simulatedFrame);
       }, 200);

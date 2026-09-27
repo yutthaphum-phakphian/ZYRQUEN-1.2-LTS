@@ -205,10 +205,9 @@ export const SovereignLegalConvergence: React.FC = () => {
     playTone(540, 0.08);
 
     setTimeout(() => {
-      const nowMs = Date.now();
       const newTx: CustodyHandoverTx = {
-        id: `tx-sec28-${nowMs.toString().slice(-4)}`,
-        txHash: `0x909ab814...${((nowMs ^ 849202) >>> 0).toString(16).slice(-4)}`,
+        id: `tx-sec28-${Date.now().toString().slice(-4)}`,
+        txHash: `0x909ab814...${Math.random().toString(16).slice(2, 6)}`,
         timestamp: new Date().toLocaleTimeString('en-GB') + ' ICT',
         custodianFrom: 'นายยุทธภูมิ พากเพียร (CUST-TH-01)',
         custodianTo: 'ธนพล เกียรติไพศาล (CUST-TH-04)',

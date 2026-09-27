@@ -24,11 +24,7 @@ import {
   Eye,
   Code2,
   QrCode,
-  AlertTriangle,
-  Zap,
 } from 'lucide-react';
-import { AUTHORITATIVE_CONSTANTS } from '../../lib/canonicalResolver';
-import { Panel } from '../common/Panel';
 import { CustodianQRValidator } from '../system/CustodianQRValidator';
 import { HardwareSealQRScanner } from '../security/HardwareSealQRScanner';
 import { CourtEvidenceQR } from '../CourtEvidenceQR';
@@ -79,20 +75,8 @@ import { UtimacoSecondaryHSMGauge } from '../UtimacoSecondaryHSMGauge';
 import { VerificationPassRatesChart } from '../VerificationPassRatesChart';
 import { LiveFlowVisualizerView } from './Security/LiveFlowVisualizerView';
 import { SecurityAnalyticsDashboard } from '../SecurityAnalyticsDashboard';
-import {
-  hsmTamperService,
-  HsmRealtimeDiagnosticReport,
-  HsmHardwareTransportState,
-} from '../../services/hsmTamperService';
-import { webAuthnService } from '../../services/webAuthnService';
-import { verifyCanonicalReconciliation } from '../../utils/authoritativeState';
-import {
-  AUTHORITATIVE_BLOCK_HEIGHT,
-  AUTHORITATIVE_MERKLE_ROOT,
-} from '../../sovereign.config';
 
 export type SecuritySubTab =
-  | 'hsm-quorum-diagnostics'
   | 'security-analytics'
   | 'court-evidence-qr'
   | 'hardware-seal-scanner'
@@ -136,20 +120,6 @@ interface SecurityViewProps {
   ) => void;
 }
 
-export interface HsmNode {
-  id: number;
-  label: string;
-  isHardware: boolean;
-  serialNumber: string;
-}
-
-export const HSM_NODES_DATA: HsmNode[] = Array.from({ length: AUTHORITATIVE_CONSTANTS.HSM_TOTAL_NODES }, (_, i) => ({
-  id: i + 1,
-  label: `HSM-NODE-${(i + 1).toString().padStart(2, '0')}`,
-  isHardware: i < 8, // 8 Real Hardware HSM, 2 Enclave Simulated
-  serialNumber: `FIPS140-3-L4-00${i + 1}`,
-}));
-
 export const SecurityView: React.FC<SecurityViewProps> = ({
   initialSubTab = 'legal-convergence',
   onAddSystemEvent,
@@ -164,124 +134,6 @@ export const SecurityView: React.FC<SecurityViewProps> = ({
   const [isPdfPreviewOpen, setIsPdfPreviewOpen] = useState(false);
   const [isQrValidatorOpen, setIsQrValidatorOpen] = useState(false);
   const [isHardwareSealScannerOpen, setIsHardwareSealScannerOpen] = useState(false);
-
-  // Hardware HSM Quorum Monitor states (activeHsmNodes, disabledHsmNodeIds, handshakingNodeId)
-  const [activeHsmNodes, setActiveHsmNodes] = useState<number[]>([1, 2, 3, 4, 5, 6, 7, 8, 9, 10]);
-  const [disabledHsmNodeIds, setDisabledHsmNodeIds] = useState<number[]>([]);
-  const [handshakingNodeId, setHandshakingNodeId] = useState<number | null>(null);
-
-  const handleHandshakeTrigger = (nodeId: number) => {
-    if (disabledHsmNodeIds.includes(nodeId)) return;
-    playTone(720, 0.05);
-    setHandshakingNodeId(nodeId);
-    setTimeout(() => {
-      setHandshakingNodeId(null);
-      setActiveHsmNodes((prev) => (prev.includes(nodeId) ? prev : [...prev, nodeId]));
-      playAuditChime();
-    }, 1200);
-  };
-
-  const toggleNodeState = (nodeId: number) => {
-    playTone(580, 0.04);
-    if (disabledHsmNodeIds.includes(nodeId)) {
-      setDisabledHsmNodeIds((prev) => prev.filter((id) => id !== nodeId));
-      setActiveHsmNodes((prev) => (prev.includes(nodeId) ? prev : [...prev, nodeId]));
-    } else {
-      setDisabledHsmNodeIds((prev) => [...prev, nodeId]);
-      setActiveHsmNodes((prev) => prev.filter((id) => id !== nodeId));
-    }
-  };
-
-  const activeCount = activeHsmNodes.length;
-  const isQuorumReached = activeCount >= AUTHORITATIVE_CONSTANTS.HSM_QUORUM_THRESHOLD;
-
-  // Real-Time HSM Quorum & Hardware Interface Diagnostics State
-  const [hsmDiagnostics, setHsmDiagnostics] = useState<HsmRealtimeDiagnosticReport | null>(null);
-  const [isProbingHsm, setIsProbingHsm] = useState<boolean>(false);
-  const [autoPollHsm, setAutoPollHsm] = useState<boolean>(true);
-  const [showSlotMatrix, setShowSlotMatrix] = useState<boolean>(true);
-  const [fidoHandshakeStatus, setFidoHandshakeStatus] = useState<string | null>(null);
-  const canonicalReconciliation = verifyCanonicalReconciliation();
-
-  const runHardwareHsmProbe = useCallback(async (manual = false) => {
-    setIsProbingHsm(true);
-    if (manual) {
-      playTone(680, 0.05);
-    }
-    try {
-      const report = await hsmTamperService.probeHardwareHsmInterfaces();
-      setHsmDiagnostics(report);
-      if (manual) {
-        playAuditChime();
-      }
-    } catch (err) {
-      console.error('HSM hardware probe error:', err);
-    } finally {
-      setIsProbingHsm(false);
-    }
-  }, []);
-
-  const handleTriggerHardwareKeyHandshake = async () => {
-    playTone(760, 0.06);
-    setFidoHandshakeStatus('ATTEMPTING HARDWARE WEBAUTHN / USB-HID HANDSHAKE...');
-    try {
-      const hasPlatform = await webAuthnService.isPlatformBiometricsAvailable();
-      await runHardwareHsmProbe(false);
-      setFidoHandshakeStatus(
-        hasPlatform
-          ? `HARDWARE AUTHENTICATOR DETECTED • 10/10 DECA-KEY QUORUM VERIFIED ON BLOCK #${AUTHORITATIVE_BLOCK_HEIGHT}`
-          : `ROAMING CTAP2 / ENCLAVE BRIDGE VERIFIED • QUORUM 10/10 AT ROOT ${AUTHORITATIVE_MERKLE_ROOT.slice(0, 12)}...`
-      );
-      playAuditChime();
-    } catch {
-      setFidoHandshakeStatus('HARDWARE BUS PROBED • STANDBY ENCLAVE BRIDGE ACTIVE (FAIL-CLOSED Δ0.00%)');
-    }
-  };
-
-  useEffect(() => {
-    runHardwareHsmProbe(false);
-  }, [runHardwareHsmProbe]);
-
-  useEffect(() => {
-    if (!autoPollHsm) return;
-    const timer = setInterval(() => {
-      runHardwareHsmProbe(false);
-    }, 5000);
-    return () => clearInterval(timer);
-  }, [autoPollHsm, runHardwareHsmProbe]);
-
-  const renderTransportBadge = (state: HsmHardwareTransportState, probing: boolean) => {
-    if (probing) {
-      return (
-        <span className="inline-flex items-center gap-1.5 text-[11px] font-mono text-cyan-300">
-          <span className="w-2 h-2 rounded-full bg-cyan-400 animate-ping" />
-          <span>CONNECTING TO HSM BUS...</span>
-        </span>
-      );
-    }
-    if (state === 'HARDWARE_LINKED') {
-      return (
-        <span className="inline-flex items-center gap-1.5 text-[11px] font-mono text-emerald-300">
-          <span className="w-2 h-2 rounded-full bg-emerald-400" />
-          <span>HARDWARE LINKED</span>
-        </span>
-      );
-    }
-    if (state === 'ENCLAVE_BRIDGE_ACTIVE') {
-      return (
-        <span className="inline-flex items-center gap-1.5 text-[11px] font-mono text-cyan-300">
-          <span className="w-2 h-2 rounded-full bg-cyan-400" />
-          <span>ENCLAVE BRIDGE ACTIVE</span>
-        </span>
-      );
-    }
-    return (
-      <span className="inline-flex items-center gap-1.5 text-[11px] font-mono text-amber-300">
-        <span className="w-2 h-2 rounded-full bg-amber-400" />
-        <span>STANDBY FALLBACK</span>
-      </span>
-    );
-  };
 
   // Live shared states for G11, G12, and G13
   const [liveCustodianCount, setLiveCustodianCount] = useState<number>(10);
@@ -521,289 +373,10 @@ export const SecurityView: React.FC<SecurityViewProps> = ({
         </div>
       </div>
 
-      {/* Hardware HSM Quorum Monitor Panel (10 Deca-Key Nodes: HW HSM vs SIMULATED & Handshake Control) */}
-      <Panel
-        title="Hardware HSM Quorum Monitor"
-        subtitle={`Audit Authority: ${AUTHORITATIVE_CONSTANTS.SYSTEM_AUDIT_ID} | Quorum Standard: ${AUTHORITATIVE_CONSTANTS.HSM_QUORUM_THRESHOLD}/${AUTHORITATIVE_CONSTANTS.HSM_TOTAL_NODES} Deca-Key | Block #${AUTHORITATIVE_CONSTANTS.GENESIS_BLOCK_HEIGHT}`}
-        rightSlot={
-          <div className="flex flex-wrap items-center gap-2">
-            <span className="text-xs text-zinc-400 font-mono">
-              PQC Dilithium-5 / SPHINCS+ Hardware Enclaves
-            </span>
-            <span
-              className={`px-3 py-1 rounded-lg text-xs font-mono font-semibold border ${
-                isQuorumReached
-                  ? 'bg-emerald-950/60 border-emerald-500/40 text-emerald-300'
-                  : 'bg-rose-950/60 border-rose-500/40 text-rose-300'
-              }`}
-            >
-              QUORUM STATUS: {activeCount}/{AUTHORITATIVE_CONSTANTS.HSM_TOTAL_NODES}{' '}
-              {isQuorumReached ? 'VALID' : 'QUORUM DEGRADED'}
-            </span>
-          </div>
-        }
-      >
-        <div className="grid grid-cols-2 md:grid-cols-5 gap-3">
-          {HSM_NODES_DATA.map((node) => {
-            const isActive = activeHsmNodes.includes(node.id);
-            const isDisabled = disabledHsmNodeIds.includes(node.id);
-            const isHandshaking = handshakingNodeId === node.id;
-
-            return (
-              <div
-                key={node.id}
-                className={`p-3 rounded-lg border transition-all duration-200 flex flex-col justify-between ${
-                  isDisabled
-                    ? 'bg-zinc-900/40 border-zinc-800/80 opacity-50'
-                    : isHandshaking
-                    ? 'bg-amber-950/40 border-amber-500/60 shadow-lg shadow-amber-500/10 animate-pulse'
-                    : isActive
-                    ? 'bg-emerald-950/20 border-emerald-500/30 hover:border-emerald-500/60'
-                    : 'bg-zinc-900 border-zinc-800'
-                }`}
-              >
-                <div className="flex justify-between items-start mb-2">
-                  <div className="flex items-center gap-1.5">
-                    <Key className={`w-3.5 h-3.5 ${isActive ? 'text-emerald-400' : 'text-zinc-500'}`} />
-                    <span className="text-xs font-mono font-bold">{node.label}</span>
-                  </div>
-                  <span
-                    className={`text-[10px] px-1.5 py-0.5 rounded uppercase font-mono ${
-                      node.isHardware
-                        ? 'bg-blue-950 border border-blue-800 text-blue-300'
-                        : 'bg-purple-950 border border-purple-800 text-purple-300'
-                    }`}
-                  >
-                    {node.isHardware ? 'HW HSM' : 'SIMULATED'}
-                  </span>
-                </div>
-
-                <div className="text-[11px] font-mono text-zinc-400 mb-3">
-                  SN: {node.serialNumber}
-                </div>
-
-                <div className="flex items-center justify-between pt-2 border-t border-zinc-800/60">
-                  <span className="flex items-center gap-1 text-[11px] font-mono">
-                    {isHandshaking ? (
-                      <span className="text-amber-400 flex items-center gap-1">
-                        <RefreshCw className="w-3 h-3 animate-spin" /> SYN...
-                      </span>
-                    ) : isActive ? (
-                      <span className="text-emerald-400 flex items-center gap-1">
-                        <CheckCircle2 className="w-3 h-3" /> ONLINE
-                      </span>
-                    ) : (
-                      <span className="text-rose-400 flex items-center gap-1">
-                        <AlertTriangle className="w-3 h-3" /> OFFLINE
-                      </span>
-                    )}
-                  </span>
-
-                  <div className="flex items-center gap-1">
-                    <button
-                      onClick={() => handleHandshakeTrigger(node.id)}
-                      disabled={isDisabled || isHandshaking}
-                      className="p-1 rounded bg-zinc-800 hover:bg-zinc-700 text-zinc-300 disabled:opacity-30 transition-colors cursor-pointer"
-                      title="Trigger Cryptographic Handshake"
-                    >
-                      <Zap className="w-3 h-3 text-amber-400" />
-                    </button>
-                    <button
-                      onClick={() => toggleNodeState(node.id)}
-                      className="p-1 rounded bg-zinc-800 hover:bg-zinc-700 text-zinc-300 transition-colors cursor-pointer"
-                      title={isDisabled ? 'Enable Node' : 'Isolate Node'}
-                    >
-                      <Lock className={`w-3 h-3 ${isDisabled ? 'text-rose-400' : 'text-emerald-400'}`} />
-                    </button>
-                  </div>
-                </div>
-              </div>
-            );
-          })}
-        </div>
-      </Panel>
-
-      {/* Real-Time HSM Quorum & Hardware-Level Interface Diagnostic Panel */}
-      <div className="p-5 sm:p-6 rounded-2xl bg-[#0a0f1e] border border-cyan-500/30 space-y-5 font-mono">
-        <div className="flex flex-col lg:flex-row lg:items-center justify-between gap-4 pb-4 border-b border-white/10">
-          <div className="space-y-1.5">
-            <div className="flex flex-wrap items-center gap-2 text-xs text-cyan-300">
-              <Cpu className={`w-4 h-4 ${isProbingHsm ? 'text-cyan-400 animate-spin' : 'text-emerald-400'}`} />
-              <span className="font-bold text-white uppercase tracking-wider">
-                Real-Time HSM Quorum &amp; Hardware Interface Diagnostic Monitor
-              </span>
-              <span aria-hidden="true" className="text-zinc-600">·</span>
-              {renderTransportBadge(
-                hsmDiagnostics?.overallState || 'ENCLAVE_BRIDGE_ACTIVE',
-                isProbingHsm
-              )}
-              <span aria-hidden="true" className="text-zinc-600">·</span>
-              <span className="text-zinc-400">
-                Quorum: <strong className="text-emerald-300">{hsmDiagnostics?.activeQuorumCount ?? 10}/10</strong> (Req &ge;8/10)
-              </span>
-              <span aria-hidden="true" className="text-zinc-600">·</span>
-              <span className="text-zinc-400">
-                SSoT Parity:{' '}
-                <strong className={canonicalReconciliation.reconciled ? 'text-emerald-300' : 'text-rose-400'}>
-                  {canonicalReconciliation.reconciled
-                    ? `RECONCILED (#${canonicalReconciliation.authoritativeBlockHeight})`
-                    : 'DRIFT DETECTED'}
-                </strong>
-              </span>
-            </div>
-            <p className="text-xs text-zinc-400 max-w-4xl">
-              Live hardware bus telemetry across PKCS#11 mTLS 1.3 Enclave Bridge, W3C WebAuthn/CTAP2 FIDO2 Security Keys, WebHID/WebUSB Physical Tokens, and WebCrypto SHA-256 challenge-response (distinguishing live hardware links from standby enclave fallback).
-            </p>
-          </div>
-
-          <div className="flex flex-wrap items-center gap-2 shrink-0">
-            <button
-              onClick={() => runHardwareHsmProbe(true)}
-              disabled={isProbingHsm}
-              className="px-3.5 py-2 rounded-xl bg-cyan-500 hover:bg-cyan-400 text-slate-950 font-bold text-xs flex items-center gap-2 transition-colors cursor-pointer"
-            >
-              <RefreshCw className={`w-3.5 h-3.5 ${isProbingHsm ? 'animate-spin' : ''}`} />
-              <span>{isProbingHsm ? 'Probing HSM Bus...' : 'Probe Hardware HSM Interfaces'}</span>
-            </button>
-
-            <button
-              onClick={handleTriggerHardwareKeyHandshake}
-              className="px-3.5 py-2 rounded-xl bg-white/5 hover:bg-white/10 border border-white/15 text-zinc-200 font-bold text-xs flex items-center gap-2 transition-colors cursor-pointer"
-            >
-              <Key className="w-3.5 h-3.5 text-amber-400" />
-              <span>Test FIDO2 / USB Handshake</span>
-            </button>
-
-            <button
-              onClick={() => {
-                playTone(600, 0.03);
-                setAutoPollHsm(!autoPollHsm);
-              }}
-              className={`px-3 py-2 rounded-xl border text-xs font-semibold transition-colors cursor-pointer ${
-                autoPollHsm
-                  ? 'bg-emerald-950/60 border-emerald-500/40 text-emerald-300'
-                  : 'bg-black/40 border-white/10 text-zinc-400'
-              }`}
-            >
-              {autoPollHsm ? 'Auto-Poll: ON (5s)' : 'Auto-Poll: PAUSED'}
-            </button>
-
-            <button
-              onClick={() => {
-                playTone(580, 0.03);
-                setShowSlotMatrix(!showSlotMatrix);
-              }}
-              className="px-3 py-2 rounded-xl bg-black/40 hover:bg-white/5 border border-white/10 text-xs text-zinc-300 cursor-pointer"
-            >
-              {showSlotMatrix ? 'Hide 10-Slot Matrix' : 'Show 10-Slot Matrix'}
-            </button>
-          </div>
-        </div>
-
-        {fidoHandshakeStatus && (
-          <div className="p-3 rounded-xl bg-black/50 border border-cyan-500/30 flex items-center justify-between gap-3 text-xs text-cyan-200">
-            <div className="flex items-center gap-2">
-              <Fingerprint className="w-4 h-4 text-cyan-400 shrink-0" />
-              <span>{fidoHandshakeStatus}</span>
-            </div>
-            <button
-              onClick={() => setFidoHandshakeStatus(null)}
-              className="text-zinc-400 hover:text-white text-[11px]"
-            >
-              Dismiss
-            </button>
-          </div>
-        )}
-
-        {/* 4 Hardware-Level Interface Transport Cards */}
-        <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-4 gap-3">
-          {(hsmDiagnostics?.interfaces || []).map((iface) => (
-            <div
-              key={iface.interfaceId}
-              className="p-3.5 rounded-xl bg-black/40 border border-white/10 space-y-2 flex flex-col justify-between"
-            >
-              <div className="space-y-1">
-                <div className="flex items-center justify-between gap-2">
-                  <span className="text-xs font-bold text-white truncate">{iface.name}</span>
-                  <span className="text-[11px] text-cyan-300 shrink-0">{iface.latencyMs} ms</span>
-                </div>
-                <div className="text-[10px] text-zinc-500">{iface.protocol}</div>
-              </div>
-
-              <p className="text-[11px] text-zinc-300 leading-relaxed">{iface.detail}</p>
-
-              <div className="pt-2 border-t border-white/5 flex items-center justify-between text-[10px]">
-                {renderTransportBadge(iface.state, isProbingHsm)}
-                <span className="text-zinc-500">
-                  {iface.hardwareDetected ? 'HW Interface Verified' : 'Configured Fallback'}
-                </span>
-              </div>
-            </div>
-          ))}
-        </div>
-
-        {/* 10-Slot Deca-Key HSM Quorum Live Connection Matrix */}
-        {showSlotMatrix && hsmDiagnostics && (
-          <div className="space-y-3 pt-2">
-            <div className="flex flex-wrap items-center justify-between gap-2 text-xs">
-              <span className="text-zinc-300 font-bold">
-                DECA-KEY 10-SLOT HSM HARDWARE CONNECTION MATRIX (TC-01 .. TC-10)
-              </span>
-              <span className="text-[11px] text-zinc-400">
-                Anchored to Block #{hsmDiagnostics.canonicalBlockHeight} · Merkle {hsmDiagnostics.canonicalMerkleRoot.slice(0, 16)}...
-              </span>
-            </div>
-
-            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-2.5">
-              {hsmDiagnostics.slots.map((slot) => (
-                <div
-                  key={slot.councilCode}
-                  className="p-3 rounded-xl bg-white/[0.02] border border-white/8 space-y-1.5 text-xs"
-                >
-                  <div className="flex items-center justify-between">
-                    <span className="font-bold text-cyan-300">
-                      {slot.councilCode} · {slot.epId}
-                    </span>
-                    <span className="text-[10px] text-emerald-300">{slot.handshakeLatencyMs} ms</span>
-                  </div>
-                  <div className="text-[11px] text-white font-medium truncate">{slot.custodianNameTh}</div>
-                  <div className="text-[10px] text-zinc-400 truncate" title={slot.enclaveModel}>
-                    {slot.enclaveModel}
-                  </div>
-                  <div className="flex items-center justify-between text-[10px] text-zinc-500 pt-1 border-t border-white/5">
-                    <span>{slot.pqcScheme}</span>
-                    <span>{slot.cryoTempMk} mK</span>
-                  </div>
-                  <div className="flex items-center justify-between pt-0.5">
-                    {renderTransportBadge(slot.connectionState, isProbingHsm)}
-                  </div>
-                </div>
-              ))}
-            </div>
-          </div>
-        )}
-      </div>
 
       {/* Unified Tab Switcher Navigation Bar */}
       <div className="flex items-center bg-[#070914]/90 backdrop-blur-xl border border-cyan-500/20 rounded-2xl p-2 font-mono text-xs shadow-inner flex-wrap gap-2 relative overflow-hidden">
         <div className="absolute inset-0 bg-gradient-to-r from-cyan-500/5 via-violet-500/5 to-transparent pointer-events-none" />
-
-        <button
-          onClick={() => {
-            playTone(690, 0.04);
-            setActiveTab('hsm-quorum-diagnostics');
-            setShowSlotMatrix(true);
-            runHardwareHsmProbe(true);
-          }}
-          className={`relative z-10 px-4 py-2.5 rounded-xl flex items-center gap-2 transition-all font-bold tracking-wide ${
-            activeTab === 'hsm-quorum-diagnostics'
-              ? 'bg-cyan-500/30 text-white border border-cyan-400/60'
-              : 'text-cyan-300/80 hover:text-cyan-200 hover:bg-cyan-500/10 border border-cyan-500/20'
-          }`}
-        >
-          <Cpu className={`w-4 h-4 ${isProbingHsm ? 'text-cyan-300 animate-spin' : 'text-emerald-400'}`} />
-          <span>HSM Quorum Live Diagnostics (10/10 Bus)</span>
-        </button>
 
         <button
           onClick={() => {
@@ -1234,14 +807,6 @@ export const SecurityView: React.FC<SecurityViewProps> = ({
         <div className="p-4 rounded-2xl bg-emerald-500/10 border border-emerald-500/20 text-emerald-300 text-xs font-mono flex items-center gap-2 animate-in fade-in">
           <CheckCircle2 className="w-4 h-4 shrink-0" />
           <span>{scanResult}</span>
-        </div>
-      )}
-
-      {/* HSM Quorum Live Hardware Diagnostics Dedicated View */}
-      {activeTab === 'hsm-quorum-diagnostics' && (
-        <div className="space-y-6 animate-in fade-in duration-300">
-          <CustodianQuorumRegistry onQuorumChange={handleQuorumChange} />
-          <UtimacoSecondaryHSMGauge />
         </div>
       )}
 

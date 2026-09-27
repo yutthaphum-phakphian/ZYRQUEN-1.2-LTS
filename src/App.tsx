@@ -103,11 +103,6 @@ import { EmergencySovereignLockdown } from '@/components/EmergencySovereignLockd
 import { SovereignWatermarkOverlay } from '@/components/SovereignWatermark';
 import { LiveQuantumEntropyTicker } from '@/components/LiveQuantumEntropyTicker';
 import { ToastNotification, ToastMessage } from '@/components/ToastNotification';
-import { RemediationProgressToast } from '@/components/RemediationProgressToast';
-import {
-  NodeRemediationEngine,
-  type RemediationProgressPayload,
-} from '@/services/NodeRemediationEngine';
 import {
   SsotDriftWarning,
   SsotDriftToggleButton,
@@ -711,9 +706,8 @@ function createNormalizedSystemEvent(
     metaHash = `merkle:root:ingest:${Date.now().toString(16)}`;
   }
 
-  const nowMs = Date.now();
   return {
-    id: `evt-${nowMs}-${(nowMs + 849202 + (sealCounter ?? 14902)) % 10000}`,
+    id: `evt-${Date.now()}-${Math.floor(Math.random() * 10000)}`,
     type: payload.type,
     title: payload.title.trim(),
     description: payload.description.trim(),
@@ -975,13 +969,11 @@ function SovereignAppContent() {
   const [isAudioActive, setIsAudioActive] = useState(false);
   const [activeHsmNodes, setActiveHsmNodes] = useState<number>(10);
   const [disabledHsmNodeIds, setDisabledHsmNodeIds] = useState<Record<string, boolean>>({});
-  const [isHsmHistoryExpanded, setIsHsmHistoryExpanded] = useState<boolean>(false);
+  const [isHsmHistoryExpanded, setIsHsmHistoryExpanded] = useState<boolean>(true);
 
   const [toasts, setToasts] = useState<ToastMessage[]>([]);
-  const toastSeqRef = useRef(0);
   const showToast = useCallback((message: string, type: ToastMessage['type'] = 'info') => {
-    toastSeqRef.current += 1;
-    const id = `tst-${Date.now().toString(36)}-${toastSeqRef.current}`;
+    const id = Math.random().toString(36).substring(2, 9);
     setToasts((prev) => [...prev, { id, message, type }]);
     setTimeout(() => {
       setToasts((prev) => prev.filter((t) => t.id !== id));
@@ -1009,17 +1001,6 @@ function SovereignAppContent() {
 
   // Connect to Node.js WebSocket Notification Service and pipe incoming alerts to toasts
   useNotificationWebSocket(showToast);
-
-  // Subscribe to NodeRemediationEngine to automatically surface RemediationProgressToast for any node
-  const [remediationToastPayload, setRemediationToastPayload] =
-    useState<RemediationProgressPayload | null>(null);
-
-  useEffect(() => {
-    const unsubscribe = NodeRemediationEngine.subscribeProgress((payload) => {
-      setRemediationToastPayload(payload);
-    });
-    return unsubscribe;
-  }, []);
 
   // Auto-open Forensic Master Dossier Modal on dedicated legal routes
   useEffect(() => {
@@ -1421,13 +1402,12 @@ function SovereignAppContent() {
         if (isSystemActivityFrozenRef.current) return;
 
         const currentSnaps = snapshotsRef.current;
-        const snapSeed = record.snapshotNumber + currentSnaps.length;
         const newSnap = createTelemetrySnapshot(
           {
-            core0: 41 + (snapSeed % 5),
-            core1: 39 + ((snapSeed * 3) % 4),
-            core2: 43 + ((snapSeed * 7) % 6),
-            core3: 38 + ((snapSeed * 11) % 5),
+            core0: 41 + Math.floor(Math.random() * 5),
+            core1: 39 + Math.floor(Math.random() * 4),
+            core2: 43 + Math.floor(Math.random() * 6),
+            core3: 38 + Math.floor(Math.random() * 5),
           },
           currentSnaps.length,
           currentSnaps[0]?.sealedHash
@@ -2469,9 +2449,6 @@ function SovereignAppContent() {
           selectedChamberId={selectedChamberId}
           onSelectChamber={setSelectedChamberId}
           liveCryo={14.98}
-          onOpenCommandSearch={() => setIsCommandSearchOpen(true)}
-          onOpenEventsSidebar={() => setIsEventsSidebarOpen((prev) => !prev)}
-          onOpenShortcuts={() => setIsShortcutsOpen(true)}
         />
 
         {/* Main Content Area with Sliding Curtain OS Entrance Transitions */}
@@ -2605,11 +2582,66 @@ function SovereignAppContent() {
                               <ShieldCheck className="w-4 h-4" />
                             </div>
                             <div className="min-w-0">
-                              <div className="font-bold text-white flex items-center gap-1.5 flex-wrap">
+                              <div className="font-bold text-white flex items-center gap-2 flex-wrap">
                                 <span>VERIFICATION GATE</span>
-                                <span className="px-1.5 py-0.5 rounded bg-emerald-500/20 text-emerald-300 text-[9px] border border-emerald-500/40 font-mono">
-                                  {verificationGateStatus.status} • MAINNET LIVE
-                                </span>
+                                {/* SVG Circular Progress Ring Visualizer (10/10 HSM Node Health Percentage: 0% to 100% dynamic fill) */}
+                                <div
+                                  className="inline-flex items-center gap-1.5 px-2 py-0.5 rounded-full bg-zinc-950/90 border border-cyan-500/40 shadow-inner group/hsm-ring"
+                                  title={`10/10 HSM Health: ${activeHsmNodes}/10 Nodes Online (${((activeHsmNodes / 10) * 100).toFixed(0)}%)`}
+                                >
+                                  <div className="relative w-5 h-5 flex items-center justify-center shrink-0">
+                                    <svg className="w-5 h-5 -rotate-90" viewBox="0 0 24 24">
+                                      <circle
+                                        cx="12"
+                                        cy="12"
+                                        r="9"
+                                        className="stroke-zinc-800"
+                                        strokeWidth="2.5"
+                                        fill="transparent"
+                                      />
+                                      <circle
+                                        cx="12"
+                                        cy="12"
+                                        r="9"
+                                        className={`${
+                                          activeHsmNodes === 10
+                                            ? 'stroke-emerald-400 drop-shadow-[0_0_4px_rgba(52,211,153,0.85)]'
+                                            : activeHsmNodes >= 8
+                                            ? 'stroke-amber-400 drop-shadow-[0_0_4px_rgba(251,191,36,0.85)]'
+                                            : 'stroke-rose-500 drop-shadow-[0_0_4px_rgba(244,63,94,0.85)]'
+                                        } transition-all duration-500 ease-out`}
+                                        strokeWidth="2.5"
+                                        strokeDasharray={2 * Math.PI * 9}
+                                        strokeDashoffset={2 * Math.PI * 9 * (1 - activeHsmNodes / 10)}
+                                        strokeLinecap="round"
+                                        fill="transparent"
+                                      />
+                                    </svg>
+                                    <span
+                                      className={`absolute text-[7px] font-mono font-black ${
+                                        activeHsmNodes === 10
+                                          ? 'text-emerald-300'
+                                          : activeHsmNodes >= 8
+                                          ? 'text-amber-300'
+                                          : 'text-rose-400'
+                                      }`}
+                                    >
+                                      {((activeHsmNodes / 10) * 100).toFixed(0)}%
+                                    </span>
+                                  </div>
+                                  <span className="text-[9px] font-mono font-bold text-zinc-100 flex items-center gap-1">
+                                    <span
+                                      className={`w-1.5 h-1.5 rounded-full ${
+                                        activeHsmNodes === 10
+                                          ? 'bg-emerald-400 animate-pulse'
+                                          : activeHsmNodes >= 8
+                                          ? 'bg-amber-400'
+                                          : 'bg-rose-500'
+                                      }`}
+                                    />
+                                    {activeHsmNodes}/10 HSM
+                                  </span>
+                                </div>
                                 {isGateTooltipPinned && (
                                   <span className="px-1.5 py-0.5 rounded-full bg-cyan-500/20 text-cyan-300 text-[9px] border border-cyan-400/50 font-mono font-bold flex items-center gap-1 shadow-[0_0_8px_rgba(6,182,212,0.3)] animate-pulse">
                                     <Pin className="w-2.5 h-2.5 text-cyan-300 rotate-45" />
@@ -3686,16 +3718,6 @@ function SovereignAppContent() {
 
       {/* Certificate Modal */}
       <ToastNotification toasts={toasts} removeToast={removeToast} />
-      <RemediationProgressToast
-        isOpen={remediationToastPayload ? true : undefined}
-        nodeId={remediationToastPayload?.nodeId}
-        phase={remediationToastPayload?.phase}
-        progressPercent={remediationToastPayload?.progressPercent}
-        statusMessage={remediationToastPayload?.statusMessage}
-        logLine={remediationToastPayload?.logLine}
-        latencyMs={remediationToastPayload?.latencyMs}
-        onDismiss={() => setRemediationToastPayload(null)}
-      />
       <AuditCertificateModal
         isOpen={isCertificateOpen}
         onClose={() => {

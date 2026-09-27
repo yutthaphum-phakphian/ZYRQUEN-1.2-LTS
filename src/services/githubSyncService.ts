@@ -29,9 +29,6 @@ export interface GitHubSyncState {
   remoteGitTreeSha: string;
   remoteBranch: string;
   remoteRepo: string;
-  remoteHttpsUrl: string;
-  remoteSshUrl: string;
-  ghCliCloneCmd: string;
   lastSyncTimestamp: string;
   isSyncing: boolean;
   driftCount: number; // remote - local
@@ -245,10 +242,7 @@ let syncState: GitHubSyncState = {
   localMerkleRoot: CANONICAL_MERKLE_ROOT,
   remoteGitTreeSha: CANONICAL_MERKLE_ROOT,
   remoteBranch: 'origin/main',
-  remoteRepo: 'yutthaphum-phakphian/ZYRQUEN-1.2-LTS',
-  remoteHttpsUrl: 'https://github.com/yutthaphum-phakphian/ZYRQUEN-1.2-LTS.git',
-  remoteSshUrl: 'git@github.com:yutthaphum-phakphian/ZYRQUEN-1.2-LTS.git',
-  ghCliCloneCmd: 'gh repo clone yutthaphum-phakphian/ZYRQUEN-1.2-LTS',
+  remoteRepo: 'yuththaphum-phakphian/ZYRQUEN-1.2-LTS',
   lastSyncTimestamp: new Date().toISOString(),
   isSyncing: false,
   driftCount: 0,

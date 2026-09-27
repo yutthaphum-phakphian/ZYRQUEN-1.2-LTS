@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 """
 ZYRQUEN Ω∞ GitHub Security & Branch Protection Automation Script
-Repo: yutthaphum-phakphian/ZYRQUEN-1.2-LTS
+Repo: yuththaphum-phakphian/ZYRQUEN-1.2-LTS
 Branch: main
 
 This script provides automated checks for GitHub PAT / GITHUB_TOKEN permissions
@@ -11,7 +11,7 @@ and configures strict Branch Protection Rules for the `main` branch.
 import json
 import os
 
-REPO_OWNER = "yutthaphum-phakphian"
+REPO_OWNER = "yuththaphum-phakphian"
 REPO_NAME = "ZYRQUEN-1.2-LTS"
 BRANCH = "main"
 

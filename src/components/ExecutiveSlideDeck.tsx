@@ -220,58 +220,6 @@ export const SLIDES_DATA: SlideItem[] = [
   }
 ];
 
-export interface DeploymentPhaseItem {
-  phase: string;
-  title: string;
-  target: string;
-  metrics: string;
-  legalMapping: string;
-  status: '100% PURE GREEN';
-}
-
-export const PURE_GREEN_DEPLOYMENT_ROADMAP: DeploymentPhaseItem[] = [
-  {
-    phase: 'PHASE 01',
-    title: 'Canonical SSoT Freeze & Genesis Anchor',
-    target: 'Genesis Block #849,202 • 14,902 Seals • Merkle Root 909ab814...',
-    metrics: 'SSoT Drift Δ0 = 0.00% | Object.freeze Immutability',
-    legalMapping: 'พ.ร.บ. ธุรกรรมฯ มาตรา ๙ และ ๒๘ (จพ.๐๑)',
-    status: '100% PURE GREEN',
-  },
-  {
-    phase: 'PHASE 02',
-    title: '10/10 Hardware HSM Quorum & NIST PQC Shield',
-    target: '8 Active Hardware Enclaves + 2 Simulated Fallback Nodes',
-    metrics: 'FIPS 140-3 Level 4 | Dilithium-5 (FIPS 204) + SPHINCS+ (FIPS 205)',
-    legalMapping: 'พ.ร.บ. ธุรกรรมฯ มาตรา ๒๖ Non-Repudiation (จพ.๐๒, จพ.๐๓)',
-    status: '100% PURE GREEN',
-  },
-  {
-    phase: 'PHASE 03',
-    title: 'Chamber 02 Quarantine & Room 18 Neural Sentinel',
-    target: 'WORM Ring-04 Isolation • Anomaly Threshold > 85.0°C / 0.85 Risk',
-    metrics: 'Fail-Closed Cutoff ≤ 1.20 ms | Zero Math.random() Deterministic Engine',
-    legalMapping: 'พ.ร.บ. ความมั่นคงปลอดภัยไซเบอร์ (NCSA CII) มาตรา ๓๕ (จพ.๐๔)',
-    status: '100% PURE GREEN',
-  },
-  {
-    phase: 'PHASE 04',
-    title: '12-Stage Forensic Replay & Telemetry Port 8443',
-    target: 'Real-Time Telemetry Stream Engine • DOMPurify Sanitized DOM',
-    metrics: 'Measured Replay 35.80 ms (SLA < 142.00 ms) | 100-Node Surge Passed',
-    legalMapping: 'ISO/IEC 27037:2012 Digital Evidence Standard (จพ.๐๕, จพ.๐๖)',
-    status: '100% PURE GREEN',
-  },
-  {
-    phase: 'PHASE 05',
-    title: 'Court Dossier จพ.๐๑–๐๗ & PDPA Sec.37 Ratification',
-    target: 'zk-SNARKs PII Zero-Knowledge Redaction & Statutory Exhibits',
-    metrics: '7/7 Court Exhibits Verified | Vitest Integration Suite 100% PASS',
-    legalMapping: 'พ.ร.บ. PDPA พ.ศ. ๒๕๖๒ มาตรา ๓๗ & ป.วิ.พ. มาตรา ๙๔ (จพ.๐๗)',
-    status: '100% PURE GREEN',
-  },
-];
-
 export const ExecutiveSlideDeck: React.FC = () => {
   const [currentSlideIndex, setCurrentSlideIndex] = useState<number>(0);
   const currentSlide = SLIDES_DATA[currentSlideIndex];
@@ -469,57 +417,6 @@ Exported at: ${new Date().toISOString()}`;
             <span className="block text-xs font-black">{idx + 1}</span>
           </button>
         ))}
-      </div>
-
-      {/* 5-Phase PURE GREEN Deployment Roadmap & Statutory Matrix */}
-      <div className="pt-4 border-t border-slate-800 space-y-4">
-        <div className="flex flex-wrap items-center justify-between gap-2">
-          <div>
-            <span className="text-[10px] font-mono font-bold text-emerald-400 uppercase tracking-widest">
-              5-PHASE PURE GREEN DEPLOYMENT ROADMAP (FROZEN v1.2.1 LTS)
-            </span>
-            <h4 className="text-sm font-bold text-white mt-0.5">
-              แผนผังการซิงโครไนซ์ 100.00% และการรับรองพยานหลักฐานตามกฎหมายไทย (จพ.๐๑–๐๗)
-            </h4>
-          </div>
-          <span className="px-2.5 py-1 rounded-lg bg-emerald-950/80 border border-emerald-700/60 text-[10px] font-mono font-bold text-emerald-300">
-            SSoT Δ0 = 0.00% • 100% DETERMINISTIC
-          </span>
-        </div>
-
-        <div className="grid grid-cols-1 md:grid-cols-5 gap-3">
-          {PURE_GREEN_DEPLOYMENT_ROADMAP.map((item) => (
-            <div
-              key={item.phase}
-              className="bg-slate-950/90 border border-slate-800 hover:border-emerald-700/60 rounded-xl p-3.5 flex flex-col justify-between transition space-y-2.5"
-            >
-              <div>
-                <div className="flex items-center justify-between gap-1 mb-1.5">
-                  <span className="text-[10px] font-mono font-black text-cyan-400">
-                    {item.phase}
-                  </span>
-                  <span className="text-[9px] font-mono font-bold px-1.5 py-0.5 rounded bg-emerald-950 text-emerald-300 border border-emerald-800/60">
-                    {item.status}
-                  </span>
-                </div>
-                <div className="text-xs font-bold text-white leading-snug mb-1">
-                  {item.title}
-                </div>
-                <p className="text-[11px] text-slate-400 leading-relaxed">
-                  {item.target}
-                </p>
-              </div>
-              <div className="pt-2 border-t border-slate-900 space-y-1">
-                <div className="text-[10px] font-mono text-amber-300">
-                  {item.metrics}
-                </div>
-                <div className="text-[10px] font-sans text-emerald-400 font-medium">
-                  ⚖️ {item.legalMapping}
-                </div>
-              </div>
-            </div>
-          ))}
-        </div>
       </div>
     </div>
   );

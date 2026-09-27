@@ -63,7 +63,7 @@ export const deriveHistoricalEntropyPoints = (
     const d = new Date(epoch);
     const timeLabel = d.toTimeString().split(' ')[0];
     const harmonic = Math.sin(i * 0.35) * 5.8 + Math.cos(i * 0.18) * 3.2;
-    const stochasticJitter = (((i * 37) % 100) / 100 - 0.5) * 1.8;
+    const stochasticJitter = (Math.random() - 0.5) * 1.8;
     const rawVal = +(52.0 + harmonic + stochasticJitter).toFixed(2);
     const aggregateDrift = Math.max(26.0, Math.min(78.0, rawVal));
     ema = +(ema * 0.75 + aggregateDrift * 0.25).toFixed(2);
@@ -263,16 +263,15 @@ export const AggregateEntropyDriftLineChart: React.FC<AggregateEntropyDriftLineC
       const timestampUtc = d.toISOString();
       const timestampIct = d.toLocaleString('th-TH', { timeZone: 'Asia/Bangkok' }) + ' ICT';
 
-      const tickMod = ((nextEpoch / 1000) * 37) % 100;
       let targetVal = 52.0;
-      let jitter = (tickMod / 100 - 0.5) * 3.6;
+      let jitter = (Math.random() - 0.5) * 3.6;
 
       if (activeAnomaly === 'HIGH_SURGE') {
         targetVal = 74.5;
-        jitter = (tickMod / 100) * 2.8;
+        jitter = Math.random() * 2.8;
       } else if (activeAnomaly === 'LOW_DROP') {
         targetVal = 28.2;
-        jitter = -((tickMod / 100) * 2.0);
+        jitter = -(Math.random() * 2.0);
       } else {
         const cycle = Math.sin(nextEpoch * 0.001) * 7.5 + Math.cos(nextEpoch * 0.0004) * 4.2;
         targetVal = 52.0 + cycle;

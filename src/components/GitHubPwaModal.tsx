@@ -35,45 +35,20 @@ export const GitHubPwaModal: React.FC<GitHubPwaModalProps> = ({ isOpen, onClose 
     setTimeout(() => setCopiedKey(null), 2500);
   };
 
-  const repoEndpoints = [
-    {
-      id: 'https',
-      label: 'HTTPS',
-      value: 'https://github.com/yutthaphum-phakphian/ZYRQUEN-1.2-LTS.git',
-      cloneCmd: 'git clone https://github.com/yutthaphum-phakphian/ZYRQUEN-1.2-LTS.git',
-    },
-    {
-      id: 'ssh',
-      label: 'SSH',
-      value: 'git@github.com:yutthaphum-phakphian/ZYRQUEN-1.2-LTS.git',
-      cloneCmd: 'git clone git@github.com:yutthaphum-phakphian/ZYRQUEN-1.2-LTS.git',
-    },
-    {
-      id: 'gh',
-      label: 'GitHub CLI',
-      value: 'gh repo clone yutthaphum-phakphian/ZYRQUEN-1.2-LTS',
-      cloneCmd: 'gh repo clone yutthaphum-phakphian/ZYRQUEN-1.2-LTS',
-    },
-  ];
-
-  const gitCliScript = `# 1. เริ่มต้นระบบ Git ในโฟลเดอร์โปรเจกต์ (หรือ Clone ด้วย HTTPS / SSH / GitHub CLI)
-# git clone https://github.com/yutthaphum-phakphian/ZYRQUEN-1.2-LTS.git
-# git clone git@github.com:yutthaphum-phakphian/ZYRQUEN-1.2-LTS.git
-# gh repo clone yutthaphum-phakphian/ZYRQUEN-1.2-LTS
+  const gitCliScript = `# 1. เริ่มต้นระบบ Git ในโฟลเดอร์โปรเจกต์
 git init
 
 # 2. เพิ่มไฟล์ทั้งหมดเข้าสเตจ
 git add .
 
 # 3. บันทึก Commit
-git commit -m "feat: integrate RemediationProgressToast (motion/react) into App.tsx for NodeRemediationEngine"
+git commit -m "feat: initial commit from AI Studio with PWA setup"
 
 # 4. เปลี่ยนชื่อบรันช์หลักเป็น main
 git branch -M main
 
-# 5. เชื่อมไปยัง Repository บน GitHub (เลือก HTTPS หรือ SSH)
-git remote add origin https://github.com/yutthaphum-phakphian/ZYRQUEN-1.2-LTS.git
-# หรือใช้ SSH: git remote set-url origin git@github.com:yutthaphum-phakphian/ZYRQUEN-1.2-LTS.git
+# 5. เชื่อมไปยัง Repository บน GitHub (yuththaphum-phakphian/ZYRQUEN-1.2-LTS)
+git remote add origin https://github.com/yuththaphum-phakphian/ZYRQUEN-1.2-LTS.git
 
 # 6. อัปโหลดไฟล์ขึ้น GitHub
 git push -u origin main`;
@@ -155,75 +130,14 @@ git push origin main`;
           {activeTab === 'github' && (
             <div className="space-y-5">
               {/* Context Callout */}
-              <div className="p-4 rounded-xl bg-cyan-950/30 border-cyan-500/20 text-xs text-cyan-200 space-y-2.5 leading-relaxed">
-                <div className="flex flex-wrap items-center justify-between gap-2">
-                  <p className="font-semibold flex items-center gap-1.5 text-cyan-300">
-                    <Info className="w-4 h-4" />
-                    คำแนะนำการนำไฟล์ขึ้น GitHub จากสภาพแวดล้อม AI Studio
-                  </p>
-                  <div className="flex flex-wrap items-center gap-2">
-                    <a
-                      href="https://github.com/yutthaphum-phakphian/ZYRQUEN-1.2-LTS"
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-lg bg-cyan-500/20 hover:bg-cyan-500/30 border border-cyan-500/40 text-cyan-200 font-mono text-[11px] font-bold transition"
-                    >
-                      <Github className="w-3.5 h-3.5" />
-                      <span>Open GitHub Repo</span>
-                      <ExternalLink className="w-3 h-3" />
-                    </a>
-                    <a
-                      href="https://yutthaphum-phakphian.github.io/ZYRQUEN-1.2-LTS/"
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-lg bg-emerald-500/20 hover:bg-emerald-500/30 border border-emerald-500/40 text-emerald-200 font-mono text-[11px] font-bold transition"
-                    >
-                      <span>Open GitHub Pages</span>
-                      <ExternalLink className="w-3 h-3" />
-                    </a>
-                  </div>
-                </div>
+              <div className="p-4 rounded-xl bg-cyan-950/30 border-cyan-500/20 text-xs text-cyan-200 space-y-1.5 leading-relaxed">
+                <p className="font-semibold flex items-center gap-1.5 text-cyan-300">
+                  <Info className="w-4 h-4" />
+                  คำแนะนำการนำไฟล์ขึ้น GitHub จากสภาพแวดล้อม AI Studio
+                </p>
                 <p>
                   เนื่องจากสภาพแวดล้อม AI Studio ทำงานบน Container แบบ Web Simulator จึงแนะนำให้ดาวน์โหลดหรือคัดลอกโฟลเดอร์โปรเจกต์ลงบนเครื่อง หรือส่งออกผ่านเมนู Settings ของ AI Studio แล้วนำขึ้น GitHub ด้วยคำสั่ง Git CLI หรือ Web Upload ดังนี้:
                 </p>
-
-                {/* Canonical Clone & Remote Endpoints (HTTPS / SSH / GitHub CLI) */}
-                <div className="pt-2 space-y-2 border-t border-cyan-500/20">
-                  <span className="text-[11px] font-mono font-bold text-cyan-300 block">
-                    Official Repository Clone &amp; Remote Endpoints (HTTPS / SSH / GitHub CLI):
-                  </span>
-                  <div className="grid grid-cols-1 gap-2">
-                    {repoEndpoints.map((ep) => (
-                      <div
-                        key={ep.id}
-                        className="flex flex-col sm:flex-row sm:items-center justify-between gap-2 p-2.5 rounded-lg bg-black/50 border border-cyan-500/25 font-mono text-[11px]"
-                      >
-                        <div className="flex items-center gap-2 min-w-0">
-                          <span className="px-2 py-0.5 rounded bg-cyan-500/20 border border-cyan-500/40 text-cyan-300 font-bold text-[10px] shrink-0">
-                            {ep.label}
-                          </span>
-                          <code className="text-zinc-200 truncate select-all">{ep.value}</code>
-                        </div>
-                        <div className="flex items-center gap-1.5 shrink-0">
-                          <button
-                            onClick={() => copyToClipboard(ep.value, `ep-url-${ep.id}`)}
-                            className="flex items-center gap-1 px-2 py-1 rounded bg-white/5 hover:bg-white/10 text-zinc-300 border border-white/10 text-[10px] transition cursor-pointer"
-                          >
-                            {copiedKey === `ep-url-${ep.id}` ? <Check className="w-3 h-3 text-emerald-400" /> : <Copy className="w-3 h-3" />}
-                            <span>{copiedKey === `ep-url-${ep.id}` ? 'Copied!' : 'Copy URL'}</span>
-                          </button>
-                          <button
-                            onClick={() => copyToClipboard(ep.cloneCmd, `ep-cmd-${ep.id}`)}
-                            className="flex items-center gap-1 px-2 py-1 rounded bg-cyan-500/15 hover:bg-cyan-500/25 text-cyan-200 border border-cyan-500/30 text-[10px] transition cursor-pointer"
-                          >
-                            {copiedKey === `ep-cmd-${ep.id}` ? <Check className="w-3 h-3 text-emerald-400" /> : <Terminal className="w-3 h-3" />}
-                            <span>{copiedKey === `ep-cmd-${ep.id}` ? 'Copied!' : 'Copy Clone'}</span>
-                          </button>
-                        </div>
-                      </div>
-                    ))}
-                  </div>
-                </div>
               </div>
 
               {/* Method 1: Git CLI */}

@@ -24,12 +24,10 @@ export const QuantumTelemetryOverlay: React.FC = () => {
   useEffect(() => {
     if (!isLive) return;
 
-    let qTick = 0;
     const interval = setInterval(() => {
-      qTick += 1;
       const now = new Date().toLocaleTimeString();
-      const randomQOps = +(1400 + ((qTick * 17) % 5000) / 100).toFixed(2);
-      const latency = +(10 + ((qTick * 13) % 50) / 10).toFixed(1);
+      const randomQOps = +(1400 + Math.random() * 50).toFixed(2);
+      const latency = +(10 + Math.random() * 5).toFixed(1);
 
       setCurrentQOps(randomQOps);
       setHeartbeatStatus(`STABLE (${latency}ms)`);

@@ -8,14 +8,6 @@ export const GitHubSyncWarningNav: React.FC = () => {
   const [syncState, setSyncState] = useState<GitHubSyncState>(githubSyncService.getState());
   const [showDetailModal, setShowDetailModal] = useState(false);
   const [resyncSuccessToast, setResyncSuccessToast] = useState(false);
-  const [copiedEndpoint, setCopiedEndpoint] = useState<string | null>(null);
-
-  const handleCopyEndpoint = (value: string, key: string) => {
-    navigator.clipboard.writeText(value);
-    playTone(840, 0.05);
-    setCopiedEndpoint(key);
-    setTimeout(() => setCopiedEndpoint(null), 2200);
-  };
 
   useEffect(() => {
     const unsubscribe = githubSyncService.subscribe((state) => {
@@ -111,7 +103,7 @@ export const GitHubSyncWarningNav: React.FC = () => {
             <span className="text-[10px] text-zinc-500 hover:text-cyan-300 ml-0.5" title="Inspect sync details">⚙️</span>
             {/* Direct Open GitHub Link button */}
             <a
-              href="https://github.com/yutthaphum-phakphian/ZYRQUEN-1.2-LTS"
+              href="https://github.com/yuththaphum-phakphian/ZYRQUEN-1.2-LTS"
               target="_blank"
               rel="noopener noreferrer"
               onClick={(e) => {
@@ -119,7 +111,7 @@ export const GitHubSyncWarningNav: React.FC = () => {
                 playTone(740, 0.04);
               }}
               className="p-1 rounded-md hover:bg-cyan-500/25 text-cyan-400 hover:text-white transition-all flex items-center gap-0.5 ml-0.5"
-              title="เปิดลิงก์ Canonical GitHub Repository (yutthaphum-phakphian/ZYRQUEN-1.2-LTS)"
+              title="เปิดลิงก์ Canonical GitHub Repository (yuththaphum-phakphian/ZYRQUEN-1.2-LTS)"
             >
               <ExternalLink className="w-3 h-3" />
             </a>
@@ -268,27 +260,17 @@ export const GitHubSyncWarningNav: React.FC = () => {
                 </div>
                 <div className="flex flex-wrap items-center gap-2 pt-1">
                   <a
-                    href="https://github.com/yutthaphum-phakphian/ZYRQUEN-1.2-LTS"
+                    href="https://github.com/yuththaphum-phakphian/ZYRQUEN-1.2-LTS"
                     target="_blank"
                     rel="noopener noreferrer"
                     onClick={() => playTone(780, 0.04)}
                     className="px-3 py-1.5 rounded-lg bg-cyan-500/20 hover:bg-cyan-500/30 border border-cyan-500/40 text-cyan-200 text-xs font-bold flex items-center gap-1.5 transition-all shadow-[0_0_10px_rgba(6,182,212,0.2)]"
                   >
                     <ExternalLink className="w-3.5 h-3.5 text-cyan-400" />
-                    <span>Open Official GitHub Repository (yutthaphum-phakphian/ZYRQUEN-1.2-LTS)</span>
+                    <span>Open Official GitHub Repository (yuththaphum-phakphian/ZYRQUEN-1.2-LTS)</span>
                   </a>
                   <a
-                    href="https://yutthaphum-phakphian.github.io/ZYRQUEN-1.2-LTS/"
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    onClick={() => playTone(820, 0.04)}
-                    className="px-3 py-1.5 rounded-lg bg-emerald-500/20 hover:bg-emerald-500/30 border border-emerald-500/40 text-emerald-200 text-xs font-bold flex items-center gap-1.5 transition-all"
-                  >
-                    <ExternalLink className="w-3.5 h-3.5 text-emerald-400" />
-                    <span>Open GitHub Pages Live App</span>
-                  </a>
-                  <a
-                    href="https://github.com/yutthaphum-phakphian"
+                    href="https://github.com/yuththaphum-phakphian"
                     target="_blank"
                     rel="noopener noreferrer"
                     onClick={() => playTone(740, 0.04)}
@@ -297,38 +279,6 @@ export const GitHubSyncWarningNav: React.FC = () => {
                     <Github className="w-3.5 h-3.5 text-zinc-400" />
                     <span>GitHub Profile & Repositories</span>
                   </a>
-                </div>
-
-                {/* Quick Copy Clone & Remote Endpoints */}
-                <div className="pt-2 border-t border-cyan-500/20 space-y-1.5">
-                  <div className="text-[10px] text-cyan-300/90 font-semibold">
-                    Clone &amp; Remote Endpoints (HTTPS / SSH / GitHub CLI):
-                  </div>
-                  <div className="space-y-1">
-                    {[
-                      { key: 'https', label: 'HTTPS', val: syncState.remoteHttpsUrl },
-                      { key: 'ssh', label: 'SSH', val: syncState.remoteSshUrl },
-                      { key: 'gh', label: 'GH CLI', val: syncState.ghCliCloneCmd },
-                    ].map((item) => (
-                      <div
-                        key={item.key}
-                        className="flex items-center justify-between gap-2 px-2.5 py-1 rounded-lg bg-black/50 border border-white/10 text-[10px]"
-                      >
-                        <div className="flex items-center gap-2 min-w-0">
-                          <span className="px-1.5 py-0.5 rounded bg-cyan-500/20 text-cyan-300 border border-cyan-500/30 font-bold text-[9px] shrink-0">
-                            {item.label}
-                          </span>
-                          <code className="text-zinc-200 truncate select-all">{item.val}</code>
-                        </div>
-                        <button
-                          onClick={() => handleCopyEndpoint(item.val, item.key)}
-                          className="px-2 py-0.5 rounded bg-cyan-500/15 hover:bg-cyan-500/30 border border-cyan-500/30 text-cyan-200 text-[9px] font-bold shrink-0 cursor-pointer transition-colors"
-                        >
-                          {copiedEndpoint === item.key ? '✓ Copied' : 'Copy'}
-                        </button>
-                      </div>
-                    ))}
-                  </div>
                 </div>
               </div>
 

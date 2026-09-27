@@ -183,15 +183,13 @@ class OfflineAuditSyncService {
     statuteRef?: string;
   }): QueuedAuditEvent {
     const queue = this.getQueue();
-    const nowMs = Date.now();
-    const detHex = ((nowMs + queue.length * 14902) ^ 849202).toString(16).padStart(8, '0').slice(-8);
     const item: QueuedAuditEvent = {
-      id: `offline-audit-${nowMs}-${detHex.slice(0, 5)}`,
+      id: `offline-audit-${Date.now()}-${Math.random().toString(36).substring(2, 7)}`,
       queuedAt: new Date().toISOString(),
       type: eventData.type,
       title: eventData.title,
       description: eventData.description,
-      metaHash: eventData.metaHash || `0x${detHex}`,
+      metaHash: eventData.metaHash || `0x${Math.random().toString(16).substring(2, 10)}`,
       severity: eventData.severity || 'info',
       statuteRef: eventData.statuteRef || 'ETDA Section 26 / SSoT Log Buffer',
       retryCount: 0,

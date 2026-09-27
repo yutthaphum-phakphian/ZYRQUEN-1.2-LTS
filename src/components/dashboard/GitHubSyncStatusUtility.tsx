@@ -7,14 +7,6 @@ export const GitHubSyncStatusUtility: React.FC = () => {
   const [syncState, setSyncState] = useState<GitHubSyncState>(githubSyncService.getState());
   const [isVerifyingChecksum, setIsVerifyingChecksum] = useState(false);
   const [verificationFeedback, setVerificationFeedback] = useState<string | null>(null);
-  const [copiedRemoteKey, setCopiedRemoteKey] = useState<string | null>(null);
-
-  const handleCopyRemote = (text: string, key: string) => {
-    navigator.clipboard.writeText(text);
-    playTone(840, 0.05);
-    setCopiedRemoteKey(key);
-    setTimeout(() => setCopiedRemoteKey(null), 2200);
-  };
 
   useEffect(() => {
     const unsubscribe = githubSyncService.subscribe((state) => {
@@ -255,50 +247,12 @@ export const GitHubSyncStatusUtility: React.FC = () => {
               </div>
               <div className="text-[10px] text-zinc-400 space-y-1">
                 <div>Branch: <span className="text-white">{syncState.remoteBranch}</span></div>
-                <div className="flex items-center flex-wrap gap-1.5">
-                  <span>Repository:</span>
-                  <a
-                    href={`https://github.com/${syncState.remoteRepo}`}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="text-cyan-300 hover:text-cyan-200 underline decoration-cyan-500/40 font-bold"
-                  >
-                    {syncState.remoteRepo} ↗
-                  </a>
-                  <a
-                    href="https://yutthaphum-phakphian.github.io/ZYRQUEN-1.2-LTS/"
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="px-1.5 py-0.5 rounded bg-emerald-500/15 border border-emerald-500/30 text-emerald-300 hover:bg-emerald-500/25 font-bold"
-                  >
-                    GitHub Pages ↗
-                  </a>
-                </div>
+                <div>Repository: <span className="text-white">{syncState.remoteRepo}</span></div>
                 <div>
                   Consensus Drift:{' '}
                   <span className={hasDrift ? 'text-[#EF4444] font-bold' : 'text-[#10B981]'}>
                     {hasDrift ? `Δ+${syncState.driftCount} BLOCKS` : 'Δ0.00% ZERO DRIFT'}
                   </span>
-                </div>
-                <div className="pt-1 flex flex-wrap items-center gap-1.5">
-                  {[
-                    { key: 'https', label: 'HTTPS', text: syncState.remoteHttpsUrl },
-                    { key: 'ssh', label: 'SSH', text: syncState.remoteSshUrl },
-                    { key: 'gh', label: 'gh clone', text: syncState.ghCliCloneCmd },
-                  ].map((ep) => (
-                    <button
-                      key={ep.key}
-                      onClick={() => handleCopyRemote(ep.text, ep.key)}
-                      title={`Click to copy: ${ep.text}`}
-                      className="px-2 py-0.5 rounded bg-slate-950 hover:bg-cyan-950/60 border border-cyan-500/30 text-cyan-300 text-[9px] font-mono flex items-center gap-1 transition-colors cursor-pointer"
-                    >
-                      <span className="font-bold">{ep.label}:</span>
-                      <span className="text-zinc-300 truncate max-w-[150px]">{ep.text}</span>
-                      <span className="text-emerald-400 font-bold">
-                        {copiedRemoteKey === ep.key ? '✓' : '📋'}
-                      </span>
-                    </button>
-                  ))}
                 </div>
               </div>
               <div className="text-[10px] text-zinc-500 pt-1 border-t border-white/5 space-y-1">

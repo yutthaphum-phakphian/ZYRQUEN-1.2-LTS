@@ -1,17 +1,4 @@
 import { CanonicalModule, AuditTransaction, ThaiCustodian, SystemInvariant } from '../types';
-import { AUTHORITATIVE_CONSTANTS } from '../lib/canonicalResolver';
-
-export const CANONICAL_BASE_DATA = Object.freeze({
-  anchorBlock: AUTHORITATIVE_CONSTANTS.GENESIS_BLOCK_HEIGHT,
-  rootHash: AUTHORITATIVE_CONSTANTS.MERKLE_ROOT,
-  totalSeals: AUTHORITATIVE_CONSTANTS.SEAL_COUNT,
-});
-
-export const canonicalData = Object.freeze({
-  blockHeight: AUTHORITATIVE_CONSTANTS.BLOCK_HEIGHT,
-  merkleRoot: AUTHORITATIVE_CONSTANTS.MERKLE_ROOT,
-  seals: AUTHORITATIVE_CONSTANTS.SEAL_COUNT,
-});
 
 export const SYSTEM_METADATA = {
   system: 'ZYRQUEN Ω∞ FROZEN v1.2 LTS',
@@ -19,15 +6,15 @@ export const SYSTEM_METADATA = {
   codename: 'ZYRQUEN Ω∞ FROZEN v1.2 LTS',
   version: 'ZYRQUEN Ω∞ v4.16 PDPA FINAL (Frozen v1.2 LTS)',
   timestamp: '2026-09-14 14:04:43 UTC',
-  merkleRoot: AUTHORITATIVE_CONSTANTS.MERKLE_ROOT as string,
-  parentMasterHash: AUTHORITATIVE_CONSTANTS.MERKLE_ROOT as string,
-  sealedBlock: AUTHORITATIVE_CONSTANTS.GENESIS_BLOCK_HEIGHT as number,
+  merkleRoot: '909ab814479844d8a14816bed34cdbb07528e18501da86fc4691763a43fa4c68',
+  parentMasterHash: '909ab814479844d8a14816bed34cdbb07528e18501da86fc4691763a43fa4c68',
+  sealedBlock: 849202,
   previousBlock: 849201,
-  genesisBlock: AUTHORITATIVE_CONSTANTS.GENESIS_BLOCK_HEIGHT as number,
-  canonicalSeals: AUTHORITATIVE_CONSTANTS.SEAL_COUNT as number,
-  totalVerifiedSeals: AUTHORITATIVE_CONSTANTS.SEAL_COUNT as number,
-  quarantineSeals: AUTHORITATIVE_CONSTANTS.QUARANTINED_SEALS as number,
-  ssotMutation: AUTHORITATIVE_CONSTANTS.SSOT_MUTATION as number,
+  genesisBlock: 849202,
+  canonicalSeals: 14902,
+  totalVerifiedSeals: 14902,
+  quarantineSeals: 80,
+  ssotMutation: 0,
   baselineDrift: '0.00%',
   quorum: '10/10 REAL_HSM Signed',
   promotionStatus: 'SOVEREIGNLOCKEDACTIVE',
@@ -44,25 +31,23 @@ export const SYSTEM_METADATA = {
   platformBoundary: 'Ω601–Ω1000 (Strict Enforcement)',
   systemIntegrity: '100% VERIFIED WITHIN DEFINED V1.21 SCOPE',
   requiredQuorum: 8,
-  achievedQuorum: AUTHORITATIVE_CONSTANTS.HSM_QUORUM_THRESHOLD,
-  slotCount: AUTHORITATIVE_CONSTANTS.HSM_TOTAL_NODES,
+  achievedQuorum: 10,
+  slotCount: 10,
   certificate_image: 'ZYRQUEN-GOLD-CERTIFICATE-FINAL-BILINGUAL-Block-849202-EP-SOVEREIGN-01.jpg',
   legalCompliance: 'พระราชบัญญัติคุ้มครองข้อมูลส่วนบุคคล พ.ศ. 2562 (PDPA มาตรา 9, 26, 28) และ พ.ร.บ. ธุรกรรมทางอิเล็กทรอนิกส์ พ.ศ. 2544 มาตรา ๙, ๒๖, ๒๘ (สพธอ. ETDA)',
   failClosedTrigger: 'Core Temp > 85.0°C or Bandwidth < 15.0 GB/s (Automatic Immediate Quarantine)',
   pqcCompliance: 'NIST FIPS 203 (ML-KEM), FIPS 204 (ML-DSA-87 Dilithium-5), FIPS 205 (SPHINCS+)',
-  auditId: AUTHORITATIVE_CONSTANTS.SYSTEM_AUDIT_ID,
 };
 
 export const REQUIRED_QUORUM = 8;
-export const ACHIEVED_QUORUM = AUTHORITATIVE_CONSTANTS.HSM_QUORUM_THRESHOLD;
-export const SLOT_COUNT = AUTHORITATIVE_CONSTANTS.HSM_TOTAL_NODES;
-export const CANONICAL_SEALS = AUTHORITATIVE_CONSTANTS.SEAL_COUNT;
-export const CANONICAL_SEAL_COUNT = AUTHORITATIVE_CONSTANTS.SEAL_COUNT;
-export const QUARANTINE_COUNT = AUTHORITATIVE_CONSTANTS.QUARANTINED_SEALS;
-export const SSOT_MUTATION = AUTHORITATIVE_CONSTANTS.SSOT_MUTATION;
+export const ACHIEVED_QUORUM = 10;
+export const SLOT_COUNT = 10;
+export const CANONICAL_SEALS = 14902;
+export const QUARANTINE_COUNT = 80;
+export const SSOT_MUTATION = 0;
 export const BASELINE_DRIFT = 0;
-export const CANONICAL_GENESIS_BLOCK = AUTHORITATIVE_CONSTANTS.GENESIS_BLOCK_HEIGHT;
-export const CANONICAL_MERKLE_ROOT = AUTHORITATIVE_CONSTANTS.MERKLE_ROOT;
+export const CANONICAL_GENESIS_BLOCK = 849202;
+export const CANONICAL_MERKLE_ROOT = '909ab814479844d8a14816bed34cdbb07528e18501da86fc4691763a43fa4c68';
 
 export const THAI_CUSTODIANS: ThaiCustodian[] = [
   {

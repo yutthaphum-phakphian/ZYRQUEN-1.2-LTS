@@ -142,10 +142,9 @@ class AlertEngine {
     metadata?: Record<string, string | number | boolean>;
     containmentPolicy?: 'FAIL_CLOSED' | 'QUARANTINE' | 'AUDIT_ONLY' | 'REJECT_MUTATION';
   }): SystemAlert {
-    const nowMs = Date.now();
-    const traceId = `TRACE-ALT-${((nowMs ^ 849202) >>> 0).toString(16).padStart(8, '0').slice(-8)}`;
-    const spanId = `SP-ALT-${((nowMs ^ 14902) >>> 0).toString(16).padStart(6, '0').slice(-6)}`;
-    const alertId = `ALT-${nowMs.toString().slice(-6)}`;
+    const traceId = `TRACE-ALT-${Math.random().toString(16).slice(2, 10)}`;
+    const spanId = `SP-ALT-${Math.random().toString(16).slice(2, 8)}`;
+    const alertId = `ALT-${Date.now().toString().slice(-6)}`;
     const now = new Date();
 
     const alert: SystemAlert = {

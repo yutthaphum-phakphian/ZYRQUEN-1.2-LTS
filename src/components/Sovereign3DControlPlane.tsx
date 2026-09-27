@@ -35,11 +35,17 @@ export const Sovereign3DControlPlane: React.FC<Sovereign3DControlPlaneProps> = (
     camera.position.set(0, 3, 9);
     camera.lookAt(0, 0, 0);
 
-    const renderer = new THREE.WebGLRenderer({ antialias: true, alpha: true });
-    renderer.setSize(width, height);
-    renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
-    renderer.setClearColor(0x09090b, 1);
-    container.appendChild(renderer.domElement);
+    let renderer: THREE.WebGLRenderer;
+    try {
+      renderer = new THREE.WebGLRenderer({ antialias: true, alpha: true });
+      renderer.setSize(width, height);
+      renderer.setPixelRatio(Math.min(window.devicePixelRatio || 1, 2));
+      renderer.setClearColor(0x09090b, 1);
+      container.appendChild(renderer.domElement);
+    } catch (e) {
+      console.warn('[Sovereign3DControlPlane] WebGL context failed:', e);
+      return;
+    }
 
     scene.add(new THREE.AmbientLight(0xffffff, 0.6));
     const goldPointLight = new THREE.PointLight(0xffd700, 2.5, 20);

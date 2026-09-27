@@ -45,7 +45,6 @@ jobs:
 
       - name: 🧪 Run Vitest 100% PURE GREEN Coverage Suite
         run: |
-          npx vitest run src/tests/integration-sovereign-control-plane.test.ts
           npx vitest run --passWithNoTests
 
       - name: ⚡ Verify 12-Stage Replay Verification (SLA < 142ms)

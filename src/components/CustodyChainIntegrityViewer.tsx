@@ -212,7 +212,7 @@ export const CustodyChainIntegrityViewer: React.FC<CustodyChainIntegrityViewerPr
       status: 'verified',
       signer: `HSM Node #0${nodeIndex}`,
       timestamp: timeStr,
-      pk: `dilithium5_pk_${((849202 + index * 14902) >>> 0).toString(16).slice(-6)}...`,
+      pk: `dilithium5_pk_${Math.random().toString(16).substring(2, 8)}...`,
     };
     setSlots(updated);
     setBlockHeight((h) => h + 1);

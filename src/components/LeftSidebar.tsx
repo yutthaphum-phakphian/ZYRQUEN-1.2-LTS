@@ -23,8 +23,7 @@ import {
   PanelLeft,
   LayoutDashboard,
   Search,
-  ChevronRight,
-  Keyboard
+  ChevronRight
 } from 'lucide-react';
 import { SOVEREIGN_CHAMBERS, OPERATING_MODULES, CANONICAL_CONSTANTS } from '../data/sovereignData.ts';
 import { Chamber, OperatingModule, ViewType } from '../types.ts';
@@ -40,9 +39,6 @@ export interface LeftSidebarProps {
   selectedChamberId?: string;
   onSelectChamber?: (id: string) => void;
   liveCryo?: number;
-  onOpenCommandSearch?: () => void;
-  onOpenEventsSidebar?: () => void;
-  onOpenShortcuts?: () => void;
 }
 
 const CHAMBER_ICONS: Record<string, React.ElementType> = {
@@ -75,9 +71,6 @@ export const LeftSidebar: React.FC<LeftSidebarProps> = ({
   selectedChamberId = '00',
   onSelectChamber,
   liveCryo = 14.98,
-  onOpenCommandSearch,
-  onOpenEventsSidebar,
-  onOpenShortcuts,
 }) => {
   const [activeTab, setActiveTab] = useState<'views' | 'chambers' | 'modules'>('views');
   const [searchQuery, setSearchQuery] = useState('');
@@ -409,66 +402,6 @@ export const LeftSidebar: React.FC<LeftSidebarProps> = ({
               <div className="flex justify-between text-[10px] text-slate-500 mt-1 font-mono">
                 <span>Stabilized: 14.98 mK</span>
                 <span className="text-amber-400/80">Quarantine Cap: 85.0 °C</span>
-              </div>
-            </div>
-
-            {/* Unobtrusive Hotkeys Discovery Hints */}
-            <div className="px-3 py-2 border-t border-slate-800/80 bg-[#04070f]/95 text-[10px] font-mono text-slate-400">
-              <div className="flex items-center justify-between mb-1.5">
-                <span className="flex items-center gap-1.5 text-[9px] uppercase tracking-wider text-slate-400 font-semibold">
-                  <Keyboard className="w-3 h-3 text-cyan-400/80" />
-                  <span>Hotkeys</span>
-                </span>
-                {onOpenShortcuts && (
-                  <button
-                    type="button"
-                    onClick={() => {
-                      playTone(620, 0.05);
-                      onOpenShortcuts();
-                    }}
-                    className="text-[9px] text-cyan-400/80 hover:text-cyan-300 transition-colors cursor-pointer"
-                  >
-                    All (?)
-                  </button>
-                )}
-              </div>
-              <div className="flex flex-wrap items-center gap-1.5">
-                <button
-                  type="button"
-                  onClick={() => {
-                    playTone(680, 0.05);
-                    onOpenCommandSearch?.();
-                  }}
-                  className="flex items-center gap-1 px-1.5 py-0.5 rounded bg-slate-900/90 hover:bg-cyan-950/60 border border-slate-800 hover:border-cyan-500/40 text-[9px] text-slate-300 hover:text-cyan-200 transition-colors cursor-pointer"
-                  title="Command & Legal Search (Cmd+K)"
-                >
-                  <kbd className="text-cyan-400 font-semibold">Cmd+K</kbd>
-                  <span className="text-slate-500">Search</span>
-                </button>
-                <button
-                  type="button"
-                  onClick={() => {
-                    playTone(640, 0.05);
-                    onOpenEventsSidebar?.();
-                  }}
-                  className="flex items-center gap-1 px-1.5 py-0.5 rounded bg-slate-900/90 hover:bg-cyan-950/60 border border-slate-800 hover:border-cyan-500/40 text-[9px] text-slate-300 hover:text-cyan-200 transition-colors cursor-pointer"
-                  title="System Events Feed (Cmd+E)"
-                >
-                  <kbd className="text-cyan-400 font-semibold">Cmd+E</kbd>
-                  <span className="text-slate-500">Events</span>
-                </button>
-                <button
-                  type="button"
-                  onClick={() => {
-                    playTone(600, 0.05);
-                    onToggle ? onToggle() : onClose();
-                  }}
-                  className="flex items-center gap-1 px-1.5 py-0.5 rounded bg-slate-900/90 hover:bg-cyan-950/60 border border-slate-800 hover:border-cyan-500/40 text-[9px] text-slate-300 hover:text-cyan-200 transition-colors cursor-pointer"
-                  title="Toggle Sidebar (Cmd+B)"
-                >
-                  <kbd className="text-slate-300 font-semibold">Cmd+B</kbd>
-                  <span className="text-slate-500">Menu</span>
-                </button>
               </div>
             </div>
           </motion.aside>

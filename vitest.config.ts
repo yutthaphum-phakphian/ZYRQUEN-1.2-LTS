@@ -25,7 +25,7 @@ export default defineConfig({
     testTimeout: 10000,
     hookTimeout: 10000,
     isolate: true,
-    setupFiles: ['./tests/setup.ts'],
+    setupFiles: [],
 
     coverage: {
       provider: 'v8',

@@ -376,7 +376,7 @@ export const speakSystemAlert = (
   }
 
   speechQueue.push({
-    id: `verbal-${now}-${(speechQueue.length + 1) * 14902}`,
+    id: `verbal-${Date.now()}-${Math.random().toString(36).substring(2, 7)}`,
     text: text.trim(),
     priority,
     lang: forcedLang,

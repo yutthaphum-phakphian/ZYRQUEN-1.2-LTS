@@ -104,7 +104,7 @@ export async function encryptSnippet(
   const digest = await computeDigest(plaintext);
 
   return {
-    id: 'CIPHER-' + Date.now().toString(36) + '-' + digest.slice(0, 4),
+    id: 'CIPHER-' + Date.now().toString(36) + '-' + Math.random().toString(36).substring(2, 6),
     title,
     category,
     ciphertext: arrayBufferToBase64(encrypted),

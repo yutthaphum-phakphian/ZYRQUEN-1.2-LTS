@@ -170,20 +170,19 @@ export const Chamber11QuantumRadar: React.FC = () => {
       setBaselineDrift(0);
     }, 2500);
 
-    const detSeed = Date.now() + threats.length * 137;
     const newSimulatedVector: ThreatVector = {
-      id: `VEC-${100 + (detSeed % 900)}`,
+      id: `VEC-${Math.floor(100 + Math.random() * 900)}`,
       name: 'Dynamic Quantum Coherence Distortion Probe',
       threat_type: 'Quantum Side-Channel Attack',
-      angle_deg: (detSeed * 47) % 360,
-      distance_pct: 25 + (detSeed % 45),
+      angle_deg: Math.floor(Math.random() * 360),
+      distance_pct: Math.floor(25 + Math.random() * 45),
       risk_score: 0.96,
       status: 'CRITICAL_THREAT',
       mitigation: 'Engage 10/10 HSM Deca-Quorum Shield & Fail-Closed',
       notes: 'ตรวจพบสัญญาณรบกวนความเร็วสูงจากภายนอก จำลองการเจาะเกราะคริปโต NIST PQC ระบบเปิดมาตรการกักโรคทันที'
     };
 
-    setThreats((prev) => [newSimulatedVector, ...prev.filter((t) => t.id !== newSimulatedVector.id)]);
+    setThreats((prev) => [newSimulatedVector, ...prev]);
     setSelectedThreat(newSimulatedVector);
     setLogs((prev) => [
       `[SIMULATOR] ⚠️ Injected Threat Vector ${newSimulatedVector.id} (${newSimulatedVector.name}) at ${newSimulatedVector.angle_deg}° range ${newSimulatedVector.distance_pct}%.`,

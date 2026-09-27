@@ -85,8 +85,7 @@ export function useAuditLedger(
     (payload: ForensicStepPayload) => {
       const timestamp = new Date().toISOString().replace('T', ' ').slice(0, 19) + ' ICT';
       const actor = payload.actor || 'SOVEREIGN_FORENSIC_ORCHESTRATOR';
-      const nowMs = Date.now();
-      const eventId = `AUD-${nowMs}-${(nowMs + 849202) % 1000}`;
+      const eventId = `AUD-${Date.now()}-${Math.floor(Math.random() * 1000)}`;
 
       const auditEvent: ForensicAuditEvent = {
         eventId,

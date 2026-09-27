@@ -63,13 +63,11 @@ export const SpatialEntropyHeatMap: React.FC = () => {
 
   // Periodic real-time perturbation simulating dynamic entropy variations
   useEffect(() => {
-    let heatTick = 0;
     const interval = setInterval(() => {
-      heatTick += 1;
       setNodes((prev) =>
-        prev.map((node, idx) => {
+        prev.map((node) => {
           // Subtle natural entropy wave
-          const delta = ((((heatTick + idx) * 19) % 100) / 100 - 0.48) * 0.04;
+          const delta = (Math.random() - 0.48) * 0.04;
           const nextEntropy = Math.max(0.1, Math.min(0.92, node.entropy + delta));
           const nextStatus =
             nextEntropy > 0.7
@@ -104,9 +102,9 @@ export const SpatialEntropyHeatMap: React.FC = () => {
     setTimeout(() => playTone(880, 0.12, 'sine', 0.08), 120);
 
     setNodes((prev) =>
-      prev.map((n, idx) => ({
+      prev.map((n) => ({
         ...n,
-        entropy: Math.max(0.12, Math.min(0.85, n.entropy + ((((idx + 1) * 23) % 80) - 40) / 1000)),
+        entropy: Math.max(0.12, Math.min(0.85, n.entropy + (Math.random() * 0.08 - 0.04))),
       }))
     );
 

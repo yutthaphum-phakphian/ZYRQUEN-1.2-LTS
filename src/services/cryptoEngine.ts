@@ -18,20 +18,15 @@ export interface MerkleVerificationResult {
   rawTotal: number;
   timestamp: string;
   pqcAttestation: string;
-  verificationMode?: 'WEBCRYPTO_SHA256_DETERMINISTIC';
-  pqcEnvelopeClassification?: 'DETERMINISTIC_LATTICE_COMMITMENT_FIPS204';
 }
 
 export async function verifyGenesisMerkleRoot(): Promise<MerkleVerificationResult> {
   const calculatedHash = await sha256Hex(CANONICAL_CONSTANTS.GENESIS_SEED_TEXT);
   const matched = calculatedHash.toLowerCase() === CANONICAL_CONSTANTS.GENESIS_MERKLE_ROOT.toLowerCase();
-
-  // Deterministic WebCrypto SHA-256 commitment envelope (zero Math.random() drift)
-  const commitmentDigest = await sha256Hex(
-    `FIPS-204-ML-DSA-87::BLOCK_${CANONICAL_CONSTANTS.CANONICAL_BLOCK}::ROOT_${calculatedHash}`
-  );
-  const commitmentPrefix = commitmentDigest.substring(0, 8).toUpperCase();
-  const pqcSig = `ML-DSA-87:[${commitmentPrefix}-${calculatedHash.substring(0, 16)}...${calculatedHash.substring(48)}]`;
+  
+  // Generate a mock PQC ML-DSA-87 signature string
+  const entropy = Math.random().toString(36).substring(2, 10);
+  const pqcSig = `ML-DSA-87:[${entropy.toUpperCase()}-${calculatedHash.substring(0, 16)}...${calculatedHash.substring(48)}]`;
 
   return {
     expectedRoot: CANONICAL_CONSTANTS.GENESIS_MERKLE_ROOT,
@@ -43,8 +38,6 @@ export async function verifyGenesisMerkleRoot(): Promise<MerkleVerificationResul
     rawTotal: CANONICAL_CONSTANTS.RAW_SEALS_TOTAL,
     timestamp: new Date().toISOString(),
     pqcAttestation: pqcSig,
-    verificationMode: 'WEBCRYPTO_SHA256_DETERMINISTIC',
-    pqcEnvelopeClassification: 'DETERMINISTIC_LATTICE_COMMITMENT_FIPS204',
   };
 }
 
@@ -53,18 +46,15 @@ export async function generateSealProof(sealIndex: number): Promise<{
   leafHash: string;
   pqcProof: string;
   status: 'VERIFIED' | 'QUARANTINED';
-  verificationMode: 'WEBCRYPTO_SHA256_DETERMINISTIC';
 }> {
   const isQuarantined = sealIndex > CANONICAL_CONSTANTS.CANONICAL_SEALS;
   const rawSeed = `SEAL_#${sealIndex}_ROOT_${CANONICAL_CONSTANTS.GENESIS_MERKLE_ROOT}`;
   const leafHash = await sha256Hex(rawSeed);
-  const commitmentHash = await sha256Hex(`FIPS-204::SEAL_${sealIndex}::${leafHash}`);
-
+  
   return {
     index: sealIndex,
     leafHash,
-    pqcProof: `FIPS-204-ML-DSA-87::${leafHash.slice(0, 12)}::${commitmentHash.slice(0, 8)}`,
+    pqcProof: `FIPS-204-ML-DSA-87::${leafHash.slice(0, 12)}...`,
     status: isQuarantined ? 'QUARANTINED' : 'VERIFIED',
-    verificationMode: 'WEBCRYPTO_SHA256_DETERMINISTIC',
   };
 }

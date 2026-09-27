@@ -204,8 +204,7 @@ export class P0FrozenCoreGuard {
     requestedValue: string,
     actor: string = 'UI_OR_RUNTIME_REQUEST'
   ): P0WriteAttemptAudit {
-    const nowMs = Date.now();
-    const attemptId = `P0-AUDIT-${nowMs}-${((nowMs ^ 849202) >>> 0).toString(36).slice(-4).toUpperCase()}`;
+    const attemptId = `P0-AUDIT-${Date.now()}-${Math.random().toString(36).substring(2, 6).toUpperCase()}`;
     const timestamp = new Date().toISOString().replace('T', ' ').slice(0, 19) + ' ICT';
 
     const auditEntry: P0WriteAttemptAudit = {

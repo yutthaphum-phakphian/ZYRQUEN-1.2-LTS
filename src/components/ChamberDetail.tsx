@@ -37,7 +37,6 @@ import { generateSealProof, verifyGenesisMerkleRoot } from '../services/cryptoEn
 import { soundFx } from '../services/audioEngine.ts';
 import { QuantumVisualizer } from './QuantumVisualizer.tsx';
 import { CryoJitterChart } from './CryoJitterChart.tsx';
-import { Room18MasterPanel } from './Room18MasterPanel.tsx';
 
 interface ChamberDetailProps {
   chamberId: string;
@@ -412,13 +411,6 @@ export const ChamberDetail: React.FC<ChamberDetailProps> = ({
               </div>
             ))}
           </div>
-        </div>
-      )}
-
-      {/* CHAMBER 18: Neural Sentinel & Predictive Governance */}
-      {chamber.id === '18' && (
-        <div className="pt-2">
-          <Room18MasterPanel />
         </div>
       )}
     </div>

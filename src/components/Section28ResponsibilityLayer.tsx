@@ -134,10 +134,9 @@ export const Section28ResponsibilityLayer: React.FC = () => {
     playTone(520, 0.08);
 
     setTimeout(() => {
-      const nowMs = Date.now();
       const newTx: CustodyHandoverTx = {
-        id: `tx-sec28-${nowMs.toString().slice(-4)}`,
-        txHash: `0x${((nowMs ^ 849202) >>> 0).toString(16).padStart(8, '0')}...${((nowMs ^ 14902) >>> 0).toString(16).padStart(6, '0')}`,
+        id: `tx-sec28-${Date.now().toString().slice(-4)}`,
+        txHash: `0x${Math.random().toString(16).slice(2, 10)}...${Math.random().toString(16).slice(2, 8)}`,
         timestamp: new Date().toLocaleTimeString('en-GB') + ' ICT',
         custodianFrom: 'นายยุทธภูมิ พากเพียร (CUST-TH-01)',
         custodianTo: 'ธนพล เกียรติไพศาล (CUST-TH-04)',

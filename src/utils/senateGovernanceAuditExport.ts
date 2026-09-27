@@ -684,8 +684,7 @@ export function exportOpaSessionPdf(params: OpaSessionPdfParams): void {
 
   const isAllowed = params.decision === 'ALLOWED' || params.decision === 'ALLOW';
   const evalDate = new Date().toISOString();
-  const nowMs = Date.now();
-  const traceId = `OPA-SEAL-${nowMs.toString(36).toUpperCase()}-${((nowMs ^ 849202) >>> 0).toString(36).slice(-5).toUpperCase()}`;
+  const traceId = `OPA-SEAL-${Date.now().toString(36).toUpperCase()}-${Math.random().toString(36).substring(2, 7).toUpperCase()}`;
 
   // 1. Dark Sovereign Header Banner
   doc.setFillColor(7, 11, 22);
@@ -949,7 +948,7 @@ export function exportOpaSessionPdf(params: OpaSessionPdfParams): void {
     certBoxY + 15.5
   );
   doc.text(
-    `Digital Evidence SHA-256 Digest: 909ab814479844d8a14816be...archived`,
+    `Digital Evidence SHA-256 Digest: ${Math.random().toString(36).substring(2, 10)}${Math.random().toString(36).substring(2, 10)}...archived`,
     margin + 3,
     certBoxY + 19
   );

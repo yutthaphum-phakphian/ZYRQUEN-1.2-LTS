@@ -72,8 +72,7 @@ export function generateAndDownloadFullAuditPdfReport({
   doc.setFont('helvetica', 'normal');
   doc.setFontSize(7.5);
   doc.setTextColor(180, 195, 215);
-  const nowMs = Date.now();
-  const reportId = `SOV-AUDIT-${nowMs}-${1000 + ((nowMs + 849202) % 9000)}`;
+  const reportId = `SOV-AUDIT-${Date.now()}-${Math.floor(Math.random() * 9000 + 1000)}`;
   const dateStr = new Date().toISOString().replace('T', ' ').substring(0, 19) + ' UTC';
   doc.text(`Document ID: ${reportId} | Generated: ${dateStr} | Baseline: Frozen v1.2 LTS`, margin, y);
   y += 4.5;
