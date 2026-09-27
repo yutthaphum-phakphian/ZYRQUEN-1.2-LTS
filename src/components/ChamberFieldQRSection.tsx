@@ -65,12 +65,7 @@ export const printChamberQRCards = (
   overrideStates: Record<string, ChamberCoherenceState> = {}
 ): void => {
   if (typeof window === 'undefined') return;
-  let printWindow: Window | null = null;
-  try {
-    printWindow = window.open('', '_blank', 'width=900,height=750');
-  } catch {
-    printWindow = null;
-  }
+  const printWindow = window.open('', '_blank', 'width=900,height=750');
   if (!printWindow) {
     window.print();
     return;

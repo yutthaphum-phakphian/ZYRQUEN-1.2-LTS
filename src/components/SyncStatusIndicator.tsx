@@ -89,16 +89,8 @@ export const SyncStatusIndicator: React.FC<SyncStatusIndicatorProps> = ({
 
   const handleOpenPeerTab = () => {
     playTone(800, 0.05);
-    try {
-      if (typeof window !== 'undefined') {
-        const link = document.createElement('a');
-        link.href = window.location.href;
-        link.target = '_blank';
-        link.rel = 'noopener noreferrer';
-        link.click();
-      }
-    } catch {
-      // safe fallback
+    if (typeof window !== 'undefined') {
+      window.open(window.location.href, '_blank');
     }
   };
 

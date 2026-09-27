@@ -1,7 +1,6 @@
 import { StrictMode } from 'react';
 import { createRoot } from 'react-dom/client';
 import App from './App';
-import { ErrorBoundary } from './components/ErrorBoundary';
 import './index.css';
 import { unlockAudioContext } from './components/AudioSynthesizer';
 
@@ -40,9 +39,7 @@ const rootElement = document.getElementById('root');
 if (rootElement) {
   createRoot(rootElement).render(
     <StrictMode>
-      <ErrorBoundary fallbackViewName="Sovereign Root Core">
-        <App />
-      </ErrorBoundary>
+      <App />
     </StrictMode>
   );
 }

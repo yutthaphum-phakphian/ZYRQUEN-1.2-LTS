@@ -72,12 +72,7 @@ export const generateForensicBatchPDF = (
   };
 
   const meta = signerMetadata && signerMetadata.signerId ? signerMetadata : defaultMeta;
-  let printWindow: Window | null = null;
-  try {
-    printWindow = window.open('', '_blank');
-  } catch {
-    printWindow = null;
-  }
+  const printWindow = window.open('', '_blank');
   if (!printWindow) return;
 
   const passRate = totalChambers > 0 ? ((passedCount / totalChambers) * 100).toFixed(3) : '0.000';

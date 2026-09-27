@@ -800,6 +800,121 @@ export const Navigation: React.FC<NavigationProps> = ({
         </button>
       </div>
 
+      {/* Unobtrusive Bottom Hotkeys Discovery Hints Bar */}
+      <div
+        id="nav-hotkeys-hints"
+        className="relative z-10 max-w-[1720px] mx-auto px-2.5 sm:px-4 md:px-6 py-1 border-t border-cyan-500/10 bg-[#05070e]/60 flex items-center justify-between gap-3 text-[10px] font-mono text-zinc-500 overflow-x-auto no-scrollbar select-none"
+      >
+        <div className="flex items-center gap-2 sm:gap-3.5 shrink-0">
+          <span className="flex items-center gap-1 text-zinc-400 font-semibold uppercase tracking-wider text-[9px]">
+            <Keyboard className="w-3 h-3 text-cyan-400/75" />
+            <span>Hotkeys:</span>
+          </span>
+
+          <button
+            type="button"
+            onClick={() => {
+              playTone(680, 0.06);
+              if (onOpenCommandSearch) {
+                onOpenCommandSearch();
+              } else {
+                onOpenLegalSearch();
+              }
+            }}
+            className="flex items-center gap-1 text-zinc-400 hover:text-cyan-200 transition-colors cursor-pointer group"
+            title="Open Command & Legal Search (Cmd+K / Ctrl+K)"
+          >
+            <kbd className="px-1.5 py-0.2 rounded bg-white/[0.04] group-hover:bg-cyan-500/15 border border-white/10 group-hover:border-cyan-500/40 text-cyan-300/90 font-mono text-[9px] transition-colors">
+              Cmd+K
+            </kbd>
+            <span className="text-[9px] text-zinc-500 group-hover:text-zinc-300">Search</span>
+          </button>
+
+          <span className="text-zinc-700">•</span>
+
+          <button
+            type="button"
+            onClick={() => {
+              playTone(640, 0.05);
+              onOpenEventsSidebar?.();
+            }}
+            className="flex items-center gap-1 text-zinc-400 hover:text-cyan-200 transition-colors cursor-pointer group"
+            title="Toggle System Events Notification Feed (Cmd+E / Ctrl+E)"
+          >
+            <kbd className="px-1.5 py-0.2 rounded bg-white/[0.04] group-hover:bg-cyan-500/15 border border-white/10 group-hover:border-cyan-500/40 text-cyan-300/90 font-mono text-[9px] transition-colors">
+              Cmd+E
+            </kbd>
+            <span className="text-[9px] text-zinc-500 group-hover:text-zinc-300">Events</span>
+          </button>
+
+          <span className="hidden sm:inline text-zinc-700">•</span>
+
+          <button
+            type="button"
+            onClick={() => {
+              playTone(600, 0.05);
+              onToggleSidebar?.();
+            }}
+            className="hidden sm:flex items-center gap-1 text-zinc-400 hover:text-cyan-200 transition-colors cursor-pointer group"
+            title="Toggle Navigation Sidebar (Cmd+B / Ctrl+B)"
+          >
+            <kbd className="px-1.5 py-0.2 rounded bg-white/[0.04] group-hover:bg-cyan-500/15 border border-white/10 group-hover:border-cyan-500/40 text-zinc-300 font-mono text-[9px] transition-colors">
+              Cmd+B
+            </kbd>
+            <span className="text-[9px] text-zinc-500 group-hover:text-zinc-300">Menu</span>
+          </button>
+
+          <span className="hidden md:inline text-zinc-700">•</span>
+
+          <button
+            type="button"
+            onClick={() => {
+              playTone(540, 0.05);
+              onSelectView('ledger');
+            }}
+            className="hidden md:flex items-center gap-1 text-zinc-400 hover:text-cyan-200 transition-colors cursor-pointer group"
+            title="Jump to Immutable WORM Ledger (Cmd+L / Ctrl+L)"
+          >
+            <kbd className="px-1.5 py-0.2 rounded bg-white/[0.04] group-hover:bg-cyan-500/15 border border-white/10 group-hover:border-cyan-500/40 text-zinc-300 font-mono text-[9px] transition-colors">
+              Cmd+L
+            </kbd>
+            <span className="text-[9px] text-zinc-500 group-hover:text-zinc-300">Ledger</span>
+          </button>
+
+          <span className="hidden lg:inline text-zinc-700">•</span>
+
+          <button
+            type="button"
+            onClick={() => {
+              playTone(720, 0.06);
+              onOpenCertificate();
+            }}
+            className="hidden lg:flex items-center gap-1 text-zinc-400 hover:text-amber-200 transition-colors cursor-pointer group"
+            title="Open Gold Master Certificate (Cmd+G / Ctrl+G)"
+          >
+            <kbd className="px-1.5 py-0.2 rounded bg-white/[0.04] group-hover:bg-amber-500/15 border border-white/10 group-hover:border-amber-500/40 text-amber-300/80 font-mono text-[9px] transition-colors">
+              Cmd+G
+            </kbd>
+            <span className="text-[9px] text-zinc-500 group-hover:text-zinc-300">Certificate</span>
+          </button>
+        </div>
+
+        <button
+          type="button"
+          onClick={() => {
+            playTone(620, 0.05);
+            onOpenShortcuts();
+          }}
+          className="flex items-center gap-1 text-[9px] text-zinc-500 hover:text-cyan-300 transition-colors shrink-0 cursor-pointer"
+          title="Open Global Keyboard Shortcuts Reference (? or Cmd+/)"
+        >
+          <span className="hidden sm:inline">All Hotkeys</span>
+          <kbd className="px-1.5 py-0.2 rounded bg-white/[0.04] border border-white/10 text-cyan-300/80 font-mono text-[9px]">
+            ?
+          </kbd>
+        </button>
+      </div>
+
       {/* Copilot Assistant Layer Drawer (Sovereign Epoch #849202) - Rendered locally only if not handled by root App */}
       {!onToggleCopilot && (
         <CopilotAssistantDrawer
