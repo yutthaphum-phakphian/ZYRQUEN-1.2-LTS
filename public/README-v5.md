@@ -72,6 +72,12 @@
 
 ### ขั้นตอนการรัน (Quick Start):
 ```bash
+# 0. ดึงซอร์สโค้ดจาก GitHub (เลือก HTTPS / SSH / GitHub CLI)
+git clone https://github.com/yutthaphum-phakphian/ZYRQUEN-1.2-LTS.git
+# หรือใช้ SSH: git clone git@github.com:yutthaphum-phakphian/ZYRQUEN-1.2-LTS.git
+# หรือใช้ GitHub CLI: gh repo clone yutthaphum-phakphian/ZYRQUEN-1.2-LTS
+cd ZYRQUEN-1.2-LTS
+
 # 1. ติดตั้ง Dependencies
 npm install
 

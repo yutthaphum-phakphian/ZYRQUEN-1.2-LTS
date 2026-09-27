@@ -97,11 +97,26 @@ interface SettingsViewProps {
 }
 
 
-import { fetchLatestCommit, GitHubCommitInfo } from '../../services/githubService';
+import {
+  fetchLatestCommit,
+  GitHubCommitInfo,
+  REPO_URL,
+  REPO_HTTPS_URL,
+  REPO_SSH_URL,
+  GH_CLI_CLONE_CMD,
+  GITHUB_PAGES_URL,
+} from '../../services/githubService';
 
 export const GitHubDeploymentWidget: React.FC = () => {
   const [commitInfo, setCommitInfo] = React.useState<GitHubCommitInfo | null>(null);
   const [loading, setLoading] = React.useState<boolean>(true);
+  const [copiedId, setCopiedId] = React.useState<string | null>(null);
+
+  const handleCopy = (val: string, id: string) => {
+    navigator.clipboard.writeText(val);
+    setCopiedId(id);
+    setTimeout(() => setCopiedId(null), 2000);
+  };
 
   const loadCommitData = async () => {
     setLoading(true);
@@ -173,6 +188,37 @@ export const GitHubDeploymentWidget: React.FC = () => {
               </div>
               <p className="text-slate-300 truncate mt-1" title={commitInfo.message}>"{commitInfo.message}"</p>
               <p className="text-[11px] text-slate-500">{new Date(commitInfo.date).toLocaleString()}</p>
+              <div className="pt-2 mt-2 border-t border-slate-800/80 space-y-1">
+                <div className="flex flex-wrap items-center gap-2 text-[10px]">
+                  <a href={REPO_URL} target="_blank" rel="noopener noreferrer" className="text-cyan-400 hover:underline flex items-center gap-1">
+                    <span>GitHub Repo</span>
+                    <ExternalLink className="w-2.5 h-2.5" />
+                  </a>
+                  <span className="text-slate-600">•</span>
+                  <a href={GITHUB_PAGES_URL} target="_blank" rel="noopener noreferrer" className="text-emerald-400 hover:underline flex items-center gap-1">
+                    <span>GitHub Pages</span>
+                    <ExternalLink className="w-2.5 h-2.5" />
+                  </a>
+                </div>
+                <div className="flex flex-wrap gap-1.5 pt-1">
+                  {[
+                    { id: 'https', label: 'HTTPS', val: REPO_HTTPS_URL },
+                    { id: 'ssh', label: 'SSH', val: REPO_SSH_URL },
+                    { id: 'gh', label: 'GH CLI', val: GH_CLI_CLONE_CMD },
+                  ].map((ep) => (
+                    <button
+                      key={ep.id}
+                      onClick={() => handleCopy(ep.val, ep.id)}
+                      title={ep.val}
+                      className="px-2 py-0.5 rounded bg-slate-950 hover:bg-slate-800 border border-slate-700 text-[10px] text-slate-300 flex items-center gap-1 cursor-pointer transition"
+                    >
+                      <span className="text-cyan-400 font-bold">{ep.label}:</span>
+                      <span className="truncate max-w-[140px]">{ep.val}</span>
+                      <span className="text-emerald-400">{copiedId === ep.id ? '✓' : '📋'}</span>
+                    </button>
+                  ))}
+                </div>
+              </div>
             </div>
           ) : (
             <div className="text-xs text-rose-400 font-mono">Failed to resolve version state.</div>

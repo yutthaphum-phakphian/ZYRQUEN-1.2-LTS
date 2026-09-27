@@ -49,10 +49,18 @@ unzip ZYRQUEN-1.2-LTS.zip
 cd ZYRQUEN-1.2-LTS
 ```
 
-หากใช้ Git ให้ clone repository แล้วเข้าสู่โฟลเดอร์โปรเจกต์:
+หากใช้ Git หรือ GitHub CLI ให้ clone repository แล้วเข้าสู่โฟลเดอร์โปรเจกต์:
 
 ```bash
+# วิธีที่ 1: Clone ผ่าน HTTPS
 git clone https://github.com/yutthaphum-phakphian/ZYRQUEN-1.2-LTS.git
+
+# วิธีที่ 2: Clone ผ่าน SSH
+git clone git@github.com:yutthaphum-phakphian/ZYRQUEN-1.2-LTS.git
+
+# วิธีที่ 3: Clone ผ่าน GitHub CLI (gh)
+gh repo clone yutthaphum-phakphian/ZYRQUEN-1.2-LTS
+
 cd ZYRQUEN-1.2-LTS
 ```
 

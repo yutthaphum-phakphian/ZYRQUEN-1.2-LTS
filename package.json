@@ -3,6 +3,16 @@
   "private": true,
   "version": "1.2.1",
   "type": "module",
+  "homepage": "https://yutthaphum-phakphian.github.io/ZYRQUEN-1.2-LTS/",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/yutthaphum-phakphian/ZYRQUEN-1.2-LTS.git",
+    "ssh": "git@github.com:yutthaphum-phakphian/ZYRQUEN-1.2-LTS.git",
+    "ghCli": "gh repo clone yutthaphum-phakphian/ZYRQUEN-1.2-LTS"
+  },
+  "bugs": {
+    "url": "https://github.com/yutthaphum-phakphian/ZYRQUEN-1.2-LTS/issues"
+  },
   "scripts": {
     "dev": "tsx server.ts",
     "build": "vite build",

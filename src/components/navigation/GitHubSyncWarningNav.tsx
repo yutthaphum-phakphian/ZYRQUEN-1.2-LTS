@@ -8,6 +8,14 @@ export const GitHubSyncWarningNav: React.FC = () => {
   const [syncState, setSyncState] = useState<GitHubSyncState>(githubSyncService.getState());
   const [showDetailModal, setShowDetailModal] = useState(false);
   const [resyncSuccessToast, setResyncSuccessToast] = useState(false);
+  const [copiedEndpoint, setCopiedEndpoint] = useState<string | null>(null);
+
+  const handleCopyEndpoint = (value: string, key: string) => {
+    navigator.clipboard.writeText(value);
+    playTone(840, 0.05);
+    setCopiedEndpoint(key);
+    setTimeout(() => setCopiedEndpoint(null), 2200);
+  };
 
   useEffect(() => {
     const unsubscribe = githubSyncService.subscribe((state) => {
@@ -289,6 +297,38 @@ export const GitHubSyncWarningNav: React.FC = () => {
                     <Github className="w-3.5 h-3.5 text-zinc-400" />
                     <span>GitHub Profile & Repositories</span>
                   </a>
+                </div>
+
+                {/* Quick Copy Clone & Remote Endpoints */}
+                <div className="pt-2 border-t border-cyan-500/20 space-y-1.5">
+                  <div className="text-[10px] text-cyan-300/90 font-semibold">
+                    Clone &amp; Remote Endpoints (HTTPS / SSH / GitHub CLI):
+                  </div>
+                  <div className="space-y-1">
+                    {[
+                      { key: 'https', label: 'HTTPS', val: syncState.remoteHttpsUrl },
+                      { key: 'ssh', label: 'SSH', val: syncState.remoteSshUrl },
+                      { key: 'gh', label: 'GH CLI', val: syncState.ghCliCloneCmd },
+                    ].map((item) => (
+                      <div
+                        key={item.key}
+                        className="flex items-center justify-between gap-2 px-2.5 py-1 rounded-lg bg-black/50 border border-white/10 text-[10px]"
+                      >
+                        <div className="flex items-center gap-2 min-w-0">
+                          <span className="px-1.5 py-0.5 rounded bg-cyan-500/20 text-cyan-300 border border-cyan-500/30 font-bold text-[9px] shrink-0">
+                            {item.label}
+                          </span>
+                          <code className="text-zinc-200 truncate select-all">{item.val}</code>
+                        </div>
+                        <button
+                          onClick={() => handleCopyEndpoint(item.val, item.key)}
+                          className="px-2 py-0.5 rounded bg-cyan-500/15 hover:bg-cyan-500/30 border border-cyan-500/30 text-cyan-200 text-[9px] font-bold shrink-0 cursor-pointer transition-colors"
+                        >
+                          {copiedEndpoint === item.key ? '✓ Copied' : 'Copy'}
+                        </button>
+                      </div>
+                    ))}
+                  </div>
                 </div>
               </div>
 
