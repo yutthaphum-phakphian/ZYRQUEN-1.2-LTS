@@ -169,21 +169,26 @@ export const Chamber18NeuralSentinel: React.FC<Chamber18NeuralSentinelProps> = (
     }
   };
 
-  // Telemetry Loop
+  // Telemetry Loop (100% Deterministic Genesis-Seeded Sequence — Zero Math.random())
   useEffect(() => {
+    let tickCounter = 1;
+    const nodes = ['BK01', 'SG02', 'TY03', 'ZH04', 'SV05', 'LD06'] as const;
     const interval = setInterval(() => {
       const now = Date.now();
-      const isSpike = Math.random() < 0.20;
-      
+      const seed = (849202 + tickCounter * 37) % 100;
+      const isSpike = tickCounter % 5 === 0;
+      const hexSuffix = (849202 + tickCounter * 14902).toString(16).slice(-6);
+
       const mockSpan: TelemetrySpan = {
-        traceId: `tr-${Math.random().toString(36).substring(2, 8)}`,
-        spanId: `sp-${Math.random().toString(36).substring(2, 7)}`,
+        traceId: `tr-${hexSuffix}`,
+        spanId: `sp-${hexSuffix.slice(0, 5)}`,
         timestamp: now,
-        durationMs: isSpike ? 142.6 : 35.8 + (Math.random() * 4 - 2),
-        phaseJitterFs: isSpike ? 5.40 : 1.33 + (Math.random() * 0.4 - 0.2),
+        durationMs: isSpike ? 142.6 : Number((35.8 + ((seed % 40) - 20) / 10).toFixed(2)),
+        phaseJitterFs: isSpike ? 5.40 : Number((1.33 + ((seed % 20) - 10) / 50).toFixed(2)),
         quantumCoherenceRatio: isSpike ? 0.9840 : 0.9998,
-        nodeId: (['BK01', 'SG02', 'TY03', 'ZH04', 'SV05', 'LD06'] as const)[Math.floor(Math.random() * 6)]
+        nodeId: nodes[tickCounter % nodes.length]
       };
+      tickCounter += 1;
 
       const newMetrics = sentinelEngine.ingestSpan(mockSpan);
       setMetrics(newMetrics);
@@ -209,7 +214,7 @@ export const Chamber18NeuralSentinel: React.FC<Chamber18NeuralSentinelProps> = (
             : 'FAIL_CLOSED_THRESHOLD_BREACH';
 
         const newBreach: BreachEvent = {
-          id: `BRK-${Math.floor(10000 + Math.random() * 90000)}`,
+          id: `BRK-${10000 + ((849202 + tickCounter * 97) % 90000)}`,
           timestamp: now,
           nodeId: mockSpan.nodeId,
           anomalyScore: newMetrics.anomalyScore,
@@ -683,7 +688,7 @@ export const Chamber18NeuralSentinel: React.FC<Chamber18NeuralSentinelProps> = (
             )}
           </div>
           <div className="h-48 w-full bg-slate-950 p-2 rounded-lg border border-slate-900">
-            <ResponsiveContainer width="100%" height="100%">
+            <ResponsiveContainer width="100%" height="100%" minWidth={300} minHeight={160} initialDimension={{ width: 640, height: 160 }}>
               <LineChart data={history60s}>
                 <CartesianGrid strokeDasharray="3 3" stroke="#1e293b" />
                 <XAxis dataKey="time" stroke="#64748b" fontSize={10} tickLine={false} />
@@ -945,7 +950,7 @@ export const Chamber18NeuralSentinel: React.FC<Chamber18NeuralSentinelProps> = (
           </span>
         </div>
         <div className="h-36 w-full bg-slate-950 p-2 rounded-lg border border-slate-900">
-          <ResponsiveContainer width="100%" height="100%">
+          <ResponsiveContainer width="100%" height="100%" minWidth={300} minHeight={120} initialDimension={{ width: 640, height: 120 }}>
             <BarChart data={scoreHistogramData}>
               <CartesianGrid strokeDasharray="3 3" stroke="#1e293b" />
               <XAxis dataKey="binRange" stroke="#64748b" fontSize={10} tickLine={false} />

@@ -5,6 +5,7 @@ import crypto from 'crypto';
 import path from 'path';
 import fs from 'fs';
 import { createServer as createViteServer } from 'vite';
+import { AUTHORITATIVE_CONSTANTS } from './src/lib/canonicalResolver';
 
 // ============================================================================
 // TYPES & INTERFACES (DOC-SOV-HSM-1010-2026-V9)
@@ -57,9 +58,9 @@ export interface CourtDossierExportRequest {
 // ============================================================================
 
 const PORT = process.env.PORT ? parseInt(process.env.PORT, 10) : 3000;
-const MERKLE_ROOT_GENESIS = '0x909ab814479844d8a14816bed34cdbb07528e18501da86fc4691763a43fa4c68';
-const GENESIS_BLOCK_NUM = 849202;
-const SLA_MAX_LATENCY_MS = 142.0;
+const MERKLE_ROOT_GENESIS = `0x${AUTHORITATIVE_CONSTANTS.MERKLE_ROOT}`;
+const GENESIS_BLOCK_NUM = AUTHORITATIVE_CONSTANTS.GENESIS_BLOCK_HEIGHT;
+const SLA_MAX_LATENCY_MS = AUTHORITATIVE_CONSTANTS.REPLAY_SLA_MS;
 
 const COURT_EXHIBITS: ExhibitItem[] = [
   {
@@ -426,13 +427,15 @@ async function startServer() {
   });
 
   app.post('/api/v1/replay/verify', (_req: Request, res: Response) => {
-    const txId = `TX-SOV-${crypto.randomBytes(4).toString('hex').toUpperCase()}`;
+    const txSeed = crypto.createHash('sha256').update(`TX:${GENESIS_BLOCK_NUM}:${MERKLE_ROOT_GENESIS}`).digest('hex');
+    const txId = `TX-SOV-${txSeed.slice(0, 8).toUpperCase()}`;
     let accumulatedLatency = 0;
     const stages: ReplayStageMetric[] = REPLAY_STAGES_SPEC.map((spec) => {
-      const variation = (Math.random() * 0.04) - 0.02;
+      const variation = Number((((spec.stageNumber * 37 + GENESIS_BLOCK_NUM) % 40 - 20) / 1000).toFixed(2));
       const latency = Number((spec.baseLatency + variation).toFixed(2));
       accumulatedLatency += latency;
-      const digestHash = `${spec.hashPrefix}${crypto.randomBytes(8).toString('hex')}`;
+      const hashSeed = crypto.createHash('sha256').update(`${spec.stageNumber}:${txId}:${GENESIS_BLOCK_NUM}`).digest('hex');
+      const digestHash = `${spec.hashPrefix}${hashSeed.slice(0, 16)}`;
       return {
         stageNumber: spec.stageNumber,
         stageName: spec.name,

@@ -24,7 +24,11 @@ import {
   Eye,
   Code2,
   QrCode,
+  AlertTriangle,
+  Zap,
 } from 'lucide-react';
+import { AUTHORITATIVE_CONSTANTS } from '../../lib/canonicalResolver';
+import { Panel } from '../common/Panel';
 import { CustodianQRValidator } from '../system/CustodianQRValidator';
 import { HardwareSealQRScanner } from '../security/HardwareSealQRScanner';
 import { CourtEvidenceQR } from '../CourtEvidenceQR';
@@ -132,6 +136,20 @@ interface SecurityViewProps {
   ) => void;
 }
 
+export interface HsmNode {
+  id: number;
+  label: string;
+  isHardware: boolean;
+  serialNumber: string;
+}
+
+export const HSM_NODES_DATA: HsmNode[] = Array.from({ length: AUTHORITATIVE_CONSTANTS.HSM_TOTAL_NODES }, (_, i) => ({
+  id: i + 1,
+  label: `HSM-NODE-${(i + 1).toString().padStart(2, '0')}`,
+  isHardware: i < 8, // 8 Real Hardware HSM, 2 Enclave Simulated
+  serialNumber: `FIPS140-3-L4-00${i + 1}`,
+}));
+
 export const SecurityView: React.FC<SecurityViewProps> = ({
   initialSubTab = 'legal-convergence',
   onAddSystemEvent,
@@ -146,6 +164,36 @@ export const SecurityView: React.FC<SecurityViewProps> = ({
   const [isPdfPreviewOpen, setIsPdfPreviewOpen] = useState(false);
   const [isQrValidatorOpen, setIsQrValidatorOpen] = useState(false);
   const [isHardwareSealScannerOpen, setIsHardwareSealScannerOpen] = useState(false);
+
+  // Hardware HSM Quorum Monitor states (activeHsmNodes, disabledHsmNodeIds, handshakingNodeId)
+  const [activeHsmNodes, setActiveHsmNodes] = useState<number[]>([1, 2, 3, 4, 5, 6, 7, 8, 9, 10]);
+  const [disabledHsmNodeIds, setDisabledHsmNodeIds] = useState<number[]>([]);
+  const [handshakingNodeId, setHandshakingNodeId] = useState<number | null>(null);
+
+  const handleHandshakeTrigger = (nodeId: number) => {
+    if (disabledHsmNodeIds.includes(nodeId)) return;
+    playTone(720, 0.05);
+    setHandshakingNodeId(nodeId);
+    setTimeout(() => {
+      setHandshakingNodeId(null);
+      setActiveHsmNodes((prev) => (prev.includes(nodeId) ? prev : [...prev, nodeId]));
+      playAuditChime();
+    }, 1200);
+  };
+
+  const toggleNodeState = (nodeId: number) => {
+    playTone(580, 0.04);
+    if (disabledHsmNodeIds.includes(nodeId)) {
+      setDisabledHsmNodeIds((prev) => prev.filter((id) => id !== nodeId));
+      setActiveHsmNodes((prev) => (prev.includes(nodeId) ? prev : [...prev, nodeId]));
+    } else {
+      setDisabledHsmNodeIds((prev) => [...prev, nodeId]);
+      setActiveHsmNodes((prev) => prev.filter((id) => id !== nodeId));
+    }
+  };
+
+  const activeCount = activeHsmNodes.length;
+  const isQuorumReached = activeCount >= AUTHORITATIVE_CONSTANTS.HSM_QUORUM_THRESHOLD;
 
   // Real-Time HSM Quorum & Hardware Interface Diagnostics State
   const [hsmDiagnostics, setHsmDiagnostics] = useState<HsmRealtimeDiagnosticReport | null>(null);
@@ -472,6 +520,108 @@ export const SecurityView: React.FC<SecurityViewProps> = ({
           )}
         </div>
       </div>
+
+      {/* Hardware HSM Quorum Monitor Panel (10 Deca-Key Nodes: HW HSM vs SIMULATED & Handshake Control) */}
+      <Panel
+        title="Hardware HSM Quorum Monitor"
+        subtitle={`Audit Authority: ${AUTHORITATIVE_CONSTANTS.SYSTEM_AUDIT_ID} | Quorum Standard: ${AUTHORITATIVE_CONSTANTS.HSM_QUORUM_THRESHOLD}/${AUTHORITATIVE_CONSTANTS.HSM_TOTAL_NODES} Deca-Key | Block #${AUTHORITATIVE_CONSTANTS.GENESIS_BLOCK_HEIGHT}`}
+        rightSlot={
+          <div className="flex flex-wrap items-center gap-2">
+            <span className="text-xs text-zinc-400 font-mono">
+              PQC Dilithium-5 / SPHINCS+ Hardware Enclaves
+            </span>
+            <span
+              className={`px-3 py-1 rounded-lg text-xs font-mono font-semibold border ${
+                isQuorumReached
+                  ? 'bg-emerald-950/60 border-emerald-500/40 text-emerald-300'
+                  : 'bg-rose-950/60 border-rose-500/40 text-rose-300'
+              }`}
+            >
+              QUORUM STATUS: {activeCount}/{AUTHORITATIVE_CONSTANTS.HSM_TOTAL_NODES}{' '}
+              {isQuorumReached ? 'VALID' : 'QUORUM DEGRADED'}
+            </span>
+          </div>
+        }
+      >
+        <div className="grid grid-cols-2 md:grid-cols-5 gap-3">
+          {HSM_NODES_DATA.map((node) => {
+            const isActive = activeHsmNodes.includes(node.id);
+            const isDisabled = disabledHsmNodeIds.includes(node.id);
+            const isHandshaking = handshakingNodeId === node.id;
+
+            return (
+              <div
+                key={node.id}
+                className={`p-3 rounded-lg border transition-all duration-200 flex flex-col justify-between ${
+                  isDisabled
+                    ? 'bg-zinc-900/40 border-zinc-800/80 opacity-50'
+                    : isHandshaking
+                    ? 'bg-amber-950/40 border-amber-500/60 shadow-lg shadow-amber-500/10 animate-pulse'
+                    : isActive
+                    ? 'bg-emerald-950/20 border-emerald-500/30 hover:border-emerald-500/60'
+                    : 'bg-zinc-900 border-zinc-800'
+                }`}
+              >
+                <div className="flex justify-between items-start mb-2">
+                  <div className="flex items-center gap-1.5">
+                    <Key className={`w-3.5 h-3.5 ${isActive ? 'text-emerald-400' : 'text-zinc-500'}`} />
+                    <span className="text-xs font-mono font-bold">{node.label}</span>
+                  </div>
+                  <span
+                    className={`text-[10px] px-1.5 py-0.5 rounded uppercase font-mono ${
+                      node.isHardware
+                        ? 'bg-blue-950 border border-blue-800 text-blue-300'
+                        : 'bg-purple-950 border border-purple-800 text-purple-300'
+                    }`}
+                  >
+                    {node.isHardware ? 'HW HSM' : 'SIMULATED'}
+                  </span>
+                </div>
+
+                <div className="text-[11px] font-mono text-zinc-400 mb-3">
+                  SN: {node.serialNumber}
+                </div>
+
+                <div className="flex items-center justify-between pt-2 border-t border-zinc-800/60">
+                  <span className="flex items-center gap-1 text-[11px] font-mono">
+                    {isHandshaking ? (
+                      <span className="text-amber-400 flex items-center gap-1">
+                        <RefreshCw className="w-3 h-3 animate-spin" /> SYN...
+                      </span>
+                    ) : isActive ? (
+                      <span className="text-emerald-400 flex items-center gap-1">
+                        <CheckCircle2 className="w-3 h-3" /> ONLINE
+                      </span>
+                    ) : (
+                      <span className="text-rose-400 flex items-center gap-1">
+                        <AlertTriangle className="w-3 h-3" /> OFFLINE
+                      </span>
+                    )}
+                  </span>
+
+                  <div className="flex items-center gap-1">
+                    <button
+                      onClick={() => handleHandshakeTrigger(node.id)}
+                      disabled={isDisabled || isHandshaking}
+                      className="p-1 rounded bg-zinc-800 hover:bg-zinc-700 text-zinc-300 disabled:opacity-30 transition-colors cursor-pointer"
+                      title="Trigger Cryptographic Handshake"
+                    >
+                      <Zap className="w-3 h-3 text-amber-400" />
+                    </button>
+                    <button
+                      onClick={() => toggleNodeState(node.id)}
+                      className="p-1 rounded bg-zinc-800 hover:bg-zinc-700 text-zinc-300 transition-colors cursor-pointer"
+                      title={isDisabled ? 'Enable Node' : 'Isolate Node'}
+                    >
+                      <Lock className={`w-3 h-3 ${isDisabled ? 'text-rose-400' : 'text-emerald-400'}`} />
+                    </button>
+                  </div>
+                </div>
+              </div>
+            );
+          })}
+        </div>
+      </Panel>
 
       {/* Real-Time HSM Quorum & Hardware-Level Interface Diagnostic Panel */}
       <div className="p-5 sm:p-6 rounded-2xl bg-[#0a0f1e] border border-cyan-500/30 space-y-5 font-mono">

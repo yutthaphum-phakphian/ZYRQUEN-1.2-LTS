@@ -1,4 +1,5 @@
 import { Chamber, OperatingModule, SatelliteNode, HSMUnit, VerificationPhase, InvariantRule, TreasuryAsset } from '../types';
+import { AUTHORITATIVE_CONSTANTS } from '../lib/canonicalResolver';
 import {
   SOVEREIGN_CONFIG as ROOT_SOVEREIGN_CONFIG,
   AUTHORITATIVE_BLOCK_HEIGHT,
@@ -12,6 +13,8 @@ import {
   AUTHORITATIVE_CRYO_TEMP_MK,
   AUTHORITATIVE_SSOT_MUTATION,
 } from '../sovereign.config';
+
+export { AUTHORITATIVE_CONSTANTS };
 
 export type { Chamber };
 

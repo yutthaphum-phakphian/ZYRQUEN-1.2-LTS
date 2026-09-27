@@ -19,6 +19,7 @@
  * ======================================================================
  */
 
+import { AUTHORITATIVE_CONSTANTS } from '../lib/canonicalResolver';
 import {
   SOVEREIGN_CONFIG,
   AUTHORITATIVE_BLOCK_HEIGHT,
@@ -31,6 +32,22 @@ import {
   AUTHORITATIVE_SSOT_MUTATION,
 } from '../sovereign.config';
 import { CANONICAL_CONSTANTS, STATE_AUTHORITY } from '../data/sovereignData';
+
+export const authoritativeState = Object.freeze({
+  height: AUTHORITATIVE_CONSTANTS.BLOCK_HEIGHT,
+  root: AUTHORITATIVE_CONSTANTS.MERKLE_ROOT,
+  seals: AUTHORITATIVE_CONSTANTS.SEAL_COUNT,
+});
+
+export const getAuthoritativeState = () =>
+  Object.freeze({
+    blockHeight: AUTHORITATIVE_CONSTANTS.GENESIS_BLOCK_HEIGHT,
+    merkleRoot: AUTHORITATIVE_CONSTANTS.MERKLE_ROOT,
+    canonicalSeals: AUTHORITATIVE_CONSTANTS.SEAL_COUNT,
+    auditId: AUTHORITATIVE_CONSTANTS.SYSTEM_AUDIT_ID,
+    sovereignAuthority: AUTHORITATIVE_CONSTANTS.SOVEREIGN_AUTHORITY,
+    isZeroDrift: true,
+  });
 
 export type ProvenanceClassification =
   | 'CANONICAL_FROZEN'

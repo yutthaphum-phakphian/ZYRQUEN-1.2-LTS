@@ -5,6 +5,7 @@
  * and cross-module parity checks into a single immutable core module.
  */
 
+import { AUTHORITATIVE_CONSTANTS } from '../lib/canonicalResolver';
 import { SOVEREIGN_CONFIG } from '../sovereign.config';
 import { SYSTEM_METADATA } from '../data/canonicalData';
 import { CANONICAL_CONSTANTS, STATE_AUTHORITY, SOVEREIGN_CHAMBERS } from '../data/sovereignData';
@@ -28,23 +29,23 @@ export const CANONICAL_SSOT_CORE = Object.freeze({
   }),
 
   genesisAnchor: Object.freeze({
-    blockHeight: 849202 as const,
-    blockTag: '#849202' as const,
-    merkleRoot: '909ab814479844d8a14816bed34cdbb07528e18501da86fc4691763a43fa4c68' as const,
-    genesisSeedText: 'ZYRQUEN_GENESIS_CONTRACT_v1.2' as const,
+    blockHeight: AUTHORITATIVE_CONSTANTS.GENESIS_BLOCK_HEIGHT,
+    blockTag: AUTHORITATIVE_CONSTANTS.BLOCK_TAG,
+    merkleRoot: AUTHORITATIVE_CONSTANTS.MERKLE_ROOT,
+    genesisSeedText: AUTHORITATIVE_CONSTANTS.GENESIS_SEED_TEXT,
     deploymentCertGold: 'ZQ-GOLD-DEP-849202-3908' as const,
-    deploymentCertGreen: 'ZQ-GREEN-DEP-849202-3908' as const,
+    deploymentCertGreen: AUTHORITATIVE_CONSTANTS.DEPLOYMENT_CERT_CODE,
     documentRef: 'DOC-SOV-HSM-1010-2026' as const,
   }),
 
   sealsLedger: Object.freeze({
-    canonicalSeals: 14902 as const,
-    quarantinedSeals: 80 as const,
-    rawTotalSeals: 14982 as const,
+    canonicalSeals: AUTHORITATIVE_CONSTANTS.SEAL_COUNT,
+    quarantinedSeals: AUTHORITATIVE_CONSTANTS.QUARANTINED_SEALS,
+    rawTotalSeals: AUTHORITATIVE_CONSTANTS.RAW_SEALS_TOTAL,
     observedRuntimeStreamSeals: 14907 as const,
     observedRuntimeQuarantineDelta: 5 as const,
-    ssotMutation: 0 as const,
-    ssotDrift: 'Δ0.00%' as const,
+    ssotMutation: AUTHORITATIVE_CONSTANTS.SSOT_MUTATION,
+    ssotDrift: AUTHORITATIVE_CONSTANTS.SSOT_DRIFT,
     writeAuthority: 'NONE' as const,
     promotionGate: 'FAIL_CLOSED' as const,
   }),

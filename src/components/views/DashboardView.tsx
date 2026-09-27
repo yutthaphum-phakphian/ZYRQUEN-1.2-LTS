@@ -999,6 +999,15 @@ export const DashboardView: React.FC<DashboardViewProps> = ({
             </div>
           </div>
 
+          {/* Complete Coverage: ROOM18 Neural Sentinel & Predictive Governance Register */}
+          <section id="room-18-sentinel" className="w-full">
+            <Room18MasterPanel
+              snapshots={snapshots}
+              onNavigate={onNavigate}
+              onOpenCertificate={onOpenCertificate}
+            />
+          </section>
+
           {/* Zyrquen Manifesto Terminal */}
           <ManifestoCard onOpenCertificate={onOpenCertificate} />
         </div>
