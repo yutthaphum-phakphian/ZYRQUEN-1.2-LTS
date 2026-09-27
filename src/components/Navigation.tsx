@@ -51,6 +51,7 @@ import { PWAInstallButton } from './PWAInstallButton';
 import { GitHubSyncWarningNav } from './navigation/GitHubSyncWarningNav';
 import { CopilotAssistantDrawer } from './copilot/CopilotAssistantDrawer';
 import { ThemeSwitcher } from './ThemeSwitcher';
+import { ZyrquenIcon } from './ZyrquenIcon';
 
 interface NavigationProps {
   currentView: ViewType;
@@ -84,6 +85,7 @@ interface NavItem {
   id: ViewType;
   labelEn: string;
   labelTh: string;
+  primaryTh?: boolean;
   icon: React.FC<{ className?: string }>;
   dotColor: string;
   badge?: string;
@@ -92,7 +94,8 @@ interface NavItem {
 
 export const NAVIGATION_ITEMS: NavItem[] = [
   { id: 'dashboard', labelEn: 'Dashboard', labelTh: 'ศูนย์บัญชาการ', icon: LayoutDashboard, dotColor: '#06B6D4', badge: 'HQ', shortcut: '1' },
-  { id: 'sovereign', labelEn: 'Unified Control Plane', labelTh: 'ศูนย์ควบคุมรวม Sentinel', icon: ShieldAlert, dotColor: '#06B6D4', badge: 'SENTINEL', shortcut: 'V' },
+  { id: 'sovereign', labelEn: 'Autonomous Self-Tuning Engine', labelTh: 'ศูนย์ควบคุมอัตโนมัติ Phase 11', icon: ShieldAlert, dotColor: '#06B6D4', badge: 'PHASE 11', shortcut: 'V' },
+  { id: 'ai-workspace', labelEn: 'AI Workspace', labelTh: 'พื้นที่ทำงาน AI & แซนด์บ็อกซ์', icon: Sparkles, dotColor: '#06B6D4', badge: 'AI BOUNDARY', shortcut: 'M' },
   { id: 'briefing', labelEn: 'Executive & Court', labelTh: 'สรุปผู้บริหาร & ศาล', icon: Landmark, dotColor: '#D4AF37', badge: 'EXECUTIVE', shortcut: 'E' },
   { id: 'sovereign-wallet', labelEn: 'Sovereign Wallet', labelTh: 'กระเป๋าอธิปไตย & คีย์ QR', icon: Wallet, dotColor: '#D4AF37', badge: 'WEBAUTHN', shortcut: 'Q' },
   { id: 'fusion', labelEn: 'Fusion Console', labelTh: 'รวมศูนย์นิติวิทยาศาสตร์', icon: Activity, dotColor: '#D946EF', badge: 'FUSION', shortcut: 'F' },
@@ -286,10 +289,9 @@ export const Navigation: React.FC<NavigationProps> = ({
             </span>
           </button>
 
-          <div className="relative flex items-center justify-center w-10 h-10 sm:w-11 sm:h-11 rounded-2xl bg-[#0a0f1e] border-cyan-500/30 shadow-[0_0_20px_rgba(6,182,212,0.25)] group cursor-default shrink-0">
-            <div className="absolute inset-0 rounded-2xl bg-cyan-400/10 opacity-0 group-hover:opacity-100 transition-opacity" />
-            <Sparkles className="w-5 h-5 text-cyan-400 animate-pulse relative z-10" />
-            <span className="absolute -bottom-1 -right-1 w-2.5 h-2.5 sm:w-3 sm:h-3 rounded-full bg-emerald-500 border-2 border-[#070914] shadow-[0_0_8px_#10B981]" />
+          <div className="relative flex items-center justify-center shrink-0">
+            <ZyrquenIcon size={42} />
+            <span className="absolute -bottom-0.5 -right-0.5 w-2.5 h-2.5 sm:w-3 sm:h-3 rounded-full bg-emerald-500 border-2 border-[#070914] shadow-[0_0_8px_#10B981]" />
           </div>
           <div className="min-w-0">
             <div className="flex items-center gap-1.5 sm:gap-2">
@@ -401,25 +403,8 @@ export const Navigation: React.FC<NavigationProps> = ({
 
         {/* Right Actions */}
         <div className="flex items-center gap-1 sm:gap-2 shrink-0">
-          {/* GitHub Synchronization Warning & Drift Re-sync System */}
+          {/* PWA Install & Copilot Assistant Layer (Sovereign Epoch #849202) Trigger Button */}
           <PWAInstallButton />
-          {onOpenGitHubPwa && (
-            <button
-              id="btn-nav-github-pwa-setup"
-              onClick={() => {
-                playTone(640, 0.06);
-                onOpenGitHubPwa();
-              }}
-              className="hidden lg:flex items-center gap-1.5 px-2.5 py-1.5 rounded-xl bg-slate-900/90 hover:bg-slate-800 text-zinc-300 hover:text-white border-slate-700/60 hover:border-cyan-500/40 transition-all font-mono text-xs cursor-pointer active:scale-95 shadow-sm"
-              title="GitHub Push & PWA Setup Guide"
-            >
-              <Github className="w-3.5 h-3.5 text-cyan-400" />
-              <span className="hidden xl:inline text-[11px] font-bold">GitHub &amp; PWA</span>
-            </button>
-          )}
-          <div className="hidden sm:block">
-            <GitHubSyncWarningNav />
-          </div>
 
           {/* Copilot Assistant Layer (Sovereign Epoch #849202) Trigger Button */}
           <button
@@ -763,8 +748,12 @@ export const Navigation: React.FC<NavigationProps> = ({
                     style={{ backgroundColor: item.dotColor, color: item.dotColor }}
                   />
                   <Icon className={`w-4 h-4 shrink-0 transition-colors ${isActive ? 'text-cyan-300' : 'text-zinc-500 group-hover:text-zinc-300'}`} />
-                  <span className="font-semibold tracking-wide whitespace-nowrap">{item.labelEn}</span>
-                  <span className={`hidden 2xl:inline text-[10px] whitespace-nowrap ${isActive ? 'text-cyan-200/70' : 'text-zinc-600 group-hover:text-zinc-400'}`}>({item.labelTh})</span>
+                  <span className="font-semibold tracking-wide whitespace-nowrap">
+                    {item.primaryTh ? item.labelTh : item.labelEn}
+                  </span>
+                  <span className={`hidden 2xl:inline text-[10px] whitespace-nowrap ${isActive ? 'text-cyan-200/70' : 'text-zinc-600 group-hover:text-zinc-400'}`}>
+                    ({item.primaryTh ? item.labelEn : item.labelTh})
+                  </span>
                   {item.badge && (
                     <span
                       className={`text-[9px] px-1.5 py-0.5 rounded font-mono font-bold tracking-wider shrink-0 ${

@@ -16,16 +16,27 @@ import {
   Activity,
   Lock,
   FolderSync,
-  FileCheck2,
   CheckCircle2,
   GitBranch,
   Layers,
+  Zap,
+  Scale,
+  FileDown,
+  Cpu,
+  HeartPulse,
 } from 'lucide-react';
-import { copilotAssistantService, CopilotAssistantState } from '../services/copilotAssistantService';
+import {
+  copilotAssistantService,
+  CopilotAssistantState,
+  CANONICAL_FORENSIC_IDENTITY_METADATA,
+  CANONICAL_16_FORENSIC_STAGES,
+  ForensicPipelineStageItem,
+} from '../services/copilotAssistantService';
 import { githubSyncService, GitHubSyncState } from '../services/githubSyncService';
 import { useSystemState } from '../hooks/useSystemState';
 import { playTone, playAuditChime } from './AudioSynthesizer';
 import { CopilotAutonomyNodePanel } from './copilot/CopilotAutonomyNodePanel';
+import { INITIAL_16_AUDIT_STEPS, exportFull16StepSummaryPDF } from './ForensicAuditStepper';
 import { ViewType } from '../types';
 
 export interface CopilotSovereignAIProps {
@@ -67,8 +78,16 @@ const CANONICAL_SYNCED_FILES: SyncedFileManifestItem[] = [
     category: 'COPILOT',
     shaShort: '54783c5a',
     status: 'UPDATED',
-    sizeKb: '28.6 KB',
-    descriptionTh: 'Copilot Sovereign AI v6.0 Ultra + All-Files SSoT Sync Engine',
+    sizeKb: '34.8 KB',
+    descriptionTh: 'Copilot Sovereign AI v6.0 Ultra + 16-Step Auto-Pilot Engine',
+  },
+  {
+    path: 'src/components/ForensicAuditStepper.tsx',
+    category: 'SECURITY',
+    shaShort: '16stg909',
+    status: 'UPDATED',
+    sizeKb: '56.4 KB',
+    descriptionTh: '16-Step Forensic Audit Pipeline Execution Matrix (STG-01..16)',
   },
   {
     path: 'src/components/copilot/CopilotAutonomyNodePanel.tsx',
@@ -83,8 +102,8 @@ const CANONICAL_SYNCED_FILES: SyncedFileManifestItem[] = [
     category: 'COPILOT',
     shaShort: '40202bf9',
     status: 'UPDATED',
-    sizeKb: '46.8 KB',
-    descriptionTh: '5-Layer Copilot Reflex, PQC Audit & Thai Semantic Ultra Engine',
+    sizeKb: '52.2 KB',
+    descriptionTh: '5-Layer Copilot Reflex, Closed-Loop Auto-Pilot & 16-Step Matrix',
   },
   {
     path: 'src/services/githubSyncService.ts',
@@ -135,14 +154,6 @@ const CANONICAL_SYNCED_FILES: SyncedFileManifestItem[] = [
     descriptionTh: 'GitHub Pages Production Deployment Pipeline (Node 22)',
   },
   {
-    path: '.github/workflows/zyrquen-security-gate.yml',
-    category: 'WORKFLOW',
-    shaShort: 'sec22gat',
-    status: 'UPDATED',
-    sizeKb: '2.8 KB',
-    descriptionTh: 'Automated 22-Gate Security & SSoT Verification Workflow',
-  },
-  {
     path: 'README.md',
     category: 'CORE',
     shaShort: 'rdm84920',
@@ -169,15 +180,21 @@ export const CopilotSovereignAI: React.FC<CopilotSovereignAIProps> = ({
 }) => {
   const [isMinimized, setIsMinimized] = useState(false);
   const [isExpanded, setIsExpanded] = useState(false);
-  const [activeTab, setActiveTab] = useState<'dialogue' | 'autonomy' | 'files'>('dialogue');
+  const [activeTab, setActiveTab] = useState<'dialogue' | 'forensic16' | 'autonomy' | 'files'>('dialogue');
   const [holoMode, setHoloMode] = useState<'hologram' | 'sphere' | 'tree'>('sphere');
   const [isSpinning, setIsSpinning] = useState(true);
   const [inputMsg, setInputMsg] = useState('');
   const [isSyncingAllFiles, setIsSyncingAllFiles] = useState(false);
+  const [isAutoTuningSweep, setIsAutoTuningSweep] = useState(false);
+  const [sweepingStageIdx, setSweepingStageIdx] = useState<number | null>(null);
+  const [selectedStage, setSelectedStage] = useState<ForensicPipelineStageItem>(
+    CANONICAL_16_FORENSIC_STAGES[0]
+  );
   const [syncedFiles, setSyncedFiles] = useState<SyncedFileManifestItem[]>(CANONICAL_SYNCED_FILES);
   const [lastFullSyncTime, setLastFullSyncTime] = useState<string>(
     new Date().toLocaleTimeString('th-TH', { hour12: false })
   );
+  const [neuralWavePhase, setNeuralWavePhase] = useState<number>(0);
 
   const [copilotState, setCopilotState] = useState<CopilotAssistantState>(
     copilotAssistantService.getState()
@@ -200,6 +217,15 @@ export const CopilotSovereignAI: React.FC<CopilotSovereignAIProps> = ({
       unsubGit();
     };
   }, []);
+
+  // Lively Neural Heartbeat Wave Animation
+  useEffect(() => {
+    if (isMinimized) return;
+    const timer = setInterval(() => {
+      setNeuralWavePhase((prev) => (prev + 1) % 360);
+    }, 180);
+    return () => clearInterval(timer);
+  }, [isMinimized]);
 
   useEffect(() => {
     if (isOpen !== undefined) {
@@ -228,9 +254,6 @@ export const CopilotSovereignAI: React.FC<CopilotSovereignAIProps> = ({
     await githubSyncService.forceRemoteResync();
     copilotAssistantService.runSentinelReflexAudit();
     copilotAssistantService.runPQCAudit();
-    await copilotAssistantService.processUserQuery(
-      'ดึงทุกไฟล์มาอัปเดทและซิงค์ข้อมูล Canonical SSoT ทั้งหมด (Pull & Update All Files)'
-    );
 
     const updatedTime = new Date().toLocaleTimeString('th-TH', { hour12: false });
     setLastFullSyncTime(updatedTime);
@@ -242,6 +265,29 @@ export const CopilotSovereignAI: React.FC<CopilotSovereignAIProps> = ({
     );
     setIsSyncingAllFiles(false);
     playAuditChime();
+  };
+
+  const handleAutoTuneAll16Stages = async () => {
+    if (isAutoTuningSweep) return;
+    setIsAutoTuningSweep(true);
+    playTone(740, 0.06);
+
+    for (let i = 0; i < CANONICAL_16_FORENSIC_STAGES.length; i += 4) {
+      setSweepingStageIdx(i);
+      await new Promise((r) => setTimeout(r, 90));
+    }
+
+    await copilotAssistantService.runAutoTune16StageSweep();
+    const updatedTime = new Date().toLocaleTimeString('th-TH', { hour12: false });
+    setLastFullSyncTime(updatedTime);
+    setSweepingStageIdx(null);
+    setIsAutoTuningSweep(false);
+    playAuditChime();
+  };
+
+  const handleToggleAutoPilot = () => {
+    playTone(660, 0.05);
+    copilotAssistantService.toggleAutoPilot();
   };
 
   const handleSend = async (customQuery?: string) => {
@@ -259,14 +305,14 @@ export const CopilotSovereignAI: React.FC<CopilotSovereignAIProps> = ({
     if (onClose) onClose();
   };
 
-  const handleRestore = () => {
-    setIsMinimized(false);
-    if (onOpen) onOpen();
-  };
-
   const handleDownloadSnapshot = () => {
     playAuditChime();
     copilotAssistantService.triggerSnapshotDownload();
+  };
+
+  const handleExport16StagePdf = () => {
+    playAuditChime();
+    exportFull16StepSummaryPDF(INITIAL_16_AUDIT_STEPS);
   };
 
   const handleHoloModeChange = (mode: 'hologram' | 'sphere' | 'tree') => {
@@ -292,20 +338,32 @@ export const CopilotSovereignAI: React.FC<CopilotSovereignAIProps> = ({
     return null;
   }
 
+  const activeLiveStage =
+    CANONICAL_16_FORENSIC_STAGES[
+      sweepingStageIdx !== null ? sweepingStageIdx : copilotState.activeForensicStageIndex
+    ] || CANONICAL_16_FORENSIC_STAGES[0];
+
+  // Dynamic SVG path for Lively Neural Heartbeat
+  const waveY1 = 10 + Math.sin((neuralWavePhase * Math.PI) / 180) * 6;
+  const waveY2 = 10 - Math.cos((neuralWavePhase * Math.PI) / 180) * 6;
+  const neuralWavePath = `M 0 10 Q 15 ${waveY1.toFixed(1)}, 30 10 T 60 ${waveY2.toFixed(1)} T 90 10`;
+
   return (
     <aside
       data-testid="copilot-sovereign-ai-panel"
       className={`fixed z-50 transition-all duration-300 ${
         isExpanded
           ? 'inset-2 sm:inset-4 md:inset-6 max-w-full h-[calc(100vh-1rem)] sm:h-[calc(100vh-2rem)]'
-          : 'bottom-14 right-2 left-2 sm:left-auto sm:right-4 sm:w-[480px] md:w-[520px] h-[82vh] max-h-[82vh]'
-      } flex flex-col bg-slate-950/95 backdrop-blur-2xl border border-cyan-500/40 rounded-2xl shadow-2xl shadow-cyan-950/80 overflow-hidden`}
+          : 'bottom-14 right-2 left-2 sm:left-auto sm:right-4 sm:w-[500px] md:w-[540px] h-[84vh] max-h-[84vh]'
+      } flex flex-col bg-slate-950/95 backdrop-blur-2xl border border-cyan-500/45 rounded-2xl shadow-2xl shadow-cyan-950/80 overflow-hidden`}
     >
-      {/* Top Header */}
+      {/* Top Header with Lively Neural Pulse */}
       <div className="flex items-center justify-between px-3.5 py-2.5 bg-gradient-to-r from-cyan-950/95 via-slate-900 to-indigo-950/95 border-b border-cyan-800/50 shrink-0">
         <div className="flex items-center gap-2.5 min-w-0">
-          <div className="p-1.5 rounded-xl bg-cyan-500/20 text-cyan-300 border border-cyan-500/40 shrink-0 shadow-[0_0_12px_rgba(6,182,212,0.3)]">
-            <Bot className="w-4 h-4" />
+          <div className="relative p-1.5 rounded-xl bg-cyan-500/20 text-cyan-300 border border-cyan-500/40 shrink-0 shadow-[0_0_14px_rgba(6,182,212,0.35)]">
+            <Bot className="w-4 h-4 animate-pulse" />
+            <span className="absolute -top-0.5 -right-0.5 w-2 h-2 rounded-full bg-emerald-400 animate-ping" />
+            <span className="absolute -top-0.5 -right-0.5 w-2 h-2 rounded-full bg-emerald-400" />
           </div>
           <div className="truncate">
             <div className="flex items-center gap-1.5 flex-wrap">
@@ -313,14 +371,25 @@ export const CopilotSovereignAI: React.FC<CopilotSovereignAIProps> = ({
                 COPILOT SOVEREIGN AI
               </span>
               <span className="px-1.5 py-0.5 text-[9px] font-bold rounded bg-cyan-500/20 text-cyan-300 border border-cyan-400/40">
-                v6.0 ULTRA
+                v6.0 ULTRA LIVE
               </span>
-              <span className="px-1.5 py-0.5 text-[9px] font-bold rounded bg-emerald-500/20 text-emerald-300 border border-emerald-400/40">
-                SOVEREIGN MESH
-              </span>
+              <button
+                type="button"
+                data-testid="btn-copilot-autopilot-toggle"
+                onClick={handleToggleAutoPilot}
+                className={`px-1.5 py-0.5 text-[9px] font-bold rounded border flex items-center gap-1 transition-all cursor-pointer ${
+                  copilotState.autoPilotActive
+                    ? 'bg-emerald-500/25 text-emerald-200 border-emerald-400/60 shadow-[0_0_10px_rgba(16,185,129,0.3)]'
+                    : 'bg-slate-800 text-slate-400 border-slate-700'
+                }`}
+                title="เปิด/ปิด โหมดปรับจูนอัตโนมัติมีชีวิตชีวา (Real-Time Autonomous Self-Tuning)"
+              >
+                <HeartPulse className={`w-2.5 h-2.5 ${copilotState.autoPilotActive ? 'text-emerald-300 animate-pulse' : 'text-slate-400'}`} />
+                <span>{copilotState.autoPilotActive ? 'AUTO-PILOT: ON' : 'AUTO-PILOT: OFF'}</span>
+              </button>
             </div>
             <p className="text-[10px] text-slate-300 truncate font-mono mt-0.5">
-              Epoch #{systemState.sealedBlock.toLocaleString()} • gemini-2.5-flash • นายยุทธภูมิ พากเพียร (#EP-SOVEREIGN-01)
+              Epoch #{systemState.sealedBlock.toLocaleString()} • 99.47% Integrity • นายยุทธภูมิ พากเพียร (#EP-SOVEREIGN-01)
             </p>
           </div>
         </div>
@@ -359,8 +428,23 @@ export const CopilotSovereignAI: React.FC<CopilotSovereignAIProps> = ({
             }`}
           >
             <Sparkles className="w-3 h-3 text-cyan-400" />
-            <span>Dialogue & Reflex</span>
+            <span>Dialogue &amp; Auto-Tune</span>
           </button>
+
+          <button
+            type="button"
+            data-testid="tab-copilot-forensic-16"
+            onClick={() => setActiveTab('forensic16')}
+            className={`px-2.5 py-1 rounded-lg font-bold flex items-center gap-1.5 transition-all cursor-pointer whitespace-nowrap ${
+              activeTab === 'forensic16'
+                ? 'bg-amber-500/25 text-amber-200 border border-amber-500/50 shadow-[0_0_10px_rgba(245,158,11,0.2)]'
+                : 'text-slate-400 hover:text-slate-200'
+            }`}
+          >
+            <Scale className="w-3 h-3 text-amber-400" />
+            <span>16 ขั้นตอน (16/16 PASS)</span>
+          </button>
+
           <button
             type="button"
             onClick={() => setActiveTab('autonomy')}
@@ -370,14 +454,10 @@ export const CopilotSovereignAI: React.FC<CopilotSovereignAIProps> = ({
                 : 'text-slate-400 hover:text-slate-200'
             }`}
           >
-            <Activity className="w-3 h-3 text-amber-400" />
+            <Activity className="w-3 h-3 text-cyan-400" />
             <span>Autonomy Node</span>
-            {copilotState.suggestions.length > 0 && (
-              <span className="px-1.5 py-0.2 rounded-full text-[9px] bg-amber-500 text-slate-950 font-black tabular-nums">
-                {copilotState.suggestions.length}
-              </span>
-            )}
           </button>
+
           <button
             type="button"
             onClick={() => setActiveTab('files')}
@@ -387,38 +467,51 @@ export const CopilotSovereignAI: React.FC<CopilotSovereignAIProps> = ({
                 : 'text-slate-400 hover:text-slate-200'
             }`}
           >
-            <FolderSync className="w-3 h-3 text-emerald-400" />
-            <span>ซิงค์ทุกไฟล์ ({syncedFiles.length})</span>
+            <GitBranch className="w-3 h-3 text-emerald-400" />
+            <span>GitHub Sync ({syncedFiles.length})</span>
           </button>
         </div>
-
-        <span className="text-[10px] text-emerald-400 font-mono flex items-center gap-1 shrink-0 ml-1">
-          <span className="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse" />
-          <span>SWARM ACTIVE</span>
-        </span>
       </div>
 
-      {/* Telemetry Status Strip */}
-      <div className="flex items-center gap-1.5 px-2.5 py-1.5 overflow-x-auto no-scrollbar bg-slate-950 border-b border-slate-800/80 text-[10px] font-mono shrink-0">
-        <div className="px-2 py-0.5 rounded bg-slate-900 border border-slate-800 text-cyan-300 shrink-0 flex items-center gap-1">
-          <RefreshCw className={`w-2.5 h-2.5 text-cyan-400 ${isSyncingAllFiles ? 'animate-spin' : ''}`} />
-          <span>Continuous Active</span>
+      {/* Lively Neural Heartbeat & Active Stage Strip */}
+      <div className="flex items-center justify-between gap-2 px-2.5 py-1.5 bg-slate-950 border-b border-slate-800/80 text-[10px] font-mono shrink-0">
+        <div className="flex items-center gap-2 min-w-0">
+          <svg viewBox="0 0 90 20" className="w-14 h-4 shrink-0">
+            <path
+              d={neuralWavePath}
+              fill="none"
+              stroke={copilotState.autoPilotActive ? '#10b981' : '#64748b'}
+              strokeWidth="2"
+              strokeLinecap="round"
+            />
+          </svg>
+          <span className="px-1.5 py-0.5 rounded bg-emerald-500/20 border border-emerald-500/40 text-emerald-300 font-bold shrink-0">
+            {activeLiveStage.stageId}
+          </span>
+          <span className="text-cyan-200 truncate" title={activeLiveStage.title}>
+            {activeLiveStage.title}
+          </span>
         </div>
-        <div className="px-2 py-0.5 rounded bg-slate-900 border border-slate-800 text-slate-200 shrink-0 tabular-nums">
-          14,902 Seals
-        </div>
-        <div className="px-2 py-0.5 rounded bg-slate-900 border border-slate-800 text-amber-300 shrink-0 uppercase">
-          {holoMode} MODE
-        </div>
-        <div className="px-2 py-0.5 rounded bg-slate-900 border border-slate-800 text-emerald-300 shrink-0 tabular-nums">
-          Δ{systemState.ssotMutationDrift} Zero Drift
-        </div>
-        <div className="px-2 py-0.5 rounded bg-slate-900 border border-slate-800 text-cyan-300 shrink-0">
-          DSL/VM Ready
+
+        <div className="flex items-center gap-1.5 shrink-0">
+          <span className="px-1.5 py-0.5 rounded bg-slate-900 border border-slate-800 text-emerald-300 tabular-nums">
+            Δ{systemState.ssotMutationDrift}
+          </span>
+          <button
+            type="button"
+            data-testid="btn-copilot-autotune-16"
+            onClick={handleAutoTuneAll16Stages}
+            disabled={isAutoTuningSweep}
+            className="px-2 py-0.5 rounded bg-gradient-to-r from-emerald-600/80 to-cyan-600/80 hover:from-emerald-500 hover:to-cyan-500 text-white border border-emerald-400/50 font-bold flex items-center gap-1 cursor-pointer transition-all"
+            title="สั่ง Copilot ปรับจูนสมดุลและตรวจสอบครบทั้ง 16 ขั้นตอนอัตโนมัติ"
+          >
+            <Zap className={`w-2.5 h-2.5 text-amber-300 ${isAutoTuningSweep ? 'animate-spin' : ''}`} />
+            <span>{isAutoTuningSweep ? 'กำลังปรับจูน...' : 'ปรับจูนอัตโนมัติ'}</span>
+          </button>
         </div>
       </div>
 
-      {/* Hologram & Pull All Files Bar */}
+      {/* Hologram Continuum Mode Bar */}
       <div className="flex items-center justify-between gap-2 px-2.5 py-1.5 bg-slate-900/60 text-[11px] border-b border-slate-800/70 shrink-0 flex-wrap">
         <div className="flex items-center gap-1">
           {(['hologram', 'sphere', 'tree'] as const).map((mode) => (
@@ -445,91 +538,95 @@ export const CopilotSovereignAI: React.FC<CopilotSovereignAIProps> = ({
           </button>
         </div>
 
-        <button
-          type="button"
-          data-testid="btn-copilot-pull-all-files"
-          onClick={handlePullAndSyncAllFiles}
-          disabled={isSyncingAllFiles}
-          className="px-2.5 py-1 rounded-lg bg-gradient-to-r from-emerald-600/80 to-cyan-600/80 hover:from-emerald-500 hover:to-cyan-500 text-white border border-emerald-400/50 text-[10px] font-bold flex items-center gap-1.5 shadow-[0_0_12px_rgba(16,185,129,0.3)] transition-all cursor-pointer whitespace-nowrap"
-        >
-          <FolderSync className={`w-3 h-3 ${isSyncingAllFiles ? 'animate-spin' : ''}`} />
-          <span>{isSyncingAllFiles ? 'กำลังดึงและอัปเดททุกไฟล์...' : 'ดึงทุกไฟล์มาอัปเดท (Sync All)'}</span>
-        </button>
+        <span className="text-[10px] font-mono text-slate-400 truncate">
+          14,902 Seals • 80 Quarantine • 10/10 REAL_HSM
+        </span>
       </div>
 
       {/* Main Content Area */}
       <div className="flex-1 p-2.5 overflow-y-auto space-y-2.5 bg-slate-950 font-mono text-[11px] custom-scrollbar">
         {activeTab === 'dialogue' && (
           <>
-            {/* All-Files SSoT Sync Status Summary Card */}
-            <div className="p-3 rounded-xl bg-gradient-to-br from-slate-900/95 via-slate-900/90 to-emerald-950/30 border border-emerald-500/35 space-y-2">
+            {/* Lively Autonomous Self-Tuning & 16-Stage Pipeline Summary Card */}
+            <div className="p-3 rounded-xl bg-gradient-to-br from-slate-900/95 via-slate-900/90 to-cyan-950/35 border border-cyan-500/35 space-y-2.5">
               <div className="flex items-center justify-between gap-2 border-b border-slate-800 pb-1.5">
-                <span className="flex items-center gap-1.5 text-[10.5px] font-bold text-emerald-300">
-                  <FileCheck2 className="w-3.5 h-3.5 text-emerald-400" />
-                  <span>สถานะดึงและอัปเดทไฟล์ทั้งหมด (All-Files SSoT Sync)</span>
+                <span className="flex items-center gap-1.5 text-[10.5px] font-bold text-cyan-300">
+                  <Cpu className="w-3.5 h-3.5 text-emerald-400 animate-pulse" />
+                  <span>ระบบปรับจูนสมดุลอัตโนมัติมีชีวิตชีวา (Autonomous Self-Tuning Engine)</span>
                 </span>
                 <span className="px-2 py-0.5 rounded bg-emerald-500/20 border border-emerald-400/40 text-[9.5px] font-bold text-emerald-300 tabular-nums">
-                  {syncedFiles.length}/{syncedFiles.length} FILES UPDATED
+                  16/16 STAGES PASSED (100%)
                 </span>
               </div>
 
               <div className="grid grid-cols-2 sm:grid-cols-4 gap-1.5 text-[10px]">
                 <div className="p-1.5 rounded-lg bg-slate-950/80 border border-slate-800">
-                  <span className="text-slate-400 block text-[9px]">GitHub Branches (3)</span>
-                  <span className="text-cyan-300 font-bold truncate block">main • gh-pages • dependabot</span>
+                  <span className="text-slate-400 block text-[9px]">Integrity Score</span>
+                  <span className="text-emerald-300 font-bold tabular-nums">99.47% (14,902 Seals)</span>
                 </div>
                 <div className="p-1.5 rounded-lg bg-slate-950/80 border border-slate-800">
-                  <span className="text-slate-400 block text-[9px]">gh-pages README</span>
-                  <span className="text-emerald-300 font-bold tabular-nums">
-                    ATTACHED (dist/README.md)
+                  <span className="text-slate-400 block text-[9px]">Chamber 02 Quarantine</span>
+                  <span className="text-amber-300 font-bold tabular-nums">80 Seals Isolated</span>
+                </div>
+                <div className="p-1.5 rounded-lg bg-slate-950/80 border border-slate-800">
+                  <span className="text-slate-400 block text-[9px]">SSoT &amp; GitHub Sync</span>
+                  <span className="text-cyan-300 font-bold tabular-nums">Δ0.00% Zero Drift</span>
+                </div>
+                <div className="p-1.5 rounded-lg bg-slate-950/80 border border-slate-800">
+                  <span className="text-slate-400 block text-[9px]">Phoenix Auto-Heal</span>
+                  <span className="text-emerald-300 font-bold tabular-nums">35.80 ms (&le;142ms)</span>
+                </div>
+              </div>
+
+              {/* 16-Stage Visual Pulse Bar */}
+              <div className="space-y-1">
+                <div className="flex items-center justify-between text-[9.5px] text-slate-300">
+                  <span className="truncate">{copilotState.lastAutoTuneSummary}</span>
+                  <span className="text-emerald-400 font-bold shrink-0 ml-2">
+                    Auto-Tunes: #{copilotState.autoTuneCount}
                   </span>
                 </div>
-                <div className="p-1.5 rounded-lg bg-slate-950/80 border border-slate-800">
-                  <span className="text-slate-400 block text-[9px]">Security Gate</span>
-                  <span className="text-amber-300 font-bold tabular-nums">22/22 PASS (Node 22)</span>
-                </div>
-                <div className="p-1.5 rounded-lg bg-slate-950/80 border border-slate-800">
-                  <span className="text-slate-400 block text-[9px]">อัปเดตล่าสุด</span>
-                  <span className="text-white font-bold tabular-nums">{lastFullSyncTime}</span>
+                <div className="grid grid-cols-16 gap-0.5 p-1 rounded-lg bg-slate-950 border border-slate-800">
+                  {CANONICAL_16_FORENSIC_STAGES.map((stg, idx) => {
+                    const isCurrent =
+                      (sweepingStageIdx !== null ? sweepingStageIdx : copilotState.activeForensicStageIndex) ===
+                      idx;
+                    return (
+                      <button
+                        key={stg.stageId}
+                        type="button"
+                        onClick={() => {
+                          setSelectedStage(stg);
+                          setActiveTab('forensic16');
+                        }}
+                        title={`${stg.stageId}: ${stg.title} (${stg.status})`}
+                        className={`h-2.5 rounded-sm transition-all cursor-pointer ${
+                          isCurrent
+                            ? 'bg-cyan-300 shadow-[0_0_8px_#22d3ee] scale-y-125'
+                            : 'bg-emerald-500/80 hover:bg-emerald-400'
+                        }`}
+                      />
+                    );
+                  })}
                 </div>
               </div>
 
-              {/* Compact Synced Files Grid */}
-              <div className="grid grid-cols-1 sm:grid-cols-2 gap-1 max-h-36 overflow-y-auto pr-0.5 custom-scrollbar">
-                {syncedFiles.map((file) => (
-                  <div
-                    key={file.path}
-                    className="px-2 py-1 rounded-lg bg-slate-950/90 border border-slate-800/90 flex items-center justify-between gap-2 text-[10px]"
-                  >
-                    <div className="flex items-center gap-1.5 min-w-0">
-                      <CheckCircle2 className="w-3 h-3 text-emerald-400 shrink-0" />
-                      <span className="text-slate-200 truncate" title={file.path}>
-                        {file.path}
-                      </span>
-                    </div>
-                    <span className="text-[9px] text-emerald-400 font-bold shrink-0 tabular-nums">
-                      {file.status}
-                    </span>
-                  </div>
-                ))}
-              </div>
-
-              <div className="flex items-center gap-2 pt-1">
+              <div className="flex items-center gap-2 pt-0.5">
                 <button
                   type="button"
-                  onClick={handlePullAndSyncAllFiles}
-                  disabled={isSyncingAllFiles}
+                  onClick={handleAutoTuneAll16Stages}
+                  disabled={isAutoTuningSweep}
                   className="flex-1 py-1.5 px-3 rounded-lg bg-emerald-500/20 hover:bg-emerald-500/30 border border-emerald-400/50 text-emerald-200 font-sans font-bold text-xs flex items-center justify-center gap-1.5 transition-colors cursor-pointer"
                 >
-                  <RefreshCw className={`w-3.5 h-3.5 ${isSyncingAllFiles ? 'animate-spin' : ''}`} />
-                  <span>ดึงทุกไฟล์มาอัปเดททันที (Pull & Update All Files)</span>
+                  <Zap className={`w-3.5 h-3.5 text-amber-300 ${isAutoTuningSweep ? 'animate-spin' : ''}`} />
+                  <span>ปรับจูนและตรวจพิสูจน์ 16 ขั้นตอนอัตโนมัติ (Auto-Tune Now)</span>
                 </button>
                 <button
                   type="button"
-                  onClick={() => setActiveTab('files')}
-                  className="py-1.5 px-2.5 rounded-lg bg-slate-800 hover:bg-slate-700 border border-slate-700 text-cyan-300 font-sans font-bold text-xs transition-colors cursor-pointer whitespace-nowrap"
+                  onClick={() => setActiveTab('forensic16')}
+                  className="py-1.5 px-2.5 rounded-lg bg-slate-800 hover:bg-slate-700 border border-slate-700 text-amber-300 font-sans font-bold text-xs transition-colors cursor-pointer whitespace-nowrap"
                 >
-                  ดูรายการไฟล์ ({syncedFiles.length})
+                  รายงาน 16 ขั้นตอน
                 </button>
               </div>
             </div>
@@ -539,7 +636,7 @@ export const CopilotSovereignAI: React.FC<CopilotSovereignAIProps> = ({
               <div className="flex items-center justify-between text-[10px] text-amber-400 border-b border-slate-800 pb-1.5">
                 <span className="flex items-center gap-1.5 font-bold">
                   <Terminal className="w-3.5 h-3.5 text-cyan-400" />
-                  <span>Sentinel Sweep v6.0 • Live Dialogue & Reflex</span>
+                  <span>Sentinel Sweep v6.0 • Live Dialogue &amp; Reflex</span>
                 </span>
                 <span className="text-slate-400 tabular-nums">{lastFullSyncTime}</span>
               </div>
@@ -579,11 +676,11 @@ export const CopilotSovereignAI: React.FC<CopilotSovereignAIProps> = ({
             {/* Live Reflex Logs Strip */}
             <div className="p-2.5 rounded-xl bg-slate-900/75 border border-slate-800 space-y-1.5">
               <div className="flex items-center justify-between text-[10px] text-cyan-300 font-bold">
-                <span>Autonomous Reflex Log Stream</span>
+                <span>Autonomous Reflex &amp; Self-Tuning Log Stream</span>
                 <span className="text-emerald-400">SSoT Δ0.00%</span>
               </div>
               <div className="space-y-1">
-                {copilotState.reflexLogs.slice(0, 3).map((log) => (
+                {copilotState.reflexLogs.slice(0, 4).map((log) => (
                   <div
                     key={log.id}
                     className="p-2 rounded-lg bg-slate-950/90 border border-slate-800/80 flex items-start justify-between gap-2 text-[10px]"
@@ -597,6 +694,150 @@ export const CopilotSovereignAI: React.FC<CopilotSovereignAIProps> = ({
               </div>
             </div>
           </>
+        )}
+
+        {/* ============================================================ */}
+        {/* TAB 2: 16-STEP DIGITAL FORENSIC AUDIT REPORT & MATRIX        */}
+        {/* ============================================================ */}
+        {activeTab === 'forensic16' && (
+          <div className="space-y-3 font-sans">
+            {/* Report Header */}
+            <div className="p-3 rounded-xl bg-gradient-to-r from-amber-950/50 via-slate-900 to-cyan-950/50 border border-amber-500/40 space-y-2">
+              <div className="flex items-start justify-between gap-2">
+                <div>
+                  <span className="text-[10px] font-mono text-amber-300 font-bold uppercase tracking-wider block">
+                    ISO/IEC 27037 • ETDA พ.ร.บ. ธุรกรรมทางอิเล็กทรอนิกส์ พ.ศ. ๒๕๔๔ • PDPA พ.ศ. ๒๕๖๒
+                  </span>
+                  <h3 className="text-xs sm:text-sm font-black text-white mt-0.5">
+                    รายงานการตรวจสอบนิติวิทยาศาสตร์ดิจิทัลฉบับสมบูรณ์ 16 ขั้นตอน: ZYRQUEN Ω∞ Sovereign World Engine
+                  </h3>
+                </div>
+                <button
+                  type="button"
+                  onClick={handleExport16StagePdf}
+                  className="px-2.5 py-1.5 rounded-lg bg-amber-500/20 hover:bg-amber-500/30 border border-amber-400/50 text-amber-200 text-[10px] font-bold flex items-center gap-1 shrink-0 cursor-pointer"
+                >
+                  <FileDown className="w-3.5 h-3.5" />
+                  <span>Export PDF</span>
+                </button>
+              </div>
+
+              <p className="text-[11px] text-slate-300 leading-relaxed">
+                การยืนยันสภาวะแช่แข็งของระบบ ณ บล็อกปฐมกาล (#849202) คงสภาวะความเบี่ยงเบนของข้อมูลไว้ที่{' '}
+                <strong className="text-emerald-300 font-mono">Δ0.00% Zero Drift</strong> บนสถานะความจริงเดี่ยว (SSoT)
+                สร้างคุณสมบัติในการยับยั้งการปฏิเสธความรับผิดชอบ (Non-repudiation) ตาม พ.ร.บ. ว่าด้วยธุรกรรมทางอิเล็กทรอนิกส์ พ.ศ. ๒๕๔๔
+              </p>
+            </div>
+
+            {/* Section 1: Sovereign Identity & System Verification Metadata */}
+            <div className="p-3 rounded-xl bg-slate-900/95 border border-cyan-500/30 space-y-2">
+              <div className="text-xs font-bold text-cyan-300 border-b border-slate-800 pb-1.5">
+                1. ข้อมูลการตรวจสอบและตัวตนของระบบอธิปไตย (Sovereign Identity &amp; System Verification Metadata)
+              </div>
+              <div className="divide-y divide-slate-800/80 text-[11px]">
+                {CANONICAL_FORENSIC_IDENTITY_METADATA.map((item) => (
+                  <div
+                    key={item.labelEn}
+                    className="py-1.5 flex flex-col sm:flex-row sm:items-center justify-between gap-1"
+                  >
+                    <span className="text-slate-400 font-medium">
+                      {item.labelTh}{' '}
+                      <span className="text-[10px] text-slate-500 font-mono">({item.labelEn})</span>
+                    </span>
+                    <span
+                      className={`font-mono font-bold text-right ${
+                        item.highlight === 'amber'
+                          ? 'text-amber-300'
+                          : item.highlight === 'emerald'
+                          ? 'text-emerald-300'
+                          : 'text-cyan-200'
+                      }`}
+                    >
+                      {item.verifiedValue}
+                    </span>
+                  </div>
+                ))}
+              </div>
+            </div>
+
+            {/* Section 2: 16-Step Forensic Audit Pipeline Execution Matrix */}
+            <div className="p-3 rounded-xl bg-slate-900/95 border border-emerald-500/35 space-y-2.5">
+              <div className="flex items-center justify-between gap-2 border-b border-slate-800 pb-1.5">
+                <div>
+                  <div className="text-xs font-bold text-emerald-300">
+                    2. ผลการตรวจสอบท่อส่งนิติวิทยาศาสตร์ดิจิทัล 16 ขั้นตอน (16-Step Forensic Audit Pipeline)
+                  </div>
+                  <div className="text-[10px] text-slate-400 font-mono">
+                    Deterministic Alignment: 100% PASSED (16/16) • คลิกที่แต่ละด่านเพื่อดูข้อมูลเชิงลึก
+                  </div>
+                </div>
+                <button
+                  type="button"
+                  onClick={handleAutoTuneAll16Stages}
+                  disabled={isAutoTuningSweep}
+                  className="px-2.5 py-1 rounded-lg bg-emerald-500/20 hover:bg-emerald-500/30 border border-emerald-400/50 text-emerald-200 text-[10px] font-bold flex items-center gap-1 shrink-0 cursor-pointer"
+                >
+                  <RefreshCw className={`w-3 h-3 ${isAutoTuningSweep ? 'animate-spin' : ''}`} />
+                  <span>Sweep 16/16</span>
+                </button>
+              </div>
+
+              {/* Selected Stage Deep-Dive Box */}
+              <div className="p-2.5 rounded-xl bg-slate-950 border border-cyan-500/40 space-y-1">
+                <div className="flex items-center justify-between text-[10.5px] font-mono">
+                  <span className="text-cyan-300 font-bold">
+                    รายละเอียดเชิงลึก {selectedStage.stageId}: {selectedStage.title}
+                  </span>
+                  <span className="px-1.5 py-0.5 rounded bg-emerald-500/20 text-emerald-300 border border-emerald-500/40 text-[9px] font-bold">
+                    {selectedStage.status} • {selectedStage.latencyMs}ms
+                  </span>
+                </div>
+                <div className="text-[10px] text-amber-300 font-mono">
+                  กลไกการเข้ารหัสและมาตรฐาน: {selectedStage.mechanism}
+                </div>
+                <p className="text-[11px] text-slate-300 leading-relaxed">{selectedStage.detailTh}</p>
+              </div>
+
+              {/* 16 Stages Table */}
+              <div className="space-y-1 max-h-64 overflow-y-auto pr-1 custom-scrollbar font-mono">
+                {CANONICAL_16_FORENSIC_STAGES.map((stg, idx) => {
+                  const isSelected = selectedStage.stageId === stg.stageId;
+                  const isLiveActive = copilotState.activeForensicStageIndex === idx;
+                  return (
+                    <div
+                      key={stg.stageId}
+                      onClick={() => {
+                        playTone(680, 0.03);
+                        setSelectedStage(stg);
+                      }}
+                      className={`p-2 rounded-lg border transition-all cursor-pointer flex items-center justify-between gap-2 text-[10px] ${
+                        isSelected
+                          ? 'bg-cyan-950/60 border-cyan-400/70 text-white'
+                          : isLiveActive
+                          ? 'bg-emerald-950/30 border-emerald-500/40 text-slate-200'
+                          : 'bg-slate-950/90 border-slate-800/90 hover:border-slate-700 text-slate-300'
+                      }`}
+                    >
+                      <div className="min-w-0 flex-1">
+                        <div className="flex items-center gap-1.5">
+                          <span className="px-1.5 py-0.2 rounded bg-cyan-500/20 text-cyan-300 font-bold shrink-0">
+                            {stg.stageId}
+                          </span>
+                          <span className="font-bold text-white truncate">{stg.title}</span>
+                        </div>
+                        <div className="text-[9.5px] text-slate-400 truncate mt-0.5">
+                          {stg.mechanism}
+                        </div>
+                      </div>
+                      <span className="px-1.5 py-0.5 rounded bg-emerald-500/15 border border-emerald-500/35 text-emerald-300 text-[9px] font-bold shrink-0 tabular-nums">
+                        {stg.status}
+                      </span>
+                    </div>
+                  );
+                })}
+              </div>
+            </div>
+          </div>
         )}
 
         {activeTab === 'autonomy' && (
@@ -616,21 +857,22 @@ export const CopilotSovereignAI: React.FC<CopilotSovereignAIProps> = ({
                 <GitBranch className="w-4 h-4 text-emerald-400" />
                 <div>
                   <div className="text-xs font-bold text-white">
-                    รายการไฟล์ที่ดึงและอัปเดททั้งหมด ({syncedFiles.length} Core Files)
+                    ศูนย์ซิงค์ GitHub SSoT &amp; รายการไฟล์ทั้งหมด ({syncedFiles.length} Core Files)
                   </div>
                   <div className="text-[10px] text-slate-400">
-                    Repo: {gitSyncState.remoteRepo} ({gitSyncState.remoteBranch}) • Block #{gitSyncState.localBlockHeight}
+                    Repo: {gitSyncState.remoteRepo} ({gitSyncState.remoteBranch}) • Block #{gitSyncState.localBlockHeight} • Parity {gitSyncState.merkleParityPercentage}%
                   </div>
                 </div>
               </div>
               <button
                 type="button"
+                data-testid="btn-copilot-pull-all-files"
                 onClick={handlePullAndSyncAllFiles}
                 disabled={isSyncingAllFiles}
                 className="px-3 py-1.5 rounded-lg bg-emerald-500/20 hover:bg-emerald-500/30 border border-emerald-400/50 text-emerald-200 text-[10px] font-bold flex items-center gap-1.5 cursor-pointer"
               >
-                <RefreshCw className={`w-3 h-3 ${isSyncingAllFiles ? 'animate-spin' : ''}`} />
-                <span>Sync All Now</span>
+                <FolderSync className={`w-3 h-3 ${isSyncingAllFiles ? 'animate-spin' : ''}`} />
+                <span>{isSyncingAllFiles ? 'Syncing...' : 'Sync GitHub Now'}</span>
               </button>
             </div>
 
@@ -664,15 +906,15 @@ export const CopilotSovereignAI: React.FC<CopilotSovereignAIProps> = ({
           </div>
         )}
 
-        {/* Quick Action Matrix */}
+        {/* Quick Action Matrix (Without Redundant Duplicate GitHub Pull Button) */}
         <div className="grid grid-cols-3 gap-1.5 text-[10.5px] font-sans pt-1">
           <button
             type="button"
-            onClick={handlePullAndSyncAllFiles}
+            onClick={handleAutoTuneAll16Stages}
             className="p-2 rounded-xl bg-slate-900 border border-emerald-500/40 text-emerald-300 hover:bg-emerald-950/60 hover:border-emerald-400 font-bold truncate flex items-center justify-center gap-1 cursor-pointer transition-all"
           >
-            <RefreshCw className={`w-3 h-3 shrink-0 ${isSyncingAllFiles ? 'animate-spin' : ''}`} />
-            <span className="truncate">ดึงอัปเดท (Pull SSoT)</span>
+            <Zap className={`w-3 h-3 shrink-0 text-amber-300 ${isAutoTuningSweep ? 'animate-spin' : ''}`} />
+            <span className="truncate">ปรับจูน 16 ขั้นตอน</span>
           </button>
           <button
             type="button"
@@ -685,13 +927,13 @@ export const CopilotSovereignAI: React.FC<CopilotSovereignAIProps> = ({
           <button
             type="button"
             onClick={() => {
-              handleSend('ตรวจสอบ PQC Dilithium-5 และสถานะ 10/10 HSM Quorum');
-              if (onNavigate) onNavigate('security');
+              setActiveTab('forensic16');
+              void handleSend('ตรวจสอบรายงานนิติวิทยาศาสตร์ 16 ขั้นตอน และ PQC Dilithium-5');
             }}
             className="p-2 rounded-xl bg-slate-900 border border-purple-500/40 text-purple-300 hover:bg-purple-950/60 hover:border-purple-400 font-bold truncate flex items-center justify-center gap-1 cursor-pointer transition-all"
           >
-            <Lock className="w-3 h-3 shrink-0" />
-            <span className="truncate">PQC Dilithium-5</span>
+            <ShieldCheck className="w-3 h-3 shrink-0" />
+            <span className="truncate">รายงาน 16 ขั้นตอน</span>
           </button>
         </div>
       </div>
@@ -708,7 +950,7 @@ export const CopilotSovereignAI: React.FC<CopilotSovereignAIProps> = ({
                 void handleSend();
               }
             }}
-            placeholder="สั่งการ Copilot เช่น ดึงทุกไฟล์มาอัปเดท, สลับโหมด Sphere, วิเคราะห์ Entropy"
+            placeholder="สั่งการ Copilot เช่น ปรับจูนอัตโนมัติ 16 ขั้นตอน, ตรวจ STG-01..16, สลับโหมด Sphere..."
             className="w-full bg-transparent text-xs text-white placeholder-slate-500 focus:outline-none"
           />
           <button

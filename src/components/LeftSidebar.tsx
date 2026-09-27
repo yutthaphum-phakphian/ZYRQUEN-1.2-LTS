@@ -29,6 +29,7 @@ import { SOVEREIGN_CHAMBERS, OPERATING_MODULES, CANONICAL_CONSTANTS } from '../d
 import { Chamber, OperatingModule, ViewType } from '../types.ts';
 import { NAVIGATION_ITEMS } from './Navigation.tsx';
 import { playTone } from './AudioSynthesizer.ts';
+import { ZyrquenIcon } from './ZyrquenIcon.tsx';
 
 export interface LeftSidebarProps {
   isOpen: boolean;
@@ -92,7 +93,8 @@ export const LeftSidebar: React.FC<LeftSidebarProps> = ({
   const filteredModules = OPERATING_MODULES.filter(
     (m) =>
       m.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
-      m.number.includes(searchQuery)
+      (m.technicalSubtitle && m.technicalSubtitle.toLowerCase().includes(searchQuery.toLowerCase())) ||
+      m.number.toLowerCase().includes(searchQuery.toLowerCase())
   );
 
   const handleSelectViewItem = (viewId: ViewType) => {
@@ -148,10 +150,8 @@ export const LeftSidebar: React.FC<LeftSidebarProps> = ({
           >
             {/* Sidebar Top Header & Close Button */}
             <div className="p-3.5 border-b border-cyan-500/20 bg-gradient-to-r from-slate-950 via-[#070c1a] to-slate-950 flex items-center justify-between">
-              <div className="flex items-center space-x-2">
-                <div className="w-7 h-7 rounded-lg bg-cyan-500/15 border-cyan-500/30 flex items-center justify-center text-cyan-400">
-                  <PanelLeft className="w-4 h-4" />
-                </div>
+              <div className="flex items-center space-x-2.5">
+                <ZyrquenIcon size={34} />
                 <div>
                   <span className="font-mono text-xs font-bold text-zinc-100 tracking-wider">
                     SOVEREIGN MENU
@@ -191,6 +191,59 @@ export const LeftSidebar: React.FC<LeftSidebarProps> = ({
                 <span>Boundary: <strong className="text-cyan-300">{CANONICAL_CONSTANTS.PLATFORM_BOUNDARY}</strong></span>
                 <span className="text-emerald-400 font-semibold">10/10 REAL_HSM</span>
               </div>
+            </div>
+
+            {/* Featured Phase 11 & AI Workspace Quick-Entry in Sidebar Navigation */}
+            <div className="px-2.5 pt-2.5 pb-1.5 bg-slate-950/70 border-b border-slate-800/80 space-y-1.5">
+              <button
+                type="button"
+                onClick={() => handleSelectViewItem('sovereign')}
+                className={`w-full text-left p-2.5 rounded-xl border transition-all cursor-pointer group ${
+                  currentView === 'sovereign'
+                    ? 'bg-gradient-to-r from-cyan-950/90 to-emerald-950/60 border-cyan-400 text-white shadow-[0_0_14px_rgba(6,182,212,0.25)]'
+                    : 'bg-slate-900/70 border-cyan-500/30 hover:border-cyan-400/60 text-slate-200'
+                }`}
+              >
+                <div className="flex items-center justify-between gap-1.5 mb-1">
+                  <span className="text-[9px] font-mono font-bold px-1.5 py-0.5 rounded bg-cyan-500/20 text-cyan-300 border border-cyan-500/40">
+                    PHASE 11 MODULE · ADAPTER
+                  </span>
+                  <span className="text-[9px] font-mono text-emerald-400 font-semibold">
+                    FROZEN CORE 🔒
+                  </span>
+                </div>
+                <div className="text-xs font-bold text-white leading-snug">
+                  Autonomous Self-Tuning Engine
+                </div>
+                <div className="text-[10px] font-mono text-cyan-300/80 mt-0.5 truncate">
+                  Phase 11 Adapter Boundary
+                </div>
+              </button>
+
+              <button
+                type="button"
+                onClick={() => handleSelectViewItem('ai-workspace')}
+                className={`w-full text-left p-2.5 rounded-xl border transition-all cursor-pointer group ${
+                  currentView === 'ai-workspace'
+                    ? 'bg-gradient-to-r from-cyan-950/90 to-purple-950/60 border-cyan-400 text-white shadow-[0_0_14px_rgba(6,182,212,0.25)]'
+                    : 'bg-slate-900/70 border-purple-500/30 hover:border-cyan-400/60 text-slate-200'
+                }`}
+              >
+                <div className="flex items-center justify-between gap-1.5 mb-1">
+                  <span className="text-[9px] font-mono font-bold px-1.5 py-0.5 rounded bg-purple-500/20 text-purple-300 border border-purple-500/40">
+                    AI SERVICE BOUNDARY
+                  </span>
+                  <span className="text-[9px] font-mono text-emerald-400 font-semibold">
+                    SANDBOX 🔒
+                  </span>
+                </div>
+                <div className="text-xs font-bold text-white leading-snug">
+                  AI Workspace
+                </div>
+                <div className="text-[10px] font-mono text-zinc-400 mt-0.5 truncate">
+                  Chat · Voice Input · History · Preview · Source
+                </div>
+              </button>
             </div>
 
             {/* Navigation Mode Switcher: 18 Views vs 18 Chambers vs 17 Modules */}
@@ -282,15 +335,17 @@ export const LeftSidebar: React.FC<LeftSidebarProps> = ({
                         </div>
                         <div className="min-w-0">
                           <div className="text-xs font-semibold truncate flex items-center gap-1.5">
-                            <span className={isActive ? 'text-white' : 'text-zinc-200'}>{item.labelEn}</span>
+                            <span className={isActive ? 'text-white' : 'text-zinc-200'}>
+                              {item.primaryTh ? item.labelTh : item.labelEn}
+                            </span>
                             {item.shortcut && (
                               <span className="text-[9px] font-mono text-zinc-500 bg-black/40 px-1 py-0.2 rounded border-white/5">
                                 {item.shortcut}
                               </span>
                             )}
                           </div>
-                          <div className="text-[10px] text-zinc-500 truncate">
-                            {item.labelTh}
+                          <div className="text-[10px] text-zinc-500 font-mono truncate">
+                            {item.primaryTh ? item.labelEn : item.labelTh}
                           </div>
                         </div>
                       </div>
@@ -366,7 +421,16 @@ export const LeftSidebar: React.FC<LeftSidebarProps> = ({
                 filteredModules.map((module: OperatingModule) => (
                   <div
                     key={module.id}
-                    className="p-2.5 rounded-xl bg-slate-950/50 border-slate-800/80 hover:border-slate-700 transition-colors"
+                    onClick={() => {
+                      if (module.targetView) {
+                        handleSelectViewItem(module.targetView);
+                      }
+                    }}
+                    className={`p-2.5 rounded-xl bg-slate-950/50 border transition-colors ${
+                      module.targetView
+                        ? 'border-cyan-500/40 hover:border-cyan-400 cursor-pointer'
+                        : 'border-slate-800/80 hover:border-slate-700'
+                    }`}
                   >
                     <div className="flex items-center justify-between text-xs mb-1">
                       <span className="font-mono text-cyan-400 font-bold">MOD {module.number}</span>
@@ -374,7 +438,12 @@ export const LeftSidebar: React.FC<LeftSidebarProps> = ({
                         {module.status}
                       </span>
                     </div>
-                    <div className="font-semibold text-xs text-slate-200 truncate">{module.name}</div>
+                    <div className="font-semibold text-xs text-slate-100 leading-snug">{module.name}</div>
+                    {module.technicalSubtitle && (
+                      <div className="text-[10px] font-mono text-cyan-300/80 mt-0.5">
+                        {module.technicalSubtitle}
+                      </div>
+                    )}
                     <div className="flex items-center justify-between text-[11px] text-slate-400 mt-1 font-mono">
                       <span className="text-cyan-300">{module.stat}</span>
                       <span className="text-slate-500 text-[10px]">{module.category}</span>

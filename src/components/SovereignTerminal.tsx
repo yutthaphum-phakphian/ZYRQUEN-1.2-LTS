@@ -1,6 +1,7 @@
 import React, { useState, useRef, useEffect } from 'react';
 import { SOVEREIGN_CONFIG } from '../data/sovereignData';
 import { playSovereignTone } from '../utils/audio';
+import { executeZyrquenCliCommand } from '../utils/hologramMaterial';
 
 interface LogEntry {
   id: string;
@@ -15,13 +16,13 @@ export const SovereignTerminal: React.FC = () => {
     {
       id: 'init-1',
       sender: 'SYSTEM',
-      text: '# ======================================================================\n# ZYRQUEN Ω∞ SOVEREIGN WORLD ENGINE APEX ULTIMATE FROZEN v1.2 LTS\n# Block #849202 | 14,902 Canonical Seals Verified | Partition: Ω600_1000\n# Principal: นายยุทธภูมิ พากเพียร (#EP-SOVEREIGN-01) | OMEGA-1 SUPREME CLEARANCE\n# Model Engine: models/gemini-3.8-flash | Quorum: 10/10 REAL_HSM\n# ======================================================================',
+      text: '# ======================================================================\n# ZYRQUEN Ω∞ SOVEREIGN WORLD ENGINE — sovereign-core-engine CLI\n# Block #849202 | 14,902 Canonical Seals Verified | Partition: Ω600_1000\n# Principal: นายยุทธภูมิ พากเพียร (#EP-SOVEREIGN-01) | OMEGA-1 SUPREME CLEARANCE\n# Telemetry Port: 8443 | Replay Latency: 35.80 ms | Quorum: 10/10 REAL_HSM\n# ======================================================================',
       timestamp: '00:00:01'
     },
     {
       id: 'init-2',
       sender: 'OMEGA-1',
-      text: '🏛️ ข้าพเจ้าคือ ZYRQUEN Ω∞ Sovereign World Engine AI Assistant ระดับ OMEGA-1\nสถานะปัจจุบัน: PDPA FINAL FROZEN v1.2 LTS | 10/10 PASSED | 100% GREEN | Δ0.00% ZERO DRIFT\nพร้อมรับคำสั่งจาก Sovereign Architect นายยุทธภูมิ พากเพียร (#EP-SOVEREIGN-01) ภายใต้พาร์ทิชัน Ω600_1000',
+      text: '🏛️ Cloud Command Center ↔ ZYRQUEN Integration ↔ sovereign-core-engine ↔ ZYRQUEN CLI เชื่อมต่อสมบูรณ์\nรองรับคำสั่ง: status | workspace list | resources | audit verify | phase11 (Inspect → Diagnose → Proposal → Approval → Patch → Test → Build → Verify → Audit)',
       timestamp: '00:00:02'
     }
   ]);
@@ -45,8 +46,12 @@ export const SovereignTerminal: React.FC = () => {
 
     let responseText = '';
     const lower = trimmed.toLowerCase();
+    const zyrquenCli = executeZyrquenCliCommand(trimmed);
 
-    if (lower.includes('audit') || lower.includes('status') || lower.includes('ssot')) {
+    if (zyrquenCli.recognized) {
+      playSovereignTone('chime');
+      responseText = zyrquenCli.responseText;
+    } else if (lower.includes('audit') || lower.includes('status') || lower.includes('ssot')) {
       playSovereignTone('chime');
       responseText = `🏛️ [AUDIT REPORT - Ω600_1000]\n# ======================================================================\n• SSoT Drift: Δ0.00% (ZERO DRIFT 100% GREEN)\n• Block Anchor: #849202 / #849203 / #40202\n• Canonical Seals: 14,902 VERIFIED\n• Quarantined Seals: 80 ISOLATED (Total Raw: 14,982)\n• Merkle Root: 909ab814479844d8a14816bed34cdbb07528e18501da86fc4691763a43fa4c68\n• Attestation Cert: ZQ-GOLD-DEP-849202-3908\n• Partition: Ω600_1000 (400 Tenants Locked: Ω601-Ω1000 Strict)\n• Quorum: 10/10 REAL_HSM FIPS 140-3 L4 at 14.98 mK\n• Mutation Authority: 0 Read Only (SSoT Immutable)`;
     } else if (lower.includes('hsm') || lower.includes('quorum')) {
@@ -113,11 +118,39 @@ export const SovereignTerminal: React.FC = () => {
 
       <div className="flex flex-wrap gap-2 mb-3 font-mono text-xs">
         <button
-          id="cmd-btn-audit"
-          onClick={() => executeCommand('audit')}
-          className="px-2.5 py-1 bg-[#070a12] border-[#17233f] text-[#F3F4F6] hover:border-[#D4AF37]"
+          id="cmd-btn-status"
+          onClick={() => executeCommand('status')}
+          className="px-2.5 py-1 bg-[#070a12] border border-[#06B6D4]/50 text-[#06B6D4] hover:border-[#D4AF37]"
         >
-          🔍 Run SSoT Audit
+          $ status
+        </button>
+        <button
+          id="cmd-btn-workspace-list"
+          onClick={() => executeCommand('workspace list')}
+          className="px-2.5 py-1 bg-[#070a12] border border-[#06B6D4]/50 text-[#06B6D4] hover:border-[#D4AF37]"
+        >
+          $ workspace list
+        </button>
+        <button
+          id="cmd-btn-resources"
+          onClick={() => executeCommand('resources')}
+          className="px-2.5 py-1 bg-[#070a12] border border-[#06B6D4]/50 text-[#06B6D4] hover:border-[#D4AF37]"
+        >
+          $ resources
+        </button>
+        <button
+          id="cmd-btn-audit-verify"
+          onClick={() => executeCommand('audit verify')}
+          className="px-2.5 py-1 bg-[#070a12] border border-[#10B981]/50 text-[#10B981] hover:border-[#D4AF37]"
+        >
+          $ audit verify
+        </button>
+        <button
+          id="cmd-btn-phase11"
+          onClick={() => executeCommand('phase11')}
+          className="px-2.5 py-1 bg-[#070a12] border border-[#D4AF37]/50 text-[#D4AF37] hover:border-[#06B6D4]"
+        >
+          $ phase11
         </button>
         <button
           id="cmd-btn-hsm"
@@ -139,13 +172,6 @@ export const SovereignTerminal: React.FC = () => {
           className="px-2.5 py-1 bg-[#070a12] border-[#17233f] text-[#F3F4F6] hover:border-[#10B981]"
         >
           💰 Inspect Treasury 4.23B
-        </button>
-        <button
-          id="cmd-btn-rules"
-          onClick={() => executeCommand('separation rules')}
-          className="px-2.5 py-1 bg-[#070a12] border-[#17233f] text-[#F3F4F6] hover:border-[#EF4444]"
-        >
-          🛡️ Authority Separation
         </button>
       </div>
 

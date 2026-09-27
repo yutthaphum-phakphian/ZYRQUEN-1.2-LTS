@@ -3,6 +3,7 @@ import { Terminal as TerminalIcon, X, Maximize2, Minimize2 } from 'lucide-react'
 import { CANONICAL_CONSTANTS } from '../data/sovereignData';
 import { verifyGenesisMerkleRoot } from '../services/cryptoEngine';
 import { soundFx } from '../services/audioEngine';
+import { executeZyrquenCliCommand } from '../utils/hologramMaterial';
 
 interface TerminalOverlayProps {
   isOpen: boolean;
@@ -76,11 +77,28 @@ export const TerminalOverlay: React.FC<TerminalOverlayProps> = ({
       return;
     }
 
+    const zyrquenCli = executeZyrquenCliCommand(cmd);
+    if (zyrquenCli.recognized) {
+      soundFx.playPhoenixChime();
+      newLogs.push({
+        id: String(Date.now() + 1),
+        type: 'success',
+        text: zyrquenCli.responseText,
+      });
+      setHistory(newLogs);
+      return;
+    }
+
     if (cmd === 'help') {
       newLogs.push({
         id: String(Date.now() + 1),
         type: 'output',
-        text: `AVAILABLE SOVEREIGN COMMANDS:
+        text: `AVAILABLE SOVEREIGN COMMANDS (sovereign-core-engine):
+  • status         - Query SSoT Δ0, Genesis #849202, Merkle, HSM 10/10, Port 8443, Buffer Gamma
+  • workspace list - List connected ZYRQUEN workspaces & branch bindings
+  • resources      - Inspect quantum compute, cryo 14.98mK, 768 qubits, & seal storage
+  • audit verify   - Run 16-stage deterministic forensic verification against Overview
+  • phase11        - Run Phase 11 lifecycle (inspect, diagnose, proposal, approve, patch, test, build, verify, audit)
   • verify-merkle  - Recompute SHA-256 genesis hash & test 14,902 seals
   • hsm-status     - Query Deca-Key hardware cluster (TC-01..TC-10)
   • phoenix-heal   - Trigger 142ms autonomous self-healing pipeline

@@ -86,6 +86,8 @@ import { SecurityPipelineView } from '@/components/views/SecurityPipelineView';
 import { ExecutiveCourtBriefing } from '@/components/executive/ExecutiveCourtBriefing';
 import { SovereignWalletView } from '@/components/views/SovereignWalletView';
 import { SovereignDashboard } from '@/pages/SovereignDashboard';
+import { AIWorkspace } from '@/components/AIWorkspace';
+import { type StagedAiCommandRequest } from '@/components/CommandCenterOperationsConsole';
 import { AuditCertificateModal } from '@/components/AuditCertificateModal';
 import { GitHubPwaModal } from '@/components/GitHubPwaModal';
 import { ThaiLegalSearchModal } from '@/components/ThaiLegalSearchModal';
@@ -343,6 +345,13 @@ const VIEW_PERSONAS: Record<ViewType, ViewPersona> = {
     orb1: 'bg-cyan-600/14',
     orb2: 'bg-emerald-600/10',
     orb3: 'bg-amber-500/8',
+    accentGlow: 'rgba(6,182,212,0.1)',
+  },
+  'ai-workspace': {
+    name: 'AI Workspace & Isolated Sandbox Boundary',
+    orb1: 'bg-cyan-600/14',
+    orb2: 'bg-purple-600/10',
+    orb3: 'bg-emerald-500/8',
     accentGlow: 'rgba(6,182,212,0.1)',
   },
 };
@@ -909,6 +918,7 @@ const VALID_VIEWS: ViewType[] = [
   'securitypipeline',
   'briefing',
   'sovereign',
+  'ai-workspace',
 ];
 
 function SovereignAppContent() {
@@ -965,6 +975,7 @@ function SovereignAppContent() {
   const [isShortcutsOpen, setIsShortcutsOpen] = useState(false);
   const [isEventsSidebarOpen, setIsEventsSidebarOpen] = useState(false);
   const [isCopilotOpen, setIsCopilotOpen] = useState(false);
+  const [stagedAiRequest, setStagedAiRequest] = useState<StagedAiCommandRequest | null>(null);
   const [isControlDockOpen, setIsControlDockOpen] = useState(false);
   const [isAudioActive, setIsAudioActive] = useState(false);
   const [activeHsmNodes, setActiveHsmNodes] = useState<number>(10);
@@ -1931,6 +1942,62 @@ function SovereignAppContent() {
 
   const persona = VIEW_PERSONAS[currentView] || VIEW_PERSONAS.dashboard;
 
+  const handleAiAuditRecord = useCallback(
+    (action: string, details: string, status: 'VERIFIED' | 'BLOCKED') => {
+      dispatchAction({
+        type: 'EMIT_SYSTEM_EVENT',
+        payload: {
+          type: status === 'BLOCKED' ? 'ALERT' : 'COMPLIANCE',
+          title: `AI Workspace Audit: ${action}`,
+          description: details,
+          metaHash: `ai-audit:${action.toLowerCase()}`,
+          severity: status === 'BLOCKED' ? 'critical' : 'info',
+          statuteRef: 'ETDA Sec 26 · ZYRQUEN Adapter Boundary (VOICE/CHAT != AUTHORIZATION)',
+          targetView: 'sovereign',
+          bindingStatus: status === 'BLOCKED' ? 'ORPHANED' : 'VERIFIED',
+        },
+      });
+    },
+    [dispatchAction]
+  );
+
+  const handleStageAiProposalForApproval = useCallback(
+    (
+      proposedBatchSize: number,
+      summary: string,
+      meta?: {
+        proposalId: string;
+        channel: 'TEXT_INPUT' | 'VOICE_STT';
+        targetWorkspace: string;
+      }
+    ) => {
+      const requestPayload: StagedAiCommandRequest = {
+        proposalId: meta?.proposalId || `PROP-AI-${Date.now()}`,
+        proposedBatchSize,
+        summary,
+        channel: meta?.channel || 'TEXT_INPUT',
+        targetWorkspace: meta?.targetWorkspace || 'ws-agent-02',
+      };
+      setStagedAiRequest(requestPayload);
+      dispatchAction({
+        type: 'EMIT_SYSTEM_EVENT',
+        payload: {
+          type: 'COMPLIANCE',
+          title: 'AI Proposal Routed to Explicit Approval Gate (#EP-SOVEREIGN-01)',
+          description: `[${requestPayload.channel}] ${summary} · Routed to Command Engine Explicit Approval Gate (0 Core Mutation).`,
+          metaHash: `ai-proposal:${requestPayload.proposalId}`,
+          severity: 'info',
+          statuteRef: 'VOICE != AUTHORIZATION · CHAT != AUTHORIZATION · Explicit Approval Required',
+          targetView: 'sovereign',
+          bindingStatus: 'VERIFIED',
+        },
+      });
+      showToast('นำส่งข้อเสนอจาก AI Workspace เข้าสู่ด่าน Explicit Approval (#EP-SOVEREIGN-01) เรียบร้อย', 'info');
+      setCurrentView('sovereign');
+    },
+    [dispatchAction, setCurrentView, showToast]
+  );
+
   const renderCurrentView = () => {
     switch (currentView) {
       case 'dashboard':
@@ -2108,7 +2175,23 @@ function SovereignAppContent() {
           />
         );
       case 'sovereign':
-        return <SovereignDashboard />;
+        return (
+          <SovereignDashboard
+            stagedAiRequest={stagedAiRequest}
+            onConsumeStagedAiRequest={() => setStagedAiRequest(null)}
+            onSystemAuditLog={handleAiAuditRecord}
+          />
+        );
+      case 'ai-workspace':
+        return (
+          <AIWorkspace
+            targetWorkspaceId="ws-agent-02"
+            targetWorkspaceName="agentic-reasoning-mesh"
+            currentBatchSize={64}
+            onStageProposalForApproval={handleStageAiProposalForApproval}
+            onAuditRecord={handleAiAuditRecord}
+          />
+        );
       default:
         return <DashboardView onNavigate={setCurrentView} onOpenCertificate={() => setIsCertificateOpen(true)} />;
     }

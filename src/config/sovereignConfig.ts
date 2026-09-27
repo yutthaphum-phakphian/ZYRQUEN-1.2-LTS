@@ -220,6 +220,13 @@ export const VIEW_PERSONAS: Record<ViewType, ViewPersona> = {
     orb3: 'bg-amber-500/8',
     accentGlow: 'rgba(6,182,212,0.1)',
   },
+  'ai-workspace': {
+    name: 'AI Workspace & Isolated Sandbox Boundary',
+    orb1: 'bg-cyan-600/14',
+    orb2: 'bg-purple-600/10',
+    orb3: 'bg-emerald-500/8',
+    accentGlow: 'rgba(6,182,212,0.1)',
+  },
 };
 
 export const VALID_VIEWS: ViewType[] = [
@@ -253,6 +260,7 @@ export const VALID_VIEWS: ViewType[] = [
   'briefing',
   'sovereign-wallet',
   'sovereign',
+  'ai-workspace',
 ];
 
 export interface LegalTriggerItem {

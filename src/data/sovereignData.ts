@@ -391,6 +391,17 @@ export const CHAMBERS = SOVEREIGN_CHAMBERS;
 
 export const OPERATING_MODULES: OperatingModule[] = [
   {
+    id: 'mod-phase11',
+    number: 'P11',
+    name: 'AUTONOMOUS SELF-TUNING ENGINE',
+    technicalSubtitle: 'Phase 11 Adapter Boundary',
+    targetView: 'sovereign',
+    category: 'Adapter Boundary',
+    status: 'ACTIVE',
+    stat: '9-Stage Pipeline',
+    detail: 'Inspect → Analyze → Propose → Approve → Apply → Verify → Audit',
+  },
+  {
     id: 'mod-01',
     number: '01',
     name: 'CORE & KERNEL',

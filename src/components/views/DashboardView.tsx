@@ -86,6 +86,17 @@ import { playAuditChime, playTone } from '../AudioSynthesizer';
 import { ShieldAlert } from 'lucide-react';
 import { FcmPushNotificationManager } from '../notifications/FcmPushNotificationManager';
 import { ChamberVisualizer } from '../ChamberVisualizer';
+import { CosmicThemeProvider } from '../CosmicThemeProvider';
+import { SovereignConsole } from '../SovereignConsole';
+import { HologramGrid } from '../HologramGrid';
+import { QuantumRadar } from '../QuantumRadar';
+import { PhoenixDashboard } from '../PhoenixDashboard';
+import {
+  PhaseBHologramContainer,
+  PhaseCHologramContainer,
+} from '../GravitationalHologramContainer';
+import { useQuantumState } from '../../hooks/useQuantumState';
+import { useChaosResilience } from '../../hooks/useChaosResilience';
 
 const TopHardwareChambersCard: React.FC = () => {
   const chambers = [
@@ -174,6 +185,29 @@ export const DashboardView: React.FC<DashboardViewProps> = ({
   const [showBufferModal, setShowBufferModal] = useState<boolean>(false);
   const [selectedChamber, setSelectedChamber] = useState<string>('ROOM00');
   const [isVerifyingSeals, setIsVerifyingSeals] = useState<boolean>(false);
+
+  const {
+    dimensions,
+    zoomLevel,
+    setZoomLevel,
+    panControl,
+    setPanControl,
+    activeDimensionId,
+    setActiveDimensionId,
+  } = useQuantumState();
+
+  const {
+    runtimeBlocks,
+    healingStatus,
+    recoveryPhase,
+    glitchIntensity,
+    latencyMs,
+    healingRatePct,
+    stabilityIndexPct,
+    latencyHistory,
+    resilienceEval,
+    simulateChaosAndAutoHeal,
+  } = useChaosResilience();
 
   // Dynamic verified seals count based on 14,902 canonical baseline + appended valid snapshots
   const baselineCanonicalSeals = 14902;
@@ -664,8 +698,62 @@ export const DashboardView: React.FC<DashboardViewProps> = ({
             previousScore={prevIntegrityScore}
           />
 
-          {/* GitHub Synchronization Status Utility (Checksum & Merkle Parity Engine) */}
-          <GitHubSyncStatusUtility />
+          {/* ZYRQUEN Integration Console, Phase 11 Workspace Lifecycle & Multiverse Hologram Blueprint */}
+          <CosmicThemeProvider resilienceScore={resilienceEval.score}>
+            <div className="space-y-4">
+              <PhaseCHologramContainer
+                phaseTitle="Gold Seal Verification Console & ZYRQUEN Integration"
+                phaseSubtitle="Real-Time Gateway Audit Log · Phase 11 Lifecycle"
+                resilienceAccentHex={resilienceEval.accentHex}
+                glitchIntensity={glitchIntensity}
+              >
+                <SovereignConsole
+                  trustScore={currentIntegrityScore}
+                  federationStatus="10/10 REAL_HSM · Port 8443 · 35.80 ms · Δ0 = 0.000%"
+                />
+              </PhaseCHologramContainer>
+
+              <PhaseBHologramContainer
+                phaseTitle="Navigation Grid Mk-III & Quantum Radar Pulse Heatmap"
+                phaseSubtitle="Mouse-Responsive 3D Gravitational Distortion Field"
+                resilienceAccentHex={resilienceEval.accentHex}
+                glitchIntensity={glitchIntensity}
+              >
+                <div className="grid grid-cols-1 xl:grid-cols-2 gap-4">
+                  <HologramGrid
+                    dimensions={dimensions}
+                    zoomLevel={zoomLevel}
+                    panControl={panControl}
+                    activeDimensionId={activeDimensionId}
+                    onSelectDimension={setActiveDimensionId}
+                    onZoomChange={setZoomLevel}
+                    onPanChange={setPanControl}
+                    glitchIntensity={glitchIntensity}
+                  />
+                  <QuantumRadar refreshRate={60} />
+                </div>
+              </PhaseBHologramContainer>
+
+              <PhaseCHologramContainer
+                phaseTitle="Quantaris Phoenix Recovery Pipeline & Chaos Distortion Visualizer"
+                phaseSubtitle="Phase-1 Detection → Phase-2 Response → Phase-3 Recovery → Phase-4 Assurance"
+                resilienceAccentHex={resilienceEval.accentHex}
+                glitchIntensity={glitchIntensity}
+              >
+                <PhoenixDashboard
+                  runtimeBlocks={runtimeBlocks}
+                  healingStatus={healingStatus}
+                  recoveryPhase={recoveryPhase}
+                  latencyMs={latencyMs}
+                  healingRatePct={healingRatePct}
+                  stabilityIndexPct={stabilityIndexPct}
+                  latencyHistory={latencyHistory}
+                  resilienceEval={resilienceEval}
+                  onTriggerAutoHeal={simulateChaosAndAutoHeal}
+                />
+              </PhaseCHologramContainer>
+            </div>
+          </CosmicThemeProvider>
 
           {/* Real-Time Stress Test & 35.80ms Latency Jitter Indicator against 142.00ms SLA Target */}
           <StressTestIndicatorD3Chart initialLatencyMs={35.80} slaLimitMs={142.00} />
@@ -1166,7 +1254,6 @@ export const DashboardView: React.FC<DashboardViewProps> = ({
             trendDelta={integrityTrendDelta}
             previousScore={prevIntegrityScore}
           />
-          <GitHubSyncStatusUtility />
           <HealthDashboard snapshots={snapshots} />
           <LiveAutomatedHealthWidget />
           <SystemResourceGrid />
