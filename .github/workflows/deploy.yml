@@ -17,50 +17,37 @@ jobs:
     steps:
       - name: Checkout Source Code
         uses: actions/checkout@v4
-        with:
-          sparse-checkout: |
-            /*
-            !cloud-workspace-command-center/
-          sparse-checkout-cone-mode: false
 
       - name: Setup Node.js Environment
         uses: actions/setup-node@v4
         with:
-          node-version: 22
-          cache: 'npm'
+          node-version: 20
 
       - name: Install Dependencies
-        run: npm install --legacy-peer-deps
+        run: npm ci --legacy-peer-deps || npm install --legacy-peer-deps
 
       - name: Build React PWA Application
         run: npm run build
         env:
           CI: false
           GITHUB_PAGES: 'true'
-          NODE_OPTIONS: '--max-old-space-size=4096'
 
       - name: Prepare Deployment Artifact
         run: |
           if [ -d "dist" ]; then
             echo "Vite build detected in dist/"
-            # Ensure 404 fallback and README/SVG assets on gh-pages branch
-            cp dist/index.html dist/404.html 2>/dev/null || true
-            cp README.md dist/README.md 2>/dev/null || true
-            cp banner.svg dist/banner.svg 2>/dev/null || true
-            cp replay_verification_dashboard.svg dist/replay_verification_dashboard.svg 2>/dev/null || true
             touch dist/.nojekyll
+            # Ensure 404 fallback for SPA routing on GitHub Pages
+            cp dist/index.html dist/404.html 2>/dev/null || true
           elif [ -d "build" ]; then
             echo "CRA build detected in build/"
             cp -r build dist
-            cp README.md dist/README.md 2>/dev/null || true
-            cp banner.svg dist/banner.svg 2>/dev/null || true
-            cp replay_verification_dashboard.svg dist/replay_verification_dashboard.svg 2>/dev/null || true
             touch dist/.nojekyll
           fi
 
-      - name: Deploy to GitHub Pages
-        uses: JamesIves/github-pages-deploy-action@v4
+      - name: Deploy to GitHub Pages (gh-pages branch)
         continue-on-error: true
+        uses: JamesIves/github-pages-deploy-action@v4
         with:
           folder: dist
           branch: gh-pages
