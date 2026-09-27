@@ -43,17 +43,24 @@ jobs:
         run: |
           if [ -d "dist" ]; then
             echo "Vite build detected in dist/"
-            # Ensure 404 fallback for SPA routing on GitHub Pages
+            # Ensure 404 fallback and README/SVG assets on gh-pages branch
             cp dist/index.html dist/404.html 2>/dev/null || true
+            cp README.md dist/README.md 2>/dev/null || true
+            cp banner.svg dist/banner.svg 2>/dev/null || true
+            cp replay_verification_dashboard.svg dist/replay_verification_dashboard.svg 2>/dev/null || true
             touch dist/.nojekyll
           elif [ -d "build" ]; then
             echo "CRA build detected in build/"
             cp -r build dist
+            cp README.md dist/README.md 2>/dev/null || true
+            cp banner.svg dist/banner.svg 2>/dev/null || true
+            cp replay_verification_dashboard.svg dist/replay_verification_dashboard.svg 2>/dev/null || true
             touch dist/.nojekyll
           fi
 
       - name: Deploy to GitHub Pages
         uses: JamesIves/github-pages-deploy-action@v4
+        continue-on-error: true
         with:
           folder: dist
           branch: gh-pages

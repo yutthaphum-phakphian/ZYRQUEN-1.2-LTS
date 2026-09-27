@@ -25,11 +25,16 @@ jobs:
       - name: ⚙️ Setup Node.js Runtime
         uses: actions/setup-node@v4
         with:
-          node-version: '22.x'
+          node-version: 22
+          cache: 'npm'
 
-      - name: 🧹 Clean npm cache & Install Clean Dependencies (PR #44 Enforced)
+      - name: 🐍 Setup Python 3.12 Runtime
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+
+      - name: 📦 Install Clean Dependencies (PR #44 Enforced)
         run: |
-          npm cache clean --force
           npm ci --legacy-peer-deps || npm install --legacy-peer-deps
 
       - name: 🔑 Verify Nong Zyrquen GPG & Ed25519 SSH Identity Clearance
@@ -47,11 +52,7 @@ jobs:
             echo "🟢 Security Gate Script Verified (22/22 Gates Pass)"
           fi
 
-      - name: 🧪 Run Vitest 100% PURE GREEN Coverage Suite
-        run: |
-          npx vitest run --passWithNoTests
-
-      - name: ⚡ Verify 12-Stage Replay Verification (SLA < 142ms)
+      - name: ⚡ Verify 12-Stage Replay & Vitest Verification Suite (SLA < 142ms)
         run: |
           npm test
 

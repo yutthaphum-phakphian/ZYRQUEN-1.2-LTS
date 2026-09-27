@@ -19,6 +19,22 @@
   animation: anomalyStrobeFlash 0.6s infinite cubic-bezier(0.4, 0, 0.6, 1);
 }
 
+/* Security View HSM Quorum Breach Subtle Crimson Pulse Glow (< 8/10 Nodes) */
+@keyframes securityCrimsonPulseGlow {
+  0%, 100% {
+    box-shadow: 0 0 24px rgba(220, 38, 38, 0.16), inset 0 0 18px rgba(220, 38, 38, 0.08);
+    border-color: rgba(244, 63, 94, 0.45);
+  }
+  50% {
+    box-shadow: 0 0 48px rgba(225, 29, 72, 0.36), inset 0 0 32px rgba(225, 29, 72, 0.16);
+    border-color: rgba(244, 63, 94, 0.78);
+  }
+}
+
+.security-view-crimson-pulse {
+  animation: securityCrimsonPulseGlow 2.4s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+}
+
 .chamber-11-quantum-radar {
   position: relative;
 }

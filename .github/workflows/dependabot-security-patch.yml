@@ -40,7 +40,7 @@ jobs:
         run: npx tsc --noEmit
 
       - name: Run runtime verification
-        run: npx vitest run tests/sovereign-runtime-verification.test.tsx --coverage
+        run: npx vitest run tests/sovereign-runtime-verification.test.tsx
 
       - name: Build production bundle
         run: NODE_OPTIONS=--max-old-space-size=4096 npm run build

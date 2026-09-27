@@ -162,10 +162,26 @@ export const SecurityView: React.FC<SecurityViewProps> = ({
   const [disabledHsmNodeIds, setDisabledHsmNodeIds] = useState<number[]>([]);
   const [handshakingNodeId, setHandshakingNodeId] = useState<number | null>(null);
   const [hsmQuorumToast, setHsmQuorumToast] = useState<HsmQuorumHighSeverityToast | null>(null);
+  const [autoHealStatus, setAutoHealStatus] = useState<string | null>(null);
   const prevActiveHsmNodesRef = useRef<number>(10);
 
   const activeHsmNodes = 10 - disabledHsmNodeIds.length;
   const isHsmQuorumValid = activeHsmNodes >= HSM_HIGH_SEVERITY_QUORUM_THRESHOLD;
+  const hsmQuorumHealthPct = Math.round((activeHsmNodes / 10) * 100);
+  const hsmNodeUptimePct = (activeHsmNodes * 10).toFixed(1);
+  const hsmOperationalStatus = isHsmQuorumValid
+    ? activeHsmNodes === 10
+      ? 'OPTIMAL • 100% ONLINE'
+      : 'OPERATIONAL • QUORUM VALID'
+    : 'DEGRADED • QUORUM BREACH (<8/10)';
+  const isCrimsonPulseActive = !isHsmQuorumValid || hsmQuorumToast !== null;
+
+  // Semi-circular SVG Gauge math (radius = 52, arc length = PI * 52 = 163.36)
+  const gaugeRadius = 52;
+  const gaugeCircumference = Math.PI * gaugeRadius;
+  const gaugeDashOffset = gaugeCircumference * (1 - hsmQuorumHealthPct / 100);
+  const gaugeStrokeColor =
+    activeHsmNodes >= 9 ? '#10b981' : activeHsmNodes === 8 ? '#f59e0b' : '#f43f5e';
 
   const triggerHighSeverityQuorumToast = useCallback(
     (activeCount: number, isolatedNodeLabels: string[]) => {
@@ -183,6 +199,7 @@ export const SecurityView: React.FC<SecurityViewProps> = ({
       };
 
       setHsmQuorumToast(alertPayload);
+      setAutoHealStatus(null);
       playTone(260, 0.12);
 
       toast.error(
@@ -226,6 +243,7 @@ export const SecurityView: React.FC<SecurityViewProps> = ({
   const toggleHsmNode = (nodeId: number) => {
     playTone(580, 0.04);
     setHandshakingNodeId(nodeId);
+    setAutoHealStatus(null);
     setTimeout(() => {
       setHandshakingNodeId((prev) => (prev === nodeId ? null : prev));
     }, 350);
@@ -246,10 +264,20 @@ export const SecurityView: React.FC<SecurityViewProps> = ({
     setHsmQuorumToast(null);
     setLiveCustodianCount(10);
     setLiveIsQuorumReached(true);
+    setAutoHealStatus('AUTO-HEAL COMPLETE: 10/10 HSM Quorum Nodes Reconnected (100% Health)');
     toast.success('HSM Quorum restored to 10/10 VALID. All hardware custodian nodes synchronized.', {
       toastId: 'hsm-quorum-restored-10',
       durationMs: 4000,
     });
+    onAddSystemEvent?.(
+      'HARDWARE',
+      'HSM Quorum Auto-Heal Executed (10/10 Nodes Online)',
+      'Auto-heal reconnected all isolated Sub-Kelvin HSM custodian nodes back to 10/10 (100% Quorum Health).',
+      '0x909ab814',
+      'info',
+      'ETDA Sec 26 / FIPS 140-3 L4 Quorum Recovery',
+      'security'
+    );
   };
 
   const handleQuorumChange = useCallback(
@@ -330,7 +358,15 @@ export const SecurityView: React.FC<SecurityViewProps> = ({
   };
 
   return (
-    <div className="space-y-6 animate-in fade-in duration-300">
+    <div
+      data-testid="security-view-container"
+      data-quorum-pulse={isCrimsonPulseActive ? 'crimson-glow' : 'nominal'}
+      className={`space-y-6 animate-in fade-in duration-300 transition-all ${
+        isCrimsonPulseActive
+          ? 'security-view-crimson-pulse p-3 sm:p-4 rounded-[32px] border border-rose-500/50 bg-rose-950/10'
+          : ''
+      }`}
+    >
       {/* Top Banner with Royal Gazette Legal Styling */}
       <div
         className={`p-6 sm:p-7 rounded-[28px] border transition-all duration-500 backdrop-blur-3xl flex flex-col xl:flex-row xl:items-center justify-between gap-5 relative overflow-hidden shadow-2xl group ${
@@ -553,13 +589,13 @@ export const SecurityView: React.FC<SecurityViewProps> = ({
         </motion.div>
       )}
 
-      {/* Interactive 10-Node Hardware HSM Quorum Health Monitor */}
+      {/* Interactive 10-Node Hardware HSM Quorum Health Monitor & Visual Gauge Chart */}
       <div
         data-testid="hardware-hsm-quorum-monitor"
         className={`p-5 rounded-[24px] border backdrop-blur-2xl font-mono transition-all ${
           isHsmQuorumValid
             ? 'bg-[#070914]/90 border-cyan-500/25 shadow-[0_0_25px_rgba(6,182,212,0.1)]'
-            : 'bg-rose-950/25 border-rose-500/50 shadow-[0_0_30px_rgba(244,63,94,0.2)]'
+            : 'bg-rose-950/25 border-rose-500/50 shadow-[0_0_30px_rgba(244,63,94,0.2)] security-view-crimson-pulse'
         }`}
       >
         <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 mb-4">
@@ -570,7 +606,7 @@ export const SecurityView: React.FC<SecurityViewProps> = ({
             </span>
             <span
               data-testid="hsm-quorum-status-badge"
-              className={`px-2.5 py-0.5 rounded-full text-[10px] font-bold border ${
+              className={`px-2.5 py-0.5 rounded-full text-[10px] font-bold border tabular-nums ${
                 isHsmQuorumValid
                   ? 'bg-emerald-500/15 text-emerald-300 border-emerald-500/30'
                   : 'bg-rose-500/20 text-rose-300 border-rose-500/40 animate-pulse'
@@ -580,18 +616,127 @@ export const SecurityView: React.FC<SecurityViewProps> = ({
             </span>
           </div>
 
-          <div className="flex items-center gap-2">
-            {disabledHsmNodeIds.length > 0 && (
-              <button
-                type="button"
-                onClick={restoreHsmQuorum}
-                className="px-3 py-1.5 rounded-xl bg-emerald-500/15 hover:bg-emerald-500/25 border border-emerald-500/40 text-emerald-300 text-[11px] font-bold transition-all cursor-pointer flex items-center gap-1.5"
-              >
-                <RefreshCw className="w-3.5 h-3.5" />
-                <span>Restore 10/10 Quorum</span>
-              </button>
-            )}
+          <div className="flex items-center gap-2 flex-wrap">
+            <button
+              type="button"
+              data-testid="btn-reconnect-nodes"
+              onClick={restoreHsmQuorum}
+              disabled={activeHsmNodes === 10}
+              className={`px-3.5 py-1.5 rounded-xl text-[11px] font-bold transition-all flex items-center gap-1.5 whitespace-nowrap ${
+                !isHsmQuorumValid
+                  ? 'bg-rose-500/25 hover:bg-emerald-500/30 border border-rose-400/60 hover:border-emerald-400/60 text-rose-100 hover:text-emerald-200 shadow-[0_0_18px_rgba(244,63,94,0.35)] cursor-pointer animate-pulse'
+                  : activeHsmNodes < 10
+                  ? 'bg-emerald-500/20 hover:bg-emerald-500/30 border border-emerald-400/50 text-emerald-200 cursor-pointer'
+                  : 'bg-white/5 border border-white/10 text-zinc-500 cursor-not-allowed opacity-70'
+              }`}
+              title="Auto-Heal: Reconnect isolated HSM Quorum nodes and reset health to 10/10 (100%)"
+            >
+              <RefreshCw className={`w-3.5 h-3.5 ${!isHsmQuorumValid ? 'animate-spin' : ''}`} />
+              <span>Reconnect Nodes</span>
+            </button>
           </div>
+        </div>
+
+        {/* Visual HSM Quorum Health Percentage Gauge Chart & Real-Time Operational Status */}
+        <div
+          data-testid="hsm-quorum-health-gauge"
+          className="mb-4 p-4 rounded-2xl bg-black/40 border border-white/10 flex flex-col lg:flex-row items-center justify-between gap-5"
+        >
+          <div className="flex flex-col sm:flex-row items-center gap-5 w-full lg:w-auto">
+            {/* Semi-Circular SVG Gauge */}
+            <div className="relative w-36 h-24 flex flex-col items-center justify-end shrink-0">
+              <svg
+                viewBox="0 0 130 78"
+                className="w-36 h-24 overflow-visible"
+                role="img"
+                aria-label={`HSM Quorum Health Gauge ${hsmQuorumHealthPct}%`}
+              >
+                {/* Background Track Arc */}
+                <path
+                  d="M 13 65 A 52 52 0 0 1 117 65"
+                  fill="none"
+                  stroke="rgba(255,255,255,0.1)"
+                  strokeWidth="10"
+                  strokeLinecap="round"
+                />
+                {/* 80% (8/10) Threshold Marker Tick */}
+                <line
+                  x1="96"
+                  y1="16"
+                  x2="102"
+                  y2="8"
+                  stroke="#f59e0b"
+                  strokeWidth="2"
+                  strokeLinecap="round"
+                />
+                {/* Active Health Value Arc */}
+                <path
+                  data-testid="hsm-quorum-gauge-arc"
+                  d="M 13 65 A 52 52 0 0 1 117 65"
+                  fill="none"
+                  stroke={gaugeStrokeColor}
+                  strokeWidth="10"
+                  strokeLinecap="round"
+                  strokeDasharray={gaugeCircumference.toFixed(2)}
+                  strokeDashoffset={gaugeDashOffset.toFixed(2)}
+                  style={{ transition: 'stroke-dashoffset 0.35s cubic-bezier(0.16, 1, 0.3, 1), stroke 0.25s ease' }}
+                />
+              </svg>
+              <div className="absolute bottom-1 flex flex-col items-center text-center">
+                <span
+                  data-testid="hsm-quorum-gauge-percentage"
+                  className={`text-xl font-bold tabular-nums leading-none ${
+                    isHsmQuorumValid ? 'text-emerald-300' : 'text-rose-400'
+                  }`}
+                >
+                  {hsmQuorumHealthPct}%
+                </span>
+                <span className="text-[9px] text-zinc-400 uppercase tracking-widest mt-0.5">
+                  Quorum Health
+                </span>
+              </div>
+            </div>
+
+            {/* Real-Time Node Uptime & Operational Telemetry */}
+            <div className="space-y-1.5 text-center sm:text-left">
+              <div className="text-[11px] text-zinc-400">
+                Real-Time Node Uptime:{' '}
+                <span
+                  data-testid="hsm-quorum-node-uptime"
+                  className="text-white font-bold tabular-nums"
+                >
+                  {hsmNodeUptimePct}% ({activeHsmNodes}/10 Active)
+                </span>
+              </div>
+              <div className="text-[11px] text-zinc-400">
+                Operational Status:{' '}
+                <span
+                  data-testid="hsm-quorum-operational-status"
+                  className={`font-bold ${
+                    isHsmQuorumValid ? 'text-emerald-300' : 'text-rose-400'
+                  }`}
+                >
+                  {hsmOperationalStatus}
+                </span>
+              </div>
+              <div className="text-[10px] text-zinc-500 tabular-nums">
+                Super-Majority Threshold: 80% (8/10 Nodes) • Auto-Heal Engine:{' '}
+                <span className={isHsmQuorumValid ? 'text-cyan-300' : 'text-amber-300 font-bold'}>
+                  {isHsmQuorumValid ? 'STANDBY (NOMINAL)' : 'ARMED — CLICK RECONNECT NODES'}
+                </span>
+              </div>
+            </div>
+          </div>
+
+          {autoHealStatus && (
+            <div
+              data-testid="hsm-auto-heal-status"
+              className="px-3.5 py-2 rounded-xl bg-emerald-500/15 border border-emerald-500/40 text-emerald-200 text-[11px] font-bold flex items-center gap-2 shrink-0"
+            >
+              <CheckCircle2 className="w-4 h-4 text-emerald-400 shrink-0" />
+              <span>{autoHealStatus}</span>
+            </div>
+          )}
         </div>
 
         <div className="grid grid-cols-2 sm:grid-cols-5 lg:grid-cols-10 gap-2">

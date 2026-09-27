@@ -62,20 +62,38 @@ describe('Sovereign runtime verification', () => {
     expect(screen.getAllByText('ALERT')).toHaveLength(3);
   });
 
-  it('triggers a real-time high-severity toast notification in SecurityView whenever HSM Quorum health drops below 8/10 nodes', () => {
+  it('triggers a real-time high-severity toast notification, crimson glow pulse, gauge chart update, and auto-heal Reconnect Nodes in SecurityView when HSM Quorum drops below 8/10', () => {
     const onAddSystemEvent = vi.fn();
     render(<SecurityView onAddSystemEvent={onAddSystemEvent} />);
 
+    const securityContainer = screen.getByTestId('security-view-container');
+    expect(securityContainer.getAttribute('data-quorum-pulse')).toBe('nominal');
+    expect(securityContainer.className).not.toContain('security-view-crimson-pulse');
+
     expect(screen.queryByTestId('hsm-quorum-high-severity-toast')).toBeNull();
     expect(screen.getByText(/QUORUM STATUS:\s*10\/10\s*VALID/i)).toBeTruthy();
+    expect(screen.getByTestId('hsm-quorum-health-gauge')).toBeTruthy();
+    expect(screen.getByTestId('hsm-quorum-gauge-percentage').textContent).toBe('100%');
+    expect(screen.getByTestId('hsm-quorum-node-uptime').textContent).toContain('100.0% (10/10 Active)');
+    expect(screen.getByTestId('hsm-quorum-operational-status').textContent).toContain('OPTIMAL');
 
     fireEvent.click(screen.getByText('HSM-NODE-01').closest('button')!);
     fireEvent.click(screen.getByText('HSM-NODE-02').closest('button')!);
     expect(screen.getByText(/QUORUM STATUS:\s*8\/10\s*VALID/i)).toBeTruthy();
+    expect(screen.getByTestId('hsm-quorum-gauge-percentage').textContent).toBe('80%');
+    expect(screen.getByTestId('hsm-quorum-node-uptime').textContent).toContain('80.0% (8/10 Active)');
     expect(screen.queryByTestId('hsm-quorum-high-severity-toast')).toBeNull();
+    expect(securityContainer.getAttribute('data-quorum-pulse')).toBe('nominal');
 
     fireEvent.click(screen.getByText('HSM-NODE-03').closest('button')!);
     expect(screen.getByText(/QUORUM STATUS:\s*7\/10\s*DEGRADED/i)).toBeTruthy();
+    expect(screen.getByTestId('hsm-quorum-gauge-percentage').textContent).toBe('70%');
+    expect(screen.getByTestId('hsm-quorum-node-uptime').textContent).toContain('70.0% (7/10 Active)');
+    expect(screen.getByTestId('hsm-quorum-operational-status').textContent).toContain('DEGRADED');
+
+    // Verify subtle crimson glow pulse animation on Security view container when < 8/10
+    expect(securityContainer.getAttribute('data-quorum-pulse')).toBe('crimson-glow');
+    expect(securityContainer.className).toContain('security-view-crimson-pulse');
 
     const highSeverityToast = screen.getByTestId('hsm-quorum-high-severity-toast');
     expect(highSeverityToast).toBeTruthy();
@@ -93,8 +111,17 @@ describe('Sovereign runtime verification', () => {
       'security'
     );
 
-    fireEvent.click(screen.getByTestId('btn-restore-hsm-quorum-toast'));
+    // Click 'Reconnect Nodes' auto-heal button to reset HSM Quorum nodes to 10/10 health
+    const reconnectBtn = screen.getByRole('button', { name: /Reconnect Nodes/i });
+    fireEvent.click(reconnectBtn);
+
     expect(screen.getByText(/QUORUM STATUS:\s*10\/10\s*VALID/i)).toBeTruthy();
+    expect(screen.getByTestId('hsm-quorum-gauge-percentage').textContent).toBe('100%');
+    expect(screen.getByTestId('hsm-quorum-node-uptime').textContent).toContain('100.0% (10/10 Active)');
+    expect(screen.getByTestId('hsm-quorum-operational-status').textContent).toContain('OPTIMAL');
+    expect(screen.getByTestId('hsm-auto-heal-status').textContent).toMatch(/10\/10 HSM Quorum Nodes Reconnected/i);
     expect(screen.queryByTestId('hsm-quorum-high-severity-toast')).toBeNull();
+    expect(securityContainer.getAttribute('data-quorum-pulse')).toBe('nominal');
+    expect(securityContainer.className).not.toContain('security-view-crimson-pulse');
   });
 });
