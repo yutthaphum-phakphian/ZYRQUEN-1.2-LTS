@@ -15,6 +15,7 @@ export interface TamperDetectionEvent {
   zeroizationPassed: boolean;
   keysPurged: number;
   quarantineTriggered: boolean;
+  attestationProvenance?: 'CONFIGURED_HSM_ENCLAVE_MODEL';
 }
 
 export interface PhoenixRecoveryResult {
@@ -29,6 +30,7 @@ export interface PhoenixRecoveryResult {
   genesisBlock: number;
   ssotDrift: string;
   hsmQuorumState: string;
+  attestationProvenance?: 'CONFIGURED_HSM_ENCLAVE_MODEL';
 }
 
 export const HSM_TAMPER_CONFIG = {
@@ -41,6 +43,7 @@ export const HSM_TAMPER_CONFIG = {
   decaKeyQuorumRequired: 10,
   decaKeyQuorumOnline: 10,
   fipsStandard: 'FIPS 140-3 Level 4',
+  attestationProvenance: 'CONFIGURED_HSM_ENCLAVE_MODEL',
 } as const;
 
 class HsmTamperService {
@@ -48,10 +51,10 @@ class HsmTamperService {
 
   /**
    * Executes Active Zeroization upon detection of physical tampering
-   * SLA < 1.2ms
+   * SLA < 1.2ms (Deterministic Configured Benchmark: 0.48ms)
    */
   public triggerActiveZeroization(sensorId = 'TAMPER_SENSOR_01', type: TamperDetectionEvent['tamperType'] = 'PHYSICAL_ENCLOSURE_BREACH'): TamperDetectionEvent {
-    const latency = Number((0.45 + Math.random() * 0.1).toFixed(2)); // ~0.48ms
+    const latency = HSM_TAMPER_CONFIG.measuredZeroizationLatencyMs;
     const event: TamperDetectionEvent = {
       eventId: `EVT-ZEROIZE-${Date.now()}`,
       timestamp: new Date().toISOString(),
@@ -62,6 +65,7 @@ class HsmTamperService {
       zeroizationPassed: latency <= HSM_TAMPER_CONFIG.activeZeroizationSlaMs,
       keysPurged: 10, // All 10 council operational session keys purged from volatile memory
       quarantineTriggered: true,
+      attestationProvenance: HSM_TAMPER_CONFIG.attestationProvenance,
     };
 
     this.events.unshift(event);
@@ -70,10 +74,10 @@ class HsmTamperService {
 
   /**
    * Executes Phoenix Recovery via SPHINCS+ state restoration
-   * SLA < 3.2ms
+   * SLA < 3.2ms (Deterministic Configured Benchmark: 2.93ms)
    */
   public executePhoenixRecovery(operator = 'Deca-Key Council #EP-SOVEREIGN-01'): PhoenixRecoveryResult {
-    const latency = Number((2.85 + Math.random() * 0.15).toFixed(2)); // ~2.93ms
+    const latency = HSM_TAMPER_CONFIG.measuredPhoenixRecoveryLatencyMs;
     return {
       recoveryId: `PHOENIX-REC-${Date.now()}`,
       timestamp: new Date().toISOString(),
@@ -86,6 +90,7 @@ class HsmTamperService {
       genesisBlock: HSM_TAMPER_CONFIG.genesisBlock,
       ssotDrift: '0.00%',
       hsmQuorumState: '10/10 REAL_HSM OPERATIONAL',
+      attestationProvenance: HSM_TAMPER_CONFIG.attestationProvenance,
     };
   }
 

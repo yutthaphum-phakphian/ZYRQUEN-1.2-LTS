@@ -56,6 +56,7 @@ const CANONICAL_SOVEREIGN_CHAMBERS: Omit<SovereignChamber, 'lastSync'>[] = [
   { id: 16, code: 'CH-15', name: 'Sonic Alert & Multilingual Speech Synthesis', status: 'Operational', drift: '0.00%', emoji: '🔊', partition: 'Ω600_1000' },
   { id: 17, code: 'CH-16', name: 'Dynamic 3D Sovereign Quantum Visualizer', status: 'Operational', drift: '0.00%', emoji: '🎮', partition: 'Ω600_1000' },
   { id: 18, code: 'CH-17', name: 'Supreme Omnipresent Command & Control', status: 'Operational', drift: '0.00%', emoji: '👑', partition: 'Ω600_1000' },
+  { id: 19, code: 'CH-18', name: 'Neural Sentinel & Predictive Governance', status: 'Operational', drift: '0.00%', emoji: '🛰️', partition: 'Ω600_1000' },
 ];
 
 interface MerkleProofResult {

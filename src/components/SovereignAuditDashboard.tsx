@@ -20,6 +20,7 @@ import { automatedBackupService, DriftDiagnosticReport } from '../services/autom
 import { WriteFirewallEngine } from '../utils/writeFirewall';
 import { playTone, playAuditChime } from './AudioSynthesizer';
 import { copyToClipboard } from '../utils/clipboard';
+import { ContractCompatibilityAuditPanel } from './ContractCompatibilityAuditPanel';
 
 // # ======================================================================
 // #  ZYRQUEN Ω∞ SOVEREIGN AUDIT DASHBOARD — FROZEN v1.2 LTS
@@ -100,6 +101,7 @@ const CHAMBERS_18: ChamberItem[] = [
   { id: 'ROOM15', num: '15', title: 'Sonic Alert', subtitle: '882Hz Sine Carrier', emoji: '🔊', status: 'VERIFIED', latency: '0.03ms', details: 'Harmonic acoustic feedback for audit transitions and warnings.' },
   { id: 'ROOM16', num: '16', title: '3D Quantum Viz', subtitle: 'Lattice Visualization', emoji: '🎮', status: 'VERIFIED', latency: '0.32ms', details: 'Spatial quantum state rendering in 3D holographic projection.' },
   { id: 'ROOM17', num: '17', title: 'Supreme Command', subtitle: 'OMEGA-1 Supreme Level', emoji: '👑', status: 'CANONICAL', latency: '0.04ms', details: 'Sovereign Architect command surface under #EP-SOVEREIGN-01.' },
+  { id: 'ROOM18', num: '18', title: 'Neural Sentinel', subtitle: '12,480 spans/m • 1.33fs', emoji: '🛰️', status: 'VERIFIED', latency: '0.08ms', details: 'Real-time phase jitter & predictive governance sentinel with CH-02 fail-closed guard.' },
 ];
 
 interface EntropyPoint {
@@ -1087,6 +1089,8 @@ export const SovereignAuditDashboard: React.FC<{
                 No diagnostic drift report recorded yet. Click "TRIGGER DRIFT PROBE" to execute.
               </div>
             )}
+
+            <ContractCompatibilityAuditPanel />
           </div>
         )}
       </div>

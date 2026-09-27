@@ -1,13 +1,14 @@
 import { verifySSoT, syncHSM, auditChambers } from "../lib/sovereign-core";
+import { CANONICAL_SSOT_CORE } from "./canonicalSSoT";
 
 export async function runSovereignFusion() {
   console.log("🧠 ZYRQUEN Ω∞ — Sovereign Fusion Initiated");
 
-  // 1️⃣ Canonical Audit
+  // 1️⃣ Canonical Audit across CH-00..CH-18
   const audit = await auditChambers({
-    chambers: 18,
-    ssotBlock: "#849202",
-    merkleRoot: "909ab14479844d8a14816bed34cdbb07528e18501da86fc4691763a43aaf4c68",
+    chambers: CANONICAL_SSOT_CORE.chambersRegistry.totalRegisteredChambers,
+    ssotBlock: CANONICAL_SSOT_CORE.genesisAnchor.blockTag,
+    merkleRoot: CANONICAL_SSOT_CORE.genesisAnchor.merkleRoot,
   });
   console.table(audit);
 
