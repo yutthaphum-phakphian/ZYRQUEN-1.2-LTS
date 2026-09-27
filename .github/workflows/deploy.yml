@@ -31,6 +31,7 @@ jobs:
         env:
           CI: false
           GITHUB_PAGES: 'true'
+          NODE_OPTIONS: '--max-old-space-size=4096'
 
       - name: Prepare Deployment Artifact
         run: |
@@ -38,9 +39,11 @@ jobs:
             echo "Vite build detected in dist/"
             # Ensure 404 fallback for SPA routing on GitHub Pages
             cp dist/index.html dist/404.html 2>/dev/null || true
+            touch dist/.nojekyll
           elif [ -d "build" ]; then
             echo "CRA build detected in build/"
             cp -r build dist
+            touch dist/.nojekyll
           fi
 
       - name: Deploy to GitHub Pages

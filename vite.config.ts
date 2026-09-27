@@ -33,7 +33,19 @@ export default defineConfig(({ mode }) => ({
     sourcemap: mode !== 'production',
     target: 'es2022',
     cssCodeSplit: true,
-    chunkSizeWarningLimit: 1200,
+    chunkSizeWarningLimit: 2500,
+    rollupOptions: {
+      output: {
+        manualChunks: {
+          'vendor-react': ['react', 'react-dom'],
+          'vendor-charts': ['recharts', 'd3'],
+          'vendor-pdf': ['jspdf', 'jspdf-autotable'],
+          'vendor-three': ['three'],
+          'vendor-motion': ['motion'],
+          'vendor-icons': ['lucide-react'],
+        },
+      },
+    },
   },
 
   test: {

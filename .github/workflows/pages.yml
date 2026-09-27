@@ -40,12 +40,14 @@ jobs:
         env:
           CI: false
           GITHUB_PAGES: 'true'
+          NODE_OPTIONS: '--max-old-space-size=4096'
 
       # 4. Create 404 fallback for SPA routing on GitHub Pages
-      - name: Prepare SPA 404 Fallback
+      - name: Prepare SPA 404 Fallback & .nojekyll
         run: |
           if [ -d "dist" ]; then
             cp dist/index.html dist/404.html 2>/dev/null || true
+            touch dist/.nojekyll
           fi
 
       # 5. Setup Pages
@@ -61,6 +63,5 @@ jobs:
       # 7. Deploy to GitHub Pages
       - name: Deploy to GitHub Pages
         id: deployment
-        continue-on-error: true
         uses: actions/deploy-pages@v4
 
