@@ -29,11 +29,12 @@ jobs:
             !cloud-workspace-command-center/
           sparse-checkout-cone-mode: false
 
-      # 1. Setup Node.js v22 with cache
+      # 1. Setup Node.js v20 LTS
       - name: Setup Node.js
         uses: actions/setup-node@v4
         with:
-          node-version: 22
+          node-version: 20
+
 
       # 2. Install Packages with legacy peer deps for React 19 compatibility
       - name: Install Dependencies
