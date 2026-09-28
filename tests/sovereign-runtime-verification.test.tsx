@@ -19,6 +19,7 @@ import {
 } from '../src/adapters/zyrquenAdapter';
 import { GovernanceHealthHeatmap } from '../src/components/GovernanceHealthHeatmap';
 import { ComplianceCoverageView } from '../src/components/views/ComplianceCoverageView';
+import { CommandCenterOperationsConsole } from '../src/components/CommandCenterOperationsConsole';
 
 afterEach(() => {
   cleanup();
@@ -289,12 +290,118 @@ describe('Sovereign runtime verification', () => {
     expect(ch04Cell.className).not.toContain('untested-coverage-cell-pulse');
 
     // Trigger HSM Quorum Breach (<8/10 nodes) and verify high-priority Health Breach Alert layer & direct forensic dossier links
+    const heatmapContainer = document.getElementById('governance-health-heatmap-container')!;
+    expect(heatmapContainer).toBeTruthy();
+    expect(heatmapContainer.className).not.toContain('hsm-breach-alert-layer');
     expect(document.getElementById('hsm-quorum-health-breach-alert-layer')).toBeNull();
     const breachBtn = document.getElementById('btn-simulate-hsm-quorum-breach')!;
     fireEvent.click(breachBtn);
     const breachLayer = document.getElementById('hsm-quorum-health-breach-alert-layer')!;
     expect(breachLayer).toBeTruthy();
     expect(breachLayer.textContent).toContain('ACTIVE QUORUM: 7/10 NODES');
+
+    // Verify GovernanceHealthHeatmap component container receives 'hsm-breach-alert-layer' CSS class when active HSM quorum < 8
+    expect(heatmapContainer.className).toContain('hsm-breach-alert-layer');
+    expect(heatmapContainer.getAttribute('data-hsm-breach-active')).toBe('true');
+
+    // Verify affected hardware node cell (e.g., CH-02 mapped to TC-03) receives hsm-breach-alert-layer CSS animation
+    const ch02Cell = document.getElementById('chamber-cell-ch-02')!;
+    expect(ch02Cell.className).toContain('hsm-breach-alert-layer');
+    expect(ch02Cell.getAttribute('data-hsm-breach-cell')).toBe('true');
+
+    // Verify every hardware cell has a 'View Forensic Dossier' button mapped over HSM node state & linked to data store historical audit artifact
+    const ch00DossierBtn = document.getElementById('btn-view-forensic-dossier-ch-00')!;
+    const ch17DossierBtn = document.getElementById('btn-view-forensic-dossier-ch-17')!;
+    expect(ch00DossierBtn).toBeTruthy();
+    expect(ch17DossierBtn).toBeTruthy();
+    expect(ch00DossierBtn.textContent).toContain('View Forensic Dossier');
+    fireEvent.click(ch00DossierBtn);
+    const cellDossierModal = document.getElementById('hsm-node-forensic-dossier-modal')!;
+    expect(cellDossierModal).toBeTruthy();
+    expect(cellDossierModal.textContent).toContain('Data Store Audit Artifact:');
+    fireEvent.click(document.getElementById('btn-close-hsm-forensic-dossier')!);
+
+    // Verify visual 'Node Status Dashboard' alongside the heatmap with scrollable real-time throughput metrics for each hardware node
+    const nodeStatusDashboard = document.getElementById('node-status-dashboard')!;
+    expect(nodeStatusDashboard).toBeTruthy();
+    expect(nodeStatusDashboard.textContent).toContain('NODE STATUS DASHBOARD');
+    expect(nodeStatusDashboard.textContent).toContain('QOPS');
+    expect(nodeStatusDashboard.textContent).toContain('sig/s');
+    const scrollableNodeList = document.getElementById('node-status-scrollable-list')!;
+    expect(scrollableNodeList).toBeTruthy();
+    expect(document.getElementById('node-status-item-tc-01')).toBeTruthy();
+    expect(document.getElementById('node-status-item-tc-10')).toBeTruthy();
+
+    // Verify local state handler triggering browser-level toast notification when hardware node drops below 'Warning' threshold
+    let capturedBrowserToast: any = null;
+    const toastListener = (evt: Event) => {
+      capturedBrowserToast = (evt as CustomEvent).detail;
+    };
+    window.addEventListener('zyrquen-toast', toastListener);
+    const warnTriggerBtn = document.getElementById('btn-trigger-node-warning-threshold')!;
+    expect(warnTriggerBtn).toBeTruthy();
+    fireEvent.click(warnTriggerBtn);
+    expect(capturedBrowserToast).toBeTruthy();
+    expect(capturedBrowserToast.type).toBe('warning');
+    expect(capturedBrowserToast.message).toContain('Warning Threshold');
+    window.removeEventListener('zyrquen-toast', toastListener);
+    const warningToastBanner = document.getElementById('hardware-node-warning-toast')!;
+    expect(warningToastBanner).toBeTruthy();
+    expect(warningToastBanner.textContent).toContain('BELOW WARNING THRESHOLD');
+
+    // Verify 24-hour integration coverage percentage trend line below the heatmap
+    const trendSection = document.getElementById('heatmap-24h-integration-coverage-trend')!;
+    expect(trendSection).toBeTruthy();
+    expect(trendSection.textContent).toContain('24-HOUR INTEGRATION COVERAGE PERCENTAGE TREND LINE');
+
+    // Verify Copy Deep-Link button
+    const copyDeepLinkBtn = document.getElementById('btn-copy-heatmap-deep-link')!;
+    expect(copyDeepLinkBtn).toBeTruthy();
+    fireEvent.click(copyDeepLinkBtn);
+
+    // Verify search bar locates hardware seal status or integration path by node ID or seal number
+    const searchInput = document.getElementById('heatmap-node-seal-integration-search') as HTMLInputElement;
+    expect(searchInput).toBeTruthy();
+    fireEvent.change(searchInput, { target: { value: 'TC-03' } });
+    expect(document.getElementById('chamber-cell-ch-02')).toBeTruthy();
+    fireEvent.change(searchInput, { target: { value: '' } });
+
+    // Verify d3-zoom zoom and pan controls on GovernanceHealthHeatmap
+    const zoomCanvas = document.getElementById('heatmap-d3-zoom-canvas')!;
+    expect(zoomCanvas).toBeTruthy();
+    expect(zoomCanvas.getAttribute('data-zoom-scale')).toBe('1.00');
+    fireEvent.click(document.getElementById('btn-heatmap-zoom-in')!);
+    expect(zoomCanvas.getAttribute('data-zoom-scale')).toBe('1.25');
+    fireEvent.click(document.getElementById('btn-heatmap-pan-right')!);
+    expect(zoomCanvas.getAttribute('data-pan-x')).toBe('48');
+    fireEvent.click(document.getElementById('btn-heatmap-zoom-reset')!);
+    expect(zoomCanvas.getAttribute('data-zoom-scale')).toBe('1.00');
+    expect(zoomCanvas.getAttribute('data-pan-x')).toBe('0');
+
+    // Verify Date Picker to view historical snapshots of hardware seal status and integration coverage
+    const datePicker = document.getElementById('heatmap-historical-date-picker') as HTMLInputElement;
+    expect(datePicker).toBeTruthy();
+    fireEvent.change(datePicker, { target: { value: '2026-09-27T11:00' } });
+    const snapshotBanner = document.getElementById('heatmap-historical-snapshot-banner')!;
+    expect(snapshotBanner).toBeTruthy();
+    expect(snapshotBanner.textContent).toContain('HISTORICAL SNAPSHOT ACTIVE');
+    expect(snapshotBanner.textContent).toContain('2026-09-27T11:00');
+
+    // Verify Export to CSV button downloads raw data of the current grid for external spreadsheet analysis
+    const exportCsvBtn = document.getElementById('btn-export-heatmap-csv')!;
+    expect(exportCsvBtn).toBeTruthy();
+    fireEvent.click(exportCsvBtn);
+    const csvBanner = document.getElementById('heatmap-csv-export-banner')!;
+    expect(csvBanner).toBeTruthy();
+    expect(csvBanner.textContent).toContain('Spreadsheet CSV Exported:');
+    expect(onAddSystemEvent).toHaveBeenCalledWith(
+      'EXPORT_CSV',
+      expect.stringContaining('Governance Heatmap CSV Exported'),
+      expect.stringContaining('Exported current grid raw data'),
+      expect.stringMatching(/^csv-export:/),
+      'success',
+      'ETDA Sec 28 / ISO-42001 Spreadsheet Audit'
+    );
 
     // Open direct forensic dossier for isolated hardware node TC-03
     const tc03DossierBtn = document.getElementById('btn-open-forensic-dossier-tc-03')!;
@@ -305,10 +412,13 @@ describe('Sovereign runtime verification', () => {
     expect(dossierModal.textContent).toContain('DOSSIER-HSM-TC03-849202');
     fireEvent.click(document.getElementById('btn-close-hsm-forensic-dossier')!);
 
-    // Generate Heatmap Forensic PDF (ETDA Sec 28)
+    // Generate Heatmap Forensic PDF (ETDA Sec 28) using jsPDF
     const pdfBtn = document.getElementById('btn-generate-heatmap-forensic-pdf')!;
     expect(pdfBtn).toBeTruthy();
     fireEvent.click(pdfBtn);
+    const pdfReceiptBanner = document.getElementById('heatmap-forensic-pdf-receipt-banner')!;
+    expect(pdfReceiptBanner).toBeTruthy();
+    expect(pdfReceiptBanner.textContent).toContain('Court-Admissible jsPDF Sealed:');
     expect(onAddSystemEvent).toHaveBeenCalledWith(
       'COMPLIANCE',
       expect.stringContaining('ETDA Sec 28 Heatmap Forensic PDF Sealed'),
@@ -318,14 +428,25 @@ describe('Sovereign runtime verification', () => {
       'ETDA B.E. 2544 Section 28'
     );
 
-    // Restore 10/10 HSM Quorum
+    // Restore 10/10 HSM Quorum and verify container hsm-breach-alert-layer is removed
     fireEvent.click(document.getElementById('btn-restore-hsm-quorum-nodes')!);
     expect(document.getElementById('hsm-quorum-health-breach-alert-layer')).toBeNull();
+    expect(heatmapContainer.className).not.toContain('hsm-breach-alert-layer');
 
+    // Verify Framer Motion layout animation container when switching between 'SEAL_STATUS' and 'INTEGRATION_COVERAGE' views
+    const animatedGrid = document.getElementById('heatmap-animated-grid-container')!;
+    expect(animatedGrid).toBeTruthy();
+    expect(animatedGrid.getAttribute('data-overlay-mode')).toBe('SEAL_STATUS');
     const toggleBtn = document.getElementById('btn-toggle-integration-coverage-overlay')!;
     expect(toggleBtn).toBeTruthy();
     fireEvent.click(toggleBtn);
+    expect(animatedGrid.getAttribute('data-overlay-mode')).toBe('INTEGRATION_COVERAGE');
     expect(document.getElementById('integration-coverage-overlay-banner')).toBeTruthy();
+    const hardwareSealModeBtn = document.getElementById('btn-mode-hardware-seal-status')!;
+    expect(hardwareSealModeBtn).toBeTruthy();
+    fireEvent.click(hardwareSealModeBtn);
+    expect(animatedGrid.getAttribute('data-overlay-mode')).toBe('SEAL_STATUS');
+    fireEvent.click(toggleBtn);
 
     const inspectMapBtn = document.getElementById('btn-open-d3-compliance-coverage-view')!;
     fireEvent.click(inspectMapBtn);
@@ -339,6 +460,17 @@ describe('Sovereign runtime verification', () => {
     const probeAllBtn = document.getElementById('btn-probe-all-uncovered')!;
     fireEvent.click(probeAllBtn);
     expect(screen.getAllByText(/PROBED PASS/i).length).toBeGreaterThan(0);
+
+    cleanup();
+
+    // 6. Verify Cloud Resources Recharts sparklines (utilizationHistory60m) and Chaos Simulator module (handleInjectChaos & activeChaosIncident)
+    render(<CommandCenterOperationsConsole />);
+    expect(document.getElementById('operations-cloud-resources-section')).toBeTruthy();
+    expect(document.getElementById('operations-chaos-simulator-section')).toBeTruthy();
+    const injectChaosBtn = document.getElementById('btn-quick-inject-chaos')!;
+    expect(injectChaosBtn).toBeTruthy();
+    fireEvent.click(injectChaosBtn);
+    expect(screen.getAllByText(/RECOVERED_VERIFIED/i).length).toBeGreaterThan(0);
 
     resetAuthoritativePhase11TransactionToFinalized();
   });

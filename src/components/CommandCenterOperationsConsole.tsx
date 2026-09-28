@@ -1,4 +1,12 @@
 import React, { useState, useEffect, useRef, useCallback } from 'react';
+import {
+  ResponsiveContainer,
+  AreaChart,
+  Area,
+  Tooltip,
+  XAxis,
+  YAxis,
+} from 'recharts';
 import { SelfTuningConsole } from './SelfTuningConsole';
 import { ZyrquenLogo, ZyrquenIcon } from './ZyrquenLogo';
 import { AIWorkspace, type AiInputChannel } from './AIWorkspace';
@@ -198,6 +206,127 @@ const ResourceQuotaAlert: React.FC<ResourceQuotaAlertProps> = ({
   );
 };
 
+export interface CloudResourceUtilizationPoint {
+  time: string;
+  utilization: number;
+  cpuPct: number;
+  memoryPct: number;
+}
+
+export interface CloudResource {
+  id: string;
+  name: string;
+  region: string;
+  tier: string;
+  status: 'OPTIMAL' | 'ELEVATED' | 'STANDBY_BUFFER';
+  cpuUtilPct: number;
+  memoryUtilPct: number;
+  latencyMs: number;
+  sealsBound: number;
+  utilizationHistory60m: CloudResourceUtilizationPoint[];
+}
+
+export const INITIAL_CLOUD_RESOURCES: CloudResource[] = [
+  {
+    id: 'cr-agent-mesh-01',
+    name: 'agentic-reasoning-mesh (SGX Enclave)',
+    region: 'ap-southeast-1 (Bangkok Sovereign Zone A)',
+    tier: '16 vCPU · 32 GB HBM3 · PQC-FIPS204',
+    status: 'ELEVATED',
+    cpuUtilPct: 68.4,
+    memoryUtilPct: 78.2,
+    latencyMs: 18.42,
+    sealsBound: 14902,
+    utilizationHistory60m: [
+      { time: '-60m', utilization: 58.2, cpuPct: 54.0, memoryPct: 62.4 },
+      { time: '-50m', utilization: 61.5, cpuPct: 57.2, memoryPct: 65.8 },
+      { time: '-40m', utilization: 64.0, cpuPct: 60.1, memoryPct: 67.9 },
+      { time: '-30m', utilization: 69.8, cpuPct: 65.4, memoryPct: 74.2 },
+      { time: '-20m', utilization: 72.1, cpuPct: 67.0, memoryPct: 77.2 },
+      { time: '-10m', utilization: 73.0, cpuPct: 68.1, memoryPct: 77.9 },
+      { time: 'Now', utilization: 73.3, cpuPct: 68.4, memoryPct: 78.2 },
+    ],
+  },
+  {
+    id: 'cr-telemetry-core-02',
+    name: 'telemetry-core-8443 (OTel Collector)',
+    region: 'ap-southeast-1 (Bangkok Sovereign Zone B)',
+    tier: '32 vCPU · 64 GB ECC · Cryo-Link 14.98mK',
+    status: 'OPTIMAL',
+    cpuUtilPct: 41.2,
+    memoryUtilPct: 64.0,
+    latencyMs: 35.8,
+    sealsBound: 14902,
+    utilizationHistory60m: [
+      { time: '-60m', utilization: 49.0, cpuPct: 38.4, memoryPct: 59.6 },
+      { time: '-50m', utilization: 50.2, cpuPct: 39.1, memoryPct: 61.3 },
+      { time: '-40m', utilization: 51.5, cpuPct: 40.0, memoryPct: 63.0 },
+      { time: '-30m', utilization: 52.0, cpuPct: 40.8, memoryPct: 63.2 },
+      { time: '-20m', utilization: 52.4, cpuPct: 41.0, memoryPct: 63.8 },
+      { time: '-10m', utilization: 52.5, cpuPct: 41.1, memoryPct: 63.9 },
+      { time: 'Now', utilization: 52.6, cpuPct: 41.2, memoryPct: 64.0 },
+    ],
+  },
+  {
+    id: 'cr-quarantine-buffer-03',
+    name: 'chamber-02-buffer-gamma (Air-Gapped Sandbox)',
+    region: 'ap-southeast-1 (Isolated Quarantine Vault)',
+    tier: '8 vCPU · 16 GB WORM · Fail-Closed',
+    status: 'STANDBY_BUFFER',
+    cpuUtilPct: 12.0,
+    memoryUtilPct: 21.5,
+    latencyMs: 0.8,
+    sealsBound: 80,
+    utilizationHistory60m: [
+      { time: '-60m', utilization: 15.8, cpuPct: 11.2, memoryPct: 20.4 },
+      { time: '-50m', utilization: 16.0, cpuPct: 11.4, memoryPct: 20.6 },
+      { time: '-40m', utilization: 16.4, cpuPct: 11.8, memoryPct: 21.0 },
+      { time: '-30m', utilization: 16.5, cpuPct: 11.9, memoryPct: 21.1 },
+      { time: '-20m', utilization: 16.6, cpuPct: 12.0, memoryPct: 21.2 },
+      { time: '-10m', utilization: 16.7, cpuPct: 12.0, memoryPct: 21.4 },
+      { time: 'Now', utilization: 16.8, cpuPct: 12.0, memoryPct: 21.5 },
+    ],
+  },
+  {
+    id: 'cr-hsm-quorum-04',
+    name: 'deca-key-hsm-cluster (10/10 REAL_HSM)',
+    region: 'th-central-vault (Sub-Kelvin Cryo Enclave)',
+    tier: 'FIPS 140-3 L4 · ML-DSA-87 Dilithium-5',
+    status: 'OPTIMAL',
+    cpuUtilPct: 29.5,
+    memoryUtilPct: 34.0,
+    latencyMs: 4.2,
+    sealsBound: 14902,
+    utilizationHistory60m: [
+      { time: '-60m', utilization: 31.0, cpuPct: 28.5, memoryPct: 33.5 },
+      { time: '-50m', utilization: 31.2, cpuPct: 28.8, memoryPct: 33.6 },
+      { time: '-40m', utilization: 31.5, cpuPct: 29.0, memoryPct: 34.0 },
+      { time: '-30m', utilization: 31.6, cpuPct: 29.2, memoryPct: 34.0 },
+      { time: '-20m', utilization: 31.7, cpuPct: 29.4, memoryPct: 34.0 },
+      { time: '-10m', utilization: 31.7, cpuPct: 29.5, memoryPct: 33.9 },
+      { time: 'Now', utilization: 31.8, cpuPct: 29.5, memoryPct: 34.0 },
+    ],
+  },
+];
+
+export interface ActiveChaosIncidentState {
+  incidentId: string;
+  scenarioCode:
+    | 'AGENT_MEMORY_SATURATION_SPIKE'
+    | 'PQC_SIGNER_LATENCY_JITTER'
+    | 'TELEMETRY_SOCKET_PARTITION'
+    | 'BYZANTINE_QUORUM_DESYNC';
+  title: string;
+  targetAgent: string;
+  status: 'INJECTED_ISOLATING' | 'AUTONOMIC_HEALING' | 'RECOVERED_VERIFIED';
+  injectedAt: string;
+  recoveryProgressPct: number;
+  autonomicRecoveryMs: number;
+  coherenceDuringFaultPct: number;
+  restoredCoherencePct: number;
+  telemetrySteps: string[];
+}
+
 export interface StagedAiCommandRequest {
   proposalId: string;
   proposedBatchSize: number;
@@ -206,9 +335,16 @@ export interface StagedAiCommandRequest {
   targetWorkspace: string;
 }
 
+export type CommandCenterModuleType =
+  | 'operations'
+  | 'self-tuning'
+  | 'voice-builder'
+  | 'cloud-resources'
+  | 'chaos-simulator';
+
 export interface CommandCenterOperationsConsoleProps {
   embedded?: boolean;
-  initialModule?: 'operations' | 'self-tuning' | 'voice-builder';
+  initialModule?: CommandCenterModuleType;
   stagedAiRequest?: StagedAiCommandRequest | null;
   onConsumeStagedAiRequest?: () => void;
   onSystemAuditLog?: (action: string, details: string, status: 'VERIFIED' | 'BLOCKED') => void;
@@ -225,7 +361,9 @@ export function CommandCenterOperationsConsole({
   onSystemAuditLog,
 }: CommandCenterOperationsConsoleProps) {
   // Sidebar Module Navigation State
-  const [activeSidebarModule, setActiveSidebarModule] = useState<'operations' | 'self-tuning' | 'voice-builder'>(initialModule);
+  const [activeSidebarModule, setActiveSidebarModule] = useState<CommandCenterModuleType>(initialModule);
+  const [cloudResources, setCloudResources] = useState<CloudResource[]>(INITIAL_CLOUD_RESOURCES);
+  const [activeChaosIncident, setActiveChaosIncident] = useState<ActiveChaosIncidentState | null>(null);
 
   // Terminal State
   const [terminalInput, setTerminalInput] = useState('');
@@ -413,6 +551,138 @@ export function CommandCenterOperationsConsole({
   const appendLog = useCallback((type: TerminalLogEntry['type'], text: string) => {
     setTerminalLogs((prev) => [...prev, { type, text }]);
   }, []);
+
+  // Synthetic Agent Failure & Autonomic Recovery Chaos Injector
+  const handleInjectChaos = useCallback(
+    (
+      scenarioCode: ActiveChaosIncidentState['scenarioCode'] = 'AGENT_MEMORY_SATURATION_SPIKE'
+    ) => {
+      const scenarioMeta: Record<
+        ActiveChaosIncidentState['scenarioCode'],
+        {
+          title: string;
+          targetAgent: string;
+          coherenceDuringFaultPct: number;
+          autonomicRecoveryMs: number;
+          steps: string[];
+        }
+      > = {
+        AGENT_MEMORY_SATURATION_SPIKE: {
+          title: 'Synthetic Agent OOM & Batch Saturation Fault',
+          targetAgent: 'ws-agent-02 (agentic-reasoning-mesh)',
+          coherenceDuringFaultPct: 94.12,
+          autonomicRecoveryMs: 35.8,
+          steps: [
+            '00.0ms — Injected synthetic agent batch spike (94.8% RAM saturation) into ws-agent-02 sandbox',
+            '08.4ms — Sentinel Circuit Breaker tripped; isolated agent worker thread (Core Mutation = 0)',
+            '21.6ms — Autonomic Phoenix Healer rebalanced BATCH_SIZE 64 → 48 & flushed tensor cache',
+            '35.8ms — Merkle Root #849202 & 14,902 Seals verified intact (Δ0.000% SSoT parity restored)',
+          ],
+        },
+        PQC_SIGNER_LATENCY_JITTER: {
+          title: 'Dilithium-5 PQC Signer Latency Jitter Injection',
+          targetAgent: 'deca-key-hsm-cluster (TC-03 / TC-08)',
+          coherenceDuringFaultPct: 95.4,
+          autonomicRecoveryMs: 28.4,
+          steps: [
+            '00.0ms — Injected +85ms synthetic PQC signature jitter on Node TC-03',
+            '06.2ms — Quorum router shifted signing load to standby HSM enclave lanes',
+            '19.1ms — Ephemeral key buffer zeroized and re-attested via FIPS 204 ML-DSA-87',
+            '28.4ms — Sub-100ms SLA restored (18.42ms P95) with zero unverified writes',
+          ],
+        },
+        TELEMETRY_SOCKET_PARTITION: {
+          title: 'Telemetry Port 8443 Stream Partition Drill',
+          targetAgent: 'ws-telemetry-01 (telemetry-core-8443)',
+          coherenceDuringFaultPct: 96.05,
+          autonomicRecoveryMs: 31.2,
+          steps: [
+            '00.0ms — Simulated transient WebSocket frame drop on telemetry-core-8443',
+            '09.0ms — Offline WORM ring-buffer engaged; zero audit frames lost',
+            '22.5ms — Multiplexed TLS 1.3 channel re-established across sovereign gateway',
+            '31.2ms — Backfill digest verified against canonical chain #849202',
+          ],
+        },
+        BYZANTINE_QUORUM_DESYNC: {
+          title: 'Byzantine Agent Consensus Drift Simulation',
+          targetAgent: 'ws-quarantine-02 (chamber-02-buffer-gamma)',
+          coherenceDuringFaultPct: 93.85,
+          autonomicRecoveryMs: 41.0,
+          steps: [
+            '00.0ms — Injected synthetic state hash divergence in candidate agent proposal',
+            '04.5ms — Fail-Closed Phase 11 Core Guard blocked candidate promotion immediately',
+            '24.8ms — Quarantined divergent payload into Chamber 02 Buffer Gamma',
+            '41.0ms — Autonomic rollback completed; canonical state verified 100% untouched',
+          ],
+        },
+      };
+
+      const meta = scenarioMeta[scenarioCode];
+      const seq = String(auditSeqRef.current++).padStart(2, '0');
+      const incidentId = `CHAOS-849205-${seq}`;
+      const nowIso = new Date().toISOString();
+
+      const newIncident: ActiveChaosIncidentState = {
+        incidentId,
+        scenarioCode,
+        title: meta.title,
+        targetAgent: meta.targetAgent,
+        status: 'RECOVERED_VERIFIED',
+        injectedAt: nowIso,
+        recoveryProgressPct: 100,
+        autonomicRecoveryMs: meta.autonomicRecoveryMs,
+        coherenceDuringFaultPct: meta.coherenceDuringFaultPct,
+        restoredCoherencePct: 99.985,
+        telemetrySteps: meta.steps,
+      };
+
+      setActiveChaosIncident(newIncident);
+      setCloudResources((prev) =>
+        prev.map((res, idx) =>
+          idx === 0
+            ? {
+                ...res,
+                utilizationHistory60m: [
+                  ...res.utilizationHistory60m.slice(1),
+                  {
+                    time: 'Chaos',
+                    utilization: 84.6,
+                    cpuPct: 81.2,
+                    memoryPct: 88.0,
+                  },
+                ],
+              }
+            : res
+        )
+      );
+
+      appendLog(
+        'warn',
+        `[CHAOS SIMULATOR — ${incidentId}] Triggered "${meta.title}" on ${meta.targetAgent}. Autonomic recovery completed in ${meta.autonomicRecoveryMs} ms (Core Mutation = 0).`
+      );
+
+      setAuditRecords((prev) => [
+        {
+          id: `AUD-CHAOS-849205-${seq}`,
+          timestamp: nowIso,
+          action: `CHAOS_DRILL_${scenarioCode}`,
+          target: meta.targetAgent,
+          actor: CORE_GUARD_INFO.principal,
+          status: 'VERIFIED',
+          details: `${meta.title} -> Autonomic Phoenix Recovery verified in ${meta.autonomicRecoveryMs}ms (0 Core Mutation).`,
+          hash: 'SHA256:909ab814479844d8a14816bed34cdbb0',
+        },
+        ...prev,
+      ]);
+
+      onSystemAuditLog?.(
+        `CHAOS_DRILL_${scenarioCode}`,
+        `${meta.title} recovered in ${meta.autonomicRecoveryMs}ms (Core Mutation = 0).`,
+        'VERIFIED'
+      );
+    },
+    [appendLog, onSystemAuditLog]
+  );
 
   // ==========================================================================
   // PERIODIC RESOURCE QUOTA MONITOR (Checks `selectedWs` vs Quota Sliders)
@@ -1230,6 +1500,58 @@ export function CommandCenterOperationsConsole({
                   Chat · Voice Input · Preview · Source
                 </div>
               </button>
+
+              {/* Module 4: Cloud Resources View (Recharts Sparkline per Resource using utilizationHistory60m) */}
+              <button
+                id="sidebar-btn-cloud-resources"
+                type="button"
+                onClick={() => setActiveSidebarModule('cloud-resources')}
+                className={`w-full text-left p-2.5 sm:p-3 rounded-xl border transition-all cursor-pointer ${
+                  activeSidebarModule === 'cloud-resources'
+                    ? 'bg-cyan-950/70 border-cyan-400 text-white shadow-[0_0_15px_rgba(6,182,212,0.2)]'
+                    : 'bg-zinc-950/70 border-zinc-800 text-zinc-200 hover:border-cyan-500/40'
+                }`}
+              >
+                <div className="flex items-center justify-between gap-2 mb-1">
+                  <span className="text-[9px] sm:text-[10px] font-mono font-bold px-2 py-0.5 rounded bg-emerald-500/20 text-emerald-300 border border-emerald-500/40">
+                    CLOUD RESOURCES
+                  </span>
+                  <span className="text-[9px] sm:text-[10px] font-mono text-cyan-300">60M SPARKLINE</span>
+                </div>
+                <div className="text-xs sm:text-sm font-bold text-white leading-snug">
+                  Cloud Resources
+                </div>
+                <div className="text-[10px] sm:text-[11px] font-mono text-zinc-400 mt-0.5">
+                  Recharts 60m Utilization Sparklines
+                </div>
+              </button>
+
+              {/* Module 5: Chaos Simulator Dashboard Module (handleInjectChaos & activeChaosIncident) */}
+              <button
+                id="sidebar-btn-chaos-simulator"
+                type="button"
+                onClick={() => setActiveSidebarModule('chaos-simulator')}
+                className={`w-full text-left p-2.5 sm:p-3 rounded-xl border transition-all cursor-pointer ${
+                  activeSidebarModule === 'chaos-simulator'
+                    ? 'bg-rose-950/70 border-rose-400 text-white shadow-[0_0_15px_rgba(244,63,94,0.2)]'
+                    : 'bg-zinc-950/70 border-zinc-800 text-zinc-200 hover:border-rose-500/40'
+                }`}
+              >
+                <div className="flex items-center justify-between gap-2 mb-1">
+                  <span className="text-[9px] sm:text-[10px] font-mono font-bold px-2 py-0.5 rounded bg-rose-500/20 text-rose-300 border border-rose-500/40">
+                    CHAOS SIMULATOR
+                  </span>
+                  <span className="text-[9px] sm:text-[10px] font-mono text-amber-300">
+                    {activeChaosIncident ? 'ACTIVE DRILL' : 'AUTONOMIC'}
+                  </span>
+                </div>
+                <div className="text-xs sm:text-sm font-bold text-white leading-snug">
+                  Chaos Simulator
+                </div>
+                <div className="text-[10px] sm:text-[11px] font-mono text-zinc-400 mt-0.5">
+                  Synthetic Agent Faults &amp; Recovery
+                </div>
+              </button>
             </nav>
 
             {/* Connected Workspaces Quick Status inside Sidebar */}
@@ -1323,6 +1645,236 @@ export function CommandCenterOperationsConsole({
                 setFailureDiagnostics((prev) => [diag, ...prev])
               }
             />
+          ) : activeSidebarModule === 'cloud-resources' ? (
+            <div
+              id="cloud-resources-view"
+              className="bg-zinc-900/90 border border-zinc-800 rounded-xl p-4 sm:p-5 space-y-4 font-mono text-xs tabular-nums"
+            >
+              <div className="flex flex-wrap items-center justify-between gap-3 border-b border-zinc-800 pb-3">
+                <div>
+                  <h3 className="text-sm sm:text-base font-bold text-white">
+                    ☁️ Cloud Resources — 60-Minute Performance &amp; Utilization Telemetry
+                  </h3>
+                  <p className="text-[11px] text-zinc-400 mt-0.5">
+                    Each CloudResource card integrates a Recharts sparkline chart powered by <code className="text-cyan-300">utilizationHistory60m</code>.
+                  </p>
+                </div>
+                <span className="px-2.5 py-1 rounded bg-emerald-950/70 border border-emerald-500/40 text-emerald-300 text-[10px] font-bold">
+                  {cloudResources.length} SOVEREIGN RESOURCES ONLINE
+                </span>
+              </div>
+
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                {cloudResources.map((resource) => (
+                  <div
+                    key={resource.id}
+                    id={`cloud-resource-card-${resource.id}`}
+                    className="p-4 rounded-xl bg-zinc-950/90 border border-zinc-800 hover:border-cyan-500/40 transition space-y-3"
+                  >
+                    <div className="flex items-start justify-between gap-2">
+                      <div>
+                        <div className="text-xs font-bold text-white">{resource.name}</div>
+                        <div className="text-[10px] text-zinc-400">{resource.region}</div>
+                        <div className="text-[10px] text-cyan-300/90 mt-0.5">{resource.tier}</div>
+                      </div>
+                      <span
+                        className={`px-2 py-0.5 rounded text-[10px] font-bold border ${
+                          resource.status === 'OPTIMAL'
+                            ? 'bg-emerald-950 text-emerald-300 border-emerald-500/40'
+                            : resource.status === 'ELEVATED'
+                            ? 'bg-amber-950 text-amber-300 border-amber-500/40'
+                            : 'bg-cyan-950 text-cyan-300 border-cyan-500/40'
+                        }`}
+                      >
+                        {resource.status}
+                      </span>
+                    </div>
+
+                    <div className="grid grid-cols-3 gap-2 p-2.5 rounded-lg bg-black/60 border border-zinc-800/80 text-center">
+                      <div>
+                        <div className="text-[9px] text-zinc-500">CPU UTIL</div>
+                        <div className="text-xs font-bold text-cyan-300">{resource.cpuUtilPct}%</div>
+                      </div>
+                      <div>
+                        <div className="text-[9px] text-zinc-500">RAM UTIL</div>
+                        <div className="text-xs font-bold text-amber-300">{resource.memoryUtilPct}%</div>
+                      </div>
+                      <div>
+                        <div className="text-[9px] text-zinc-500">LATENCY</div>
+                        <div className="text-xs font-bold text-emerald-300">{resource.latencyMs} ms</div>
+                      </div>
+                    </div>
+
+                    {/* Recharts Sparkline Chart using utilizationHistory60m */}
+                    <div className="p-2.5 rounded-lg bg-black/70 border border-zinc-800/90 space-y-1.5">
+                      <div className="flex items-center justify-between text-[10px] text-zinc-400">
+                        <span className="text-cyan-300 font-bold">60m Utilization Trend (utilizationHistory60m)</span>
+                        <span>
+                          Latest:{' '}
+                          <strong className="text-white">
+                            {resource.utilizationHistory60m[resource.utilizationHistory60m.length - 1]?.utilization}%
+                          </strong>
+                        </span>
+                      </div>
+                      <div className="h-20 w-full">
+                        <ResponsiveContainer width="100%" height="100%">
+                          <AreaChart
+                            data={resource.utilizationHistory60m}
+                            margin={{ top: 4, right: 6, left: -24, bottom: 0 }}
+                          >
+                            <defs>
+                              <linearGradient id={`grad-${resource.id}`} x1="0" y1="0" x2="0" y2="1">
+                                <stop offset="5%" stopColor="#06b6d4" stopOpacity={0.45} />
+                                <stop offset="95%" stopColor="#06b6d4" stopOpacity={0.02} />
+                              </linearGradient>
+                            </defs>
+                            <XAxis dataKey="time" stroke="#52525b" fontSize={9} tickLine={false} />
+                            <YAxis domain={[0, 100]} stroke="#52525b" fontSize={9} tickLine={false} />
+                            <Tooltip />
+                            <Area
+                              type="monotone"
+                              dataKey="utilization"
+                              stroke="#22d3ee"
+                              strokeWidth={2}
+                              fillOpacity={1}
+                              fill={`url(#grad-${resource.id})`}
+                              isAnimationActive={false}
+                            />
+                          </AreaChart>
+                        </ResponsiveContainer>
+                      </div>
+                    </div>
+                  </div>
+                ))}
+              </div>
+            </div>
+          ) : activeSidebarModule === 'chaos-simulator' ? (
+            <div
+              id="chaos-simulator-module"
+              className="bg-zinc-900/90 border border-rose-500/40 rounded-xl p-4 sm:p-5 space-y-4 font-mono text-xs tabular-nums"
+            >
+              <div className="flex flex-wrap items-center justify-between gap-3 border-b border-zinc-800 pb-3">
+                <div>
+                  <h3 className="text-sm sm:text-base font-bold text-white">
+                    ⚡ Chaos Simulator — Synthetic Agent Faults &amp; Autonomic Recovery Telemetry
+                  </h3>
+                  <p className="text-[11px] text-zinc-400 mt-0.5">
+                    Hooks directly into <code className="text-rose-300">handleInjectChaos</code> and <code className="text-cyan-300">activeChaosIncident</code> state with strict Fail-Closed Core Isolation (0 Core Mutation).
+                  </p>
+                </div>
+                <span className="px-2.5 py-1 rounded bg-emerald-950/70 border border-emerald-500/40 text-emerald-300 text-[10px] font-bold">
+                  CORE LOCK: FROZEN (#849202)
+                </span>
+              </div>
+
+              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-2.5">
+                {(
+                  [
+                    {
+                      code: 'AGENT_MEMORY_SATURATION_SPIKE',
+                      label: '1. Agent OOM Spike',
+                      sub: 'ws-agent-02 Batch Saturation',
+                    },
+                    {
+                      code: 'PQC_SIGNER_LATENCY_JITTER',
+                      label: '2. PQC Signer Jitter',
+                      sub: 'Dilithium-5 +85ms Drill',
+                    },
+                    {
+                      code: 'TELEMETRY_SOCKET_PARTITION',
+                      label: '3. Port 8443 Partition',
+                      sub: 'WORM Ring-Buffer Failover',
+                    },
+                    {
+                      code: 'BYZANTINE_QUORUM_DESYNC',
+                      label: '4. Byzantine Desync',
+                      sub: 'Chamber 02 Quarantine Gate',
+                    },
+                  ] as const
+                ).map((item) => (
+                  <button
+                    key={item.code}
+                    id={`btn-inject-chaos-${item.code.toLowerCase()}`}
+                    type="button"
+                    onClick={() => handleInjectChaos(item.code)}
+                    className="p-3 rounded-xl bg-zinc-950 hover:bg-rose-950/50 border border-rose-500/40 hover:border-rose-400 text-left transition cursor-pointer"
+                  >
+                    <div className="text-xs font-bold text-rose-300">{item.label}</div>
+                    <div className="text-[10px] text-zinc-400 mt-0.5">{item.sub}</div>
+                  </button>
+                ))}
+              </div>
+
+              {activeChaosIncident ? (
+                <div
+                  id="active-chaos-incident-panel"
+                  className="p-4 rounded-xl bg-zinc-950 border border-emerald-500/50 space-y-3"
+                >
+                  <div className="flex flex-wrap items-center justify-between gap-2 border-b border-zinc-800 pb-2">
+                    <div className="flex items-center gap-2">
+                      <span className="px-2 py-0.5 rounded bg-emerald-950 border border-emerald-500/50 text-emerald-300 text-[10px] font-bold">
+                        {activeChaosIncident.status}
+                      </span>
+                      <span className="font-bold text-white">
+                        {activeChaosIncident.incidentId}: {activeChaosIncident.title}
+                      </span>
+                    </div>
+                    <button
+                      type="button"
+                      onClick={() => setActiveChaosIncident(null)}
+                      className="px-2.5 py-1 rounded bg-zinc-800 hover:bg-zinc-700 text-zinc-300 text-[10px] cursor-pointer"
+                    >
+                      Clear Incident
+                    </button>
+                  </div>
+
+                  <div className="grid grid-cols-2 sm:grid-cols-4 gap-2.5 text-center">
+                    <div className="p-2.5 rounded-lg bg-black/60 border border-zinc-800">
+                      <div className="text-[9px] text-zinc-500">TARGET AGENT</div>
+                      <div className="text-[11px] font-bold text-cyan-300 truncate mt-0.5">
+                        {activeChaosIncident.targetAgent}
+                      </div>
+                    </div>
+                    <div className="p-2.5 rounded-lg bg-black/60 border border-zinc-800">
+                      <div className="text-[9px] text-zinc-500">AUTONOMIC MTTR</div>
+                      <div className="text-xs font-bold text-emerald-300 mt-0.5">
+                        {activeChaosIncident.autonomicRecoveryMs} ms
+                      </div>
+                    </div>
+                    <div className="p-2.5 rounded-lg bg-black/60 border border-zinc-800">
+                      <div className="text-[9px] text-zinc-500">FAULT COHERENCE</div>
+                      <div className="text-xs font-bold text-amber-300 mt-0.5">
+                        {activeChaosIncident.coherenceDuringFaultPct}%
+                      </div>
+                    </div>
+                    <div className="p-2.5 rounded-lg bg-black/60 border border-zinc-800">
+                      <div className="text-[9px] text-zinc-500">RESTORED COHERENCE</div>
+                      <div className="text-xs font-bold text-emerald-400 mt-0.5">
+                        {activeChaosIncident.restoredCoherencePct}%
+                      </div>
+                    </div>
+                  </div>
+
+                  <div className="space-y-1.5">
+                    <div className="text-[10px] font-bold text-cyan-300">
+                      Autonomic Recovery Telemetry Timeline:
+                    </div>
+                    {activeChaosIncident.telemetrySteps.map((step, i) => (
+                      <div
+                        key={i}
+                        className="p-2 rounded bg-black/70 border border-zinc-800/90 text-[11px] text-zinc-200"
+                      >
+                        {step}
+                      </div>
+                    ))}
+                  </div>
+                </div>
+              ) : (
+                <div className="p-4 rounded-xl bg-zinc-950/70 border border-zinc-800 text-zinc-400 text-xs">
+                  No active chaos incident. Select any synthetic agent failure scenario above to invoke <code className="text-rose-300">handleInjectChaos</code> and inspect real-time autonomic recovery telemetry.
+                </div>
+              )}
+            </div>
           ) : (
             <div className="bg-zinc-900/90 border border-zinc-800 rounded-xl p-3.5 sm:p-5 space-y-4 sm:space-y-5">
               {/* Top Banner */}
@@ -2071,6 +2623,142 @@ export function CommandCenterOperationsConsole({
                         </div>
                       </div>
                     ))}
+                </div>
+              </div>
+
+              {/* ============================================================= */}
+              {/* 4. CHAOS SIMULATOR MODULE (handleInjectChaos & activeChaosIncident) */}
+              {/* ============================================================= */}
+              <div
+                id="operations-chaos-simulator-section"
+                className="p-3.5 sm:p-4 rounded-xl bg-[#040710] border border-rose-500/40 space-y-3 font-mono text-xs tabular-nums"
+              >
+                <div className="flex flex-wrap items-center justify-between gap-2 border-b border-zinc-800 pb-2.5">
+                  <div>
+                    <div className="text-xs font-bold text-rose-300 uppercase tracking-wider">
+                      ⚡ 4. Chaos Simulator — Synthetic Agent Failure &amp; Autonomic Recovery Telemetry
+                    </div>
+                    <div className="text-[10px] text-zinc-400">
+                      Interactive fault injection via handleInjectChaos · Live autonomic recovery state in activeChaosIncident
+                    </div>
+                  </div>
+                  <button
+                    id="btn-quick-inject-chaos"
+                    type="button"
+                    onClick={() => handleInjectChaos('AGENT_MEMORY_SATURATION_SPIKE')}
+                    className="px-3 py-1.5 rounded-lg bg-rose-600/30 hover:bg-rose-600/50 border border-rose-400/60 text-rose-200 font-bold text-[11px] cursor-pointer transition"
+                  >
+                    ⚡ Inject Synthetic Agent Failure
+                  </button>
+                </div>
+
+                <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-2">
+                  {(
+                    [
+                      { code: 'AGENT_MEMORY_SATURATION_SPIKE', title: 'Agent OOM Saturation' },
+                      { code: 'PQC_SIGNER_LATENCY_JITTER', title: 'PQC Signer Jitter (+85ms)' },
+                      { code: 'TELEMETRY_SOCKET_PARTITION', title: 'Port 8443 Stream Partition' },
+                      { code: 'BYZANTINE_QUORUM_DESYNC', title: 'Byzantine Consensus Desync' },
+                    ] as const
+                  ).map((sc) => (
+                    <button
+                      key={sc.code}
+                      type="button"
+                      onClick={() => handleInjectChaos(sc.code)}
+                      className={`p-2.5 rounded-lg border text-left cursor-pointer transition ${
+                        activeChaosIncident?.scenarioCode === sc.code
+                          ? 'bg-rose-950/70 border-rose-400 text-white'
+                          : 'bg-zinc-950 border-zinc-800 text-zinc-300 hover:border-rose-500/40'
+                      }`}
+                    >
+                      <div className="text-[10px] text-rose-300 font-bold">{sc.code}</div>
+                      <div className="text-[11px] font-semibold mt-0.5">{sc.title}</div>
+                    </button>
+                  ))}
+                </div>
+
+                {activeChaosIncident && (
+                  <div className="p-3 rounded-lg bg-zinc-950 border border-emerald-500/40 space-y-2">
+                    <div className="flex flex-wrap items-center justify-between gap-2">
+                      <span className="text-emerald-300 font-bold">
+                        {activeChaosIncident.incidentId} · {activeChaosIncident.title} ({activeChaosIncident.status})
+                      </span>
+                      <span className="text-cyan-300">
+                        Autonomic MTTR: <strong>{activeChaosIncident.autonomicRecoveryMs} ms</strong> · Restored Coherence:{' '}
+                        <strong>{activeChaosIncident.restoredCoherencePct}%</strong>
+                      </span>
+                    </div>
+                    <div className="grid grid-cols-1 md:grid-cols-2 gap-1.5 text-[10px] text-zinc-300">
+                      {activeChaosIncident.telemetrySteps.map((st, idx) => (
+                        <div key={idx} className="p-1.5 rounded bg-black/60 border border-zinc-800">
+                          {st}
+                        </div>
+                      ))}
+                    </div>
+                  </div>
+                )}
+              </div>
+
+              {/* ============================================================= */}
+              {/* 5. CLOUD RESOURCES VIEW (CloudResource Cards + Recharts utilizationHistory60m Sparkline) */}
+              {/* ============================================================= */}
+              <div
+                id="operations-cloud-resources-section"
+                className="p-3.5 sm:p-4 rounded-xl bg-zinc-950/90 border border-cyan-500/30 space-y-3 font-mono text-xs tabular-nums"
+              >
+                <div className="flex flex-wrap items-center justify-between gap-2 border-b border-zinc-800 pb-2.5">
+                  <div>
+                    <div className="text-xs font-bold text-cyan-300 uppercase tracking-wider">
+                      ☁️ 5. Cloud Resources — 60-Minute Utilization Sparklines (utilizationHistory60m)
+                    </div>
+                    <div className="text-[10px] text-zinc-400">
+                      Recharts-based visual performance tracking for each sovereign cloud resource
+                    </div>
+                  </div>
+                  <button
+                    type="button"
+                    onClick={() => setActiveSidebarModule('cloud-resources')}
+                    className="px-2.5 py-1 rounded bg-cyan-950/80 hover:bg-cyan-900 border border-cyan-500/40 text-cyan-200 text-[10px] font-bold cursor-pointer"
+                  >
+                    Expand Cloud Resources View &rarr;
+                  </button>
+                </div>
+
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
+                  {cloudResources.map((resource) => (
+                    <div
+                      key={resource.id}
+                      className="p-3 rounded-lg bg-black/70 border border-zinc-800 space-y-2"
+                    >
+                      <div className="flex items-center justify-between gap-2">
+                        <span className="font-bold text-white truncate">{resource.name}</span>
+                        <span className="text-[10px] text-cyan-300 shrink-0">
+                          CPU {resource.cpuUtilPct}% · RAM {resource.memoryUtilPct}%
+                        </span>
+                      </div>
+                      <div className="h-16 w-full">
+                        <ResponsiveContainer width="100%" height="100%">
+                          <AreaChart
+                            data={resource.utilizationHistory60m}
+                            margin={{ top: 2, right: 4, left: -26, bottom: 0 }}
+                          >
+                            <XAxis dataKey="time" stroke="#52525b" fontSize={8} tickLine={false} />
+                            <YAxis domain={[0, 100]} stroke="#52525b" fontSize={8} tickLine={false} />
+                            <Tooltip />
+                            <Area
+                              type="monotone"
+                              dataKey="utilization"
+                              stroke="#22d3ee"
+                              strokeWidth={1.8}
+                              fill="#06b6d4"
+                              fillOpacity={0.22}
+                              isAnimationActive={false}
+                            />
+                          </AreaChart>
+                        </ResponsiveContainer>
+                      </div>
+                    </div>
+                  ))}
                 </div>
               </div>
             </div>

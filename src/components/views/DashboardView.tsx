@@ -86,6 +86,7 @@ import { playAuditChime, playTone } from '../AudioSynthesizer';
 import { ShieldAlert } from 'lucide-react';
 import { FcmPushNotificationManager } from '../notifications/FcmPushNotificationManager';
 import { ChamberVisualizer } from '../ChamberVisualizer';
+import { CommandCenterOperationsConsole } from '../CommandCenterOperationsConsole';
 import { CosmicThemeProvider } from '../CosmicThemeProvider';
 import { SovereignConsole } from '../SovereignConsole';
 import { HologramGrid } from '../HologramGrid';
@@ -720,6 +721,9 @@ export const DashboardView: React.FC<DashboardViewProps> = ({
 
           {/* Real-Time Stress Test & 35.80ms Latency Jitter Indicator against 142.00ms SLA Target */}
           <StressTestIndicatorD3Chart initialLatencyMs={35.80} slaLimitMs={142.00} />
+
+          {/* Cloud & AI Command Center (Operations, Chaos Simulator, Cloud Resources 60m Sparklines) */}
+          <CommandCenterOperationsConsole embedded={true} />
 
           {/* System Health Dashboard (CPU, Memory, Cryostat Recharts Realtime Stream) */}
           <HealthDashboard snapshots={snapshots} />
