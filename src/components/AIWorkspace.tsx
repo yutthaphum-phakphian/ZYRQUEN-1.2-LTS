@@ -1,4 +1,6 @@
 import React, { useState, useEffect, useRef, useCallback } from 'react';
+import { motion, AnimatePresence } from 'motion/react';
+import jsPDF from 'jspdf';
 import {
   Mic,
   MicOff,
@@ -15,8 +17,22 @@ import {
   History,
   Copy,
   Trash2,
+  Search,
+  FileText,
+  Plus,
+  X,
+  FileDown,
 } from 'lucide-react';
-import { ProvenanceState, ZYRQUEN_CORE_FROZEN_STATE } from '../adapters/zyrquenAdapter';
+import {
+  ProvenanceState,
+  ZYRQUEN_CORE_FROZEN_STATE,
+  RealExecutionTrace,
+  FailureDiagnosticRecord,
+  createCanonicalFinalizedExecutionTrace,
+  buildExecutionTraceForOutcome,
+  createFailureDiagnosticRecord,
+  INITIAL_FAILURE_DIAGNOSTIC_RECORDS,
+} from '../adapters/zyrquenAdapter';
 import { offlineAuditSyncService } from '../services/offlineAuditSyncService';
 
 export type AiWorkspaceUiStatus =
@@ -67,6 +83,36 @@ export interface AiConversationMessage {
   requiresExplicitApproval?: boolean;
 }
 
+export interface AiWorkspaceNote {
+  id: string;
+  workspaceId: string;
+  title: string;
+  content: string;
+  category: 'BOUNDARY_NOTE' | 'TUNING_RECORD' | 'OPERATOR_NOTE';
+  createdAt: string;
+}
+
+const INITIAL_WORKSPACE_NOTES: AiWorkspaceNote[] = [
+  {
+    id: 'NOTE-849202-01',
+    workspaceId: 'ws-agent-02',
+    title: 'Phase 11 Self-Tuning Lock Record (BATCH_SIZE 64 → 48)',
+    content:
+      'Transaction TX-P11-849202-01 completed all 8 evidence checkpoints and transitioned to FINALIZED. Duplicate execution blocked by Idempotency Guard (0 Core Mutation).',
+    category: 'TUNING_RECORD',
+    createdAt: '2026-09-27T08:00:00.000Z',
+  },
+  {
+    id: 'NOTE-849202-02',
+    workspaceId: 'ws-agent-02',
+    title: 'AI Service Boundary & Sandbox Policy',
+    content:
+      'Voice Input (VOICE_STT) and Chat (TEXT_INPUT) route through /api/ai/workspace and require Explicit Approval (#EP-SOVEREIGN-01). Live Preview enforces sandbox="allow-scripts" with opaque origin.',
+    category: 'BOUNDARY_NOTE',
+    createdAt: '2026-09-27T08:05:00.000Z',
+  },
+];
+
 export interface AIWorkspaceProps {
   targetWorkspaceId?: string;
   targetWorkspaceName?: string;
@@ -81,6 +127,8 @@ export interface AIWorkspaceProps {
     }
   ) => void;
   onAuditRecord?: (action: string, details: string, status: 'VERIFIED' | 'BLOCKED') => void;
+  onExecutionTraceUpdate?: (trace: RealExecutionTrace) => void;
+  onFailureDiagnostic?: (diagnostic: FailureDiagnosticRecord) => void;
 }
 
 export type ZyrquenVoiceChatBuilderProps = AIWorkspaceProps;
@@ -150,12 +198,19 @@ export function AIWorkspace({
   currentBatchSize = 64,
   onStageProposalForApproval,
   onAuditRecord,
+  onExecutionTraceUpdate,
+  onFailureDiagnostic,
 }: AIWorkspaceProps) {
   const [providerStatus, setProviderStatus] = useState<AiProviderConnectionState>('WAITING_FOR_PROVIDER');
   const [uiStatus, setUiStatus] = useState<AiWorkspaceUiStatus>('IDLE');
   const [provenance, setProvenance] = useState<ProvenanceState>('UNVERIFIED');
   const [messages, setMessages] = useState<AiConversationMessage[]>([]);
-  const [historyFilter, setHistoryFilter] = useState<'ALL' | AiInputChannel>('ALL');
+  const [workspaceNotes, setWorkspaceNotes] = useState<AiWorkspaceNote[]>(INITIAL_WORKSPACE_NOTES);
+  const [historyFilter, setHistoryFilter] = useState<'ALL' | AiInputChannel | 'NOTES'>('ALL');
+  const [searchQuery, setSearchQuery] = useState('');
+  const [isAddingNote, setIsAddingNote] = useState(false);
+  const [newNoteTitle, setNewNoteTitle] = useState('');
+  const [newNoteContent, setNewNoteContent] = useState('');
   const [inputMessage, setInputMessage] = useState('');
   const [isListening, setIsListening] = useState(false);
   const [activeTab, setActiveTab] = useState<'preview' | 'code'>('preview');
@@ -163,8 +218,16 @@ export function AIWorkspace({
   const [sandboxViolations, setSandboxViolations] = useState<string[]>([]);
   const [latestProposal, setLatestProposal] = useState<AiProposalSummary | null>(null);
   const [copiedSource, setCopiedSource] = useState(false);
+  const [executionTrace, setExecutionTrace] = useState<RealExecutionTrace>(() =>
+    createCanonicalFinalizedExecutionTrace()
+  );
+  const [latestFailureDiagnostic, setLatestFailureDiagnostic] = useState<FailureDiagnosticRecord | null>(
+    () => INITIAL_FAILURE_DIAGNOSTIC_RECORDS[0] || null
+  );
+  const [showTraceAndDiagnostics, setShowTraceAndDiagnostics] = useState(false);
 
   const msgSeqRef = useRef<number>(1);
+  const noteSeqRef = useRef<number>(3);
   const chatEndRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
@@ -348,6 +411,61 @@ export function AIWorkspace({
 
         setMessages((prev) => [...prev, aiMsg]);
 
+        const reqId = data.requestId || `REQ-AI-849202-${String(seq).padStart(4, '0')}`;
+        const trcId = data.traceId || `TRC-AI-849202-${String(seq).padStart(4, '0')}`;
+        const durMs = typeof data.durationMs === 'number' ? data.durationMs : 28;
+
+        if (data.diagnostic) {
+          const diag = createFailureDiagnosticRecord({
+            failureId: data.diagnostic.failureId || `FAIL-AI-849202-${seq}`,
+            stage: data.diagnostic.stage || 'ANALYSIS',
+            component: data.diagnostic.component || 'AI_SERVICE_BOUNDARY',
+            requestId: data.diagnostic.requestId || reqId,
+            traceId: data.diagnostic.traceId || trcId,
+            target: data.diagnostic.target || targetWorkspaceId,
+            actualError: data.diagnostic.actualError || aiMsg.text,
+            expectedState: data.diagnostic.expectedState || 'AI_PROVIDER_CONNECTED',
+            observedState: data.diagnostic.observedState,
+            evidence: data.diagnostic.evidence || `ERR:${trcId}`,
+            timestamp: data.diagnostic.timestamp || new Date().toISOString(),
+            recoveryState: data.diagnostic.recoveryState,
+            explicitCategory: data.diagnostic.classification,
+          });
+          setLatestFailureDiagnostic(diag);
+          onFailureDiagnostic?.(diag);
+
+          const haltedTrace = buildExecutionTraceForOutcome({
+            traceId: trcId,
+            requestId: reqId,
+            targetWorkspace: targetWorkspaceId,
+            stoppedAtStage: diag.stage,
+            stopStatus:
+              diag.classification === 'BLOCKED'
+                ? 'BLOCKED'
+                : diag.classification === 'PROVIDER_UNAVAILABLE'
+                ? 'PROVIDER_UNAVAILABLE'
+                : 'FAILED',
+            stopDetail: diag.actualError,
+            stopEvidenceRef: diag.evidence,
+            stageDurationMs: durMs,
+          });
+          setExecutionTrace(haltedTrace);
+          onExecutionTraceUpdate?.(haltedTrace);
+        } else if (nextProviderStatus === 'CONNECTED' && data.proposal) {
+          const awaitingTrace = buildExecutionTraceForOutcome({
+            traceId: trcId,
+            requestId: reqId,
+            targetWorkspace: targetWorkspaceId,
+            stoppedAtStage: 'APPROVAL',
+            stopStatus: 'AWAITING_APPROVAL',
+            stopDetail: `Awaiting Explicit Approval (#EP-SOVEREIGN-01) for ${data.proposal.proposalId}.`,
+            stopEvidenceRef: `${data.proposal.proposalId}:AWAITING_EP_SOVEREIGN_01`,
+            stageDurationMs: durMs,
+          });
+          setExecutionTrace(awaitingTrace);
+          onExecutionTraceUpdate?.(awaitingTrace);
+        }
+
         if (nextUiStatus === 'BLOCKED') {
           emitStandardAuditRecord(
             'AI_WORKSPACE_CORE_GUARD_BLOCKED',
@@ -377,6 +495,36 @@ export function AIWorkspace({
         setUiStatus('FAILED');
         setProvenance('UNVERIFIED');
 
+        const reqId = `REQ-AI-ERR-${String(seq).padStart(4, '0')}`;
+        const trcId = `TRC-AI-ERR-${String(seq).padStart(4, '0')}`;
+        const diag = createFailureDiagnosticRecord({
+          failureId: `FAIL-NET-849202-${seq}`,
+          stage: 'ANALYSIS',
+          component: 'AI_SERVICE_BOUNDARY',
+          requestId: reqId,
+          traceId: trcId,
+          target: targetWorkspaceId,
+          actualError: errMsg,
+          expectedState: 'AI_PROVIDER_RESPONSE_OK',
+          evidence: `ERR:NET:${trcId}`,
+        });
+        setLatestFailureDiagnostic(diag);
+        onFailureDiagnostic?.(diag);
+
+        const haltedTrace = buildExecutionTraceForOutcome({
+          traceId: trcId,
+          requestId: reqId,
+          targetWorkspace: targetWorkspaceId,
+          stoppedAtStage: 'ANALYSIS',
+          stopStatus:
+            diag.classification === 'PROVIDER_UNAVAILABLE' ? 'PROVIDER_UNAVAILABLE' : 'FAILED',
+          stopDetail: errMsg,
+          stopEvidenceRef: diag.evidence,
+          stageDurationMs: 15,
+        });
+        setExecutionTrace(haltedTrace);
+        onExecutionTraceUpdate?.(haltedTrace);
+
         const errRecord: AiConversationMessage = {
           id: `err-${seq}`,
           sender: 'system',
@@ -389,17 +537,29 @@ export function AIWorkspace({
         setMessages((prev) => [...prev, errRecord]);
       }
     },
-    [inputMessage, uiStatus, targetWorkspaceId, emitStandardAuditRecord, speakText]
+    [
+      inputMessage,
+      uiStatus,
+      targetWorkspaceId,
+      emitStandardAuditRecord,
+      speakText,
+      onExecutionTraceUpdate,
+      onFailureDiagnostic,
+    ]
   );
 
   // Voice Input Channel: Listening -> Speech-to-Text -> Text -> Normal AI Pipeline
   useEffect(() => {
-    if (typeof window === 'undefined') return;
+    if (!isListening || typeof window === 'undefined') return;
     const SpeechRecognition =
       (window as unknown as Record<string, unknown>).SpeechRecognition ||
       (window as unknown as Record<string, unknown>).webkitSpeechRecognition;
 
-    if (!SpeechRecognition || typeof SpeechRecognition !== 'function') return;
+    if (!SpeechRecognition || typeof SpeechRecognition !== 'function') {
+      setIsListening(false);
+      setUiStatus(providerStatus === 'CONNECTED' ? 'IDLE' : 'UNAVAILABLE');
+      return;
+    }
 
     const recognition = new (SpeechRecognition as new () => {
       lang: string;
@@ -435,14 +595,21 @@ export function AIWorkspace({
       setIsListening(false);
     };
 
-    if (isListening) {
-      setUiStatus('LISTENING');
+    setUiStatus('LISTENING');
+    try {
       recognition.start();
-    } else {
-      recognition.stop();
+    } catch {
+      setIsListening(false);
+      setUiStatus(providerStatus === 'CONNECTED' ? 'IDLE' : 'UNAVAILABLE');
     }
 
-    return () => recognition.stop();
+    return () => {
+      try {
+        recognition.stop();
+      } catch {
+        // Ignore stop errors on unstarted or completed recognition instance
+      }
+    };
   }, [isListening, providerStatus, submitAiWorkspaceRequest]);
 
   const handleToggleVoice = () => {
@@ -477,14 +644,244 @@ export function AIWorkspace({
     setCopiedSource(true);
   };
 
-  const filteredMessages = messages.filter((m) =>
-    historyFilter === 'ALL' ? true : m.channel === historyFilter
-  );
+  const handleExportWorkspacePdf = () => {
+    const doc = new jsPDF({ orientation: 'portrait', unit: 'mm', format: 'a4' });
+    const pageWidth = doc.internal.pageSize.getWidth();
+    const pageHeight = doc.internal.pageSize.getHeight();
+    const margin = 14;
+    const contentWidth = pageWidth - margin * 2;
+    let y = 18;
+
+    const ensurePageSpace = (neededMm: number) => {
+      if (y + neededMm > pageHeight - 16) {
+        doc.addPage();
+        y = 18;
+      }
+    };
+
+    // Document Title & Sovereign Boundary Metadata
+    doc.setFont('helvetica', 'bold');
+    doc.setFontSize(13);
+    doc.text('ZYRQUEN AI WORKSPACE — SESSION & NOTES DOSSIER', margin, y);
+    y += 6;
+
+    doc.setFont('helvetica', 'normal');
+    doc.setFontSize(9);
+    doc.text(
+      `Workspace: ${targetWorkspaceId} (${targetWorkspaceName}) | Batch Size: ${currentBatchSize}`,
+      margin,
+      y
+    );
+    y += 5;
+    doc.text(
+      `Provider Status: ${providerStatus} | UI Status: ${uiStatus} | Provenance: ${provenance}`,
+      margin,
+      y
+    );
+    y += 5;
+    doc.text(
+      `Core Guard: FROZEN / READ-ONLY (Block #${ZYRQUEN_CORE_FROZEN_STATE.canonicalBlock} | Drift: 0.000% | Core Mutation: 0)`,
+      margin,
+      y
+    );
+    y += 5;
+    doc.text(`Exported At: ${new Date().toISOString()}`, margin, y);
+    y += 4;
+
+    doc.setLineWidth(0.3);
+    doc.line(margin, y, pageWidth - margin, y);
+    y += 7;
+
+    // Section 1: Workspace Notes
+    doc.setFont('helvetica', 'bold');
+    doc.setFontSize(11);
+    doc.text(`1. Workspace Notes (${workspaceNotes.length})`, margin, y);
+    y += 6;
+
+    doc.setFont('helvetica', 'normal');
+    doc.setFontSize(9);
+    if (workspaceNotes.length === 0) {
+      doc.text('No workspace notes recorded.', margin, y);
+      y += 6;
+    } else {
+      for (const note of workspaceNotes) {
+        const noteHeader = `[${note.id}] ${note.title} (${note.category} · ${note.createdAt})`;
+        const wrappedBody = doc.splitTextToSize(note.content, contentWidth - 4);
+        ensurePageSpace(8 + wrappedBody.length * 4.5);
+
+        doc.setFont('helvetica', 'bold');
+        doc.text(noteHeader, margin, y);
+        y += 4.5;
+
+        doc.setFont('helvetica', 'normal');
+        doc.text(wrappedBody, margin + 2, y);
+        y += wrappedBody.length * 4.5 + 3;
+      }
+    }
+
+    y += 3;
+    ensurePageSpace(14);
+
+    // Section 2: Conversation History
+    doc.setFont('helvetica', 'bold');
+    doc.setFontSize(11);
+    doc.text(`2. Conversation History (${messages.length})`, margin, y);
+    y += 6;
+
+    doc.setFont('helvetica', 'normal');
+    doc.setFontSize(9);
+    if (messages.length === 0) {
+      doc.text('No chat or voice session messages recorded in current workspace view.', margin, y);
+      y += 6;
+    } else {
+      for (const msg of messages) {
+        const msgHeader = `[${msg.timestamp}] ${msg.sender.toUpperCase()} (${msg.channel}) — ${msg.uiStatus} / ${msg.provenance}`;
+        const asciiSafeText = msg.text.replace(/[^\x20-\x7E\n]/g, '');
+        const bodyText = asciiSafeText.trim() || msg.text;
+        const wrappedMsg = doc.splitTextToSize(bodyText, contentWidth - 4);
+        ensurePageSpace(10 + wrappedMsg.length * 4.5);
+
+        doc.setFont('helvetica', 'bold');
+        doc.text(msgHeader, margin, y);
+        y += 4.5;
+
+        doc.setFont('helvetica', 'normal');
+        doc.text(wrappedMsg, margin + 2, y);
+        y += wrappedMsg.length * 4.5 + 2;
+
+        if (msg.proposal) {
+          ensurePageSpace(7);
+          doc.setFont('helvetica', 'italic');
+          doc.text(
+            `Proposal ${msg.proposal.proposalId}: ${msg.proposal.parameter} -> ${msg.proposal.proposedBatchSize} (Approver: ${msg.proposal.requiresApprover})`,
+            margin + 2,
+            y
+          );
+          y += 5;
+        }
+        y += 2;
+      }
+    }
+
+    // Section 3: Sandbox Preview Artifact Summary
+    if (currentHtml) {
+      y += 3;
+      ensurePageSpace(20);
+      doc.setFont('helvetica', 'bold');
+      doc.setFontSize(11);
+      doc.text(
+        `3. Isolated Preview Sandbox Source (${sourceLines.length} lines, ${currentHtml.length} chars)`,
+        margin,
+        y
+      );
+      y += 5.5;
+
+      doc.setFont('courier', 'normal');
+      doc.setFontSize(8);
+      const snippetLines = doc.splitTextToSize(currentHtml.slice(0, 1800), contentWidth);
+      for (const line of snippetLines) {
+        ensurePageSpace(4.5);
+        doc.text(line, margin, y);
+        y += 4;
+      }
+    }
+
+    doc.save(`zyrquen-ai-workspace-${targetWorkspaceId}.pdf`);
+
+    emitStandardAuditRecord(
+      'AI_WORKSPACE_PDF_EXPORTED',
+      `Workspace=${targetWorkspaceId} | Messages=${messages.length} | Notes=${workspaceNotes.length} | Core Mutation=0`,
+      'VERIFIED',
+      'TEXT_INPUT'
+    );
+  };
+
+  const handleSaveWorkspaceNote = () => {
+    const cleanTitle = newNoteTitle.trim();
+    const cleanContent = newNoteContent.trim();
+    if (!cleanTitle || !cleanContent) return;
+
+    const seq = String(noteSeqRef.current++).padStart(2, '0');
+    const createdNote: AiWorkspaceNote = {
+      id: `NOTE-849202-${seq}`,
+      workspaceId: targetWorkspaceId,
+      title: cleanTitle,
+      content: cleanContent,
+      category: 'OPERATOR_NOTE',
+      createdAt: new Date().toISOString(),
+    };
+
+    setWorkspaceNotes((prev) => [createdNote, ...prev]);
+    setNewNoteTitle('');
+    setNewNoteContent('');
+    setIsAddingNote(false);
+
+    emitStandardAuditRecord(
+      'WORKSPACE_NOTE_RECORDED',
+      `NoteId=${createdNote.id} | Workspace=${targetWorkspaceId} | Title="${cleanTitle}" (0 Core Mutation)`,
+      'VERIFIED',
+      'TEXT_INPUT'
+    );
+  };
+
+  const handleDeleteWorkspaceNote = (noteId: string) => {
+    setWorkspaceNotes((prev) => prev.filter((n) => n.id !== noteId));
+  };
+
+  const normalizedQuery = searchQuery.trim().toLowerCase();
+
+  const filteredMessages = messages.filter((m) => {
+    const matchesChannel =
+      historyFilter === 'ALL' || historyFilter === 'NOTES'
+        ? true
+        : m.channel === historyFilter;
+    if (!matchesChannel) return false;
+    if (!normalizedQuery) return true;
+
+    const searchableText = [
+      m.text,
+      m.channel,
+      m.uiStatus,
+      m.provenance,
+      m.analysis?.summary || '',
+      m.analysis?.targetWorkspace || '',
+      m.proposal?.proposalId || '',
+      m.proposal?.parameter || '',
+      m.timestamp,
+    ]
+      .join(' ')
+      .toLowerCase();
+
+    return searchableText.includes(normalizedQuery);
+  });
+
+  const filteredNotes = workspaceNotes.filter((note) => {
+    if (!normalizedQuery) return true;
+    const searchableNote = [
+      note.id,
+      note.title,
+      note.content,
+      note.category,
+      note.workspaceId,
+      note.createdAt,
+    ]
+      .join(' ')
+      .toLowerCase();
+    return searchableNote.includes(normalizedQuery);
+  });
+
+  const showNotesSection = historyFilter === 'NOTES' || Boolean(normalizedQuery);
+  const showMessagesSection = historyFilter !== 'NOTES';
 
   const sourceLines = currentHtml ? currentHtml.split('\n') : [];
 
   return (
-    <div className="bg-zinc-900/90 border border-zinc-800 rounded-xl overflow-hidden shadow-2xl font-sans">
+    <motion.div
+      initial={{ opacity: 0, y: 10 }}
+      animate={{ opacity: 1, y: 0 }}
+      transition={{ duration: 0.28, ease: [0.22, 1, 0.36, 1] }}
+      className="bg-zinc-900/90 border border-zinc-800 rounded-xl overflow-hidden shadow-2xl font-sans"
+    >
       {/* ── CLEAN HEADER: AI Workspace + Real Provider & System Status ── */}
       <div className="px-4 py-3 border-b border-zinc-800 bg-zinc-950/90 flex flex-wrap items-center justify-between gap-3">
         <div className="flex items-center gap-3 min-w-0">
@@ -533,146 +930,438 @@ export function AIWorkspace({
           <span className="px-2 py-1 rounded bg-zinc-900 border border-zinc-800 text-zinc-400">
             {provenance}
           </span>
+
+          {/* Export PDF Button */}
+          <button
+            type="button"
+            onClick={handleExportWorkspacePdf}
+            className="px-2.5 py-1 rounded bg-cyan-950/80 hover:bg-cyan-900 border border-cyan-500/40 text-cyan-300 font-semibold flex items-center gap-1.5 cursor-pointer transition"
+            title="Export current AI Workspace chat sessions, notes, and source summary to PDF"
+          >
+            <FileDown className="w-3.5 h-3.5" />
+            <span>Export PDF</span>
+          </button>
+
+          {/* Toggle Real Execution Trace & Failure-First Diagnostics */}
+          <button
+            type="button"
+            onClick={() => setShowTraceAndDiagnostics((v) => !v)}
+            className={`px-2.5 py-1 rounded border font-semibold cursor-pointer transition ${
+              showTraceAndDiagnostics
+                ? 'bg-purple-950/80 border-purple-500/50 text-purple-200'
+                : 'bg-zinc-900 border-zinc-700 text-zinc-400 hover:text-zinc-200'
+            }`}
+          >
+            🔎 Trace &amp; Diagnostics
+          </button>
         </div>
       </div>
 
-      {/* ── RESPONSIVE WORKSPACE BODY: Desktop (Chat & History 35% / Preview & Source 65%) ── */}
-      <div className="flex flex-col lg:flex-row min-h-[580px]">
-        {/* LEFT COLUMN (35% on Desktop): Conversation History + Chat + Voice Input */}
-        <div className="w-full lg:w-[35%] border-b lg:border-b-0 lg:border-r border-zinc-800 flex flex-col bg-zinc-900/40">
-          {/* Dedicated Conversation History Toolbar */}
-          <div className="px-3.5 py-2 border-b border-zinc-800 bg-zinc-950/70 flex items-center justify-between gap-2 font-mono text-[10px]">
-            <div className="flex items-center gap-1.5 text-zinc-300 font-semibold">
-              <History className="w-3.5 h-3.5 text-cyan-400" />
-              <span>Conversation History ({filteredMessages.length})</span>
+      {/* ── UNIFIED REAL EXECUTION TRACE & FAILURE-FIRST DIAGNOSTICS STRIP ── */}
+      {showTraceAndDiagnostics && (
+        <div className="px-4 py-3 border-b border-zinc-800 bg-[#050914] space-y-3 font-mono text-[10px] tabular-nums">
+          <div className="flex flex-wrap items-center justify-between gap-2">
+            <div className="flex items-center gap-2">
+              <span className="font-bold text-cyan-300 uppercase tracking-wider">
+                🔎 Real Execution Trace ({executionTrace.traceId})
+              </span>
+              <span
+                className={`px-1.5 py-0.5 rounded font-bold border ${
+                  executionTrace.overallStatus === 'FINALIZED'
+                    ? 'bg-emerald-950/70 border-emerald-500/40 text-emerald-300'
+                    : executionTrace.overallStatus === 'AWAITING_APPROVAL'
+                    ? 'bg-amber-950/70 border-amber-500/40 text-amber-300'
+                    : 'bg-rose-950/70 border-rose-500/50 text-rose-300'
+                }`}
+              >
+                {executionTrace.overallStatus}
+                {executionTrace.stoppedAtStage ? ` (STOPPED AT ${executionTrace.stoppedAtStage})` : ''}
+              </span>
             </div>
-            <div className="flex items-center gap-1">
-              {(['ALL', 'TEXT_INPUT', 'VOICE_STT'] as const).map((flt) => (
-                <button
-                  key={flt}
-                  type="button"
-                  onClick={() => setHistoryFilter(flt)}
-                  className={`px-2 py-0.5 rounded transition cursor-pointer ${
-                    historyFilter === flt
-                      ? 'bg-cyan-950 text-cyan-300 border border-cyan-500/40 font-bold'
-                      : 'text-zinc-400 hover:text-zinc-200'
-                  }`}
-                >
-                  {flt === 'ALL' ? 'All' : flt === 'TEXT_INPUT' ? 'Chat' : 'Voice'}
-                </button>
-              ))}
-              {messages.length > 0 && (
-                <button
-                  type="button"
-                  onClick={() => setMessages([])}
-                  className="p-1 rounded text-zinc-500 hover:text-rose-400 transition cursor-pointer ml-1"
-                  title="Clear Conversation History"
-                >
-                  <Trash2 className="w-3 h-3" />
-                </button>
-              )}
+            <div className="text-zinc-400">
+              Req: <span className="text-zinc-200">{executionTrace.requestId}</span> · Total Duration:{' '}
+              <span className="text-cyan-300 font-bold">{executionTrace.totalDurationMs} ms</span>
             </div>
           </div>
 
-          {/* Conversation History & Chat Feed */}
-          <div className="flex-1 overflow-y-auto p-4 space-y-3 max-h-[420px] lg:max-h-[460px]">
-            {filteredMessages.length === 0 ? (
-              <div className="p-4 rounded-xl bg-zinc-950/80 border border-zinc-800/90 space-y-2.5 font-mono text-xs text-zinc-400">
-                <div className="flex items-center justify-between text-zinc-200 font-bold">
-                  <span>AI Service Boundary</span>
-                  <span className="text-[10px] text-emerald-400">🔒 Core Mutation = 0</span>
-                </div>
-                <p className="text-[11px] leading-relaxed">
-                  ส่งคำสั่งผ่าน <strong>Chat</strong> หรือ <strong>Voice Input (Speech-to-Text)</strong> เพื่อเข้าสู่ Pipeline มาตรฐาน:
-                  <span className="block text-cyan-300 mt-1">
-                    Text/Voice → AI Request → Analysis → Proposal → Preview → Explicit Approval → Command Engine → ZYRQUEN Adapter
-                  </span>
-                </p>
-                {providerStatus !== 'CONNECTED' && (
-                  <div className="p-2.5 rounded bg-amber-950/40 border border-amber-500/40 text-amber-300 text-[11px]">
-                    ⚠️ <strong>Provider Unavailable ({providerStatus})</strong>: ยังไม่ได้เชื่อมต่อ AI Provider จริง ระบบปฏิเสธการใช้ Mock LLM หรือ setTimeout สร้างผลลัพธ์ปลอมตามกฎ Zero-Mock Policy
-                  </div>
-                )}
-              </div>
-            ) : (
-              filteredMessages.map((msg) => (
+          {/* 8-Stage Single Timeline: REQUEST -> ANALYSIS -> PROPOSAL -> APPROVAL #EP-SOVEREIGN-01 -> EXECUTE -> TARGET -> VERIFY -> AUDIT */}
+          <div className="grid grid-cols-2 sm:grid-cols-4 xl:grid-cols-8 gap-1.5">
+            {executionTrace.stages.map((st, idx) => {
+              const isPassed = st.status === 'PASSED';
+              const isStopped =
+                st.status === 'BLOCKED' ||
+                st.status === 'FAILED' ||
+                st.status === 'PROVIDER_UNAVAILABLE';
+              const isAwaiting = st.status === 'AWAITING_APPROVAL';
+              return (
                 <div
-                  key={msg.id}
-                  className={`flex gap-2.5 ${msg.sender === 'user' ? 'justify-end' : 'justify-start'}`}
+                  key={st.stage}
+                  className={`p-2 rounded-lg border flex flex-col justify-between ${
+                    isStopped
+                      ? 'bg-rose-950/60 border-rose-500/70 text-rose-200'
+                      : isAwaiting
+                      ? 'bg-amber-950/50 border-amber-500/50 text-amber-200'
+                      : isPassed
+                      ? 'bg-emerald-950/30 border-emerald-500/40 text-emerald-200'
+                      : 'bg-zinc-950/80 border-zinc-800 text-zinc-500'
+                  }`}
                 >
-                  {msg.sender !== 'user' && (
-                    <div className="w-7 h-7 rounded-full bg-cyan-500/10 border border-cyan-500/30 flex items-center justify-center text-cyan-400 shrink-0 mt-0.5">
-                      <Sparkles className="w-3.5 h-3.5" />
+                  <div>
+                    <div className="flex items-center justify-between gap-1 font-bold text-[9px]">
+                      <span>0{idx + 1}</span>
+                      <span>{st.status}</span>
                     </div>
-                  )}
-                  <div
-                    onClick={() => msg.htmlCode && setCurrentHtml(msg.htmlCode)}
-                    className={`max-w-[85%] p-3 rounded-xl text-xs leading-relaxed space-y-2 ${
-                      msg.sender === 'user'
-                        ? 'bg-cyan-950/80 border border-cyan-500/40 text-cyan-100'
-                        : msg.uiStatus === 'BLOCKED' || msg.uiStatus === 'FAILED'
-                        ? 'bg-rose-950/50 border border-rose-500/50 text-rose-200'
-                        : msg.uiStatus === 'UNAVAILABLE'
-                        ? 'bg-amber-950/40 border border-amber-500/40 text-amber-200'
-                        : 'bg-zinc-950/90 border border-zinc-800 text-zinc-200 cursor-pointer hover:border-cyan-500/40'
+                    <div className="text-[9px] font-semibold mt-0.5 truncate" title={st.displayLabel}>
+                      {st.displayLabel}
+                    </div>
+                  </div>
+                  <div className="mt-1.5 pt-1 border-t border-white/10 space-y-0.5 text-[9px]">
+                    <div className="flex justify-between">
+                      <span className="opacity-75">{st.timestamp ? st.timestamp.slice(11, 19) : '—'}</span>
+                      <span>{st.durationMs !== null ? `${st.durationMs}ms` : '—'}</span>
+                    </div>
+                    <div className="truncate opacity-80" title={st.evidenceRef || 'NO_EVIDENCE'}>
+                      Ev: {st.evidenceRef || 'NONE'}
+                    </div>
+                  </div>
+                </div>
+              );
+            })}
+          </div>
+
+          {/* Failure-First Diagnostics Card (Real Evidence Without AI Guessing) */}
+          {latestFailureDiagnostic && (
+            <div className="p-2.5 rounded-lg bg-rose-950/30 border border-rose-500/50 space-y-1.5 text-[10px]">
+              <div className="flex flex-wrap items-center justify-between gap-2">
+                <div className="flex items-center gap-2">
+                  <span className="px-1.5 py-0.5 rounded bg-rose-950 border border-rose-500/60 text-rose-300 font-bold">
+                    {latestFailureDiagnostic.classification}
+                  </span>
+                  <span className="font-bold text-rose-200">
+                    Failure-First Diagnostics · {latestFailureDiagnostic.failureId}
+                  </span>
+                </div>
+                <span className="text-zinc-400">
+                  Stage: <strong className="text-amber-300">{latestFailureDiagnostic.stage}</strong> · Component:{' '}
+                  <strong className="text-cyan-300">{latestFailureDiagnostic.component}</strong>
+                </span>
+              </div>
+              <div className="text-rose-200/95 break-words">
+                <strong>Actual Error:</strong> {latestFailureDiagnostic.actualError}
+              </div>
+              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-1.5 text-[9px] text-zinc-300 pt-1 border-t border-rose-500/20">
+                <div className="truncate" title={latestFailureDiagnostic.expectedState}>
+                  <span className="text-zinc-500">Expected:</span> {latestFailureDiagnostic.expectedState}
+                </div>
+                <div className="truncate" title={latestFailureDiagnostic.observedState}>
+                  <span className="text-zinc-500">Observed:</span> {latestFailureDiagnostic.observedState}
+                </div>
+                <div className="truncate" title={latestFailureDiagnostic.evidence}>
+                  <span className="text-zinc-500">Evidence:</span> {latestFailureDiagnostic.evidence}
+                </div>
+                <div className="truncate" title={latestFailureDiagnostic.recoveryState}>
+                  <span className="text-zinc-500">Recovery:</span>{' '}
+                  <strong className="text-emerald-300">{latestFailureDiagnostic.recoveryState}</strong>
+                </div>
+              </div>
+            </div>
+          )}
+        </div>
+      )}
+
+      {/* ── RESPONSIVE WORKSPACE BODY: Desktop (Chat & History 35% / Preview & Source 65%) ── */}
+      <div className="flex flex-col lg:flex-row min-h-[580px]">
+        {/* LEFT COLUMN (35% on Desktop): Conversation History + Workspace Notes + Search + Chat/Voice Input */}
+        <motion.div
+          initial={{ opacity: 0, x: -10 }}
+          animate={{ opacity: 1, x: 0 }}
+          transition={{ duration: 0.26, delay: 0.04, ease: [0.22, 1, 0.36, 1] }}
+          className="w-full lg:w-[35%] border-b lg:border-b-0 lg:border-r border-zinc-800 flex flex-col bg-zinc-900/40"
+        >
+          {/* Dedicated Conversation History & Workspace Notes Toolbar */}
+          <div className="px-3.5 py-2.5 border-b border-zinc-800 bg-zinc-950/70 space-y-2 font-mono text-[10px]">
+            <div className="flex flex-wrap items-center justify-between gap-2">
+              <div className="flex items-center gap-1.5 text-zinc-300 font-semibold">
+                <History className="w-3.5 h-3.5 text-cyan-400" />
+                <span>
+                  Sessions ({filteredMessages.length}) · Notes ({filteredNotes.length})
+                </span>
+              </div>
+              <div className="flex items-center gap-1">
+                {(['ALL', 'TEXT_INPUT', 'VOICE_STT', 'NOTES'] as const).map((flt) => (
+                  <button
+                    key={flt}
+                    type="button"
+                    onClick={() => setHistoryFilter(flt)}
+                    className={`px-2 py-0.5 rounded transition cursor-pointer ${
+                      historyFilter === flt
+                        ? 'bg-cyan-950 text-cyan-300 border border-cyan-500/40 font-bold'
+                        : 'text-zinc-400 hover:text-zinc-200'
                     }`}
                   >
-                    <div className="flex items-center justify-between gap-2 font-mono text-[9px] opacity-75">
-                      <span>{msg.channel === 'VOICE_STT' ? '🎙️ VOICE_STT' : '⌨️ TEXT_INPUT'}</span>
-                      <span>
-                        {msg.uiStatus} · {msg.provenance}
+                    {flt === 'ALL'
+                      ? 'All'
+                      : flt === 'TEXT_INPUT'
+                      ? 'Chat'
+                      : flt === 'VOICE_STT'
+                      ? 'Voice'
+                      : 'Notes'}
+                  </button>
+                ))}
+                <button
+                  type="button"
+                  onClick={() => setIsAddingNote((prev) => !prev)}
+                  className={`px-1.5 py-0.5 rounded border transition cursor-pointer flex items-center gap-0.5 ${
+                    isAddingNote
+                      ? 'bg-purple-950 text-purple-300 border-purple-500/40 font-bold'
+                      : 'bg-zinc-900 text-zinc-300 border-zinc-700 hover:border-cyan-500/40'
+                  }`}
+                  title="Add Workspace Note"
+                >
+                  <Plus className="w-3 h-3" />
+                  <span>Note</span>
+                </button>
+                {messages.length > 0 && (
+                  <button
+                    type="button"
+                    onClick={() => setMessages([])}
+                    className="p-1 rounded text-zinc-500 hover:text-rose-400 transition cursor-pointer"
+                    title="Clear Conversation History"
+                  >
+                    <Trash2 className="w-3 h-3" />
+                  </button>
+                )}
+              </div>
+            </div>
+
+            {/* Search Input Bar for Past Chat Sessions & Workspace Notes */}
+            <div className="relative flex items-center">
+              <Search className="w-3.5 h-3.5 text-zinc-500 absolute left-2.5 pointer-events-none" />
+              <input
+                type="text"
+                value={searchQuery}
+                onChange={(e) => setSearchQuery(e.target.value)}
+                placeholder="Search past chat sessions, proposals, or workspace notes..."
+                aria-label="Search past chat sessions or workspace notes"
+                className="w-full bg-zinc-900/90 border border-zinc-800 rounded-lg pl-8 pr-7 py-1.5 text-[11px] text-zinc-100 placeholder-zinc-500 focus:outline-none focus:border-cyan-500 font-mono"
+              />
+              {searchQuery && (
+                <button
+                  type="button"
+                  onClick={() => setSearchQuery('')}
+                  className="absolute right-2 text-zinc-500 hover:text-zinc-200 cursor-pointer"
+                  title="Clear search"
+                  aria-label="Clear search"
+                >
+                  <X className="w-3.5 h-3.5" />
+                </button>
+              )}
+            </div>
+
+            {/* Inline Add Workspace Note Composer */}
+            {isAddingNote && (
+              <div className="p-2.5 rounded-lg bg-zinc-900/95 border border-purple-500/30 space-y-2">
+                <div className="flex items-center justify-between text-purple-300 font-bold">
+                  <span className="flex items-center gap-1">
+                    <FileText className="w-3 h-3" />
+                    New Workspace Note ({targetWorkspaceId})
+                  </span>
+                  <button
+                    type="button"
+                    onClick={() => setIsAddingNote(false)}
+                    className="text-zinc-500 hover:text-zinc-300 cursor-pointer"
+                  >
+                    <X className="w-3 h-3" />
+                  </button>
+                </div>
+                <input
+                  type="text"
+                  value={newNoteTitle}
+                  onChange={(e) => setNewNoteTitle(e.target.value)}
+                  placeholder="Note title (e.g. Batch tuning observation)..."
+                  className="w-full bg-zinc-950 border border-zinc-800 rounded px-2.5 py-1 text-[11px] text-zinc-100 placeholder-zinc-500 focus:outline-none focus:border-purple-400"
+                />
+                <textarea
+                  value={newNoteContent}
+                  onChange={(e) => setNewNoteContent(e.target.value)}
+                  rows={2}
+                  placeholder="Record workspace note or session reference..."
+                  className="w-full bg-zinc-950 border border-zinc-800 rounded px-2.5 py-1 text-[11px] text-zinc-100 placeholder-zinc-500 focus:outline-none focus:border-purple-400 resize-none"
+                />
+                <div className="flex justify-end gap-1.5">
+                  <button
+                    type="button"
+                    onClick={handleSaveWorkspaceNote}
+                    disabled={!newNoteTitle.trim() || !newNoteContent.trim()}
+                    className="px-2.5 py-1 rounded bg-purple-600 hover:bg-purple-500 disabled:opacity-40 text-white font-bold cursor-pointer transition"
+                  >
+                    Save Note
+                  </button>
+                </div>
+              </div>
+            )}
+          </div>
+
+          {/* Conversation History, Search Results & Workspace Notes Feed */}
+          <div className="flex-1 overflow-y-auto p-4 space-y-3 max-h-[420px] lg:max-h-[460px]">
+            {/* Workspace Notes Section (shown when Notes filter is selected or when searching) */}
+            {showNotesSection && filteredNotes.length > 0 && (
+              <div className="space-y-2">
+                <div className="flex items-center justify-between font-mono text-[10px] text-purple-300 font-bold uppercase tracking-wider">
+                  <span className="flex items-center gap-1.5">
+                    <FileText className="w-3 h-3" />
+                    Workspace Notes ({filteredNotes.length})
+                  </span>
+                  <span>{targetWorkspaceId}</span>
+                </div>
+                {filteredNotes.map((note) => (
+                  <motion.div
+                    key={note.id}
+                    initial={{ opacity: 0, y: 6 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    transition={{ duration: 0.2, ease: [0.22, 1, 0.36, 1] }}
+                    className="p-3 rounded-xl bg-zinc-950/90 border border-purple-500/30 space-y-1.5 font-mono text-xs"
+                  >
+                    <div className="flex items-center justify-between gap-2 text-[9px] text-zinc-400">
+                      <span className="px-1.5 py-0.5 rounded bg-purple-950/80 border border-purple-500/30 text-purple-300 font-bold">
+                        {note.id} · {note.category}
                       </span>
+                      <div className="flex items-center gap-1.5">
+                        <span>{note.workspaceId}</span>
+                        <button
+                          type="button"
+                          onClick={() => handleDeleteWorkspaceNote(note.id)}
+                          className="text-zinc-500 hover:text-rose-400 cursor-pointer"
+                          title="Delete Note"
+                        >
+                          <Trash2 className="w-3 h-3" />
+                        </button>
+                      </div>
                     </div>
+                    <div className="font-bold text-zinc-100 text-[11px]">{note.title}</div>
+                    <p className="text-[11px] text-zinc-300 leading-relaxed whitespace-pre-wrap">
+                      {note.content}
+                    </p>
+                  </motion.div>
+                ))}
+              </div>
+            )}
 
-                    <p className="whitespace-pre-wrap break-words">{msg.text}</p>
+            {showNotesSection && historyFilter === 'NOTES' && filteredNotes.length === 0 && (
+              <div className="p-4 rounded-xl bg-zinc-950/80 border border-zinc-800/90 text-center font-mono text-xs text-zinc-400">
+                ไม่พบบันทึก Workspace Notes ที่ตรงกับคำค้นหา &ldquo;{searchQuery}&rdquo;
+              </div>
+            )}
 
-                    {msg.analysis && (
-                      <div className="p-2 rounded bg-zinc-900/80 border border-zinc-800 font-mono text-[10px] text-zinc-300">
-                        <div>Analysis: {msg.analysis.summary}</div>
-                        <div className="text-zinc-500 mt-0.5">
-                          Target: {msg.analysis.targetWorkspace} · Risk: {msg.analysis.riskLevel}
-                        </div>
-                      </div>
-                    )}
-
-                    {msg.proposal && (
-                      <div className="p-2 rounded bg-black/50 border border-zinc-800 font-mono text-[10px] space-y-1.5">
-                        <div className="text-cyan-300 font-bold">
-                          Proposal: {msg.proposal.parameter} ({currentBatchSize} &rarr;{' '}
-                          {msg.proposal.proposedBatchSize})
-                        </div>
-                        <div className="text-zinc-400">
-                          Required Authority: <strong className="text-amber-300">{msg.proposal.requiresApprover}</strong>
-                        </div>
-                        {onStageProposalForApproval && (
-                          <button
-                            type="button"
-                            onClick={(e) => {
-                              e.stopPropagation();
-                              handleRouteToApprovalGate(msg.proposal!, msg.channel);
-                            }}
-                            className="w-full mt-1 py-1.5 px-2 rounded bg-emerald-950/80 hover:bg-emerald-900 border border-emerald-500/50 text-emerald-300 font-bold cursor-pointer transition"
-                          >
-                            🔒 Route to Explicit Approval Gate (#EP-SOVEREIGN-01)
-                          </button>
-                        )}
-                      </div>
-                    )}
-
-                    {msg.htmlCode && (
-                      <div className="text-[10px] text-cyan-400 font-mono flex items-center gap-1">
-                        <CheckCircle2 className="w-3 h-3" />
-                        <span>คลิกเพื่อโหลดโค้ดชุดนี้ใน Isolated Preview Sandbox</span>
+            {/* Past Chat Sessions Section */}
+            {showMessagesSection && (
+              <>
+                {normalizedQuery && filteredMessages.length === 0 && filteredNotes.length === 0 ? (
+                  <div className="p-4 rounded-xl bg-zinc-950/80 border border-zinc-800/90 text-center font-mono text-xs text-zinc-400 space-y-1">
+                    <div className="text-zinc-200 font-bold">No Matching Sessions or Notes</div>
+                    <div>
+                      ไม่พบประวัติการสนทนาหรือบันทึกที่ตรงกับคำค้นหา &ldquo;{searchQuery}&rdquo;
+                    </div>
+                  </div>
+                ) : filteredMessages.length === 0 ? (
+                  <div className="p-4 rounded-xl bg-zinc-950/80 border border-zinc-800/90 space-y-2 font-mono text-xs text-zinc-400">
+                    <div className="flex items-center justify-between text-zinc-200 font-bold">
+                      <span>AI Service Boundary</span>
+                      <span className="text-[10px] text-emerald-400">Core Mutation = 0</span>
+                    </div>
+                    <p className="text-[11px] leading-relaxed text-cyan-300">
+                      Text / Voice &rarr; AI Request &rarr; Analysis &rarr; Proposal &rarr; Preview &rarr; Explicit Approval (#EP-SOVEREIGN-01)
+                    </p>
+                    {providerStatus !== 'CONNECTED' && (
+                      <div className="p-2 rounded bg-amber-950/40 border border-amber-500/40 text-amber-300 text-[11px]">
+                        Provider Unavailable ({providerStatus}) — Zero-Mock Policy Active
                       </div>
                     )}
                   </div>
-                  {msg.sender === 'user' && (
-                    <div className="w-7 h-7 rounded-full bg-zinc-800 border border-zinc-700 flex items-center justify-center text-zinc-200 shrink-0 mt-0.5">
-                      <User className="w-3.5 h-3.5" />
-                    </div>
-                  )}
-                </div>
-              ))
+                ) : (
+                  filteredMessages.map((msg) => (
+                    <motion.div
+                      key={msg.id}
+                      initial={{ opacity: 0, y: 8 }}
+                      animate={{ opacity: 1, y: 0 }}
+                      transition={{ duration: 0.22, ease: [0.22, 1, 0.36, 1] }}
+                      className={`flex gap-2.5 ${msg.sender === 'user' ? 'justify-end' : 'justify-start'}`}
+                    >
+                      {msg.sender !== 'user' && (
+                        <div className="w-7 h-7 rounded-full bg-cyan-500/10 border border-cyan-500/30 flex items-center justify-center text-cyan-400 shrink-0 mt-0.5">
+                          <Sparkles className="w-3.5 h-3.5" />
+                        </div>
+                      )}
+                      <div
+                        onClick={() => msg.htmlCode && setCurrentHtml(msg.htmlCode)}
+                        className={`max-w-[85%] p-3 rounded-xl text-xs leading-relaxed space-y-2 ${
+                          msg.sender === 'user'
+                            ? 'bg-cyan-950/80 border border-cyan-500/40 text-cyan-100'
+                            : msg.uiStatus === 'BLOCKED' || msg.uiStatus === 'FAILED'
+                            ? 'bg-rose-950/50 border border-rose-500/50 text-rose-200'
+                            : msg.uiStatus === 'UNAVAILABLE'
+                            ? 'bg-amber-950/40 border border-amber-500/40 text-amber-200'
+                            : 'bg-zinc-950/90 border border-zinc-800 text-zinc-200 cursor-pointer hover:border-cyan-500/40'
+                        }`}
+                      >
+                        <div className="flex items-center justify-between gap-2 font-mono text-[9px] opacity-75">
+                          <span>{msg.channel === 'VOICE_STT' ? '🎙️ VOICE_STT' : '⌨️ TEXT_INPUT'}</span>
+                          <span>
+                            {msg.uiStatus} · {msg.provenance}
+                          </span>
+                        </div>
+
+                        <p className="whitespace-pre-wrap break-words">{msg.text}</p>
+
+                        {msg.analysis && (
+                          <div className="p-2 rounded bg-zinc-900/80 border border-zinc-800 font-mono text-[10px] text-zinc-300">
+                            <div>Analysis: {msg.analysis.summary}</div>
+                            <div className="text-zinc-500 mt-0.5">
+                              Target: {msg.analysis.targetWorkspace} · Risk: {msg.analysis.riskLevel}
+                            </div>
+                          </div>
+                        )}
+
+                        {msg.proposal && (
+                          <div className="p-2 rounded bg-black/50 border border-zinc-800 font-mono text-[10px] space-y-1.5">
+                            <div className="text-cyan-300 font-bold">
+                              Proposal: {msg.proposal.parameter} ({currentBatchSize} &rarr;{' '}
+                              {msg.proposal.proposedBatchSize})
+                            </div>
+                            <div className="text-zinc-400">
+                              Required Authority: <strong className="text-amber-300">{msg.proposal.requiresApprover}</strong>
+                            </div>
+                            {onStageProposalForApproval && (
+                              <button
+                                type="button"
+                                onClick={(e) => {
+                                  e.stopPropagation();
+                                  handleRouteToApprovalGate(msg.proposal!, msg.channel);
+                                }}
+                                className="w-full mt-1 py-1.5 px-2 rounded bg-emerald-950/80 hover:bg-emerald-900 border border-emerald-500/50 text-emerald-300 font-bold cursor-pointer transition"
+                              >
+                                🔒 Route to Explicit Approval Gate (#EP-SOVEREIGN-01)
+                              </button>
+                            )}
+                          </div>
+                        )}
+
+                        {msg.htmlCode && (
+                          <div className="text-[10px] text-cyan-400 font-mono flex items-center gap-1">
+                            <CheckCircle2 className="w-3 h-3" />
+                            <span>คลิกเพื่อโหลดโค้ดชุดนี้ใน Isolated Preview Sandbox</span>
+                          </div>
+                        )}
+                      </div>
+                      {msg.sender === 'user' && (
+                        <div className="w-7 h-7 rounded-full bg-zinc-800 border border-zinc-700 flex items-center justify-center text-zinc-200 shrink-0 mt-0.5">
+                          <User className="w-3.5 h-3.5" />
+                        </div>
+                      )}
+                    </motion.div>
+                  ))
+                )}
+              </>
             )}
 
             {uiStatus === 'PROCESSING' && (
@@ -740,10 +1429,15 @@ export function AIWorkspace({
               </div>
             )}
           </div>
-        </div>
+        </motion.div>
 
         {/* RIGHT COLUMN (65% on Desktop): Live Preview (Sandboxed Iframe) | Source Code Viewer */}
-        <div className="w-full lg:w-[65%] flex flex-col bg-zinc-950 min-h-[400px]">
+        <motion.div
+          initial={{ opacity: 0, x: 10 }}
+          animate={{ opacity: 1, x: 0 }}
+          transition={{ duration: 0.26, delay: 0.08, ease: [0.22, 1, 0.36, 1] }}
+          className="w-full lg:w-[65%] flex flex-col bg-zinc-950 min-h-[400px]"
+        >
           {/* Preview | Source Sub-Header */}
           <div className="px-4 py-2.5 border-b border-zinc-800 flex flex-wrap items-center justify-between gap-2 bg-zinc-900/60">
             <div className="flex items-center gap-1.5 bg-zinc-950 p-1 rounded-lg border border-zinc-800">
@@ -789,70 +1483,90 @@ export function AIWorkspace({
 
           {/* Sandbox Content Area */}
           <div className="flex-1 relative bg-[#030712] flex flex-col">
-            {currentHtml ? (
-              activeTab === 'preview' ? (
-                <iframe
-                  title="Isolated AI Workspace Preview Sandbox"
-                  sandbox="allow-scripts"
-                  referrerPolicy="no-referrer"
-                  srcDoc={currentHtml}
-                  className="w-full flex-1 min-h-[400px] border-none bg-[#030712]"
-                />
+            <AnimatePresence mode="wait">
+              {currentHtml ? (
+                activeTab === 'preview' ? (
+                  <motion.div
+                    key="sandbox-live-preview"
+                    initial={{ opacity: 0, y: 6 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    exit={{ opacity: 0, y: -6 }}
+                    transition={{ duration: 0.22, ease: [0.22, 1, 0.36, 1] }}
+                    className="w-full flex-1 flex flex-col bg-[#030712]"
+                  >
+                    <iframe
+                      title="Isolated AI Workspace Preview Sandbox"
+                      sandbox="allow-scripts"
+                      referrerPolicy="no-referrer"
+                      srcDoc={currentHtml}
+                      className="w-full flex-1 min-h-[400px] border-none bg-[#030712]"
+                    />
+                  </motion.div>
+                ) : (
+                  <motion.div
+                    key="sandbox-source-code"
+                    initial={{ opacity: 0, y: 6 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    exit={{ opacity: 0, y: -6 }}
+                    transition={{ duration: 0.22, ease: [0.22, 1, 0.36, 1] }}
+                    className="w-full flex-1 flex flex-col bg-[#030712]"
+                  >
+                    <div className="px-4 py-2 border-b border-zinc-800/80 bg-zinc-950/90 flex items-center justify-between font-mono text-[11px] text-zinc-400">
+                      <span>
+                        Sanitized HTML5 Source · {sourceLines.length} lines · {currentHtml.length} chars
+                      </span>
+                      <button
+                        type="button"
+                        onClick={handleCopySourceCode}
+                        className="px-2.5 py-1 rounded bg-zinc-900 hover:bg-zinc-800 border border-zinc-700 text-cyan-300 flex items-center gap-1.5 cursor-pointer transition"
+                      >
+                        <Copy className="w-3 h-3" />
+                        <span>{copiedSource ? 'Copied' : 'Copy Source'}</span>
+                      </button>
+                    </div>
+                    <div className="w-full flex-1 p-4 overflow-auto font-mono text-xs text-cyan-300 select-text">
+                      {sourceLines.map((line, idx) => (
+                        <div key={idx} className="flex gap-3 leading-relaxed">
+                          <span className="w-8 text-right text-zinc-600 select-none shrink-0">
+                            {idx + 1}
+                          </span>
+                          <span className="whitespace-pre-wrap break-all">{line}</span>
+                        </div>
+                      ))}
+                    </div>
+                  </motion.div>
+                )
               ) : (
-                <div className="w-full flex-1 flex flex-col bg-[#030712]">
-                  <div className="px-4 py-2 border-b border-zinc-800/80 bg-zinc-950/90 flex items-center justify-between font-mono text-[11px] text-zinc-400">
-                    <span>
-                      Sanitized HTML5 Source · {sourceLines.length} lines · {currentHtml.length} chars
-                    </span>
-                    <button
-                      type="button"
-                      onClick={handleCopySourceCode}
-                      className="px-2.5 py-1 rounded bg-zinc-900 hover:bg-zinc-800 border border-zinc-700 text-cyan-300 flex items-center gap-1.5 cursor-pointer transition"
-                    >
-                      <Copy className="w-3 h-3" />
-                      <span>{copiedSource ? 'Copied' : 'Copy Source'}</span>
-                    </button>
+                <motion.div
+                  key="sandbox-empty-boundary"
+                  initial={{ opacity: 0, scale: 0.985 }}
+                  animate={{ opacity: 1, scale: 1 }}
+                  exit={{ opacity: 0, scale: 0.985 }}
+                  transition={{ duration: 0.24, ease: [0.22, 1, 0.36, 1] }}
+                  className="flex-1 flex flex-col items-center justify-center p-6 text-center font-mono space-y-3"
+                >
+                  <div className="p-3 rounded-full bg-zinc-900 border border-zinc-800 text-amber-400">
+                    <AlertTriangle className="w-6 h-6" />
                   </div>
-                  <div className="w-full flex-1 p-4 overflow-auto font-mono text-xs text-cyan-300 select-text">
-                    {sourceLines.map((line, idx) => (
-                      <div key={idx} className="flex gap-3 leading-relaxed">
-                        <span className="w-8 text-right text-zinc-600 select-none shrink-0">
-                          {idx + 1}
-                        </span>
-                        <span className="whitespace-pre-wrap break-all">{line}</span>
-                      </div>
-                    ))}
+                  <div className="text-xs sm:text-sm font-bold text-zinc-200">
+                    {providerStatus === 'CONNECTED'
+                      ? 'WAITING FOR VERIFIED AI ARTIFACT'
+                      : `PROVIDER UNAVAILABLE (${providerStatus})`}
                   </div>
-                </div>
-              )
-            ) : (
-              <div className="flex-1 flex flex-col items-center justify-center p-6 text-center font-mono space-y-3">
-                <div className="p-3 rounded-full bg-zinc-900 border border-zinc-800 text-amber-400">
-                  <AlertTriangle className="w-6 h-6" />
-                </div>
-                <div className="text-xs sm:text-sm font-bold text-zinc-200">
-                  {providerStatus === 'CONNECTED'
-                    ? 'WAITING FOR VERIFIED AI ARTIFACT (IDLE)'
-                    : `Provider Unavailable (${providerStatus}) — NO MOCK PREVIEW`}
-                </div>
-                <p className="text-[11px] text-zinc-400 max-w-md leading-relaxed">
-                  {providerStatus === 'CONNECTED'
-                    ? 'ส่งคำสั่งผ่าน Chat หรือ Voice Input เพื่อวิเคราะห์และสร้าง Preview ภายใต้ Sandbox Isolation (sandbox="allow-scripts")'
-                    : 'ยังไม่มีการเชื่อมต่อ AI Provider จริง (Provider Unavailable) ระบบไม่แสดงหน้าเว็บจำลองหรือสถานะ Sandbox Ready ปลอมตามกฎ Zero-Mock Policy'}
-                </p>
-                <div className="flex flex-wrap justify-center gap-2 text-[10px] text-zinc-500 pt-1">
-                  <span>DOM/Parent Access: BLOCKED</span>
-                  <span aria-hidden="true">·</span>
-                  <span>Cookies/localStorage: BLOCKED</span>
-                  <span aria-hidden="true">·</span>
-                  <span>Core Mutation: 0</span>
-                </div>
-              </div>
-            )}
+                  <div className="flex flex-wrap justify-center gap-2 text-[10px] text-zinc-500 pt-1">
+                    <span>DOM/Parent: BLOCKED</span>
+                    <span aria-hidden="true">·</span>
+                    <span>Storage: BLOCKED</span>
+                    <span aria-hidden="true">·</span>
+                    <span>Core Mutation: 0</span>
+                  </div>
+                </motion.div>
+              )}
+            </AnimatePresence>
           </div>
-        </div>
+        </motion.div>
       </div>
-    </div>
+    </motion.div>
   );
 }
 

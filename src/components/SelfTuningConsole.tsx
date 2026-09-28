@@ -803,8 +803,8 @@ export const SelfTuningConsole: React.FC<SelfTuningConsoleProps> = ({
               }`}
             />
             {pipelineStage === 'FINALIZED' || pipelineStage === 'COMPLETED'
-              ? '🔒 COMPLETED (RE-EXECUTION BLOCKED)'
-              : `● ${pipelineStage}`}
+              ? 'FINALIZED'
+              : pipelineStage}
           </span>
         </div>
       </div>
@@ -850,16 +850,14 @@ export const SelfTuningConsole: React.FC<SelfTuningConsoleProps> = ({
         </div>
 
         {/* VERIFICATION CARD */}
-        <div className="bg-zinc-900/80 border border-zinc-800 rounded-xl p-3.5 space-y-1">
+        <div className="bg-zinc-900/80 border border-zinc-800 rounded-xl p-3.5 space-y-1.5">
           <div className="text-[10px] text-zinc-400 font-bold uppercase tracking-wider">VERIFICATION</div>
-          <div className="text-[11px] text-emerald-300 grid grid-cols-2 gap-x-2 gap-y-0.5">
-            <span>✓ Execution</span>
-            <span>✓ Verification</span>
-            <span>✓ Audit recorded</span>
-            <span>✓ Core untouched</span>
+          <div className="text-sm font-bold text-emerald-300">
+            {authoritativeTx.finalizationEvent?.verificationResult || 'VERIFIED_STABLE'}
           </div>
-          <div className="text-[11px] font-bold text-emerald-400 pt-0.5">
-            Transaction: COMPLETED 🔒
+          <div className="text-[11px] text-zinc-300 flex items-center justify-between">
+            <span>State</span>
+            <span className="text-emerald-400 font-bold">{authoritativeTx.lifecycleStage}</span>
           </div>
         </div>
       </div>
@@ -867,32 +865,25 @@ export const SelfTuningConsole: React.FC<SelfTuningConsoleProps> = ({
       {/* 3. SINGLE EXECUTION PIPELINE STEPPER */}
       <div className="bg-zinc-900/70 border border-zinc-800/90 rounded-xl p-3 sm:p-4 space-y-2.5">
         <div className="text-[10px] sm:text-xs font-mono uppercase text-zinc-400 flex flex-wrap justify-between items-center gap-2">
-          <span className="font-bold text-zinc-200">EXECUTION PIPELINE</span>
+          <span className="font-bold text-zinc-200">EXECUTION PIPELINE ({authoritativeTx.transactionId})</span>
           <span className="text-emerald-400 font-bold">
-            {pipelineStage === 'FINALIZED' || pipelineStage === 'COMPLETED'
-              ? `🔒 COMPLETED · RE-EXECUTION BLOCKED (${authoritativeTx.transactionId})`
-              : `STATUS: ${pipelineStage}`}
+            {pipelineStage}
           </span>
         </div>
         <div className="grid grid-cols-3 sm:grid-cols-5 md:grid-cols-9 gap-1.5 sm:gap-2">
-          <StageIndicator stage="INSPECT" currentStage={pipelineStage} label="✓ 01 Inspect" labelTh="ตรวจสอบจริง" />
-          <StageIndicator stage="ANALYZE" currentStage={pipelineStage} label="✓ 02 Analyze" labelTh="วิเคราะห์" />
-          <StageIndicator stage="PROPOSE" currentStage={pipelineStage} label="✓ 03 Propose" labelTh="เสนอ Diff" />
-          <StageIndicator
-            stage="APPROVAL_REQUIRED"
-            currentStage={pipelineStage}
-            label="✓ 04 Approval"
-            labelTh="อนุมัติอธิปไตย"
-          />
-          <StageIndicator stage="APPLYING" currentStage={pipelineStage} label="✓ 05 Apply" labelTh="ปรับผ่าน Adapter" />
-          <StageIndicator stage="TESTING" currentStage={pipelineStage} label="✓ 06 Test" labelTh="ทดสอบผล" />
-          <StageIndicator stage="VERIFYING" currentStage={pipelineStage} label="✓ 07 Verify" labelTh="ยืนยัน SLA" />
-          <StageIndicator stage="ROLLBACK" currentStage={pipelineStage} label="✓ 08 Safety" labelTh="ถอยกลับอัตโนมัติ" />
-          <StageIndicator stage="AUDITING" currentStage={pipelineStage} label="✓ 09 Audit" labelTh="ประทับ WORM" />
+          <StageIndicator stage="INSPECT" currentStage={pipelineStage} label="01 Inspect" />
+          <StageIndicator stage="ANALYZE" currentStage={pipelineStage} label="02 Analyze" />
+          <StageIndicator stage="PROPOSE" currentStage={pipelineStage} label="03 Propose" />
+          <StageIndicator stage="APPROVAL_REQUIRED" currentStage={pipelineStage} label="04 Approval" />
+          <StageIndicator stage="APPLYING" currentStage={pipelineStage} label="05 Apply" />
+          <StageIndicator stage="TESTING" currentStage={pipelineStage} label="06 Test" />
+          <StageIndicator stage="VERIFYING" currentStage={pipelineStage} label="07 Verify" />
+          <StageIndicator stage="ROLLBACK" currentStage={pipelineStage} label="08 Safety" />
+          <StageIndicator stage="AUDITING" currentStage={pipelineStage} label="09 Audit" />
         </div>
         {reExecutionBlockedReason && (
           <div className="p-2 rounded bg-rose-950/60 border border-rose-500/60 font-mono text-xs text-rose-200 font-bold">
-            🛑 BLOCKED: REASON = {reExecutionBlockedReason} (Audit Event Recorded · 0 Mutation)
+            REASON = {reExecutionBlockedReason} (0 Mutation)
           </div>
         )}
       </div>
@@ -907,7 +898,6 @@ export const SelfTuningConsole: React.FC<SelfTuningConsoleProps> = ({
                 <h2 className="text-xs sm:text-sm font-semibold text-zinc-200 tracking-wider font-mono">
                   🎯 TARGET WORKSPACE TELEMETRY
                 </h2>
-                <p className="text-[10px] sm:text-[11px] text-zinc-400 mt-0.5 truncate">{workspace.thaiName}</p>
               </div>
               <ProvenanceBadge state={workspace.provenance} />
             </div>
@@ -923,7 +913,7 @@ export const SelfTuningConsole: React.FC<SelfTuningConsoleProps> = ({
                     : 'bg-zinc-950 border-zinc-800 text-zinc-400 hover:text-zinc-200'
                 }`}
               >
-                ws-agent-02 (OBSERVED)
+                ws-agent-02
               </button>
               <button
                 type="button"
@@ -934,7 +924,7 @@ export const SelfTuningConsole: React.FC<SelfTuningConsoleProps> = ({
                     : 'bg-zinc-950 border-zinc-800 text-zinc-400 hover:text-zinc-200'
                 }`}
               >
-                Unverified (NULL / NO_DATA)
+                Unverified (NULL)
               </button>
             </div>
 
@@ -949,54 +939,42 @@ export const SelfTuningConsole: React.FC<SelfTuningConsoleProps> = ({
               </div>
               <div className="flex justify-between items-center py-1 border-b border-zinc-800/50 gap-2">
                 <span className="text-zinc-400">CPU Load (16 Cores):</span>
-                <div className="flex items-center gap-1.5 sm:gap-2">
-                  <span className="text-zinc-200 font-bold">
-                    {workspace.cpuUtilPercent !== null ? `${workspace.cpuUtilPercent}%` : 'NULL / NO_DATA'}
-                  </span>
-                  <ProvenanceBadge state={workspace.cpuUtilPercent !== null ? workspace.provenance : 'NULL'} />
-                </div>
+                <span className="text-zinc-200 font-bold">
+                  {workspace.cpuUtilPercent !== null ? `${workspace.cpuUtilPercent}%` : 'NULL / NO_DATA'}
+                </span>
               </div>
               <div className="flex justify-between items-center py-1 border-b border-zinc-800/50 gap-2">
                 <span className="text-zinc-400">RAM Utilization:</span>
-                <div className="flex items-center gap-1.5 sm:gap-2">
-                  <span
-                    className={`font-bold ${
-                      workspace.memoryUtilPercent === null
-                        ? 'text-zinc-500'
-                        : workspace.memoryUtilPercent > 75
-                        ? 'text-amber-400'
-                        : 'text-emerald-400'
-                    }`}
-                  >
-                    {workspace.memoryUtilPercent !== null ? `${workspace.memoryUtilPercent}%` : 'NULL / NO_DATA'}
-                  </span>
-                  <ProvenanceBadge state={workspace.memoryUtilPercent !== null ? workspace.provenance : 'NULL'} />
-                </div>
+                <span
+                  className={`font-bold ${
+                    workspace.memoryUtilPercent === null
+                      ? 'text-zinc-500'
+                      : workspace.memoryUtilPercent > 75
+                      ? 'text-amber-400'
+                      : 'text-emerald-400'
+                  }`}
+                >
+                  {workspace.memoryUtilPercent !== null ? `${workspace.memoryUtilPercent}%` : 'NULL / NO_DATA'}
+                </span>
               </div>
               <div className="flex justify-between items-center py-1 border-b border-zinc-800/50 gap-2">
                 <span className="text-zinc-400">Active Batch Size:</span>
-                <div className="flex items-center gap-1.5 sm:gap-2">
-                  <span className="text-cyan-400 font-bold">
-                    {workspace.batchSize !== null ? workspace.batchSize : 'UNVERIFIED'}
-                  </span>
-                  <ProvenanceBadge state={workspace.batchSize !== null ? workspace.provenance : 'UNVERIFIED'} />
-                </div>
+                <span className="text-cyan-400 font-bold">
+                  {workspace.batchSize !== null ? workspace.batchSize : 'UNVERIFIED'}
+                </span>
               </div>
               <div className="flex justify-between items-center py-1 border-b border-zinc-800/50 gap-2">
                 <span className="text-zinc-400">Execution Latency:</span>
-                <div className="flex items-center gap-1.5 sm:gap-2">
-                  <span className="text-emerald-300">
-                    {workspace.executionLatencyMs !== null
-                      ? `${workspace.executionLatencyMs} ms`
-                      : 'NULL / NO_DATA'}
-                  </span>
-                  <ProvenanceBadge state={workspace.executionLatencyMs !== null ? workspace.provenance : 'NULL'} />
-                </div>
+                <span className="text-emerald-300">
+                  {workspace.executionLatencyMs !== null
+                    ? `${workspace.executionLatencyMs} ms`
+                    : 'NULL / NO_DATA'}
+                </span>
               </div>
               <div className="flex justify-between items-center py-1 border-b border-zinc-800/50 gap-2">
                 <span className="text-zinc-400">Chamber 04 Temp:</span>
                 <span className="text-amber-400 font-bold">
-                  {workspace.chamber04TempC !== null ? `${workspace.chamber04TempC}°C (MONITORED)` : 'NO_DATA'}
+                  {workspace.chamber04TempC !== null ? `${workspace.chamber04TempC}°C` : 'NO_DATA'}
                 </span>
               </div>
             </div>

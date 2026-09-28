@@ -1944,6 +1944,19 @@ function SovereignAppContent() {
 
   const handleAiAuditRecord = useCallback(
     (action: string, details: string, status: 'VERIFIED' | 'BLOCKED') => {
+      try {
+        offlineAuditSyncService.enqueueEvent({
+          type: status === 'BLOCKED' ? 'ALERT' : 'COMPLIANCE',
+          title: `AI Workspace Audit: ${action}`,
+          description: details,
+          metaHash: `ai-audit:${action.toLowerCase()}`,
+          severity: status === 'BLOCKED' ? 'critical' : 'info',
+          statuteRef: 'ETDA Sec 26 · ZYRQUEN Adapter Boundary (VOICE/CHAT != AUTHORIZATION)',
+        });
+      } catch {
+        // Ignore storage errors in restricted environments
+      }
+
       dispatchAction({
         type: 'EMIT_SYSTEM_EVENT',
         payload: {
@@ -1979,6 +1992,20 @@ function SovereignAppContent() {
         targetWorkspace: meta?.targetWorkspace || 'ws-agent-02',
       };
       setStagedAiRequest(requestPayload);
+
+      try {
+        offlineAuditSyncService.enqueueEvent({
+          type: 'COMPLIANCE',
+          title: 'AI Proposal Routed to Explicit Approval Gate (#EP-SOVEREIGN-01)',
+          description: `[${requestPayload.channel}] ${summary} · Routed to Command Engine Explicit Approval Gate (0 Core Mutation).`,
+          metaHash: `ai-proposal:${requestPayload.proposalId}`,
+          severity: 'info',
+          statuteRef: 'VOICE != AUTHORIZATION · CHAT != AUTHORIZATION · Explicit Approval Required',
+        });
+      } catch {
+        // Ignore storage errors in restricted environments
+      }
+
       dispatchAction({
         type: 'EMIT_SYSTEM_EVENT',
         payload: {
@@ -1997,6 +2024,33 @@ function SovereignAppContent() {
     },
     [dispatchAction, setCurrentView, showToast]
   );
+
+  useEffect(() => {
+    const handleGlobalAiApprovalStage = (event: Event) => {
+      const customEvt = event as CustomEvent<{
+        proposalId?: string;
+        proposedBatchSize?: number;
+        summary?: string;
+        channel?: 'TEXT_INPUT' | 'VOICE_STT';
+        targetWorkspace?: string;
+      }>;
+      const detail = customEvt.detail || {};
+      handleStageAiProposalForApproval(
+        detail.proposedBatchSize === 48 ? 48 : 64,
+        detail.summary || 'AI-generated workspace proposal routed to Explicit Approval Gate',
+        {
+          proposalId: detail.proposalId || `PROP-AI-${Date.now()}`,
+          channel: detail.channel || 'TEXT_INPUT',
+          targetWorkspace: detail.targetWorkspace || 'ws-agent-02',
+        }
+      );
+    };
+
+    window.addEventListener('zyrquen-stage-ai-approval', handleGlobalAiApprovalStage);
+    return () => {
+      window.removeEventListener('zyrquen-stage-ai-approval', handleGlobalAiApprovalStage);
+    };
+  }, [handleStageAiProposalForApproval]);
 
   const renderCurrentView = () => {
     switch (currentView) {
@@ -2516,9 +2570,6 @@ function SovereignAppContent() {
           setShowLoginLoader(true);
         }}
       />
-
-      {/* Live Quantum Stream Entropy & Sovereign Invariant Marquee Ticker */}
-      <LiveQuantumEntropyTicker />
 
       {/* App Body Layout with Collapsible Left Sidebar */}
       <div className="relative z-10 max-w-[1780px] w-full max-w-full mx-auto px-2 sm:px-4 flex items-start overflow-hidden">
@@ -3421,10 +3472,6 @@ function SovereignAppContent() {
                     )}
                   </AnimatePresence>
                 </div>
-
-                <span className="text-zinc-400 hidden lg:inline text-[11px] truncate max-w-md">
-                  {verificationGateStatus.message}
-                </span>
               </div>
 
               {/* Right: Metrics, Drift Toggle, Trigger Button, Counters */}
@@ -3457,10 +3504,7 @@ function SovereignAppContent() {
                   }`}
                 >
                   <Scale className="w-3.5 h-3.5 text-cyan-400" />
-                  <span>ETDA / PDPA Triggers</span>
-                  <span className="px-1.5 py-0.2 rounded text-[9px] bg-cyan-500/20 text-cyan-300 border border-cyan-500/40">
-                    6 Active
-                  </span>
+                  <span>ETDA / PDPA (6)</span>
                   {isGateDetailsExpanded ? (
                     <ChevronUp className="w-3.5 h-3.5 text-cyan-400" />
                   ) : (
@@ -3470,40 +3514,9 @@ function SovereignAppContent() {
 
                 <span className="hidden sm:inline text-zinc-600">•</span>
 
-                <span className="flex items-center gap-1">
-                  <CheckCircle2 className="w-3.5 h-3.5 text-emerald-400" />
-                  <span>Anchors: <strong className="text-emerald-300">{verificationGateStatus.complianceEventCount}</strong></span>
-                </span>
-
-                <span>•</span>
-
                 <BannerAnimatedSealCount
                   sealCount={verificationGateStatus.sealCount}
                   baseSealCount={14902}
-                />
-
-                <span className="hidden md:inline text-zinc-600">•</span>
-                <span className="text-zinc-500 hidden md:inline">{verificationGateStatus.lastCheckedTime}</span>
-              </div>
-            </div>
-
-            {/* Scheduled Telemetry Audit Real-time Progress Bar */}
-            <div className="px-4 pb-2.5 pt-0.5 space-y-1 bg-black/20 border-t border-white/5">
-              <div className="flex items-center justify-between text-[10px] font-mono text-zinc-400">
-                <span className="flex items-center gap-1.5 text-cyan-300">
-                  <Clock className="w-3 h-3 text-cyan-400" />
-                  <span>Next Telemetry Audit: <strong className="text-white">{auditCountdownSec}s</strong></span>
-                  <span className="text-zinc-600">•</span>
-                  <span className="text-zinc-400">Sub-Kelvin HSM Cycle</span>
-                </span>
-                <span className="text-emerald-400 font-bold">
-                  {Math.round(auditProgressPercent)}% Complete
-                </span>
-              </div>
-              <div className="w-full h-1.5 bg-black/60 rounded-full overflow-hidden border border-white/5 relative">
-                <div
-                  className="h-full bg-cyan-400 transition-all duration-1000 ease-linear rounded-full"
-                  style={{ width: `${auditProgressPercent}%` }}
                 />
               </div>
             </div>
@@ -3716,14 +3729,18 @@ function SovereignAppContent() {
           </AnimatePresence>
         </div>
 
-        {/* Emergency Sovereign Isolation Protocol Control */}
-        <EmergencySovereignLockdown />
+        {/* Emergency Sovereign Isolation Protocol Control (Shown on Security/Dashboard views) */}
+        {(currentView === 'dashboard' || currentView === 'security') && (
+          <EmergencySovereignLockdown />
+        )}
 
-        {/* Real-time Nexus Integration Layer Bridge */}
-        <NexusIntegrationLayer
-          currentView={currentView}
-          onNavigate={setCurrentView}
-        />
+        {/* Real-time Nexus Integration Layer Bridge (Shown on Nexus/Archive/Ledger views) */}
+        {(currentView === 'nexus' || currentView === 'archive' || currentView === 'ledger') && (
+          <NexusIntegrationLayer
+            currentView={currentView}
+            onNavigate={setCurrentView}
+          />
+        )}
 
         <AnimatePresence mode="wait">
           <motion.div
@@ -3934,9 +3951,6 @@ function SovereignAppContent() {
           </div>
         </div>
       </div>
-
-      {/* Sovereign Bottom Status Bar (Background Sync & Network Telemetry at bottom-0) */}
-      <SovereignBottomStatusBar />
 
       {/* Sovereign Copilot AI v6.0 Ultra Panel with docked Voice-to-Command Bridge */}
       <CopilotSovereignAI

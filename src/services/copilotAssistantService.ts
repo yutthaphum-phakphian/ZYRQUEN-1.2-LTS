@@ -11,6 +11,7 @@
  */
 
 import { githubSyncService, GitHubSyncState } from './githubSyncService';
+import { offlineAuditSyncService } from './offlineAuditSyncService';
 
 import { SYSTEM_METADATA } from '../data/canonicalData';
 import { systemStateStore } from '../store/systemStateStore';
@@ -1306,6 +1307,47 @@ export const copilotAssistantService = {
       type: 'DOWNLOAD_SNAPSHOT' | 'PQC_AUDIT' | 'DISPATCH_SWARM' | 'SWITCH_SPHERE' | 'SWITCH_TREE' | 'TOGGLE_SPIN' | 'FORCE_RESYNC';
       label: string;
     } | undefined = undefined;
+
+    try {
+      offlineAuditSyncService.enqueueEvent({
+        type: 'COMPLIANCE',
+        title: 'Chat Input Captured (TEXT_INPUT)',
+        description: `Query="${userQuery.slice(0, 120)}" | Enforcing CHAT != AUTHORIZATION boundary.`,
+        metaHash: `chat-input:${Date.now()}`,
+        severity: 'info',
+        statuteRef: 'CHAT != AUTHORIZATION · ETDA Sec 26 Audit Trail',
+      });
+    } catch {
+      // Ignore storage errors in restricted environments
+    }
+
+    // 0. Authorization Boundary Guard: Route AI/Chat write or tuning requests to Explicit Approval Gate
+    if (
+      queryLower.includes('batch') ||
+      queryLower.includes('tune') ||
+      queryLower.includes('quota') ||
+      queryLower.includes('apply') ||
+      queryLower.includes('mutate') ||
+      queryLower.includes('override')
+    ) {
+      const proposedBatch = queryLower.includes('48') ? 48 : 64;
+      const proposalId = `PROP-CHAT-${Date.now()}`;
+      if (typeof window !== 'undefined') {
+        window.dispatchEvent(
+          new CustomEvent('zyrquen-stage-ai-approval', {
+            detail: {
+              proposalId,
+              proposedBatchSize: proposedBatch,
+              summary: `Chat Command Proposal ("${userQuery.slice(0, 80)}") -> BATCH_SIZE ${proposedBatch}`,
+              channel: 'TEXT_INPUT',
+              targetWorkspace: 'ws-agent-02',
+            },
+          })
+        );
+      }
+      localActionNotice = `🔒 [Explicit Approval Gate Required] คำสั่งเปลี่ยนแปลงพารามิเตอร์ (${proposalId}) ถูกส่งเข้าสู่ด่าน Explicit Approval (#EP-SOVEREIGN-01) ของ Command Engine เรียบร้อยแล้ว (CHAT != AUTHORIZATION · 0 Core Mutation)\n`;
+      actionTaken = 'ROUTED_TO_EXPLICIT_APPROVAL_GATE';
+    }
 
     // 1. Synchronous reactive UI & cryptographic side-effects
     if (queryLower.includes('snapshot') || queryLower.includes('สแนปช็อต') || queryLower.includes('ดาวน์โหลด') || queryLower.includes('download')) {

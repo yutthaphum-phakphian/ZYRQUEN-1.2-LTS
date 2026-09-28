@@ -10,9 +10,16 @@ import {
   attemptIdempotentPhase11Execution,
   resetAuthoritativePhase11TransactionToFinalized,
   Phase11AuthoritativeTransaction,
+  CANONICAL_EXECUTION_TRACE_STAGE_ORDER,
+  createCanonicalFinalizedExecutionTrace,
+  buildExecutionTraceForOutcome,
+  normalizeTraceStageNode,
+  evaluateBoundaryHealthSnapshot,
+  createFailureDiagnosticRecord,
+  parseQuotaRetryAfterSeconds,
 } from '../../src/adapters/zyrquenAdapter';
 import { INITIAL_ADAPTER_WRITE_GATE_STEPS } from '../../src/utils/hologramMaterial';
-import { validateAndSanitizePreviewHtml } from '../../src/components/ZyrquenVoiceChatBuilder';
+import { validateAndSanitizePreviewHtml } from '../../src/components/AIWorkspace';
 
 test('T1 — Post-Audit Finalization Test: COMPLETED transaction with all 8 evidence checkpoints transitions to FINALIZED', () => {
   const baseTx = resetAuthoritativePhase11TransactionToFinalized();
@@ -155,4 +162,110 @@ test('T6 — AI Workspace Preview Sandbox Isolation & Sanitization Test: Blocks 
   assert.ok(result.sanitizedHtml.includes('Content-Security-Policy'));
   assert.ok(result.blockedReasons.length >= 5);
 });
+
+test('T7 — Real Execution Trace Test: 8-stage timeline (REQUEST -> ANALYSIS -> PROPOSAL -> APPROVAL -> EXECUTE -> TARGET -> VERIFY -> AUDIT) halts deterministically and rejects PASSED without evidence', () => {
+  const canonicalTrace = createCanonicalFinalizedExecutionTrace();
+  assert.equal(canonicalTrace.stages.length, 8);
+  assert.deepEqual(
+    canonicalTrace.stages.map((s) => s.stage),
+    CANONICAL_EXECUTION_TRACE_STAGE_ORDER.map((s) => s.stage)
+  );
+  assert.ok(canonicalTrace.stages.every((s) => s.status === 'PASSED' && Boolean(s.evidenceRef)));
+
+  // Reject PASSED when evidenceRef is missing
+  const unverifiedNode = normalizeTraceStageNode({
+    stage: 'VERIFY',
+    displayLabel: 'VERIFY',
+    timestamp: new Date().toISOString(),
+    durationMs: 10,
+    status: 'PASSED',
+    evidenceRef: '',
+    detail: 'Missing evidence ref',
+  });
+  assert.equal(unverifiedNode.status, 'PENDING');
+  assert.equal(unverifiedNode.evidenceRef, null);
+
+  // Halted trace at ANALYSIS due to PROVIDER_UNAVAILABLE
+  const halted = buildExecutionTraceForOutcome({
+    traceId: 'TRC-AI-849205-0301',
+    requestId: 'REQ-AI-849205-0301',
+    targetWorkspace: 'ws-agent-02',
+    stoppedAtStage: 'ANALYSIS',
+    stopStatus: 'PROVIDER_UNAVAILABLE',
+    stopDetail: 'Quota exceeded',
+    stopEvidenceRef: 'ERR:QUOTA_EXHAUSTED',
+  });
+  assert.equal(halted.overallStatus, 'HALTED');
+  assert.equal(halted.stoppedAtStage, 'ANALYSIS');
+  assert.equal(halted.stages[0].status, 'PASSED'); // REQUEST
+  assert.equal(halted.stages[1].status, 'PROVIDER_UNAVAILABLE'); // ANALYSIS
+  assert.equal(halted.stages[2].status, 'PENDING'); // PROPOSAL
+  assert.equal(halted.stages[7].status, 'PENDING'); // AUDIT
+});
+
+test('T8 — Boundary Health Monitor Zero-Evidence Guard Test: Never reports green status without real evidence reference', () => {
+  const snapshotWithoutEvidence = evaluateBoundaryHealthSnapshot({
+    aiProviderConnected: true,
+    aiProviderEvidenceRef: null, // Missing evidence -> must downgrade to UNAVAILABLE
+    commandEngineStatus: 'READY',
+    commandEngineEvidenceRef: '', // Empty evidence -> must downgrade to ERROR
+    adapterConnected: true,
+    adapterEvidenceRef: 'ZYRQUEN_WRITE_GATEWAY_V11:BLK-849202',
+    targetWorkspaceReachable: true,
+    targetWorkspaceId: 'ws-agent-02',
+    targetWorkspaceEvidenceRef: null, // Missing evidence -> must downgrade to UNAVAILABLE
+    verificationReady: true,
+    verificationEvidenceRef: 'VRF:MERKLE_0.000%',
+    auditLedgerAvailable: true,
+    auditLedgerEvidenceRef: 'AUD-849205-01:SHA256:e3b0c442',
+  });
+
+  assert.equal(snapshotWithoutEvidence.aiProvider.status, 'UNAVAILABLE');
+  assert.equal(snapshotWithoutEvidence.aiProvider.isGreen, false);
+  assert.equal(snapshotWithoutEvidence.commandEngine.status, 'ERROR');
+  assert.equal(snapshotWithoutEvidence.commandEngine.isGreen, false);
+  assert.equal(snapshotWithoutEvidence.adapter.status, 'CONNECTED');
+  assert.equal(snapshotWithoutEvidence.adapter.isGreen, true);
+  assert.equal(snapshotWithoutEvidence.targetWorkspace.status, 'UNAVAILABLE');
+  assert.equal(snapshotWithoutEvidence.targetWorkspace.isGreen, false);
+  assert.equal(snapshotWithoutEvidence.verification.status, 'READY');
+  assert.equal(snapshotWithoutEvidence.verification.isGreen, true);
+  assert.equal(snapshotWithoutEvidence.auditLedger.status, 'AVAILABLE');
+  assert.equal(snapshotWithoutEvidence.auditLedger.isGreen, true);
+});
+
+test('T9 — Failure-First Diagnostics Test: Captures all 12 fields and classifies resource_exhausted quota errors as PROVIDER_UNAVAILABLE', () => {
+  const rawQuotaError =
+    'generic::resource_exhausted: You exceeded your current quota, please check your plan and billing details. Quota exceeded for metric: generativelanguage.googleapis.com/generate_requests_per_model, limit: 300, model: gdm-lc-eval-phase-1 Please retry in 50.292337146s.';
+
+  assert.equal(parseQuotaRetryAfterSeconds(rawQuotaError), 51);
+
+  const diag = createFailureDiagnosticRecord({
+    failureId: 'FAIL-QUOTA-849205-99',
+    stage: 'ANALYSIS',
+    component: 'AI_SERVICE_BOUNDARY',
+    requestId: 'REQ-AI-849205-0301',
+    traceId: 'TRC-AI-849205-0301',
+    target: 'ws-agent-02',
+    actualError: rawQuotaError,
+    expectedState: 'AI_PROVIDER_CONNECTED',
+    evidence: 'ERR:RESOURCE_EXHAUSTED:LIMIT_300',
+  });
+
+  assert.equal(diag.failureId, 'FAIL-QUOTA-849205-99');
+  assert.equal(diag.classification, 'PROVIDER_UNAVAILABLE');
+  assert.equal(diag.stage, 'ANALYSIS');
+  assert.equal(diag.component, 'AI_SERVICE_BOUNDARY');
+  assert.equal(diag.requestId, 'REQ-AI-849205-0301');
+  assert.equal(diag.traceId, 'TRC-AI-849205-0301');
+  assert.equal(diag.target, 'ws-agent-02');
+  assert.equal(diag.actualError, rawQuotaError);
+  assert.equal(diag.expectedState, 'AI_PROVIDER_CONNECTED');
+  assert.match(diag.observedState, /PROVIDER_UNAVAILABLE/);
+  assert.equal(diag.evidence, 'ERR:RESOURCE_EXHAUSTED:LIMIT_300');
+  assert.ok(diag.timestamp.length > 0);
+  assert.match(diag.recoveryState, /QUOTA_COOLDOWN_51S/);
+  assert.equal(diag.retryAfterSeconds, 51);
+});
+
 

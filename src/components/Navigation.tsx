@@ -748,11 +748,8 @@ export const Navigation: React.FC<NavigationProps> = ({
                     style={{ backgroundColor: item.dotColor, color: item.dotColor }}
                   />
                   <Icon className={`w-4 h-4 shrink-0 transition-colors ${isActive ? 'text-cyan-300' : 'text-zinc-500 group-hover:text-zinc-300'}`} />
-                  <span className="font-semibold tracking-wide whitespace-nowrap">
+                  <span className="font-semibold tracking-wide whitespace-nowrap" title={`${item.labelEn} — ${item.labelTh}`}>
                     {item.primaryTh ? item.labelTh : item.labelEn}
-                  </span>
-                  <span className={`hidden 2xl:inline text-[10px] whitespace-nowrap ${isActive ? 'text-cyan-200/70' : 'text-zinc-600 group-hover:text-zinc-400'}`}>
-                    ({item.primaryTh ? item.labelEn : item.labelTh})
                   </span>
                   {item.badge && (
                     <span

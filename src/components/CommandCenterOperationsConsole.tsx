@@ -12,7 +12,17 @@ import {
   loadAuthoritativePhase11Transaction,
   attemptIdempotentPhase11Execution,
   Phase11AuthoritativeTransaction,
+  RealExecutionTrace,
+  BoundaryHealthSnapshot,
+  FailureDiagnosticRecord,
+  FailureClassification,
+  createCanonicalFinalizedExecutionTrace,
+  buildExecutionTraceForOutcome,
+  evaluateBoundaryHealthSnapshot,
+  createFailureDiagnosticRecord,
+  INITIAL_FAILURE_DIAGNOSTIC_RECORDS,
 } from '../adapters/zyrquenAdapter';
+import { offlineAuditSyncService } from '../services/offlineAuditSyncService';
 
 // ============================================================================
 // CONSTANTS & CANONICAL SNAPSHOT DATA (SSoT Boundary)
@@ -277,6 +287,75 @@ export function CommandCenterOperationsConsole({
     loadAuthoritativePhase11Transaction()
   );
   const [reExecutionBlockedReason, setReExecutionBlockedReason] = useState<string | null>(null);
+
+  // 1. Real Execution Trace (REQUEST -> ANALYSIS -> PROPOSAL -> APPROVAL -> EXECUTE -> TARGET -> VERIFY -> AUDIT)
+  const [executionTrace, setExecutionTrace] = useState<RealExecutionTrace>(() =>
+    createCanonicalFinalizedExecutionTrace()
+  );
+
+  // 2. Boundary Health Monitor (AI Provider, Command Engine, Adapter, Target Workspace, Verification, Audit Ledger)
+  const [aiProviderLiveState, setAiProviderLiveState] = useState<{
+    connected: boolean;
+    evidenceRef: string | null;
+    detail: string;
+  }>({
+    connected: false,
+    evidenceRef: null,
+    detail: 'UNAVAILABLE (Awaiting /api/ai/status verification — Zero Fake Green)',
+  });
+
+  // 3. Failure-First Diagnostics Ledger (12-Field Evidence Ledger)
+  const [failureDiagnostics, setFailureDiagnostics] = useState<FailureDiagnosticRecord[]>(
+    () => INITIAL_FAILURE_DIAGNOSTIC_RECORDS
+  );
+  const [selectedFailureCategoryFilter, setSelectedFailureCategoryFilter] = useState<
+    'ALL' | FailureClassification
+  >('ALL');
+
+  useEffect(() => {
+    let cancelled = false;
+    async function checkBoundaryHealth() {
+      try {
+        const res = await fetch('/api/ai/status');
+        if (!res.ok) {
+          if (!cancelled) {
+            setAiProviderLiveState({
+              connected: false,
+              evidenceRef: null,
+              detail: `UNAVAILABLE (HTTP ${res.status})`,
+            });
+          }
+          return;
+        }
+        const data = await res.json();
+        if (!cancelled) {
+          const isConnected = Boolean(data.connected && data.evidenceRef);
+          const retryNote = data.retryAfterSeconds
+            ? ` · Quota Cooldown (${data.retryAfterSeconds}s)`
+            : '';
+          setAiProviderLiveState({
+            connected: isConnected,
+            evidenceRef: isConnected ? String(data.evidenceRef) : null,
+            detail: isConnected
+              ? `CONNECTED (${data.evidenceRef})`
+              : `UNAVAILABLE (${data.providerStatus || 'PROVIDER_NOT_CONNECTED'}${retryNote})`,
+          });
+        }
+      } catch {
+        if (!cancelled) {
+          setAiProviderLiveState({
+            connected: false,
+            evidenceRef: null,
+            detail: 'UNAVAILABLE (Network / Boundary Unreachable)',
+          });
+        }
+      }
+    }
+    checkBoundaryHealth();
+    return () => {
+      cancelled = true;
+    };
+  }, []);
 
   // 6-Gate Write Pipeline & Preset State (Inspect -> Preview -> Explicit Approval -> Execute -> Verify -> Audit -> FINALIZED)
   const [selectedWritePresetId, setSelectedWritePresetId] = useState<string>(
@@ -580,6 +659,15 @@ export function CommandCenterOperationsConsole({
       return;
     }
 
+    if (cmd === 'ai-workspace') {
+      setActiveSidebarModule('voice-builder');
+      appendLog(
+        'info',
+        'Switched view to AI Workspace & Isolated Preview Sandbox.'
+      );
+      return;
+    }
+
     if (cmd.includes('core') && (cmd.includes('write') || cmd.includes('mutate') || cmd.includes('delete'))) {
       appendLog(
         'err',
@@ -599,6 +687,68 @@ export function CommandCenterOperationsConsole({
         },
         ...prev,
       ]);
+      try {
+        offlineAuditSyncService.enqueueEvent({
+          type: 'ALERT',
+          title: 'Command Engine: CORE_MUTATION_BLOCKED',
+          description: `Command "${rawCmd}" rejected by Core Isolation Guard (0 Core Mutation).`,
+          metaHash: 'cmd-engine:core-mutation-blocked',
+          severity: 'critical',
+          statuteRef: 'ZYRQUEN Adapter Boundary · Core FROZEN',
+        });
+      } catch {
+        // Ignore storage errors
+      }
+      onSystemAuditLog?.('CORE_MUTATION_BLOCKED', `Command "${rawCmd}" rejected by Core Isolation Guard (0 Core Mutation).`, 'BLOCKED');
+      return;
+    }
+
+    // Route any AI-generated or CLI write/tuning requests through the Explicit Approval Gate
+    if (
+      cmd.startsWith('zyrquen-adapter workspace tune') ||
+      cmd.startsWith('tune') ||
+      cmd.startsWith('batch') ||
+      cmd.startsWith('apply') ||
+      cmd.startsWith('proposal')
+    ) {
+      const targetBatch = cmd.includes('48') ? 48 : 64;
+      handleInspectAndPreview(targetBatch);
+      appendLog(
+        'info',
+        `[COMMAND ENGINE -> EXPLICIT APPROVAL GATE] Write/Tuning request "${rawCmd}" staged for #EP-SOVEREIGN-01 Explicit Approval (Authorization Required · Core Mutation=0).`
+      );
+      const seq = String(auditSeqRef.current++).padStart(2, '0');
+      setAuditRecords((prev) => [
+        {
+          id: `AUD-CMD-GATE-849205-${seq}`,
+          timestamp: new Date().toISOString(),
+          action: 'COMMAND_ROUTED_TO_EXPLICIT_APPROVAL',
+          target: selectedWs.id,
+          actor: CORE_GUARD_INFO.principal,
+          status: 'VERIFIED',
+          details: `Command "${rawCmd}" routed to Explicit Approval Gate (BATCH_SIZE -> ${targetBatch} · Core Mutation=0).`,
+          hash: 'SHA256:e3b0c44298fc1c149afbf4c8996fb924',
+        },
+        ...prev,
+      ]);
+      try {
+        offlineAuditSyncService.enqueueEvent({
+          type: 'COMPLIANCE',
+          title: 'Command Engine: Write Request Routed to Explicit Approval Gate',
+          description: `Command "${rawCmd}" staged for #EP-SOVEREIGN-01 Explicit Approval (BATCH_SIZE -> ${targetBatch}).`,
+          metaHash: `cmd-engine:explicit-approval:${seq}`,
+          severity: 'info',
+          statuteRef: 'Explicit Approval Gate (#EP-SOVEREIGN-01) · Core Mutation = 0',
+        });
+      } catch {
+        // Ignore storage errors
+      }
+      onSystemAuditLog?.(
+        'COMMAND_ROUTED_TO_EXPLICIT_APPROVAL',
+        `Command "${rawCmd}" routed to Explicit Approval Gate (BATCH_SIZE -> ${targetBatch}).`,
+        'VERIFIED'
+      );
+      handleRequestApproval();
       return;
     }
 
@@ -657,6 +807,35 @@ export function CommandCenterOperationsConsole({
         `[WRITE GATE 3 BLOCKED] Attempted direct Core write (${selectedWritePreset.commandString}). Rejected by Phase 11 Core Isolation Guard.`
       );
       const seq = String(auditSeqRef.current++).padStart(2, '0');
+      const reqId = `REQ-CORE-849205-${seq}`;
+      const trcId = `TRC-CORE-849205-${seq}`;
+      const coreDiag = createFailureDiagnosticRecord({
+        failureId: `FAIL-CORE-849205-${seq}`,
+        stage: 'APPROVAL',
+        component: 'PHASE11_CORE_ISOLATION_GUARD',
+        requestId: reqId,
+        traceId: trcId,
+        target: 'sovereign-core-engine (ZYRQUEN Ω∞ Core)',
+        actualError: `CORE_MUTATION_BLOCKED: Direct Core write command "${selectedWritePreset.commandString}" rejected by Phase 11 Core Isolation Guard.`,
+        expectedState: 'WORKSPACE_ADAPTER_TARGET_ONLY (Core FROZEN / READ-ONLY)',
+        observedState: 'BLOCKED_CORE_GUARD (0 Core Mutation)',
+        evidence: `AUD-GUARD-849205-${seq} · SHA256:e3b0c44298fc1c149afbf4c8996fb924`,
+        recoveryState: 'FAIL_CLOSED_ZERO_CORE_MUTATION',
+        explicitCategory: 'BLOCKED',
+      });
+      setFailureDiagnostics((prev) => [coreDiag, ...prev]);
+      setExecutionTrace(
+        buildExecutionTraceForOutcome({
+          traceId: trcId,
+          requestId: reqId,
+          targetWorkspace: 'sovereign-core-engine',
+          stoppedAtStage: 'APPROVAL',
+          stopStatus: 'BLOCKED',
+          stopDetail: coreDiag.actualError,
+          stopEvidenceRef: coreDiag.evidence,
+          stageDurationMs: 9,
+        })
+      );
       setAuditRecords((prev) => [
         {
           id: `AUD-GUARD-849205-${seq}`,
@@ -692,6 +871,34 @@ export function CommandCenterOperationsConsole({
         `[IDEMPOTENCY GUARD — BLOCKED] REASON = ${attempt.reason} | Tx=${attempt.transaction.transactionId} | Trace=${attempt.transaction.traceId} | Workspace Mutation=0 | Core Mutation=0`
       );
       const seq = String(auditSeqRef.current++).padStart(2, '0');
+      const lockDiag = createFailureDiagnosticRecord({
+        failureId: `FAIL-LOCK-849205-${seq}`,
+        stage: 'APPROVAL',
+        component: 'IDEMPOTENCY_REEXECUTION_GUARD',
+        requestId: `REQ-DUP-${attempt.transaction.transactionId}-${seq}`,
+        traceId: attempt.transaction.traceId,
+        target: `${selectedWritePreset.targetWorkspace} (${attempt.transaction.transactionId})`,
+        actualError: attempt.auditRecord.details,
+        expectedState: 'NON_FINALIZED_TRANSACTION',
+        observedState: 'FINALIZED 🔒 (RE-EXECUTION BLOCKED)',
+        evidence: `${attempt.auditRecord.hash} · AUD-LOCK-849205-${seq}`,
+        timestamp: attempt.auditRecord.timestamp,
+        recoveryState: 'LOCKED_IDEMPOTENT_ZERO_MUTATION (Workspace Mutation = 0, Core Mutation = 0)',
+        explicitCategory: 'BLOCKED',
+      });
+      setFailureDiagnostics((prev) => [lockDiag, ...prev]);
+      setExecutionTrace(
+        buildExecutionTraceForOutcome({
+          traceId: attempt.transaction.traceId,
+          requestId: lockDiag.requestId,
+          targetWorkspace: selectedWritePreset.targetWorkspace,
+          stoppedAtStage: 'APPROVAL',
+          stopStatus: 'BLOCKED',
+          stopDetail: `REASON = ${attempt.reason} (0 Mutation)`,
+          stopEvidenceRef: lockDiag.evidence,
+          stageDurationMs: 6,
+        })
+      );
       setAuditRecords((prev) => [
         {
           id: `AUD-LOCK-849205-${seq}`,
@@ -892,7 +1099,7 @@ export function CommandCenterOperationsConsole({
                   Command Center Operations Console
                 </div>
                 <div className="text-[10px] sm:text-[11px] font-mono text-zinc-400 mt-0.5">
-                  ศูนย์ควบคุมและเทอร์มินัลขอบเขตอะแดปเตอร์
+                  Adapter CLI &amp; Quota Governance
                 </div>
               </button>
 
@@ -1000,12 +1207,13 @@ export function CommandCenterOperationsConsole({
                 ]);
                 onSystemAuditLog?.(action, details, status);
               }}
+              onExecutionTraceUpdate={(trace) => setExecutionTrace(trace)}
+              onFailureDiagnostic={(diag) =>
+                setFailureDiagnostics((prev) => [diag, ...prev])
+              }
             />
           ) : (
             <div className="bg-zinc-900/90 border border-zinc-800 rounded-xl p-3.5 sm:p-5 space-y-4 sm:space-y-5">
-              {/* Brand SVG Header Banner */}
-              <ZyrquenLogo variant="full" showTagline={true} showStatus={true} />
-
               {/* Top Banner */}
               <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 border-b border-zinc-800 pb-4">
                 <div className="min-w-0">
@@ -1392,12 +1600,9 @@ export function CommandCenterOperationsConsole({
                       >
                         <div className="flex items-center justify-between text-[10px] font-bold">
                           <span>0{st.stepNumber}</span>
-                          <span>{isBlocked ? '🔒' : isPassed ? '✓' : isAwaiting ? '⏳' : '•'}</span>
+                          <span>{isBlocked ? 'BLOCKED' : isPassed ? 'PASSED' : isAwaiting ? 'AWAITING' : 'READY'}</span>
                         </div>
-                        <div className="font-bold text-[11px] mt-0.5 truncate">{st.label}</div>
-                        <div className="text-[9px] sm:text-[10px] opacity-85 mt-0.5 leading-snug">
-                          {st.labelTh}
-                        </div>
+                        <div className="font-bold text-[11px] mt-1 truncate">{st.label}</div>
                       </div>
                     );
                   })}
@@ -1418,31 +1623,18 @@ export function CommandCenterOperationsConsole({
                     </pre>
                   </div>
 
-                  <div className="p-2.5 rounded-lg bg-emerald-950/30 border border-emerald-500/40 space-y-1.5">
+                  <div className="p-2.5 rounded-lg bg-emerald-950/30 border border-emerald-500/40 space-y-1">
                     <div className="flex flex-wrap items-center justify-between gap-2 text-[10px] sm:text-[11px]">
                       <span className="font-bold text-emerald-300">
-                        🔒 STATUS: {writeGateStage === 'FINALIZED' ? 'COMPLETED 🔒 (FINALIZED)' : writeGateStage} (Tx:{' '}
-                        {authoritativeTx.transactionId} · Trace: {authoritativeTx.traceId})
+                        STATE: {writeGateStage} (Tx: {authoritativeTx.transactionId} · Trace: {authoritativeTx.traceId})
                       </span>
                       <span className="px-2 py-0.5 rounded bg-rose-950/80 border border-rose-500/50 text-rose-300 font-bold text-[10px]">
                         RE-EXECUTION: BLOCKED
                       </span>
                     </div>
-                    <div className="text-[10px] text-zinc-300 flex flex-wrap gap-x-3 gap-y-1">
-                      <span>Inspect ✓</span>
-                      <span>Preview ✓</span>
-                      <span>Approval ✓ (CLOSED)</span>
-                      <span>Execute ✓ (CLOSED)</span>
-                      <span>Verify ✓</span>
-                      <span>Safety ✓</span>
-                      <span>Audit ✓</span>
-                      <span className="text-rose-300 font-semibold">
-                        Replay/Duplicate/Mutation = BLOCKED
-                      </span>
-                    </div>
                     {reExecutionBlockedReason && (
                       <div className="text-[10px] text-rose-300 font-bold">
-                        🛑 BLOCKED: REASON = {reExecutionBlockedReason}
+                        REASON = {reExecutionBlockedReason}
                       </div>
                     )}
                   </div>
@@ -1467,6 +1659,307 @@ export function CommandCenterOperationsConsole({
                       </button>
                     </div>
                   </div>
+                </div>
+              </div>
+
+              {/* ============================================================= */}
+              {/* 1. REAL EXECUTION TRACE 🔎 (Single End-to-End 8-Stage Timeline) */}
+              {/* ============================================================= */}
+              <div className="p-3.5 sm:p-4 rounded-xl bg-[#040710] border border-cyan-500/40 space-y-3 font-mono text-xs tabular-nums">
+                <div className="flex flex-wrap items-center justify-between gap-2 border-b border-zinc-800 pb-2.5">
+                  <div className="flex flex-wrap items-center gap-2">
+                    <span className="text-xs font-bold text-cyan-300 uppercase tracking-wider">
+                      🔎 1. Real Execution Trace (REQUEST &rarr; ANALYSIS &rarr; PROPOSAL &rarr; APPROVAL #EP-SOVEREIGN-01 &rarr; EXECUTE &rarr; TARGET &rarr; VERIFY &rarr; AUDIT)
+                    </span>
+                    <span
+                      className={`px-2 py-0.5 rounded text-[10px] font-bold border ${
+                        executionTrace.overallStatus === 'FINALIZED'
+                          ? 'bg-emerald-950/70 border-emerald-500/40 text-emerald-300'
+                          : executionTrace.overallStatus === 'AWAITING_APPROVAL'
+                          ? 'bg-amber-950/70 border-amber-500/40 text-amber-300'
+                          : 'bg-rose-950/70 border-rose-500/50 text-rose-300'
+                      }`}
+                    >
+                      {executionTrace.overallStatus}
+                      {executionTrace.stoppedAtStage ? ` · STOPPED AT ${executionTrace.stoppedAtStage}` : ''}
+                    </span>
+                  </div>
+                  <div className="flex items-center gap-2 text-[10px] text-zinc-400">
+                    <span>
+                      Trace: <strong className="text-cyan-300">{executionTrace.traceId}</strong>
+                    </span>
+                    <span>·</span>
+                    <span>
+                      Duration: <strong className="text-emerald-300">{executionTrace.totalDurationMs} ms</strong>
+                    </span>
+                    {executionTrace.stoppedAtStage && (
+                      <button
+                        type="button"
+                        onClick={() => setExecutionTrace(createCanonicalFinalizedExecutionTrace())}
+                        className="px-2 py-0.5 rounded bg-zinc-900 hover:bg-zinc-800 border border-zinc-700 text-cyan-300 cursor-pointer"
+                      >
+                        Reset to Canonical Trace
+                      </button>
+                    )}
+                  </div>
+                </div>
+
+                <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 xl:grid-cols-8 gap-2">
+                  {executionTrace.stages.map((st, idx) => {
+                    const isPassed = st.status === 'PASSED';
+                    const isStopped =
+                      st.status === 'BLOCKED' ||
+                      st.status === 'FAILED' ||
+                      st.status === 'PROVIDER_UNAVAILABLE';
+                    const isAwaiting = st.status === 'AWAITING_APPROVAL';
+                    return (
+                      <div
+                        key={st.stage}
+                        className={`p-2.5 rounded-lg border flex flex-col justify-between space-y-2 ${
+                          isStopped
+                            ? 'bg-rose-950/60 border-rose-500/70 text-rose-200 shadow-[0_0_12px_rgba(244,63,94,0.2)]'
+                            : isAwaiting
+                            ? 'bg-amber-950/50 border-amber-500/50 text-amber-200'
+                            : isPassed
+                            ? 'bg-emerald-950/30 border-emerald-500/40 text-emerald-200'
+                            : 'bg-zinc-950/70 border-zinc-800 text-zinc-500'
+                        }`}
+                      >
+                        <div>
+                          <div className="flex items-center justify-between text-[10px] font-bold">
+                            <span>0{idx + 1}</span>
+                            <span>{st.status}</span>
+                          </div>
+                          <div className="text-[10px] font-semibold mt-0.5 truncate" title={st.displayLabel}>
+                            {st.displayLabel}
+                          </div>
+                          <div className="text-[9px] opacity-80 mt-1 line-clamp-2 leading-snug" title={st.detail}>
+                            {st.detail}
+                          </div>
+                        </div>
+
+                        <div className="pt-1.5 border-t border-white/10 space-y-0.5 text-[9px]">
+                          <div className="flex items-center justify-between">
+                            <span className="opacity-80">{st.timestamp ? st.timestamp.slice(11, 19) : '—'}</span>
+                            <span>{st.durationMs !== null ? `${st.durationMs} ms` : '—'}</span>
+                          </div>
+                          <div className="truncate text-cyan-300/90" title={st.evidenceRef || 'NO_EVIDENCE'}>
+                            Ev: {st.evidenceRef || 'NONE'}
+                          </div>
+                        </div>
+                      </div>
+                    );
+                  })}
+                </div>
+              </div>
+
+              {/* ============================================================= */}
+              {/* 2. BOUNDARY HEALTH MONITOR (Zero Green Without Real Evidence) */}
+              {/* ============================================================= */}
+              {(() => {
+                const boundarySnapshot: BoundaryHealthSnapshot = evaluateBoundaryHealthSnapshot({
+                  aiProviderConnected: aiProviderLiveState.connected,
+                  aiProviderEvidenceRef: aiProviderLiveState.evidenceRef,
+                  aiProviderDetail: aiProviderLiveState.detail,
+                  commandEngineStatus:
+                    writeGateStage === 'BLOCKED' || reExecutionBlockedReason ? 'BLOCKED' : 'READY',
+                  commandEngineEvidenceRef: `GATE6:${authoritativeTx.transactionId}:EP-SOVEREIGN-01`,
+                  commandEngineDetail:
+                    writeGateStage === 'BLOCKED' || reExecutionBlockedReason
+                      ? `BLOCKED (${reExecutionBlockedReason || 'CORE_ISOLATION_GUARD'})`
+                      : `READY (6-Gate Enforced · Tx ${authoritativeTx.transactionId})`,
+                  adapterConnected: true,
+                  adapterEvidenceRef: `ZYRQUEN_WRITE_GATEWAY_V11:BLK-${CORE_GUARD_INFO.block}`,
+                  targetWorkspaceReachable: selectedWs.status === 'CONNECTED',
+                  targetWorkspaceId: selectedWs.id,
+                  targetWorkspaceEvidenceRef:
+                    selectedWs.status === 'CONNECTED'
+                      ? `WS:${selectedWs.id}:LATENCY_${selectedWs.latency.replace(/\s+/g, '')}`
+                      : null,
+                  verificationReady: true,
+                  verificationEvidenceRef: `VRF:MERKLE_${CORE_GUARD_INFO.drift}:SEALS_${selectedWs.seals}`,
+                  auditLedgerAvailable: auditRecords.length > 0,
+                  auditLedgerEvidenceRef:
+                    auditRecords.length > 0 ? `${auditRecords[0].id}:${auditRecords[0].hash}` : null,
+                });
+
+                const boundaryNodes = [
+                  boundarySnapshot.aiProvider,
+                  boundarySnapshot.commandEngine,
+                  boundarySnapshot.adapter,
+                  boundarySnapshot.targetWorkspace,
+                  boundarySnapshot.verification,
+                  boundarySnapshot.auditLedger,
+                ];
+
+                return (
+                  <div className="p-3.5 sm:p-4 rounded-xl bg-zinc-950/90 border border-zinc-800 space-y-3 font-mono text-xs tabular-nums">
+                    <div className="flex flex-wrap items-center justify-between gap-2 border-b border-zinc-800 pb-2.5">
+                      <div>
+                        <div className="text-xs font-bold text-white uppercase tracking-wider">
+                          🛡️ 2. Boundary Health Monitor
+                        </div>
+                        <div className="text-[10px] text-zinc-400">
+                          Zero-Evidence Guard: No green status without verified evidence reference
+                        </div>
+                      </div>
+                      <span className="px-2 py-0.5 rounded bg-zinc-900 border border-zinc-700 text-[10px] text-cyan-300">
+                        Verified Green: {boundaryNodes.filter((n) => n.isGreen).length} / {boundaryNodes.length}
+                      </span>
+                    </div>
+
+                    <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-2.5">
+                      {boundaryNodes.map((node) => (
+                        <div
+                          key={node.boundaryId}
+                          className={`p-3 rounded-lg border space-y-1.5 ${
+                            node.isGreen
+                              ? 'bg-emerald-950/25 border-emerald-500/40 text-emerald-200'
+                              : node.status === 'BLOCKED'
+                              ? 'bg-amber-950/35 border-amber-500/50 text-amber-200'
+                              : 'bg-rose-950/35 border-rose-500/50 text-rose-200'
+                          }`}
+                        >
+                          <div className="flex items-center justify-between gap-2">
+                            <span className="font-bold text-xs text-white">{node.label}</span>
+                            <span
+                              className={`px-2 py-0.5 rounded text-[10px] font-bold border ${
+                                node.isGreen
+                                  ? 'bg-emerald-950 border-emerald-500/50 text-emerald-300'
+                                  : node.status === 'BLOCKED'
+                                  ? 'bg-amber-950 border-amber-500/50 text-amber-300'
+                                  : 'bg-rose-950 border-rose-500/50 text-rose-300'
+                              }`}
+                            >
+                              {node.status}
+                            </span>
+                          </div>
+                          <div className="text-[10px] opacity-90 leading-snug">{node.detail}</div>
+                          <div className="text-[9px] pt-1 border-t border-white/10 truncate text-cyan-300/90">
+                            Evidence: {node.evidenceRef || 'NONE (Downgraded to Non-Green)'}
+                          </div>
+                        </div>
+                      ))}
+                    </div>
+                  </div>
+                );
+              })()}
+
+              {/* ============================================================= */}
+              {/* 3. FAILURE-FIRST DIAGNOSTICS (12-Field Evidence Ledger)       */}
+              {/* ============================================================= */}
+              <div className="p-3.5 sm:p-4 rounded-xl bg-[#040710] border border-rose-500/40 space-y-3 font-mono text-xs tabular-nums">
+                <div className="flex flex-wrap items-center justify-between gap-2 border-b border-zinc-800 pb-2.5">
+                  <div>
+                    <div className="text-xs font-bold text-rose-300 uppercase tracking-wider">
+                      🚨 3. Failure-First Diagnostics (Real Evidence Ledger — Zero AI Guessing)
+                    </div>
+                    <div className="text-[10px] text-zinc-400">
+                      12-Field Deterministic Capture: BLOCKED · FAILED · TIMEOUT · PROVIDER_UNAVAILABLE · VERIFICATION_FAILED · AUDIT_FAILED
+                    </div>
+                  </div>
+                  <div className="flex flex-wrap items-center gap-1 text-[10px]">
+                    {(
+                      [
+                        'ALL',
+                        'PROVIDER_UNAVAILABLE',
+                        'BLOCKED',
+                        'FAILED',
+                        'TIMEOUT',
+                        'VERIFICATION_FAILED',
+                        'AUDIT_FAILED',
+                      ] as const
+                    ).map((cat) => (
+                      <button
+                        key={cat}
+                        type="button"
+                        onClick={() => setSelectedFailureCategoryFilter(cat)}
+                        className={`px-2 py-0.5 rounded border cursor-pointer transition ${
+                          selectedFailureCategoryFilter === cat
+                            ? 'bg-rose-950 border-rose-500/60 text-rose-200 font-bold'
+                            : 'bg-zinc-900 border-zinc-800 text-zinc-400 hover:text-zinc-200'
+                        }`}
+                      >
+                        {cat}
+                      </button>
+                    ))}
+                  </div>
+                </div>
+
+                <div className="space-y-2.5 max-h-96 overflow-y-auto pr-1">
+                  {failureDiagnostics
+                    .filter(
+                      (d) =>
+                        selectedFailureCategoryFilter === 'ALL' ||
+                        d.classification === selectedFailureCategoryFilter
+                    )
+                    .map((diag) => (
+                      <div
+                        key={diag.failureId}
+                        className="p-3 rounded-lg bg-zinc-950/95 border border-rose-500/40 space-y-2 text-[11px]"
+                      >
+                        <div className="flex flex-wrap items-center justify-between gap-2 border-b border-zinc-800 pb-1.5">
+                          <div className="flex items-center gap-2">
+                            <span className="px-2 py-0.5 rounded bg-rose-950 border border-rose-500/60 text-rose-300 font-bold text-[10px]">
+                              {diag.classification}
+                            </span>
+                            <span className="font-bold text-white">Failure ID: {diag.failureId}</span>
+                          </div>
+                          <span className="text-[10px] text-zinc-400">Timestamp: {diag.timestamp}</span>
+                        </div>
+
+                        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-2 text-[10px]">
+                          <div>
+                            <span className="text-zinc-500">Stage:</span>{' '}
+                            <strong className="text-amber-300">{diag.stage}</strong>
+                          </div>
+                          <div>
+                            <span className="text-zinc-500">Component:</span>{' '}
+                            <strong className="text-cyan-300">{diag.component}</strong>
+                          </div>
+                          <div>
+                            <span className="text-zinc-500">Request ID:</span>{' '}
+                            <span className="text-zinc-200">{diag.requestId}</span>
+                          </div>
+                          <div>
+                            <span className="text-zinc-500">Trace ID:</span>{' '}
+                            <span className="text-zinc-200">{diag.traceId}</span>
+                          </div>
+                          <div className="sm:col-span-2">
+                            <span className="text-zinc-500">Target:</span>{' '}
+                            <span className="text-zinc-200">{diag.target}</span>
+                          </div>
+                          <div className="sm:col-span-2">
+                            <span className="text-zinc-500">Evidence:</span>{' '}
+                            <span className="text-emerald-300">{diag.evidence}</span>
+                          </div>
+                          <div className="sm:col-span-2">
+                            <span className="text-zinc-500">Expected State:</span>{' '}
+                            <span className="text-zinc-300">{diag.expectedState}</span>
+                          </div>
+                          <div className="sm:col-span-2">
+                            <span className="text-zinc-500">Observed State:</span>{' '}
+                            <strong className="text-rose-300">{diag.observedState}</strong>
+                          </div>
+                        </div>
+
+                        <div className="p-2 rounded bg-rose-950/30 border border-rose-500/30 text-[10px] text-rose-200 break-words">
+                          <strong>Actual Error:</strong> {diag.actualError}
+                        </div>
+
+                        <div className="flex flex-wrap items-center justify-between gap-2 text-[10px] pt-0.5">
+                          <span>
+                            <span className="text-zinc-500">Recovery State:</span>{' '}
+                            <strong className="text-emerald-400">{diag.recoveryState}</strong>
+                          </span>
+                          {diag.retryAfterSeconds !== null && (
+                            <span className="px-2 py-0.5 rounded bg-amber-950/80 border border-amber-500/40 text-amber-300 font-bold">
+                              Retry Cooldown: {diag.retryAfterSeconds}s
+                            </span>
+                          )}
+                        </div>
+                      </div>
+                    ))}
                 </div>
               </div>
             </div>

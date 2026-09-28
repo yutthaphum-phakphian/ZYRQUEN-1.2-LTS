@@ -72,12 +72,15 @@ export const GatekeeperStatusWidget: React.FC<{ onTriggerCheck?: () => void }> =
     playTone(720, 0.04);
     setIsVerifying(true);
     await new Promise(r => setTimeout(r, 600));
-    setReport(prev => ({
-      ...prev,
-      status: 'PASS',
-      timestamp: new Date().toLocaleTimeString(),
-      runId: `#${128 + Math.floor(Math.random() * 3)}`,
-    }));
+    setReport(prev => {
+      const currentNum = parseInt(prev.runId.replace('#', ''), 10) || 127;
+      return {
+        ...prev,
+        status: 'PASS',
+        timestamp: new Date().toLocaleTimeString(),
+        runId: `#${currentNum + 1}`,
+      };
+    });
     setIsVerifying(false);
     if (onTriggerCheck) onTriggerCheck();
   };
@@ -150,7 +153,7 @@ export const GatekeeperStatusWidget: React.FC<{ onTriggerCheck?: () => void }> =
           <span className="text-slate-400 block text-[10px]">CPU LOAD</span>
           <span className="font-bold text-slate-100">{report.checks.cpuLoad.value}%</span>
           <span className={`text-[10px] block ${report.checks.cpuLoad.passed ? 'text-emerald-400' : 'text-red-400'}`}>
-            {report.checks.cpuLoad.passed ? '✓ < 80%' : '✗ > 80% (FAIL)'}
+            {report.checks.cpuLoad.passed ? '< 80%' : '> 80% (FAIL)'}
           </span>
         </div>
 
@@ -165,7 +168,7 @@ export const GatekeeperStatusWidget: React.FC<{ onTriggerCheck?: () => void }> =
           <span className="text-slate-400 block text-[10px]">LATENCY</span>
           <span className="font-bold text-slate-100">{report.checks.latency.value}ms</span>
           <span className={`text-[10px] block ${report.checks.latency.passed ? 'text-emerald-400' : 'text-red-400'}`}>
-            {report.checks.latency.passed ? '✓ < 400ms' : '✗ > 400ms (FAIL)'}
+            {report.checks.latency.passed ? '< 400ms' : '> 400ms (FAIL)'}
           </span>
         </div>
 
@@ -179,7 +182,7 @@ export const GatekeeperStatusWidget: React.FC<{ onTriggerCheck?: () => void }> =
         >
           <span className="text-slate-400 block text-[10px]">THROUGHPUT</span>
           <span className="font-bold text-slate-100">{report.checks.throughput.value} req/s</span>
-          <span className="text-[10px] block text-emerald-400">✓ Baseline OK</span>
+          <span className="text-[10px] block text-emerald-400">Baseline OK</span>
         </div>
 
         {/* Memory */}
@@ -192,7 +195,7 @@ export const GatekeeperStatusWidget: React.FC<{ onTriggerCheck?: () => void }> =
         >
           <span className="text-slate-400 block text-[10px]">HEAP MEMORY</span>
           <span className="font-bold text-slate-100">{report.checks.memory.value}MB</span>
-          <span className="text-[10px] block text-emerald-400">✓ &lt; 500MB</span>
+          <span className="text-[10px] block text-emerald-400">&lt; 500MB</span>
         </div>
 
         {/* Cache Hit */}
@@ -205,7 +208,7 @@ export const GatekeeperStatusWidget: React.FC<{ onTriggerCheck?: () => void }> =
         >
           <span className="text-slate-400 block text-[10px]">CACHE HIT</span>
           <span className="font-bold text-slate-100">{report.checks.cacheHit.value}%</span>
-          <span className="text-[10px] block text-emerald-400">✓ &gt; 85%</span>
+          <span className="text-[10px] block text-emerald-400">&gt; 85%</span>
         </div>
 
         {/* 14,902 Seals */}
@@ -218,7 +221,7 @@ export const GatekeeperStatusWidget: React.FC<{ onTriggerCheck?: () => void }> =
         >
           <span className="text-slate-400 block text-[10px]">14,902 SEALS</span>
           <span className="font-bold text-[#D4AF37]">{report.checks.sealsBinding.value}</span>
-          <span className="text-[10px] block text-emerald-400">✓ 100% BOUND</span>
+          <span className="text-[10px] block text-emerald-400">100% BOUND</span>
         </div>
       </div>
 

@@ -8,6 +8,7 @@ export {
   type AiProposalSummary,
   type AiAnalysisSummary,
   type AiConversationMessage,
+  type AiWorkspaceNote,
   type AIWorkspaceProps,
   type ZyrquenVoiceChatBuilderProps,
 } from './AIWorkspace';

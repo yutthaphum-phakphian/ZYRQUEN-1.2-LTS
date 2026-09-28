@@ -788,14 +788,46 @@ async function startServer() {
     });
   });
 
+  // Track real AI Provider runtime state (including quota exhaustion / rate-limit cooldown)
+  let lastProviderFailureState: {
+    classification: 'PROVIDER_UNAVAILABLE' | 'TIMEOUT' | 'FAILED';
+    actualError: string;
+    retryAfterSeconds: number | null;
+    cooldownUntilMs: number;
+    timestamp: string;
+    failureId: string;
+  } | null = null;
+
+  let aiRequestSequence = 1;
+
   // GET /api/ai/status (AI Service Boundary — Real Provider Connection Status, Zero Mock)
   app.get('/api/ai/status', (_req: Request, res: Response) => {
     const hasProviderKey = Boolean(process.env.GEMINI_API_KEY && process.env.GEMINI_API_KEY.trim().length > 0);
+    const nowMs = Date.now();
+    const isQuotaCooledDown =
+      !lastProviderFailureState || nowMs >= lastProviderFailureState.cooldownUntilMs;
+    const isTrulyConnected = hasProviderKey && isQuotaCooledDown;
+    const remainingRetrySec =
+      lastProviderFailureState && !isQuotaCooledDown
+        ? Math.max(1, Math.ceil((lastProviderFailureState.cooldownUntilMs - nowMs) / 1000))
+        : null;
+
     return res.status(200).json({
-      connected: hasProviderKey,
-      providerStatus: hasProviderKey ? 'CONNECTED' : 'PROVIDER_NOT_CONNECTED',
-      uiStatus: hasProviderKey ? 'IDLE' : 'UNAVAILABLE',
-      provenance: hasProviderKey ? 'OBSERVED' : 'UNVERIFIED',
+      connected: isTrulyConnected,
+      providerStatus: isTrulyConnected
+        ? 'CONNECTED'
+        : hasProviderKey
+        ? 'WAITING_FOR_PROVIDER'
+        : 'PROVIDER_NOT_CONNECTED',
+      boundaryHealthStatus: isTrulyConnected ? 'CONNECTED' : 'UNAVAILABLE',
+      uiStatus: isTrulyConnected ? 'IDLE' : 'UNAVAILABLE',
+      provenance: isTrulyConnected ? 'OBSERVED' : 'UNVERIFIED',
+      evidenceRef: isTrulyConnected
+        ? `ENV:GEMINI_API_KEY_PRESENT:BLK-${GENESIS_BLOCK_NUM}`
+        : null,
+      retryAfterSeconds: remainingRetrySec,
+      lastFailure:
+        lastProviderFailureState && !isQuotaCooledDown ? lastProviderFailureState : null,
       boundary: 'ZYRQUEN_AI_SERVICE_BOUNDARY',
       coreProtection: {
         status: 'FROZEN / READ-ONLY',
@@ -809,6 +841,10 @@ async function startServer() {
 
   // POST /api/ai/workspace (Unified Text & Voice AI Pipeline -> Analysis -> Proposal -> Preview -> Explicit Approval Gate)
   app.post('/api/ai/workspace', async (req: Request, res: Response) => {
+    const startedAtMs = Date.now();
+    const seq = String(aiRequestSequence++).padStart(4, '0');
+    const requestId = `REQ-AI-${GENESIS_BLOCK_NUM}-${seq}`;
+    const traceId = `TRC-AI-${GENESIS_BLOCK_NUM}-${seq}`;
     const {
       prompt = '',
       inputChannel = 'TEXT_INPUT',
@@ -817,7 +853,10 @@ async function startServer() {
 
     const cleanPrompt = String(prompt).trim();
     if (!cleanPrompt) {
+      const nowIso = new Date().toISOString();
       return res.status(400).json({
+        requestId,
+        traceId,
         providerStatus: 'WAITING_FOR_PROVIDER',
         uiStatus: 'FAILED',
         provenance: 'UNVERIFIED',
@@ -828,6 +867,22 @@ async function startServer() {
         htmlPreview: null,
         requiresExplicitApproval: false,
         coreMutationCount: 0,
+        diagnostic: {
+          failureId: `FAIL-${GENESIS_BLOCK_NUM}-${seq}`,
+          classification: 'FAILED',
+          stage: 'REQUEST',
+          component: 'AI_SERVICE_BOUNDARY',
+          requestId,
+          traceId,
+          target: String(targetWorkspace),
+          actualError: 'EMPTY_PROMPT: Request payload contained empty prompt string.',
+          expectedState: 'NON_EMPTY_PROMPT_STRING',
+          observedState: 'EMPTY_PROMPT',
+          evidence: `REQ:${requestId}:EMPTY`,
+          timestamp: nowIso,
+          recoveryState: 'FAIL_CLOSED_ZERO_MUTATION · AWAITING_VALID_INPUT',
+          retryAfterSeconds: null,
+        },
       });
     }
 
@@ -843,7 +898,11 @@ async function startServer() {
         lowerPrompt.includes('แก้'));
 
     if (attemptsCoreMutation) {
+      const nowIso = new Date().toISOString();
       return res.status(200).json({
+        requestId,
+        traceId,
+        durationMs: Math.max(1, Date.now() - startedAtMs),
         providerStatus: Boolean(process.env.GEMINI_API_KEY?.trim()) ? 'CONNECTED' : 'PROVIDER_NOT_CONNECTED',
         uiStatus: 'BLOCKED',
         provenance: 'VERIFIED',
@@ -860,14 +919,34 @@ async function startServer() {
         htmlPreview: null,
         requiresExplicitApproval: false,
         coreMutationCount: 0,
-        timestamp: new Date().toISOString(),
+        diagnostic: {
+          failureId: `FAIL-CORE-${GENESIS_BLOCK_NUM}-${seq}`,
+          classification: 'BLOCKED',
+          stage: 'ANALYSIS',
+          component: 'CORE_ISOLATION_GUARD',
+          requestId,
+          traceId,
+          target: 'ZYRQUEN_CORE',
+          actualError: 'CORE_MUTATION_PROHIBITED: Direct ZYRQUEN Ω∞ Core write attempt blocked.',
+          expectedState: 'WORKSPACE_RUNTIME_TARGET_ONLY (Core Mutation = 0)',
+          observedState: 'DIRECT_CORE_MUTATION_REQUEST_BLOCKED',
+          evidence: `GUARD:CORE_FROZEN:BLK-${GENESIS_BLOCK_NUM}`,
+          timestamp: nowIso,
+          recoveryState: 'FAIL_CLOSED_ZERO_CORE_MUTATION',
+          retryAfterSeconds: null,
+        },
+        timestamp: nowIso,
       });
     }
 
     // 2. Real Provider Check — NO MOCK LLM, NO SETTIMEOUT, NO FAKE SUCCESS
     const apiKey = process.env.GEMINI_API_KEY?.trim();
     if (!apiKey) {
+      const nowIso = new Date().toISOString();
       return res.status(200).json({
+        requestId,
+        traceId,
+        durationMs: Math.max(1, Date.now() - startedAtMs),
         providerStatus: 'PROVIDER_NOT_CONNECTED',
         uiStatus: 'UNAVAILABLE',
         provenance: 'UNVERIFIED',
@@ -880,7 +959,23 @@ async function startServer() {
         htmlPreview: null,
         requiresExplicitApproval: false,
         coreMutationCount: 0,
-        timestamp: new Date().toISOString(),
+        diagnostic: {
+          failureId: `FAIL-PROV-${GENESIS_BLOCK_NUM}-${seq}`,
+          classification: 'PROVIDER_UNAVAILABLE',
+          stage: 'ANALYSIS',
+          component: 'AI_SERVICE_BOUNDARY',
+          requestId,
+          traceId,
+          target: String(targetWorkspace),
+          actualError: 'PROVIDER_NOT_CONNECTED: GEMINI_API_KEY is not configured in server runtime.',
+          expectedState: 'AI_PROVIDER_CONNECTED',
+          observedState: 'PROVIDER_UNAVAILABLE (NO_API_KEY)',
+          evidence: `BOUNDARY:AI_STATUS_UNAVAILABLE:${requestId}`,
+          timestamp: nowIso,
+          recoveryState: 'FAIL_CLOSED_NO_MOCK_FALLBACK',
+          retryAfterSeconds: null,
+        },
+        timestamp: nowIso,
       });
     }
 
@@ -918,7 +1013,11 @@ Rules:
 
       const rawText = response?.text || '';
       if (!rawText) {
+        const nowIso = new Date().toISOString();
         return res.status(200).json({
+          requestId,
+          traceId,
+          durationMs: Math.max(1, Date.now() - startedAtMs),
           providerStatus: 'WAITING_FOR_PROVIDER',
           uiStatus: 'UNAVAILABLE',
           provenance: 'UNVERIFIED',
@@ -930,15 +1029,37 @@ Rules:
           htmlPreview: null,
           requiresExplicitApproval: false,
           coreMutationCount: 0,
-          timestamp: new Date().toISOString(),
+          diagnostic: {
+            failureId: `FAIL-EMPTY-${GENESIS_BLOCK_NUM}-${seq}`,
+            classification: 'PROVIDER_UNAVAILABLE',
+            stage: 'ANALYSIS',
+            component: 'AI_SERVICE_BOUNDARY',
+            requestId,
+            traceId,
+            target: String(targetWorkspace),
+            actualError: 'EMPTY_PROVIDER_PAYLOAD: AI Provider returned an empty text payload.',
+            expectedState: 'VERIFIED_JSON_ANALYSIS_AND_PROPOSAL',
+            observedState: 'EMPTY_PAYLOAD_UNVERIFIED',
+            evidence: `BOUNDARY:EMPTY_RESPONSE:${requestId}`,
+            timestamp: nowIso,
+            recoveryState: 'FAIL_CLOSED_ZERO_MUTATION',
+            retryAfterSeconds: null,
+          },
+          timestamp: nowIso,
         });
       }
 
+      lastProviderFailureState = null;
       const parsed = JSON.parse(rawText);
       const requiresApproval = Boolean(parsed.requiresWriteApproval);
       const proposedBatch = Number(parsed.proposedBatchSize) === 48 ? 48 : 64;
+      const proposalId = `PROP-AI-${GENESIS_BLOCK_NUM}-${seq}`;
+      const durationMs = Math.max(1, Date.now() - startedAtMs);
 
       return res.status(200).json({
+        requestId,
+        traceId,
+        durationMs,
         providerStatus: 'CONNECTED',
         uiStatus: requiresApproval ? 'APPROVAL_REQUIRED' : 'PROPOSAL_READY',
         provenance: 'PROPOSED',
@@ -953,7 +1074,7 @@ Rules:
           riskLevel: 'LOW',
         },
         proposal: {
-          proposalId: `PROP-AI-${Date.now()}`,
+          proposalId,
           targetWorkspace,
           parameter: 'BATCH_SIZE',
           proposedBatchSize: proposedBatch,
@@ -962,23 +1083,75 @@ Rules:
         htmlPreview: typeof parsed.htmlPreview === 'string' ? parsed.htmlPreview : null,
         requiresExplicitApproval: requiresApproval,
         coreMutationCount: 0,
+        diagnostic: null,
         timestamp: new Date().toISOString(),
       });
     } catch (err: unknown) {
       const errMsg = err instanceof Error ? err.message : String(err);
+      const lowerErr = errMsg.toLowerCase();
+      const isQuotaExhausted =
+        lowerErr.includes('resource_exhausted') ||
+        lowerErr.includes('quota exceeded') ||
+        lowerErr.includes('rate-limit') ||
+        lowerErr.includes('429');
+      const isTimeout = lowerErr.includes('timeout') || lowerErr.includes('deadline_exceeded');
+      const retryMatch = errMsg.match(/retry in\s+([0-9]+(?:\.[0-9]+)?)s/i);
+      const retryAfterSeconds = retryMatch ? Math.ceil(Number(retryMatch[1])) : isQuotaExhausted ? 60 : null;
+      const classification = isTimeout
+        ? 'TIMEOUT'
+        : isQuotaExhausted
+        ? 'PROVIDER_UNAVAILABLE'
+        : 'FAILED';
+      const nowIso = new Date().toISOString();
+      const failureId = `FAIL-AI-${GENESIS_BLOCK_NUM}-${seq}`;
+
+      lastProviderFailureState = {
+        classification,
+        actualError: errMsg,
+        retryAfterSeconds,
+        cooldownUntilMs: Date.now() + (retryAfterSeconds ?? 30) * 1000,
+        timestamp: nowIso,
+        failureId,
+      };
+
       return res.status(200).json({
+        requestId,
+        traceId,
+        durationMs: Math.max(1, Date.now() - startedAtMs),
         providerStatus: 'WAITING_FOR_PROVIDER',
-        uiStatus: 'FAILED',
+        uiStatus: isQuotaExhausted ? 'UNAVAILABLE' : 'FAILED',
         provenance: 'UNVERIFIED',
         inputChannel,
         targetWorkspace,
-        replyText: `WAITING_FOR_PROVIDER / AI BOUNDARY ERROR: ${errMsg}`,
+        replyText: isQuotaExhausted
+          ? `PROVIDER_UNAVAILABLE (QUOTA_EXHAUSTED${retryAfterSeconds ? ` · Retry in ${retryAfterSeconds}s` : ''}): ${errMsg}`
+          : `WAITING_FOR_PROVIDER / AI BOUNDARY ERROR: ${errMsg}`,
         analysis: null,
         proposal: null,
         htmlPreview: null,
         requiresExplicitApproval: false,
         coreMutationCount: 0,
-        timestamp: new Date().toISOString(),
+        diagnostic: {
+          failureId,
+          classification,
+          stage: 'ANALYSIS',
+          component: 'AI_SERVICE_BOUNDARY',
+          requestId,
+          traceId,
+          target: String(targetWorkspace),
+          actualError: errMsg,
+          expectedState: 'AI_PROVIDER_RESPONSE_OK',
+          observedState: isQuotaExhausted
+            ? `PROVIDER_UNAVAILABLE (QUOTA_EXCEEDED${retryAfterSeconds ? ` · RETRY_${retryAfterSeconds}S` : ''})`
+            : `AI_BOUNDARY_${classification}`,
+          evidence: `ERR:${failureId}:${classification}`,
+          timestamp: nowIso,
+          recoveryState: isQuotaExhausted
+            ? `FAIL_CLOSED_ZERO_MUTATION · QUOTA_COOLDOWN_${retryAfterSeconds ?? 60}S`
+            : 'FAIL_CLOSED_ZERO_MUTATION',
+          retryAfterSeconds,
+        },
+        timestamp: nowIso,
       });
     }
   });
