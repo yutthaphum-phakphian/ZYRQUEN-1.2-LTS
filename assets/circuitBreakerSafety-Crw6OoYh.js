@@ -1,0 +1,1 @@
+const i={baselineKBps:11264,stdDev:1019,stabilityIndex:98.2,criticalThresholdKBps:15e3};function l(s){const{criticalThresholdKBps:e}=i;return s>e?s>=14300&&s<=14900?(console.log(`[CH-06] AUTHORIZED SURGE: ${s} KBps - TRNG Reseed`),!1):!0:!1}const o={canonicalHash:"0x3319203849102834019283401928340192834019283401928340192834019283"};export{o as C,i as Z,l as s};
