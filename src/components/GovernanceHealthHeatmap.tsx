@@ -757,7 +757,7 @@ export const GovernanceHealthHeatmap: React.FC<GovernanceHealthHeatmapProps> = (
           currentCryoTemp: newCryo,
           coherenceHistory: updatedHistory,
           currentStability: newStability,
-          status: isUnstable ? 'UNSTABLE' : 'PURE_GREEN',
+          status: (isUnstable ? 'UNSTABLE' : 'PURE_GREEN') as 'UNSTABLE' | 'PURE_GREEN',
           varianceFlag,
           recentSnapshots: updatedSnapshots,
         };
