@@ -14,6 +14,7 @@ import { copyToClipboard } from '../utils/clipboard';
 import QRCode from 'qrcode';
 import { InteractivePdfPreviewModal } from './InteractivePdfPreviewModal';
 import { OfflineSealChainQrGenerator } from './OfflineSealChainQrGenerator';
+import { CourtDossierCertificateView } from './CourtDossierCertificateView';
 
 interface AuditCertificateModalProps {
   isOpen: boolean;
@@ -23,8 +24,9 @@ interface AuditCertificateModalProps {
 export const AuditCertificateModal: React.FC<AuditCertificateModalProps> = ({ isOpen, onClose }) => {
   const [copiedHash, setCopiedHash] = useState(false);
   const [copiedProof, setCopiedProof] = useState(false);
-  const [activeTab, setActiveTab] = useState<'certificate' | 'goldMaster' | 'treasury' | 'invariants' | 'stages' | 'custodians' | 'qrGenerator'>('goldMaster');
+  const [activeTab, setActiveTab] = useState<'courtCertificate' | 'goldMaster' | 'treasury' | 'invariants' | 'stages' | 'custodians' | 'qrGenerator' | 'certificate'>('courtCertificate');
   const [isDossierPreviewOpen, setIsDossierPreviewOpen] = useState(false);
+
   const [isQrModalOpen, setIsQrModalOpen] = useState(false);
   const [qrCodeDataUrl, setQrCodeDataUrl] = useState<string>('');
 
@@ -234,6 +236,7 @@ export const AuditCertificateModal: React.FC<AuditCertificateModalProps> = ({ is
         {/* Modal Tabs */}
         <div className="stagger-2 px-4 sm:px-6 border-b border-white/8 bg-black/40 flex items-center gap-1.5 overflow-x-auto no-scrollbar">
           {[
+            { id: 'courtCertificate', label: '⚖️ Court Certificate' },
             { id: 'goldMaster', label: '🏆 Master Forensic' },
             { id: 'qrGenerator', label: '📱 Verification QR' },
             { id: 'certificate', label: 'Master Seal' },
@@ -261,7 +264,12 @@ export const AuditCertificateModal: React.FC<AuditCertificateModalProps> = ({ is
 
         {/* Modal Body */}
         <div className="stagger-3 p-4 sm:p-6 overflow-y-auto space-y-5 flex-1 text-sm font-mono text-zinc-300">
+          {activeTab === 'courtCertificate' && (
+            <CourtDossierCertificateView />
+          )}
+
           {activeTab === 'goldMaster' && (
+
             <div className="space-y-5">
               {/* Header Badge & Credential Banner */}
               <div className="p-4 sm:p-5 rounded-2xl bg-[#0a0f1e] border-[#06B6D4]/30 space-y-3">

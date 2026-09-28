@@ -49,11 +49,13 @@ import { generateSovereignReportPdf } from '../../utils/sovereignReportPdfExport
 import { exportCanonicalSealArtifactJson } from '../../utils/canonicalSealArtifactExport';
 import { safeCopyToClipboard } from '../../utils/clipboard';
 import { ViewType } from '../../types';
+import { CourtDossierCertificateView } from '../CourtDossierCertificateView';
 
 import { SystemEvent } from '../SystemEventsSidebar';
 import { ForensicAuditStepper } from '../ForensicAuditStepper';
 
 export type LegalSubTab =
+  | 'court-certificate'
   | 'forensic-stepper'
   | 'etda-statutes'
   | 'pdpa-enclave'
@@ -63,6 +65,7 @@ export type LegalSubTab =
   | 'architecture-topology'
   | 'custodian-passport'
   | 'audit-certify';
+
 
 interface LegalViewProps {
   onNavigate?: (view: ViewType) => void;
@@ -374,6 +377,14 @@ export const LegalView: React.FC<LegalViewProps> = ({
       <div className="flex items-center gap-2 overflow-x-auto pb-1 border-b border-white/10">
         {[
           {
+            id: 'court-certificate',
+            labelTh: 'ใบรับรองพยานหลักฐานดิจิทัลชั้นศาล (Court Certificate)',
+            labelEn: 'CERT-ZYRQUEN-2026-0928-849205 & 4 Pillars',
+            icon: Award,
+            badge: 'CERTIFIED ⚖️',
+            accent: 'text-amber-400',
+          },
+          {
             id: 'forensic-stepper',
             labelTh: 'กระบวนการตรวจสอบ ๑๖ ขั้นตอน (16-Step Stepper)',
             labelEn: '16-Stage Forensic Audit Pipeline & Matrix',
@@ -381,6 +392,7 @@ export const LegalView: React.FC<LegalViewProps> = ({
             badge: '16 STEPS',
             accent: 'text-cyan-400',
           },
+
           {
             id: 'etda-statutes',
             labelTh: 'พ.ร.บ. ธุรกรรมทางอิเล็กทรอนิกส์ (ม. ๙, ๒๖, ๒๘)',
@@ -478,8 +490,18 @@ export const LegalView: React.FC<LegalViewProps> = ({
         })}
       </div>
 
+      {/* Tab: Court Dossier Certificate & 4 Pillars */}
+      {activeTab === 'court-certificate' && (
+        <motion.div variants={containerVariants} initial="hidden" animate="visible" className="space-y-6">
+          <motion.div variants={itemVariants}>
+            <CourtDossierCertificateView />
+          </motion.div>
+        </motion.div>
+      )}
+
       {/* Tab 0: 16-Step Forensic Audit Stepper & Matrix */}
       {activeTab === 'forensic-stepper' && (
+
         <motion.div variants={containerVariants} initial="hidden" animate="visible" className="space-y-6">
           <motion.div variants={itemVariants}>
             <ForensicAuditStepper
