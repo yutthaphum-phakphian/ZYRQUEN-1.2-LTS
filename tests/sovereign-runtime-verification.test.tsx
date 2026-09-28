@@ -573,9 +573,32 @@ describe('Sovereign runtime verification', () => {
     fireEvent.click(swapBtn);
     expect(ch04Cell.getAttribute('data-diff-state')).toBe('DEGRADED');
 
-    // Clear diff view
+    // Toggle Side-by-Side comparison mode
+    const sideBySideToggleBtn = document.getElementById('btn-toggle-side-by-side-diff')!;
+    expect(sideBySideToggleBtn).toBeTruthy();
+    fireEvent.click(sideBySideToggleBtn);
+
+    // Verify Side-by-Side diff grid is rendered with Timestamp A and Timestamp B comparison columns
+    const sideBySideGrid = document.getElementById('heatmap-side-by-side-diff-grid')!;
+    expect(sideBySideGrid).toBeTruthy();
+    expect(sideBySideGrid.getAttribute('data-side-by-side-active')).toBe('true');
+
+    const gridColA = document.getElementById('diff-side-grid-timestamp-a')!;
+    const gridColB = document.getElementById('diff-side-grid-timestamp-b')!;
+    expect(gridColA).toBeTruthy();
+    expect(gridColB).toBeTruthy();
+
+    // Verify changed seal statuses are highlighted in the diff grid
+    const sideDiffCellCh04 = document.getElementById('side-by-side-diff-cell-ch-04')!;
+    expect(sideDiffCellCh04).toBeTruthy();
+    expect(sideDiffCellCh04.getAttribute('data-status-changed')).toBe('true');
+    expect(sideDiffCellCh04.getAttribute('data-diff-state')).toBe('DEGRADED');
+    expect(sideDiffCellCh04.textContent).toContain('▼ DEGRADED');
+
+    // Toggle back or clear diff view
     const clearDiffBtn = document.getElementById('btn-clear-historical-diff')!;
     fireEvent.click(clearDiffBtn);
     expect(document.getElementById('heatmap-historical-diff-banner')).toBeNull();
+    expect(document.getElementById('heatmap-side-by-side-diff-grid')).toBeNull();
   });
 });

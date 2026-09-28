@@ -32,7 +32,7 @@ jobs:
         run: npm run lint
 
       - name: 🧪 Run Sovereign Integration Test Suite (Thai Statutory & API Verification)
-        run: npx vitest run src/tests/integration-sovereign-control-plane.test.ts
+        run: npx vitest run tests/sovereign-runtime-verification.test.tsx
 
       - name: 🧪 Run Full Vitest & Unit Test Suites
         run: npm test

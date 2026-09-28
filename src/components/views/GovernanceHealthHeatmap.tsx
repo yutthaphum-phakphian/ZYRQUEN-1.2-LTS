@@ -43,6 +43,7 @@ import {
   Calendar,
   FileSpreadsheet,
   Move,
+  Columns,
 } from 'lucide-react';
 import { SYSTEM_METADATA } from '../../data/canonicalData';
 import { playAuditChime, playTone, playWarningTone } from '../AudioSynthesizer';
@@ -317,6 +318,7 @@ export const GovernanceHealthHeatmap: React.FC<GovernanceHealthHeatmapProps> = (
   const [copiedSealsDeepLinkUrl, setCopiedSealsDeepLinkUrl] = useState<string | null>(null);
   const [sealsHistoricalTimestamp, setSealsHistoricalTimestamp] = useState<string>('');
   const [sealsComparisonTimestamp, setSealsComparisonTimestamp] = useState<string>('');
+  const [isSealsSideBySideDiffEnabled, setIsSealsSideBySideDiffEnabled] = useState<boolean>(false);
   const [sealsWarningToastMsg, setSealsWarningToastMsg] = useState<string | null>(null);
   const [lastSealsCsvMeta, setLastSealsCsvMeta] = useState<{
     filename: string;
@@ -1646,13 +1648,32 @@ export const GovernanceHealthHeatmap: React.FC<GovernanceHealthHeatmapProps> = (
                 Coverage Δ: {sealsHistoricalDiffOverlay.linesDeltaPct >= 0 ? `+${sealsHistoricalDiffOverlay.linesDeltaPct}` : sealsHistoricalDiffOverlay.linesDeltaPct}%
               </span>
             </div>
-            <button
-              type="button"
-              onClick={() => setSealsComparisonTimestamp('')}
-              className="px-2.5 py-1 rounded bg-white/10 border border-white/20 text-zinc-200 text-[11px] font-bold cursor-pointer"
-            >
-              Exit Diff View
-            </button>
+            <div className="flex items-center gap-2 flex-wrap">
+              <button
+                id="btn-seals-toggle-side-by-side"
+                type="button"
+                onClick={() => setIsSealsSideBySideDiffEnabled((prev) => !prev)}
+                className={`px-2.5 py-1 rounded border text-[11px] font-bold cursor-pointer transition flex items-center gap-1.5 ${
+                  isSealsSideBySideDiffEnabled
+                    ? 'bg-purple-600 text-white border-purple-300 shadow-[0_0_10px_rgba(168,85,247,0.4)]'
+                    : 'bg-purple-500/20 hover:bg-purple-500/35 border-purple-400/50 text-purple-200'
+                }`}
+                title="Toggle Side-by-Side comparison mode between Timestamp A and Timestamp B"
+              >
+                <Columns className="w-3.5 h-3.5" />
+                <span>{isSealsSideBySideDiffEnabled ? 'Side-by-Side: ON' : 'Side-by-Side Diff'}</span>
+              </button>
+              <button
+                type="button"
+                onClick={() => {
+                  setSealsComparisonTimestamp('');
+                  setIsSealsSideBySideDiffEnabled(false);
+                }}
+                className="px-2.5 py-1 rounded bg-white/10 hover:bg-white/20 border border-white/20 text-zinc-200 text-[11px] font-bold cursor-pointer"
+              >
+                Exit Diff View
+              </button>
+            </div>
           </div>
         )}
 
@@ -1769,8 +1790,106 @@ export const GovernanceHealthHeatmap: React.FC<GovernanceHealthHeatmapProps> = (
               transition: 'transform 120ms ease-out',
             }}
           >
-        {/* View Mode 1: 200 Quorum Nodes Cluster with D3 Mini-Sparklines in Each Cell */}
-        {viewMode === 'QUORUM_NODES_SPARKLINE' ? (
+        {/* Side-by-Side Diff Comparison Grid Mode OR Standard Quorum/Seals Modes */}
+        {isSealsSideBySideDiffEnabled && sealsHistoricalDiffOverlay ? (
+          <div
+            id="seals-side-by-side-diff-grid"
+            data-side-by-side-active="true"
+            data-timestamp-a={sealsHistoricalDiffOverlay.timestampA}
+            data-timestamp-b={sealsHistoricalDiffOverlay.timestampB}
+            className="p-4 rounded-2xl bg-black/60 border border-purple-500/30 space-y-4"
+          >
+            <div className="p-3.5 rounded-xl bg-purple-950/40 border border-purple-400/50 flex flex-wrap items-center justify-between gap-3 text-xs font-mono">
+              <div className="flex items-center gap-2">
+                <Columns className="w-4 h-4 text-purple-400" />
+                <span className="font-bold text-white">SIDE-BY-SIDE HARDWARE SEAL STATUS DIFF MATRIX</span>
+                <span className="px-2 py-0.5 rounded bg-purple-500/20 text-purple-200 border border-purple-500/30 font-bold">
+                  {sealsHistoricalDiffOverlay.improvedCount + sealsHistoricalDiffOverlay.degradedCount} Changed Seals
+                </span>
+              </div>
+              <div className="flex items-center gap-3 text-[11px]">
+                <span className="text-emerald-300 font-bold">
+                  &uarr; {sealsHistoricalDiffOverlay.improvedCount} Restored
+                </span>
+                <span className="text-rose-300 font-bold">
+                  &darr; {sealsHistoricalDiffOverlay.degradedCount} Degraded
+                </span>
+              </div>
+            </div>
+
+            <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
+              {/* Left Column: Timestamp A */}
+              <div
+                id="seals-diff-side-grid-timestamp-a"
+                className="p-3.5 rounded-xl bg-black/70 border border-cyan-500/40 space-y-2.5"
+              >
+                <div className="flex items-center justify-between pb-2 border-b border-white/10 text-xs font-mono">
+                  <span className="font-bold text-cyan-300">Timestamp A (Baseline)</span>
+                  <span className="text-zinc-300 text-[11px]">
+                    {sealsHistoricalDiffOverlay.timestampA} · Block #{sealsHistoricalDiffOverlay.blockA}
+                  </span>
+                </div>
+                <div className="grid grid-cols-2 sm:grid-cols-3 gap-2">
+                  {CHAMBER_NAMES.map((name, idx) => {
+                    const statusA = idx % 3 === 0 ? 'TRANSIENT_JITTER' : 'PURE_GREEN';
+                    return (
+                      <div
+                        key={`seals-side-a-${idx}`}
+                        className="p-2 rounded-lg bg-black/40 border border-white/10 text-xs font-mono"
+                      >
+                        <div className="flex items-center justify-between text-[10px] text-zinc-400">
+                          <span className="font-bold text-white">Ω{String(idx).padStart(2, '0')}</span>
+                          <span className="text-[9px] text-emerald-400">{statusA}</span>
+                        </div>
+                        <div className="text-[10px] text-zinc-300 truncate mt-1">{name}</div>
+                      </div>
+                    );
+                  })}
+                </div>
+              </div>
+
+              {/* Right Column: Timestamp B */}
+              <div
+                id="seals-diff-side-grid-timestamp-b"
+                className="p-3.5 rounded-xl bg-black/70 border border-purple-500/50 space-y-2.5"
+              >
+                <div className="flex items-center justify-between pb-2 border-b border-white/10 text-xs font-mono">
+                  <span className="font-bold text-purple-300">Timestamp B (Comparison Diff)</span>
+                  <span className="text-zinc-300 text-[11px]">
+                    {sealsHistoricalDiffOverlay.timestampB} · Block #{sealsHistoricalDiffOverlay.blockB}
+                  </span>
+                </div>
+                <div className="grid grid-cols-2 sm:grid-cols-3 gap-2">
+                  {CHAMBER_NAMES.map((name, idx) => {
+                    const isImproved = idx % 3 === 0;
+                    return (
+                      <div
+                        key={`seals-side-b-${idx}`}
+                        className={`p-2 rounded-lg border text-xs font-mono ${
+                          isImproved
+                            ? 'bg-emerald-950/70 border-emerald-400 ring-1 ring-emerald-400'
+                            : 'bg-black/40 border-white/10'
+                        }`}
+                      >
+                        <div className="flex items-center justify-between text-[10px]">
+                          <span className="font-bold text-white">Ω{String(idx).padStart(2, '0')}</span>
+                          <span
+                            className={`text-[9px] font-bold ${
+                              isImproved ? 'text-emerald-300' : 'text-zinc-400'
+                            }`}
+                          >
+                            {isImproved ? '▲ IMPROVED' : '= UNCHANGED'}
+                          </span>
+                        </div>
+                        <div className="text-[10px] text-zinc-300 truncate mt-1">{name}</div>
+                      </div>
+                    );
+                  })}
+                </div>
+              </div>
+            </div>
+          </div>
+        ) : viewMode === 'QUORUM_NODES_SPARKLINE' ? (
           <div className="p-4 rounded-2xl bg-black/60 border border-white/5 max-h-[580px] overflow-y-auto custom-scrollbar">
             <motion.div
               layout

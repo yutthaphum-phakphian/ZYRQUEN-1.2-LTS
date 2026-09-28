@@ -46,6 +46,7 @@ import {
   Calendar,
   FileSpreadsheet,
   Move,
+  Columns,
 } from 'lucide-react';
 import { SOVEREIGN_CHAMBERS } from '../data/sovereignData';
 import { Chamber } from '../types';
@@ -204,6 +205,7 @@ export const GovernanceHealthHeatmap: React.FC<GovernanceHealthHeatmapProps> = (
   const [selectedHistoricalTimestamp, setSelectedHistoricalTimestamp] = useState<string>('');
   const [comparisonHistoricalTimestamp, setComparisonHistoricalTimestamp] = useState<string>('');
   const [isDiffOverlayEnabled, setIsDiffOverlayEnabled] = useState<boolean>(true);
+  const [isSideBySideDiffEnabled, setIsSideBySideDiffEnabled] = useState<boolean>(false);
 
   // Export to CSV State
   const [lastExportedCsvMeta, setLastExportedCsvMeta] = useState<{
@@ -428,7 +430,8 @@ export const GovernanceHealthHeatmap: React.FC<GovernanceHealthHeatmapProps> = (
           (evt) =>
             evt.title?.includes(dossier.nodeId) ||
             evt.description?.includes(dossier.nodeId) ||
-            evt.metaHash?.includes(dossier.signatureDigest.slice(0, 10))
+            evt.id?.includes(dossier.nodeId) ||
+            (evt as any).metaHash?.includes(dossier.signatureDigest.slice(0, 10))
         ) || storeSystemEvents[idx % Math.max(1, storeSystemEvents.length)];
       const isIsolated = dossier.status === 'ISOLATED_BREACH';
       const isWarned = warnedNodeIds.includes(dossier.nodeId);
@@ -2452,7 +2455,21 @@ export const GovernanceHealthHeatmap: React.FC<GovernanceHealthHeatmapProps> = (
               </div>
             </div>
 
-            <div className="flex items-center gap-2">
+            <div className="flex items-center gap-2 flex-wrap">
+              <button
+                id="btn-toggle-side-by-side-diff"
+                type="button"
+                onClick={() => setIsSideBySideDiffEnabled((prev) => !prev)}
+                className={`px-3 py-1.5 rounded-xl border font-bold cursor-pointer transition flex items-center gap-1.5 ${
+                  isSideBySideDiffEnabled
+                    ? 'bg-purple-600 text-white border-purple-300 shadow-[0_0_12px_rgba(168,85,247,0.4)]'
+                    : 'bg-purple-500/20 hover:bg-purple-500/35 border-purple-400/50 text-purple-200'
+                }`}
+                title="Toggle Side-by-Side comparison mode between Timestamp A and Timestamp B with highlighted changed seal statuses in diff grid"
+              >
+                <Columns className="w-3.5 h-3.5" />
+                <span>{isSideBySideDiffEnabled ? 'Side-by-Side: Active' : 'Side-by-Side Diff Mode'}</span>
+              </button>
               <button
                 id="btn-swap-diff-timestamps"
                 type="button"
@@ -2469,7 +2486,10 @@ export const GovernanceHealthHeatmap: React.FC<GovernanceHealthHeatmapProps> = (
               <button
                 id="btn-clear-historical-diff"
                 type="button"
-                onClick={() => setComparisonHistoricalTimestamp('')}
+                onClick={() => {
+                  setComparisonHistoricalTimestamp('');
+                  setIsSideBySideDiffEnabled(false);
+                }}
                 className="px-3 py-1.5 rounded-xl bg-white/10 hover:bg-white/20 border border-white/20 text-zinc-200 font-bold cursor-pointer"
               >
                 Exit Diff View
@@ -2565,15 +2585,33 @@ export const GovernanceHealthHeatmap: React.FC<GovernanceHealthHeatmapProps> = (
                 </button>
                 <button
                   id="btn-subview-cards"
-                  onClick={() => setGridSubView('cards')}
+                  onClick={() => {
+                    setGridSubView('cards');
+                    setIsSideBySideDiffEnabled(false);
+                  }}
                   className={`px-3 py-1 rounded-lg transition-all cursor-pointer ${
-                    gridSubView === 'cards'
-                      ? 'bg-emerald-500/20 text-emerald-300 border-emerald-500/40 font-bold shadow-[0_0_10px_rgba(16,185,129,0.3)]'
+                    gridSubView === 'cards' && !isSideBySideDiffEnabled
+                      ? 'bg-emerald-500/20 text-emerald-300 border-emerald-500/40 font-bold shadow-[0_0_10px_rgba(168,85,129,0.3)]'
                       : 'text-zinc-400 hover:text-white'
                   }`}
                 >
                   Detailed Chamber Cards
                 </button>
+                {historicalDiffOverlay && (
+                  <button
+                    id="btn-subview-side-by-side"
+                    type="button"
+                    onClick={() => setIsSideBySideDiffEnabled((prev) => !prev)}
+                    className={`px-3 py-1 rounded-lg transition-all cursor-pointer flex items-center gap-1.5 ${
+                      isSideBySideDiffEnabled
+                        ? 'bg-purple-500/30 text-purple-200 border border-purple-400/60 font-bold shadow-[0_0_10px_rgba(168,85,247,0.3)]'
+                        : 'text-zinc-400 hover:text-white'
+                    }`}
+                  >
+                    <Columns className="w-3.5 h-3.5" />
+                    <span>Side-by-Side Diff</span>
+                  </button>
+                )}
               </div>
             </div>
 
@@ -2814,8 +2852,199 @@ export const GovernanceHealthHeatmap: React.FC<GovernanceHealthHeatmapProps> = (
                 transition: 'transform 120ms ease-out',
               }}
             >
-          {/* 18-Cell Sovereign Chambers Matrix (6-Column Grid) with Framer Motion Layout Transition */}
-          {gridSubView === '6col' ? (
+          {/* Side-by-Side Diff Comparison Grid Mode OR Standard Grid Modes */}
+          {isSideBySideDiffEnabled && historicalDiffOverlay ? (
+            <div
+              id="heatmap-side-by-side-diff-grid"
+              data-side-by-side-active="true"
+              data-timestamp-a={historicalDiffOverlay.timestampA}
+              data-timestamp-b={historicalDiffOverlay.timestampB}
+              className="space-y-4"
+            >
+              {/* Header Summary for Side-by-Side Comparison */}
+              <div className="p-3.5 rounded-2xl bg-purple-950/40 border border-purple-400/50 flex flex-wrap items-center justify-between gap-3 text-xs font-mono">
+                <div className="flex items-center gap-2">
+                  <Columns className="w-4 h-4 text-purple-400" />
+                  <span className="font-bold text-white">SIDE-BY-SIDE HISTORICAL SEAL STATUS DIFF MATRIX</span>
+                  <span className="px-2 py-0.5 rounded bg-purple-500/20 text-purple-200 border border-purple-500/30 font-bold">
+                    {historicalDiffOverlay.totalChangedCount} Chambers with Status Transitions
+                  </span>
+                </div>
+                <div className="flex items-center gap-3 text-[11px]">
+                  <span className="text-emerald-300 font-bold flex items-center gap-1">
+                    <span className="w-2 h-2 rounded-full bg-emerald-400" />
+                    {historicalDiffOverlay.improvedCount} Improved
+                  </span>
+                  <span className="text-rose-300 font-bold flex items-center gap-1">
+                    <span className="w-2 h-2 rounded-full bg-rose-400" />
+                    {historicalDiffOverlay.degradedCount} Degraded
+                  </span>
+                  <span className="text-cyan-300 flex items-center gap-1">
+                    <span className="w-2 h-2 rounded-full bg-cyan-400" />
+                    {historicalDiffOverlay.unchangedCount} Unchanged
+                  </span>
+                </div>
+              </div>
+
+              {/* 2-Column Side-by-Side Comparison Grid */}
+              <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
+                {/* Left Column: Timestamp A (Baseline) */}
+                <div
+                  id="diff-side-grid-timestamp-a"
+                  className="p-4 rounded-2xl bg-black/60 border border-cyan-500/40 space-y-3"
+                >
+                  <div className="flex items-center justify-between pb-2 border-b border-white/10 text-xs font-mono">
+                    <div className="flex items-center gap-2">
+                      <Calendar className="w-3.5 h-3.5 text-cyan-400" />
+                      <span className="font-bold text-cyan-300">Timestamp A (Baseline Snapshot)</span>
+                    </div>
+                    <div className="text-zinc-300 text-[11px]">
+                      <strong className="text-white">{historicalDiffOverlay.timestampA}</strong> · Block #{historicalDiffOverlay.blockA}
+                    </div>
+                  </div>
+
+                  <div className="grid grid-cols-2 sm:grid-cols-3 gap-2.5">
+                    {filteredProfiles.map((chamber) => {
+                      const cellDiff = historicalDiffOverlay.cellsDiffMap[chamber.chamber.code];
+                      const isChanged = cellDiff && cellDiff.diffState !== 'UNCHANGED';
+                      const cohA = cellDiff ? cellDiff.coherenceA : chamber.currentCoherence;
+                      const statusA = cellDiff ? cellDiff.statusA : 'PURE_GREEN';
+
+                      return (
+                        <div
+                          key={`side-a-${chamber.chamber.id}`}
+                          id={`side-a-cell-${chamber.chamber.code.toLowerCase()}`}
+                          data-side-a-chamber={chamber.chamber.code}
+                          data-status-a={statusA}
+                          data-changed={isChanged ? 'true' : 'false'}
+                          className={`p-3 rounded-xl border text-xs font-mono transition-all relative overflow-hidden ${
+                            isChanged
+                              ? 'bg-purple-950/40 border-purple-400/70 shadow-[0_0_10px_rgba(168,85,247,0.2)]'
+                              : 'bg-black/40 border-white/10 text-zinc-300'
+                          }`}
+                        >
+                          <div className="flex items-center justify-between text-[10px] text-zinc-400">
+                            <span className="font-bold text-white">{chamber.chamber.code}</span>
+                            <span
+                              className={`px-1.5 py-0.5 rounded text-[9px] font-bold ${
+                                statusA === 'PURE_GREEN'
+                                  ? 'text-emerald-400 bg-emerald-500/15'
+                                  : statusA === 'TRANSIENT_JITTER'
+                                  ? 'text-amber-400 bg-amber-500/15'
+                                  : 'text-rose-400 bg-rose-500/15'
+                              }`}
+                            >
+                              {statusA}
+                            </span>
+                          </div>
+                          <div className="text-base font-bold my-1 text-white">{cohA.toFixed(2)}%</div>
+                          <div className="text-[10px] text-zinc-400 truncate">{chamber.chamber.name}</div>
+                          {isChanged && (
+                            <div className="mt-1.5 pt-1 border-t border-purple-500/30 text-[9px] text-purple-300 flex items-center justify-between font-bold">
+                              <span>Transitions in B:</span>
+                              <span className="text-cyan-300">&rarr; {cellDiff.statusB}</span>
+                            </div>
+                          )}
+                        </div>
+                      );
+                    })}
+                  </div>
+                </div>
+
+                {/* Right Column: Timestamp B (Comparison Diff) with Prominent Changed Status Highlights */}
+                <div
+                  id="diff-side-grid-timestamp-b"
+                  className="p-4 rounded-2xl bg-black/60 border border-purple-500/50 space-y-3"
+                >
+                  <div className="flex items-center justify-between pb-2 border-b border-white/10 text-xs font-mono">
+                    <div className="flex items-center gap-2">
+                      <Calendar className="w-3.5 h-3.5 text-purple-400" />
+                      <span className="font-bold text-purple-300">Timestamp B (Comparison Diff)</span>
+                    </div>
+                    <div className="text-zinc-300 text-[11px]">
+                      <strong className="text-white">{historicalDiffOverlay.timestampB}</strong> · Block #{historicalDiffOverlay.blockB}
+                    </div>
+                  </div>
+
+                  <div className="grid grid-cols-2 sm:grid-cols-3 gap-2.5">
+                    {filteredProfiles.map((chamber) => {
+                      const cellDiff = historicalDiffOverlay.cellsDiffMap[chamber.chamber.code];
+                      const isImproved = cellDiff?.diffState === 'IMPROVED';
+                      const isDegraded = cellDiff?.diffState === 'DEGRADED';
+                      const isChanged = isImproved || isDegraded;
+                      const cohB = cellDiff ? cellDiff.coherenceB : chamber.currentCoherence;
+                      const statusB = cellDiff ? cellDiff.statusB : 'PURE_GREEN';
+
+                      const highlightStyle = isImproved
+                        ? 'bg-emerald-950/80 border-emerald-400 ring-2 ring-emerald-400/80 shadow-[0_0_15px_rgba(16,185,129,0.3)]'
+                        : isDegraded
+                        ? 'bg-rose-950/80 border-rose-400 ring-2 ring-rose-400/80 shadow-[0_0_15px_rgba(244,63,94,0.3)]'
+                        : 'bg-black/40 border-white/10 text-zinc-400';
+
+                      return (
+                        <div
+                          key={`side-b-${chamber.chamber.id}`}
+                          id={`side-by-side-diff-cell-${chamber.chamber.code.toLowerCase()}`}
+                          data-side-by-side-cell={chamber.chamber.code}
+                          data-diff-state={cellDiff?.diffState || 'UNCHANGED'}
+                          data-status-changed={isChanged ? 'true' : 'false'}
+                          data-status-a={cellDiff?.statusA}
+                          data-status-b={statusB}
+                          className={`p-3 rounded-xl border text-xs font-mono transition-all relative overflow-hidden ${highlightStyle}`}
+                        >
+                          <div className="flex items-center justify-between text-[10px]">
+                            <span className="font-bold text-white">{chamber.chamber.code}</span>
+                            <span
+                              className={`px-1.5 py-0.5 rounded text-[9px] font-bold ${
+                                isImproved
+                                  ? 'text-emerald-300 bg-emerald-500/30'
+                                  : isDegraded
+                                  ? 'text-rose-300 bg-rose-500/30'
+                                  : 'text-zinc-400 bg-white/5'
+                              }`}
+                            >
+                              {isImproved ? '▲ IMPROVED' : isDegraded ? '▼ DEGRADED' : '= UNCHANGED'}
+                            </span>
+                          </div>
+                          <div className="text-base font-bold my-1 text-white flex items-center justify-between">
+                            <span>{cohB.toFixed(2)}%</span>
+                            {cellDiff && (
+                              <span
+                                className={`text-[11px] font-bold ${
+                                  cellDiff.coherenceDelta >= 0 ? 'text-emerald-300' : 'text-rose-300'
+                                }`}
+                              >
+                                {cellDiff.coherenceDelta >= 0
+                                  ? `+${cellDiff.coherenceDelta.toFixed(2)}%`
+                                  : `${cellDiff.coherenceDelta.toFixed(2)}%`}
+                              </span>
+                            )}
+                          </div>
+                          <div className="text-[10px] text-zinc-300 truncate">{statusB}</div>
+                          {cellDiff && (
+                            <div
+                              className={`mt-1.5 pt-1 border-t text-[9px] font-bold flex items-center justify-between ${
+                                isImproved
+                                  ? 'border-emerald-500/40 text-emerald-200'
+                                  : isDegraded
+                                  ? 'border-rose-500/40 text-rose-200'
+                                  : 'border-white/10 text-zinc-400'
+                              }`}
+                            >
+                              <span>Transition:</span>
+                              <span>
+                                {cellDiff.statusA} &rarr; {cellDiff.statusB}
+                              </span>
+                            </div>
+                          )}
+                        </div>
+                      );
+                    })}
+                  </div>
+                </div>
+              </div>
+            </div>
+          ) : gridSubView === '6col' ? (
             <motion.div
               layout
               id="heatmap-animated-grid-container"

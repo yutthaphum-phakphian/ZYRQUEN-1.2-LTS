@@ -496,6 +496,10 @@ export const ForensicAuditStepper: React.FC<ForensicAuditStepperProps> = ({
   const [isExpanded, setIsExpanded] = useState<boolean>(true);
 
   const autoRunTimerRef = useRef<NodeJS.Timeout | null>(null);
+  const stepsRef = useRef<AuditStep[]>(steps);
+  useEffect(() => {
+    stepsRef.current = steps;
+  }, [steps]);
 
   const activeStep = useMemo(() => {
     return steps.find((s) => s.id === activeStepId) || steps[0];
@@ -596,37 +600,38 @@ export const ForensicAuditStepper: React.FC<ForensicAuditStepperProps> = ({
     }
 
     autoRunTimerRef.current = setInterval(() => {
-      setSteps((prevSteps) => {
-        // Find next step that is not PASSED
-        const nextIndex = prevSteps.findIndex((s) => s.status !== 'PASSED');
-        if (nextIndex === -1) {
-          // All done!
-          setIsRunning(false);
-          playAuditChime();
-          if (isAudioFeedbackEnabled) {
-            speakSystemAlert('All 16 forensic audit stages passed. SSoT Zero Drift confirmed.', 'critical', 'en');
-          }
-          if (onAddSystemEvent) {
-            onAddSystemEvent(
-              'COMPLIANCE',
-              'All 16-Step Forensic Audit Stages Unanimously Ratified',
-              'Full 16-stage pipeline certified under ETDA Sec 9/26/28, PDPA Sec 37, and FIPS 140-3 L4. Zero drift.',
-              CANONICAL_MERKLE_ROOT,
-              'success',
-              'ETDA Sec 9, 26, 28 & PDPA Sec 37',
-              'dashboard'
-            );
-          }
-          return prevSteps;
+      const currentSteps = stepsRef.current;
+      const nextIndex = currentSteps.findIndex((s) => s.status !== 'PASSED');
+      if (nextIndex === -1) {
+        // All done!
+        setIsRunning(false);
+        playAuditChime();
+        if (isAudioFeedbackEnabled) {
+          speakSystemAlert('All 16 forensic audit stages passed. SSoT Zero Drift confirmed.', 'critical', 'en');
         }
+        if (onAddSystemEvent) {
+          onAddSystemEvent(
+            'COMPLIANCE',
+            'All 16-Step Forensic Audit Stages Unanimously Ratified',
+            'Full 16-stage pipeline certified under ETDA Sec 9/26/28, PDPA Sec 37, and FIPS 140-3 L4. Zero drift.',
+            CANONICAL_MERKLE_ROOT,
+            'success',
+            'ETDA Sec 9, 26, 28 & PDPA Sec 37',
+            'dashboard'
+          );
+        }
+        return;
+      }
 
-        const nextStep = prevSteps[nextIndex];
-        setActiveStepId(nextStep.id);
+      const nextStep = currentSteps[nextIndex];
+      setActiveStepId(nextStep.id);
+      provideStepAudioFeedback(nextStep, 'verified');
 
-        provideStepAudioFeedback(nextStep, 'verified');
-
-        const updated = [...prevSteps];
-        updated[nextIndex] = { ...nextStep, status: 'PASSED' };
+      setSteps((prev) => {
+        const updated = [...prev];
+        if (nextIndex < updated.length) {
+          updated[nextIndex] = { ...updated[nextIndex], status: 'PASSED' };
+        }
         return updated;
       });
     }, 750);
