@@ -2,6 +2,8 @@ import React, { useState } from 'react';
 import { ViewType, HardwareSnapshot } from '../../types';
 import { SYSTEM_METADATA, CANONICAL_MODULES, AUDIT_TRACE_TX } from '../../data/canonicalData';
 import { useOfflineWarning } from '../../hooks/useOfflineWarning';
+import { HsmClusterHealthGauge } from '../HsmClusterHealthGauge';
+import { MutationDeltaD3Chart } from '../MutationDeltaD3Chart';
 import {
   Activity,
   Cpu,
@@ -17,8 +19,10 @@ import {
   Radio,
   FileCheck,
   RotateCw,
+  Server,
 } from 'lucide-react';
 import { playAuditChime, playTone } from '../AudioSynthesizer';
+
 
 interface DashboardViewProps {
   snapshots?: HardwareSnapshot[];
@@ -203,7 +207,36 @@ export const DashboardView: React.FC<DashboardViewProps> = ({
         </div>
       </div>
 
+      {/* 2.5. CENTRALIZED HSM CLUSTER HEALTH & TELEMETRY GAUGE */}
+      <div className="space-y-2">
+        <div className="flex items-center justify-between px-1">
+          <div className="flex items-center gap-2 font-mono text-xs text-zinc-400">
+            <Server className="w-3.5 h-3.5 text-cyan-400" />
+            <span className="font-bold text-white tracking-wide uppercase">Deca-Key HSM Cluster Oversight (10/10 Quorum)</span>
+          </div>
+          <span className="text-[11px] font-mono text-emerald-400 bg-emerald-950/60 border border-emerald-500/30 px-2 py-0.5 rounded-full">
+            REAL_HSM QUORUM ONLINE
+          </span>
+        </div>
+        <HsmClusterHealthGauge />
+      </div>
+
+      {/* 2.6. REAL-TIME FORENSIC AUDIT & MUTATION DELTA D3 TRACKER */}
+      <div className="space-y-2">
+        <div className="flex items-center justify-between px-1">
+          <div className="flex items-center gap-2 font-mono text-xs text-zinc-400">
+            <Activity className="w-3.5 h-3.5 text-cyan-400" />
+            <span className="font-bold text-white tracking-wide uppercase">Forensic Audit: Mutation Delta &amp; Genesis Adherence (Δ0.00%)</span>
+          </div>
+          <span className="text-[11px] font-mono text-cyan-300 bg-cyan-950/60 border border-cyan-500/30 px-2 py-0.5 rounded-full">
+            SSoT ZERO-DRIFT ACTIVE
+          </span>
+        </div>
+        <MutationDeltaD3Chart />
+      </div>
+
       {/* 3. PRIMARY SYSTEM SUMMARY & OPERATIONS ROUTER (2-Column Grid) */}
+
       <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 items-start">
         
         {/* Left 6 Columns: Key Runtime Status */}

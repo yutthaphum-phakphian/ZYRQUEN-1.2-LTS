@@ -23,6 +23,8 @@ import { COURT_CERTIFICATE_DATA } from '../data/courtDossierCertificateData';
 import { generateCourtDossierCertificatePdf } from '../utils/courtDossierCertificatePdf';
 import { playAuditChime, playTone } from './AudioSynthesizer';
 import { copyToClipboard } from '../utils/clipboard';
+import { MutationDeltaD3Chart } from './MutationDeltaD3Chart';
+
 
 interface ForensicRunResult {
   audit_timestamp_utc: string;
@@ -496,8 +498,12 @@ export const CourtDossierCertificateView: React.FC = () => {
         </div>
       </div>
 
+      {/* Real-time D3 Mutation Delta & Genesis Hash Deviation Tracker */}
+      <MutationDeltaD3Chart />
+
       {/* Forensic Audit Python Script Engine Interactive Simulator */}
       <div className="p-5 rounded-2xl bg-[#090d1a] border border-white/10 space-y-4">
+
         <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
           <div className="space-y-1">
             <h3 className="text-xs font-bold text-white uppercase tracking-wider flex items-center gap-2">
