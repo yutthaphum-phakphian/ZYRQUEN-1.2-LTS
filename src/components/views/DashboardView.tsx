@@ -4,6 +4,7 @@ import { SYSTEM_METADATA, CANONICAL_MODULES, AUDIT_TRACE_TX } from '../../data/c
 import { useOfflineWarning } from '../../hooks/useOfflineWarning';
 import { HsmClusterHealthGauge } from '../HsmClusterHealthGauge';
 import { MutationDeltaD3Chart } from '../MutationDeltaD3Chart';
+import { MutationDeltaChart } from '../charts/MutationDeltaChart';
 import {
   Activity,
   Cpu,
@@ -232,7 +233,7 @@ export const DashboardView: React.FC<DashboardViewProps> = ({
             SSoT ZERO-DRIFT ACTIVE
           </span>
         </div>
-        <MutationDeltaD3Chart />
+        <MutationDeltaChart />
       </div>
 
       {/* 3. PRIMARY SYSTEM SUMMARY & OPERATIONS ROUTER (2-Column Grid) */}

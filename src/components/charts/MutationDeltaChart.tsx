@@ -1,39 +1,39 @@
-import React, { useEffect, useRef, useState, useMemo } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import * as d3 from 'd3';
 import { Activity, ShieldCheck, AlertTriangle, RefreshCw, Zap, Lock, Info } from 'lucide-react';
-import { playAuditChime, playTone } from './AudioSynthesizer';
-import { CANONICAL_GENESIS_BLOCK, CANONICAL_MERKLE_ROOT } from '../data/canonicalData';
+import { playAuditChime, playTone } from '../AudioSynthesizer';
+import { CANONICAL_GENESIS_BLOCK, CANONICAL_MERKLE_ROOT } from '../../data/canonicalData';
 
-export interface MutationDeltaPoint {
+export interface MutationDeltaDataPoint {
   id: string;
   blockHeight: number;
   timestamp: Date;
-  deltaPct: number; // 0.0000% nominal
+  deltaPct: number; // Nominal 0.0000%
   isAnomaly: boolean;
   computedHash: string;
   status: 'SSOT_LOCKED' | 'TRANSIENT_DRIFT' | 'DEVIATION_ALERT';
 }
 
-interface MutationDeltaD3ChartProps {
+interface MutationDeltaChartProps {
   className?: string;
-  onAlertTriggered?: (point: MutationDeltaPoint) => void;
+  onAlertTriggered?: (point: MutationDeltaDataPoint) => void;
 }
 
-export const MutationDeltaD3Chart: React.FC<MutationDeltaD3ChartProps> = ({
+export const MutationDeltaChart: React.FC<MutationDeltaChartProps> = ({
   className = '',
   onAlertTriggered,
 }) => {
   const svgRef = useRef<SVGSVGElement | null>(null);
   const containerRef = useRef<HTMLDivElement | null>(null);
-  const [dataPoints, setDataPoints] = useState<MutationDeltaPoint[]>([]);
+  const [dataPoints, setDataPoints] = useState<MutationDeltaDataPoint[]>([]);
   const [isLiveStreaming, setIsLiveStreaming] = useState(true);
-  const [hoveredPoint, setHoveredPoint] = useState<MutationDeltaPoint | null>(null);
+  const [hoveredPoint, setHoveredPoint] = useState<MutationDeltaDataPoint | null>(null);
   const [simulatedJitterActive, setSimulatedJitterActive] = useState(false);
 
   // Initialize with deterministic 24-point baseline history
   useEffect(() => {
     const now = Date.now();
-    const initial: MutationDeltaPoint[] = [];
+    const initial: MutationDeltaDataPoint[] = [];
     for (let i = 23; i >= 0; i--) {
       const ptTime = new Date(now - i * 3000);
       initial.push({
@@ -49,7 +49,7 @@ export const MutationDeltaD3Chart: React.FC<MutationDeltaD3ChartProps> = ({
     setDataPoints(initial);
   }, []);
 
-  // Real-time interval generator
+  // Real-time telemetry generator
   useEffect(() => {
     if (!isLiveStreaming) return;
 
@@ -60,7 +60,7 @@ export const MutationDeltaD3Chart: React.FC<MutationDeltaD3ChartProps> = ({
         
         let delta = 0.0000;
         let isAnomaly = false;
-        let status: MutationDeltaPoint['status'] = 'SSOT_LOCKED';
+        let status: MutationDeltaDataPoint['status'] = 'SSOT_LOCKED';
         let hash = CANONICAL_MERKLE_ROOT;
 
         if (simulatedJitterActive) {
@@ -72,7 +72,7 @@ export const MutationDeltaD3Chart: React.FC<MutationDeltaD3ChartProps> = ({
           hash = `0x${Math.random().toString(16).substring(2, 10)}...${CANONICAL_MERKLE_ROOT.slice(-12)}`;
         }
 
-        const newPoint: MutationDeltaPoint = {
+        const newPoint: MutationDeltaDataPoint = {
           id: `PT-${nextBlock}`,
           blockHeight: nextBlock,
           timestamp: new Date(),
@@ -117,10 +117,10 @@ export const MutationDeltaD3Chart: React.FC<MutationDeltaD3ChartProps> = ({
     // Defs for gradients & filters
     const defs = svg.append('defs');
 
-    // Gradient for nominal area fill (Emerald)
+    // Gradient for nominal area fill (Emerald/Cyan)
     const areaGradient = defs
       .append('linearGradient')
-      .attr('id', 'mutation-area-gradient')
+      .attr('id', 'chart-mutation-area-gradient')
       .attr('x1', '0%')
       .attr('y1', '0%')
       .attr('x2', '0%')
@@ -129,10 +129,10 @@ export const MutationDeltaD3Chart: React.FC<MutationDeltaD3ChartProps> = ({
     areaGradient.append('stop').attr('offset', '0%').attr('stop-color', '#10b981').attr('stop-opacity', 0.35);
     areaGradient.append('stop').attr('offset', '100%').attr('stop-color', '#10b981').attr('stop-opacity', 0.0);
 
-    // Gradient for anomaly glow
+    // Gradient for anomaly glow (Rose)
     const anomalyGlow = defs
       .append('linearGradient')
-      .attr('id', 'anomaly-area-gradient')
+      .attr('id', 'chart-anomaly-area-gradient')
       .attr('x1', '0%')
       .attr('y1', '0%')
       .attr('x2', '0%')
@@ -142,7 +142,7 @@ export const MutationDeltaD3Chart: React.FC<MutationDeltaD3ChartProps> = ({
     anomalyGlow.append('stop').attr('offset', '100%').attr('stop-color', '#f43f5e').attr('stop-opacity', 0.0);
 
     // Glow filter
-    const filter = defs.append('filter').attr('id', 'glow').attr('x', '-20%').attr('y', '-20%').attr('width', '140%').attr('height', '140%');
+    const filter = defs.append('filter').attr('id', 'chart-glow').attr('x', '-20%').attr('y', '-20%').attr('width', '140%').attr('height', '140%');
     filter.append('feGaussianBlur').attr('stdDeviation', '3').attr('result', 'coloredBlur');
     const feMerge = filter.append('feMerge');
     feMerge.append('feMergeNode').attr('in', 'coloredBlur');
@@ -197,7 +197,7 @@ export const MutationDeltaD3Chart: React.FC<MutationDeltaD3ChartProps> = ({
       .attr('font-family', 'monospace')
       .text('0.00% ZERO-DRIFT SSoT BASELINE');
 
-    // Upper Deviation Tolerance Threshold Line (y = 0.0200%)
+    // Secondary Upper Deviation Threshold Line (y = 0.0200%)
     const thresholdDelta = 0.020;
     const yThreshold = yScale(thresholdDelta);
     
@@ -223,7 +223,7 @@ export const MutationDeltaD3Chart: React.FC<MutationDeltaD3ChartProps> = ({
 
     // Area Generator
     const area = d3
-      .area<MutationDeltaPoint>()
+      .area<MutationDeltaDataPoint>()
       .x((d) => xScale(d.timestamp))
       .y0(innerHeight)
       .y1((d) => yScale(d.deltaPct))
@@ -231,12 +231,12 @@ export const MutationDeltaD3Chart: React.FC<MutationDeltaD3ChartProps> = ({
 
     g.append('path')
       .datum(dataPoints)
-      .attr('fill', simulatedJitterActive ? 'url(#anomaly-area-gradient)' : 'url(#mutation-area-gradient)')
+      .attr('fill', simulatedJitterActive ? 'url(#chart-anomaly-area-gradient)' : 'url(#chart-mutation-area-gradient)')
       .attr('d', area);
 
     // Line Generator
     const line = d3
-      .line<MutationDeltaPoint>()
+      .line<MutationDeltaDataPoint>()
       .x((d) => xScale(d.timestamp))
       .y((d) => yScale(d.deltaPct))
       .curve(d3.curveMonotoneX);
@@ -245,28 +245,32 @@ export const MutationDeltaD3Chart: React.FC<MutationDeltaD3ChartProps> = ({
       .datum(dataPoints)
       .attr('fill', 'none')
       .attr('stroke', simulatedJitterActive ? '#f43f5e' : '#10b981')
-      .attr('stroke-width', 2.2)
-      .attr('filter', 'url(#glow)')
+      .attr('stroke-width', 2.5)
+      .attr('filter', 'url(#chart-glow)')
       .attr('d', line);
 
-    // Render Data Points
-    g.selectAll('.data-point')
+    // Data Point Circles
+    const circlesGroup = g.append('g').attr('class', 'data-points');
+
+    circlesGroup
+      .selectAll('circle')
       .data(dataPoints)
       .enter()
       .append('circle')
-      .attr('class', 'data-point')
       .attr('cx', (d) => xScale(d.timestamp))
       .attr('cy', (d) => yScale(d.deltaPct))
-      .attr('r', (d) => (d.isAnomaly ? 5 : d.deltaPct > 0 ? 3.5 : 2.5))
-      .attr('fill', (d) => (d.isAnomaly ? '#f43f5e' : d.deltaPct > 0 ? '#f59e0b' : '#10b981'))
-      .attr('stroke', '#050912')
+      .attr('r', (d) => (d.isAnomaly ? 5 : 3.5))
+      .attr('fill', (d) => (d.isAnomaly ? '#f43f5e' : '#10b981'))
+      .attr('stroke', '#030712')
       .attr('stroke-width', 1.5)
-      .style('cursor', 'pointer')
-      .on('mouseenter', (_event, d) => {
+      .attr('cursor', 'pointer')
+      .on('mouseenter', (event, d) => {
         setHoveredPoint(d);
-        playTone(d.isAnomaly ? 440 : 880, 0.02);
+        playTone(700 + d.deltaPct * 3000, 0.02);
       })
-      .on('mouseleave', () => setHoveredPoint(null));
+      .on('mouseleave', () => {
+        setHoveredPoint(null);
+      });
 
     // X Axis
     const xAxis = d3
@@ -274,136 +278,143 @@ export const MutationDeltaD3Chart: React.FC<MutationDeltaD3ChartProps> = ({
       .ticks(5)
       .tickFormat((d) => d3.timeFormat('%H:%M:%S')(d as Date));
 
-    const xAxisGroup = g
-      .append('g')
+    g.append('g')
       .attr('transform', `translate(0,${innerHeight})`)
-      .call(xAxis);
+      .attr('class', 'x-axis')
+      .call(xAxis)
+      .selectAll('text')
+      .attr('fill', '#94a3b8')
+      .attr('font-size', '9px')
+      .attr('font-family', 'monospace');
 
-    xAxisGroup.selectAll('text').attr('fill', '#94a3b8').attr('font-size', '9px').attr('font-family', 'monospace');
-    xAxisGroup.select('.domain').attr('stroke', 'rgba(255, 255, 255, 0.15)');
+    g.select('.x-axis .domain').attr('stroke', 'rgba(255, 255, 255, 0.15)');
 
     // Y Axis
     const yAxis = d3
       .axisLeft(yScale)
-      .ticks(5)
-      .tickFormat((d) => `${(d as number).toFixed(3)}%`);
+      .ticks(4)
+      .tickFormat((d) => `+${d.valueOf()}%`);
 
-    const yAxisGroup = g.append('g').call(yAxis);
-    yAxisGroup.selectAll('text').attr('fill', '#94a3b8').attr('font-size', '9px').attr('font-family', 'monospace');
-    yAxisGroup.select('.domain').attr('stroke', 'rgba(255, 255, 255, 0.15)');
+    g.append('g')
+      .attr('class', 'y-axis')
+      .call(yAxis)
+      .selectAll('text')
+      .attr('fill', '#94a3b8')
+      .attr('font-size', '9px')
+      .attr('font-family', 'monospace');
+
+    g.select('.y-axis .domain').attr('stroke', 'rgba(255, 255, 255, 0.15)');
   }, [dataPoints, simulatedJitterActive]);
 
-  const toggleJitterSimulation = () => {
-    playTone(simulatedJitterActive ? 520 : 740, 0.04);
-    setSimulatedJitterActive(!simulatedJitterActive);
-    if (!simulatedJitterActive) {
-      playAuditChime();
-    }
-  };
-
-  const currentDelta = useMemo(() => {
-    if (dataPoints.length === 0) return '0.0000%';
-    const last = dataPoints[dataPoints.length - 1];
-    return `${last.deltaPct.toFixed(4)}%`;
-  }, [dataPoints]);
+  const latestPoint = dataPoints[dataPoints.length - 1];
+  const isCurrentlyNormal = !simulatedJitterActive && (!latestPoint || latestPoint.deltaPct === 0);
 
   return (
-    <div className={`p-4 sm:p-5 rounded-2xl bg-[#080d1a] border border-cyan-500/30 space-y-3 font-mono shadow-xl relative overflow-hidden ${className}`}>
-      {/* Header */}
-      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 pb-3 border-b border-white/10">
-        <div className="space-y-0.5">
-          <div className="flex items-center gap-2 flex-wrap">
-            <span className="px-2 py-0.5 rounded bg-cyan-500/15 text-cyan-300 border border-cyan-500/30 text-[10px] font-bold">
-              REAL-TIME D3 FORENSIC TELEMETRY
-            </span>
+    <div
+      ref={containerRef}
+      className={`p-5 rounded-2xl bg-[#090d1a] border border-cyan-500/20 space-y-4 relative overflow-hidden shadow-2xl ${className}`}
+    >
+      {/* Background Ambience */}
+      <div
+        className={`absolute -top-12 -right-12 w-64 h-64 rounded-full blur-3xl pointer-events-none transition-colors duration-700 ${
+          simulatedJitterActive ? 'bg-rose-500/15' : 'bg-emerald-500/10'
+        }`}
+      />
+
+      {/* Header Bar */}
+      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 relative z-10">
+        <div className="space-y-1">
+          <div className="flex items-center gap-2">
+            <Activity className="w-4 h-4 text-cyan-400 animate-pulse" />
+            <h3 className="text-sm font-bold font-mono text-white tracking-wide uppercase">
+              Forensic Audit: Mutation Delta vs. Genesis Hash Parity
+            </h3>
             <span
-              className={`px-2 py-0.5 rounded text-[10px] font-bold border ${
-                simulatedJitterActive
-                  ? 'bg-rose-500/20 text-rose-300 border-rose-500/40 animate-pulse'
-                  : 'bg-emerald-500/15 text-emerald-300 border-emerald-500/30'
+              className={`px-2 py-0.5 rounded-full text-[10px] font-mono font-bold ${
+                isCurrentlyNormal
+                  ? 'bg-emerald-500/20 text-emerald-300 border border-emerald-500/30'
+                  : 'bg-rose-500/20 text-rose-300 border border-rose-500/30 animate-pulse'
               }`}
             >
-              {simulatedJitterActive ? '⚠️ DRIFT DETECTED' : '🔒 SSoT Δ0.0000% LOCKED'}
+              {isCurrentlyNormal ? 'Δ0.0000% ZERO-DRIFT SSoT' : 'ANOMALY DETECTED'}
             </span>
           </div>
-          <h3 className="text-sm font-bold text-white flex items-center gap-2 pt-1">
-            <Activity className="w-4 h-4 text-cyan-400" />
-            <span>Mutation Delta & Genesis Hash Deviation Tracker</span>
-          </h3>
+          <p className="text-xs text-zinc-400 font-sans">
+            Real-time D3 line chart plotting drift deviation from Canonical Genesis Block #{CANONICAL_GENESIS_BLOCK}.
+          </p>
         </div>
 
-        <div className="flex items-center gap-2 flex-wrap">
+        {/* Controls & Metrics */}
+        <div className="flex items-center gap-2">
           <button
-            onClick={toggleJitterSimulation}
-            className={`px-2.5 py-1 text-[11px] font-bold rounded-lg border transition cursor-pointer flex items-center gap-1.5 ${
+            onClick={() => {
+              playTone(600, 0.03);
+              setSimulatedJitterActive(!simulatedJitterActive);
+            }}
+            className={`px-3 py-1.5 rounded-xl border text-xs font-mono font-semibold flex items-center gap-1.5 transition-all cursor-pointer ${
               simulatedJitterActive
-                ? 'bg-rose-500/20 hover:bg-rose-500/30 text-rose-200 border-rose-400'
-                : 'bg-amber-500/15 hover:bg-amber-500/25 text-amber-300 border-amber-500/40'
+                ? 'bg-rose-500/20 hover:bg-rose-500/30 text-rose-300 border-rose-500/40 shadow-[0_0_10px_rgba(244,63,94,0.3)]'
+                : 'bg-white/5 hover:bg-white/10 text-zinc-300 border-white/10'
             }`}
-            title="Inject simulated quantum phase jitter to verify visual deviation highlighting"
           >
-            <Zap className="w-3.5 h-3.5" />
+            <Zap className={`w-3.5 h-3.5 ${simulatedJitterActive ? 'text-rose-400' : 'text-zinc-400'}`} />
             <span>{simulatedJitterActive ? 'Clear Jitter' : 'Inject Jitter'}</span>
           </button>
+
           <button
-            onClick={() => setIsLiveStreaming(!isLiveStreaming)}
-            className="px-2.5 py-1 text-[11px] font-medium rounded-lg bg-white/5 hover:bg-white/10 text-zinc-300 border border-white/10 transition cursor-pointer flex items-center gap-1"
+            onClick={() => {
+              playTone(500, 0.03);
+              setIsLiveStreaming(!isLiveStreaming);
+            }}
+            className="p-1.5 rounded-xl bg-white/5 hover:bg-white/10 border border-white/10 text-zinc-300 transition-all cursor-pointer"
+            title={isLiveStreaming ? 'Pause Stream' : 'Resume Stream'}
           >
             <RefreshCw className={`w-3.5 h-3.5 ${isLiveStreaming ? 'animate-spin' : ''}`} />
-            <span>{isLiveStreaming ? 'Streaming 1.8s' : 'Paused'}</span>
           </button>
         </div>
       </div>
 
-      {/* D3 Viewport Container */}
-      <div ref={containerRef} className="w-full relative min-h-[220px]">
-        <svg ref={svgRef} className="w-full h-[220px] overflow-visible" />
+      {/* D3 Render Area */}
+      <div className="relative w-full overflow-x-auto">
+        <svg ref={svgRef} className="w-full h-[220px]" />
 
-        {/* Floating Tooltip Inspector */}
+        {/* Hover Inspector Tooltip */}
         {hoveredPoint && (
-          <div className="absolute top-2 right-2 p-2.5 bg-black/90 border border-cyan-500/50 rounded-xl text-xs space-y-1 shadow-2xl backdrop-blur-md animate-in fade-in">
-            <div className="flex items-center justify-between gap-3">
-              <span className="text-zinc-400 font-bold">Block:</span>
-              <span className="text-white font-mono">#{hoveredPoint.blockHeight}</span>
-            </div>
-            <div className="flex items-center justify-between gap-3">
-              <span className="text-zinc-400 font-bold">Mutation Delta:</span>
-              <span className={`font-mono font-bold ${hoveredPoint.deltaPct > 0 ? 'text-rose-400' : 'text-emerald-400'}`}>
-                {hoveredPoint.deltaPct.toFixed(4)}%
+          <div className="absolute top-2 left-16 bg-black/90 border border-cyan-500/40 rounded-xl p-3 shadow-2xl font-mono text-xs text-zinc-200 pointer-events-none z-20 space-y-1 backdrop-blur-md">
+            <div className="flex items-center justify-between gap-4 border-b border-white/10 pb-1">
+              <span className="text-cyan-400 font-bold">Block #{hoveredPoint.blockHeight}</span>
+              <span className={hoveredPoint.isAnomaly ? 'text-rose-400 font-bold' : 'text-emerald-400 font-bold'}>
+                +{hoveredPoint.deltaPct.toFixed(4)}%
               </span>
             </div>
-            <div className="flex items-center justify-between gap-3">
-              <span className="text-zinc-400 font-bold">Timestamp:</span>
-              <span className="text-cyan-300 font-mono text-[10px]">{hoveredPoint.timestamp.toLocaleTimeString()}</span>
-            </div>
-            <div className="text-[9px] text-zinc-400 truncate max-w-[220px]">
-              Hash: {hoveredPoint.computedHash}
-            </div>
+            <div className="text-[10px] text-zinc-400">Time: {hoveredPoint.timestamp.toLocaleTimeString()}</div>
+            <div className="text-[10px] text-zinc-400 truncate max-w-[200px]">Hash: {hoveredPoint.computedHash}</div>
           </div>
         )}
       </div>
 
-      {/* Live Metric Strip */}
-      <div className="grid grid-cols-2 sm:grid-cols-4 gap-2 pt-2 text-xs border-t border-white/10">
-        <div className="p-2 bg-black/40 rounded-xl border border-white/5">
-          <span className="text-[10px] text-zinc-500 block">CURRENT DELTA</span>
-          <span className={`font-bold mt-0.5 block ${simulatedJitterActive ? 'text-rose-400' : 'text-emerald-400'}`}>
-            {currentDelta}
+      {/* Status Bar */}
+      <div className="grid grid-cols-2 sm:grid-cols-4 gap-2 pt-2 border-t border-white/10 text-xs font-mono">
+        <div className="p-2 rounded-xl bg-black/40 border border-white/5">
+          <span className="text-[10px] text-zinc-500 block">CURRENT DRIFT</span>
+          <span className={`font-bold ${isCurrentlyNormal ? 'text-emerald-400' : 'text-rose-400'}`}>
+            +{latestPoint?.deltaPct.toFixed(4) || '0.0000'}%
           </span>
         </div>
-        <div className="p-2 bg-black/40 rounded-xl border border-white/5">
-          <span className="text-[10px] text-zinc-500 block">GENESIS ANCHOR</span>
-          <span className="text-cyan-300 font-bold mt-0.5 block">Block #{CANONICAL_GENESIS_BLOCK}</span>
+        <div className="p-2 rounded-xl bg-black/40 border border-white/5">
+          <span className="text-[10px] text-zinc-500 block">GENESIS HASH PARITY</span>
+          <span className="text-cyan-300 font-bold">100% BITWISE</span>
         </div>
-        <div className="p-2 bg-black/40 rounded-xl border border-white/5">
-          <span className="text-[10px] text-zinc-500 block">BIT-EXACT MATCH</span>
-          <span className="text-emerald-400 font-bold mt-0.5 block">64 / 64 Hex Chars</span>
+        <div className="p-2 rounded-xl bg-black/40 border border-white/5">
+          <span className="text-[10px] text-zinc-500 block">SSoT THRESHOLD</span>
+          <span className="text-amber-300 font-bold">&lt; 0.0200%</span>
         </div>
-        <div className="p-2 bg-black/40 rounded-xl border border-white/5">
-          <span className="text-[10px] text-zinc-500 block">FAIL-CLOSED GATE</span>
-          <span className="text-white font-bold mt-0.5 block">&Delta; &gt; 0.02% (Armed)</span>
+        <div className="p-2 rounded-xl bg-black/40 border border-white/5">
+          <span className="text-[10px] text-zinc-500 block">INSPECTOR STATE</span>
+          <span className="text-purple-300 font-bold">ACTIVE STREAM</span>
         </div>
       </div>
     </div>
   );
 };
+export default MutationDeltaChart;

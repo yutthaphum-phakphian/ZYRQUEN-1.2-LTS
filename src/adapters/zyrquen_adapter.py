@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 """
 ZYRQUEN Adapter Layer Extension for Phase 11 — Autonomous Self-Tuning Engine
-ระบบปรับจูนสมดุลอัตโนมัติ มีชีวิตชีวา (Phase 11 v11.0.0-LTS)
+ระบบปรับจูนสมดุลอัตโนมัติ (Phase 11 v11.0.0-LTS)
 File: src/adapters/zyrquen_adapter.py
 
 Core Protection Status: FROZEN / READ-ONLY (ZYRQUEN Ω∞ Core)

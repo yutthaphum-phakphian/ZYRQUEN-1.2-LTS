@@ -48,6 +48,7 @@ import {
 } from '../../data/auditHistoryData';
 import { createTelemetrySnapshot, generateSha256Hash } from '../../utils/telemetrySnapshot';
 import { playTone, playAuditChime } from '../AudioSynthesizer';
+import { MutationDeltaD3Chart } from '../MutationDeltaD3Chart';
 import { copyToClipboard } from '../../utils/clipboard';
 import { generateAndDownloadFullAuditPdfReport } from '../../utils/fullAuditPdfExport';
 import { HARDWARE_SEALS_LEDGER } from '../../data/hardwareSealsData';
@@ -461,6 +462,9 @@ export const AuditHistoryView: React.FC<AuditHistoryViewProps> = ({
           </div>
         </div>
       </div>
+
+      {/* 1.5. Real-Time D3 Mutation Delta & SSoT Zero-Drift Visualizer */}
+      <MutationDeltaD3Chart />
 
       {/* 2. Search, Filter, Density and Sorting Controls */}
       <div className="p-4 rounded-2xl bg-[#0a0f1e] border border-white/10 shadow-lg flex flex-col md:flex-row items-center justify-between gap-4">

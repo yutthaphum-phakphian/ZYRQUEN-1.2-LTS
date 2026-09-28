@@ -24,6 +24,7 @@ import { generateCourtDossierCertificatePdf } from '../utils/courtDossierCertifi
 import { playAuditChime, playTone } from './AudioSynthesizer';
 import { copyToClipboard } from '../utils/clipboard';
 import { MutationDeltaD3Chart } from './MutationDeltaD3Chart';
+import ForensicDossierSuite from './ForensicDossierSuite';
 
 
 interface ForensicRunResult {
@@ -500,6 +501,9 @@ export const CourtDossierCertificateView: React.FC = () => {
 
       {/* Real-time D3 Mutation Delta & Genesis Hash Deviation Tracker */}
       <MutationDeltaD3Chart />
+
+      {/* Phase 12 Digital Forensic Court Dossier & Multi-Agent Swarm Suite */}
+      <ForensicDossierSuite />
 
       {/* Forensic Audit Python Script Engine Interactive Simulator */}
       <div className="p-5 rounded-2xl bg-[#090d1a] border border-white/10 space-y-4">

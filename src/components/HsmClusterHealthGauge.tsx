@@ -269,35 +269,91 @@ export const HsmClusterHealthGauge: React.FC<HsmClusterHealthGaugeProps> = ({
           <span className="text-emerald-400 text-[11px] font-bold">Bangkok (4) • Chiang Mai (2) • Hong Kong (2) • Singapore (2)</span>
         </div>
 
-        <div className="grid grid-cols-2 sm:grid-cols-5 gap-2.5">
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-3">
           {nodes.map((node) => {
             const isSelected = node.id === selectedNodeId;
             const isOnline = node.status === 'ONLINE';
+            
+            // Progress calculations
+            const latencyPct = Math.min(100, Math.round((node.lastPingMs / 142) * 100));
+            const cpuPct = Math.min(100, node.cpuLoadPct);
+            const tempPct = Math.min(100, Math.round((node.tempC / 85) * 100));
 
             return (
               <button
                 key={node.id}
                 onClick={() => handleSelectNode(node)}
-                className={`p-2.5 rounded-xl border text-left transition-all relative overflow-hidden cursor-pointer ${
+                className={`p-3 rounded-xl border text-left transition-all relative overflow-hidden cursor-pointer flex flex-col justify-between gap-2 ${
                   isSelected
-                    ? 'bg-cyan-500/20 border-cyan-400 text-white shadow-[0_0_12px_rgba(6,182,212,0.35)] ring-1 ring-cyan-400/50'
+                    ? 'bg-cyan-500/20 border-cyan-400 text-white shadow-[0_0_15px_rgba(6,182,212,0.4)] ring-1 ring-cyan-400/60'
                     : isOnline
                     ? 'bg-black/40 hover:bg-white/5 border-white/10 text-zinc-300'
-                    : 'bg-rose-950/30 border-rose-500/40 text-rose-200 animate-pulse'
+                    : 'bg-rose-950/40 border-rose-500/50 text-rose-200 animate-pulse'
                 }`}
               >
-                <div className="flex items-center justify-between text-[10px] mb-1">
-                  <span className="font-bold">{node.id}</span>
+                <div className="flex items-center justify-between text-xs">
+                  <div className="flex items-center gap-1.5 font-bold">
+                    <Server className="w-3.5 h-3.5 text-cyan-400" />
+                    <span className="text-white">{node.id}</span>
+                  </div>
                   <span
-                    className={`w-2 h-2 rounded-full ${
-                      isOnline ? 'bg-emerald-400 shadow-[0_0_6px_rgba(16,185,129,0.8)]' : 'bg-rose-400'
+                    className={`px-1.5 py-0.5 rounded text-[9px] font-bold ${
+                      isOnline ? 'bg-emerald-500/20 text-emerald-300' : 'bg-rose-500/20 text-rose-300'
                     }`}
-                  />
+                  >
+                    {isOnline ? 'ONLINE' : 'DEGRADED'}
+                  </span>
                 </div>
-                <div className="text-[10px] text-zinc-400 truncate">{node.location}</div>
-                <div className="flex items-center justify-between text-[10px] font-mono mt-1 pt-1 border-t border-white/5">
-                  <span className="text-cyan-300">{node.lastPingMs}ms</span>
-                  <span className="text-zinc-400">{node.tempC}°C</span>
+
+                <div className="text-[10px] text-zinc-400 truncate">{node.datacenter}</div>
+
+                {/* Real-time Progress Indicators for Latency, CPU, and Temp */}
+                <div className="space-y-1.5 pt-1 border-t border-white/10 text-[10px]">
+                  {/* Latency Progress */}
+                  <div>
+                    <div className="flex justify-between text-[9px] mb-0.5">
+                      <span className="text-zinc-400">LATENCY:</span>
+                      <span className="text-cyan-300 font-bold">{node.lastPingMs} ms</span>
+                    </div>
+                    <div className="w-full h-1 bg-white/10 rounded-full overflow-hidden">
+                      <div
+                        className="h-full bg-cyan-400 rounded-full transition-all duration-500"
+                        style={{ width: `${Math.max(8, latencyPct)}%` }}
+                      />
+                    </div>
+                  </div>
+
+                  {/* CPU Load Progress */}
+                  <div>
+                    <div className="flex justify-between text-[9px] mb-0.5">
+                      <span className="text-zinc-400">CPU LOAD:</span>
+                      <span className="text-indigo-300 font-bold">{node.cpuLoadPct}%</span>
+                    </div>
+                    <div className="w-full h-1 bg-white/10 rounded-full overflow-hidden">
+                      <div
+                        className={`h-full rounded-full transition-all duration-500 ${
+                          cpuPct > 75 ? 'bg-rose-400' : cpuPct > 50 ? 'bg-amber-400' : 'bg-indigo-400'
+                        }`}
+                        style={{ width: `${Math.max(8, cpuPct)}%` }}
+                      />
+                    </div>
+                  </div>
+
+                  {/* Temp Progress */}
+                  <div>
+                    <div className="flex justify-between text-[9px] mb-0.5">
+                      <span className="text-zinc-400">TEMP:</span>
+                      <span className="text-amber-300 font-bold">{node.tempC}°C</span>
+                    </div>
+                    <div className="w-full h-1 bg-white/10 rounded-full overflow-hidden">
+                      <div
+                        className={`h-full rounded-full transition-all duration-500 ${
+                          tempPct > 70 ? 'bg-rose-400' : 'bg-amber-400'
+                        }`}
+                        style={{ width: `${Math.max(8, tempPct)}%` }}
+                      />
+                    </div>
+                  </div>
                 </div>
               </button>
             );

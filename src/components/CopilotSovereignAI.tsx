@@ -382,7 +382,7 @@ export const CopilotSovereignAI: React.FC<CopilotSovereignAIProps> = ({
                     ? 'bg-emerald-500/25 text-emerald-200 border-emerald-400/60 shadow-[0_0_10px_rgba(16,185,129,0.3)]'
                     : 'bg-slate-800 text-slate-400 border-slate-700'
                 }`}
-                title="เปิด/ปิด โหมดปรับจูนอัตโนมัติมีชีวิตชีวา (Real-Time Autonomous Self-Tuning)"
+                title="เปิด/ปิด โหมดปรับจูนอัตโนมัติ (Real-Time Autonomous Self-Tuning)"
               >
                 <HeartPulse className={`w-2.5 h-2.5 ${copilotState.autoPilotActive ? 'text-emerald-300 animate-pulse' : 'text-slate-400'}`} />
                 <span>{copilotState.autoPilotActive ? 'AUTO-PILOT: ON' : 'AUTO-PILOT: OFF'}</span>
@@ -415,13 +415,13 @@ export const CopilotSovereignAI: React.FC<CopilotSovereignAIProps> = ({
         </div>
       </div>
 
-      {/* Navigation Tabs */}
-      <div className="flex items-center justify-between px-2.5 py-1.5 bg-slate-900/90 border-b border-slate-800 text-[11px] shrink-0">
-        <div className="flex items-center gap-1 overflow-x-auto no-scrollbar">
+      {/* Navigation Tabs - Mobile-First Touch Target Compact Design */}
+      <div className="flex items-center justify-between px-2 py-1 bg-slate-900/90 border-b border-slate-800 text-[11px] shrink-0">
+        <div className="flex items-center gap-1 overflow-x-auto no-scrollbar py-0.5 w-full">
           <button
             type="button"
             onClick={() => setActiveTab('dialogue')}
-            className={`px-2.5 py-1 rounded-lg font-bold flex items-center gap-1.5 transition-all cursor-pointer whitespace-nowrap ${
+            className={`px-2 py-1 rounded-lg font-bold flex items-center gap-1.5 transition-all cursor-pointer text-[10px] sm:text-[11px] shrink-0 ${
               activeTab === 'dialogue'
                 ? 'bg-cyan-500/25 text-cyan-200 border border-cyan-500/50 shadow-[0_0_10px_rgba(6,182,212,0.2)]'
                 : 'text-slate-400 hover:text-slate-200'
@@ -435,40 +435,40 @@ export const CopilotSovereignAI: React.FC<CopilotSovereignAIProps> = ({
             type="button"
             data-testid="tab-copilot-forensic-16"
             onClick={() => setActiveTab('forensic16')}
-            className={`px-2.5 py-1 rounded-lg font-bold flex items-center gap-1.5 transition-all cursor-pointer whitespace-nowrap ${
+            className={`px-2 py-1 rounded-lg font-bold flex items-center gap-1.5 transition-all cursor-pointer text-[10px] sm:text-[11px] shrink-0 ${
               activeTab === 'forensic16'
                 ? 'bg-amber-500/25 text-amber-200 border border-amber-500/50 shadow-[0_0_10px_rgba(245,158,11,0.2)]'
                 : 'text-slate-400 hover:text-slate-200'
             }`}
           >
             <Scale className="w-3 h-3 text-amber-400" />
-            <span>16 ขั้นตอน (16/16 PASS)</span>
+            <span>16 ขั้นตอน (16/16)</span>
           </button>
 
           <button
             type="button"
             onClick={() => setActiveTab('autonomy')}
-            className={`px-2.5 py-1 rounded-lg font-bold flex items-center gap-1.5 transition-all cursor-pointer whitespace-nowrap ${
+            className={`px-2 py-1 rounded-lg font-bold flex items-center gap-1.5 transition-all cursor-pointer text-[10px] sm:text-[11px] shrink-0 ${
               activeTab === 'autonomy'
                 ? 'bg-cyan-500/25 text-cyan-200 border border-cyan-500/50 shadow-[0_0_10px_rgba(6,182,212,0.2)]'
                 : 'text-slate-400 hover:text-slate-200'
             }`}
           >
             <Activity className="w-3 h-3 text-cyan-400" />
-            <span>Autonomy Node</span>
+            <span>Autonomy</span>
           </button>
 
           <button
             type="button"
             onClick={() => setActiveTab('files')}
-            className={`px-2.5 py-1 rounded-lg font-bold flex items-center gap-1.5 transition-all cursor-pointer whitespace-nowrap ${
+            className={`px-2 py-1 rounded-lg font-bold flex items-center gap-1.5 transition-all cursor-pointer text-[10px] sm:text-[11px] shrink-0 ${
               activeTab === 'files'
                 ? 'bg-emerald-500/25 text-emerald-200 border border-emerald-500/50 shadow-[0_0_10px_rgba(16,185,129,0.2)]'
                 : 'text-slate-400 hover:text-slate-200'
             }`}
           >
             <GitBranch className="w-3 h-3 text-emerald-400" />
-            <span>GitHub Sync ({syncedFiles.length})</span>
+            <span>GitHub Sync</span>
           </button>
         </div>
       </div>
@@ -547,12 +547,12 @@ export const CopilotSovereignAI: React.FC<CopilotSovereignAIProps> = ({
       <div className="flex-1 p-2.5 overflow-y-auto space-y-2.5 bg-slate-950 font-mono text-[11px] custom-scrollbar">
         {activeTab === 'dialogue' && (
           <>
-            {/* Lively Autonomous Self-Tuning & 16-Stage Pipeline Summary Card */}
+            {/* Autonomous Self-Tuning & 16-Stage Pipeline Summary Card */}
             <div className="p-3 rounded-xl bg-gradient-to-br from-slate-900/95 via-slate-900/90 to-cyan-950/35 border border-cyan-500/35 space-y-2.5">
               <div className="flex items-center justify-between gap-2 border-b border-slate-800 pb-1.5">
                 <span className="flex items-center gap-1.5 text-[10.5px] font-bold text-cyan-300">
                   <Cpu className="w-3.5 h-3.5 text-emerald-400 animate-pulse" />
-                  <span>ระบบปรับจูนสมดุลอัตโนมัติมีชีวิตชีวา (Autonomous Self-Tuning Engine)</span>
+                  <span>ระบบปรับจูนสมดุลอัตโนมัติ (Autonomous Self-Tuning Engine)</span>
                 </span>
                 <span className="px-2 py-0.5 rounded bg-emerald-500/20 border border-emerald-400/40 text-[9.5px] font-bold text-emerald-300 tabular-nums">
                   16/16 STAGES PASSED (100%)
@@ -645,7 +645,7 @@ export const CopilotSovereignAI: React.FC<CopilotSovereignAIProps> = ({
                 {copilotState.chatHistory.map((item) => (
                   <div
                     key={item.id}
-                    className={`p-2.5 rounded-xl border text-[11px] leading-relaxed font-sans ${
+                    className={`p-2.5 rounded-xl border text-[11px] leading-relaxed font-sans space-y-2 ${
                       item.sender === 'user'
                         ? 'bg-cyan-950/50 border-cyan-500/40 text-cyan-100 ml-4'
                         : 'bg-slate-950/90 border-slate-800 text-slate-200'
@@ -653,11 +653,68 @@ export const CopilotSovereignAI: React.FC<CopilotSovereignAIProps> = ({
                   >
                     <div className="flex items-center justify-between text-[9.5px] text-slate-400 font-mono mb-1">
                       <span className="font-bold text-cyan-300">
-                        {item.sender === 'user' ? 'Sovereign Architect' : 'Copilot Sovereign v6.0'}
+                        {item.sender === 'user' ? 'Sovereign Architect' : 'Copilot Sovereign v6.1'}
                       </span>
                       <span>{item.timestamp.slice(11, 19)}</span>
                     </div>
                     <p className="whitespace-pre-wrap">{item.message}</p>
+
+                    {/* Multi-Agent Swarm Consensus Matrix Display */}
+                    {(item.consensus || item.proposal?.consensusMatrix) && (
+                      <div className="p-2 rounded-lg bg-black/60 border border-purple-500/30 space-y-1.5 font-mono text-[10px]">
+                        <div className="flex items-center justify-between text-purple-300 font-bold border-b border-purple-500/20 pb-1">
+                          <span className="flex items-center gap-1">
+                            <Sparkles className="w-3 h-3 text-purple-400" />
+                            <span>Multi-Agent Consensus Matrix (3/3 Ratified)</span>
+                          </span>
+                          <span className="text-emerald-400">99.9% Confidence</span>
+                        </div>
+                        <div className="space-y-1 text-[9.5px]">
+                          {(item.consensus?.agents || item.proposal?.consensusMatrix.agents || []).map((ag) => (
+                            <div key={ag.agentName} className="flex items-center justify-between text-slate-300 bg-white/5 p-1 rounded">
+                              <span className="font-bold text-cyan-300">{ag.agentName}</span>
+                              <span className="text-emerald-300 font-semibold">{ag.verdict} ({ag.confidenceScore}%)</span>
+                            </div>
+                          ))}
+                        </div>
+                      </div>
+                    )}
+
+                    {/* Direct One-Click Approval Gate */}
+                    {item.proposal && (
+                      <div className="p-2.5 rounded-lg bg-cyan-950/40 border border-cyan-500/40 space-y-2 font-mono text-[10px]">
+                        <div className="flex items-center justify-between text-cyan-200 font-bold">
+                          <span>{item.proposal.title}</span>
+                          <span className="px-1.5 py-0.5 rounded bg-amber-500/20 text-amber-300 border border-amber-500/30 text-[9px]">
+                            {item.proposal.isApproved ? 'RATIFIED' : 'PENDING SOVEREIGN SIGN'}
+                          </span>
+                        </div>
+                        <div className="text-slate-300 text-[9.5px]">
+                          {item.proposal.proposedChange}
+                        </div>
+                        {item.proposal.isApproved ? (
+                          <div className="p-1.5 rounded bg-emerald-950/80 border border-emerald-500/40 text-emerald-300 font-bold flex items-center justify-center gap-1.5 shadow-[0_0_10px_rgba(16,185,129,0.3)]">
+                            <CheckCircle2 className="w-3.5 h-3.5 text-emerald-400" />
+                            <span>✅ ลงนามอนุมัติแล้ว (#EP-SOVEREIGN-01) • 6-Gate Adapter Applied</span>
+                          </div>
+                        ) : (
+                          <button
+                            type="button"
+                            onClick={async () => {
+                              playTone(680, 0.04);
+                              if (item.proposal) {
+                                await copilotAssistantService.approveProposal(item.proposal.proposalId);
+                                playAuditChime();
+                              }
+                            }}
+                            className="w-full py-1.5 px-2.5 rounded-lg bg-gradient-to-r from-amber-600 via-emerald-600 to-teal-600 hover:from-amber-500 hover:to-teal-500 text-white font-bold flex items-center justify-center gap-1.5 cursor-pointer shadow-[0_0_12px_rgba(16,185,129,0.35)] transition-all"
+                          >
+                            <Lock className="w-3.5 h-3.5" />
+                            <span>[ 🔒 ลงนามอนุมัติ (#EP-SOVEREIGN-01) ]</span>
+                          </button>
+                        )}
+                      </div>
+                    )}
                   </div>
                 ))}
                 <div ref={chatEndRef} />
