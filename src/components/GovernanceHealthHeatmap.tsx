@@ -641,6 +641,28 @@ export const GovernanceHealthHeatmap: React.FC<GovernanceHealthHeatmapProps> = (
     });
   });
 
+  // Synchronized refs for stable interval execution without recreating timers
+  const latestSnapshotRef = useRef(latestSnapshot);
+  latestSnapshotRef.current = latestSnapshot;
+
+  const simulatedUnstableChamberIdRef = useRef(simulatedUnstableChamberId);
+  simulatedUnstableChamberIdRef.current = simulatedUnstableChamberId;
+
+  const isAudioEnabledRef = useRef(isAudioEnabled);
+  isAudioEnabledRef.current = isAudioEnabled;
+
+  const onSystemEventRef = useRef(onSystemEvent);
+  onSystemEventRef.current = onSystemEvent;
+
+  const onAddSystemEventRef = useRef(onAddSystemEvent);
+  onAddSystemEventRef.current = onAddSystemEvent;
+
+  const chamberProfilesRef = useRef(chamberProfiles);
+  chamberProfilesRef.current = chamberProfiles;
+
+  const heartbeatCycleRef = useRef(heartbeatCycle);
+  heartbeatCycleRef.current = heartbeatCycle;
+
   // Heartbeat pulse simulation and telemetry heartbeat interval
   useEffect(() => {
     if (!isHeartbeatRunning) return;
@@ -650,7 +672,8 @@ export const GovernanceHealthHeatmap: React.FC<GovernanceHealthHeatmapProps> = (
       const timeStr = now.toLocaleTimeString('en-GB', { hour12: false });
       const nowIso = now.toISOString();
 
-      setHeartbeatCycle((prev) => prev + 1);
+      const currentCycle = heartbeatCycleRef.current;
+      setHeartbeatCycle(currentCycle + 1);
       setLastHeartbeatUtc(nowIso);
       setHeartbeatPulse(true);
 
@@ -658,102 +681,120 @@ export const GovernanceHealthHeatmap: React.FC<GovernanceHealthHeatmapProps> = (
       setTimeout(() => setHeartbeatPulse(false), 260);
 
       // Play audio pulse if unmuted
-      if (isAudioEnabled) {
+      if (isAudioEnabledRef.current) {
         playTelemetryBeep(720);
       }
 
-      // Compute next telemetry heartbeat pulse across all 18 chambers
-      setChamberProfiles((prevProfiles) => {
-        return prevProfiles.map((prof, idx) => {
-          // If locked and protected by bulk lockdown, maintain protected state
-          if (prof.status === 'LOCKED_PROTECTED') {
-            return prof;
-          }
+      const prevProfiles = chamberProfilesRef.current;
+      const newUnstableList: UnstableEvent[] = [];
+      const alertEventsToDispatch: Array<{
+        code: string;
+        name: string;
+        newCoherence: number;
+      }> = [];
 
-          const isSimulated = simulatedUnstableChamberId === prof.chamber.code;
+      const nextProfiles = prevProfiles.map((prof, idx) => {
+        // If locked and protected by bulk lockdown, maintain protected state
+        if (prof.status === 'LOCKED_PROTECTED') {
+          return prof;
+        }
 
-          // Micro-fluctuations tightly centered around 100% GREEN nominal SSoT
-          const globalQopsBonus = latestSnapshot ? (latestSnapshot.qopsThroughput - 850) * 0.00005 : 0;
-          const jitter = (Math.sin(Date.now() / 800 + idx * 1.5) * 0.003) + globalQopsBonus;
-          
-          let newCoherence = +(Math.min(100.0, Math.max(99.965, 99.992 + jitter))).toFixed(3);
-          if (isSimulated) {
-            newCoherence = +(93.8 + Math.sin(Date.now() / 600) * 0.3).toFixed(2);
-          }
+        const isSimulated = simulatedUnstableChamberIdRef.current === prof.chamber.code;
 
-          const isUnstable = newCoherence < 95;
-          const varianceFlag = isUnstable || (Math.sin(Date.now() / 700 + idx * 2.1) > 0.75);
+        // Micro-fluctuations tightly centered around 100% GREEN nominal SSoT
+        const snap = latestSnapshotRef.current;
+        const globalQopsBonus = snap ? (snap.qopsThroughput - 850) * 0.00005 : 0;
+        const jitter = (Math.sin(Date.now() / 800 + idx * 1.5) * 0.003) + globalQopsBonus;
+        
+        let newCoherence = +(Math.min(100.0, Math.max(99.965, 99.992 + jitter))).toFixed(3);
+        if (isSimulated) {
+          newCoherence = +(93.8 + Math.sin(Date.now() / 600) * 0.3).toFixed(2);
+        }
 
-          const newStability = +(Math.min(100.0, Math.max(99.98, 99.995 + Math.cos(Date.now() / 900 + idx) * 0.002))).toFixed(2);
-          const newCryo = +(14.98 + Math.sin(Date.now() / 1200 + idx) * 0.06).toFixed(2);
+        const isUnstable = newCoherence < 95;
+        const varianceFlag = isUnstable || (Math.sin(Date.now() / 700 + idx * 2.1) > 0.75);
 
-          // Alert trigger if drops below 95%
-          if (newCoherence < 95) {
-            setUnstableEvents((currentEvents) => {
-              const exists = currentEvents.some((e) => e.chamberId === prof.chamber.code);
-              if (!exists) {
-                return [
-                  {
-                    id: `EVT-${prof.chamber.code}-${Date.now()}`,
-                    chamberId: prof.chamber.code,
-                    coherence: newCoherence,
-                    timestamp: timeStr,
-                  },
-                  ...currentEvents,
-                ];
-              }
-              return currentEvents;
-            });
-          }
+        const newStability = +(Math.min(100.0, Math.max(99.98, 99.995 + Math.cos(Date.now() / 900 + idx) * 0.002))).toFixed(2);
+        const newCryo = +(14.98 + Math.sin(Date.now() / 1200 + idx) * 0.06).toFixed(2);
 
-          if (newCoherence < 95 && prof.currentCoherence >= 95) {
-            if (onSystemEvent) {
-              onSystemEvent(`[ALERT] Chamber ${prof.chamber.code} coherence dropped to ${newCoherence}% (<95%) - Instability detected!`);
-            }
-            if (onAddSystemEvent) {
-              onAddSystemEvent(
-                'ALERT',
-                `[ALERT] Chamber ${prof.chamber.code} Under-Coherence`,
-                `Chamber ${prof.chamber.name} dropped to ${newCoherence}% (<95%). Instability detected!`,
-                `HASH-${prof.chamber.code}-${Date.now()}`,
-                'critical',
-                'ETDA Sec 26'
-              );
-            }
-          }
-
-          const newSnap: ChamberHeartbeatSnapshot = {
-            epochIndex: heartbeatCycle + 1,
+        // Track alerts if drops below 95%
+        if (newCoherence < 95) {
+          newUnstableList.push({
+            id: `EVT-${prof.chamber.code}-${Date.now()}`,
+            chamberId: prof.chamber.code,
+            coherence: newCoherence,
             timestamp: timeStr,
-            coherencePct: newCoherence,
-            stabilityIndex: newStability,
-            cryoTempMk: newCryo,
-            driftDeltaPpm: 0.0,
-            quorumVotes: 10,
-            status: isSimulated ? 'ALERT' : prof.chamber.status,
-          };
+          });
+        }
 
-          const updatedSnapshots = [...prof.recentSnapshots.slice(1), newSnap];
-          const updatedHistory = [...(prof.coherenceHistory || [prof.currentCoherence]).slice(1), newCoherence];
+        if (newCoherence < 95 && prof.currentCoherence >= 95) {
+          alertEventsToDispatch.push({
+            code: prof.chamber.code,
+            name: prof.chamber.name,
+            newCoherence,
+          });
+        }
 
-          return {
-            ...prof,
-            prevCoherence: prof.currentCoherence,
-            currentCoherence: newCoherence,
-            prevCryoTemp: prof.currentCryoTemp,
-            currentCryoTemp: newCryo,
-            coherenceHistory: updatedHistory,
-            currentStability: newStability,
-            status: isUnstable ? 'UNSTABLE' : 'PURE_GREEN',
-            varianceFlag,
-            recentSnapshots: updatedSnapshots,
-          };
-        });
+        const newSnap: ChamberHeartbeatSnapshot = {
+          epochIndex: currentCycle + 1,
+          timestamp: timeStr,
+          coherencePct: newCoherence,
+          stabilityIndex: newStability,
+          cryoTempMk: newCryo,
+          driftDeltaPpm: 0.0,
+          quorumVotes: 10,
+          status: isSimulated ? 'ALERT' : prof.chamber.status,
+        };
+
+        const updatedSnapshots = [...prof.recentSnapshots.slice(1), newSnap];
+        const updatedHistory = [...(prof.coherenceHistory || [prof.currentCoherence]).slice(1), newCoherence];
+
+        return {
+          ...prof,
+          prevCoherence: prof.currentCoherence,
+          currentCoherence: newCoherence,
+          prevCryoTemp: prof.currentCryoTemp,
+          currentCryoTemp: newCryo,
+          coherenceHistory: updatedHistory,
+          currentStability: newStability,
+          status: isUnstable ? 'UNSTABLE' : 'PURE_GREEN',
+          varianceFlag,
+          recentSnapshots: updatedSnapshots,
+        };
       });
+
+      setChamberProfiles(nextProfiles);
+
+      if (newUnstableList.length > 0) {
+        setUnstableEvents((currentEvents) => {
+          const uniqueToAdd = newUnstableList.filter(
+            (item) => !currentEvents.some((e) => e.chamberId === item.chamberId)
+          );
+          return uniqueToAdd.length > 0 ? [...uniqueToAdd, ...currentEvents] : currentEvents;
+        });
+      }
+
+      if (alertEventsToDispatch.length > 0) {
+        alertEventsToDispatch.forEach(({ code, name, newCoherence }) => {
+          if (onSystemEventRef.current) {
+            onSystemEventRef.current(`[ALERT] Chamber ${code} coherence dropped to ${newCoherence}% (<95%) - Instability detected!`);
+          }
+          if (onAddSystemEventRef.current) {
+            onAddSystemEventRef.current(
+              'ALERT',
+              `[ALERT] Chamber ${code} Under-Coherence`,
+              `Chamber ${name} dropped to ${newCoherence}% (<95%). Instability detected!`,
+              `HASH-${code}-${Date.now()}`,
+              'critical',
+              'ETDA Sec 26'
+            );
+          }
+        });
+      }
     }, heartbeatIntervalMs);
 
     return () => clearInterval(timer);
-  }, [isHeartbeatRunning, heartbeatIntervalMs, isAudioEnabled, heartbeatCycle, latestSnapshot, simulatedUnstableChamberId, onSystemEvent, onAddSystemEvent]);
+  }, [isHeartbeatRunning, heartbeatIntervalMs]);
 
   // Aggregate telemetry metrics across 18 Chambers
   const aggregateMetrics = useMemo(() => {
