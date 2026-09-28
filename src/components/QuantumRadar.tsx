@@ -97,13 +97,6 @@ export const QuantumRadar: React.FC<QuantumRadarProps> = ({
     material.uniforms.uSweepAngleRad.value = (sweepAngle * Math.PI) / 180;
   }, [signalData, heatmapFilter, shaderPalette, sweepAngle]);
 
-  useEffect(() => {
-    const interval = setInterval(() => {
-      setSweepAngle((prev) => (prev + 6) % 360);
-    }, Math.max(30, Math.round(1000 / Math.min(refreshRate, 30))));
-    return () => clearInterval(interval);
-  }, [refreshRate]);
-
   // Dynamic dimensional activity fluctuation on the navigation grid heatmap
   useEffect(() => {
     const fluxTimer = setInterval(() => {
@@ -118,7 +111,7 @@ export const QuantumRadar: React.FC<QuantumRadarProps> = ({
           };
         })
       );
-    }, 2200);
+    }, 4000);
     return () => clearInterval(fluxTimer);
   }, []);
 
@@ -299,11 +292,13 @@ export const QuantumRadar: React.FC<QuantumRadarProps> = ({
             <div className="absolute w-full h-[1px] bg-cyan-500/15" />
             <div className="absolute h-full w-[1px] bg-cyan-500/15" />
 
-            {/* Rotating Sweep Beam */}
+            {/* Rotating Sweep Beam with GPU-accelerated CSS Animation */}
             <div
-              className="absolute inset-0 pointer-events-none"
+              className="absolute inset-0 pointer-events-none animate-spin"
               style={{
-                transform: `rotate(${sweepAngle}deg)`,
+                animationDuration: '6s',
+                animationTimingFunction: 'linear',
+                animationIterationCount: 'infinite',
                 background:
                   'conic-gradient(from 0deg, rgba(6, 182, 212, 0.34) 0deg, rgba(139, 92, 246, 0.12) 50deg, transparent 95deg)',
               }}

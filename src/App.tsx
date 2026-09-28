@@ -55,42 +55,45 @@ import { SovereignControlDock } from '@/components/SovereignControlDock';
 import { SovereignBottomStatusBar } from '@/components/SovereignBottomStatusBar';
 import { CopilotSovereignAI } from '@/components/CopilotSovereignAI';
 import { SystemEventsSidebar, SystemEvent } from '@/components/SystemEventsSidebar';
-import { DashboardView } from '@/components/views/DashboardView';
-import { QuantumView } from '@/components/views/QuantumView';
-import { Chamber11QuantumRadar } from '@/components/views/Chamber11QuantumRadar';
-import { G11CanonicalCore } from '@/components/views/G11CanonicalCore';
-import { NexusView } from '@/components/views/NexusView';
-import { VaultView } from '@/components/views/VaultView';
-import { LedgerView } from '@/components/views/LedgerView';
-import { PulseView } from '@/components/views/PulseView';
-import { ForgeView } from '@/components/views/ForgeView';
-import { MatrixView } from '@/components/views/MatrixView';
-import { ArchiveView } from '@/components/views/ArchiveView';
-import { ConsoleView } from '@/components/views/ConsoleView';
-import { SecurityView, SecuritySubTab } from '@/components/views/SecurityView';
-import { SettingsView } from '@/components/views/SettingsView';
-import { ProductionReadinessView } from '@/components/views/ProductionReadinessView';
-import { CouncilView } from '@/components/views/CouncilView';
-import { LegalView } from '@/components/views/LegalView';
 import { ForensicAuditStepper } from '@/components/ForensicAuditStepper';
-import { StudioView } from '@/components/views/StudioView';
-import { UnifiedMultiverseControlPanel } from '@/components/views/UnifiedMultiverseControlPanel';
-import { UnifiedAuditPlaybackConsole } from '@/components/views/UnifiedAuditPlaybackConsole';
-import { GovernanceHealthHeatmap } from '@/components/views/GovernanceHealthHeatmap';
-import { ComplianceCoverageView } from '@/components/views/ComplianceCoverageView';
-import { CivilizationEngineView } from '@/components/views/CivilizationEngineView';
-import { CanonicalIntegrityDashboardView } from '@/components/views/CanonicalIntegrityDashboardView';
-import { QuantumAuditFusionView } from '@/components/views/QuantumAuditFusionView';
-import { AdminConsole } from '@/components/AdminConsole';
-import { AuditAnalyticsDashboard } from '@/components/AuditAnalyticsDashboard';
-import { SovereignChambersControlPlane } from '@/components/SovereignChambersControlPlane';
-import { AuditHistoryView } from '@/components/views/AuditHistoryView';
-import { SecurityPipelineView } from '@/components/views/SecurityPipelineView';
-import { ExecutiveCourtBriefing } from '@/components/executive/ExecutiveCourtBriefing';
-import { SovereignWalletView } from '@/components/views/SovereignWalletView';
-import { SovereignDashboard } from '@/pages/SovereignDashboard';
-import { AIWorkspace } from '@/components/AIWorkspace';
 import { type StagedAiCommandRequest } from '@/components/CommandCenterOperationsConsole';
+import type { SecuritySubTab } from '@/components/views/SecurityView';
+
+// High-Performance Lazy Loading for Sovereign Views (Zero Main-Thread Latency)
+const DashboardView = React.lazy(() => import('@/components/views/DashboardView').then(m => ({ default: m.DashboardView })));
+const QuantumView = React.lazy(() => import('@/components/views/QuantumView').then(m => ({ default: m.QuantumView })));
+const Chamber11QuantumRadar = React.lazy(() => import('@/components/views/Chamber11QuantumRadar').then(m => ({ default: m.Chamber11QuantumRadar })));
+const G11CanonicalCore = React.lazy(() => import('@/components/views/G11CanonicalCore').then(m => ({ default: m.G11CanonicalCore })));
+const NexusView = React.lazy(() => import('@/components/views/NexusView').then(m => ({ default: m.NexusView })));
+const VaultView = React.lazy(() => import('@/components/views/VaultView').then(m => ({ default: m.VaultView })));
+const LedgerView = React.lazy(() => import('@/components/views/LedgerView').then(m => ({ default: m.LedgerView })));
+const PulseView = React.lazy(() => import('@/components/views/PulseView').then(m => ({ default: m.PulseView })));
+const ForgeView = React.lazy(() => import('@/components/views/ForgeView').then(m => ({ default: m.ForgeView })));
+const MatrixView = React.lazy(() => import('@/components/views/MatrixView').then(m => ({ default: m.MatrixView })));
+const ArchiveView = React.lazy(() => import('@/components/views/ArchiveView').then(m => ({ default: m.ArchiveView })));
+const ConsoleView = React.lazy(() => import('@/components/views/ConsoleView').then(m => ({ default: m.ConsoleView })));
+const SecurityView = React.lazy(() => import('@/components/views/SecurityView').then(m => ({ default: m.SecurityView })));
+const SettingsView = React.lazy(() => import('@/components/views/SettingsView').then(m => ({ default: m.SettingsView })));
+const ProductionReadinessView = React.lazy(() => import('@/components/views/ProductionReadinessView').then(m => ({ default: m.ProductionReadinessView })));
+const CouncilView = React.lazy(() => import('@/components/views/CouncilView').then(m => ({ default: m.CouncilView })));
+const LegalView = React.lazy(() => import('@/components/views/LegalView').then(m => ({ default: m.LegalView })));
+const StudioView = React.lazy(() => import('@/components/views/StudioView').then(m => ({ default: m.StudioView })));
+const UnifiedMultiverseControlPanel = React.lazy(() => import('@/components/views/UnifiedMultiverseControlPanel').then(m => ({ default: m.UnifiedMultiverseControlPanel })));
+const UnifiedAuditPlaybackConsole = React.lazy(() => import('@/components/views/UnifiedAuditPlaybackConsole').then(m => ({ default: m.UnifiedAuditPlaybackConsole })));
+const GovernanceHealthHeatmap = React.lazy(() => import('@/components/views/GovernanceHealthHeatmap').then(m => ({ default: m.GovernanceHealthHeatmap })));
+const ComplianceCoverageView = React.lazy(() => import('@/components/views/ComplianceCoverageView').then(m => ({ default: m.ComplianceCoverageView })));
+const CivilizationEngineView = React.lazy(() => import('@/components/views/CivilizationEngineView').then(m => ({ default: m.CivilizationEngineView })));
+const CanonicalIntegrityDashboardView = React.lazy(() => import('@/components/views/CanonicalIntegrityDashboardView').then(m => ({ default: m.CanonicalIntegrityDashboardView })));
+const QuantumAuditFusionView = React.lazy(() => import('@/components/views/QuantumAuditFusionView').then(m => ({ default: m.QuantumAuditFusionView })));
+const AdminConsole = React.lazy(() => import('@/components/AdminConsole').then(m => ({ default: m.AdminConsole })));
+const AuditAnalyticsDashboard = React.lazy(() => import('@/components/AuditAnalyticsDashboard').then(m => ({ default: m.AuditAnalyticsDashboard })));
+const SovereignChambersControlPlane = React.lazy(() => import('@/components/SovereignChambersControlPlane').then(m => ({ default: m.SovereignChambersControlPlane })));
+const AuditHistoryView = React.lazy(() => import('@/components/views/AuditHistoryView').then(m => ({ default: m.AuditHistoryView })));
+const SecurityPipelineView = React.lazy(() => import('@/components/views/SecurityPipelineView').then(m => ({ default: m.SecurityPipelineView })));
+const ExecutiveCourtBriefing = React.lazy(() => import('@/components/executive/ExecutiveCourtBriefing').then(m => ({ default: m.ExecutiveCourtBriefing })));
+const SovereignWalletView = React.lazy(() => import('@/components/views/SovereignWalletView').then(m => ({ default: m.SovereignWalletView })));
+const SovereignDashboard = React.lazy(() => import('@/pages/SovereignDashboard').then(m => ({ default: m.SovereignDashboard })));
+const AIWorkspace = React.lazy(() => import('@/components/AIWorkspace').then(m => ({ default: m.AIWorkspace })));
 import { AuditCertificateModal } from '@/components/AuditCertificateModal';
 import { GitHubPwaModal } from '@/components/GitHubPwaModal';
 import { ThaiLegalSearchModal } from '@/components/ThaiLegalSearchModal';
@@ -1037,7 +1040,6 @@ function SovereignAppContent() {
   const [carrierPitchHz, setCarrierPitchHz] = useState<number>(882);
   const [snapshots, setSnapshots] = useState<HardwareSnapshot[]>(INITIAL_HARDWARE_SNAPSHOTS);
   const [lastSnapshotTime, setLastSnapshotTime] = useState<number>(0);
-  const [heartbeatTick, setHeartbeatTick] = useState<boolean>(false);
   const [systemEvents, dispatchSystemEvents] = useReducer(systemEventsReducer, INITIAL_SYSTEM_EVENTS);
   const [isSystemActivityFrozen, setIsSystemActivityFrozen] = useState<boolean>(() => {
     try {
@@ -1142,18 +1144,6 @@ function SovereignAppContent() {
   
 
   
-
-  // Heartbeat pulse timer in sync with telemetry
-  useEffect(() => {
-    const isRecent = Date.now() - lastSnapshotTime < 6000;
-    const intervalTime = isRecent ? 500 : 1000; // Accelerated heartbeat when snapshot is captured!
-
-    const interval = setInterval(() => {
-      setHeartbeatTick((prev) => !prev);
-    }, intervalTime);
-
-    return () => clearInterval(interval);
-  }, [lastSnapshotTime]);
 
   const snapshotsRef = useRef(snapshots);
   snapshotsRef.current = snapshots;
@@ -4004,7 +3994,17 @@ function SovereignAppContent() {
               fallbackViewName={VIEW_PERSONAS[currentView]?.name || currentView}
               onResetToHome={() => setCurrentView('dashboard')}
             >
-              {renderCurrentView()}
+              <React.Suspense
+                fallback={
+                  <div className="flex flex-col items-center justify-center min-h-[360px] w-full p-8 font-mono text-cyan-400 space-y-3 animate-in fade-in duration-150">
+                    <div className="w-10 h-10 border-2 border-cyan-500/20 border-t-cyan-400 rounded-full animate-spin shadow-[0_0_15px_rgba(6,182,212,0.4)]" />
+                    <span className="text-xs tracking-wider text-slate-300">INITIALIZING SOVEREIGN MODULE...</span>
+                    <span className="text-[10px] text-slate-500">Zero-Drift Execution Pipeline · Δ0.00%</span>
+                  </div>
+                }
+              >
+                {renderCurrentView()}
+              </React.Suspense>
             </ErrorBoundary>
           </motion.div>
         </AnimatePresence>
