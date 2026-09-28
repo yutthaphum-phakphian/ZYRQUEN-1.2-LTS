@@ -909,7 +909,7 @@ async function startServer() {
           },
         });
         const response = await ai.models.generateContent({
-          model: 'gemini-3-flash-preview',
+          model: 'gemini-3.8-flash',
           contents: userQuery,
           config: {
             systemInstruction: `You are the Sovereign Intelligence Assistant for ZYRQUEN Ω∞ Sovereign World Engine (Genesis Block #${GENESIS_BLOCK_NUM}, Merkle ${MERKLE_ROOT_GENESIS}, 14,902 Seals, SSoT Δ0.00% Zero Drift). Respond professionally with authoritative sovereign clarity. Context: ${JSON.stringify(context || {})}`,
@@ -1163,7 +1163,7 @@ Rules:
 - "htmlPreview": string (a self-contained HTML5 document using Tailwind CSS CDN with dark slate-950 styling representing the requested UI/dashboard preview; never reference window.parent, top, document.cookie, or localStorage).`;
 
       // Bounded real-provider retry on transient model API overload (Zero Mock Fallback)
-      const candidateModels = ['gemini-3-flash-preview', 'gemini-2.5-flash'] as const;
+      const candidateModels = ['gemini-3.8-flash', 'gemini-3.1-flash-lite'] as const;
       let response: Awaited<ReturnType<typeof ai.models.generateContent>> | null = null;
       let lastUpstreamError: unknown = null;
 

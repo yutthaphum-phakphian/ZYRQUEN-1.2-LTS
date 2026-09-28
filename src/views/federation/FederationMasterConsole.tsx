@@ -4,6 +4,8 @@
  */
 import React, { useEffect, useState } from 'react';
 import MultiverseDefensePanorama from '../panorama/MultiverseDefensePanorama';
+import { SovereignIdentityFederation } from '../../components/federation/SovereignIdentityFederation';
+import { AdaptiveRuntimeOrchestratorPanel } from '../../components/orchestration/AdaptiveRuntimeOrchestratorPanel';
 import {
   Shield,
   Activity,
@@ -15,6 +17,8 @@ import {
   Sparkles,
   Zap,
   Radio,
+  Sliders,
+  Building2,
 } from 'lucide-react';
 
 export interface FederationLogEntry {
@@ -93,6 +97,7 @@ const INITIAL_LOGS: FederationLogEntry[] = [
 export const FederationMasterConsole: React.FC = () => {
   const [logs, setLogs] = useState<FederationLogEntry[]>(INITIAL_LOGS);
   const [isConnected, setIsConnected] = useState<boolean>(true);
+  const [activeSubTab, setActiveSubTab] = useState<'PANORAMA' | 'PHASE_13_ORCHESTRATOR' | 'PHASE_14_FEDERATION'>('PANORAMA');
 
   // Live WebSocket Connection & Diagnostic Log Stream
   useEffect(() => {
@@ -180,8 +185,60 @@ export const FederationMasterConsole: React.FC = () => {
         </div>
       </div>
 
-      {/* Panoramic 3D Holographic Visualization */}
-      <div data-testid="defense-panorama-section">
+      {/* Navigation Sub-Tabs */}
+      <div className="flex items-center gap-2 p-1.5 rounded-2xl bg-slate-950 border border-slate-800 font-mono text-xs overflow-x-auto no-scrollbar">
+        <button
+          onClick={() => setActiveSubTab('PANORAMA')}
+          className={`flex items-center gap-2 px-4 py-2 rounded-xl font-bold transition cursor-pointer whitespace-nowrap ${
+            activeSubTab === 'PANORAMA'
+              ? 'bg-cyan-950 text-cyan-300 border border-cyan-500/50 shadow-sm'
+              : 'text-slate-400 hover:text-white'
+          }`}
+        >
+          <Globe className="w-3.5 h-3.5" />
+          <span>Multiverse Defense Panorama</span>
+        </button>
+
+        <button
+          onClick={() => setActiveSubTab('PHASE_13_ORCHESTRATOR')}
+          className={`flex items-center gap-2 px-4 py-2 rounded-xl font-bold transition cursor-pointer whitespace-nowrap ${
+            activeSubTab === 'PHASE_13_ORCHESTRATOR'
+              ? 'bg-cyan-950 text-cyan-300 border border-cyan-500/50 shadow-sm'
+              : 'text-slate-400 hover:text-white'
+          }`}
+        >
+          <Sliders className="w-3.5 h-3.5" />
+          <span>Phase 13: Adaptive Orchestrator</span>
+        </button>
+
+        <button
+          onClick={() => setActiveSubTab('PHASE_14_FEDERATION')}
+          className={`flex items-center gap-2 px-4 py-2 rounded-xl font-bold transition cursor-pointer whitespace-nowrap ${
+            activeSubTab === 'PHASE_14_FEDERATION'
+              ? 'bg-indigo-950 text-indigo-300 border border-indigo-500/50 shadow-sm'
+              : 'text-slate-400 hover:text-white'
+          }`}
+        >
+          <Building2 className="w-3.5 h-3.5" />
+          <span>Phase 14: Sovereign Identity Federation</span>
+        </button>
+      </div>
+
+      {/* Conditional Sub-View Panels */}
+      {activeSubTab === 'PHASE_13_ORCHESTRATOR' && (
+        <div className="animate-in fade-in duration-200">
+          <AdaptiveRuntimeOrchestratorPanel />
+        </div>
+      )}
+
+      {activeSubTab === 'PHASE_14_FEDERATION' && (
+        <div className="animate-in fade-in duration-200">
+          <SovereignIdentityFederation />
+        </div>
+      )}
+
+      {/* Panoramic 3D Holographic Visualization (always preserved in DOM for test harness) */}
+      <div data-testid="defense-panorama-section" className={activeSubTab !== 'PANORAMA' ? 'hidden' : 'block'}>
         <MultiverseDefensePanorama />
       </div>
 
