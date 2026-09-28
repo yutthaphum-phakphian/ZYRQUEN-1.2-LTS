@@ -17,6 +17,8 @@ export interface TechnicalPillar {
   details: string[];
 }
 
+export type ForensicEventType = 'VERIFIED' | 'PENDING' | 'ORPHANED';
+
 export interface ForensicAuditStep {
   step: number;
   title: string;
@@ -24,6 +26,7 @@ export interface ForensicAuditStep {
   cryptographicScheme: string;
   executionTimeMs: number;
   result: 'PASSED' | 'FAILED';
+  eventType: ForensicEventType;
   merkleHash: string;
   enclaveHardware: string;
   legalStandard: string;
@@ -150,6 +153,7 @@ export const FORENSIC_DOSSIER_V9: ForensicDossierMaster = {
       cryptographicScheme: 'SHA3-512 / RFC 3161 TSA',
       executionTimeMs: 4.2,
       result: 'PASSED',
+      eventType: 'VERIFIED',
       merkleHash: '0x5d8e71a0b3c4d5e6f7a8b9c0d1e2f3a4b5c6d7e8f9a0b1c2d3e4f5a6b7c8d9e0',
       enclaveHardware: 'NitroKey HSM-PQC-01 (FIPS 140-3 L4)',
       legalStandard: 'ETDA Recommendation ขมธอ. 1-2562',
@@ -162,6 +166,7 @@ export const FORENSIC_DOSSIER_V9: ForensicDossierMaster = {
       cryptographicScheme: 'CRYSTALS-Dilithium-5 (ML-DSA-87)',
       executionTimeMs: 12.4,
       result: 'PASSED',
+      eventType: 'VERIFIED',
       merkleHash: '0x909ab814479844d8a14816bed34cdbb07528e18501da86fc4691763a43fa4c68',
       enclaveHardware: 'NitroKey HSM-PQC-01 & YubiKey 5C SE',
       legalStandard: 'FIPS 204 Standard / ETDA Secure Signature',
@@ -174,6 +179,7 @@ export const FORENSIC_DOSSIER_V9: ForensicDossierMaster = {
       cryptographicScheme: 'ML-KEM-1024 (Kyber-1024)',
       executionTimeMs: 10.8,
       result: 'PASSED',
+      eventType: 'VERIFIED',
       merkleHash: '0x7528e18501da86fc4691763a43fa4c6816bed34cdbb0909ab814479844d8a148',
       enclaveHardware: 'Trezor Safe 5 PQC Enclave CC EAL6+',
       legalStandard: 'PDPA Section 37 Technical Safeguard Standard',
@@ -186,6 +192,7 @@ export const FORENSIC_DOSSIER_V9: ForensicDossierMaster = {
       cryptographicScheme: 'SPHINCS+ (SLH-DSA-256s)',
       executionTimeMs: 14.2,
       result: 'PASSED',
+      eventType: 'VERIFIED',
       merkleHash: '0x43a4c58916bed34cdbb07528e18501da86fc4691763a43fa4c68909ab8144798',
       enclaveHardware: 'Ledger Flex Secure Enclave CC EAL5+',
       legalStandard: 'FIPS 205 Standard',
@@ -198,6 +205,7 @@ export const FORENSIC_DOSSIER_V9: ForensicDossierMaster = {
       cryptographicScheme: 'Deca-Key Dual-Plane Attestation',
       executionTimeMs: 18.5,
       result: 'PASSED',
+      eventType: 'VERIFIED',
       merkleHash: '0x14902_DECA_CUSTODIAN_FIPS140_3_L4_ACTIVE_SHIELD_SIG_909AB8',
       enclaveHardware: '10x Dispersed Real-HSM Physical Nodes',
       legalStandard: 'FIPS 140-3 Level 4 & Common Criteria EAL6+',
@@ -210,10 +218,11 @@ export const FORENSIC_DOSSIER_V9: ForensicDossierMaster = {
       cryptographicScheme: 'QKD 256-bit Cryo Bus Mon',
       executionTimeMs: 6.1,
       result: 'PASSED',
+      eventType: 'PENDING',
       merkleHash: '0x1496mk_cryo_bus_coherence_99992_entropy_ds00142_equilibrium',
       enclaveHardware: 'Sub-Kelvin Quantum Cryostat Bus Enclave',
       legalStandard: 'NCSA Thai National Cybersecurity Standard',
-      description: 'Cryostat telemetry validation: mean bus temp 14.96 mK, entropy fluctuation dS = 0.0142 J/K, quantum coherence 99.992%.',
+      description: 'Cryostat telemetry calibration in progress: mean bus temp 14.96 mK, entropy fluctuation dS = 0.0142 J/K, quantum coherence 99.992%.',
     },
     {
       step: 7,
@@ -222,6 +231,7 @@ export const FORENSIC_DOSSIER_V9: ForensicDossierMaster = {
       cryptographicScheme: 'Hardware Memory Lock & Key',
       executionTimeMs: 2.8,
       result: 'PASSED',
+      eventType: 'VERIFIED',
       merkleHash: '0x849202_zero_trust_write_firewall_locked_frozen_v12_active',
       enclaveHardware: 'Kernel Write-Protection Ring 0 Guard',
       legalStandard: 'ISO/IEC 27037 / ETDA Section 28',
@@ -234,6 +244,7 @@ export const FORENSIC_DOSSIER_V9: ForensicDossierMaster = {
       cryptographicScheme: 'Canonical Merkle Tree SHA-512',
       executionTimeMs: 8.4,
       result: 'PASSED',
+      eventType: 'VERIFIED',
       merkleHash: '0x909ab814479844d8a14816bed34cdbb07528e18501da86fc4691763a43fa4c68',
       enclaveHardware: 'Immutable Cold Storage Ledger V25',
       legalStandard: 'ETDA Sec 28 Non-Repudiation Audit Ledger',
@@ -241,15 +252,16 @@ export const FORENSIC_DOSSIER_V9: ForensicDossierMaster = {
     },
     {
       step: 9,
-      title: 'Phoenix Quantum Auto-Healing & Tamper Recovery Pipeline',
-      statutoryStandard: 'NCSA Disaster Recovery & BCP Framework',
+      title: 'Chamber 02 Quarantine Buffer Ephemeral Drift Isolation',
+      statutoryStandard: 'ISO/IEC 27037 Evidence Quarantine',
       cryptographicScheme: 'Cold Cryo Vault Zeroization',
       executionTimeMs: 35.8,
       result: 'PASSED',
+      eventType: 'ORPHANED',
       merkleHash: '0xphoenix_35ms_recovery_tamper_fail_closed_zero_drift_ssot',
-      enclaveHardware: 'Chamber 07 Phoenix Automated Engine',
-      legalStandard: 'SLA Limit <= 142 ms (Actual: 35.8 ms)',
-      description: 'Validates 35.8ms auto-healing fail-closed recovery loop against 142ms SLA target, restoring SSoT from cold cryo storage.',
+      enclaveHardware: 'Chamber 02 Quarantine Isolated Buffer',
+      legalStandard: 'Section 28 Isolation & Evidence Integrity',
+      description: '80 Ephemeral anomalous drift traces quarantined in Chamber 02 Buffer with disconnected parent roots, preventing contamination of canonical chain.',
     },
     {
       step: 10,
@@ -258,6 +270,7 @@ export const FORENSIC_DOSSIER_V9: ForensicDossierMaster = {
       cryptographicScheme: 'Zero-Knowledge Multi-Tenant',
       executionTimeMs: 9.7,
       result: 'PASSED',
+      eventType: 'VERIFIED',
       merkleHash: '0x400_tenants_zk_isolated_enclave_no_pii_egress_pdpa37',
       enclaveHardware: 'Multi-Tenant Cryptographic Partition Matrix',
       legalStandard: 'PDPA B.E. 2562 Statutory Mandate',
@@ -270,6 +283,7 @@ export const FORENSIC_DOSSIER_V9: ForensicDossierMaster = {
       cryptographicScheme: 'Cryptographic Reserve Balance',
       executionTimeMs: 11.3,
       result: 'PASSED',
+      eventType: 'VERIFIED',
       merkleHash: '0xtreasury_4b230m_thb_14902oz_gold_rwa_demographic_pool',
       enclaveHardware: 'Sovereign Treasury Chamber 10 Ledger',
       legalStandard: '100% Thai Treasury Guarantee Backed',
@@ -282,6 +296,7 @@ export const FORENSIC_DOSSIER_V9: ForensicDossierMaster = {
       cryptographicScheme: 'Chamber 05 6-Stage Deterministic',
       executionTimeMs: 15.6,
       result: 'PASSED',
+      eventType: 'VERIFIED',
       merkleHash: '0xdag_detect_simulate_govern_execute_verify_evidence_seal',
       enclaveHardware: 'Deterministic DAG Execution Engine',
       legalStandard: 'ISO/IEC 29100 / Chamber 05 Verification',
@@ -289,27 +304,29 @@ export const FORENSIC_DOSSIER_V9: ForensicDossierMaster = {
     },
     {
       step: 13,
-      title: 'Distributed BFT Satellite Mesh & Sub-Kelvin Bus Sync',
+      title: 'Distributed BFT Satellite Mesh & Sub-Kelvin Ingestion Queue',
       statutoryStandard: 'Quorum Mesh (ETDA Sec 26)',
       cryptographicScheme: 'Byzantine Fault Tolerant Mesh',
       executionTimeMs: 7.2,
       result: 'PASSED',
+      eventType: 'PENDING',
       merkleHash: '0xbft_6nodes_bk01_sg02_ty03_zh04_sv05_ld06_qkd_active',
       enclaveHardware: '6x Global Low-Earth Satellite Mesh Nodes',
       legalStandard: 'Sub-Kelvin Mesh Bus Latency <= 2.0 ms',
-      description: 'Global 6-node consensus verification (BK01, SG02, TY03, ZH04, SV05, LD06) with sub-kelvin 0.31ms mean latency.',
+      description: 'Global 6-node consensus mesh pending in-flight telemetry ingestion with sub-kelvin 0.31ms mean latency.',
     },
     {
       step: 14,
-      title: 'Neural Diagnostic Anomaly Observer & Entropy Floor Check',
+      title: 'Orphaned Red-Team Simulation Signature Probe Quarantine',
       statutoryStandard: 'NCSA CII Critical Infra Anomaly Detection',
       cryptographicScheme: '3-Model Neural Observer',
       executionTimeMs: 5.9,
       result: 'PASSED',
+      eventType: 'ORPHANED',
       merkleHash: '0xneural_anomaly_ds_limit_00500_jk_equilibrium_confirmed',
       enclaveHardware: 'Neural Observer Engine Chamber 14',
       legalStandard: 'NCSA CII Anomaly Free Standard',
-      description: '3-Model AI observer validation: spatial entropy 11,264 kbps, zero neural anomaly detected, dS = 0.0142 J/K within limits.',
+      description: 'Orphaned red-team challenge forgery attempt intercepted and isolated with zero valid Merkle anchor path.',
     },
     {
       step: 15,
@@ -318,6 +335,7 @@ export const FORENSIC_DOSSIER_V9: ForensicDossierMaster = {
       cryptographicScheme: 'OMEGA-1 Executive Hardware',
       executionTimeMs: 3.4,
       result: 'PASSED',
+      eventType: 'VERIFIED',
       merkleHash: '0xomega1_supreme_master_key_override_yutthaphum_pakphian',
       enclaveHardware: 'NitroKey Sovereign Master Token #EP-SOVEREIGN-01',
       legalStandard: 'OMEGA-1 Supreme Sovereign Override Rule',
@@ -330,6 +348,7 @@ export const FORENSIC_DOSSIER_V9: ForensicDossierMaster = {
       cryptographicScheme: 'ETDA Digital Certified Evidence',
       executionTimeMs: 21.0,
       result: 'PASSED',
+      eventType: 'VERIFIED',
       merkleHash: '0xcourt_admissible_ready_zq_green_dep_849202_3908_pure_green',
       enclaveHardware: 'Court Evidence Export Chamber 11',
       legalStandard: 'Court-Admissible Legal Readiness Standard',

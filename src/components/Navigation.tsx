@@ -52,6 +52,7 @@ import { GitHubSyncWarningNav } from './navigation/GitHubSyncWarningNav';
 import { CopilotAssistantDrawer } from './copilot/CopilotAssistantDrawer';
 import { ThemeSwitcher } from './ThemeSwitcher';
 import { ZyrquenIcon } from './ZyrquenIcon';
+import { TopNavGlobalSearchBar } from './navigation/TopNavGlobalSearchBar';
 
 interface NavigationProps {
   currentView: ViewType;
@@ -400,6 +401,16 @@ export const Navigation: React.FC<NavigationProps> = ({
               </motion.span>
             </AnimatePresence>
           </motion.div>
+        </div>
+
+        {/* Global Search Bar (Quick Filter for System Events, Forensic Audit Logs, Laws) */}
+        <div className="hidden md:flex flex-1 max-w-sm lg:max-w-md mx-2">
+          <TopNavGlobalSearchBar
+            onSelectView={onSelectView}
+            onOpenForensicDossier={onOpenForensicDossier}
+            onOpenEventsSidebar={onOpenEventsSidebar}
+            onOpenLegalSearch={onOpenLegalSearch}
+          />
         </div>
 
         {/* Right Actions */}

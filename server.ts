@@ -770,6 +770,88 @@ async function startServer() {
     });
   });
 
+  // ============================================================================
+  // RBAC & ADMIN CONSOLE API (Project Owner Invariant & User Management)
+  // ============================================================================
+  const adminUsersDirectory = [
+    {
+      id: 'usr_owner_ep01',
+      username: 'นายยุทธภูมิ พากเพียร (#EP-SOVEREIGN-01)',
+      email: 'yuttaphumphakphian@gmail.com',
+      role: 'owner',
+      createdAt: '2026-09-16T19:00:00.000Z',
+      lastActiveUtc: new Date().toISOString(),
+      status: 'active',
+    },
+    {
+      id: 'usr_adm_ch11',
+      username: 'Chamber 11 Sentinel Admin',
+      email: 'sentinel.ch11@zyrquen.internal',
+      role: 'admin',
+      createdAt: '2026-09-17T08:30:00.000Z',
+      lastActiveUtc: new Date().toISOString(),
+      status: 'active',
+    },
+    {
+      id: 'usr_aud_fips02',
+      username: 'Forensic Custodian Auditor #02',
+      email: 'auditor.fips02@zyrquen.internal',
+      role: 'admin',
+      createdAt: '2026-09-18T10:15:00.000Z',
+      lastActiveUtc: new Date().toISOString(),
+      status: 'active',
+    },
+    {
+      id: 'usr_ops_004',
+      username: 'Deca-Key Hardware Operator',
+      email: 'operator.deca@zyrquen.internal',
+      role: 'user',
+      createdAt: '2026-09-20T14:20:00.000Z',
+      lastActiveUtc: new Date().toISOString(),
+      status: 'active',
+    },
+  ];
+
+  app.get('/api/admin/users', (_req: Request, res: Response) => {
+    res.status(200).json({
+      status: 'SUCCESS',
+      users: adminUsersDirectory,
+      totalUsers: adminUsersDirectory.length,
+      ownerProtected: true,
+      genesisBlock: GENESIS_BLOCK_NUM,
+      merkleRoot: MERKLE_ROOT_GENESIS,
+      timestamp: new Date().toISOString(),
+    });
+  });
+
+  app.patch('/api/admin/users/:id/role', (req: Request, res: Response) => {
+    const { id } = req.params;
+    const { role } = req.body || {};
+
+    const targetUser = adminUsersDirectory.find((u) => u.id === id);
+    if (!targetUser) {
+      return res.status(404).json({ error: 'USER_NOT_FOUND', message: 'Target user not found in directory.' });
+    }
+
+    if (targetUser.role === 'owner' || id === 'usr_owner_ep01') {
+      return res.status(403).json({
+        error: 'OWNER_PROTECTION_VIOLATION',
+        message: 'Security Invariant Violation: Project Owner permissions cannot be demoted or modified.',
+      });
+    }
+
+    if (role !== 'admin' && role !== 'user') {
+      return res.status(400).json({ error: 'INVALID_ROLE', message: 'Role must be either admin or user.' });
+    }
+
+    targetUser.role = role;
+    res.status(200).json({
+      status: 'SUCCESS',
+      message: `User role successfully updated to ${role.toUpperCase()}.`,
+      user: targetUser,
+    });
+  });
+
   // POST /api/copilot/chat (Sovereign Coding & System Assistant Copilot Bridge)
   app.post('/api/copilot/chat', async (req: Request, res: Response) => {
     const { message, context } = req.body || {};

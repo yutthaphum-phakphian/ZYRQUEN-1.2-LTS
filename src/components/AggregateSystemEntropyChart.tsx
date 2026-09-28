@@ -1,10 +1,12 @@
 import React, { useEffect, useRef, useState } from 'react';
 import * as d3 from 'd3';
 import { Activity } from 'lucide-react';
+import { useChartAnimationPreference } from '../hooks/useChartAnimationPreference';
 
 export const AggregateSystemEntropyChart: React.FC = () => {
   const containerRef = useRef<HTMLDivElement>(null);
   const svgRef = useRef<SVGSVGElement>(null);
+  const { animationsEnabled } = useChartAnimationPreference();
   
   const [data, setData] = useState<{ time: number; value: number }[]>([]);
 
@@ -17,6 +19,7 @@ export const AggregateSystemEntropyChart: React.FC = () => {
     }));
     setData(initialData);
 
+    const intervalMs = animationsEnabled ? 1000 : 2500;
     const interval = setInterval(() => {
       setData(prev => {
         const nextTime = Date.now();
@@ -24,10 +27,10 @@ export const AggregateSystemEntropyChart: React.FC = () => {
         const nextData = [...prev.slice(1), { time: nextTime, value: nextValue }];
         return nextData;
       });
-    }, 1000);
+    }, intervalMs);
 
     return () => clearInterval(interval);
-  }, []);
+  }, [animationsEnabled]);
 
   useEffect(() => {
     if (!containerRef.current || !svgRef.current || data.length === 0) return;
@@ -85,17 +88,19 @@ export const AggregateSystemEntropyChart: React.FC = () => {
     g.selectAll('.domain').attr('stroke', '#3f3f46');
     g.selectAll('.tick line').attr('stroke', '#3f3f46');
 
+    const curve = animationsEnabled ? d3.curveMonotoneX : d3.curveLinear;
+
     const line = d3.line<{ time: number; value: number }>()
       .x(d => x(d.time))
       .y(d => y(d.value))
-      .curve(d3.curveMonotoneX);
+      .curve(curve);
 
     // Area under line
     const area = d3.area<{ time: number; value: number }>()
       .x(d => x(d.time))
       .y0(innerHeight)
       .y1(d => y(d.value))
-      .curve(d3.curveMonotoneX);
+      .curve(curve);
 
     const gradientId = 'entropy-gradient';
     const defs = svg.append('defs');

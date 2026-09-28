@@ -30,6 +30,8 @@ import {
 import { HardwareSnapshot } from '../../types';
 import { INITIAL_HARDWARE_SNAPSHOTS } from '../../utils/telemetrySnapshot';
 import { playTone } from '../AudioSynthesizer';
+import { useChartAnimationPreference } from '../../hooks/useChartAnimationPreference';
+import { ChartAnimationToggle } from './ChartAnimationToggle';
 
 export interface CpuTemperatureTrendChartProps {
   snapshots?: HardwareSnapshot[];
@@ -161,6 +163,7 @@ export const CpuTemperatureTrendChart: React.FC<CpuTemperatureTrendChartProps> =
   className = '',
   onNavigateToLedger,
 }) => {
+  const { animationsEnabled } = useChartAnimationPreference();
   const [viewMode, setViewMode] = useState<TrendViewMode>('cores');
   const [rangeFilter, setRangeFilter] = useState<'10' | '20' | 'ALL'>('ALL');
   const [visibleCores, setVisibleCores] = useState<{ [key: string]: boolean }>({
@@ -432,6 +435,9 @@ export const CpuTemperatureTrendChart: React.FC<CpuTemperatureTrendChartProps> =
             ))}
           </div>
 
+          {/* User Chart Animation & High Performance Toggle */}
+          <ChartAnimationToggle variant="badge" />
+
           {/* Export JSON Button */}
           <button
             type="button"
@@ -687,6 +693,7 @@ export const CpuTemperatureTrendChart: React.FC<CpuTemperatureTrendChartProps> =
                   stroke="#06b6d4"
                   strokeWidth={2.5}
                   fill="url(#cpuGradient)"
+                  isAnimationActive={animationsEnabled}
                   dot={{ r: 3, fill: '#06b6d4', stroke: '#0a0f1e', strokeWidth: 1.5 }}
                   activeDot={{ r: 5, fill: '#22d3ee', stroke: '#fff', strokeWidth: 2 }}
                 />
@@ -698,6 +705,7 @@ export const CpuTemperatureTrendChart: React.FC<CpuTemperatureTrendChartProps> =
                     name="Package Temp (°C)"
                     stroke="#f59e0b"
                     strokeWidth={2.5}
+                    isAnimationActive={animationsEnabled}
                     dot={{ r: 3, fill: '#f59e0b', stroke: '#0a0f1e', strokeWidth: 1.5 }}
                     activeDot={{ r: 5, fill: '#fbbf24', stroke: '#fff', strokeWidth: 2 }}
                   />
@@ -718,6 +726,7 @@ export const CpuTemperatureTrendChart: React.FC<CpuTemperatureTrendChartProps> =
                     strokeWidth={2}
                     fill="url(#core0Gradient)"
                     stackId={isStackedCores ? 'cores' : undefined}
+                    isAnimationActive={animationsEnabled}
                     dot={{ r: 2.5, fill: '#06b6d4' }}
                     activeDot={{ r: 4.5, fill: '#22d3ee', stroke: '#fff', strokeWidth: 1.5 }}
                   />
@@ -732,6 +741,7 @@ export const CpuTemperatureTrendChart: React.FC<CpuTemperatureTrendChartProps> =
                     strokeWidth={2}
                     fill="url(#core1Gradient)"
                     stackId={isStackedCores ? 'cores' : undefined}
+                    isAnimationActive={animationsEnabled}
                     dot={{ r: 2.5, fill: '#14b8a6' }}
                     activeDot={{ r: 4.5, fill: '#2dd4bf', stroke: '#fff', strokeWidth: 1.5 }}
                   />
@@ -746,6 +756,7 @@ export const CpuTemperatureTrendChart: React.FC<CpuTemperatureTrendChartProps> =
                     strokeWidth={2}
                     fill="url(#core2Gradient)"
                     stackId={isStackedCores ? 'cores' : undefined}
+                    isAnimationActive={animationsEnabled}
                     dot={{ r: 2.5, fill: '#10b981' }}
                     activeDot={{ r: 4.5, fill: '#34d399', stroke: '#fff', strokeWidth: 1.5 }}
                   />
@@ -760,6 +771,7 @@ export const CpuTemperatureTrendChart: React.FC<CpuTemperatureTrendChartProps> =
                     strokeWidth={2}
                     fill="url(#core3Gradient)"
                     stackId={isStackedCores ? 'cores' : undefined}
+                    isAnimationActive={animationsEnabled}
                     dot={{ r: 2.5, fill: '#6366f1' }}
                     activeDot={{ r: 4.5, fill: '#818cf8', stroke: '#fff', strokeWidth: 1.5 }}
                   />
@@ -775,6 +787,7 @@ export const CpuTemperatureTrendChart: React.FC<CpuTemperatureTrendChartProps> =
                     stroke="#c084fc"
                     strokeWidth={2.5}
                     strokeDasharray="4 2"
+                    isAnimationActive={animationsEnabled}
                     dot={{ r: 3, fill: '#a855f7', stroke: '#0a0f1e', strokeWidth: 1.5 }}
                     activeDot={{ r: 5.5, fill: '#f3e8ff', stroke: '#9333ea', strokeWidth: 2 }}
                   />
@@ -793,6 +806,7 @@ export const CpuTemperatureTrendChart: React.FC<CpuTemperatureTrendChartProps> =
                   stroke="#f59e0b"
                   strokeWidth={2.5}
                   fill="url(#tempGradient)"
+                  isAnimationActive={animationsEnabled}
                   dot={{ r: 3, fill: '#f59e0b' }}
                 />
                 <Line
@@ -803,6 +817,7 @@ export const CpuTemperatureTrendChart: React.FC<CpuTemperatureTrendChartProps> =
                   stroke="#8b5cf6"
                   strokeWidth={2}
                   strokeDasharray="4 2"
+                  isAnimationActive={animationsEnabled}
                   dot={{ r: 2.5, fill: '#8b5cf6' }}
                 />
               </>

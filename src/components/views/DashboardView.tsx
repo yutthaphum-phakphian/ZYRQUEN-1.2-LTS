@@ -5,6 +5,8 @@ import { useOfflineWarning } from '../../hooks/useOfflineWarning';
 import { HsmClusterHealthGauge } from '../HsmClusterHealthGauge';
 import { MutationDeltaD3Chart } from '../MutationDeltaD3Chart';
 import { MutationDeltaChart } from '../charts/MutationDeltaChart';
+import { ChartAnimationToggle } from '../dashboard/ChartAnimationToggle';
+import { useChartAnimationPreference } from '../../hooks/useChartAnimationPreference';
 import {
   Activity,
   Cpu,
@@ -21,6 +23,8 @@ import {
   FileCheck,
   RotateCw,
   Server,
+  Sparkles,
+  SlidersHorizontal,
 } from 'lucide-react';
 import { playAuditChime, playTone } from '../AudioSynthesizer';
 
@@ -101,6 +105,9 @@ export const DashboardView: React.FC<DashboardViewProps> = ({
 
           {/* Quick Actions Header CTAs */}
           <div className="flex items-center gap-2.5 flex-wrap sm:flex-nowrap shrink-0">
+            {/* User Setting: Toggle Chart Animations / High-Performance Mode */}
+            <ChartAnimationToggle variant="compact" />
+
             <button
               onClick={() => {
                 playTone(700, 0.04);

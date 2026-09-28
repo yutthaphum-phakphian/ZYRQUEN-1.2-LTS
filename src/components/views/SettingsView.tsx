@@ -4,6 +4,7 @@ import { SovereignMasterForensicReportCard } from '../SovereignMasterForensicRep
 import { SovereignSelfAuditEngine } from '../audit/SovereignSelfAuditEngine';
 import { DataPersistenceSettingsTab } from '../settings/DataPersistenceSettingsTab';
 import { AuditChimeSettingsCard } from '../settings/AuditChimeSettingsCard';
+import { ChartAnimationToggle } from '../dashboard/ChartAnimationToggle';
 import { offlineAuditSyncService } from '../../services/offlineAuditSyncService';
 import React, { useState, useEffect } from 'react';
 import {
@@ -850,6 +851,9 @@ export const SettingsView: React.FC<SettingsViewProps> = ({
           </div>
         </div>
       </div>
+
+      {/* High-Performance Mode / Chart Animations User Setting */}
+      <ChartAnimationToggle variant="card" />
 
       <FirmwareLifecycleManager onNotifyEvent={onNotifyEvent} onAddSystemEvent={onAddSystemEvent} />
 

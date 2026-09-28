@@ -1,17 +1,25 @@
 // src/components/SovereignBottomStatusBar.tsx
 import React, { useState, useEffect } from 'react';
-import { RefreshCw, CloudUpload, CheckCircle2, Zap, ShieldCheck } from 'lucide-react';
+import { RefreshCw, CloudUpload, CheckCircle2, Zap, ShieldCheck, Battery, BatteryCharging, Sparkles } from 'lucide-react';
 import { useOfflineAuditSync } from '../utils/offlineAuditSync';
 import { offlineAuditSyncService } from '../services/offlineAuditSyncService';
 import { playAuditChime, playTone } from './AudioSynthesizer';
 import { triggerVibration } from '../utils/vibration';
+import { useChartAnimationPreference } from '../hooks/useChartAnimationPreference';
 
 export const SovereignBottomStatusBar: React.FC = () => {
   const { pendingCount, isOnline, syncNow } = useOfflineAuditSync();
+  const { animationsEnabled, performanceMode, toggleAnimations } = useChartAnimationPreference();
   const [isSyncing, setIsSyncing] = useState<boolean>(false);
   const [justSynced, setJustSynced] = useState<boolean>(false);
   const [syncProgress, setSyncProgress] = useState<number>(100);
   const [showPulseEffect, setShowPulseEffect] = useState<boolean>(false);
+
+  const handleToggleBatterySaver = () => {
+    triggerVibration('click');
+    playTone(performanceMode ? 620 : 780, 0.04);
+    toggleAnimations();
+  };
 
   const handleManualSync = async () => {
     if (isSyncing) return;
@@ -112,6 +120,36 @@ export const SovereignBottomStatusBar: React.FC = () => {
         </div>
 
         <div className="flex items-center gap-2 shrink-0">
+          {/* Battery Saver / High-Performance Mode Toggle Status Button */}
+          <button
+            type="button"
+            onClick={handleToggleBatterySaver}
+            title={
+              performanceMode
+                ? '⚡ โหมดประหยัดพลังงาน (Battery Saver): กำลังเปิดใช้งาน (ปิดแอนิเมชันกราฟเพื่อลดการใช้ทรัพยากร 0ms) — คลิกเพื่อเปิดแอนิเมชัน 60FPS'
+                : '⚡ โหมดประสิทธิภาพมาตรฐาน (60FPS Active) — คลิกเพื่อเปิดโหมดประหยัดพลังงาน (Battery Saver) สำหรับอุปกรณ์สเปกต่ำ'
+            }
+            className={`px-2.5 py-1 rounded-lg text-xs font-mono font-semibold flex items-center gap-1.5 transition-all cursor-pointer border active:scale-95 ${
+              performanceMode
+                ? 'bg-amber-500/20 hover:bg-amber-500/30 text-amber-300 border-amber-500/50 shadow-[0_0_12px_rgba(245,158,11,0.3)]'
+                : 'bg-cyan-950/60 hover:bg-cyan-900/60 text-cyan-300 border-cyan-500/30 hover:border-cyan-400'
+            }`}
+          >
+            {performanceMode ? (
+              <>
+                <BatteryCharging className="w-3.5 h-3.5 text-amber-400 animate-pulse" />
+                <span className="hidden sm:inline">BATTERY SAVER (0ms)</span>
+                <span className="sm:hidden">SAVER</span>
+              </>
+            ) : (
+              <>
+                <Battery className="w-3.5 h-3.5 text-cyan-400" />
+                <span className="hidden sm:inline">60FPS MOTION</span>
+                <span className="sm:hidden">60FPS</span>
+              </>
+            )}
+          </button>
+
           <span className="text-cyan-400 font-bold text-[11px] hidden sm:inline px-1.5 py-0.5 rounded bg-cyan-950/60 border border-cyan-500/30">
             14.98 mK
           </span>

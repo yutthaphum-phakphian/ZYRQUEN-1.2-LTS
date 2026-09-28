@@ -23,6 +23,7 @@ import { SovereignEngineHeader } from '../components/core/SovereignEngineHeader'
 import { OverviewTab } from '../views/overview/OverviewTab';
 import { OperationsTab } from '../views/operations/OperationsTab';
 import { ForensicsTab } from '../views/forensics/ForensicsTab';
+import { ChartAnimationToggle } from '../components/dashboard/ChartAnimationToggle';
 import { playTone } from '../components/AudioSynthesizer';
 
 export interface SovereignDashboardProps {
@@ -115,11 +116,14 @@ export const SovereignDashboard: React.FC<SovereignDashboardProps> = ({
           </button>
         </div>
 
-        <div className="hidden lg:flex items-center gap-2 text-xs font-mono text-slate-400">
-          <span className="w-2 h-2 rounded-full bg-emerald-400 animate-pulse" />
-          <span>SSoT Δ0.00%</span>
-          <span className="text-slate-700">•</span>
-          <span>10/10 REAL_HSM</span>
+        <div className="flex items-center gap-3">
+          <ChartAnimationToggle variant="compact" />
+          <div className="hidden lg:flex items-center gap-2 text-xs font-mono text-slate-400">
+            <span className="w-2 h-2 rounded-full bg-emerald-400 animate-pulse" />
+            <span>SSoT Δ0.00%</span>
+            <span className="text-slate-700">•</span>
+            <span>10/10 REAL_HSM</span>
+          </div>
         </div>
       </div>
 

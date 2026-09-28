@@ -17,6 +17,7 @@ import {
 } from 'lucide-react';
 import { playAuditChime, playTone } from './AudioSynthesizer';
 import { FULL_DECA_HSM_RESTORED_DATA } from '../data/decaHsmRestoredPayload';
+import { useChartAnimationPreference } from '../hooks/useChartAnimationPreference';
 
 export interface DecaHsmNodeMetric {
   id: string;
@@ -44,6 +45,7 @@ export const HsmClusterHealthGauge: React.FC<HsmClusterHealthGaugeProps> = ({
   className = '',
   onSelectNode,
 }) => {
+  const { animationsEnabled } = useChartAnimationPreference();
   const [nodes, setNodes] = useState<DecaHsmNodeMetric[]>(
     FULL_DECA_HSM_RESTORED_DATA.decaHsmNodes as DecaHsmNodeMetric[]
   );
@@ -203,7 +205,7 @@ export const HsmClusterHealthGauge: React.FC<HsmClusterHealthGaugeProps> = ({
                 strokeDashoffset={strokeDashoffset}
                 strokeLinecap="round"
                 fill="transparent"
-                className="transition-all duration-700 ease-out"
+                className={animationsEnabled ? 'transition-all duration-700 ease-out' : 'transition-none'}
               />
             </svg>
             <div className="absolute flex flex-col items-center justify-center text-center">

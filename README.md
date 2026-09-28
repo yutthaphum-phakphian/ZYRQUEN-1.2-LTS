@@ -51,6 +51,23 @@ ZYRQUEN Ω™ is a sovereign autonomous SRE and Technical Architect agent engine
 
 ---
 
+## 🏛️ System & Security Architecture
+
+![ZYRQUEN Ω™ System Architecture](zyrquen-architecture.svg.png)
+
+*High-Assurance Cryptographic Architecture: Deca-Key Hardware Quorum (FIPS 140-3 L4), Post-Quantum NIST FIPS 203/204/205 Schemes, Chamber 02 Quarantine Buffer, and Sovereign Zero-Drift Kernel.*
+
+---
+
+## 🔍 Forensic Audit Master Dossier & Event Matrix
+
+The Forensic Audit Master Dossier (`DOC-SOV-HSM-1010-2026-V9`) provides court-admissible audit trails with tri-state event filtering:
+- **`Verified` (🟢)**: 100% Bit-exact cryptographic seals verified against Genesis Block #849202 (NIST Dilithium-5, ML-KEM-1024, SPHINCS+, and 10/10 HSM Quorum).
+- **`Pending` (🟡)**: In-flight consensus verification and asynchronous background synchronization telemetry.
+- **`Orphaned` (🔴)**: Quarantined anomalous drift deviations isolated in Chamber 02 Buffer (80 Quarantine Seals) to preserve canonical immutability.
+
+---
+
 ## 🌿 Branch & Deployment Architecture
 
 | Branch | Role | Status |

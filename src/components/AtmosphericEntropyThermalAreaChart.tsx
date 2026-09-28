@@ -23,6 +23,7 @@ import {
   Download,
 } from 'lucide-react';
 import { playTone, playAuditChime, playWarningTone } from './AudioSynthesizer';
+import { useChartAnimationPreference } from '../hooks/useChartAnimationPreference';
 
 export interface EntropyThermalDataPoint {
   time: string;
@@ -71,6 +72,7 @@ interface AtmosphericEntropyThermalAreaChartProps {
 export const AtmosphericEntropyThermalAreaChart: React.FC<AtmosphericEntropyThermalAreaChartProps> = ({
   onTriggerAlert,
 }) => {
+  const { animationsEnabled } = useChartAnimationPreference();
   const [data, setData] = useState<EntropyThermalDataPoint[]>(GENERATE_INITIAL_SERIES);
   const [timeHorizon, setTimeHorizon] = useState<'15m' | '60m' | '24h'>('60m');
   const [activeSeries, setActiveSeries] = useState<'all' | 'entropy' | 'thermal' | 'stability'>('all');
@@ -416,6 +418,7 @@ export const AtmosphericEntropyThermalAreaChart: React.FC<AtmosphericEntropyTher
                 strokeWidth={2.5}
                 fillOpacity={1}
                 fill="url(#entropyAtmosphereGrad)"
+                isAnimationActive={animationsEnabled}
               />
             )}
 
@@ -429,6 +432,7 @@ export const AtmosphericEntropyThermalAreaChart: React.FC<AtmosphericEntropyTher
                 strokeWidth={2.5}
                 fillOpacity={1}
                 fill="url(#cpuThermalVarianceGrad)"
+                isAnimationActive={animationsEnabled}
               />
             )}
 
@@ -443,6 +447,7 @@ export const AtmosphericEntropyThermalAreaChart: React.FC<AtmosphericEntropyTher
                 strokeDasharray="2 2"
                 fillOpacity={1}
                 fill="url(#chaoticStabilityGrad)"
+                isAnimationActive={animationsEnabled}
               />
             )}
           </AreaChart>

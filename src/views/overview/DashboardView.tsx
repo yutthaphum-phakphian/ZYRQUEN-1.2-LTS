@@ -26,6 +26,7 @@ import { ViewType, HardwareSnapshot } from '../../types';
 import { SYSTEM_INVARIANTS, SYSTEM_METADATA } from '../../data/canonicalData';
 import { playTone } from '../../components/AudioSynthesizer';
 import { ExecutiveSummaryView } from './ExecutiveSummaryView';
+import { ChartAnimationToggle } from '../../components/dashboard/ChartAnimationToggle';
 
 interface DashboardViewProps {
   onNavigate: (view: ViewType) => void;
@@ -69,7 +70,8 @@ export const DashboardView: React.FC<DashboardViewProps> = ({
           </p>
         </div>
 
-        <div className="flex items-center gap-3">
+        <div className="flex items-center gap-3 flex-wrap sm:flex-nowrap">
+          <ChartAnimationToggle variant="compact" />
           {onOpenCertificate && (
             <button
               onClick={() => {

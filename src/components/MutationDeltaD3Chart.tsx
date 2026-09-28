@@ -1,8 +1,9 @@
 import React, { useEffect, useRef, useState, useMemo } from 'react';
 import * as d3 from 'd3';
-import { Activity, ShieldCheck, AlertTriangle, RefreshCw, Zap, Lock, Info } from 'lucide-react';
+import { Activity, ShieldCheck, AlertTriangle, RefreshCw, Zap, Lock, Info, Sparkles } from 'lucide-react';
 import { playAuditChime, playTone } from './AudioSynthesizer';
 import { CANONICAL_GENESIS_BLOCK, CANONICAL_MERKLE_ROOT } from '../data/canonicalData';
+import { useChartAnimationPreference } from '../hooks/useChartAnimationPreference';
 
 export interface MutationDeltaPoint {
   id: string;
@@ -25,6 +26,7 @@ export const MutationDeltaD3Chart: React.FC<MutationDeltaD3ChartProps> = ({
 }) => {
   const svgRef = useRef<SVGSVGElement | null>(null);
   const containerRef = useRef<HTMLDivElement | null>(null);
+  const { animationsEnabled, performanceMode, toggleAnimations } = useChartAnimationPreference();
   const [dataPoints, setDataPoints] = useState<MutationDeltaPoint[]>([]);
   const [isLiveStreaming, setIsLiveStreaming] = useState(true);
   const [hoveredPoint, setHoveredPoint] = useState<MutationDeltaPoint | null>(null);
@@ -234,20 +236,23 @@ export const MutationDeltaD3Chart: React.FC<MutationDeltaD3ChartProps> = ({
       .attr('fill', simulatedJitterActive ? 'url(#anomaly-area-gradient)' : 'url(#mutation-area-gradient)')
       .attr('d', area);
 
-    // Line Generator
+    // Line Generator (High-Performance Mode bypasses expensive SVG filter computation)
     const line = d3
       .line<MutationDeltaPoint>()
       .x((d) => xScale(d.timestamp))
       .y((d) => yScale(d.deltaPct))
-      .curve(d3.curveMonotoneX);
+      .curve(animationsEnabled ? d3.curveMonotoneX : d3.curveLinear);
 
-    g.append('path')
+    const linePath = g.append('path')
       .datum(dataPoints)
       .attr('fill', 'none')
       .attr('stroke', simulatedJitterActive ? '#f43f5e' : '#10b981')
-      .attr('stroke-width', 2.2)
-      .attr('filter', 'url(#glow)')
-      .attr('d', line);
+      .attr('stroke-width', 2.2);
+
+    if (animationsEnabled) {
+      linePath.attr('filter', 'url(#glow)');
+    }
+    linePath.attr('d', line);
 
     // Render Data Points
     g.selectAll('.data-point')
@@ -291,7 +296,7 @@ export const MutationDeltaD3Chart: React.FC<MutationDeltaD3ChartProps> = ({
     const yAxisGroup = g.append('g').call(yAxis);
     yAxisGroup.selectAll('text').attr('fill', '#94a3b8').attr('font-size', '9px').attr('font-family', 'monospace');
     yAxisGroup.select('.domain').attr('stroke', 'rgba(255, 255, 255, 0.15)');
-  }, [dataPoints, simulatedJitterActive]);
+  }, [dataPoints, simulatedJitterActive, animationsEnabled]);
 
   const toggleJitterSimulation = () => {
     playTone(simulatedJitterActive ? 520 : 740, 0.04);
@@ -333,6 +338,37 @@ export const MutationDeltaD3Chart: React.FC<MutationDeltaD3ChartProps> = ({
         </div>
 
         <div className="flex items-center gap-2 flex-wrap">
+          {/* Performance Mode Toggle */}
+          <button
+            type="button"
+            onClick={() => {
+              playTone(animationsEnabled ? 500 : 700, 0.03);
+              toggleAnimations();
+            }}
+            title={
+              animationsEnabled
+                ? 'Chart Animations: ON (60FPS). Click to enable High-Performance Mode (0ms render, saves battery).'
+                : 'High-Performance Mode: Active. Click to enable 60FPS animations.'
+            }
+            className={`px-2 py-1 text-[11px] font-mono font-medium rounded-lg border transition cursor-pointer flex items-center gap-1.5 ${
+              performanceMode
+                ? 'bg-amber-500/20 text-amber-300 border-amber-500/40 shadow-[0_0_10px_rgba(245,158,11,0.25)]'
+                : 'bg-white/5 hover:bg-white/10 text-zinc-300 border-white/10'
+            }`}
+          >
+            {performanceMode ? (
+              <>
+                <Zap className="w-3.5 h-3.5 text-amber-400" />
+                <span>High-Perf (0ms)</span>
+              </>
+            ) : (
+              <>
+                <Sparkles className="w-3.5 h-3.5 text-cyan-400" />
+                <span>60FPS</span>
+              </>
+            )}
+          </button>
+
           <button
             onClick={toggleJitterSimulation}
             className={`px-2.5 py-1 text-[11px] font-bold rounded-lg border transition cursor-pointer flex items-center gap-1.5 ${
@@ -349,7 +385,7 @@ export const MutationDeltaD3Chart: React.FC<MutationDeltaD3ChartProps> = ({
             onClick={() => setIsLiveStreaming(!isLiveStreaming)}
             className="px-2.5 py-1 text-[11px] font-medium rounded-lg bg-white/5 hover:bg-white/10 text-zinc-300 border border-white/10 transition cursor-pointer flex items-center gap-1"
           >
-            <RefreshCw className={`w-3.5 h-3.5 ${isLiveStreaming ? 'animate-spin' : ''}`} />
+            <RefreshCw className={`w-3.5 h-3.5 ${isLiveStreaming && animationsEnabled ? 'animate-spin' : ''}`} />
             <span>{isLiveStreaming ? 'Streaming 1.8s' : 'Paused'}</span>
           </button>
         </div>
