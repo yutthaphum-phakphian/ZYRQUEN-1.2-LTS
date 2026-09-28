@@ -1,0 +1,26 @@
+============================= test session starts ==============================
+platform linux -- Python 3.14.2, pytest-9.1.1, pluggy-1.6.0
+rootdir: /workspaces/ZYRQUEN-1.2-LTS
+plugins: anyio-4.15.1
+collected 0 items / 2 errors
+
+==================================== ERRORS ====================================
+__________ ERROR collecting tests/test_e2e_container_verification.py ___________
+import file mismatch:
+imported module 'test_e2e_container_verification' has this __file__ attribute:
+  /workspaces/ZYRQUEN-1.2-LTS/tests/python/test_e2e_container_verification.py
+which is not the same as the test file we want to collect:
+  /workspaces/ZYRQUEN-1.2-LTS/tests/test_e2e_container_verification.py
+HINT: remove __pycache__ / .pyc files and/or use a unique basename for your test file modules
+_____________ ERROR collecting tests/test_sovereign_api_gateway.py _____________
+import file mismatch:
+imported module 'test_sovereign_api_gateway' has this __file__ attribute:
+  /workspaces/ZYRQUEN-1.2-LTS/tests/python/test_sovereign_api_gateway.py
+which is not the same as the test file we want to collect:
+  /workspaces/ZYRQUEN-1.2-LTS/tests/test_sovereign_api_gateway.py
+HINT: remove __pycache__ / .pyc files and/or use a unique basename for your test file modules
+=========================== short test summary info ============================
+ERROR tests/test_e2e_container_verification.py
+ERROR tests/test_sovereign_api_gateway.py
+!!!!!!!!!!!!!!!!!!! Interrupted: 2 errors during collection !!!!!!!!!!!!!!!!!!!!
+============================== 2 errors in 0.31s ===============================
