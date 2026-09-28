@@ -53,6 +53,16 @@ export const SovereignDashboard: React.FC<SovereignDashboardProps> = ({
         <SovereignEngineHeader activeViewTitle="ZYRQUEN Ω∞ SOVEREIGN SENTINEL & GATEWAYS" />
       </section>
 
+      {/* Sentinel & Gateway Realtime Quorum Stream */}
+      <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+        <section>
+          <SentinelRemediation monitoringIntervalMs={4500} onAlertLevelChange={setAlertLevel} />
+        </section>
+        <section>
+          <SovereignGateways alertLevel={alertLevel} />
+        </section>
+      </div>
+
       {/* 2. Tab Navigation (Switch between Grid Views) */}
       <div className="flex flex-wrap items-center justify-between gap-3 border-b border-slate-800 pb-3">
         <div className="flex flex-wrap gap-2">
@@ -138,16 +148,6 @@ export const SovereignDashboard: React.FC<SovereignDashboardProps> = ({
                 onSystemAuditLog={onSystemAuditLog}
               />
             </section>
-
-            <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-              <section>
-                <SentinelRemediation monitoringIntervalMs={4500} onAlertLevelChange={setAlertLevel} />
-              </section>
-
-              <section>
-                <SovereignGateways alertLevel={alertLevel} />
-              </section>
-            </div>
           </div>
         )}
       </main>

@@ -3665,9 +3665,11 @@ function SovereignAppContent() {
               </div>
 
               {/* Right: Metrics, Drift Toggle, Trigger Button, Counters */}
-              <div className="flex items-center gap-2.5 sm:gap-3 text-[11px] text-zinc-400 ml-auto flex-wrap sm:flex-nowrap">
+              <div className="flex items-center gap-1.5 sm:gap-2.5 text-[11px] text-zinc-400 ml-auto flex-wrap sm:flex-nowrap">
                 {/* SSoT Drift Deviation Simulator Toggle Button */}
-                <SsotDriftToggleButton />
+                <div className="hidden sm:inline-block">
+                  <SsotDriftToggleButton />
+                </div>
 
                 {/* Mobile Audit QR Code Share Button */}
                 <button
@@ -3678,11 +3680,12 @@ function SovereignAppContent() {
                     setGateQrModalAutoCamera(false);
                     setIsGateQrModalOpen(true);
                   }}
-                  className="px-2.5 py-1 rounded-lg font-mono text-[10px] font-semibold border flex items-center gap-1.5 transition-all cursor-pointer bg-cyan-950/40 hover:bg-cyan-900/50 text-cyan-200 border-cyan-500/40 hover:border-cyan-400/70 shadow-[0_0_10px_rgba(6,182,212,0.18)]"
-                  title="Generate and display shareable QR code containing Merkle root & block height for mobile audit"
+                  className="px-2 py-1 rounded-lg font-mono text-[10px] font-semibold border flex items-center gap-1 transition-all cursor-pointer bg-cyan-950/40 hover:bg-cyan-900/50 text-cyan-200 border-cyan-500/40 shadow-sm"
+                  title="Mobile Audit QR"
                 >
-                  <QrCode className="w-3.5 h-3.5 text-cyan-400" />
-                  <span>Mobile Audit QR</span>
+                  <QrCode className="w-3 h-3 text-cyan-400" />
+                  <span className="hidden sm:inline">Mobile Audit QR</span>
+                  <span className="sm:hidden text-[9px]">QR</span>
                 </button>
 
                 {/* Device Camera QR Audit Artifact Scanner & Merkle Root Verifier Button */}
@@ -3695,26 +3698,27 @@ function SovereignAppContent() {
                     setGateQrModalAutoCamera(true);
                     setIsGateQrModalOpen(true);
                   }}
-                  className="px-2.5 py-1 rounded-lg font-mono text-[10px] font-semibold border flex items-center gap-1.5 transition-all cursor-pointer bg-emerald-950/50 hover:bg-emerald-900/60 text-emerald-200 border-emerald-500/45 hover:border-emerald-400/80 shadow-[0_0_12px_rgba(16,185,129,0.22)]"
-                  title="Open device camera modal to scan and verify QR-based audit artifacts against the current Merkle root"
+                  className="px-2 py-1 rounded-lg font-mono text-[10px] font-semibold border flex items-center gap-1 transition-all cursor-pointer bg-emerald-950/50 hover:bg-emerald-900/60 text-emerald-200 border-emerald-500/45 shadow-sm"
+                  title="Scan & Verify QR Artifact"
                 >
-                  <Camera className="w-3.5 h-3.5 text-emerald-400" />
-                  <span>Scan &amp; Verify QR Artifact</span>
+                  <Camera className="w-3 h-3 text-emerald-400" />
+                  <span className="hidden sm:inline">Scan &amp; Verify</span>
+                  <span className="sm:hidden text-[9px]">Scan</span>
                 </button>
 
                 {qrArtifactVerificationState && (
                   <span
                     id="verification-gate-qr-verification-badge"
                     data-verified={String(qrArtifactVerificationState.verified)}
-                    className={`px-2 py-0.5 rounded-lg font-mono text-[10px] font-bold border flex items-center gap-1.5 transition-all ${
+                    className={`px-2 py-0.5 rounded-lg font-mono text-[10px] font-bold border flex items-center gap-1 transition-all ${
                       qrArtifactVerificationState.verified
-                        ? 'bg-emerald-500/20 text-emerald-300 border-emerald-500/40 shadow-[0_0_10px_rgba(16,185,129,0.25)]'
-                        : 'bg-rose-500/20 text-rose-300 border-rose-500/40 shadow-[0_0_10px_rgba(244,63,94,0.25)]'
+                        ? 'bg-emerald-500/20 text-emerald-300 border-emerald-500/40'
+                        : 'bg-rose-500/20 text-rose-300 border-rose-500/40'
                     }`}
                     title={qrArtifactVerificationState.message}
                   >
-                    <Scan className="w-3 h-3" />
-                    <span>
+                    <Scan className="w-3 h-3 shrink-0" />
+                    <span className="text-[9px] font-bold">
                       {qrArtifactVerificationState.verified
                         ? `QR VERIFIED (${qrArtifactVerificationState.evidenceId})`
                         : 'QR MISMATCH REJECTED'}
@@ -3726,22 +3730,22 @@ function SovereignAppContent() {
                 <button
                   type="button"
                   onClick={() => setIsGateDetailsExpanded((prev) => !prev)}
-                  className={`px-2.5 py-1 rounded-lg font-mono text-[10px] font-semibold border flex items-center gap-1.5 transition-all cursor-pointer ${
+                  className={`px-2 py-1 rounded-lg font-mono text-[10px] font-semibold border flex items-center gap-1 transition-all cursor-pointer ${
                     isGateDetailsExpanded
-                      ? 'bg-cyan-500/20 text-cyan-200 border-cyan-400/50 shadow-[0_0_12px_rgba(6,182,212,0.25)]'
-                      : 'bg-white/5 text-zinc-300 border-white/10 hover:bg-white/10 hover:text-cyan-300 hover:border-cyan-500/30'
+                      ? 'bg-cyan-500/20 text-cyan-200 border-cyan-400/50'
+                      : 'bg-white/5 text-zinc-300 border-white/10 hover:bg-white/10 hover:text-cyan-300'
                   }`}
                 >
-                  <Scale className="w-3.5 h-3.5 text-cyan-400" />
-                  <span>ETDA / PDPA (6)</span>
+                  <Scale className="w-3 h-3 text-cyan-400" />
+                  <span>ETDA (6)</span>
                   {isGateDetailsExpanded ? (
-                    <ChevronUp className="w-3.5 h-3.5 text-cyan-400" />
+                    <ChevronUp className="w-3 h-3 text-cyan-400" />
                   ) : (
-                    <ChevronDown className="w-3.5 h-3.5 text-zinc-400" />
+                    <ChevronDown className="w-3 h-3 text-zinc-400" />
                   )}
                 </button>
 
-                <span className="hidden sm:inline text-zinc-600">•</span>
+                <span className="hidden md:inline text-zinc-600">•</span>
 
                 <BannerAnimatedSealCount
                   sealCount={verificationGateStatus.sealCount}
