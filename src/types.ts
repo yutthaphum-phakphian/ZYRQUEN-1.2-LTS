@@ -29,7 +29,8 @@ export type ViewType =
   | 'briefing'
   | 'sovereign-wallet'
   | 'sovereign'
-  | 'ai-workspace';
+  | 'ai-workspace'
+  | 'compliance-coverage';
 
 export interface AuditStage {
   id: string;

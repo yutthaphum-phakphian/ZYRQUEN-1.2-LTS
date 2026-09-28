@@ -292,9 +292,23 @@ export function AIWorkspace({
         const data = await res.json();
         if (!cancelled) {
           const connected = Boolean(data.connected);
-          setProviderStatus(connected ? 'CONNECTED' : 'PROVIDER_NOT_CONNECTED');
+          const resolvedStatus: AiProviderConnectionState =
+            data.providerStatus === 'CONNECTED' ||
+            data.providerStatus === 'WAITING_FOR_PROVIDER' ||
+            data.providerStatus === 'PROVIDER_NOT_CONNECTED'
+              ? data.providerStatus
+              : connected
+              ? 'CONNECTED'
+              : 'PROVIDER_NOT_CONNECTED';
+          setProviderStatus(resolvedStatus);
           setUiStatus(connected ? 'IDLE' : 'UNAVAILABLE');
-          setProvenance(connected ? 'OBSERVED' : 'UNVERIFIED');
+          setProvenance(
+            data.provenance === 'VERIFIED' || data.provenance === 'OBSERVED'
+              ? data.provenance
+              : connected
+              ? 'OBSERVED'
+              : 'UNVERIFIED'
+          );
         }
       } catch {
         if (!cancelled) {
@@ -491,10 +505,6 @@ export function AIWorkspace({
         }
       } catch (err: unknown) {
         const errMsg = err instanceof Error ? err.message : String(err);
-        setProviderStatus('PROVIDER_NOT_CONNECTED');
-        setUiStatus('FAILED');
-        setProvenance('UNVERIFIED');
-
         const reqId = `REQ-AI-ERR-${String(seq).padStart(4, '0')}`;
         const trcId = `TRC-AI-ERR-${String(seq).padStart(4, '0')}`;
         const diag = createFailureDiagnosticRecord({
@@ -508,6 +518,10 @@ export function AIWorkspace({
           expectedState: 'AI_PROVIDER_RESPONSE_OK',
           evidence: `ERR:NET:${trcId}`,
         });
+        const isProviderUnavailable = diag.classification === 'PROVIDER_UNAVAILABLE';
+        setProviderStatus(isProviderUnavailable ? 'WAITING_FOR_PROVIDER' : 'PROVIDER_NOT_CONNECTED');
+        setUiStatus(isProviderUnavailable ? 'UNAVAILABLE' : 'FAILED');
+        setProvenance('UNVERIFIED');
         setLatestFailureDiagnostic(diag);
         onFailureDiagnostic?.(diag);
 
@@ -516,8 +530,7 @@ export function AIWorkspace({
           requestId: reqId,
           targetWorkspace: targetWorkspaceId,
           stoppedAtStage: 'ANALYSIS',
-          stopStatus:
-            diag.classification === 'PROVIDER_UNAVAILABLE' ? 'PROVIDER_UNAVAILABLE' : 'FAILED',
+          stopStatus: isProviderUnavailable ? 'PROVIDER_UNAVAILABLE' : 'FAILED',
           stopDetail: errMsg,
           stopEvidenceRef: diag.evidence,
           stageDurationMs: 15,
@@ -529,9 +542,11 @@ export function AIWorkspace({
           id: `err-${seq}`,
           sender: 'system',
           channel,
-          text: `Provider Unavailable (PROVIDER_NOT_CONNECTED / FAILED): ${errMsg}`,
+          text: isProviderUnavailable
+            ? `PROVIDER_UNAVAILABLE (${diag.observedState}): ${errMsg}`
+            : `Provider Unavailable (PROVIDER_NOT_CONNECTED / FAILED): ${errMsg}`,
           timestamp: new Date().toISOString(),
-          uiStatus: 'FAILED',
+          uiStatus: isProviderUnavailable ? 'UNAVAILABLE' : 'FAILED',
           provenance: 'UNVERIFIED',
         };
         setMessages((prev) => [...prev, errRecord]);

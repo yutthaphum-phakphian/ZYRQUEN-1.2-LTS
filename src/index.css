@@ -35,6 +35,29 @@
   animation: securityCrimsonPulseGlow 2.4s cubic-bezier(0.4, 0, 0.6, 1) infinite;
 }
 
+/* Subtle CSS Pulse Animation for Grid Cells Representing Untested Integration Coverage Paths */
+@keyframes untestedCoverageSubtlePulse {
+  0%, 100% {
+    box-shadow: 0 0 0 0 rgba(245, 158, 11, 0), inset 0 0 10px rgba(245, 158, 11, 0.08);
+    border-color: rgba(245, 158, 11, 0.45);
+  }
+  50% {
+    box-shadow: 0 0 16px 2px rgba(245, 158, 11, 0.35), inset 0 0 20px rgba(245, 158, 11, 0.22);
+    border-color: rgba(251, 191, 36, 0.92);
+  }
+}
+
+.untested-coverage-cell-pulse {
+  animation: untestedCoverageSubtlePulse 2.2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .untested-coverage-cell-pulse {
+    animation: none;
+    border-color: rgba(251, 191, 36, 0.85);
+  }
+}
+
 .chamber-11-quantum-radar {
   position: relative;
 }

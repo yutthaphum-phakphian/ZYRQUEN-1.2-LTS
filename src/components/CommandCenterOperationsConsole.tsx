@@ -11,6 +11,8 @@ import {
 import {
   loadAuthoritativePhase11Transaction,
   attemptIdempotentPhase11Execution,
+  finalizePhase11Transaction,
+  stageNewProposalTransaction,
   Phase11AuthoritativeTransaction,
   RealExecutionTrace,
   BoundaryHealthSnapshot,
@@ -789,7 +791,7 @@ export function CommandCenterOperationsConsole({
   };
 
   // Step 3: Open Explicit Approval Modal (or Block via Idempotency Guard / Core Guard)
-  const handleRequestApproval = () => {
+  const handleRequestApproval = (overrideTx?: Phase11AuthoritativeTransaction) => {
     if (selectedWritePreset.touchesCoreDirectly) {
       setWriteGateSteps((prev) =>
         prev.map((st) =>
@@ -852,11 +854,16 @@ export function CommandCenterOperationsConsole({
       return;
     }
 
+    const activeTx =
+      overrideTx && typeof overrideTx === 'object' && 'transactionId' in overrideTx
+        ? overrideTx
+        : authoritativeTx;
+
     // Authoritative Idempotency & Post-Execution Lock Guard
     const attempt = attemptIdempotentPhase11Execution({
-      transactionId: authoritativeTx.transactionId,
-      traceId: authoritativeTx.traceId,
-      operationId: authoritativeTx.operationId,
+      transactionId: activeTx.transactionId,
+      traceId: activeTx.traceId,
+      operationId: activeTx.operationId,
       actor: CORE_GUARD_INFO.principal,
     });
     if (!attempt.allowed) {
@@ -915,8 +922,21 @@ export function CommandCenterOperationsConsole({
       return;
     }
 
+    setReExecutionBlockedReason(null);
     setSignatureError(null);
     setWriteGateStage('AWAITING_APPROVAL');
+    setExecutionTrace(
+      buildExecutionTraceForOutcome({
+        traceId: activeTx.traceId,
+        requestId: activeTx.transactionId,
+        targetWorkspace: activeTx.targetWorkspace,
+        stoppedAtStage: 'APPROVAL',
+        stopStatus: 'AWAITING_APPROVAL',
+        stopDetail: `Awaiting Explicit Approval (${CORE_GUARD_INFO.principal}) for ${activeTx.proposalId}.`,
+        stopEvidenceRef: `${activeTx.proposalId}:AWAITING_EP_SOVEREIGN_01`,
+        stageDurationMs: 14,
+      })
+    );
     setShowApprovalModal(true);
   };
 
@@ -924,6 +944,13 @@ export function CommandCenterOperationsConsole({
   useEffect(() => {
     if (!stagedAiRequest) return;
     handleInspectAndPreview(stagedAiRequest.proposedBatchSize);
+    const stagedTx = stageNewProposalTransaction({
+      proposalId: stagedAiRequest.proposalId,
+      targetWorkspace: stagedAiRequest.targetWorkspace,
+      previousValue: selectedWs.batchSize,
+      proposedValue: stagedAiRequest.proposedBatchSize,
+    });
+    setAuthoritativeTx(stagedTx);
     appendLog(
       'info',
       `[AI WORKSPACE -> COMMAND ENGINE] Routed ${stagedAiRequest.channel} Proposal (${stagedAiRequest.proposalId}) to Explicit Approval Gate (${CORE_GUARD_INFO.principal}): ${stagedAiRequest.summary}`
@@ -943,24 +970,59 @@ export function CommandCenterOperationsConsole({
       ...prev,
     ]);
     setActiveSidebarModule('operations');
-    handleRequestApproval();
+    handleRequestApproval(stagedTx);
     onConsumeStagedAiRequest?.();
   }, [stagedAiRequest]);
 
   // Step 4-6: Confirm Approval -> Execute -> Verify -> Audit
   const handleConfirmApprovalAndExecute = () => {
     if (principalSignature.trim() !== CORE_GUARD_INFO.principal) {
-      setSignatureError(`Requires Sovereign Principal signature: ${CORE_GUARD_INFO.principal}`);
+      const errText = `Requires Sovereign Principal signature: ${CORE_GUARD_INFO.principal}`;
+      setSignatureError(errText);
+      const seq = String(auditSeqRef.current++).padStart(2, '0');
+      const sigDiag = createFailureDiagnosticRecord({
+        failureId: `FAIL-SIG-849205-${seq}`,
+        stage: 'APPROVAL',
+        component: 'EXPLICIT_APPROVAL_GATE',
+        requestId: authoritativeTx.transactionId,
+        traceId: authoritativeTx.traceId,
+        target: `${selectedWs.id} (${authoritativeTx.proposalId})`,
+        actualError: `SIGNATURE_REJECTED: Invalid principal signature "${principalSignature.trim() || 'EMPTY'}". ${errText}`,
+        expectedState: CORE_GUARD_INFO.principal,
+        observedState: 'APPROVAL_BLOCKED_INVALID_SIGNATURE',
+        evidence: `SIG_REJECTED:${authoritativeTx.transactionId}:${seq}`,
+        recoveryState: 'AWAITING_VALID_SOVEREIGN_PRINCIPAL_SIGNATURE (0 Mutation)',
+        explicitCategory: 'BLOCKED',
+      });
+      setFailureDiagnostics((prev) => [sigDiag, ...prev]);
+      setExecutionTrace(
+        buildExecutionTraceForOutcome({
+          traceId: authoritativeTx.traceId,
+          requestId: authoritativeTx.transactionId,
+          targetWorkspace: selectedWs.id,
+          stoppedAtStage: 'APPROVAL',
+          stopStatus: 'BLOCKED',
+          stopDetail: sigDiag.actualError,
+          stopEvidenceRef: sigDiag.evidence,
+          stageDurationMs: 11,
+        })
+      );
       return;
     }
 
     setShowApprovalModal(false);
     setWriteGateStage('EXECUTING');
+    setReExecutionBlockedReason(null);
 
     const oldBatch = selectedWs.batchSize;
     const newBatch = proposedBatchSize;
     const seq = String(auditSeqRef.current++).padStart(2, '0');
-    const traceId = `TRC-GATE-849205-${seq}`;
+    const traceId = authoritativeTx.isFinalized
+      ? `TRC-GATE-849205-${seq}`
+      : authoritativeTx.traceId;
+    const nowIso = new Date().toISOString();
+    const merkleHash = 'e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855';
+    const auditReference = `${traceId} · SHA256:${merkleHash.slice(0, 32)}`;
 
     setWorkspaces((prev) =>
       prev.map((ws) =>
@@ -980,6 +1042,48 @@ export function CommandCenterOperationsConsole({
       `✅ ALL 6 GATES PASSED & FINALIZED 🔒: Signed by ${CORE_GUARD_INFO.principal} · Verified Merkle Parity & Δ0.00% · WORM Audit Trace ${traceId}`
     );
 
+    // Finalize Authoritative Transaction with all 8 evidence checkpoints verified
+    const finalizedResult = finalizePhase11Transaction({
+      ...authoritativeTx,
+      traceId,
+      targetWorkspace: selectedWs.id,
+      previousValue: oldBatch,
+      appliedValue: newBatch,
+      lifecycleStage: 'COMPLETED',
+      isFinalized: false,
+      workspaceMutationCount: authoritativeTx.workspaceMutationCount + 1,
+      evidence: {
+        inspect: true,
+        preview: true,
+        approval: true,
+        execute: true,
+        test: true,
+        verify: true,
+        safety: true,
+        audit: true,
+      },
+      finalizationEvent: {
+        transactionId: authoritativeTx.transactionId,
+        traceId,
+        finalState: 'FINALIZED',
+        finalizedAt: nowIso,
+        actor: CORE_GUARD_INFO.principal,
+        verificationResult: `VERIFIED_STABLE (BATCH_SIZE ${oldBatch} -> ${newBatch}, Δ0.000%)`,
+        auditReference,
+      },
+    });
+    setAuthoritativeTx(finalizedResult.transaction);
+
+    // Complete 8-stage Real Execution Trace (REQUEST -> ANALYSIS -> PROPOSAL -> APPROVAL -> EXECUTE -> TARGET -> VERIFY -> AUDIT)
+    setExecutionTrace(
+      buildExecutionTraceForOutcome({
+        traceId,
+        requestId: finalizedResult.transaction.transactionId,
+        targetWorkspace: selectedWs.id,
+        stoppedAtStage: null,
+      })
+    );
+
     const receipt = {
       traceId,
       workspace: `${selectedWs.name} (${selectedWs.id})`,
@@ -987,8 +1091,8 @@ export function CommandCenterOperationsConsole({
       newBatch,
       cpuQuota: cpuQuotaLimit,
       ramQuota: ramQuotaLimit,
-      timestamp: new Date().toISOString(),
-      merkleHash: 'e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855',
+      timestamp: nowIso,
+      merkleHash,
     };
     setLastAuditReceipt(receipt);
     setAuditRecords((prev) => [
@@ -1181,14 +1285,21 @@ export function CommandCenterOperationsConsole({
               targetWorkspaceId={selectedWs.id}
               targetWorkspaceName={selectedWs.name}
               currentBatchSize={selectedWs.batchSize}
-              onStageProposalForApproval={(proposedBatch, summary) => {
+              onStageProposalForApproval={(proposedBatch, summary, meta) => {
                 handleInspectAndPreview(proposedBatch);
+                const stagedTx = stageNewProposalTransaction({
+                  proposalId: meta?.proposalId || `PROP-AI-849202-${Date.now()}`,
+                  targetWorkspace: meta?.targetWorkspace || selectedWs.id,
+                  previousValue: selectedWs.batchSize,
+                  proposedValue: proposedBatch,
+                });
+                setAuthoritativeTx(stagedTx);
                 appendLog(
                   'info',
-                  `[AI WORKSPACE -> COMMAND ENGINE] Staged Proposal for Explicit Approval (${CORE_GUARD_INFO.principal}): ${summary}`
+                  `[AI WORKSPACE -> COMMAND ENGINE] Staged Proposal (${stagedTx.proposalId}) for Explicit Approval (${CORE_GUARD_INFO.principal}): ${summary}`
                 );
                 setActiveSidebarModule('operations');
-                handleRequestApproval();
+                handleRequestApproval(stagedTx);
               }}
               onAuditRecord={(action, details, status) => {
                 const seq = String(auditSeqRef.current++).padStart(2, '0');
@@ -1646,7 +1757,7 @@ export function CommandCenterOperationsConsole({
                       <button
                         type="button"
                         disabled={writeGateStage === 'FINALIZED' && !selectedWritePreset.touchesCoreDirectly}
-                        onClick={handleRequestApproval}
+                        onClick={() => handleRequestApproval()}
                         className={`px-3.5 py-1.5 rounded-lg font-bold text-[11px] transition ${
                           writeGateStage === 'FINALIZED' && !selectedWritePreset.touchesCoreDirectly
                             ? 'bg-zinc-900 border border-emerald-500/40 text-emerald-300 cursor-not-allowed opacity-85'

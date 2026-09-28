@@ -788,7 +788,7 @@ async function startServer() {
     });
   });
 
-  // Track real AI Provider runtime state (including quota exhaustion / rate-limit cooldown)
+  // Track real AI Provider runtime state (including quota exhaustion / 503 unavailability cooldown and real E2E evidence)
   let lastProviderFailureState: {
     classification: 'PROVIDER_UNAVAILABLE' | 'TIMEOUT' | 'FAILED';
     actualError: string;
@@ -796,6 +796,14 @@ async function startServer() {
     cooldownUntilMs: number;
     timestamp: string;
     failureId: string;
+  } | null = null;
+
+  let lastVerifiedProviderEvidence: {
+    requestId: string;
+    traceId: string;
+    proposalId: string;
+    durationMs: number;
+    timestamp: string;
   } | null = null;
 
   let aiRequestSequence = 1;
@@ -807,6 +815,7 @@ async function startServer() {
     const isQuotaCooledDown =
       !lastProviderFailureState || nowMs >= lastProviderFailureState.cooldownUntilMs;
     const isTrulyConnected = hasProviderKey && isQuotaCooledDown;
+    const endToEndVerified = Boolean(isTrulyConnected && lastVerifiedProviderEvidence);
     const remainingRetrySec =
       lastProviderFailureState && !isQuotaCooledDown
         ? Math.max(1, Math.ceil((lastProviderFailureState.cooldownUntilMs - nowMs) / 1000))
@@ -814,6 +823,8 @@ async function startServer() {
 
     return res.status(200).json({
       connected: isTrulyConnected,
+      keyConfigured: hasProviderKey,
+      endToEndVerified,
       providerStatus: isTrulyConnected
         ? 'CONNECTED'
         : hasProviderKey
@@ -821,10 +832,13 @@ async function startServer() {
         : 'PROVIDER_NOT_CONNECTED',
       boundaryHealthStatus: isTrulyConnected ? 'CONNECTED' : 'UNAVAILABLE',
       uiStatus: isTrulyConnected ? 'IDLE' : 'UNAVAILABLE',
-      provenance: isTrulyConnected ? 'OBSERVED' : 'UNVERIFIED',
-      evidenceRef: isTrulyConnected
+      provenance: endToEndVerified ? 'VERIFIED' : isTrulyConnected ? 'OBSERVED' : 'UNVERIFIED',
+      evidenceRef: endToEndVerified && lastVerifiedProviderEvidence
+        ? `E2E:${lastVerifiedProviderEvidence.requestId}:${lastVerifiedProviderEvidence.traceId}`
+        : isTrulyConnected
         ? `ENV:GEMINI_API_KEY_PRESENT:BLK-${GENESIS_BLOCK_NUM}`
         : null,
+      lastVerifiedExecution: lastVerifiedProviderEvidence,
       retryAfterSeconds: remainingRetrySec,
       lastFailure:
         lastProviderFailureState && !isQuotaCooledDown ? lastProviderFailureState : null,
@@ -1002,14 +1016,45 @@ Rules:
 - "proposedBatchSize": number (48 or 64)
 - "htmlPreview": string (a self-contained HTML5 document using Tailwind CSS CDN with dark slate-950 styling representing the requested UI/dashboard preview; never reference window.parent, top, document.cookie, or localStorage).`;
 
-      const response = await ai.models.generateContent({
-        model: 'gemini-3-flash-preview',
-        contents: cleanPrompt,
-        config: {
-          systemInstruction: systemPrompt,
-          responseMimeType: 'application/json',
-        },
-      });
+      // Bounded real-provider retry on transient model API overload (Zero Mock Fallback)
+      const candidateModels = ['gemini-3-flash-preview', 'gemini-2.5-flash'] as const;
+      let response: Awaited<ReturnType<typeof ai.models.generateContent>> | null = null;
+      let lastUpstreamError: unknown = null;
+
+      for (let attempt = 0; attempt < candidateModels.length; attempt++) {
+        try {
+          response = await ai.models.generateContent({
+            model: candidateModels[attempt],
+            contents: cleanPrompt,
+            config: {
+              systemInstruction: systemPrompt,
+              responseMimeType: 'application/json',
+            },
+          });
+          lastUpstreamError = null;
+          break;
+        } catch (attemptErr: unknown) {
+          lastUpstreamError = attemptErr;
+          const msg = (attemptErr instanceof Error ? attemptErr.message : String(attemptErr)).toLowerCase();
+          const isTransientOverload =
+            msg.includes('currently overloaded') ||
+            msg.includes('intermittent errors') ||
+            msg.includes('overloaded') ||
+            msg.includes('503') ||
+            msg.includes('"status":"unavailable"') ||
+            msg.includes('experiencing high demand') ||
+            msg.includes('service unavailable');
+          if (isTransientOverload && attempt < candidateModels.length - 1) {
+            await new Promise((resolve) => setTimeout(resolve, 300));
+            continue;
+          }
+          throw attemptErr;
+        }
+      }
+
+      if (lastUpstreamError) {
+        throw lastUpstreamError;
+      }
 
       const rawText = response?.text || '';
       if (!rawText) {
@@ -1055,6 +1100,15 @@ Rules:
       const proposedBatch = Number(parsed.proposedBatchSize) === 48 ? 48 : 64;
       const proposalId = `PROP-AI-${GENESIS_BLOCK_NUM}-${seq}`;
       const durationMs = Math.max(1, Date.now() - startedAtMs);
+      const nowIso = new Date().toISOString();
+
+      lastVerifiedProviderEvidence = {
+        requestId,
+        traceId,
+        proposalId,
+        durationMs,
+        timestamp: nowIso,
+      };
 
       return res.status(200).json({
         requestId,
@@ -1084,7 +1138,7 @@ Rules:
         requiresExplicitApproval: requiresApproval,
         coreMutationCount: 0,
         diagnostic: null,
-        timestamp: new Date().toISOString(),
+        timestamp: nowIso,
       });
     } catch (err: unknown) {
       const errMsg = err instanceof Error ? err.message : String(err);
@@ -1094,12 +1148,29 @@ Rules:
         lowerErr.includes('quota exceeded') ||
         lowerErr.includes('rate-limit') ||
         lowerErr.includes('429');
+      const isIntermittentOverload =
+        lowerErr.includes('currently overloaded') ||
+        lowerErr.includes('intermittent errors') ||
+        lowerErr.includes('overloaded');
+      const isServiceUnavailable =
+        isIntermittentOverload ||
+        lowerErr.includes('503') ||
+        lowerErr.includes('"status":"unavailable"') ||
+        lowerErr.includes('experiencing high demand') ||
+        lowerErr.includes('service unavailable');
+      const isProviderUnavailable = isQuotaExhausted || isServiceUnavailable;
       const isTimeout = lowerErr.includes('timeout') || lowerErr.includes('deadline_exceeded');
       const retryMatch = errMsg.match(/retry in\s+([0-9]+(?:\.[0-9]+)?)s/i);
-      const retryAfterSeconds = retryMatch ? Math.ceil(Number(retryMatch[1])) : isQuotaExhausted ? 60 : null;
+      const retryAfterSeconds = retryMatch
+        ? Math.ceil(Number(retryMatch[1]))
+        : isQuotaExhausted
+        ? 60
+        : isServiceUnavailable
+        ? 15
+        : null;
       const classification = isTimeout
         ? 'TIMEOUT'
-        : isQuotaExhausted
+        : isProviderUnavailable
         ? 'PROVIDER_UNAVAILABLE'
         : 'FAILED';
       const nowIso = new Date().toISOString();
@@ -1109,7 +1180,7 @@ Rules:
         classification,
         actualError: errMsg,
         retryAfterSeconds,
-        cooldownUntilMs: Date.now() + (retryAfterSeconds ?? 30) * 1000,
+        cooldownUntilMs: Date.now() + (retryAfterSeconds ?? 15) * 1000,
         timestamp: nowIso,
         failureId,
       };
@@ -1119,12 +1190,16 @@ Rules:
         traceId,
         durationMs: Math.max(1, Date.now() - startedAtMs),
         providerStatus: 'WAITING_FOR_PROVIDER',
-        uiStatus: isQuotaExhausted ? 'UNAVAILABLE' : 'FAILED',
+        uiStatus: isProviderUnavailable ? 'UNAVAILABLE' : 'FAILED',
         provenance: 'UNVERIFIED',
         inputChannel,
         targetWorkspace,
         replyText: isQuotaExhausted
           ? `PROVIDER_UNAVAILABLE (QUOTA_EXHAUSTED${retryAfterSeconds ? ` · Retry in ${retryAfterSeconds}s` : ''}): ${errMsg}`
+          : isIntermittentOverload
+          ? `PROVIDER_UNAVAILABLE (MODEL_API_OVERLOADED_INTERMITTENT${retryAfterSeconds ? ` · Retry in ${retryAfterSeconds}s` : ''}): ${errMsg}`
+          : isServiceUnavailable
+          ? `PROVIDER_UNAVAILABLE (HIGH_DEMAND_503${retryAfterSeconds ? ` · Retry in ${retryAfterSeconds}s` : ''}): ${errMsg}`
           : `WAITING_FOR_PROVIDER / AI BOUNDARY ERROR: ${errMsg}`,
         analysis: null,
         proposal: null,
@@ -1143,11 +1218,15 @@ Rules:
           expectedState: 'AI_PROVIDER_RESPONSE_OK',
           observedState: isQuotaExhausted
             ? `PROVIDER_UNAVAILABLE (QUOTA_EXCEEDED${retryAfterSeconds ? ` · RETRY_${retryAfterSeconds}S` : ''})`
+            : isIntermittentOverload
+            ? `PROVIDER_UNAVAILABLE (MODEL_API_OVERLOADED_INTERMITTENT${retryAfterSeconds ? ` · RETRY_${retryAfterSeconds}S` : ''})`
+            : isServiceUnavailable
+            ? `PROVIDER_UNAVAILABLE (UPSTREAM_503_UNAVAILABLE${retryAfterSeconds ? ` · RETRY_${retryAfterSeconds}S` : ''})`
             : `AI_BOUNDARY_${classification}`,
           evidence: `ERR:${failureId}:${classification}`,
           timestamp: nowIso,
-          recoveryState: isQuotaExhausted
-            ? `FAIL_CLOSED_ZERO_MUTATION · QUOTA_COOLDOWN_${retryAfterSeconds ?? 60}S`
+          recoveryState: isProviderUnavailable
+            ? `FAIL_CLOSED_ZERO_MUTATION · COOLDOWN_${retryAfterSeconds ?? 15}S`
             : 'FAIL_CLOSED_ZERO_MUTATION',
           retryAfterSeconds,
         },

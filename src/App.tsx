@@ -75,6 +75,7 @@ import { StudioView } from '@/components/views/StudioView';
 import { UnifiedMultiverseControlPanel } from '@/components/views/UnifiedMultiverseControlPanel';
 import { UnifiedAuditPlaybackConsole } from '@/components/views/UnifiedAuditPlaybackConsole';
 import { GovernanceHealthHeatmap } from '@/components/views/GovernanceHealthHeatmap';
+import { ComplianceCoverageView } from '@/components/views/ComplianceCoverageView';
 import { CivilizationEngineView } from '@/components/views/CivilizationEngineView';
 import { CanonicalIntegrityDashboardView } from '@/components/views/CanonicalIntegrityDashboardView';
 import { QuantumAuditFusionView } from '@/components/views/QuantumAuditFusionView';
@@ -352,6 +353,13 @@ const VIEW_PERSONAS: Record<ViewType, ViewPersona> = {
     orb1: 'bg-cyan-600/14',
     orb2: 'bg-purple-600/10',
     orb3: 'bg-emerald-500/8',
+    accentGlow: 'rgba(6,182,212,0.1)',
+  },
+  'compliance-coverage': {
+    name: 'D3 Compliance & Integration Coverage Map',
+    orb1: 'bg-cyan-600/16',
+    orb2: 'bg-emerald-600/12',
+    orb3: 'bg-purple-600/10',
     accentGlow: 'rgba(6,182,212,0.1)',
   },
 };
@@ -2099,6 +2107,13 @@ function SovereignAppContent() {
         return (
           <GovernanceHealthHeatmap
             onNavigateToView={setCurrentView}
+            onAddSystemEvent={addSystemEvent as any}
+          />
+        );
+      case 'compliance-coverage':
+        return (
+          <ComplianceCoverageView
+            onNavigate={setCurrentView}
             onAddSystemEvent={addSystemEvent as any}
           />
         );

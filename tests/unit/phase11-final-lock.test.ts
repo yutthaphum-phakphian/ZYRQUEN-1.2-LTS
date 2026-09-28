@@ -7,6 +7,7 @@ import {
   verifyAllStageEvidenceComplete,
   loadAuthoritativePhase11Transaction,
   finalizePhase11Transaction,
+  stageNewProposalTransaction,
   attemptIdempotentPhase11Execution,
   resetAuthoritativePhase11TransactionToFinalized,
   Phase11AuthoritativeTransaction,
@@ -266,6 +267,86 @@ test('T9 — Failure-First Diagnostics Test: Captures all 12 fields and classifi
   assert.ok(diag.timestamp.length > 0);
   assert.match(diag.recoveryState, /QUOTA_COOLDOWN_51S/);
   assert.equal(diag.retryAfterSeconds, 51);
+});
+
+test('T10 — End-to-End Proposal Staging -> Approval (#EP-SOVEREIGN-01) -> Execution -> Audit Finalization -> Replay Lock Test', () => {
+  resetAuthoritativePhase11TransactionToFinalized();
+
+  // 1. Stage a brand-new AI Proposal for ws-agent-02
+  const staged = stageNewProposalTransaction({
+    proposalId: 'PROP-AI-849202-0007',
+    targetWorkspace: 'ws-agent-02',
+    previousValue: 64,
+    proposedValue: 48,
+  });
+  assert.equal(staged.isFinalized, false);
+  assert.equal(staged.lifecycleStage, 'APPROVAL_REQUIRED');
+  assert.equal(staged.lockPolicies.approval, 'OPEN');
+
+  // 2. First execution attempt on the new proposal must be ALLOWED
+  const firstAttempt = attemptIdempotentPhase11Execution({
+    transactionId: staged.transactionId,
+    traceId: staged.traceId,
+    operationId: staged.operationId,
+    actor: SOVEREIGN_PRINCIPAL_AUTHORITY.id,
+  });
+  assert.equal(firstAttempt.allowed, true);
+  assert.equal(firstAttempt.status, 'ALLOWED');
+
+  // 3. Complete all 8 evidence checkpoints and finalize into WORM Audit Ledger
+  const finalized = finalizePhase11Transaction({
+    ...staged,
+    lifecycleStage: 'COMPLETED',
+    workspaceMutationCount: staged.workspaceMutationCount + 1,
+    evidence: {
+      inspect: true,
+      preview: true,
+      approval: true,
+      execute: true,
+      test: true,
+      verify: true,
+      safety: true,
+      audit: true,
+    },
+  });
+  assert.equal(finalized.finalized, true);
+  assert.equal(finalized.lifecycleStage, 'FINALIZED');
+  assert.equal(finalized.transaction.isFinalized, true);
+  assert.equal(finalized.transaction.coreMutationCount, 0);
+
+  // 4. 8-Stage Real Execution Trace transitions to FINALIZED with all 8 stages PASSED
+  const completedTrace = buildExecutionTraceForOutcome({
+    traceId: finalized.transaction.traceId,
+    requestId: finalized.transaction.transactionId,
+    targetWorkspace: 'ws-agent-02',
+    stoppedAtStage: null,
+  });
+  assert.equal(completedTrace.overallStatus, 'FINALIZED');
+  assert.equal(completedTrace.stoppedAtStage, null);
+  assert.ok(completedTrace.stages.every((s) => s.status === 'PASSED' && Boolean(s.evidenceRef)));
+
+  // 5. Re-staging or re-executing the same finalized proposalId is deterministically BLOCKED
+  const restaged = stageNewProposalTransaction({
+    proposalId: 'PROP-AI-849202-0007',
+    targetWorkspace: 'ws-agent-02',
+    previousValue: 64,
+    proposedValue: 48,
+  });
+  assert.equal(restaged.isFinalized, true);
+
+  const duplicateAttempt = attemptIdempotentPhase11Execution({
+    transactionId: restaged.transactionId,
+    traceId: restaged.traceId,
+    operationId: restaged.operationId,
+    actor: SOVEREIGN_PRINCIPAL_AUTHORITY.id,
+  });
+  assert.equal(duplicateAttempt.allowed, false);
+  assert.equal(duplicateAttempt.status, 'BLOCKED');
+  assert.equal(duplicateAttempt.reason, 'TRANSACTION_ALREADY_FINALIZED');
+  assert.equal(duplicateAttempt.mutationOccurred, false);
+  assert.equal(duplicateAttempt.coreMutationCount, 0);
+
+  resetAuthoritativePhase11TransactionToFinalized();
 });
 
 

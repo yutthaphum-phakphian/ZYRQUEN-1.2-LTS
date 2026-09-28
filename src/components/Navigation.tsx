@@ -105,6 +105,7 @@ export const NAVIGATION_ITEMS: NavItem[] = [
   { id: 'studio', labelEn: 'Studio 3D', labelTh: 'สตูดิโอ 3D โฮโลแกรม', icon: Boxes, dotColor: '#06B6D4', badge: '3D LATTICE', shortcut: 'S' },
   { id: 'unified', labelEn: 'Multiverse Panel', labelTh: 'แผงควบคุมรวมมิติ', icon: LayoutGrid, dotColor: '#38BDF8', badge: 'TRI-VIEW', shortcut: 'U' },
   { id: 'heatmap', labelEn: '14.9K Seals Heatmap', labelTh: 'แผนผังสุขภาพ 14,902 ตรา', icon: Grid3X3, dotColor: '#10B981', badge: '14.9K', shortcut: 'H' },
+  { id: 'compliance-coverage', labelEn: 'Compliance Coverage', labelTh: 'แผนผังความครอบคลุม D3', icon: TrendingUp, dotColor: '#06B6D4', badge: 'D3 COV', shortcut: 'G' },
   { id: 'council', labelEn: 'Council 10/10', labelTh: 'สภาผู้พิทักษ์', icon: Crown, dotColor: '#F59E0B', badge: '10/10', shortcut: 'C' },
   { id: 'production', labelEn: 'Readiness', labelTh: 'ความพร้อมผลิต', icon: ShieldCheck, dotColor: '#10B981', badge: 'PH-20', shortcut: 'R' },
   { id: 'quantum', labelEn: 'Quantum', labelTh: 'ควอนตัมเน็กซัส', icon: Cpu, dotColor: '#8B5CF6', badge: '768-Q', shortcut: '2' },

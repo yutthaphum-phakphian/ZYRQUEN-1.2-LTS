@@ -42,6 +42,19 @@ import { SOVEREIGN_CHAMBERS } from '../data/sovereignData';
 import { Chamber } from '../types';
 import { useTelemetry } from '../hooks/useTelemetry';
 import { playTelemetryBeep, playAuditChime } from './AudioSynthesizer';
+import {
+  CHAMBER_INTEGRATION_COVERAGE_METRICS,
+  PRODUCTION_INTEGRATION_COVERAGE_SUMMARY,
+  ChamberIntegrationCoverageMetric,
+} from '../adapters/zyrquenAdapter';
+import { useSystemStateStore, systemStateStore } from '../store/systemStateStore';
+import {
+  generateHeatmapForensicPdf,
+  CANONICAL_HSM_NODE_FORENSIC_DOSSIERS,
+  HsmNodeForensicDossierSummary,
+  HeatmapForensicPdfReceipt,
+} from '../utils/heatmapForensicPdfExport';
+import { EvidenceExportService } from '../services/EvidenceExportService';
 
 // ======================================================================
 // ZYRQUEN Ω∞ — 18 SOVEREIGN CHAMBERS GOVERNANCE HEALTH HEATMAP
@@ -49,7 +62,8 @@ import { playTelemetryBeep, playAuditChime } from './AudioSynthesizer';
 // Genesis Block #849202 | SSoT Δ0.00% Zero Drift | 10/10 REAL_HSM
 // ======================================================================
 
-export type HeatmapMetricType = 'coherence' | 'stability' | 'cryoTemp' | 'drift';
+export type HeatmapMetricType = 'coherence' | 'stability' | 'cryoTemp' | 'drift' | 'integrationCoverage';
+export type HeatmapOverlayMode = 'SEAL_STATUS' | 'INTEGRATION_COVERAGE';
 export type HeatmapViewMode = 'grid' | 'epoch_matrix' | 'telemetry_trend';
 
 export interface UnstableEvent {
@@ -120,6 +134,7 @@ export const GovernanceHealthHeatmap: React.FC<GovernanceHealthHeatmapProps> = (
 
   // Component States
   const [activeMetric, setActiveMetric] = useState<HeatmapMetricType>('coherence');
+  const [overlayMode, setOverlayMode] = useState<HeatmapOverlayMode>('SEAL_STATUS');
   const [activeViewMode, setActiveViewMode] = useState<HeatmapViewMode>('grid');
   const [gridSubView, setGridSubView] = useState<'6col' | 'cards'>('6col');
   const [hoveredChamber, setHoveredChamber] = useState<ChamberHealthProfile | null>(null);
@@ -147,6 +162,86 @@ export const GovernanceHealthHeatmap: React.FC<GovernanceHealthHeatmapProps> = (
   // Requirement 3: Print Event Tracker & Immutable Ledger Logs
   const [printLedgerLogs, setPrintLedgerLogs] = useState<PrintAuditRecord[]>([]);
   const [printToast, setPrintToast] = useState<string | null>(null);
+
+  // HSM Quorum State & High-Priority Health Breach Alert (< 8/10 Nodes)
+  const storeCustodianProofs = useSystemStateStore((s) => s.custodianProofs);
+  const [isolatedHsmNodeIds, setIsolatedHsmNodeIds] = useState<string[]>([]);
+  const [selectedForensicDossier, setSelectedForensicDossier] = useState<HsmNodeForensicDossierSummary | null>(null);
+  const [lastPdfReceipt, setLastPdfReceipt] = useState<HeatmapForensicPdfReceipt | null>(null);
+
+  // Track which 'untested' integration coverage grid cells have been interacted with
+  const [interactedUntestedCells, setInteractedUntestedCells] = useState<string[]>([]);
+
+  const effectiveHsmQuorumNodes = useMemo(() => {
+    const localCount = 10 - isolatedHsmNodeIds.length;
+    return Math.min(storeCustodianProofs, localCount);
+  }, [storeCustodianProofs, isolatedHsmNodeIds]);
+
+  const isHsmHealthBreachActive = effectiveHsmQuorumNodes < 8;
+
+  const hsmNodeDossiersWithStatus = useMemo<HsmNodeForensicDossierSummary[]>(() => {
+    const storeDeficit = Math.max(0, 10 - storeCustodianProofs);
+    return CANONICAL_HSM_NODE_FORENSIC_DOSSIERS.map((dossier, idx) => {
+      const isLocallyIsolated = isolatedHsmNodeIds.includes(dossier.nodeId);
+      const isStoreIsolated = storeDeficit > 0 && idx >= 10 - storeDeficit;
+      return {
+        ...dossier,
+        status: isLocallyIsolated || isStoreIsolated ? 'ISOLATED_BREACH' : 'ONLINE_VERIFIED',
+      };
+    });
+  }, [isolatedHsmNodeIds, storeCustodianProofs]);
+
+  const breachedHsmDossiers = useMemo(
+    () => hsmNodeDossiersWithStatus.filter((d) => d.status === 'ISOLATED_BREACH'),
+    [hsmNodeDossiersWithStatus]
+  );
+
+  const handleToggleHsmQuorumBreachSimulation = useCallback(() => {
+    if (isHsmHealthBreachActive) {
+      setIsolatedHsmNodeIds([]);
+      systemStateStore.setCustodianProofs(10);
+      const restoreMsg = '[HSM QUORUM RESTORED] 10/10 REAL_HSM nodes online. Super-majority (>=8/10) re-established.';
+      setPrintToast(restoreMsg);
+      setTimeout(() => setPrintToast((curr) => (curr === restoreMsg ? null : curr)), 4000);
+      if (onSystemEvent) onSystemEvent(restoreMsg);
+      if (onAddSystemEvent) {
+        onAddSystemEvent(
+          'HARDWARE',
+          'HSM Quorum Restored (10/10 Online)',
+          'All 10 Deca-Key HSM nodes verified online. Health Breach Alert cleared.',
+          'HSM-QUORUM-10-10',
+          'success',
+          'ETDA Sec 26/28'
+        );
+      }
+    } else {
+      const targetIsolated = ['TC-03', 'TC-08', 'TC-09'];
+      setIsolatedHsmNodeIds(targetIsolated);
+      systemStateStore.setCustodianProofs(7);
+      if (isAudioEnabled) playTelemetryBeep(320);
+      const breachMsg =
+        '[HEALTH BREACH ALERT] HSM Quorum dropped to 7/10 (<8 required)! Nodes TC-03, TC-08, TC-09 isolated. Forensic dossiers linked.';
+      setPrintToast(breachMsg);
+      setTimeout(() => setPrintToast((curr) => (curr === breachMsg ? null : curr)), 4500);
+      if (onSystemEvent) onSystemEvent(breachMsg);
+      if (onAddSystemEvent) {
+        onAddSystemEvent(
+          'ALERT',
+          'HIGH-PRIORITY: HSM Quorum Health Breach (<8/10 Nodes)',
+          'HSM Quorum dropped to 7/10 active nodes. Hardware nodes TC-03, TC-08, TC-09 isolated; direct forensic dossiers attached.',
+          'HSM-BREACH-7-OF-10',
+          'critical',
+          'ETDA Sec 28 / FIPS 140-3 L4',
+          'security'
+        );
+      }
+    }
+  }, [isHsmHealthBreachActive, isAudioEnabled, onSystemEvent, onAddSystemEvent]);
+
+  const handleChamberCellInteraction = useCallback((chamberId: string, chamberCode: string) => {
+    setSelectedChamberId(chamberId);
+    setInteractedUntestedCells((prev) => (prev.includes(chamberCode) ? prev : [...prev, chamberCode]));
+  }, []);
 
   // Generate initial historical heartbeat profiles for each of the 18 Sovereign Chambers
   const [chamberProfiles, setChamberProfiles] = useState<ChamberHealthProfile[]>(() => {
@@ -825,6 +920,67 @@ export const GovernanceHealthHeatmap: React.FC<GovernanceHealthHeatmapProps> = (
     URL.revokeObjectURL(url);
   };
 
+  // Generate Court-Admissible Heatmap Forensic PDF (ETDA B.E. 2544 Section 28)
+  const handleGenerateHeatmapForensicPdf = useCallback(() => {
+    playAuditChime();
+    const receipt = generateHeatmapForensicPdf({
+      overlayMode,
+      activeMetric,
+      heartbeatCycle,
+      activeHsmQuorumNodes: effectiveHsmQuorumNodes,
+      totalHsmQuorumNodes: 10,
+      isolatedHsmDossiers: breachedHsmDossiers,
+      chambers: chamberProfiles.map((p) => ({
+        code: p.chamber.code,
+        name: p.chamber.name,
+        category: p.chamber.category,
+        coherencePct: p.currentCoherence,
+        stabilityPct: p.currentStability,
+        cryoTempMk: p.currentCryoTemp,
+        sealStatus: p.status || (p.currentCoherence < 95 ? 'UNSTABLE' : 'PURE_GREEN'),
+        invariantsCount: p.invariantsPassing,
+      })),
+      interactedUntestedCells,
+      triggerDownload: true,
+    });
+
+    setLastPdfReceipt(receipt);
+
+    const newRecord: PrintAuditRecord = {
+      printId: receipt.documentId,
+      chamberSource: `ETDA SEC 28 HEATMAP PDF (${receipt.capturedChambersCount} Chambers • ${receipt.overlayMode} • ${receipt.activeHsmQuorumNodes}/10 HSM)`,
+      timestamp: receipt.timestampUtc,
+      ledgerStatus: 'COMMITTED_IMMUTABLE_V25',
+    };
+    setPrintLedgerLogs((prev) => [newRecord, ...prev]);
+
+    const msg = `[ETDA Sec 28 Forensic PDF] Generated ${receipt.filename} (Digest: ${receipt.sha256Digest.slice(0, 18)}...)`;
+    setPrintToast(msg);
+    setTimeout(() => setPrintToast((curr) => (curr === msg ? null : curr)), 4500);
+
+    if (onSystemEvent) onSystemEvent(msg);
+    if (onAddSystemEvent) {
+      onAddSystemEvent(
+        'COMPLIANCE',
+        `ETDA Sec 28 Heatmap Forensic PDF Sealed (${receipt.documentId})`,
+        `Captured 18 Chambers Hardware Seal Status & Integration Coverage (${PRODUCTION_INTEGRATION_COVERAGE_SUMMARY.adapterLinesPct}% Lines) with ${receipt.activeHsmQuorumNodes}/10 HSM Quorum.`,
+        receipt.sha256Digest,
+        'success',
+        'ETDA B.E. 2544 Section 28'
+      );
+    }
+  }, [
+    overlayMode,
+    activeMetric,
+    heartbeatCycle,
+    effectiveHsmQuorumNodes,
+    breachedHsmDossiers,
+    chamberProfiles,
+    interactedUntestedCells,
+    onSystemEvent,
+    onAddSystemEvent,
+  ]);
+
   // Prepare temporal aggregate data for Recharts Trend
   const trendData = useMemo(() => {
     if (chamberProfiles.length === 0) return [];
@@ -910,6 +1066,48 @@ export const GovernanceHealthHeatmap: React.FC<GovernanceHealthHeatmapProps> = (
 
           {/* Heartbeat Controls & Actions */}
           <div className="flex flex-wrap items-center gap-2.5 shrink-0">
+            {/* Toggle between Hardware Seal Status and Integration Coverage Overlay */}
+            <div
+              id="heatmap-overlay-mode-switcher"
+              className="flex items-center bg-black/60 p-1 rounded-xl border border-cyan-500/30 text-xs font-mono"
+            >
+              <button
+                id="btn-mode-hardware-seal-status"
+                type="button"
+                onClick={() => {
+                  setOverlayMode('SEAL_STATUS');
+                  if (activeMetric === 'integrationCoverage') setActiveMetric('coherence');
+                }}
+                className={`px-3 py-1.5 rounded-lg transition-all cursor-pointer ${
+                  overlayMode === 'SEAL_STATUS'
+                    ? 'bg-emerald-500/20 text-emerald-300 border border-emerald-500/40 font-bold'
+                    : 'text-zinc-400 hover:text-white'
+                }`}
+              >
+                Hardware Seal Status
+              </button>
+              <button
+                id="btn-toggle-integration-coverage-overlay"
+                type="button"
+                onClick={() => {
+                  const next = overlayMode === 'INTEGRATION_COVERAGE' ? 'SEAL_STATUS' : 'INTEGRATION_COVERAGE';
+                  setOverlayMode(next);
+                  if (next === 'INTEGRATION_COVERAGE') {
+                    setActiveMetric('integrationCoverage');
+                  } else {
+                    setActiveMetric('coherence');
+                  }
+                }}
+                className={`px-3 py-1.5 rounded-lg transition-all cursor-pointer ${
+                  overlayMode === 'INTEGRATION_COVERAGE'
+                    ? 'bg-cyan-500/25 text-cyan-200 border border-cyan-400/50 font-bold'
+                    : 'text-zinc-400 hover:text-white'
+                }`}
+              >
+                Integration Coverage Overlay
+              </button>
+            </div>
+
             {/* Heartbeat Play/Pause */}
             <button
               id="btn-toggle-heartbeat-pulse"
@@ -949,6 +1147,18 @@ export const GovernanceHealthHeatmap: React.FC<GovernanceHealthHeatmapProps> = (
               <span>TRIGGER PULSE</span>
             </button>
 
+            {/* Generate Heatmap Forensic PDF (ETDA Sec 28) */}
+            <button
+              id="btn-generate-heatmap-forensic-pdf"
+              type="button"
+              onClick={handleGenerateHeatmapForensicPdf}
+              className="px-3.5 py-2 rounded-xl bg-amber-500/20 hover:bg-amber-500/30 border border-amber-500/40 text-amber-200 font-mono font-bold text-xs flex items-center gap-1.5 shadow-[0_0_14px_rgba(245,158,11,0.2)] transition cursor-pointer"
+              title="Generate Court-Admissible Heatmap Forensic PDF (Hardware Seal Status + Integration Coverage per ETDA Sec 28)"
+            >
+              <FileText className="w-3.5 h-3.5 text-amber-400" />
+              <span>Generate Heatmap Forensic PDF</span>
+            </button>
+
             {/* Export JSON */}
             <button
               id="btn-export-health-report"
@@ -962,6 +1172,98 @@ export const GovernanceHealthHeatmap: React.FC<GovernanceHealthHeatmapProps> = (
           </div>
         </div>
       </div>
+
+      {/* 🚨 HIGH-PRIORITY HEALTH BREACH ALERT VISUAL LAYER (When HSM Quorum Nodes < 8) */}
+      {isHsmHealthBreachActive && (
+        <div
+          id="hsm-quorum-health-breach-alert-layer"
+          role="alert"
+          className="p-5 rounded-2xl bg-gradient-to-r from-red-950/90 via-rose-950/85 to-[#120609] border-2 border-rose-500/80 security-view-crimson-pulse shadow-[0_0_35px_rgba(244,63,94,0.35)] space-y-4"
+        >
+          <div className="flex flex-col lg:flex-row lg:items-center justify-between gap-4 border-b border-rose-500/30 pb-3.5">
+            <div className="flex items-start gap-3">
+              <div className="p-2.5 rounded-xl bg-rose-500/25 border border-rose-400/50 text-rose-300 shrink-0 mt-0.5">
+                <AlertTriangle className="w-5 h-5 text-rose-400 animate-bounce" />
+              </div>
+              <div className="space-y-1">
+                <div className="flex items-center gap-2 flex-wrap">
+                  <span className="text-xs font-mono font-bold uppercase tracking-wider text-rose-300">
+                    HIGH-PRIORITY HEALTH BREACH ALERT • HSM QUORUM BELOW 8/10 THRESHOLD
+                  </span>
+                  <span aria-hidden="true" className="text-rose-400">·</span>
+                  <span className="text-xs font-mono font-bold text-white">
+                    ACTIVE QUORUM: {effectiveHsmQuorumNodes}/10 NODES (MINIMUM REQUIRED: 8/10)
+                  </span>
+                </div>
+                <p className="text-xs text-rose-100/90 font-sans">
+                  Sub-Kelvin Hardware Security Module super-majority threshold breached. Fail-closed promotion lock is
+                  engaged. Inspect the direct court-admissible forensic dossiers for each isolated hardware node below.
+                </p>
+              </div>
+            </div>
+
+            <div className="flex items-center gap-2 shrink-0 flex-wrap">
+              {onNavigateToView && (
+                <button
+                  id="btn-navigate-forensic-dossier-view"
+                  type="button"
+                  onClick={() => onNavigateToView('security')}
+                  className="px-3.5 py-2 rounded-xl bg-rose-500/25 hover:bg-rose-500/35 border border-rose-400/60 text-rose-100 font-mono font-bold text-xs flex items-center gap-1.5 cursor-pointer"
+                >
+                  <ExternalLink className="w-3.5 h-3.5 text-rose-300" />
+                  <span>Open HSM Security Forensics</span>
+                </button>
+              )}
+              <button
+                id="btn-restore-hsm-quorum-nodes"
+                type="button"
+                onClick={handleToggleHsmQuorumBreachSimulation}
+                className="px-3.5 py-2 rounded-xl bg-emerald-600/30 hover:bg-emerald-600/40 border border-emerald-400/60 text-emerald-200 font-mono font-bold text-xs flex items-center gap-1.5 cursor-pointer"
+              >
+                <ShieldCheck className="w-3.5 h-3.5 text-emerald-300" />
+                <span>Restore 10/10 HSM Quorum</span>
+              </button>
+            </div>
+          </div>
+
+          {/* Direct Forensic Dossier Links for Affected / Isolated Hardware Nodes */}
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-3">
+            {breachedHsmDossiers.map((dossier) => (
+              <div
+                key={dossier.nodeId}
+                id={`breached-hsm-node-card-${dossier.nodeId.toLowerCase()}`}
+                className="p-3.5 rounded-xl bg-black/70 border border-rose-500/40 flex flex-col justify-between gap-2.5 text-xs font-mono"
+              >
+                <div className="space-y-1">
+                  <div className="flex items-center justify-between text-rose-300 font-bold">
+                    <span>{dossier.nodeId} ({dossier.signerNode})</span>
+                    <span className="text-[10px] text-rose-400">ISOLATED</span>
+                  </div>
+                  <div className="text-[11px] text-white font-semibold">{dossier.nodeName}</div>
+                  <div className="text-[10px] text-zinc-400">
+                    Dossier ID: <span className="text-cyan-300">{dossier.dossierId}</span> · {dossier.associatedChamber}
+                  </div>
+                  <div className="text-[10px] text-zinc-500 truncate">
+                    PQC Key: {dossier.publicKey} · Sig: {dossier.signatureDigest.slice(0, 14)}...
+                  </div>
+                </div>
+
+                <div className="flex items-center justify-between gap-2 pt-2 border-t border-white/10">
+                  <button
+                    id={`btn-open-forensic-dossier-${dossier.nodeId.toLowerCase()}`}
+                    type="button"
+                    onClick={() => setSelectedForensicDossier(dossier)}
+                    className="px-2.5 py-1.5 rounded-lg bg-rose-500/20 hover:bg-rose-500/35 border border-rose-400/50 text-rose-200 font-bold text-[11px] flex items-center gap-1.5 cursor-pointer w-full justify-center"
+                  >
+                    <FileText className="w-3.5 h-3.5 text-rose-300" />
+                    <span>Inspect Node Forensic Dossier ({dossier.dossierId})</span>
+                  </button>
+                </div>
+              </div>
+            ))}
+          </div>
+        </div>
+      )}
 
       {/* 📊 Aggregate Telemetry HUD Cards */}
       <div className="grid grid-cols-2 sm:grid-cols-4 gap-3">
@@ -998,13 +1300,17 @@ export const GovernanceHealthHeatmap: React.FC<GovernanceHealthHeatmapProps> = (
           <div className="text-[10px] text-blue-300/80 font-mono mt-0.5">SLA &le;18.00 mK (NOMINAL)</div>
         </div>
 
-        <div className="p-4 rounded-2xl bg-black/40 border-white/8">
+        <div className={`p-4 rounded-2xl border ${isHsmHealthBreachActive ? 'bg-rose-950/40 border-rose-500/60' : 'bg-black/40 border-white/8'}`}>
           <div className="flex items-center justify-between text-[10px] font-mono text-zinc-400 uppercase">
             <span>Quorum Binding</span>
-            <Lock className="w-3.5 h-3.5 text-purple-400" />
+            <Lock className={`w-3.5 h-3.5 ${isHsmHealthBreachActive ? 'text-rose-400 animate-pulse' : 'text-purple-400'}`} />
           </div>
-          <div className="text-xl sm:text-2xl font-mono font-bold text-purple-300 mt-1">10/10 REAL_HSM</div>
-          <div className="text-[10px] text-purple-300/80 font-mono mt-0.5">FIPS 140-3 LEVEL 4</div>
+          <div className={`text-xl sm:text-2xl font-mono font-bold mt-1 ${isHsmHealthBreachActive ? 'text-rose-400' : 'text-purple-300'}`}>
+            {effectiveHsmQuorumNodes}/10 REAL_HSM
+          </div>
+          <div className="text-[10px] text-purple-300/80 font-mono mt-0.5">
+            {isHsmHealthBreachActive ? 'BREACH ALERT (<8/10 QUORUM)' : 'FIPS 140-3 LEVEL 4'}
+          </div>
         </div>
       </div>
 
@@ -1053,20 +1359,29 @@ export const GovernanceHealthHeatmap: React.FC<GovernanceHealthHeatmapProps> = (
         </div>
 
         {/* Metric Selector */}
-        <div className="flex items-center gap-1.5 text-xs font-mono">
+        <div className="flex items-center gap-1.5 text-xs font-mono flex-wrap">
           <span className="text-zinc-400 mr-1 hidden sm:inline">Color Heat by:</span>
-          {(['coherence', 'stability', 'cryoTemp', 'drift'] as HeatmapMetricType[]).map((metric) => (
+          {(['coherence', 'stability', 'cryoTemp', 'drift', 'integrationCoverage'] as HeatmapMetricType[]).map((metric) => (
             <button
               key={metric}
               id={`metric-btn-${metric}`}
-              onClick={() => setActiveMetric(metric)}
+              onClick={() => {
+                setActiveMetric(metric);
+                if (metric === 'integrationCoverage') {
+                  setOverlayMode('INTEGRATION_COVERAGE');
+                }
+              }}
               className={`px-2.5 py-1 rounded-lg border transition cursor-pointer capitalize ${
                 activeMetric === metric
                   ? 'bg-white/10 text-white border-white/30 font-bold'
                   : 'bg-black/40 text-zinc-400 border-white/5 hover:text-zinc-200'
               }`}
             >
-              {metric === 'cryoTemp' ? 'Cryo (mK)' : metric}
+              {metric === 'cryoTemp'
+                ? 'Cryo (mK)'
+                : metric === 'integrationCoverage'
+                ? 'Integration Coverage'
+                : metric}
             </button>
           ))}
         </div>
@@ -1097,6 +1412,42 @@ export const GovernanceHealthHeatmap: React.FC<GovernanceHealthHeatmapProps> = (
           </select>
         </div>
       </div>
+
+      {/* Optional Integration Coverage Overlay Summary Banner */}
+      {overlayMode === 'INTEGRATION_COVERAGE' && (
+        <div
+          id="integration-coverage-overlay-banner"
+          className="p-4 rounded-2xl bg-cyan-950/30 border border-cyan-500/40 flex flex-col lg:flex-row lg:items-center justify-between gap-4 text-xs font-mono"
+        >
+          <div className="space-y-1">
+            <div className="flex items-center gap-2 text-cyan-300 font-bold">
+              <span>INTEGRATION COVERAGE OVERLAY ACTIVE (V8 CONSOLE SUMMARY)</span>
+              <span aria-hidden="true">·</span>
+              <span className="text-emerald-300">
+                {PRODUCTION_INTEGRATION_COVERAGE_SUMMARY.e2eStagesVerified}/
+                {PRODUCTION_INTEGRATION_COVERAGE_SUMMARY.e2eStagesTotal} E2E STAGES VERIFIED
+              </span>
+            </div>
+            <div className="text-zinc-300">
+              Adapter Lines: <strong className="text-white">{PRODUCTION_INTEGRATION_COVERAGE_SUMMARY.adapterLinesPct}%</strong> ·
+              Functions: <strong className="text-emerald-300">{PRODUCTION_INTEGRATION_COVERAGE_SUMMARY.adapterFunctionsPct}%</strong> ·
+              Branches: <strong className="text-amber-300">{PRODUCTION_INTEGRATION_COVERAGE_SUMMARY.adapterBranchesPct}%</strong> ·
+              Uncovered Gaps: <span className="text-rose-300">L1305–1341 (Classifier), L1539–1576 (Sig Gate)</span>
+            </div>
+          </div>
+          {onNavigateToView && (
+            <button
+              id="btn-open-d3-compliance-coverage-view"
+              type="button"
+              onClick={() => onNavigateToView('compliance-coverage')}
+              className="px-3.5 py-2 rounded-xl bg-cyan-500/20 hover:bg-cyan-500/30 border border-cyan-400/50 text-cyan-200 font-bold flex items-center gap-2 cursor-pointer shrink-0"
+            >
+              <span>Inspect D3 Compliance Coverage Map</span>
+              <ChevronRight className="w-4 h-4" />
+            </button>
+          )}
+        </div>
+      )}
 
       {/* 🗺️ VIEW MODE 1: 18 Sovereign Chambers Spatial Grid Heatmap */}
       {activeViewMode === 'grid' && (
@@ -1141,6 +1492,25 @@ export const GovernanceHealthHeatmap: React.FC<GovernanceHealthHeatmapProps> = (
               >
                 <AlertTriangle className="w-3.5 h-3.5 text-red-400" />
                 <span>🚨 Unstable Alerts ({unstableEvents.length})</span>
+              </button>
+
+              <button
+                id="btn-simulate-hsm-quorum-breach"
+                type="button"
+                onClick={handleToggleHsmQuorumBreachSimulation}
+                className={`px-3 py-1.5 rounded-xl text-xs font-mono font-bold transition flex items-center gap-1.5 cursor-pointer border ${
+                  isHsmHealthBreachActive
+                    ? 'bg-rose-500/25 border-rose-500/70 text-rose-200 animate-pulse shadow-[0_0_14px_rgba(244,63,94,0.4)]'
+                    : 'bg-purple-500/15 border-purple-500/40 text-purple-200 hover:bg-purple-500/25'
+                }`}
+                title="Simulate HSM Quorum dropping below 8/10 nodes to trigger Health Breach Alert layer and Forensic Dossier links"
+              >
+                <Lock className="w-3.5 h-3.5 text-rose-400" />
+                <span>
+                  {isHsmHealthBreachActive
+                    ? `RESTORE HSM QUORUM (${effectiveHsmQuorumNodes}/10)`
+                    : 'SIMULATE HSM QUORUM BREACH (<8/10)'}
+                </span>
               </button>
 
               <button
@@ -1255,10 +1625,22 @@ export const GovernanceHealthHeatmap: React.FC<GovernanceHealthHeatmapProps> = (
               {filteredProfiles.map((chamber, index) => {
                 const isUnstable = chamber.currentCoherence < 95;
                 const isProtected = chamber.status === 'LOCKED_PROTECTED';
+                const covMetric: ChamberIntegrationCoverageMetric =
+                  CHAMBER_INTEGRATION_COVERAGE_METRICS.find((m) => m.chamberCode === chamber.chamber.code) ||
+                  CHAMBER_INTEGRATION_COVERAGE_METRICS[0];
+                const isCoverageMode = overlayMode === 'INTEGRATION_COVERAGE' || activeMetric === 'integrationCoverage';
+                const hasUntestedCoveragePath =
+                  covMetric.completenessStatus === 'PARTIAL_BRANCH_GAP' ||
+                  covMetric.uncoveredLineRanges !== 'None (100% E2E Verified)';
+                const isUntestedPulsing =
+                  hasUntestedCoveragePath && !interactedUntestedCells.includes(chamber.chamber.code);
+                const hasBranchGap = isCoverageMode && hasUntestedCoveragePath;
                 const cellStyle = isProtected
                   ? 'bg-blue-950/80 border-blue-500 text-blue-300 shadow-[0_0_15px_rgba(59,130,246,0.3)]'
                   : isUnstable
                   ? 'bg-red-950/80 border-red-500 text-red-400'
+                  : hasBranchGap
+                  ? 'bg-amber-950/70 border-amber-500/70 text-amber-200'
                   : getCellColorStyle(chamber.currentCoherence);
                 const isSelected = selectedChamberId === chamber.chamber.id;
 
@@ -1266,14 +1648,20 @@ export const GovernanceHealthHeatmap: React.FC<GovernanceHealthHeatmapProps> = (
                   <motion.div
                     key={chamber.chamber.id}
                     id={`chamber-cell-${chamber.chamber.code.toLowerCase()}`}
+                    data-untested-path={hasUntestedCoveragePath ? 'true' : 'false'}
+                    data-untested-pulse={
+                      hasUntestedCoveragePath ? (isUntestedPulsing ? 'active' : 'acknowledged') : 'none'
+                    }
                     initial={{ opacity: 0, scale: 0.9 }}
                     animate={{ opacity: 1, scale: 1 }}
                     transition={{ duration: 0.3, delay: index * 0.03 }}
                     whileHover={{ scale: 1.03 }}
                     onMouseEnter={() => setHoveredChamber(chamber)}
                     onMouseLeave={() => setHoveredChamber(null)}
-                    onClick={() => setSelectedChamberId(chamber.chamber.id)}
+                    onClick={() => handleChamberCellInteraction(chamber.chamber.id, chamber.chamber.code)}
                     className={`relative p-3.5 rounded-xl border transition-all cursor-pointer shadow-inner overflow-hidden ${cellStyle} ${
+                      isUntestedPulsing ? 'untested-coverage-cell-pulse' : ''
+                    } ${
                       isUnstable && !isProtected ? 'ring-2 ring-red-500 animate-pulse' : ''
                     } ${isSelected ? 'ring-2 ring-white scale-[1.02] shadow-2xl' : ''}`}
                   >
@@ -1284,7 +1672,11 @@ export const GovernanceHealthHeatmap: React.FC<GovernanceHealthHeatmapProps> = (
 
                     <div className="text-[10px] text-gray-400 uppercase tracking-wider flex justify-between items-center relative z-10">
                       <span className="font-mono font-bold text-gray-200">{chamber.chamber.code}</span>
-                      {isProtected ? (
+                      {isCoverageMode ? (
+                        <span className="text-cyan-300 font-mono text-[9px] font-bold">
+                          {covMetric.integrationStage}
+                        </span>
+                      ) : isProtected ? (
                         <span className="text-blue-400 font-bold text-[9px] font-mono px-1.5 py-0.5 rounded bg-blue-500/20 border-blue-500/40">
                           LOCKED
                         </span>
@@ -1294,8 +1686,22 @@ export const GovernanceHealthHeatmap: React.FC<GovernanceHealthHeatmapProps> = (
                     </div>
 
                     <div className="text-base font-bold my-1 font-mono relative z-10">
-                      {chamber.currentCoherence.toFixed(2)}%
+                      {isCoverageMode ? `${covMetric.linesPct.toFixed(1)}% Cov` : `${chamber.currentCoherence.toFixed(2)}%`}
                     </div>
+
+                    {isCoverageMode && (
+                      <div className="text-[9px] font-mono text-zinc-300 flex items-center justify-between relative z-10 mb-1">
+                        <span>Br: {covMetric.branchesPct.toFixed(0)}%</span>
+                        <span>{covMetric.e2eTestsPassing}/{covMetric.e2eTestsTotal} E2E</span>
+                      </div>
+                    )}
+
+                    {hasUntestedCoveragePath && (
+                      <div className="text-[9px] font-mono text-amber-300 flex items-center justify-between relative z-10 mb-1">
+                        <span>{isUntestedPulsing ? 'UNTESTED GAP (PULSE)' : 'GAP INSPECTED'}</span>
+                        <span>{covMetric.uncoveredLineRanges}</span>
+                      </div>
+                    )}
 
                     {/* Sparkline Chart inside Chamber Card (Last 10 Ticks) */}
                     <div className="h-4 w-full my-1 relative z-10 flex items-end">
@@ -1359,15 +1765,28 @@ export const GovernanceHealthHeatmap: React.FC<GovernanceHealthHeatmapProps> = (
 
                 const heatStyle = getCellHeatStyle(activeMetric, valueToMeasure);
                 const isSelected = selectedChamberId === prof.chamber.id;
+                const cardCovMetric: ChamberIntegrationCoverageMetric =
+                  CHAMBER_INTEGRATION_COVERAGE_METRICS.find((m) => m.chamberCode === prof.chamber.code) ||
+                  CHAMBER_INTEGRATION_COVERAGE_METRICS[0];
+                const cardHasUntestedPath =
+                  cardCovMetric.completenessStatus === 'PARTIAL_BRANCH_GAP' ||
+                  cardCovMetric.uncoveredLineRanges !== 'None (100% E2E Verified)';
+                const cardIsUntestedPulsing =
+                  cardHasUntestedPath && !interactedUntestedCells.includes(prof.chamber.code);
 
                 return (
                   <div
                     key={prof.chamber.id}
                     id={`chamber-card-${prof.chamber.code.toLowerCase()}`}
-                    onClick={() => setSelectedChamberId(prof.chamber.id)}
+                    data-untested-pulse={
+                      cardHasUntestedPath ? (cardIsUntestedPulsing ? 'active' : 'acknowledged') : 'none'
+                    }
+                    onClick={() => handleChamberCellInteraction(prof.chamber.id, prof.chamber.code)}
                     className={`p-5 rounded-2xl border transition-all duration-200 cursor-pointer relative overflow-hidden ${
                       heatStyle.bg
-                    } ${heatStyle.border} ${isSelected ? 'ring-2 ring-white scale-[1.01] z-20 shadow-xl' : ''}`}
+                    } ${heatStyle.border} ${cardIsUntestedPulsing ? 'untested-coverage-cell-pulse' : ''} ${
+                      isSelected ? 'ring-2 ring-white scale-[1.01] z-20 shadow-xl' : ''
+                    }`}
                   >
                     {/* Top Bar: Code, Category, Status */}
                     <div className="flex items-center justify-between gap-2 mb-2">
@@ -1920,6 +2339,108 @@ export const GovernanceHealthHeatmap: React.FC<GovernanceHealthHeatmapProps> = (
           >
             <CheckCircle2 className="w-4 h-4 text-emerald-400 shrink-0" />
             <span>{printToast}</span>
+          </motion.div>
+        )}
+      </AnimatePresence>
+
+      {/* Forensic Dossier Modal for Specific Hardware HSM Node */}
+      <AnimatePresence>
+        {selectedForensicDossier && (
+          <motion.div
+            id="hsm-node-forensic-dossier-modal"
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            className="fixed inset-0 z-50 bg-black/80 backdrop-blur-sm flex items-center justify-center p-4"
+            onClick={() => setSelectedForensicDossier(null)}
+          >
+            <motion.div
+              initial={{ scale: 0.94, y: 16 }}
+              animate={{ scale: 1, y: 0 }}
+              exit={{ scale: 0.94, y: 16 }}
+              onClick={(e) => e.stopPropagation()}
+              className="bg-[#0b101b] border-2 border-rose-500/60 rounded-2xl w-full max-w-xl p-6 shadow-2xl text-white space-y-4 font-mono"
+            >
+              <div className="flex items-center justify-between pb-3 border-b border-rose-500/30">
+                <div>
+                  <div className="text-xs text-rose-300 font-bold">
+                    HARDWARE HSM NODE FORENSIC DOSSIER • {selectedForensicDossier.dossierId}
+                  </div>
+                  <h3 className="text-base font-bold text-white mt-0.5">
+                    {selectedForensicDossier.nodeId} — {selectedForensicDossier.nodeName}
+                  </h3>
+                </div>
+                <button
+                  id="btn-close-hsm-forensic-dossier"
+                  type="button"
+                  onClick={() => setSelectedForensicDossier(null)}
+                  className="px-3 py-1.5 rounded-xl bg-white/10 hover:bg-white/20 text-xs text-zinc-200 cursor-pointer"
+                >
+                  Close
+                </button>
+              </div>
+
+              <div className="space-y-2.5 text-xs">
+                <div className="p-3 rounded-xl bg-black/60 border border-white/10 space-y-1">
+                  <div className="text-zinc-400">
+                    Hardware Enclave: <span className="text-white font-bold">{selectedForensicDossier.signerNode}</span>
+                  </div>
+                  <div className="text-zinc-400">
+                    Associated Chamber: <span className="text-cyan-300">{selectedForensicDossier.associatedChamber}</span>
+                  </div>
+                  <div className="text-zinc-400">
+                    PQC Public Key: <span className="text-emerald-300">{selectedForensicDossier.publicKey}</span>
+                  </div>
+                  <div className="text-zinc-400">
+                    Signature Digest: <span className="text-purple-300">{selectedForensicDossier.signatureDigest}</span>
+                  </div>
+                  <div className="text-zinc-400">
+                    Statutory Authority: <span className="text-amber-300">{selectedForensicDossier.statutoryRef}</span>
+                  </div>
+                </div>
+
+                <div className="p-3 rounded-xl bg-rose-950/30 border border-rose-500/30 text-rose-100 font-sans text-xs">
+                  <strong className="font-mono text-rose-300 block mb-1">Forensic Finding &amp; Chain of Custody:</strong>
+                  {selectedForensicDossier.forensicSummary}
+                </div>
+              </div>
+
+              <div className="flex flex-wrap items-center justify-between gap-2 pt-3 border-t border-white/10">
+                <button
+                  id="btn-download-hsm-dossier-json"
+                  type="button"
+                  onClick={() => {
+                    EvidenceExportService.downloadJsonBlob(
+                      {
+                        ...selectedForensicDossier,
+                        genesisBlock: '#849202',
+                        merkleRoot: '909ab814479844d8a14816bed34cdbb07528e18501da86fc4691763a43fa4c68',
+                        activeHsmQuorumNodes: effectiveHsmQuorumNodes,
+                        exportedAtUtc: new Date().toISOString(),
+                      },
+                      `${selectedForensicDossier.dossierId}.json`
+                    );
+                  }}
+                  className="px-3.5 py-2 rounded-xl bg-cyan-500/20 hover:bg-cyan-500/30 border border-cyan-400/50 text-cyan-200 text-xs font-bold flex items-center gap-1.5 cursor-pointer"
+                >
+                  <Download className="w-3.5 h-3.5" />
+                  <span>Download Node Dossier JSON</span>
+                </button>
+
+                <button
+                  id="btn-generate-dossier-pdf-from-modal"
+                  type="button"
+                  onClick={() => {
+                    handleGenerateHeatmapForensicPdf();
+                    setSelectedForensicDossier(null);
+                  }}
+                  className="px-3.5 py-2 rounded-xl bg-amber-500/25 hover:bg-amber-500/35 border border-amber-400/60 text-amber-200 text-xs font-bold flex items-center gap-1.5 cursor-pointer"
+                >
+                  <FileText className="w-3.5 h-3.5" />
+                  <span>Export ETDA Sec 28 Forensic PDF</span>
+                </button>
+              </div>
+            </motion.div>
           </motion.div>
         )}
       </AnimatePresence>
