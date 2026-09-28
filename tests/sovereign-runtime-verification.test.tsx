@@ -20,6 +20,7 @@ import {
 import { GovernanceHealthHeatmap } from '../src/components/GovernanceHealthHeatmap';
 import { ComplianceCoverageView } from '../src/components/views/ComplianceCoverageView';
 import { CommandCenterOperationsConsole } from '../src/components/CommandCenterOperationsConsole';
+import App from '../src/App';
 
 afterEach(() => {
   cleanup();
@@ -473,5 +474,108 @@ describe('Sovereign runtime verification', () => {
     expect(screen.getAllByText(/RECOVERED_VERIFIED/i).length).toBeGreaterThan(0);
 
     resetAuthoritativePhase11TransactionToFinalized();
+  });
+
+  it('renders the 24-hour HSM node health sparkline in the Verification Gate tooltip and scans/verifies QR-based audit artifacts via the camera modal', () => {
+    render(<App />);
+
+    // 1. Verify Verification Gate section and hover/open the Verification Gate tooltip
+    const gateSection = document.getElementById('verification-gate-section')!;
+    expect(gateSection).toBeTruthy();
+
+    const gateStatusBtn = document.getElementById('verification-gate-status')!;
+    expect(gateStatusBtn).toBeTruthy();
+    fireEvent.mouseEnter(gateStatusBtn.parentElement!);
+
+    const gateTooltip = document.getElementById('verification-gate-status-tooltip')!;
+    expect(gateTooltip).toBeTruthy();
+
+    // Verify 24-hour HSM node health sparkline chart inside tooltip
+    const sparklineContainer = document.getElementById('verification-gate-hsm-24h-sparkline')!;
+    expect(sparklineContainer).toBeTruthy();
+    expect(sparklineContainer.textContent).toContain('24H HSM NODE HEALTH SPARKLINE (QUORUM STABILITY)');
+    expect(sparklineContainer.textContent).toContain('24H MEAN:');
+    expect(sparklineContainer.textContent).toContain('NOW: 100% (10/10)');
+
+    const sparklineSvg = document.getElementById('verification-gate-hsm-sparkline-svg')!;
+    expect(sparklineSvg).toBeTruthy();
+    expect(document.getElementById('verification-gate-hsm-sparkline-path')).toBeTruthy();
+    expect(document.getElementById('verification-gate-hsm-sparkline-area')).toBeTruthy();
+    const hourlyPoints = sparklineSvg.querySelectorAll('circle.hsm-sparkline-point');
+    expect(hourlyPoints.length).toBe(24);
+
+    // 2. Verify Verification Gate camera QR scanner button opens modal in camera scanner mode and updates UI on verification
+    const qrCameraScanBtn = document.getElementById('btn-verification-gate-qr-camera-scan')!;
+    expect(qrCameraScanBtn).toBeTruthy();
+    fireEvent.click(qrCameraScanBtn);
+
+    const qrModal = document.getElementById('merkle-qr-verification-modal')!;
+    expect(qrModal).toBeTruthy();
+
+    // Camera scanner viewport should be active automatically
+    const cameraViewport = document.getElementById('camera-scanner-viewport')!;
+    expect(cameraViewport).toBeTruthy();
+
+    const captureVerifyBtn = document.getElementById('btn-capture-verify-qr-artifact')!;
+    expect(captureVerifyBtn).toBeTruthy();
+    fireEvent.click(captureVerifyBtn);
+
+    // Verify modal result and Verification Gate UI updated accordingly
+    const scanResultBox = document.getElementById('qr-scan-verification-result')!;
+    expect(scanResultBox).toBeTruthy();
+    expect(scanResultBox.getAttribute('data-verification-status')).toBe('SUCCESS');
+
+    const gateQrBadge = document.getElementById('verification-gate-qr-verification-badge')!;
+    expect(gateQrBadge).toBeTruthy();
+    expect(gateQrBadge.getAttribute('data-verified')).toBe('true');
+    expect(gateQrBadge.textContent).toContain('QR VERIFIED');
+    expect(gateStatusBtn.textContent).toContain('PASSED');
+  });
+
+  it('8. GovernanceHealthHeatmap: Historical Timestamp Diff Overlay comparing hardware seal status changes between two timestamps', () => {
+    render(<GovernanceHealthHeatmap hsmQuorumNodes={10} />);
+
+    const datePickerA = document.getElementById('heatmap-historical-date-picker') as HTMLInputElement;
+    const datePickerB = document.getElementById('heatmap-comparison-date-picker') as HTMLInputElement;
+    expect(datePickerA).toBeTruthy();
+    expect(datePickerB).toBeTruthy();
+
+    // Select two different historical timestamps using the date pickers
+    fireEvent.change(datePickerA, { target: { value: '2026-09-27T11:00' } });
+    fireEvent.change(datePickerB, { target: { value: '2026-09-28T00:00' } });
+
+    expect(datePickerA.value).toBe('2026-09-27T11:00');
+    expect(datePickerB.value).toBe('2026-09-28T00:00');
+
+    // Verify diff overlay banner is active and summarizes hardware seal status transitions
+    const diffBanner = document.getElementById('heatmap-historical-diff-banner')!;
+    expect(diffBanner).toBeTruthy();
+    expect(diffBanner.getAttribute('data-timestamp-a')).toBe('2026-09-27T11:00');
+    expect(diffBanner.getAttribute('data-timestamp-b')).toBe('2026-09-28T00:00');
+    expect(Number(diffBanner.getAttribute('data-changed-count'))).toBeGreaterThan(0);
+    expect(diffBanner.textContent).toContain('HISTORICAL SEAL STATUS DIFF OVERLAY ACTIVE');
+
+    // Verify per-cell diff overlays are rendered across the hardware cells
+    const cellDiffBadges = document.querySelectorAll('.heatmap-cell-diff-overlay');
+    expect(cellDiffBadges.length).toBeGreaterThanOrEqual(18);
+
+    const ch04Cell = document.getElementById('chamber-cell-ch-04')!;
+    expect(ch04Cell.getAttribute('data-diff-active')).toBe('true');
+    expect(ch04Cell.getAttribute('data-diff-state')).toBe('IMPROVED');
+
+    const ch04DiffOverlay = document.getElementById('cell-diff-overlay-ch-04')!;
+    expect(ch04DiffOverlay.textContent).toContain('DIFF: IMPROVED');
+    expect(ch04DiffOverlay.textContent).toContain('TRANSIENT_JITTER');
+    expect(ch04DiffOverlay.textContent).toContain('PURE_GREEN');
+
+    // Swap timestamps A <-> B and verify direction reverses to DEGRADED
+    const swapBtn = document.getElementById('btn-swap-diff-timestamps')!;
+    fireEvent.click(swapBtn);
+    expect(ch04Cell.getAttribute('data-diff-state')).toBe('DEGRADED');
+
+    // Clear diff view
+    const clearDiffBtn = document.getElementById('btn-clear-historical-diff')!;
+    fireEvent.click(clearDiffBtn);
+    expect(document.getElementById('heatmap-historical-diff-banner')).toBeNull();
   });
 });

@@ -41,8 +41,10 @@ import {
   Radio,
   Zap,
   History,
+  Camera,
+  Scan,
 } from 'lucide-react';
-import { MerkleRootQrCodeModal } from '@/components/MerkleRootQrCodeModal';
+import { MerkleRootQrCodeModal, type QrVerificationCallbackResult } from '@/components/MerkleRootQrCodeModal';
 import { CANONICAL_GENESIS_BLOCK, CANONICAL_MERKLE_ROOT } from '@/data/canonicalData';
 
 import { ViewType, HardwareSnapshot } from '@/types';
@@ -1089,6 +1091,9 @@ function SovereignAppContent() {
   const [isGateTooltipVisible, setIsGateTooltipVisible] = useState<boolean>(false);
   const [isGateTooltipPinned, setIsGateTooltipPinned] = useState<boolean>(false);
   const [isGateQrModalOpen, setIsGateQrModalOpen] = useState<boolean>(false);
+  const [gateQrModalInitialTab, setGateQrModalInitialTab] = useState<'PRESENTATION' | 'SCANNER'>('PRESENTATION');
+  const [gateQrModalAutoCamera, setGateQrModalAutoCamera] = useState<boolean>(false);
+  const [qrArtifactVerificationState, setQrArtifactVerificationState] = useState<QrVerificationCallbackResult | null>(null);
   const [isMonochromeMode, setIsMonochromeMode] = useState<boolean>(() => {
     try {
       return localStorage.getItem('zyrquen_monochrome_mode') === 'true';
@@ -2606,7 +2611,10 @@ function SovereignAppContent() {
           <SsotDriftWarning />
 
           {/* Verification Gate Active Invariant Banner with Progress Bar & Expandable ETDA/PDPA Triggers */}
-          <div className="rounded-2xl bg-[#0b0e1a]/90 border border-cyan-500/25 backdrop-blur-xl shadow-lg transition-all duration-300 overflow-hidden">
+          <div
+            id="verification-gate-section"
+            className="rounded-2xl bg-[#0b0e1a]/90 border border-cyan-500/25 backdrop-blur-xl shadow-lg transition-all duration-300 overflow-hidden"
+          >
             <div className="px-4 py-2.5 flex flex-wrap items-center justify-between gap-3 text-xs font-mono">
               {/* Left: Gate Status & Info with Tooltip Trigger */}
               <div className="flex items-center gap-2.5 relative">
@@ -3023,6 +3031,162 @@ function SovereignAppContent() {
                                   </div>
                                 </div>
                               </div>
+
+                              {/* 24-Hour HSM Node Health Sparkline Chart (Quorum Stability Trends) */}
+                              {(() => {
+                                const baseHourlyHealth = [
+                                  100.0, 99.8, 100.0, 99.9, 100.0, 99.7, 100.0, 99.6,
+                                  99.9, 95.0, 99.2, 100.0, 99.9, 100.0, 99.8, 100.0,
+                                  99.7, 100.0, 99.9, 100.0, 99.8, 100.0, 99.9,
+                                ];
+                                const sparklinePoints = [...baseHourlyHealth, healthPercent].map((pct, idx) => {
+                                  const hoursAgo = 23 - idx;
+                                  const nodesActive = idx === 23 ? currentActiveNodes : pct >= 98 ? 10 : 9;
+                                  return {
+                                    index: idx,
+                                    hourLabel: hoursAgo === 0 ? 'NOW' : `T-${hoursAgo}h`,
+                                    healthPct: Number(pct.toFixed(1)),
+                                    nodesActive,
+                                  };
+                                });
+
+                                const svgWidth = 280;
+                                const svgHeight = 58;
+                                const padLeft = 6;
+                                const padRight = 6;
+                                const padTop = 8;
+                                const padBottom = 8;
+                                const plotWidth = svgWidth - padLeft - padRight;
+                                const plotHeight = svgHeight - padTop - padBottom;
+
+                                const coords = sparklinePoints.map((pt, idx) => {
+                                  const x = padLeft + (idx / (sparklinePoints.length - 1)) * plotWidth;
+                                  const normalizedY = Math.max(0, Math.min(100, pt.healthPct)) / 100;
+                                  const y = padTop + (1 - normalizedY) * plotHeight;
+                                  return { ...pt, x: Number(x.toFixed(2)), y: Number(y.toFixed(2)) };
+                                });
+
+                                const polylinePoints = coords.map((c) => `${c.x},${c.y}`).join(' ');
+                                const linePath = coords
+                                  .map((c, idx) => `${idx === 0 ? 'M' : 'L'} ${c.x} ${c.y}`)
+                                  .join(' ');
+                                const areaPath = `${linePath} L ${coords[coords.length - 1].x} ${svgHeight - padBottom} L ${coords[0].x} ${svgHeight - padBottom} Z`;
+                                const quorumFloorY = Number((padTop + (1 - 0.8) * plotHeight).toFixed(2));
+                                const mean24hHealth =
+                                  sparklinePoints.reduce((acc, item) => acc + item.healthPct, 0) /
+                                  sparklinePoints.length;
+
+                                const sparklineStrokeColor =
+                                  currentActiveNodes === 10
+                                    ? '#34d399'
+                                    : currentActiveNodes >= 8
+                                    ? '#fbbf24'
+                                    : '#f43f5e';
+
+                                return (
+                                  <div
+                                    id="verification-gate-hsm-24h-sparkline"
+                                    className="p-2.5 rounded-lg bg-zinc-950/90 border border-cyan-500/30 space-y-1.5"
+                                  >
+                                    <div className="flex items-center justify-between text-[9px] font-mono">
+                                      <span className="text-cyan-300 font-bold flex items-center gap-1">
+                                        <Activity className="w-3 h-3 text-emerald-400" />
+                                        <span>24H HSM NODE HEALTH SPARKLINE (QUORUM STABILITY)</span>
+                                      </span>
+                                      <span
+                                        className={`px-1.5 py-0.2 rounded font-bold text-[8px] border ${
+                                          currentActiveNodes >= 8
+                                            ? 'bg-emerald-500/15 text-emerald-300 border-emerald-500/30'
+                                            : 'bg-rose-500/20 text-rose-300 border-rose-500/40'
+                                        }`}
+                                      >
+                                        24H MEAN: {mean24hHealth.toFixed(1)}%
+                                      </span>
+                                    </div>
+
+                                    <div className="relative w-full h-16 rounded bg-black/70 border border-white/5 px-1 py-0.5 overflow-hidden">
+                                      <svg
+                                        id="verification-gate-hsm-sparkline-svg"
+                                        viewBox={`0 0 ${svgWidth} ${svgHeight}`}
+                                        className="w-full h-full overflow-visible"
+                                        role="img"
+                                        aria-label="Last 24 hours HSM node health and quorum stability sparkline chart"
+                                      >
+                                        <defs>
+                                          <linearGradient id="hsm-24h-sparkline-fill" x1="0" y1="0" x2="0" y2="1">
+                                            <stop offset="0%" stopColor={sparklineStrokeColor} stopOpacity="0.38" />
+                                            <stop offset="100%" stopColor={sparklineStrokeColor} stopOpacity="0.02" />
+                                          </linearGradient>
+                                        </defs>
+
+                                        {/* 80% (8/10) Statutory Quorum Floor Reference Line */}
+                                        <line
+                                          x1={padLeft}
+                                          y1={quorumFloorY}
+                                          x2={svgWidth - padRight}
+                                          y2={quorumFloorY}
+                                          stroke="#f59e0b"
+                                          strokeWidth="0.8"
+                                          strokeDasharray="3 2"
+                                          opacity="0.65"
+                                        />
+
+                                        {/* Sparkline Area Fill */}
+                                        <path
+                                          id="verification-gate-hsm-sparkline-area"
+                                          d={areaPath}
+                                          fill="url(#hsm-24h-sparkline-fill)"
+                                        />
+
+                                        {/* Sparkline Trend Polyline & Path */}
+                                        <path
+                                          id="verification-gate-hsm-sparkline-path"
+                                          d={linePath}
+                                          fill="none"
+                                          stroke={sparklineStrokeColor}
+                                          strokeWidth="1.75"
+                                          strokeLinecap="round"
+                                          strokeLinejoin="round"
+                                        />
+                                        <polyline
+                                          id="verification-gate-hsm-sparkline-polyline"
+                                          fill="none"
+                                          stroke="transparent"
+                                          points={polylinePoints}
+                                        />
+
+                                        {/* 24 Hourly Data Points */}
+                                        {coords.map((pt) => (
+                                          <circle
+                                            key={pt.hourLabel}
+                                            cx={pt.x}
+                                            cy={pt.y}
+                                            r={pt.index === 23 ? 2.8 : 1.5}
+                                            fill={pt.index === 23 ? '#22d3ee' : sparklineStrokeColor}
+                                            className="hsm-sparkline-point transition-all duration-200"
+                                            data-hour={pt.hourLabel}
+                                            data-health={pt.healthPct}
+                                            data-nodes={pt.nodesActive}
+                                          >
+                                            <title>{`${pt.hourLabel}: ${pt.healthPct}% HSM Health (${pt.nodesActive}/10 Nodes Online)`}</title>
+                                          </circle>
+                                        ))}
+                                      </svg>
+                                    </div>
+
+                                    <div className="flex items-center justify-between text-[8px] font-mono text-zinc-400">
+                                      <span>T-24h (100%)</span>
+                                      <span>T-18h</span>
+                                      <span>T-12h</span>
+                                      <span>T-6h</span>
+                                      <span className="text-amber-300/90">Floor: ≥80% (8/10)</span>
+                                      <span className="text-cyan-300 font-bold">
+                                        NOW: {healthPercent.toFixed(0)}% ({currentActiveNodes}/10)
+                                      </span>
+                                    </div>
+                                  </div>
+                                );
+                              })()}
 
                               {/* HSM Cluster Health Visual Array & Individual Node Breakdown (10 Nodes) */}
                               <div className="space-y-2">
@@ -3463,20 +3627,41 @@ function SovereignAppContent() {
                           </div>
                         </div>
 
-                        {/* Quick Mobile Audit QR Trigger Button */}
-                        <button
-                          type="button"
-                          onClick={(e) => {
-                            e.stopPropagation();
-                            playTone(720, 0.05);
-                            setIsGateQrModalOpen(true);
-                          }}
-                          className="w-full py-1.5 px-2.5 rounded-xl bg-cyan-950/60 hover:bg-cyan-900/70 border border-cyan-500/30 hover:border-cyan-400/60 text-cyan-200 hover:text-white font-mono text-[10px] font-semibold flex items-center justify-center gap-2 transition-all cursor-pointer shadow-sm mb-2"
-                          title="Generate & display shareable QR code with Merkle root & block height for mobile-based audit verification"
-                        >
-                          <QrCode className="w-3.5 h-3.5 text-cyan-400" />
-                          <span>Generate Shareable Mobile Audit QR (Merkle #849202)</span>
-                        </button>
+                        {/* Quick Mobile Audit QR Trigger & Camera Scanner Buttons */}
+                        <div className="grid grid-cols-1 sm:grid-cols-2 gap-1.5 mb-2">
+                          <button
+                            type="button"
+                            onClick={(e) => {
+                              e.stopPropagation();
+                              playTone(720, 0.05);
+                              setGateQrModalInitialTab('PRESENTATION');
+                              setGateQrModalAutoCamera(false);
+                              setIsGateQrModalOpen(true);
+                            }}
+                            className="w-full py-1.5 px-2.5 rounded-xl bg-cyan-950/60 hover:bg-cyan-900/70 border border-cyan-500/30 hover:border-cyan-400/60 text-cyan-200 hover:text-white font-mono text-[10px] font-semibold flex items-center justify-center gap-1.5 transition-all cursor-pointer shadow-sm"
+                            title="Generate & display shareable QR code with Merkle root & block height for mobile-based audit verification"
+                          >
+                            <QrCode className="w-3.5 h-3.5 text-cyan-400 shrink-0" />
+                            <span className="truncate">Mobile Audit QR (#849202)</span>
+                          </button>
+
+                          <button
+                            id="btn-tooltip-qr-camera-scan"
+                            type="button"
+                            onClick={(e) => {
+                              e.stopPropagation();
+                              playTone(760, 0.05);
+                              setGateQrModalInitialTab('SCANNER');
+                              setGateQrModalAutoCamera(true);
+                              setIsGateQrModalOpen(true);
+                            }}
+                            className="w-full py-1.5 px-2.5 rounded-xl bg-emerald-950/60 hover:bg-emerald-900/70 border border-emerald-500/40 hover:border-emerald-400/70 text-emerald-200 hover:text-white font-mono text-[10px] font-semibold flex items-center justify-center gap-1.5 transition-all cursor-pointer shadow-sm"
+                            title="Open device camera to scan and verify QR-based audit artifacts against current Merkle root"
+                          >
+                            <Camera className="w-3.5 h-3.5 text-emerald-400 shrink-0" />
+                            <span className="truncate">Scan &amp; Verify QR Artifact</span>
+                          </button>
+                        </div>
 
                         <p className="text-[10px] text-cyan-400/80 font-mono text-center">
                           {isGateTooltipPinned
@@ -3499,6 +3684,8 @@ function SovereignAppContent() {
                   type="button"
                   onClick={() => {
                     playTone(720, 0.05);
+                    setGateQrModalInitialTab('PRESENTATION');
+                    setGateQrModalAutoCamera(false);
                     setIsGateQrModalOpen(true);
                   }}
                   className="px-2.5 py-1 rounded-lg font-mono text-[10px] font-semibold border flex items-center gap-1.5 transition-all cursor-pointer bg-cyan-950/40 hover:bg-cyan-900/50 text-cyan-200 border-cyan-500/40 hover:border-cyan-400/70 shadow-[0_0_10px_rgba(6,182,212,0.18)]"
@@ -3507,6 +3694,43 @@ function SovereignAppContent() {
                   <QrCode className="w-3.5 h-3.5 text-cyan-400" />
                   <span>Mobile Audit QR</span>
                 </button>
+
+                {/* Device Camera QR Audit Artifact Scanner & Merkle Root Verifier Button */}
+                <button
+                  id="btn-verification-gate-qr-camera-scan"
+                  type="button"
+                  onClick={() => {
+                    playTone(760, 0.05);
+                    setGateQrModalInitialTab('SCANNER');
+                    setGateQrModalAutoCamera(true);
+                    setIsGateQrModalOpen(true);
+                  }}
+                  className="px-2.5 py-1 rounded-lg font-mono text-[10px] font-semibold border flex items-center gap-1.5 transition-all cursor-pointer bg-emerald-950/50 hover:bg-emerald-900/60 text-emerald-200 border-emerald-500/45 hover:border-emerald-400/80 shadow-[0_0_12px_rgba(16,185,129,0.22)]"
+                  title="Open device camera modal to scan and verify QR-based audit artifacts against the current Merkle root"
+                >
+                  <Camera className="w-3.5 h-3.5 text-emerald-400" />
+                  <span>Scan &amp; Verify QR Artifact</span>
+                </button>
+
+                {qrArtifactVerificationState && (
+                  <span
+                    id="verification-gate-qr-verification-badge"
+                    data-verified={String(qrArtifactVerificationState.verified)}
+                    className={`px-2 py-0.5 rounded-lg font-mono text-[10px] font-bold border flex items-center gap-1.5 transition-all ${
+                      qrArtifactVerificationState.verified
+                        ? 'bg-emerald-500/20 text-emerald-300 border-emerald-500/40 shadow-[0_0_10px_rgba(16,185,129,0.25)]'
+                        : 'bg-rose-500/20 text-rose-300 border-rose-500/40 shadow-[0_0_10px_rgba(244,63,94,0.25)]'
+                    }`}
+                    title={qrArtifactVerificationState.message}
+                  >
+                    <Scan className="w-3 h-3" />
+                    <span>
+                      {qrArtifactVerificationState.verified
+                        ? `QR VERIFIED (${qrArtifactVerificationState.evidenceId})`
+                        : 'QR MISMATCH REJECTED'}
+                    </span>
+                  </span>
+                )}
 
                 {/* Expandable Section Toggle Button */}
                 <button
@@ -3855,11 +4079,26 @@ function SovereignAppContent() {
         }}
         currentBlockHeight={CANONICAL_GENESIS_BLOCK}
         merkleRootHash={CANONICAL_MERKLE_ROOT}
+        initialTab={gateQrModalInitialTab}
+        autoStartCamera={gateQrModalAutoCamera}
         onScanSuccess={(event) => {
           dispatchAction({
             type: 'EMIT_SYSTEM_EVENT',
             payload: event,
           });
+        }}
+        onVerificationResult={(result) => {
+          setQrArtifactVerificationState(result);
+          setVerificationGateStatus((curr) => ({
+            ...curr,
+            status: result.verified ? 'PASSED' : 'BLOCKED',
+            lastCheckedTime: result.timestamp,
+            complianceEventCount: result.verified ? curr.complianceEventCount + 1 : curr.complianceEventCount,
+            sealCount: result.verified ? curr.sealCount + 1 : curr.sealCount,
+            message: result.verified
+              ? `Verification Gate PASSED: QR Audit Artifact (${result.evidenceId}) verified against Merkle Root 0x${result.merkleRootMatched.replace(/^0x/, '').slice(0, 12)}... (Block #${result.blockHeight}).`
+              : `Verification Gate BLOCKED: QR Audit Artifact failed verification against Canonical Merkle Root 0x${result.merkleRootMatched.replace(/^0x/, '').slice(0, 12)}... (Fail-Closed).`,
+          }));
         }}
       />
 

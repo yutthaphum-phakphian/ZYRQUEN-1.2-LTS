@@ -13,6 +13,7 @@ import {
   Eye,
   FileCheck,
   QrCode,
+  Camera,
 } from 'lucide-react';
 import { ResponsiveContainer, LineChart, Line, YAxis } from 'recharts';
 import { playAuditChime, playTone } from './AudioSynthesizer';
@@ -28,6 +29,8 @@ const initialSparklineData = Array.from({ length: 20 }, (_, i) => ({
 export const FrozenIntegrityReconciliationGate: React.FC = () => {
   const [isReconciling, setIsReconciling] = useState(false);
   const [isQrModalOpen, setIsQrModalOpen] = useState(false);
+  const [qrModalInitialTab, setQrModalInitialTab] = useState<'PRESENTATION' | 'SCANNER'>('PRESENTATION');
+  const [qrModalAutoCamera, setQrModalAutoCamera] = useState(false);
   const [chartData, setChartData] = useState(initialSparklineData);
   const [reconcileState, setReconcileState] = useState<BaselineReconciliationState>({
     canonicalMerkleRoot: SYSTEM_METADATA.merkleRoot,
@@ -173,8 +176,11 @@ export const FrozenIntegrityReconciliationGate: React.FC = () => {
 
         <div className="flex items-center gap-2 shrink-0">
           <button
+            type="button"
             onClick={() => {
               playTone(400, 0.05);
+              setQrModalInitialTab('PRESENTATION');
+              setQrModalAutoCamera(false);
               setIsQrModalOpen(true);
             }}
             className={`p-1.5 rounded-lg border transition-all ${
@@ -185,6 +191,20 @@ export const FrozenIntegrityReconciliationGate: React.FC = () => {
             title="Export QR Code for Forensic Verification"
           >
             <QrCode className="w-4 h-4" />
+          </button>
+          <button
+            type="button"
+            onClick={() => {
+              playTone(480, 0.05);
+              setQrModalInitialTab('SCANNER');
+              setQrModalAutoCamera(true);
+              setIsQrModalOpen(true);
+            }}
+            className="px-2.5 py-1 rounded-lg bg-emerald-500/20 hover:bg-emerald-500/30 border border-emerald-500/40 text-emerald-200 text-[10px] font-bold flex items-center gap-1.5 transition-all cursor-pointer"
+            title="Scan and verify QR-based audit artifacts against current Merkle root"
+          >
+            <Camera className="w-3.5 h-3.5 text-emerald-400" />
+            <span>Scan &amp; Verify QR</span>
           </button>
           <span className="text-[10px] px-2.5 py-1 rounded-lg bg-black/60 border-white/10 font-bold">
             Read-Only: ENFORCED
@@ -332,6 +352,15 @@ export const FrozenIntegrityReconciliationGate: React.FC = () => {
         onClose={() => setIsQrModalOpen(false)}
         currentBlockHeight={reconcileState.runtimeBlock}
         merkleRootHash={reconcileState.runtimeMerkleRoot}
+        initialTab={qrModalInitialTab}
+        autoStartCamera={qrModalAutoCamera}
+        onVerificationResult={(result) => {
+          setReconcileState((prev) => ({
+            ...prev,
+            reconciliationStatus: result.verified ? 'HARMONIZED_100' : 'MISMATCH_FAIL_CLOSED',
+            lastReconciliationAt: result.timestamp,
+          }));
+        }}
       />
     </div>
   );

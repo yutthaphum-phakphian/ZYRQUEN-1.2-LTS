@@ -200,8 +200,10 @@ export const GovernanceHealthHeatmap: React.FC<GovernanceHealthHeatmapProps> = (
   const [interactedUntestedCells, setInteractedUntestedCells] = useState<string[]>([]);
   const [copiedDeepLinkUrl, setCopiedDeepLinkUrl] = useState<string | null>(null);
 
-  // Historical Snapshot Date Picker State (view historical snapshots of hardware seal status & integration coverage)
+  // Historical Snapshot Date Picker State (view historical snapshots & diff comparison between two timestamps)
   const [selectedHistoricalTimestamp, setSelectedHistoricalTimestamp] = useState<string>('');
+  const [comparisonHistoricalTimestamp, setComparisonHistoricalTimestamp] = useState<string>('');
+  const [isDiffOverlayEnabled, setIsDiffOverlayEnabled] = useState<boolean>(true);
 
   // Export to CSV State
   const [lastExportedCsvMeta, setLastExportedCsvMeta] = useState<{
@@ -334,10 +336,12 @@ export const GovernanceHealthHeatmap: React.FC<GovernanceHealthHeatmapProps> = (
       const viewParam = params.get('viewMode') as HeatmapViewMode | null;
       const breachParam = params.get('hsmBreach');
       const tsParam = params.get('timestamp');
+      const tsCompareParam = params.get('compareTimestamp');
 
       if (qParam !== null) setSearchQuery(qParam);
       if (catParam) setSelectedCategory(catParam);
       if (tsParam) setSelectedHistoricalTimestamp(tsParam);
+      if (tsCompareParam) setComparisonHistoricalTimestamp(tsCompareParam);
       if (metricParam && ['coherence', 'stability', 'cryoTemp', 'drift', 'integrationCoverage'].includes(metricParam)) {
         setActiveMetric(metricParam);
       }
@@ -772,10 +776,10 @@ export const GovernanceHealthHeatmap: React.FC<GovernanceHealthHeatmapProps> = (
     return ['ALL', ...Array.from(set)];
   }, []);
 
-  // Historical Snapshot Computation for selected timestamp (Hardware Seal Status + Integration Coverage)
-  const historicalSnapshotMeta = useMemo(() => {
-    if (!selectedHistoricalTimestamp.trim()) return null;
-    const raw = selectedHistoricalTimestamp.trim();
+  // Helper to deterministically compute historical snapshot metadata for any timestamp string
+  const buildHistoricalSnapshotMeta = useCallback((rawTimestamp: string) => {
+    const raw = rawTimestamp.trim();
+    if (!raw) return null;
     const seed = raw.split('').reduce((acc, ch, i) => acc + ch.charCodeAt(0) * (i + 1), 0);
     const isDegradationWindow =
       raw.includes('11:') ||
@@ -807,7 +811,119 @@ export const GovernanceHealthHeatmap: React.FC<GovernanceHealthHeatmapProps> = (
       coherenceOffset,
       sealSummary,
     };
-  }, [selectedHistoricalTimestamp]);
+  }, []);
+
+  // Historical Snapshot Computation for primary selected timestamp (Hardware Seal Status + Integration Coverage)
+  const historicalSnapshotMeta = useMemo(
+    () => buildHistoricalSnapshotMeta(selectedHistoricalTimestamp),
+    [selectedHistoricalTimestamp, buildHistoricalSnapshotMeta]
+  );
+
+  // Historical Snapshot Computation for secondary comparison timestamp
+  const comparisonSnapshotMeta = useMemo(
+    () => buildHistoricalSnapshotMeta(comparisonHistoricalTimestamp),
+    [comparisonHistoricalTimestamp, buildHistoricalSnapshotMeta]
+  );
+
+  // Historical Diff Overlay Computation when two different timestamps are selected
+  const historicalDiffOverlay = useMemo(() => {
+    if (
+      !isDiffOverlayEnabled ||
+      !historicalSnapshotMeta ||
+      !comparisonSnapshotMeta ||
+      historicalSnapshotMeta.timestamp === comparisonSnapshotMeta.timestamp
+    ) {
+      return null;
+    }
+
+    const cellsDiffMap: Record<
+      string,
+      {
+        chamberCode: string;
+        statusA: 'PURE_GREEN' | 'TRANSIENT_JITTER' | 'DEGRADED_SEAL';
+        statusB: 'PURE_GREEN' | 'TRANSIENT_JITTER' | 'DEGRADED_SEAL';
+        coherenceA: number;
+        coherenceB: number;
+        coherenceDelta: number;
+        sealsDelta: number;
+        diffState: 'IMPROVED' | 'DEGRADED' | 'UNCHANGED';
+      }
+    > = {};
+
+    let improvedCount = 0;
+    let degradedCount = 0;
+    let unchangedCount = 0;
+
+    chamberProfiles.forEach((prof, idx) => {
+      const code = prof.chamber.code;
+      const baseCoh = 99.992;
+
+      const deltaA =
+        historicalSnapshotMeta.coherenceOffset +
+        Math.sin((historicalSnapshotMeta.seed + idx) * 0.9) * 0.025 -
+        (historicalSnapshotMeta.isDegradationWindow && idx % 3 === 0 ? 1.85 : 0);
+      const deltaB =
+        comparisonSnapshotMeta.coherenceOffset +
+        Math.sin((comparisonSnapshotMeta.seed + idx) * 0.9) * 0.025 -
+        (comparisonSnapshotMeta.isDegradationWindow && idx % 3 === 0 ? 1.85 : 0);
+
+      // Ensure at least a few chambers exhibit status changes when any two distinct timestamps are compared
+      const syntheticShiftA = !historicalSnapshotMeta.isDegradationWindow && !comparisonSnapshotMeta.isDegradationWindow && idx % 4 === 0 ? -1.45 : 0;
+      const cohA = +(Math.min(100, Math.max(91.5, baseCoh + deltaA + syntheticShiftA))).toFixed(2);
+      const cohB = +(Math.min(100, Math.max(91.5, baseCoh + deltaB))).toFixed(2);
+
+      const statusA: 'PURE_GREEN' | 'TRANSIENT_JITTER' | 'DEGRADED_SEAL' =
+        cohA < 98.8 ? 'DEGRADED_SEAL' : cohA < 99.75 ? 'TRANSIENT_JITTER' : 'PURE_GREEN';
+      const statusB: 'PURE_GREEN' | 'TRANSIENT_JITTER' | 'DEGRADED_SEAL' =
+        cohB < 98.8 ? 'DEGRADED_SEAL' : cohB < 99.75 ? 'TRANSIENT_JITTER' : 'PURE_GREEN';
+
+      const coherenceDelta = +(cohB - cohA).toFixed(2);
+      const rank = { DEGRADED_SEAL: 0, TRANSIENT_JITTER: 1, PURE_GREEN: 2 };
+      let diffState: 'IMPROVED' | 'DEGRADED' | 'UNCHANGED' = 'UNCHANGED';
+
+      if (rank[statusB] > rank[statusA] || coherenceDelta >= 0.15) {
+        diffState = 'IMPROVED';
+        improvedCount++;
+      } else if (rank[statusB] < rank[statusA] || coherenceDelta <= -0.15) {
+        diffState = 'DEGRADED';
+        degradedCount++;
+      } else {
+        unchangedCount++;
+      }
+
+      const sealsDelta =
+        diffState === 'IMPROVED'
+          ? Math.max(1, Math.round(Math.abs(coherenceDelta)))
+          : diffState === 'DEGRADED'
+          ? -Math.max(1, Math.round(Math.abs(coherenceDelta)))
+          : 0;
+
+      cellsDiffMap[code] = {
+        chamberCode: code,
+        statusA,
+        statusB,
+        coherenceA: cohA,
+        coherenceB: cohB,
+        coherenceDelta,
+        sealsDelta,
+        diffState,
+      };
+    });
+
+    return {
+      timestampA: historicalSnapshotMeta.timestamp,
+      timestampB: comparisonSnapshotMeta.timestamp,
+      blockA: historicalSnapshotMeta.historicalBlock,
+      blockB: comparisonSnapshotMeta.historicalBlock,
+      linesDeltaPct: +(comparisonSnapshotMeta.snapshotLinesPct - historicalSnapshotMeta.snapshotLinesPct).toFixed(2),
+      branchesDeltaPct: +(comparisonSnapshotMeta.snapshotBranchesPct - historicalSnapshotMeta.snapshotBranchesPct).toFixed(2),
+      improvedCount,
+      degradedCount,
+      unchangedCount,
+      totalChangedCount: improvedCount + degradedCount,
+      cellsDiffMap,
+    };
+  }, [isDiffOverlayEnabled, historicalSnapshotMeta, comparisonSnapshotMeta, chamberProfiles]);
 
   // Filtered chambers (supports searching by Node ID, Seal Number, Hardware Seal Status, or Integration Path + Historical Snapshot modulation)
   const filteredProfiles = useMemo(() => {
@@ -2230,11 +2346,11 @@ export const GovernanceHealthHeatmap: React.FC<GovernanceHealthHeatmapProps> = (
             ))}
           </select>
 
-          {/* Historical Snapshot Date Picker */}
-          <div className="flex items-center gap-1.5 bg-black/60 border border-cyan-500/30 rounded-xl px-2.5 py-1">
+          {/* Historical Snapshot Date Pickers (Timestamp A & Comparison Timestamp B for Diff Overlay) */}
+          <div className="flex flex-wrap items-center gap-1.5 bg-black/60 border border-cyan-500/30 rounded-xl px-2.5 py-1">
             <Calendar className="w-3.5 h-3.5 text-cyan-400 shrink-0" />
             <label htmlFor="heatmap-historical-date-picker" className="text-[10px] text-zinc-400 shrink-0">
-              Snapshot Timestamp:
+              Timestamp A:
             </label>
             <input
               id="heatmap-historical-date-picker"
@@ -2243,6 +2359,21 @@ export const GovernanceHealthHeatmap: React.FC<GovernanceHealthHeatmapProps> = (
               value={selectedHistoricalTimestamp}
               onChange={(e) => setSelectedHistoricalTimestamp(e.target.value)}
               className="bg-transparent text-xs text-cyan-200 focus:outline-none font-mono cursor-pointer"
+            />
+            <span className="text-zinc-600">vs</span>
+            <label htmlFor="heatmap-comparison-date-picker" className="text-[10px] text-purple-300 shrink-0">
+              Timestamp B:
+            </label>
+            <input
+              id="heatmap-comparison-date-picker"
+              type="datetime-local"
+              aria-label="Comparison Historical Snapshot Timestamp"
+              value={comparisonHistoricalTimestamp}
+              onChange={(e) => {
+                setComparisonHistoricalTimestamp(e.target.value);
+                setIsDiffOverlayEnabled(true);
+              }}
+              className="bg-transparent text-xs text-purple-200 focus:outline-none font-mono cursor-pointer"
             />
             <button
               id="btn-historical-preset-degradation"
@@ -2253,11 +2384,27 @@ export const GovernanceHealthHeatmap: React.FC<GovernanceHealthHeatmapProps> = (
             >
               -13h Snapshot
             </button>
-            {selectedHistoricalTimestamp && (
+            <button
+              id="btn-historical-diff-preset"
+              type="button"
+              onClick={() => {
+                setSelectedHistoricalTimestamp('2026-09-27T11:00');
+                setComparisonHistoricalTimestamp('2026-09-28T00:00');
+                setIsDiffOverlayEnabled(true);
+              }}
+              className="px-2 py-0.5 rounded bg-purple-500/20 hover:bg-purple-500/30 border border-purple-500/40 text-purple-200 text-[10px] font-bold cursor-pointer"
+              title="Compare two historical timestamps (2026-09-27T11:00 vs 2026-09-28T00:00) and overlay hardware seal status diff"
+            >
+              Compare Diff (-13h vs 00h)
+            </button>
+            {(selectedHistoricalTimestamp || comparisonHistoricalTimestamp) && (
               <button
                 id="btn-reset-historical-snapshot"
                 type="button"
-                onClick={() => setSelectedHistoricalTimestamp('')}
+                onClick={() => {
+                  setSelectedHistoricalTimestamp('');
+                  setComparisonHistoricalTimestamp('');
+                }}
                 className="px-2 py-0.5 rounded bg-emerald-500/20 hover:bg-emerald-500/30 border border-emerald-500/40 text-emerald-300 text-[10px] font-bold cursor-pointer"
               >
                 Live Stream
@@ -2266,6 +2413,71 @@ export const GovernanceHealthHeatmap: React.FC<GovernanceHealthHeatmapProps> = (
           </div>
         </div>
       </div>
+
+      {/* Historical Timestamp Diff Overlay Banner (Comparing Hardware Seal Status Changes Between Two Timestamps) */}
+      {historicalDiffOverlay && (
+        <div
+          id="heatmap-historical-diff-banner"
+          data-timestamp-a={historicalDiffOverlay.timestampA}
+          data-timestamp-b={historicalDiffOverlay.timestampB}
+          data-changed-count={historicalDiffOverlay.totalChangedCount}
+          className="p-4 rounded-2xl bg-gradient-to-r from-purple-950/60 via-indigo-950/50 to-cyan-950/40 border-2 border-purple-400/60 flex flex-col gap-3 text-xs font-mono shadow-[0_0_25px_rgba(168,85,247,0.25)]"
+        >
+          <div className="flex flex-wrap items-center justify-between gap-3">
+            <div className="space-y-1">
+              <div className="flex items-center gap-2 text-purple-200 font-bold flex-wrap">
+                <Layers className="w-4 h-4 text-purple-400" />
+                <span>
+                  HISTORICAL SEAL STATUS DIFF OVERLAY ACTIVE: {historicalDiffOverlay.timestampA} (Block #{historicalDiffOverlay.blockA}) &rarr; {historicalDiffOverlay.timestampB} (Block #{historicalDiffOverlay.blockB})
+                </span>
+              </div>
+              <div className="text-zinc-300 flex flex-wrap items-center gap-3">
+                <span>
+                  Status Transitions: <strong className="text-white">{historicalDiffOverlay.totalChangedCount} Chambers Changed</strong>
+                </span>
+                <span className="text-emerald-300 font-bold">
+                  &uarr; {historicalDiffOverlay.improvedCount} Improved / Restored
+                </span>
+                <span className="text-rose-300 font-bold">
+                  &darr; {historicalDiffOverlay.degradedCount} Degraded / Regressed
+                </span>
+                <span className="text-cyan-300">
+                  = {historicalDiffOverlay.unchangedCount} Unchanged
+                </span>
+                <span>
+                  Coverage Δ: <strong className={historicalDiffOverlay.linesDeltaPct >= 0 ? 'text-emerald-300' : 'text-amber-300'}>
+                    {historicalDiffOverlay.linesDeltaPct >= 0 ? `+${historicalDiffOverlay.linesDeltaPct}` : historicalDiffOverlay.linesDeltaPct}% Lines
+                  </strong>
+                </span>
+              </div>
+            </div>
+
+            <div className="flex items-center gap-2">
+              <button
+                id="btn-swap-diff-timestamps"
+                type="button"
+                onClick={() => {
+                  const a = selectedHistoricalTimestamp;
+                  const b = comparisonHistoricalTimestamp;
+                  setSelectedHistoricalTimestamp(b);
+                  setComparisonHistoricalTimestamp(a);
+                }}
+                className="px-3 py-1.5 rounded-xl bg-purple-500/20 hover:bg-purple-500/30 border border-purple-400/50 text-purple-200 font-bold cursor-pointer"
+              >
+                Swap A &harr; B
+              </button>
+              <button
+                id="btn-clear-historical-diff"
+                type="button"
+                onClick={() => setComparisonHistoricalTimestamp('')}
+                className="px-3 py-1.5 rounded-xl bg-white/10 hover:bg-white/20 border border-white/20 text-zinc-200 font-bold cursor-pointer"
+              >
+                Exit Diff View
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
 
       {/* Historical Snapshot Active Banner (Hardware Seal Status & Integration Coverage at Selected Timestamp) */}
       {historicalSnapshotMeta && (
@@ -2638,11 +2850,16 @@ export const GovernanceHealthHeatmap: React.FC<GovernanceHealthHeatmapProps> = (
                     : undefined);
                 const isCellHsmBreached = isHsmHealthBreachActive && Boolean(mappedNodeDossier);
                 const activeCellDossier = mappedNodeDossier || linkedHsmNode;
+                const cellDiff = historicalDiffOverlay?.cellsDiffMap[chamber.chamber.code];
 
                 const cellStyle = isProtected
                   ? 'bg-blue-950/80 border-blue-500 text-blue-300 shadow-[0_0_15px_rgba(59,130,246,0.3)]'
                   : isCellHsmBreached
                   ? 'bg-rose-950/80 border-rose-500 text-rose-200'
+                  : cellDiff?.diffState === 'IMPROVED'
+                  ? 'bg-emerald-950/90 border-emerald-400 text-emerald-200 ring-1 ring-emerald-400/60'
+                  : cellDiff?.diffState === 'DEGRADED'
+                  ? 'bg-rose-950/90 border-rose-400 text-rose-200 ring-1 ring-rose-400/60'
                   : isUnstable
                   ? 'bg-red-950/80 border-red-500 text-red-400'
                   : hasBranchGap
@@ -2657,6 +2874,8 @@ export const GovernanceHealthHeatmap: React.FC<GovernanceHealthHeatmapProps> = (
                     key={chamber.chamber.id}
                     id={`chamber-cell-${chamber.chamber.code.toLowerCase()}`}
                     data-overlay-mode={overlayMode}
+                    data-diff-active={cellDiff ? 'true' : 'false'}
+                    data-diff-state={cellDiff ? cellDiff.diffState : 'NONE'}
                     data-hsm-node-id={activeCellDossier.nodeId}
                     data-audit-artifact-id={linkedHsmNode.historicalAuditEventId}
                     data-untested-path={hasUntestedCoveragePath ? 'true' : 'false'}
@@ -2728,6 +2947,32 @@ export const GovernanceHealthHeatmap: React.FC<GovernanceHealthHeatmapProps> = (
                       <div className="text-[9px] font-mono text-amber-300 flex items-center justify-between relative z-10 mb-1">
                         <span>{isUntestedPulsing ? 'UNTESTED GAP (PULSE)' : 'GAP INSPECTED'}</span>
                         <span>{covMetric.uncoveredLineRanges}</span>
+                      </div>
+                    )}
+
+                    {/* Historical Timestamp Hardware Seal Status Diff Overlay Pill */}
+                    {cellDiff && (
+                      <div
+                        id={`cell-diff-overlay-${chamber.chamber.code.toLowerCase()}`}
+                        className={`heatmap-cell-diff-overlay my-1 px-1.5 py-1 rounded border text-[8.5px] font-mono relative z-10 space-y-0.5 ${
+                          cellDiff.diffState === 'IMPROVED'
+                            ? 'bg-emerald-500/25 border-emerald-400/60 text-emerald-200'
+                            : cellDiff.diffState === 'DEGRADED'
+                            ? 'bg-rose-500/25 border-rose-400/60 text-rose-200'
+                            : 'bg-purple-500/20 border-purple-400/40 text-purple-200'
+                        }`}
+                      >
+                        <div className="flex items-center justify-between font-bold">
+                          <span>DIFF: {cellDiff.diffState}</span>
+                          <span>
+                            {cellDiff.coherenceDelta >= 0
+                              ? `+${cellDiff.coherenceDelta.toFixed(2)}%`
+                              : `${cellDiff.coherenceDelta.toFixed(2)}%`}
+                          </span>
+                        </div>
+                        <div className="truncate text-[8px] opacity-90">
+                          {cellDiff.statusA} &rarr; {cellDiff.statusB}
+                        </div>
                       </div>
                     )}
 

@@ -316,6 +316,7 @@ export const GovernanceHealthHeatmap: React.FC<GovernanceHealthHeatmapProps> = (
   const [selectedNodeDossier, setSelectedNodeDossier] = useState<HsmNodeForensicDossierSummary | null>(null);
   const [copiedSealsDeepLinkUrl, setCopiedSealsDeepLinkUrl] = useState<string | null>(null);
   const [sealsHistoricalTimestamp, setSealsHistoricalTimestamp] = useState<string>('');
+  const [sealsComparisonTimestamp, setSealsComparisonTimestamp] = useState<string>('');
   const [sealsWarningToastMsg, setSealsWarningToastMsg] = useState<string | null>(null);
   const [lastSealsCsvMeta, setLastSealsCsvMeta] = useState<{
     filename: string;
@@ -438,9 +439,9 @@ export const GovernanceHealthHeatmap: React.FC<GovernanceHealthHeatmapProps> = (
     setSealsZoomTransform({ k: 1, x: 0, y: 0 });
   }, []);
 
-  const sealsHistoricalSnapshotMeta = useMemo(() => {
-    if (!sealsHistoricalTimestamp.trim()) return null;
-    const raw = sealsHistoricalTimestamp.trim();
+  const buildSealsSnapshotMeta = useCallback((rawTs: string) => {
+    const raw = rawTs.trim();
+    if (!raw) return null;
     const seed = raw.split('').reduce((acc, ch, i) => acc + ch.charCodeAt(0) * (i + 1), 0);
     const isDegradation = raw.includes('11:') || raw.includes('12:') || seed % 5 === 0;
     const historicalBlock = Math.max(840000, 849202 - ((seed % 36) + 1) * 60);
@@ -452,6 +453,7 @@ export const GovernanceHealthHeatmap: React.FC<GovernanceHealthHeatmapProps> = (
     ).toFixed(2);
     return {
       timestamp: raw,
+      seed,
       historicalBlock,
       isDegradation,
       linesPct,
@@ -460,7 +462,37 @@ export const GovernanceHealthHeatmap: React.FC<GovernanceHealthHeatmapProps> = (
         ? '14,896 / 14,902 NOMINAL (6 Seals in Transient Cryo Re-Attestation)'
         : '14,902 / 14,902 NOMINAL (100% Hardware Seal Parity)',
     };
-  }, [sealsHistoricalTimestamp]);
+  }, []);
+
+  const sealsHistoricalSnapshotMeta = useMemo(
+    () => buildSealsSnapshotMeta(sealsHistoricalTimestamp),
+    [sealsHistoricalTimestamp, buildSealsSnapshotMeta]
+  );
+
+  const sealsComparisonSnapshotMeta = useMemo(
+    () => buildSealsSnapshotMeta(sealsComparisonTimestamp),
+    [sealsComparisonTimestamp, buildSealsSnapshotMeta]
+  );
+
+  const sealsHistoricalDiffOverlay = useMemo(() => {
+    if (
+      !sealsHistoricalSnapshotMeta ||
+      !sealsComparisonSnapshotMeta ||
+      sealsHistoricalSnapshotMeta.timestamp === sealsComparisonSnapshotMeta.timestamp
+    ) {
+      return null;
+    }
+    return {
+      timestampA: sealsHistoricalSnapshotMeta.timestamp,
+      timestampB: sealsComparisonSnapshotMeta.timestamp,
+      blockA: sealsHistoricalSnapshotMeta.historicalBlock,
+      blockB: sealsComparisonSnapshotMeta.historicalBlock,
+      linesDeltaPct: +(sealsComparisonSnapshotMeta.linesPct - sealsHistoricalSnapshotMeta.linesPct).toFixed(2),
+      improvedCount: 6,
+      degradedCount: sealsComparisonSnapshotMeta.isDegradation && !sealsHistoricalSnapshotMeta.isDegradation ? 6 : 0,
+      unchangedCount: 194,
+    };
+  }, [sealsHistoricalSnapshotMeta, sealsComparisonSnapshotMeta]);
 
   const isSealsHsmBreach = storeCustodianProofs < 8;
   const isolatedSealsDossiers = useMemo(
@@ -1368,8 +1400,8 @@ export const GovernanceHealthHeatmap: React.FC<GovernanceHealthHeatmapProps> = (
             ))}
           </select>
 
-          {/* Historical Snapshot Date Picker */}
-          <div className="flex items-center gap-1.5 bg-black/60 border border-cyan-500/30 rounded-xl px-2.5 py-1.5">
+          {/* Historical Snapshot Date Pickers (Timestamp A & Comparison Timestamp B) */}
+          <div className="flex flex-wrap items-center gap-1.5 bg-black/60 border border-cyan-500/30 rounded-xl px-2.5 py-1.5">
             <Calendar className="w-3.5 h-3.5 text-cyan-400 shrink-0" />
             <input
               id="seals-historical-date-picker"
@@ -1379,6 +1411,15 @@ export const GovernanceHealthHeatmap: React.FC<GovernanceHealthHeatmapProps> = (
               onChange={(e) => setSealsHistoricalTimestamp(e.target.value)}
               className="bg-transparent text-xs text-cyan-200 focus:outline-none font-mono cursor-pointer"
             />
+            <span className="text-zinc-600">vs</span>
+            <input
+              id="seals-comparison-date-picker"
+              type="datetime-local"
+              aria-label="Comparison Historical Snapshot Timestamp"
+              value={sealsComparisonTimestamp}
+              onChange={(e) => setSealsComparisonTimestamp(e.target.value)}
+              className="bg-transparent text-xs text-purple-200 focus:outline-none font-mono cursor-pointer"
+            />
             <button
               type="button"
               onClick={() => setSealsHistoricalTimestamp('2026-09-27T11:00')}
@@ -1386,10 +1427,24 @@ export const GovernanceHealthHeatmap: React.FC<GovernanceHealthHeatmapProps> = (
             >
               -13h Snapshot
             </button>
-            {sealsHistoricalTimestamp && (
+            <button
+              id="btn-seals-historical-diff-preset"
+              type="button"
+              onClick={() => {
+                setSealsHistoricalTimestamp('2026-09-27T11:00');
+                setSealsComparisonTimestamp('2026-09-28T00:00');
+              }}
+              className="px-2 py-0.5 rounded bg-purple-500/20 border border-purple-500/40 text-purple-200 text-[10px] font-bold cursor-pointer"
+            >
+              Compare Diff
+            </button>
+            {(sealsHistoricalTimestamp || sealsComparisonTimestamp) && (
               <button
                 type="button"
-                onClick={() => setSealsHistoricalTimestamp('')}
+                onClick={() => {
+                  setSealsHistoricalTimestamp('');
+                  setSealsComparisonTimestamp('');
+                }}
                 className="px-2 py-0.5 rounded bg-emerald-500/20 border border-emerald-500/40 text-emerald-300 text-[10px] font-bold cursor-pointer"
               >
                 Live
@@ -1569,6 +1624,38 @@ export const GovernanceHealthHeatmap: React.FC<GovernanceHealthHeatmapProps> = (
           </div>
         </div>
 
+        {/* Historical Diff Overlay Banner */}
+        {sealsHistoricalDiffOverlay && (
+          <div
+            id="seals-historical-diff-banner"
+            className="p-3.5 rounded-xl bg-purple-950/50 border-2 border-purple-400/60 flex flex-wrap items-center justify-between gap-2 text-xs font-mono"
+          >
+            <div>
+              <span className="text-purple-200 font-bold">
+                HISTORICAL SEAL STATUS DIFF OVERLAY ({sealsHistoricalDiffOverlay.timestampA} &rarr; {sealsHistoricalDiffOverlay.timestampB}):
+              </span>{' '}
+              <span className="text-emerald-300 font-bold">
+                &uarr; {sealsHistoricalDiffOverlay.improvedCount} Seals Restored
+              </span>{' '}
+              ·{' '}
+              <span className="text-rose-300 font-bold">
+                &darr; {sealsHistoricalDiffOverlay.degradedCount} Degraded
+              </span>{' '}
+              ·{' '}
+              <span className="text-cyan-300">
+                Coverage Δ: {sealsHistoricalDiffOverlay.linesDeltaPct >= 0 ? `+${sealsHistoricalDiffOverlay.linesDeltaPct}` : sealsHistoricalDiffOverlay.linesDeltaPct}%
+              </span>
+            </div>
+            <button
+              type="button"
+              onClick={() => setSealsComparisonTimestamp('')}
+              className="px-2.5 py-1 rounded bg-white/10 border border-white/20 text-zinc-200 text-[11px] font-bold cursor-pointer"
+            >
+              Exit Diff View
+            </button>
+          </div>
+        )}
+
         {/* Historical Snapshot Banner & d3-zoom Controls */}
         {sealsHistoricalSnapshotMeta && (
           <div
@@ -1666,11 +1753,12 @@ export const GovernanceHealthHeatmap: React.FC<GovernanceHealthHeatmapProps> = (
           </div>
         </div>
 
-        {/* d3-zoom Viewport Wrapping High-Density Seal Grid */}
+        {/* Side-by-Side Workspace: d3-zoom Viewport Wrapping High-Density Seal Grid + Scrollable Node Status Dashboard */}
+        <div className="grid grid-cols-1 xl:grid-cols-12 gap-4 items-start">
         <div
           id="seals-d3-zoom-viewport"
           ref={sealsZoomViewportRef}
-          className="relative overflow-hidden rounded-2xl border border-cyan-500/20"
+          className="xl:col-span-8 relative overflow-hidden rounded-2xl border border-cyan-500/20"
         >
           <div
             id="seals-d3-zoom-canvas"
@@ -1857,6 +1945,64 @@ export const GovernanceHealthHeatmap: React.FC<GovernanceHealthHeatmapProps> = (
           </div>
         )}
           </div>
+        </div>
+
+        {/* Scrollable Node Status Dashboard on Seals Tab */}
+        <aside
+          id="seals-node-status-dashboard"
+          className="xl:col-span-4 p-4 rounded-2xl bg-black/65 border border-cyan-500/30 backdrop-blur-xl space-y-3 font-mono text-xs"
+        >
+          <div className="flex items-center justify-between gap-2 pb-2.5 border-b border-white/10">
+            <div>
+              <div className="flex items-center gap-1.5 text-cyan-300 font-bold">
+                <Cpu className="w-4 h-4 text-cyan-400" />
+                <span>NODE STATUS DASHBOARD</span>
+              </div>
+              <p className="text-[10px] text-zinc-400 font-sans mt-0.5">
+                Real-time throughput metrics (QOPS &amp; sig/s) and audit dossier links for all 10 HSM nodes.
+              </p>
+            </div>
+            <span className="px-2 py-0.5 rounded bg-emerald-500/15 border border-emerald-500/40 text-emerald-300 text-[10px] font-bold">
+              {storeCustodianProofs}/10 ONLINE
+            </span>
+          </div>
+          <div className="max-h-[520px] overflow-y-auto space-y-2 pr-1 custom-scrollbar">
+            {CANONICAL_HSM_NODE_FORENSIC_DOSSIERS.map((d, idx) => {
+              const isIsolated = isSealsHsmBreach && ['TC-03', 'TC-08', 'TC-09'].includes(d.nodeId);
+              const qops = isIsolated ? 0 : +(851.9 + idx * 14.5).toFixed(1);
+              const sigPerSec = isIsolated ? 0 : 1420 + idx * 35;
+              return (
+                <div
+                  key={d.nodeId}
+                  className={`p-2.5 rounded-xl border space-y-1.5 ${
+                    isIsolated ? 'bg-rose-950/60 border-rose-500/60 hsm-breach-alert-layer' : 'bg-black/70 border-white/10'
+                  }`}
+                >
+                  <div className="flex items-center justify-between">
+                    <span className="font-bold text-cyan-300">{d.nodeId} · {d.nodeName}</span>
+                    <span className="text-[9px] text-emerald-300">{qops} QOPS / {sigPerSec} sig/s</span>
+                  </div>
+                  <div className="flex items-center justify-between gap-1.5">
+                    <button
+                      type="button"
+                      onClick={() => setSelectedNodeDossier(d)}
+                      className="flex-1 px-2 py-1 rounded bg-cyan-500/20 hover:bg-cyan-500/30 border border-cyan-400/40 text-cyan-200 text-[10px] font-bold cursor-pointer"
+                    >
+                      View Forensic Dossier ({d.dossierId})
+                    </button>
+                    <button
+                      type="button"
+                      onClick={() => handleTriggerSealsNodeWarning(d.nodeId)}
+                      className="px-2 py-1 rounded bg-amber-500/20 hover:bg-amber-500/30 border border-amber-400/40 text-amber-200 text-[10px] font-bold cursor-pointer"
+                    >
+                      Warn Toast
+                    </button>
+                  </div>
+                </div>
+              );
+            })}
+          </div>
+        </aside>
         </div>
 
         {/* Pagination Controls when browsing all 14,902 seals */}
