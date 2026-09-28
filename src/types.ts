@@ -28,7 +28,9 @@ export type ViewType =
   | 'securitypipeline'
   | 'briefing'
   | 'sovereign-wallet'
-  | 'sovereign';
+  | 'sovereign'
+  | 'ai-workspace'
+  | 'compliance-coverage';
 
 export interface AuditStage {
   id: string;
@@ -365,6 +367,8 @@ export interface OperatingModule {
   id: string;
   number: string;
   name: string;
+  technicalSubtitle?: string;
+  targetView?: ViewType;
   category: string;
   status: 'NOMINAL' | 'ACTIVE' | 'ENFORCED' | 'SEALED' | 'SOVEREIGN' | 'FROZEN' | 'PRESERVED';
   stat: string;

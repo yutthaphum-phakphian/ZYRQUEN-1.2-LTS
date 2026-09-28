@@ -1,6 +1,7 @@
-import { useEffect, useState, useCallback } from 'react';
+import { useEffect, useState, useCallback, useRef } from 'react';
 import { ViewType } from '../types';
 import { SystemEvent } from '../components/SystemEventsSidebar';
+import { offlineAuditSyncService } from '../services/offlineAuditSyncService';
 import {
   speakSystemAlert,
   announceSecurityLockdown,
@@ -20,13 +21,18 @@ interface SpeechRecognitionEvent {
   };
 }
 
+interface SpeechRecognitionErrorEvent {
+  error?: string;
+  message?: string;
+}
+
 interface SpeechRecognitionInstance {
   continuous: boolean;
   interimResults: boolean;
   lang: string;
   onstart: (() => void) | null;
   onend: (() => void) | null;
-  onerror: ((event: unknown) => void) | null;
+  onerror: ((event: SpeechRecognitionErrorEvent) => void) | null;
   onresult: ((event: SpeechRecognitionEvent) => void) | null;
   start: () => void;
   stop: () => void;
@@ -46,29 +52,105 @@ export const useVoiceCommand = (
   const [isListening, setIsListening] = useState(false);
   const [lastCommand, setLastCommand] = useState<string>('');
 
+  const callbacksRef = useRef({ onNavigate, onCaptureSnapshot, onNotifyEvent });
   useEffect(() => {
+    callbacksRef.current = { onNavigate, onCaptureSnapshot, onNotifyEvent };
+  }, [onNavigate, onCaptureSnapshot, onNotifyEvent]);
+
+  useEffect(() => {
+    if (typeof window === 'undefined') return;
     const customWindow = window as unknown as CustomSpeechWindow;
     const SpeechRecognition = customWindow.SpeechRecognition || customWindow.webkitSpeechRecognition;
     if (!SpeechRecognition) return;
 
     const recognition = new SpeechRecognition();
-    recognition.continuous = true;
+    recognition.continuous = false;
     recognition.interimResults = false;
     recognition.lang = 'en-US';
 
     recognition.onstart = () => setIsListening(true);
     recognition.onend = () => setIsListening(false);
-    
-    recognition.onerror = (event: unknown) => {
-      console.error("Voice command error", event);
+
+    recognition.onerror = (event: SpeechRecognitionErrorEvent) => {
       setIsListening(false);
+      const errCode = event?.error || 'recognition-unavailable';
+      if (errCode !== 'no-speech' && errCode !== 'aborted') {
+        callbacksRef.current.onNotifyEvent(
+          'AUDIO',
+          'Voice Input Boundary Notice',
+          `Speech recognition unavailable (${errCode}). Use text input or grant microphone permission.`,
+          `voice:error:${errCode}`,
+          'warning'
+        );
+      }
     };
 
     recognition.onresult = (event: SpeechRecognitionEvent) => {
+      const {
+        onNavigate: nav,
+        onCaptureSnapshot: snap,
+        onNotifyEvent: notify,
+      } = callbacksRef.current;
+
       const transcript = event.results[event.results.length - 1][0].transcript.toLowerCase();
       setLastCommand(transcript);
 
+      try {
+        offlineAuditSyncService.enqueueEvent({
+          type: 'COMPLIANCE',
+          title: 'Voice Input Captured (VOICE_STT)',
+          description: `Transcript="${transcript}" | Enforcing VOICE != AUTHORIZATION boundary.`,
+          metaHash: `voice-input:${Date.now()}`,
+          severity: 'info',
+          statuteRef: 'VOICE != AUTHORIZATION · ETDA Sec 26 Audit Trail',
+        });
+      } catch {
+        // Ignore storage errors in restricted environments
+      }
+
+      // Authorization Boundary Guard: Voice write/tuning commands must route through Explicit Approval Gate
+      if (
+        transcript.includes('batch') ||
+        transcript.includes('tune') ||
+        transcript.includes('quota') ||
+        transcript.includes('apply') ||
+        transcript.includes('execute') ||
+        transcript.includes('mutate') ||
+        transcript.includes('override') ||
+        transcript.includes('ปรับ') ||
+        transcript.includes('แก้')
+      ) {
+        const proposedBatch = transcript.includes('48') ? 48 : 64;
+        speakSystemAlert('Voice input cannot bypass authorization. Routing proposal to Explicit Approval Gate.', 'info');
+        notify(
+          'COMPLIANCE',
+          'Voice Request Routed to Explicit Approval Gate',
+          `Voice command "${transcript}" staged for #EP-SOVEREIGN-01 Explicit Approval (VOICE != AUTHORIZATION).`,
+          'voice:explicit-approval-gate',
+          'info'
+        );
+        if (typeof window !== 'undefined') {
+          window.dispatchEvent(
+            new CustomEvent('zyrquen-stage-ai-approval', {
+              detail: {
+                proposalId: `PROP-VOICE-${Date.now()}`,
+                proposedBatchSize: proposedBatch,
+                summary: `Voice Command Proposal ("${transcript}") -> BATCH_SIZE ${proposedBatch}`,
+                channel: 'VOICE_STT',
+                targetWorkspace: 'ws-agent-02',
+              },
+            })
+          );
+        }
+        return;
+      }
+
       const commandMap: Record<string, ViewType> = {
+        'ai workspace': 'ai-workspace',
+        'workspace': 'ai-workspace',
+        'sandbox': 'ai-workspace',
+        'sovereign': 'sovereign',
+        'phase 11': 'sovereign',
         'dashboard': 'dashboard',
         'quantum': 'quantum',
         'nexus': 'nexus',
@@ -99,7 +181,7 @@ export const useVoiceCommand = (
           quorum: '10/10 REAL_HSM',
           tempMK: 14.98,
         });
-        onNotifyEvent('AUDIO', 'Hands-Free Briefing Requested', 'Spoken system invariants report delivered.', 'voice:briefing', 'info');
+        notify('AUDIO', 'Hands-Free Briefing Requested', 'Spoken system invariants report delivered.', 'voice:briefing', 'info');
         return;
       }
 
@@ -115,16 +197,16 @@ export const useVoiceCommand = (
           chamber: 'Chamber 02 Quarantine',
           reason: 'Voice command lockdown initiated hands-free',
         });
-        onNotifyEvent('SECURITY', 'Voice Command Lockdown', 'Chamber 02 Quarantine engaged via verbal command.', 'voice:lockdown', 'critical');
+        notify('SECURITY', 'Voice Command Lockdown', 'Chamber 02 Quarantine engaged via verbal command.', 'voice:lockdown', 'critical');
         return;
       }
 
       // View switching
       for (const [key, view] of Object.entries(commandMap)) {
         if (transcript.includes(key)) {
-          onNavigate(view);
+          nav(view);
           speakSystemAlert(`Navigating to ${key}`, 'info');
-          onNotifyEvent(
+          notify(
             'AUDIO',
             'Voice Command Executed',
             `Switched view to ${key.toUpperCase()}`,
@@ -138,9 +220,9 @@ export const useVoiceCommand = (
 
       // Snapshot trigger
       if (!matched && (transcript.includes('capture') || transcript.includes('snapshot'))) {
-        onCaptureSnapshot();
+        snap();
         speakSystemAlert('Signed snapshot captured and sealed.', 'info');
-        onNotifyEvent(
+        notify(
           'AUDIO',
           'Voice Command Executed',
           'Triggered hardware telemetry snapshot.',
@@ -150,19 +232,38 @@ export const useVoiceCommand = (
       }
     };
 
-    // Auto-restart if we want continuous listening, but here we just manage state
-    // We'll expose a toggle function.
     customWindow._recognition = recognition;
-  }, [onNavigate, onCaptureSnapshot, onNotifyEvent]);
+    return () => {
+      try {
+        recognition.stop();
+      } catch {
+        // Ignore stop errors on unstarted instance
+      }
+    };
+  }, []);
 
   const toggleListening = useCallback(() => {
     const customWindow = window as unknown as CustomSpeechWindow;
     const recognition = customWindow._recognition;
-    if (!recognition) return;
-    if (isListening) {
-      recognition.stop();
-    } else {
-      recognition.start();
+    if (!recognition) {
+      callbacksRef.current.onNotifyEvent(
+        'AUDIO',
+        'Voice Input Unsupported',
+        'Web Speech API is not available in this browser environment.',
+        'voice:unsupported',
+        'warning'
+      );
+      return;
+    }
+    try {
+      if (isListening) {
+        recognition.stop();
+        setIsListening(false);
+      } else {
+        recognition.start();
+      }
+    } catch {
+      setIsListening(false);
     }
   }, [isListening]);
 

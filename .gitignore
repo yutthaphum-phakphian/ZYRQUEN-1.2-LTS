@@ -14,6 +14,14 @@ rendered-manifests.yaml
 !.env.example
 *.pem
 *.key
+<<<<<<< HEAD
 # Ignore generated forensic reports
 ZYRQUEN_Heatmap_Forensic_*
 *.pdf
+=======
+__pycache__/
+*.pyc
+cloud-workspace-command-center/
+.aistudio/
+
+>>>>>>> 7ac074a8c3e45abf1566a4b8ba5538579dc45192

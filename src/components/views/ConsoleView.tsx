@@ -40,6 +40,7 @@ import { EvidentiaryManifestQRScanner, EvidentiaryManifestPayload } from '../Evi
 import { HardwareSnapshot, ViewType } from '../../types';
 import { createTelemetrySnapshot, generateSha256Hash } from '../../utils/telemetrySnapshot';
 import { exportCanonicalSealArtifactJson } from '../../utils/canonicalSealArtifactExport';
+import { executeZyrquenCliCommand } from '../../utils/hologramMaterial';
 import {
   triggerFederationSync,
   subscribeFederationSync,
@@ -374,6 +375,19 @@ export const ConsoleView: React.FC<ConsoleViewProps> = ({
 
     if (command === 'clear') {
       setHistory([]);
+      return;
+    }
+
+    const zyrquenCli = executeZyrquenCliCommand(trimmed);
+    if (zyrquenCli.recognized) {
+      playAuditChime();
+      setHistory((prev) => [
+        ...prev,
+        {
+          type: 'success',
+          text: zyrquenCli.responseText,
+        },
+      ]);
       return;
     }
 
@@ -1528,10 +1542,22 @@ ${THAI_CUSTODIANS.map((c) => `  • ${c.passportNumber}: ${c.nameTh} (${c.nameEn
                 <span className="w-3 h-3 rounded-full bg-emerald-500/80" />
               </div>
               <span className="text-xs font-mono text-zinc-400 ml-2">
-                zyrquen-omega-cli — sovereign-node@cloudrun-bk01
+                sovereign-core-engine — ZYRQUEN CLI (Port 8443 · 35.80 ms)
               </span>
             </div>
             <div className="flex items-center gap-2">
+              <div className="hidden md:flex items-center gap-1 mr-2 font-mono text-[10px]">
+                {(['status', 'workspace list', 'resources', 'audit verify', 'phase11'] as const).map((qCmd) => (
+                  <button
+                    key={qCmd}
+                    type="button"
+                    onClick={() => executeCommand(qCmd)}
+                    className="px-2 py-0.5 rounded bg-cyan-950/60 hover:bg-cyan-900/70 border border-cyan-500/40 text-cyan-300 cursor-pointer transition-colors"
+                  >
+                    $ {qCmd}
+                  </button>
+                ))}
+              </div>
               <button
                 onClick={handleExportAuditLogs}
                 disabled={isExportingLog}

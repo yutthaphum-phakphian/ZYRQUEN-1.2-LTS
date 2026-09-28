@@ -148,7 +148,7 @@ export const setAuditChimeVolume = (vol: number) => {
   }
 };
 
-function getAudioContext(): AudioContext {
+export function getAudioContext(): AudioContext {
   if (!audioCtx) {
     const AudioContextClass =
       window.AudioContext ||
@@ -159,6 +159,17 @@ function getAudioContext(): AudioContext {
     audioCtx.resume();
   }
   return audioCtx;
+}
+
+export function unlockAudioContext(): void {
+  try {
+    const ctx = getAudioContext();
+    if (ctx.state === 'suspended') {
+      ctx.resume();
+    }
+  } catch {
+    // ignore
+  }
 }
 
 export const setMasterVolume = (vol: number) => {

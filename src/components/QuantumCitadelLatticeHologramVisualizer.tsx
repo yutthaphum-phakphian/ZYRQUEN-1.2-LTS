@@ -416,6 +416,7 @@ export const QuantumCitadelLatticeHologramVisualizer: React.FC<QuantumCitadelLat
   const [rotationSpeed, setRotationSpeed] = useState<number>(speedMultiplier);
   const [copiedHash, setCopiedHash] = useState<string | null>(null);
   const [telemetryTick, setTelemetryTick] = useState<number>(0);
+  const [webglReady, setWebglReady] = useState<boolean>(true);
 
   // Sound throttler
   const lastSoundTimeRef = useRef<number>(0);
@@ -443,7 +444,8 @@ export const QuantumCitadelLatticeHologramVisualizer: React.FC<QuantumCitadelLat
 
     // Scene
     const scene = new THREE.Scene();
-    scene.fog = new THREE.FogExp2(0x04060c, 0.035);
+    scene.background = new THREE.Color(0x050710);
+    scene.fog = new THREE.FogExp2(0x050710, 0.032);
     sceneRef.current = scene;
 
     // Camera
@@ -452,17 +454,32 @@ export const QuantumCitadelLatticeHologramVisualizer: React.FC<QuantumCitadelLat
     cameraRef.current = camera;
 
     // Renderer
-    const renderer = new THREE.WebGLRenderer({
-      canvas: canvasRef.current,
-      antialias: true,
-      alpha: true,
-      powerPreference: 'high-performance'
-    });
-    renderer.setSize(width, height);
-    renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
-    renderer.toneMapping = THREE.ACESFilmicToneMapping;
-    renderer.toneMappingExposure = 1.2;
-    rendererRef.current = renderer;
+    let renderer: THREE.WebGLRenderer;
+    try {
+      renderer = new THREE.WebGLRenderer({
+        canvas: canvasRef.current,
+        antialias: true,
+        alpha: false,
+        powerPreference: 'default'
+      });
+      renderer.setClearColor(0x050710, 1);
+      renderer.setSize(width, height);
+      renderer.setPixelRatio(Math.min(window.devicePixelRatio || 1, 2));
+      renderer.toneMapping = THREE.ACESFilmicToneMapping;
+      renderer.toneMappingExposure = 1.15;
+      rendererRef.current = renderer;
+      setWebglReady(true);
+    } catch (e) {
+      console.warn('[QuantumCitadelLatticeHologramVisualizer] WebGL context failed:', e);
+      setWebglReady(false);
+      return;
+    }
+
+    const handleContextLost = (event: Event) => {
+      event.preventDefault();
+      setWebglReady(false);
+    };
+    canvasRef.current.addEventListener('webglcontextlost', handleContextLost, false);
 
     // Lighting
     const ambientLight = new THREE.AmbientLight(0x0a1026, 2.5);
@@ -691,6 +708,9 @@ export const QuantumCitadelLatticeHologramVisualizer: React.FC<QuantumCitadelLat
       if (animFrameIdRef.current) {
         cancelAnimationFrame(animFrameIdRef.current);
       }
+      if (canvasRef.current) {
+        canvasRef.current.removeEventListener('webglcontextlost', handleContextLost);
+      }
       resizeObserver.disconnect();
       clearInterval(telemetryInterval);
       renderer.dispose();
@@ -837,8 +857,8 @@ export const QuantumCitadelLatticeHologramVisualizer: React.FC<QuantumCitadelLat
   return (
     <div
       ref={containerRef}
-      className={`relative rounded-[28px] bg-gradient-to-b from-[#080b18]/95 via-[#060812]/90 to-[#030408] border-cyan-500/20 backdrop-blur-2xl overflow-hidden shadow-[0_0_50px_rgba(6,182,212,0.12)] flex flex-col ${
-        expanded ? 'fixed inset-4 z-50 rounded-2xl' : 'min-h-[560px] h-[640px]'
+      className={`relative w-full h-full rounded-2xl bg-[#050710] border border-cyan-500/20 overflow-hidden shadow-[0_0_40px_rgba(6,182,212,0.12)] flex flex-col ${
+        expanded ? 'fixed inset-4 z-50 rounded-2xl' : 'min-h-[360px]'
       } ${className}`}
     >
       {/* 3D Canvas */}
@@ -848,8 +868,35 @@ export const QuantumCitadelLatticeHologramVisualizer: React.FC<QuantumCitadelLat
         onPointerMove={handlePointerMove}
         onPointerUp={handlePointerUp}
         onWheel={handleWheel}
-        className="w-full h-full cursor-grab active:cursor-grabbing block"
+        className={`w-full h-full cursor-grab active:cursor-grabbing block bg-[#050710] ${
+          webglReady ? 'opacity-100' : 'opacity-0 pointer-events-none'
+        }`}
       />
+
+      {/* Interactive 18-Chamber Hologram Grid Fallback if Mobile GPU exhausts WebGL contexts */}
+      {!webglReady && (
+        <div className="absolute inset-0 bg-[#050710] flex flex-col items-center justify-center p-4 pt-16 pb-14 overflow-y-auto">
+          <div
+            className="w-full max-w-2xl grid grid-cols-3 sm:grid-cols-6 gap-2 p-3 rounded-xl border border-cyan-500/30 bg-gradient-to-b from-cyan-950/25 via-[#070b18] to-violet-950/25"
+            style={{ transform: 'perspective(680px) rotateX(18deg)' }}
+          >
+            {LATTICE_CHAMBERS.map((ch) => (
+              <button
+                key={ch.id}
+                type="button"
+                onClick={() => setSelectedNode(ch)}
+                className="p-2 rounded-lg bg-black/70 border border-cyan-500/30 hover:border-cyan-400 text-left font-mono transition-all cursor-pointer"
+              >
+                <div className="flex items-center justify-between text-[10px]">
+                  <span className="font-bold text-cyan-300">CH-{ch.num}</span>
+                  <span className="text-emerald-400">{Math.round(ch.telemetryAmplitude * 100)}%</span>
+                </div>
+                <div className="text-[9px] text-zinc-300 truncate mt-0.5">{ch.badge}</div>
+              </button>
+            ))}
+          </div>
+        </div>
+      )}
 
       {/* Hologram Scanlines & Vignette Filter */}
       <div className="absolute inset-0 pointer-events-none bg-[radial-gradient(ellipse_at_center,transparent_0%,rgba(4,6,12,0.6)_100%)]" />

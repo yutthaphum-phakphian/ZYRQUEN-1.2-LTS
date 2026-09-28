@@ -1,73 +1,62 @@
-# =============================================================================
-# ZYRQUEN Ω∞ Senate Gate — Prometheus Enterprise Alert Rules v5.0 LTS
-# Real-time SLA Protection, Quorum Health & Post-Quantum Cryptographic Audits
-# =============================================================================
+groups:
+  - name: zyrquen_sovereign_alerts
+    rules:
+      - alert: SSoTBaselineDriftDetected
+        expr: zyrquen_ssot_baseline_drift_percent > 0.000
+        for: 0s
+        labels:
+          severity: critical
+          system: ZYRQUEN_SOVEREIGN_ENGINE
+        annotations:
+          summary: "CRITICAL: SSoT Baseline Drift Detected (Δ > 0.000%)"
+          description: "Sovereign Engine SSoT Baseline has drifted from Genesis Anchor #849202. Immediate isolation required."
 
-apiVersion: monitoring.coreos.com/v1
-kind: PrometheusRule
-metadata:
-  name: senate-gate-enterprise-alerts
-  namespace: monitoring
-  labels:
-    role: alert-rules
-    app.kubernetes.io/name: senate-gate
-spec:
-  groups:
-    - name: senategate.sla.rules
-      rules:
-        # 1. P99 Latency SLA Violation Alert
-        - alert: SenateGateLatencyP99Breach
-          expr: histogram_quantile(0.99, sum(rate(senategate_eval_duration_seconds_bucket[1m])) by (le)) * 1000 > 1.00
-          for: 30s
-          labels:
-            severity: critical
-            tier: sovereign-governance
-          annotations:
-            summary: "Senate Gate p99 Evaluation Latency exceeds statutory SLA (< 1.00ms)"
-            description: "Current p99 evaluation latency is {{ $value | printf \"%.3f\" }}ms. JIT compiler cache or short-circuit evaluation pipeline degraded."
-            runbook_url: "https://ops.zyrquen.network/runbooks/senategate-latency-p99"
+      - alert: Chamber02QuarantineSpike
+        expr: rate(zyrquen_quarantine_http_423_total[1m]) > 10
+        for: 10s
+        labels:
+          severity: warning
+          system: ZYRQUEN_SENTINEL_PLANE
+        annotations:
+          summary: "WARNING: High Chamber 02 Quarantine Spike (HTTP 423)"
+          description: "Active Interceptor (Risk ≥ 0.85) triggered high-volume quarantine events. Auto-remediation active."
 
-        # 2. Quorum Supermajority Degradation Alert
-        - alert: SenateGateQuorumDegraded
-          expr: (sum(senategate_senate_nodes_active{status="ATTESTED"}) / sum(senategate_senate_nodes_active)) < 0.667
-          for: 15s
-          labels:
-            severity: critical
-            tier: sovereign-governance
-          annotations:
-            summary: "Active Senate Quorum has dropped below Supermajority (66.7%)"
-            description: "Only {{ $value | humanizePercentage }} of Senate nodes are currently attested. Quorum decisions may freeze or fail-closed."
-            runbook_url: "https://ops.zyrquen.network/runbooks/senategate-quorum-deficit"
+      - alert: HSMDecaKeyQuorumDegraded
+        expr: zyrquen_hsm_active_quorum_nodes < 10
+        for: 0s
+        labels:
+          severity: critical
+          system: ZYRQUEN_HSM_CLUSTER
+        annotations:
+          summary: "CRITICAL: 10/10 REAL_HSM Quorum Consensus Degraded"
+          description: "FIPS 140-3 Level 4 HSM Cluster lost quorum (Nodes active < 10). PQC signing paused."
 
-        # 3. Geo-Distributed Split-Brain Drift Anomaly
-        - alert: SenateGateCrossRegionDriftAnomaly
-          expr: max(senategate_cross_region_drift_blocks) > 0
-          for: 10s
-          labels:
-            severity: page
-            tier: sovereign-governance
-          annotations:
-            summary: "Geo-Distributed Consensus Merkle Drift Detected (> 0 blocks lag)"
-            description: "Cluster {{ $labels.target_region }} is lagging by {{ $value }} blocks. Immediate risk of split-brain consensus divergence."
+      - alert: QuantumCoherenceDegraded
+        expr: zyrquen_quantum_satellite_coherence_percent < 99.990
+        for: 5s
+        labels:
+          severity: warning
+          system: ZYRQUEN_QUANTUM_GATEWAY
+        annotations:
+          summary: "WARNING: Quantum Satellite Coherence below 99.990%"
+          description: "Telemetric signal coherence degraded. Fail-closed satellite link monitoring active."
 
-        # 4. HSM FIPS 140-3 Hardware Attestation Deficit
-        - alert: SenateGateHSMAttestationFailure
-          expr: count(senategate_node_hsm_fips_level < 4) > 0
-          for: 0m
-          labels:
-            severity: critical
-            tier: sovereign-governance
-          annotations:
-            summary: "Senate Node Hardware Security Module (HSM) below FIPS 140-3 Level 4"
-            description: "Detected node with unauthorized hardware attestation level. Immediate zero-trust revocation applied."
+      - alert: SubKelvinThermalBusAnomalous
+        expr: zyrquen_cryo_thermal_mK > 20.00
+        for: 2s
+        labels:
+          severity: critical
+          system: ZYRQUEN_CRYO_THERMAL_BUS
+        annotations:
+          summary: "CRITICAL: Cryo-Thermal Bus Temperature > 20.00 mK"
+          description: "Sub-Kelvin thermal stability limit exceeded. Fail-closed thermal trigger (85.0°C / Cryo) armed."
 
-        # 5. Volumetric Attack / Chaos Injection Spike
-        - alert: SenateGateVolumetricChaosSpike
-          expr: sum(rate(senategate_short_circuit_triggers_total{guard="LIFECYCLE_SUSPENDED"}[1m])) > 500
-          for: 1m
-          labels:
-            severity: warning
-            tier: sovereign-governance
-          annotations:
-            summary: "Massive influx of suspended agent authorization attempts (>500/s)"
-            description: "Fast-path short-circuit guard is absorbing heavy attack volume. Potential adversary recon activity."
+      - alert: ReplayVerificationSLAViolated
+        expr: zyrquen_replay_verification_duration_ms > 142.00
+        for: 0s
+        labels:
+          severity: critical
+          system: ZYRQUEN_FORENSIC_REPLAY
+        annotations:
+          summary: "CRITICAL: 12-Stage Replay Execution Time > 142.00 ms SLA"
+          description: "Replay execution exceeded statutory SLA limit (35.80ms baseline breached)."

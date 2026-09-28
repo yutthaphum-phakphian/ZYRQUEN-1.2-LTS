@@ -35,6 +35,17 @@ import { ConsoleView } from './ConsoleView';
 import { GovernanceHealthHeatmap } from './GovernanceHealthHeatmap';
 import { FederationKnowledgeDriftHeatmap } from '../FederationKnowledgeDriftHeatmap';
 import { MultiverseNavigationGridPanel } from '../MultiverseNavigationGridPanel';
+import { CosmicThemeProvider } from '../CosmicThemeProvider';
+import { SovereignConsole } from '../SovereignConsole';
+import { HologramGrid } from '../HologramGrid';
+import { QuantumRadar } from '../QuantumRadar';
+import { PhoenixDashboard } from '../PhoenixDashboard';
+import {
+  PhaseBHologramContainer,
+  PhaseCHologramContainer,
+} from '../GravitationalHologramContainer';
+import { useQuantumState } from '../../hooks/useQuantumState';
+import { useChaosResilience } from '../../hooks/useChaosResilience';
 import { HardwareSnapshot, ViewType } from '../../types';
 import { SYSTEM_METADATA } from '../../data/canonicalData';
 import { playAuditChime, playTone, playWarningTone } from '../AudioSynthesizer';
@@ -89,6 +100,29 @@ export const UnifiedMultiverseControlPanel: React.FC<UnifiedMultiverseControlPan
   const [activeFederationLog, setActiveFederationLog] = useState<string[]>([]);
   const [warpSimulationSpeed, setWarpSimulationSpeed] = useState<number>(1.0);
   const [isWarpPaused, setIsWarpPaused] = useState<boolean>(false);
+
+  const {
+    dimensions,
+    zoomLevel,
+    setZoomLevel,
+    panControl,
+    setPanControl,
+    activeDimensionId,
+    setActiveDimensionId,
+  } = useQuantumState();
+
+  const {
+    runtimeBlocks,
+    healingStatus,
+    recoveryPhase,
+    glitchIntensity,
+    latencyMs,
+    healingRatePct,
+    stabilityIndexPct,
+    latencyHistory,
+    resilienceEval,
+    simulateChaosAndAutoHeal,
+  } = useChaosResilience();
 
   const handleToggleTts = () => {
     const next = toggleTTSEnabled();
@@ -675,6 +709,61 @@ export const UnifiedMultiverseControlPanel: React.FC<UnifiedMultiverseControlPan
 
       {activeMode === 'path-projection' && (
         <div className="space-y-6">
+          <CosmicThemeProvider resilienceScore={resilienceEval.score}>
+            <div className="space-y-4">
+              <PhaseCHologramContainer
+                phaseTitle="Gold Seal Verification Console & ZYRQUEN Integration"
+                phaseSubtitle="Real-Time Gateway Audit Log · Phase 11 Lifecycle"
+                resilienceAccentHex={resilienceEval.accentHex}
+                glitchIntensity={glitchIntensity}
+              >
+                <SovereignConsole
+                  trustScore={99.47}
+                  federationStatus="10/10 REAL_HSM · Port 8443 · 35.80 ms · Δ0 = 0.000%"
+                />
+              </PhaseCHologramContainer>
+
+              <PhaseBHologramContainer
+                phaseTitle="Navigation Grid Mk-III & Quantum Radar Pulse Heatmap"
+                phaseSubtitle="Mouse-Responsive 3D Gravitational Distortion Field"
+                resilienceAccentHex={resilienceEval.accentHex}
+                glitchIntensity={glitchIntensity}
+              >
+                <div className="grid grid-cols-1 xl:grid-cols-2 gap-4">
+                  <HologramGrid
+                    dimensions={dimensions}
+                    zoomLevel={zoomLevel}
+                    panControl={panControl}
+                    activeDimensionId={activeDimensionId}
+                    onSelectDimension={setActiveDimensionId}
+                    onZoomChange={setZoomLevel}
+                    onPanChange={setPanControl}
+                    glitchIntensity={glitchIntensity}
+                  />
+                  <QuantumRadar refreshRate={60} />
+                </div>
+              </PhaseBHologramContainer>
+
+              <PhaseCHologramContainer
+                phaseTitle="Quantaris Phoenix Recovery Pipeline & Chaos Distortion Visualizer"
+                phaseSubtitle="Phase-1 Detection → Phase-2 Response → Phase-3 Recovery → Phase-4 Assurance"
+                resilienceAccentHex={resilienceEval.accentHex}
+                glitchIntensity={glitchIntensity}
+              >
+                <PhoenixDashboard
+                  runtimeBlocks={runtimeBlocks}
+                  healingStatus={healingStatus}
+                  recoveryPhase={recoveryPhase}
+                  latencyMs={latencyMs}
+                  healingRatePct={healingRatePct}
+                  stabilityIndexPct={stabilityIndexPct}
+                  latencyHistory={latencyHistory}
+                  resilienceEval={resilienceEval}
+                  onTriggerAutoHeal={simulateChaosAndAutoHeal}
+                />
+              </PhaseCHologramContainer>
+            </div>
+          </CosmicThemeProvider>
           <MultiverseNavigationGridPanel
             snapshots={snapshots}
             onAddSystemEvent={onAddSystemEvent as any}

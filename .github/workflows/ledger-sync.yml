@@ -13,6 +13,11 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@v4
+        with:
+          sparse-checkout: |
+            /*
+            !cloud-workspace-command-center/
+          sparse-checkout-cone-mode: false
 
       - name: Verify PQC & Sync Ledger
         run: |

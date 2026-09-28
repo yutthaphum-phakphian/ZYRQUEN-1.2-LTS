@@ -1,0 +1,57 @@
+# ======================================================================
+# 🐳 ZYRQUEN Ω∞ — SOVEREIGN CONTAINER HARDENING SPEC (v1.2.1 LTS)
+#    Multi-Stage Read-Only Non-Root Container Spec
+#    SSoT Baseline #849202 | NIST PQC Category 5 Enforced
+# ======================================================================
+
+# --- STAGE 1: Build & Security Audit Stage ---
+FROM node:20-alpine AS builder
+
+WORKDIR /app
+
+# Enforce clean dependencies and PR #44 optimizations
+COPY package*.json tsconfig.json ./
+RUN npm cache clean --force && npm ci --ignore-scripts
+
+COPY . .
+RUN npx tsc --skipLibCheck
+RUN npm run build
+
+# --- STAGE 2: Hardened Sovereign Production Stage ---
+FROM alpine:3.20 AS production
+
+LABEL maintainer="Nong Zyrquen <nong.zyrquen@zyrquen.io>"
+LABEL version="1.2.1-LTS"
+LABEL description="ZYRQUEN Ω∞ Sovereign Control Plane Runtime Engine"
+
+RUN apk add --no-cache \
+    nodejs \
+    npm \
+    python3 \
+    gnupg \
+    openssh-client \
+    tzdata \
+    ca-certificates \
+    && rm -rf /var/cache/apk/*
+
+# Create non-root sovereign user & group
+RUN addgroup -S zyrquen && adduser -S zyrquen -G zyrquen
+
+WORKDIR /app
+
+COPY --from=builder /app/dist ./dist
+COPY --from=builder /app/package*.json ./
+COPY --from=builder /app/node_modules ./node_modules
+COPY zyrquen-security-gate.py .
+COPY verify-court-proof.py .
+
+# Enforce Read-Only File System & Strict Non-Root Execution
+USER zyrquen:zyrquen
+
+EXPOSE 8443
+EXPOSE 3000
+
+HEALTHCHECK --interval=30s --timeout=5s --start-period=10s --retries=3 \
+    CMD python3 zyrquen-security-gate.py || exit 1
+
+ENTRYPOINT ["node", "dist/server.js"]

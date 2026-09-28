@@ -861,7 +861,7 @@ export function addSystemEvent(
   systemStateStore.addSystemEvent(eventOrTitle as any, description, severity, handler);
 }
 
-import { useState, useEffect } from 'react';
+import { useSyncExternalStore, useRef, useCallback } from 'react';
 
 export type SystemStateWithActions = SystemState & {
   triggerQuarantineIsolation: (reason?: string) => void;
@@ -870,27 +870,41 @@ export type SystemStateWithActions = SystemState & {
   logSystemEvent: (event: any) => void;
 };
 
+const boundActions = {
+  triggerQuarantineIsolation: (reason?: string) => systemStateStore.triggerQuarantineIsolation(reason),
+  updateCoherence: (score: number) => systemStateStore.updateCoherence(score),
+  resetToSSoTBaseline: () => systemStateStore.resetToSSoTBaseline(),
+  logSystemEvent: (event: any) => systemStateStore.logSystemEvent(event),
+};
+
+let lastRawState: SystemState | null = null;
+let lastCombinedState: SystemStateWithActions | null = null;
+
+function getCombinedSnapshot(): SystemStateWithActions {
+  const currentRaw = systemStateStore.getState();
+  if (currentRaw === lastRawState && lastCombinedState !== null) {
+    return lastCombinedState;
+  }
+  lastRawState = currentRaw;
+  lastCombinedState = Object.assign({}, currentRaw, boundActions);
+  return lastCombinedState;
+}
+
 export function useSystemStateStore<T = SystemStateWithActions>(
   selector?: (state: SystemStateWithActions) => T
 ): T {
-  const getCombined = (): SystemStateWithActions => ({
-    ...systemStateStore.getState(),
-    triggerQuarantineIsolation: (reason?: string) => systemStateStore.triggerQuarantineIsolation(reason),
-    updateCoherence: (score: number) => systemStateStore.updateCoherence(score),
-    resetToSSoTBaseline: () => systemStateStore.resetToSSoTBaseline(),
-    logSystemEvent: (event: any) => systemStateStore.logSystemEvent(event),
-  });
+  const selectorRef = useRef(selector);
+  selectorRef.current = selector;
 
-  const [state, setState] = useState(() => (selector ? selector(getCombined()) : (getCombined() as unknown as T)));
+  const getSnapshot = useCallback(() => {
+    const combined = getCombinedSnapshot();
+    return selectorRef.current ? selectorRef.current(combined) : (combined as unknown as T);
+  }, []);
 
-  useEffect(() => {
-    const unsubscribe = systemStateStore.subscribe(() => {
-      const combined = getCombined();
-      setState(selector ? selector(combined) : (combined as unknown as T));
-    });
-    return unsubscribe;
-  }, [selector]);
-
-  return state;
+  return useSyncExternalStore(
+    (onStoreChange) => systemStateStore.subscribe(onStoreChange),
+    getSnapshot,
+    getSnapshot
+  );
 }
 

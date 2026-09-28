@@ -12,6 +12,11 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
+        with:
+          sparse-checkout: |
+            /*
+            !cloud-workspace-command-center/
+          sparse-checkout-cone-mode: false
       - name: Run Benchmark
         run: |
           echo "🟢 Helm Benchmark Passed (<142ms Trace SLA)"

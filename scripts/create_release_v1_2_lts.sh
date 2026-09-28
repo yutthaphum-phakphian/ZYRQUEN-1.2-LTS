@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 # ==============================================================================
 # ZYRQUEN Ω∞ SOVEREIGN OPERATING SYSTEM - RELEASE SCRIPT v1.2-LTS
-# Target Repo: yutthaphum-phakphian/ZYRQUEN-1.2-LTS
+# Target Repo: yuththaphum-phakphian/ZYRQUEN-1.2-LTS
 # Target Commit: ecdce9f0132922181b56c98f83f70d071078f8ae
 # Canonical Genesis: #849202 | Merkle: 909ab814479844d8a14816bed34cdbb07528e18501da86fc4691763a43fa4c68
 # ==============================================================================
@@ -11,7 +11,7 @@ set -euo pipefail
 TAG="v1.2-LTS"
 COMMIT="ecdce9f"
 TITLE="ZYRQUEN Ω∞ Sovereign Operating System v1.2-LTS (Frozen Master)"
-REPO="yutthaphum-phakphian/ZYRQUEN-1.2-LTS"
+REPO="yuththaphum-phakphian/ZYRQUEN-1.2-LTS"
 
 echo "=================================================================="
 echo " [ZYRQUEN Ω∞] Initiating GitHub Release: $TAG ($COMMIT)"

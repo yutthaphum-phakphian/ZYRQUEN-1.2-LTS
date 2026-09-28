@@ -1,6 +1,10 @@
 import assert from 'node:assert/strict';
 import test from 'node:test';
 import { SOVEREIGN_CHAMBERS } from '../../src/data/sovereignData';
+import {
+  generateHeatmapForensicPdf,
+  CANONICAL_HSM_NODE_FORENSIC_DOSSIERS,
+} from '../../src/utils/heatmapForensicPdfExport';
 
 test('GovernanceHealthHeatmap - Sovereign Chambers Telemetry & Coherence Invariant Verification', async (t) => {
   await t.test('should verify all Sovereign Chambers exist (CH-00 through CH-18)', () => {
@@ -116,6 +120,42 @@ test('GovernanceHealthHeatmap - Sovereign Chambers Telemetry & Coherence Invaria
     assert.ok(printRecord.printId.startsWith('PRINT-LOG-'));
     assert.ok(printRecord.chamberSource.includes('CH-00'));
     assert.equal(printRecord.ledgerStatus, 'COMMITTED_IMMUTABLE_V25');
+  });
+
+  await t.test('should generate court-admissible ETDA Sec 28 Heatmap Forensic PDF receipt and verify HSM node forensic dossiers', () => {
+    assert.equal(CANONICAL_HSM_NODE_FORENSIC_DOSSIERS.length, 10);
+    const isolatedDossiers = CANONICAL_HSM_NODE_FORENSIC_DOSSIERS.filter((d) =>
+      ['TC-03', 'TC-08', 'TC-09'].includes(d.nodeId)
+    );
+    assert.equal(isolatedDossiers.length, 3);
+
+    const receipt = generateHeatmapForensicPdf({
+      overlayMode: 'INTEGRATION_COVERAGE',
+      activeMetric: 'integrationCoverage',
+      heartbeatCycle: 849202,
+      activeHsmQuorumNodes: 7,
+      totalHsmQuorumNodes: 10,
+      isolatedHsmDossiers: isolatedDossiers,
+      chambers: SOVEREIGN_CHAMBERS.slice(0, 18).map((c) => ({
+        code: c.code,
+        name: c.name,
+        category: c.category,
+        coherencePct: 99.992,
+        stabilityPct: 99.99,
+        cryoTempMk: 14.98,
+        sealStatus: 'PURE_GREEN',
+        invariantsCount: c.invariants.length,
+      })),
+      triggerDownload: false,
+    });
+
+    assert.ok(receipt.documentId.startsWith('ETDA-SEC28-HEATMAP-'));
+    assert.ok(receipt.filename.endsWith('.pdf'));
+    assert.equal(receipt.isQuorumBreachActive, true);
+    assert.equal(receipt.activeHsmQuorumNodes, 7);
+    assert.equal(receipt.capturedChambersCount, 18);
+    assert.ok(receipt.etdaStatutoryClause.includes('ETDA B.E. 2544 Section 28'));
+    assert.ok(receipt.pageCount >= 1);
   });
 });
 

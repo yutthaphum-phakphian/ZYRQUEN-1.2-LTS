@@ -3,27 +3,10 @@ import { createRoot } from 'react-dom/client';
 import App from './App';
 import { ErrorBoundary } from './components/ErrorBoundary';
 import './index.css';
-import './styles/print.css';
+import { unlockAudioContext } from './components/AudioSynthesizer';
 
-if (typeof window !== 'undefined' && 'serviceWorker' in navigator) {
-  window.addEventListener('load', () => {
-    navigator.serviceWorker.register('/service-worker.js')
-      .then(reg => {
-        console.log('ZYRQUEN Ω∞ Audit Service Worker registered:', reg.scope);
-        if ('sync' in reg) {
-          console.log('⚡ Background Sync API supported and active');
-        }
-      })
-      .catch(err => {
-        console.warn('SW register notice:', err?.message || err);
-        // Fallback to /sw.js if needed
-        navigator.serviceWorker.register('/sw.js').catch(() => {});
-      });
-  });
-}
-
-// Guard เฉพาะ ResizeObserver - ไม่ซ่อน WebSocket เพื่อ Forensic
-if (typeof window!== 'undefined') {
+// ป้องกันปัญหา ResizeObserver Loop Error ในเบราว์เซอร์
+if (typeof window !== 'undefined') {
   window.addEventListener('error', (event) => {
     const errorMsg = event.message || event.error?.message || String(event);
     if (
@@ -36,25 +19,30 @@ if (typeof window!== 'undefined') {
     }
   }, true);
 
-  window.addEventListener('unhandledrejection', (event) => {
-    const reasonMsg = event.reason?.message || String(event.reason || '');
-    if (
-      reasonMsg.includes('Document is not focused') ||
-      reasonMsg.includes('writeText') ||
-      event.reason?.name === 'NotAllowedError' ||
-      reasonMsg.includes('ResizeObserver')
-    ) {
-      event.stopImmediatePropagation();
-      event.preventDefault();
-      return true;
+  // ปลดล็อก Web Audio Context เมื่อผู้ใช้มีปฏิสัมพันธ์กับหน้าจอครั้งแรก
+  const unlockAudioOnInteraction = () => {
+    try {
+      unlockAudioContext();
+    } catch {
+      // safe fallback if audio is not permitted yet
     }
-  }, true);
+    window.removeEventListener('pointerdown', unlockAudioOnInteraction);
+    window.removeEventListener('keydown', unlockAudioOnInteraction);
+    window.removeEventListener('touchstart', unlockAudioOnInteraction);
+  };
+  window.addEventListener('pointerdown', unlockAudioOnInteraction, { passive: true });
+  window.addEventListener('keydown', unlockAudioOnInteraction, { passive: true });
+  window.addEventListener('touchstart', unlockAudioOnInteraction, { passive: true });
 }
 
-createRoot(document.getElementById('root')!).render(
-  <StrictMode>
-    <ErrorBoundary>
-      <App />
-    </ErrorBoundary>
-  </StrictMode>
-);
+const rootElement = document.getElementById('root');
+
+if (rootElement) {
+  createRoot(rootElement).render(
+    <StrictMode>
+      <ErrorBoundary fallbackViewName="Sovereign Root Core">
+        <App />
+      </ErrorBoundary>
+    </StrictMode>
+  );
+}

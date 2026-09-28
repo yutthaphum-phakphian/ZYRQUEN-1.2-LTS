@@ -86,6 +86,18 @@ import { playAuditChime, playTone } from '../AudioSynthesizer';
 import { ShieldAlert } from 'lucide-react';
 import { FcmPushNotificationManager } from '../notifications/FcmPushNotificationManager';
 import { ChamberVisualizer } from '../ChamberVisualizer';
+import { CommandCenterOperationsConsole } from '../CommandCenterOperationsConsole';
+import { CosmicThemeProvider } from '../CosmicThemeProvider';
+import { SovereignConsole } from '../SovereignConsole';
+import { HologramGrid } from '../HologramGrid';
+import { QuantumRadar } from '../QuantumRadar';
+import { PhoenixDashboard } from '../PhoenixDashboard';
+import {
+  PhaseBHologramContainer,
+  PhaseCHologramContainer,
+} from '../GravitationalHologramContainer';
+import { useQuantumState } from '../../hooks/useQuantumState';
+import { useChaosResilience } from '../../hooks/useChaosResilience';
 
 const TopHardwareChambersCard: React.FC = () => {
   const chambers = [
@@ -175,6 +187,29 @@ export const DashboardView: React.FC<DashboardViewProps> = ({
   const [selectedChamber, setSelectedChamber] = useState<string>('ROOM00');
   const [isVerifyingSeals, setIsVerifyingSeals] = useState<boolean>(false);
 
+  const {
+    dimensions,
+    zoomLevel,
+    setZoomLevel,
+    panControl,
+    setPanControl,
+    activeDimensionId,
+    setActiveDimensionId,
+  } = useQuantumState();
+
+  const {
+    runtimeBlocks,
+    healingStatus,
+    recoveryPhase,
+    glitchIntensity,
+    latencyMs,
+    healingRatePct,
+    stabilityIndexPct,
+    latencyHistory,
+    resilienceEval,
+    simulateChaosAndAutoHeal,
+  } = useChaosResilience();
+
   // Dynamic verified seals count based on 14,902 canonical baseline + appended valid snapshots
   const baselineCanonicalSeals = 14902;
   const initialSnapshotsCount = 2;
@@ -240,34 +275,17 @@ export const DashboardView: React.FC<DashboardViewProps> = ({
         )}
       </AnimatePresence>
 
-      {/* Real-time Quantum Stream Entropy, Block Height & Compliance Status Ticker */}
-      <div className="rounded-xl overflow-hidden border border-cyan-500/30 shadow-lg shadow-cyan-950/40">
-        <LiveQuantumEntropyTicker />
-      </div>
-
-      {/* Unified Executive Header & Single Status Bar (Density Reduction) */}
+      {/* Unified Executive Header & Single Status Bar */}
       <div className="p-3.5 sm:p-5 md:p-6 rounded-2xl bg-[#0a0f1e] border border-cyan-500/20 relative overflow-hidden shadow-xl max-[479px]:p-[12px]">
         <div className="relative z-10 flex flex-col lg:flex-row lg:items-center justify-between gap-5">
           <div className="space-y-1.5">
             <div className="flex flex-wrap items-center gap-2">
               <span className="px-2.5 py-0.5 rounded-full bg-cyan-950 text-cyan-300 border border-cyan-500/40 text-[11px] font-mono font-semibold flex items-center gap-1.5">
-                <span className="w-1.5 h-1.5 rounded-full bg-cyan-400 animate-ping" />
-                💎 FROZEN v1.2 LTS
+                <span className="w-1.5 h-1.5 rounded-full bg-cyan-400" />
+                FROZEN v1.2 LTS
               </span>
               <span className="px-2.5 py-0.5 rounded-full bg-emerald-950 text-emerald-300 border border-emerald-500/40 text-[11px] font-mono font-semibold">
-                🛡️ GOVERNANCE: {STATE_AUTHORITY.GOVERNANCE_CONSENSUS}
-              </span>
-              <span className="px-2.5 py-0.5 rounded-full bg-emerald-950 text-emerald-300 border border-emerald-500/40 text-[11px] font-mono font-semibold">
-                🔐 CUSTODIAN: {STATE_AUTHORITY.CUSTODIAN_STATUS_LABEL}
-              </span>
-              <span className="px-2.5 py-0.5 rounded-full bg-violet-950 text-violet-300 border border-violet-500/40 text-[11px] font-mono font-semibold">
-                🌐 {STATE_AUTHORITY.TENANT_BOUNDARY} LOCKED
-              </span>
-              <span className="px-2.5 py-0.5 rounded-full bg-zinc-900 text-zinc-300 border border-zinc-700 text-[11px] font-mono font-semibold">
-                ⚙️ RUNTIME: {STATE_AUTHORITY.RUNTIME_STATUS}
-              </span>
-              <span className="px-2.5 py-0.5 rounded-full bg-amber-950 text-amber-300 border border-amber-500/40 text-[11px] font-mono font-semibold">
-                ⚖️ ETDA / PDPA
+                {STATE_AUTHORITY.CUSTODIAN_STATUS_LABEL}
               </span>
             </div>
             
@@ -280,29 +298,9 @@ export const DashboardView: React.FC<DashboardViewProps> = ({
               <span className="text-zinc-600">•</span>
               <span>Block: <strong className="text-zinc-200">#849202</strong></span>
               <span className="text-zinc-600">•</span>
-              <span>Seals: <strong className="text-emerald-300">14,902 Verified</strong></span>
+              <span>Seals: <strong className="text-emerald-300">14,902</strong></span>
               <span className="text-zinc-600">•</span>
-              <span>SSoT Drift: <strong className="text-cyan-300">Δ0.00%</strong></span>
-              <span className="text-zinc-600">•</span>
-              <span className="inline-flex items-center gap-1 font-mono">
-                <span>Integrity:</span>
-                <strong className="text-emerald-300 tabular-nums">{currentIntegrityScore.toFixed(2)}%</strong>
-                <span
-                  className={`inline-flex items-center gap-0.5 px-1.5 py-0.2 rounded text-[10px] font-semibold border ${
-                    integrityTrend === 'increased'
-                      ? 'bg-emerald-950/80 text-emerald-300 border-emerald-500/40'
-                      : integrityTrend === 'decreased'
-                      ? 'bg-rose-950/80 text-rose-300 border-rose-500/40'
-                      : 'bg-cyan-950/80 text-cyan-300 border-cyan-500/40'
-                  }`}
-                  title={`Integrity trend: ${integrityTrend} (${integrityTrendDelta >= 0 ? '+' : ''}${integrityTrendDelta.toFixed(3)}%)`}
-                >
-                  {integrityTrend === 'increased' && <TrendingUp className="w-2.5 h-2.5 text-emerald-400" />}
-                  {integrityTrend === 'decreased' && <TrendingDown className="w-2.5 h-2.5 text-rose-400" />}
-                  {integrityTrend === 'stable' && <Minus className="w-2.5 h-2.5 text-cyan-400" />}
-                  <span>{integrityTrend === 'increased' ? '↑ Increased' : integrityTrend === 'decreased' ? '↓ Decreased' : '→ Stable'}</span>
-                </span>
-              </span>
+              <span>Drift: <strong className="text-cyan-300">Δ0.00%</strong></span>
               <span className="text-zinc-600">•</span>
               <span className="text-zinc-300 font-medium">นายยุทธภูมิ พากเพียร (#EP-SOVEREIGN-01)</span>
             </div>
@@ -664,11 +662,68 @@ export const DashboardView: React.FC<DashboardViewProps> = ({
             previousScore={prevIntegrityScore}
           />
 
-          {/* GitHub Synchronization Status Utility (Checksum & Merkle Parity Engine) */}
-          <GitHubSyncStatusUtility />
+          {/* ZYRQUEN Integration Console, Phase 11 Workspace Lifecycle & Multiverse Hologram Blueprint */}
+          <CosmicThemeProvider resilienceScore={resilienceEval.score}>
+            <div className="space-y-4">
+              <PhaseCHologramContainer
+                phaseTitle="Gold Seal Verification Console & ZYRQUEN Integration"
+                phaseSubtitle="Real-Time Gateway Audit Log · Phase 11 Lifecycle"
+                resilienceAccentHex={resilienceEval.accentHex}
+                glitchIntensity={glitchIntensity}
+              >
+                <SovereignConsole
+                  trustScore={currentIntegrityScore}
+                  federationStatus="10/10 REAL_HSM · Port 8443 · 35.80 ms · Δ0 = 0.000%"
+                />
+              </PhaseCHologramContainer>
+
+              <PhaseBHologramContainer
+                phaseTitle="Navigation Grid Mk-III & Quantum Radar Pulse Heatmap"
+                phaseSubtitle="Mouse-Responsive 3D Gravitational Distortion Field"
+                resilienceAccentHex={resilienceEval.accentHex}
+                glitchIntensity={glitchIntensity}
+              >
+                <div className="grid grid-cols-1 xl:grid-cols-2 gap-4">
+                  <HologramGrid
+                    dimensions={dimensions}
+                    zoomLevel={zoomLevel}
+                    panControl={panControl}
+                    activeDimensionId={activeDimensionId}
+                    onSelectDimension={setActiveDimensionId}
+                    onZoomChange={setZoomLevel}
+                    onPanChange={setPanControl}
+                    glitchIntensity={glitchIntensity}
+                  />
+                  <QuantumRadar refreshRate={60} />
+                </div>
+              </PhaseBHologramContainer>
+
+              <PhaseCHologramContainer
+                phaseTitle="Quantaris Phoenix Recovery Pipeline & Chaos Distortion Visualizer"
+                phaseSubtitle="Phase-1 Detection → Phase-2 Response → Phase-3 Recovery → Phase-4 Assurance"
+                resilienceAccentHex={resilienceEval.accentHex}
+                glitchIntensity={glitchIntensity}
+              >
+                <PhoenixDashboard
+                  runtimeBlocks={runtimeBlocks}
+                  healingStatus={healingStatus}
+                  recoveryPhase={recoveryPhase}
+                  latencyMs={latencyMs}
+                  healingRatePct={healingRatePct}
+                  stabilityIndexPct={stabilityIndexPct}
+                  latencyHistory={latencyHistory}
+                  resilienceEval={resilienceEval}
+                  onTriggerAutoHeal={simulateChaosAndAutoHeal}
+                />
+              </PhaseCHologramContainer>
+            </div>
+          </CosmicThemeProvider>
 
           {/* Real-Time Stress Test & 35.80ms Latency Jitter Indicator against 142.00ms SLA Target */}
           <StressTestIndicatorD3Chart initialLatencyMs={35.80} slaLimitMs={142.00} />
+
+          {/* Cloud & AI Command Center (Operations, Chaos Simulator, Cloud Resources 60m Sparklines) */}
+          <CommandCenterOperationsConsole embedded={true} />
 
           {/* System Health Dashboard (CPU, Memory, Cryostat Recharts Realtime Stream) */}
           <HealthDashboard snapshots={snapshots} />
@@ -1166,7 +1221,6 @@ export const DashboardView: React.FC<DashboardViewProps> = ({
             trendDelta={integrityTrendDelta}
             previousScore={prevIntegrityScore}
           />
-          <GitHubSyncStatusUtility />
           <HealthDashboard snapshots={snapshots} />
           <LiveAutomatedHealthWidget />
           <SystemResourceGrid />

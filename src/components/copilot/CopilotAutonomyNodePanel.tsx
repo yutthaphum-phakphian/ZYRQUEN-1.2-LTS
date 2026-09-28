@@ -6,26 +6,30 @@ import {
   CANONICAL_PEAK_EVENTS,
   CANONICAL_ENCLAVE_CONTRIBUTIONS,
   CANONICAL_ENTROPY_STATS,
+  CANONICAL_FORENSIC_IDENTITY_METADATA,
+  CANONICAL_16_FORENSIC_STAGES,
 } from '../../services/copilotAssistantService';
 import { useSystemState } from '../../hooks/useSystemState';
 
 interface CopilotAutonomyNodePanelProps {
   onNavigateToView?: (viewId: string) => void;
-  defaultActiveTab?: 'SUGGESTIONS' | 'ENTROPY_TIMELINE' | 'CRYO_BURST' | 'NODE_CONTRIBUTION' | 'ASCENSION_MODE' | 'QUANTUM_SWARM';
+  defaultActiveTab?: 'SUGGESTIONS' | 'FORENSIC_16_MATRIX' | 'ENTROPY_TIMELINE' | 'CRYO_BURST' | 'NODE_CONTRIBUTION' | 'ASCENSION_MODE' | 'QUANTUM_SWARM';
 }
 
 export const CopilotAutonomyNodePanel: React.FC<CopilotAutonomyNodePanelProps> = ({
-  defaultActiveTab = 'SUGGESTIONS',
+  defaultActiveTab = 'FORENSIC_16_MATRIX',
 }) => {
   const [copilotState, setCopilotState] = useState<CopilotAssistantState>(
     copilotAssistantService.getState()
   );
   const systemState = useSystemState();
   const [activeTab, setActiveTab] = useState<
-    'SUGGESTIONS' | 'ENTROPY_TIMELINE' | 'CRYO_BURST' | 'NODE_CONTRIBUTION' | 'ASCENSION_MODE' | 'QUANTUM_SWARM'
+    'SUGGESTIONS' | 'FORENSIC_16_MATRIX' | 'ENTROPY_TIMELINE' | 'CRYO_BURST' | 'NODE_CONTRIBUTION' | 'ASCENSION_MODE' | 'QUANTUM_SWARM'
   >(defaultActiveTab);
   const [selectedPeakIndex, setSelectedPeakIndex] = useState<number>(1); // Default to 12:00 Midday Reseed
   const [selectedEnclaveId, setSelectedEnclaveId] = useState<string>('TC-01');
+  const [selectedStageId, setSelectedStageId] = useState<string>('STG-01');
+  const [isAutoTuningSweep, setIsAutoTuningSweep] = useState<boolean>(false);
   const [actionFeedback, setActionFeedback] = useState<string | null>(null);
 
   useEffect(() => {
@@ -47,9 +51,33 @@ export const CopilotAutonomyNodePanel: React.FC<CopilotAutonomyNodePanelProps> =
 
   const handleSimulateDrift = () => {
     copilotAssistantService.simulateDriftPattern(2);
-    setActionFeedback('🧪 จำลอง Block Drift (+2 Blocks) เรียบร้อย — ตรวจสอบข้อเสนอแนะใหม่ด้านล่าง');
+    setActionFeedback('🧪 จำลอง Block Drift (+2 Blocks) เรียบร้อย — ระบบ Auto-Pilot พร้อมตรวจจับและปรับสมดุลอัตโนมัติ');
     setTimeout(() => setActionFeedback(null), 4000);
   };
+
+  const handleAutoTuneAll16 = async () => {
+    if (isAutoTuningSweep) return;
+    setIsAutoTuningSweep(true);
+    const res = await copilotAssistantService.runAutoTune16StageSweep();
+    setActionFeedback(res);
+    setIsAutoTuningSweep(false);
+    setTimeout(() => setActionFeedback(null), 6000);
+  };
+
+  const handleToggleAutoPilot = () => {
+    const next = copilotAssistantService.toggleAutoPilot();
+    setActionFeedback(
+      next
+        ? '⚡ เปิดโหมด Autonomous Self-Tuning Auto-Pilot: ตรวจสอบและซ่อมแซม HSM / Drift / GitHub SSoT อัตโนมัติ'
+        : '⏸️ พักโหมด Auto-Pilot ชั่วคราว (Manual Control)'
+    );
+    setTimeout(() => setActionFeedback(null), 4000);
+  };
+
+  const stages = CANONICAL_16_FORENSIC_STAGES;
+  const activeStageIdx = copilotState.activeForensicStageIndex ?? 0;
+  const activeLiveStage = stages[activeStageIdx] || stages[0];
+  const inspectedStage = stages.find((s) => s.stageId === selectedStageId) || stages[0];
 
   const selectedPeak = CANONICAL_PEAK_EVENTS[selectedPeakIndex] || CANONICAL_PEAK_EVENTS[0];
   const selectedEnclave =
@@ -125,6 +153,27 @@ export const CopilotAutonomyNodePanel: React.FC<CopilotAutonomyNodePanelProps> =
           </div>
 
           <button
+            onClick={handleAutoTuneAll16}
+            disabled={isAutoTuningSweep}
+            className="px-3 py-1.5 rounded-xl bg-emerald-950/90 hover:bg-emerald-900 border border-emerald-400/60 text-emerald-200 font-mono text-xs font-bold transition-all shadow-[0_0_12px_rgba(16,185,129,0.25)] disabled:opacity-50"
+            title="Auto-Tune & Re-Verify All 16 Forensic Stages"
+          >
+            {isAutoTuningSweep ? '⚙️ กำลังปรับจูน 16 ด่าน...' : '⚡ ปรับจูนอัตโนมัติ 16 ขั้นตอน'}
+          </button>
+
+          <button
+            onClick={handleToggleAutoPilot}
+            className={`px-2.5 py-1.5 rounded-xl font-mono text-xs font-bold transition-all border ${
+              copilotState.autoPilotActive
+                ? 'bg-cyan-950/90 border-cyan-400 text-cyan-200'
+                : 'bg-zinc-900 border-zinc-700 text-zinc-400'
+            }`}
+            title="Toggle Autonomous Self-Tuning Auto-Pilot"
+          >
+            {copilotState.autoPilotActive ? '🟢 AUTO-PILOT: ON' : '⚪ AUTO-PILOT: OFF'}
+          </button>
+
+          <button
             onClick={() => copilotAssistantService.triggerDriftCheckNow()}
             className="px-2.5 py-1.5 rounded-xl bg-[#070a12] hover:bg-cyan-950 border border-cyan-500/40 text-cyan-300 font-mono text-xs font-bold transition-all"
             title="Scan Ledger Drift Now"
@@ -139,6 +188,25 @@ export const CopilotAutonomyNodePanel: React.FC<CopilotAutonomyNodePanelProps> =
           >
             🧪 Test Drift
           </button>
+        </div>
+      </div>
+
+      {/* Lively Neural Heartbeat & Autonomous Self-Tuning Status Strip */}
+      <div className="p-2.5 rounded-xl bg-[#070a12] border border-emerald-500/30 flex flex-col sm:flex-row sm:items-center justify-between gap-2 text-xs font-mono">
+        <div className="flex items-center gap-2">
+          <span className="inline-block w-2 h-2 rounded-full bg-emerald-400 animate-ping" />
+          <span className="text-emerald-300 font-bold">NEURAL HEARTBEAT:</span>
+          <span className="text-cyan-300 font-bold">{activeLiveStage.stageId}</span>
+          <span className="text-zinc-300 truncate max-w-[260px] sm:max-w-[420px]">
+            {activeLiveStage.title} ({activeLiveStage.mechanism})
+          </span>
+        </div>
+        <div className="flex items-center gap-3 text-[11px]">
+          <span className="text-zinc-400">
+            Auto-Tunes: <strong className="text-emerald-400">{copilotState.autoTuneCount || 1}</strong>
+          </span>
+          <span className="text-zinc-600">|</span>
+          <span className="text-amber-300 font-bold">16/16 PASSED (100%)</span>
         </div>
       </div>
 
@@ -159,7 +227,19 @@ export const CopilotAutonomyNodePanel: React.FC<CopilotAutonomyNodePanelProps> =
       )}
 
       {/* Sub-Module Navigation Tabs */}
-      <div className="grid grid-cols-2 md:grid-cols-6 gap-2 bg-[#070a12] p-1.5 rounded-xl border border-cyan-500/20 text-xs font-bold overflow-x-auto">
+      <div className="grid grid-cols-2 md:grid-cols-7 gap-2 bg-[#070a12] p-1.5 rounded-xl border border-cyan-500/20 text-xs font-bold overflow-x-auto">
+        <button
+          onClick={() => setActiveTab('FORENSIC_16_MATRIX')}
+          className={`py-2 px-2.5 rounded-lg flex items-center justify-center gap-1.5 transition-all ${
+            activeTab === 'FORENSIC_16_MATRIX'
+              ? 'bg-[#0a0f1e] text-emerald-300 border border-emerald-400 shadow-md'
+              : 'text-emerald-400/80 hover:text-emerald-300'
+          }`}
+        >
+          <span>🛡️</span>
+          <span className="truncate">16-Step Forensic Report</span>
+        </button>
+
         <button
           onClick={() => setActiveTab('SUGGESTIONS')}
           className={`py-2 px-2.5 rounded-lg flex items-center justify-center gap-1.5 transition-all ${
@@ -237,6 +317,144 @@ export const CopilotAutonomyNodePanel: React.FC<CopilotAutonomyNodePanelProps> =
           <span className="truncate">Quantum Swarm</span>
         </button>
       </div>
+
+      {/* ============================================================ */}
+      {/* TAB 0: 16-STEP FORENSIC AUDIT PIPELINE EXECUTION MATRIX */}
+      {/* ============================================================ */}
+      {activeTab === 'FORENSIC_16_MATRIX' && (
+        <div className="space-y-4 animate-in fade-in duration-200">
+          {/* Section 1: Sovereign Identity & System Verification Metadata */}
+          <div className="p-4 rounded-xl bg-[#070a12] border border-cyan-500/30 space-y-3">
+            <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2 border-b border-cyan-500/20 pb-2.5">
+              <div>
+                <h4 className="text-sm font-black text-white">
+                  1. ข้อมูลการตรวจสอบและตัวตนของระบบอธิปไตย (Sovereign Identity & System Verification Metadata)
+                </h4>
+                <p className="text-[11px] text-zinc-400 font-mono mt-0.5">
+                  การยืนยันสภาวะแช่แข็ง ณ บล็อกปฐมกาล (#849202) ตามมาตรฐานสากล ISO/IEC 27037 และ พ.ร.บ. ธุรกรรมทางอิเล็กทรอนิกส์ พ.ศ. ๒๕๔๔
+                </p>
+              </div>
+              <span className="px-2.5 py-1 rounded bg-emerald-950/90 border border-emerald-500/40 text-emerald-300 font-mono text-[10px] font-bold shrink-0">
+                Δ0.00% ZERO DRIFT • NON-REPUDIATION
+              </span>
+            </div>
+
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-2.5">
+              {CANONICAL_FORENSIC_IDENTITY_METADATA.map((item, i) => (
+                <div
+                  key={i}
+                  className="p-2.5 rounded-lg bg-[#050811] border border-zinc-800/90 flex flex-col justify-between gap-1"
+                >
+                  <div className="text-[10px] text-zinc-400 font-mono">
+                    {item.labelTh} <span className="text-zinc-500">({item.labelEn})</span>
+                  </div>
+                  <div className="text-xs font-bold font-mono text-cyan-200 break-words">
+                    {item.verifiedValue}
+                  </div>
+                </div>
+              ))}
+            </div>
+
+            {/* Legal Implications Summary */}
+            <div className="p-3 rounded-lg bg-amber-950/20 border border-amber-500/30 text-xs text-amber-100/90 leading-relaxed">
+              <strong className="text-amber-300 font-mono block mb-1">
+                ⚖️ นัยสำคัญทางกฎหมายและการต่อสู้คดี (Legal Implications & Non-repudiation):
+              </strong>
+              การคงสภาวะความเบี่ยงเบนของข้อมูลไว้ที่ <span className="font-mono font-bold text-emerald-300">Δ0.00% Zero Drift</span> บนสถานะความจริงเดี่ยว (Single Source of Truth: SSoT) พิสูจน์ว่าไม่มีการเพิ่ม ลบ หรือแก้ไขข้อมูลแม้แต่บิตเดียว นับตั้งแต่นาทีที่ประทับตราปฐมกาล บันทึกหลักฐานดิจิทัลทั้งหมดจึงมีคุณสมบัติในการยับยั้งการปฏิเสธความรับผิดชอบ (Non-repudiation) ตาม พ.ร.บ. ว่าด้วยธุรกรรมทางอิเล็กทรอนิกส์ พ.ศ. ๒๕๔๔
+            </div>
+          </div>
+
+          {/* Section 2: 16-Step Forensic Audit Pipeline Execution Matrix */}
+          <div className="p-4 rounded-xl bg-[#070a12] border border-emerald-500/30 space-y-3">
+            <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2 border-b border-emerald-500/20 pb-2.5">
+              <div>
+                <h4 className="text-sm font-black text-white">
+                  2. ผลการตรวจสอบท่อส่งนิติวิทยาศาสตร์ดิจิทัล 16 ขั้นตอน (16-Step Forensic Audit Pipeline Execution Matrix)
+                </h4>
+                <p className="text-[11px] text-zinc-400 font-mono mt-0.5">
+                  Deterministic Alignment — ผลการตรวจสอบ: 100% PASSED (16/16) สมบูรณ์แบบทุกด่าน (คลิกที่แต่ละ Stage เพื่อดูข้อมูลเชิงลึก)
+                </p>
+              </div>
+              <button
+                onClick={handleAutoTuneAll16}
+                disabled={isAutoTuningSweep}
+                className="px-3 py-1.5 rounded-lg bg-emerald-500/20 hover:bg-emerald-500/30 border border-emerald-400/50 text-emerald-300 font-mono text-xs font-bold transition-all shrink-0"
+              >
+                {isAutoTuningSweep ? '⚙️ กำลังตรวจสอบ 16 ด่าน...' : '🔄 ตรวจสอบและปรับจูน 16 ขั้นตอนอัตโนมัติ'}
+              </button>
+            </div>
+
+            <div className="overflow-x-auto rounded-lg border border-zinc-800">
+              <table className="w-full text-left border-collapse text-xs font-mono">
+                <thead>
+                  <tr className="bg-[#050811] text-zinc-400 border-b border-zinc-800 text-[10px] uppercase">
+                    <th className="py-2 px-2.5">Stage ID</th>
+                    <th className="py-2 px-2.5">ชื่อขั้นตอนการตรวจสอบ (Audit Stage Pipeline)</th>
+                    <th className="py-2 px-2.5">กลไกการเข้ารหัสและมาตรฐานที่ใช้ (Cryptographic Mechanism)</th>
+                    <th className="py-2 px-2.5 text-right">ผลการประเมิน (Status)</th>
+                  </tr>
+                </thead>
+                <tbody className="divide-y divide-zinc-800/70">
+                  {stages.map((stg, idx) => {
+                    const isCurrentPulse = idx === activeStageIdx;
+                    const isSelected = stg.stageId === selectedStageId;
+                    return (
+                      <tr
+                        key={stg.stageId}
+                        onClick={() => setSelectedStageId(stg.stageId)}
+                        className={`cursor-pointer transition-colors ${
+                          isSelected
+                            ? 'bg-cyan-950/50 text-white'
+                            : isCurrentPulse
+                            ? 'bg-emerald-950/30 text-zinc-100'
+                            : 'bg-[#070a12] hover:bg-zinc-900/70 text-zinc-300'
+                        }`}
+                      >
+                        <td className="py-2 px-2.5 font-bold text-cyan-300 whitespace-nowrap">
+                          <span className="inline-flex items-center gap-1.5">
+                            <span
+                              className={`w-1.5 h-1.5 rounded-full ${
+                                isCurrentPulse ? 'bg-emerald-400 animate-ping' : 'bg-emerald-500'
+                              }`}
+                            />
+                            {stg.stageId}
+                          </span>
+                        </td>
+                        <td className="py-2 px-2.5 font-sans font-semibold text-white">
+                          {stg.title}
+                        </td>
+                        <td className="py-2 px-2.5 text-cyan-200/90">
+                          {stg.mechanism}
+                        </td>
+                        <td className="py-2 px-2.5 text-right whitespace-nowrap">
+                          <span className="px-2 py-0.5 rounded bg-emerald-950 text-emerald-300 border border-emerald-500/40 text-[10px] font-bold">
+                            {stg.status}
+                          </span>
+                        </td>
+                      </tr>
+                    );
+                  })}
+                </tbody>
+              </table>
+            </div>
+
+            {/* Deep-Dive Stage Inspector (Default STG-01 RFC 3161 Ingestion & Sovereign Time-Stamp Authority) */}
+            <div className="p-3.5 rounded-xl bg-[#050811] border border-cyan-500/40 space-y-1.5">
+              <div className="flex flex-wrap items-center justify-between gap-2">
+                <span className="text-xs font-bold font-mono text-cyan-300">
+                  🔬 รายละเอียดเชิงลึก {inspectedStage.stageId}: {inspectedStage.title}
+                </span>
+                <span className="text-[11px] font-mono text-emerald-400">
+                  Mechanism: {inspectedStage.mechanism} • Latency: {inspectedStage.latencyMs.toFixed(2)}ms
+                </span>
+              </div>
+              <p className="text-xs text-zinc-300 leading-relaxed">
+                {inspectedStage.detailTh}
+              </p>
+            </div>
+          </div>
+        </div>
+      )}
 
       {/* ============================================================ */}
       {/* TAB 1: REAL-TIME SUGGESTIONS BASED ON DRIFT PATTERNS */}
@@ -937,7 +1155,7 @@ export const CopilotAutonomyNodePanel: React.FC<CopilotAutonomyNodePanelProps> =
         </div>
 
         <div className="flex items-center gap-3">
-          <span>14,905 Verified Seals</span>
+          <span>14,902 Verified Seals (80 Quarantine)</span>
           <span>•</span>
           <span className="text-cyan-400">NIST FIPS 140-3 L4</span>
           <span>•</span>

@@ -51,11 +51,13 @@ import { PWAInstallButton } from './PWAInstallButton';
 import { GitHubSyncWarningNav } from './navigation/GitHubSyncWarningNav';
 import { CopilotAssistantDrawer } from './copilot/CopilotAssistantDrawer';
 import { ThemeSwitcher } from './ThemeSwitcher';
+import { ZyrquenIcon } from './ZyrquenIcon';
 
 interface NavigationProps {
   currentView: ViewType;
   onSelectView: (view: ViewType) => void;
   onOpenCertificate: () => void;
+  onOpenForensicDossier?: () => void;
   onOpenChecklist?: () => void;
   onOpenLegalSearch: () => void;
   onOpenCommandSearch?: () => void;
@@ -83,6 +85,7 @@ interface NavItem {
   id: ViewType;
   labelEn: string;
   labelTh: string;
+  primaryTh?: boolean;
   icon: React.FC<{ className?: string }>;
   dotColor: string;
   badge?: string;
@@ -91,7 +94,8 @@ interface NavItem {
 
 export const NAVIGATION_ITEMS: NavItem[] = [
   { id: 'dashboard', labelEn: 'Dashboard', labelTh: 'ศูนย์บัญชาการ', icon: LayoutDashboard, dotColor: '#06B6D4', badge: 'HQ', shortcut: '1' },
-  { id: 'sovereign', labelEn: 'Unified Control Plane', labelTh: 'ศูนย์ควบคุมรวม Sentinel', icon: ShieldAlert, dotColor: '#06B6D4', badge: 'SENTINEL', shortcut: 'V' },
+  { id: 'sovereign', labelEn: 'Autonomous Self-Tuning Engine', labelTh: 'ศูนย์ควบคุมอัตโนมัติ Phase 11', icon: ShieldAlert, dotColor: '#06B6D4', badge: 'PHASE 11', shortcut: 'V' },
+  { id: 'ai-workspace', labelEn: 'AI Workspace', labelTh: 'พื้นที่ทำงาน AI & แซนด์บ็อกซ์', icon: Sparkles, dotColor: '#06B6D4', badge: 'AI BOUNDARY', shortcut: 'M' },
   { id: 'briefing', labelEn: 'Executive & Court', labelTh: 'สรุปผู้บริหาร & ศาล', icon: Landmark, dotColor: '#D4AF37', badge: 'EXECUTIVE', shortcut: 'E' },
   { id: 'sovereign-wallet', labelEn: 'Sovereign Wallet', labelTh: 'กระเป๋าอธิปไตย & คีย์ QR', icon: Wallet, dotColor: '#D4AF37', badge: 'WEBAUTHN', shortcut: 'Q' },
   { id: 'fusion', labelEn: 'Fusion Console', labelTh: 'รวมศูนย์นิติวิทยาศาสตร์', icon: Activity, dotColor: '#D946EF', badge: 'FUSION', shortcut: 'F' },
@@ -101,6 +105,7 @@ export const NAVIGATION_ITEMS: NavItem[] = [
   { id: 'studio', labelEn: 'Studio 3D', labelTh: 'สตูดิโอ 3D โฮโลแกรม', icon: Boxes, dotColor: '#06B6D4', badge: '3D LATTICE', shortcut: 'S' },
   { id: 'unified', labelEn: 'Multiverse Panel', labelTh: 'แผงควบคุมรวมมิติ', icon: LayoutGrid, dotColor: '#38BDF8', badge: 'TRI-VIEW', shortcut: 'U' },
   { id: 'heatmap', labelEn: '14.9K Seals Heatmap', labelTh: 'แผนผังสุขภาพ 14,902 ตรา', icon: Grid3X3, dotColor: '#10B981', badge: '14.9K', shortcut: 'H' },
+  { id: 'compliance-coverage', labelEn: 'Compliance Coverage', labelTh: 'แผนผังความครอบคลุม D3', icon: TrendingUp, dotColor: '#06B6D4', badge: 'D3 COV', shortcut: 'G' },
   { id: 'council', labelEn: 'Council 10/10', labelTh: 'สภาผู้พิทักษ์', icon: Crown, dotColor: '#F59E0B', badge: '10/10', shortcut: 'C' },
   { id: 'production', labelEn: 'Readiness', labelTh: 'ความพร้อมผลิต', icon: ShieldCheck, dotColor: '#10B981', badge: 'PH-20', shortcut: 'R' },
   { id: 'quantum', labelEn: 'Quantum', labelTh: 'ควอนตัมเน็กซัส', icon: Cpu, dotColor: '#8B5CF6', badge: '768-Q', shortcut: '2' },
@@ -126,6 +131,7 @@ export const Navigation: React.FC<NavigationProps> = ({
   currentView,
   onSelectView,
   onOpenCertificate,
+  onOpenForensicDossier,
   onOpenChecklist,
   onOpenLegalSearch,
   onOpenCommandSearch,
@@ -284,10 +290,9 @@ export const Navigation: React.FC<NavigationProps> = ({
             </span>
           </button>
 
-          <div className="relative flex items-center justify-center w-10 h-10 sm:w-11 sm:h-11 rounded-2xl bg-[#0a0f1e] border-cyan-500/30 shadow-[0_0_20px_rgba(6,182,212,0.25)] group cursor-default shrink-0">
-            <div className="absolute inset-0 rounded-2xl bg-cyan-400/10 opacity-0 group-hover:opacity-100 transition-opacity" />
-            <Sparkles className="w-5 h-5 text-cyan-400 animate-pulse relative z-10" />
-            <span className="absolute -bottom-1 -right-1 w-2.5 h-2.5 sm:w-3 sm:h-3 rounded-full bg-emerald-500 border-2 border-[#070914] shadow-[0_0_8px_#10B981]" />
+          <div className="relative flex items-center justify-center shrink-0">
+            <ZyrquenIcon size={42} />
+            <span className="absolute -bottom-0.5 -right-0.5 w-2.5 h-2.5 sm:w-3 sm:h-3 rounded-full bg-emerald-500 border-2 border-[#070914] shadow-[0_0_8px_#10B981]" />
           </div>
           <div className="min-w-0">
             <div className="flex items-center gap-1.5 sm:gap-2">
@@ -399,25 +404,8 @@ export const Navigation: React.FC<NavigationProps> = ({
 
         {/* Right Actions */}
         <div className="flex items-center gap-1 sm:gap-2 shrink-0">
-          {/* GitHub Synchronization Warning & Drift Re-sync System */}
+          {/* PWA Install & Copilot Assistant Layer (Sovereign Epoch #849202) Trigger Button */}
           <PWAInstallButton />
-          {onOpenGitHubPwa && (
-            <button
-              id="btn-nav-github-pwa-setup"
-              onClick={() => {
-                playTone(640, 0.06);
-                onOpenGitHubPwa();
-              }}
-              className="hidden lg:flex items-center gap-1.5 px-2.5 py-1.5 rounded-xl bg-slate-900/90 hover:bg-slate-800 text-zinc-300 hover:text-white border-slate-700/60 hover:border-cyan-500/40 transition-all font-mono text-xs cursor-pointer active:scale-95 shadow-sm"
-              title="GitHub Push & PWA Setup Guide"
-            >
-              <Github className="w-3.5 h-3.5 text-cyan-400" />
-              <span className="hidden xl:inline text-[11px] font-bold">GitHub &amp; PWA</span>
-            </button>
-          )}
-          <div className="hidden sm:block">
-            <GitHubSyncWarningNav />
-          </div>
 
           {/* Copilot Assistant Layer (Sovereign Epoch #849202) Trigger Button */}
           <button
@@ -651,6 +639,37 @@ export const Navigation: React.FC<NavigationProps> = ({
             )}
           </div>
 
+          {/* Master Forensic Dossier Button (Exhibits จพ.๐๑-๐๗ with 1-Click PDF Export) */}
+          {onOpenForensicDossier && (
+            <button
+              onClick={() => {
+                playTone(740, 0.08);
+                onOpenForensicDossier();
+              }}
+              className="hidden lg:flex group items-center gap-1.5 px-3 py-1.5 rounded-xl bg-gradient-to-r from-purple-500/20 via-indigo-500/15 to-cyan-500/20 border border-purple-500/40 text-purple-200 hover:text-white font-mono text-xs hover:border-purple-400/60 transition-all shadow-[0_0_15px_rgba(168,85,247,0.2)] hover:shadow-[0_0_20px_rgba(168,85,247,0.35)] active:scale-95 cursor-pointer ml-1"
+              title="เปิดสำนวนพยานหลักฐานดิจิทัลสำหรับยื่นศาล (Master Forensic Dossier DOC-SOV-HSM-1010-2026-V9 พร้อม Export PDF/JSON)"
+            >
+              <Scale className="w-4 h-4 text-purple-400 group-hover:scale-110 transition-transform" />
+              <span className="font-bold tracking-wide">Dossier</span>
+              <span className="hidden xl:inline-block px-1.5 py-0.2 rounded-full bg-purple-500/25 text-[9px] text-purple-300 border border-purple-500/30">จพ.๐๑-๐๗</span>
+            </button>
+          )}
+
+          {/* PWA Mobile & Offline Hub Button */}
+          {onOpenGitHubPwa && (
+            <button
+              onClick={() => {
+                playTone(680, 0.08);
+                onOpenGitHubPwa();
+              }}
+              className="hidden xl:flex group items-center gap-1.5 px-3 py-1.5 rounded-xl bg-cyan-950/40 hover:bg-cyan-900/50 border border-cyan-500/40 text-cyan-300 hover:text-cyan-100 font-mono text-xs hover:border-cyan-400/60 transition-all shadow-sm active:scale-95 cursor-pointer ml-1"
+              title="PWA Mobile Install & GitHub Synchronization Center"
+            >
+              <Smartphone className="w-4 h-4 text-cyan-400 group-hover:scale-110 transition-transform" />
+              <span className="font-bold tracking-wide">PWA / Mobile</span>
+            </button>
+          )}
+
           {onOpenChecklist && (
             <button
               onClick={() => {
@@ -730,8 +749,9 @@ export const Navigation: React.FC<NavigationProps> = ({
                     style={{ backgroundColor: item.dotColor, color: item.dotColor }}
                   />
                   <Icon className={`w-4 h-4 shrink-0 transition-colors ${isActive ? 'text-cyan-300' : 'text-zinc-500 group-hover:text-zinc-300'}`} />
-                  <span className="font-semibold tracking-wide whitespace-nowrap">{item.labelEn}</span>
-                  <span className={`hidden 2xl:inline text-[10px] whitespace-nowrap ${isActive ? 'text-cyan-200/70' : 'text-zinc-600 group-hover:text-zinc-400'}`}>({item.labelTh})</span>
+                  <span className="font-semibold tracking-wide whitespace-nowrap" title={`${item.labelEn} — ${item.labelTh}`}>
+                    {item.primaryTh ? item.labelTh : item.labelEn}
+                  </span>
                   {item.badge && (
                     <span
                       className={`text-[9px] px-1.5 py-0.5 rounded font-mono font-bold tracking-wider shrink-0 ${
