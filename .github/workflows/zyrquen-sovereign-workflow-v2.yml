@@ -51,9 +51,14 @@ jobs:
             echo "🟢 Security Gate Script Verified (22/22 Gates Pass)"
           fi
 
+      - name: 🔍 Lint Type Check
+        run: npm run lint
+
       - name: ⚡ Verify Vitest Verification Suite (SLA < 142ms)
-        run: |
-          npm test
+        run: npm run test:unit
+
+      - name: 🏗️ Build Production
+        run: npm run build
 
       - name: 📡 Broadcast Real-time Telemetry & Sentinel Remediation Stream to Port 8443
         if: always()
