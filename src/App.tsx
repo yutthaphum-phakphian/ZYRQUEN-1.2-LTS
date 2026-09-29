@@ -48,6 +48,7 @@ import {
   Trash2,
   AlertTriangle,
   TrendingUp,
+  GripVertical,
 } from 'lucide-react';
 import {
   ResponsiveContainer,
@@ -110,7 +111,7 @@ const SecurityPipelineView = React.lazy(() => import('@/components/views/Securit
 const ExecutiveCourtBriefing = React.lazy(() => import('@/components/executive/ExecutiveCourtBriefing').then(m => ({ default: m.ExecutiveCourtBriefing })));
 const SovereignWalletView = React.lazy(() => import('@/components/views/SovereignWalletView').then(m => ({ default: m.SovereignWalletView })));
 const SovereignDashboard = React.lazy(() => import('@/pages/SovereignDashboard').then(m => ({ default: m.SovereignDashboard })));
-const AIWorkspace = React.lazy(() => import('@/components/AIWorkspace').then(m => ({ default: m.AIWorkspace })));
+import AIWorkspace from '@/components/AIWorkspace';
 import { AuditCertificateModal } from '@/components/AuditCertificateModal';
 import { GitHubPwaModal } from '@/components/GitHubPwaModal';
 import { ThaiLegalSearchModal } from '@/components/ThaiLegalSearchModal';
@@ -1189,7 +1190,42 @@ function SovereignAppContent() {
   const [isGateInlineQrOpen, setIsGateInlineQrOpen] = useState<boolean>(false);
   const [isPendingBadgeHovered, setIsPendingBadgeHovered] = useState<boolean>(false);
   const [isStatusTransitionsHovered, setIsStatusTransitionsHovered] = useState<boolean>(false);
+  const [isAuditSyncing, setIsAuditSyncing] = useState<boolean>(() => offlineAuditSyncService.isSyncInProgress());
+  const [syncProgressPercent, setSyncProgressPercent] = useState<number>(() => offlineAuditSyncService.getCurrentSyncProgress());
+  const [isBroadcastHeartbeating, setIsBroadcastHeartbeating] = useState<boolean>(false);
   const [pendingLogsThreshold, setPendingLogsThreshold] = useState<number>(() => offlineAuditSyncService.getPendingThreshold());
+  const [draggedTransitionIdx, setDraggedTransitionIdx] = useState<number | null>(null);
+
+  // Subscribe to background sync status, progress, and cross-tab broadcast heartbeat
+  useEffect(() => {
+    const unsubStatus = offlineAuditSyncService.subscribeSyncStatus((syncing) => {
+      setIsAuditSyncing(syncing);
+    });
+    const unsubProgress = offlineAuditSyncService.subscribeSyncProgress((progress) => {
+      setSyncProgressPercent(progress);
+    });
+    const unsubHeartbeat = offlineAuditSyncService.subscribeBroadcastHeartbeat(() => {
+      setIsBroadcastHeartbeating(true);
+      setTimeout(() => setIsBroadcastHeartbeating(false), 750);
+    });
+    return () => {
+      unsubStatus();
+      unsubProgress();
+      unsubHeartbeat();
+    };
+  }, []);
+
+  // Audio confirmation: Trigger playAuditChime exactly when background audit sync completes
+  const prevIsSyncingRef = useRef<boolean>(isAuditSyncing);
+  useEffect(() => {
+    if (prevIsSyncingRef.current && !isAuditSyncing) {
+      playAuditChime();
+      playTone(920, 0.08);
+      triggerVibration('snapshot');
+      showToast('Audit Log Ledger Synchronized & Ratified (Zero Drift)', 'success');
+    }
+    prevIsSyncingRef.current = isAuditSyncing;
+  }, [isAuditSyncing, showToast]);
 
   // Derive the last 3 verification state transitions from system event history
   const last3VerificationTransitions = React.useMemo(() => {
@@ -1233,6 +1269,40 @@ function SovereignAppContent() {
     }
     return transitions;
   }, [systemEvents, verificationGateStatus]);
+
+  // Drag-and-drop prioritized ordering for the last 3 verification state transitions
+  const [orderedTransitions, setOrderedTransitions] = useState(last3VerificationTransitions);
+  const isCustomReorderedRef = useRef<boolean>(false);
+
+  useEffect(() => {
+    if (!isCustomReorderedRef.current) {
+      setOrderedTransitions(last3VerificationTransitions);
+    }
+  }, [last3VerificationTransitions]);
+
+  const handleTransitionDragStart = (idx: number) => {
+    setDraggedTransitionIdx(idx);
+    playTone(600, 0.03);
+  };
+
+  const handleTransitionDragOver = (e: React.DragEvent, targetIdx: number) => {
+    e.preventDefault();
+    e.dataTransfer.dropEffect = 'move';
+  };
+
+  const handleTransitionDrop = (e: React.DragEvent, targetIdx: number) => {
+    e.preventDefault();
+    if (draggedTransitionIdx === null || draggedTransitionIdx === targetIdx) return;
+    const reordered = [...orderedTransitions];
+    const [moved] = reordered.splice(draggedTransitionIdx, 1);
+    reordered.splice(targetIdx, 0, moved);
+    setOrderedTransitions(reordered);
+    setDraggedTransitionIdx(null);
+    isCustomReorderedRef.current = true;
+    playTone(760, 0.04);
+    triggerVibration('click');
+    showToast(`Reordered verification transitions view priority`, 'info');
+  };
 
   const offlineTypeBreakdown = React.useMemo(() => {
     const counts: Record<string, number> = {};
@@ -2948,43 +3018,51 @@ function SovereignAppContent() {
                     initial={false}
                     animate={{
                       backgroundColor:
-                        verificationGateStatus.status === 'BLOCKED'
-                          ? undefined // Handled by verification-blocked-color-cycle animation
-                          : activeHsmNodes < 5
-                            ? 'rgba(244, 63, 94, 0.2)' 
-                            : activeHsmNodes < 8
-                              ? 'rgba(245, 158, 11, 0.16)'
-                              : verificationGateStatus.status === 'PASSED' 
-                                ? 'rgba(16, 185, 129, 0.1)' 
-                                : 'rgba(6, 182, 212, 0.1)',
+                        isAuditSyncing
+                          ? 'rgba(30, 58, 138, 0.45)'
+                          : verificationGateStatus.status === 'BLOCKED'
+                            ? undefined // Handled by verification-blocked-color-cycle animation
+                            : activeHsmNodes < 5
+                              ? 'rgba(244, 63, 94, 0.2)' 
+                              : activeHsmNodes < 8
+                                ? 'rgba(245, 158, 11, 0.16)'
+                                : verificationGateStatus.status === 'PASSED' 
+                                  ? 'rgba(16, 185, 129, 0.1)' 
+                                  : 'rgba(6, 182, 212, 0.1)',
                       borderColor:
-                        verificationGateStatus.status === 'BLOCKED'
-                          ? undefined // Handled by verification-blocked-color-cycle animation
-                          : activeHsmNodes < 5
-                            ? 'rgba(244, 63, 94, 0.95)' 
-                            : activeHsmNodes < 8
-                              ? 'rgba(245, 158, 11, 0.95)' 
-                              : verificationGateStatus.status === 'PASSED' 
-                                ? 'rgba(16, 185, 129, 0.45)' 
-                                : 'rgba(6, 182, 212, 0.45)',
+                        isAuditSyncing
+                          ? 'rgba(147, 197, 253, 0.95)'
+                          : verificationGateStatus.status === 'BLOCKED'
+                            ? undefined // Handled by verification-blocked-color-cycle animation
+                            : activeHsmNodes < 5
+                              ? 'rgba(244, 63, 94, 0.95)' 
+                              : activeHsmNodes < 8
+                                ? 'rgba(245, 158, 11, 0.95)' 
+                                : verificationGateStatus.status === 'PASSED' 
+                                  ? 'rgba(16, 185, 129, 0.45)' 
+                                  : 'rgba(6, 182, 212, 0.45)',
                       boxShadow:
-                        verificationGateStatus.status === 'BLOCKED'
-                          ? undefined
-                          : activeHsmNodes < 5
-                            ? '0 0 16px rgba(244, 63, 94, 0.6)' 
-                            : activeHsmNodes < 8
-                              ? '0 0 14px rgba(245, 158, 11, 0.55)' 
-                              : '0 0 0px rgba(0, 0, 0, 0)',
+                        isAuditSyncing
+                          ? '0 0 24px rgba(59, 130, 246, 0.9)'
+                          : verificationGateStatus.status === 'BLOCKED'
+                            ? undefined
+                            : activeHsmNodes < 5
+                              ? '0 0 16px rgba(244, 63, 94, 0.6)' 
+                              : activeHsmNodes < 8
+                                ? '0 0 14px rgba(245, 158, 11, 0.55)' 
+                                : '0 0 0px rgba(0, 0, 0, 0)',
                       color:
-                        verificationGateStatus.status === 'BLOCKED'
-                          ? undefined
-                          : activeHsmNodes < 5
-                            ? 'rgb(254, 205, 211)' 
-                            : activeHsmNodes < 8
-                              ? 'rgb(252, 211, 77)' 
-                              : verificationGateStatus.status === 'PASSED' 
-                                ? 'rgb(110, 231, 183)' 
-                                : 'rgb(103, 232, 249)',
+                        isAuditSyncing
+                          ? 'rgb(219, 234, 254)'
+                          : verificationGateStatus.status === 'BLOCKED'
+                            ? undefined
+                            : activeHsmNodes < 5
+                              ? 'rgb(254, 205, 211)' 
+                              : activeHsmNodes < 8
+                                ? 'rgb(252, 211, 77)' 
+                                : verificationGateStatus.status === 'PASSED' 
+                                  ? 'rgb(110, 231, 183)' 
+                                  : 'rgb(103, 232, 249)',
                     }}
                     transition={{
                       layout: { duration: 0.35, ease: [0.4, 0, 0.2, 1] },
@@ -2992,17 +3070,19 @@ function SovereignAppContent() {
                       ease: [0.25, 0.1, 0.25, 1],
                     }}
                     className={`px-2 py-0.5 rounded text-[10px] font-bold border flex items-center gap-1.5 transition-all cursor-pointer group relative overflow-hidden ${
-                      verificationGateStatus.status === 'BLOCKED'
-                        ? 'verification-blocked-color-cycle ring-2 ring-rose-500/80 shadow-[0_0_20px_rgba(244,63,94,0.6)]'
-                        : activeHsmNodes < 5
-                          ? 'hover:bg-rose-500/30 animate-pulse ring-1 ring-rose-500/60'
-                          : activeHsmNodes < 8
-                            ? 'hover:bg-amber-500/25 ring-1 ring-amber-500/70 border-amber-500'
-                            : verificationGateStatus.status === 'PASSED' 
-                              ? 'hover:bg-emerald-500/20' 
-                              : 'hover:bg-cyan-500/20'
+                      isAuditSyncing
+                        ? 'sync-breathing-blue-glow ring-2 ring-blue-400/90'
+                        : verificationGateStatus.status === 'BLOCKED'
+                          ? 'verification-blocked-color-cycle ring-2 ring-rose-500/80 shadow-[0_0_20px_rgba(244,63,94,0.6)]'
+                          : activeHsmNodes < 5
+                            ? 'hover:bg-rose-500/30 animate-pulse ring-1 ring-rose-500/60'
+                            : activeHsmNodes < 8
+                              ? 'hover:bg-amber-500/25 ring-1 ring-amber-500/70 border-amber-500'
+                              : verificationGateStatus.status === 'PASSED' 
+                                ? 'hover:bg-emerald-500/20' 
+                                : 'hover:bg-cyan-500/20'
                     }`}
-                    title={`VERIFICATION GATE: ${verificationGateStatus.status}\n\n• Current Node Health: ${activeHsmNodes}/10 Nodes Online (${(activeHsmNodes * 10).toFixed(0)}% Quorum${activeHsmNodes < 8 ? ' - SUB-QUORUM WARNING' : ''}) | Cryo-Bus: 14.98 mK | Zeroization: <1.2 µs | Latency: 0.31 ms\n• Last Synchronization: ${syncHistory[0] ? new Date(syncHistory[0]).toISOString() : '2026-09-29T05:25:30.000Z'} (Bitwise SSoT Verified)\n\nIndividual HSM Nodes Breakdown:\n` +
+                    title={`VERIFICATION GATE: ${isAuditSyncing ? 'BACKGROUND AUDIT SYNC IN PROGRESS' : verificationGateStatus.status}\n\n• Current Node Health: ${activeHsmNodes}/10 Nodes Online (${(activeHsmNodes * 10).toFixed(0)}% Quorum${activeHsmNodes < 8 ? ' - SUB-QUORUM WARNING' : ''}) | Cryo-Bus: 14.98 mK | Zeroization: <1.2 µs | Latency: 0.31 ms\n• Last Synchronization: ${syncHistory[0] ? new Date(syncHistory[0]).toISOString() : '2026-09-29T05:25:30.000Z'} (Bitwise SSoT Verified)\n\nIndividual HSM Nodes Breakdown:\n` +
                       [
                         'TC-01 (Alpha • Kyber-1024)',
                         'TC-02 (Beta • Dilithium-5)',
@@ -3058,15 +3138,42 @@ function SovereignAppContent() {
 
                     {/* Status Text Container with Secondary Hover Tooltip (Last 3 Verification Transitions) */}
                     <div
-                      className="relative inline-flex items-center"
+                      className="relative inline-flex items-center gap-1"
                       onMouseEnter={() => setIsStatusTransitionsHovered(true)}
                       onMouseLeave={() => setIsStatusTransitionsHovered(false)}
                     >
                       <span className="font-bold tracking-wide status-text-glitch" aria-live="polite" aria-atomic="true">
-                        {verificationGateStatus.status}
+                        {isAuditSyncing ? 'SYNCING...' : verificationGateStatus.status}
                       </span>
 
-                      {/* Secondary Hover Tooltip displaying the timestamp of the last 3 verification state transitions */}
+                      {/* Small dynamic progress percentage indicator next to pulsating glow */}
+                      {isAuditSyncing && (
+                        <span
+                          id="verification-gate-sync-progress"
+                          className="px-1.5 py-0.2 rounded text-[8px] font-mono font-bold bg-blue-950/90 text-blue-200 border border-blue-400/50 shadow-[0_0_8px_rgba(59,130,246,0.7)] animate-pulse shrink-0"
+                        >
+                          {syncProgressPercent > 0 ? `${syncProgressPercent}%` : '100%'}
+                        </span>
+                      )}
+
+                      {/* Visual Heartbeat Indicator for Cross-Tab Broadcast SSoT Propagation */}
+                      <div
+                        className="relative flex items-center justify-center shrink-0 cursor-help"
+                        title={`Cross-Tab Broadcast Heartbeat: SSoT state synchronized across tabs (${isBroadcastHeartbeating ? 'PULSE ACTIVE' : 'NOMINAL'})`}
+                      >
+                        <span
+                          className={`w-1.5 h-1.5 rounded-full transition-all duration-300 ${
+                            isBroadcastHeartbeating
+                              ? 'bg-cyan-300 scale-140 shadow-[0_0_10px_rgba(6,182,212,1)] ring-2 ring-cyan-400/80'
+                              : 'bg-emerald-400/70 scale-100 shadow-[0_0_4px_rgba(52,211,153,0.5)]'
+                          }`}
+                        />
+                        {isBroadcastHeartbeating && (
+                          <span className="absolute w-3 h-3 rounded-full bg-cyan-400/40 animate-ping pointer-events-none" />
+                        )}
+                      </div>
+
+                      {/* Secondary Hover Tooltip displaying the drag-and-drop reorderable last 3 verification state transitions */}
                       <AnimatePresence>
                         {isStatusTransitionsHovered && (
                           <motion.div
@@ -3074,12 +3181,12 @@ function SovereignAppContent() {
                             animate={{ opacity: 1, y: 0, scale: 1 }}
                             exit={{ opacity: 0, y: 2, scale: 0.96 }}
                             transition={{ duration: 0.15, ease: 'easeOut' }}
-                            className="absolute left-0 bottom-full mb-2.5 z-50 w-72 p-2.5 rounded-xl bg-[#080d1a]/98 border border-cyan-500/50 shadow-[0_10px_30px_rgba(0,0,0,0.85),0_0_15px_rgba(6,182,212,0.3)] backdrop-blur-2xl text-[9px] text-zinc-300 space-y-1.5 pointer-events-none"
+                            className="absolute left-0 bottom-full mb-2.5 z-50 w-76 p-2.5 rounded-xl bg-[#080d1a]/98 border border-cyan-500/50 shadow-[0_10px_30px_rgba(0,0,0,0.85),0_0_15px_rgba(6,182,212,0.3)] backdrop-blur-2xl text-[9px] text-zinc-300 space-y-1.5"
                           >
                             <div className="flex items-center justify-between border-b border-cyan-500/20 pb-1 font-bold">
                               <span className="text-cyan-300 flex items-center gap-1 font-mono">
                                 <Activity className="w-3 h-3 text-cyan-400" />
-                                Last 3 State Transitions
+                                Last 3 State Transitions (Drag to Reorder)
                               </span>
                               <span className="text-[7.5px] text-emerald-400 font-mono px-1 py-0.2 rounded bg-emerald-950/80 border border-emerald-500/30">
                                 SSoT Δ0.00%
@@ -3087,12 +3194,22 @@ function SovereignAppContent() {
                             </div>
 
                             <div className="space-y-1">
-                              {last3VerificationTransitions.map((tr, idx) => (
+                              {orderedTransitions.map((tr, idx) => (
                                 <div
                                   key={tr.id || idx}
-                                  className="flex items-center justify-between gap-1.5 p-1 rounded bg-black/40 border border-white/5 font-mono text-[8.5px]"
+                                  draggable
+                                  onDragStart={() => handleTransitionDragStart(idx)}
+                                  onDragOver={(e) => handleTransitionDragOver(e, idx)}
+                                  onDrop={(e) => handleTransitionDrop(e, idx)}
+                                  className={`flex items-center justify-between gap-1.5 p-1.5 rounded bg-black/50 border transition-all cursor-grab active:cursor-grabbing select-none ${
+                                    draggedTransitionIdx === idx
+                                      ? 'border-cyan-400/80 bg-cyan-950/40 opacity-50 scale-98'
+                                      : 'border-white/10 hover:border-cyan-500/40 hover:bg-slate-900/60'
+                                  } font-mono text-[8.5px]`}
+                                  title="Drag and drop to reorder this transition view"
                                 >
                                   <div className="flex items-center gap-1.5 min-w-0 truncate">
+                                    <GripVertical className="w-2.5 h-2.5 text-zinc-500 hover:text-cyan-300 shrink-0 cursor-grab" />
                                     <span
                                       className={`w-1.5 h-1.5 rounded-full shrink-0 ${
                                         tr.severity === 'critical'

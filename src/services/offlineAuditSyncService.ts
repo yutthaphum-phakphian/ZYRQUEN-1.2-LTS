@@ -30,14 +30,23 @@ type QueueListener = (count: number, items: QueuedAuditEvent[]) => void;
 type AutoSyncListener = (enabled: boolean) => void;
 type SyncHistoryListener = (history: string[]) => void;
 type ThresholdListener = (threshold: number) => void;
+type SyncStatusListener = (isSyncing: boolean) => void;
+type SyncProgressListener = (progressPercent: number) => void;
+type BroadcastHeartbeatListener = (timestamp: number) => void;
 
 class OfflineAuditSyncService {
   private listeners: Set<QueueListener> = new Set();
   private autoSyncListeners: Set<AutoSyncListener> = new Set();
   private historyListeners: Set<SyncHistoryListener> = new Set();
   private thresholdListeners: Set<ThresholdListener> = new Set();
+  private syncStatusListeners: Set<SyncStatusListener> = new Set();
+  private syncProgressListeners: Set<SyncProgressListener> = new Set();
+  private broadcastHeartbeatListeners: Set<BroadcastHeartbeatListener> = new Set();
   private isFlushing = false;
+  private currentProgress = 0;
   private autoSyncTimer: ReturnType<typeof setInterval> | null = null;
+  private heartbeatTimer: ReturnType<typeof setInterval> | null = null;
+  private broadcastChannel: BroadcastChannel | null = null;
   private readonly AUTO_SYNC_INTERVAL_MS = 5 * 60 * 1000; // 5 minutes
 
   constructor() {
@@ -55,24 +64,31 @@ class OfflineAuditSyncService {
             this.saveQueue([]);
             this.notifyListeners([]);
             this.recordSyncSuccess();
+            this.notifyBroadcastHeartbeat(Date.now());
           }
         });
       }
 
       if (typeof BroadcastChannel !== 'undefined') {
         try {
-          const channel = new BroadcastChannel('zyrquen_audit_sync_bus');
-          channel.onmessage = (event) => {
+          this.broadcastChannel = new BroadcastChannel('zyrquen_audit_sync_bus');
+          this.broadcastChannel.onmessage = (event) => {
             if (event.data?.type === 'AUDIT_LOGS_SYNCED') {
               this.saveQueue([]);
               this.notifyListeners([]);
               this.recordSyncSuccess();
+              this.notifyBroadcastHeartbeat(Date.now());
+            } else if (event.data?.type === 'HEARTBEAT_PULSE') {
+              this.notifyBroadcastHeartbeat(event.data.timestamp || Date.now());
             }
           };
         } catch {
           // BroadcastChannel fallback
         }
       }
+
+      // Start periodic cross-tab heartbeat propagation (every 3.5 seconds)
+      this.startHeartbeatTimer();
 
       // Initialize Auto-Sync timer if enabled (default ON)
       if (this.isAutoSyncEnabled()) {
@@ -154,6 +170,90 @@ class OfflineAuditSyncService {
     } catch (e) {
       return { pendingLogsCount: this.getQueueCount() };
     }
+  }
+
+  private setFlushing(isFlushing: boolean) {
+    this.isFlushing = isFlushing;
+    if (!isFlushing) {
+      this.setProgress(0);
+    }
+    this.syncStatusListeners.forEach((listener) => {
+      try {
+        listener(isFlushing);
+      } catch (e) {
+        console.warn('[OfflineAuditSync] Listener error:', e);
+      }
+    });
+  }
+
+  private setProgress(percent: number) {
+    this.currentProgress = Math.max(0, Math.min(100, Math.round(percent)));
+    this.syncProgressListeners.forEach((listener) => {
+      try {
+        listener(this.currentProgress);
+      } catch (e) {
+        console.warn('[OfflineAuditSync] Progress listener error:', e);
+      }
+    });
+  }
+
+  private notifyBroadcastHeartbeat(timestamp: number) {
+    this.broadcastHeartbeatListeners.forEach((listener) => {
+      try {
+        listener(timestamp);
+      } catch (e) {
+        console.warn('[OfflineAuditSync] Heartbeat listener error:', e);
+      }
+    });
+  }
+
+  private startHeartbeatTimer() {
+    if (this.heartbeatTimer) clearInterval(this.heartbeatTimer);
+    if (typeof window === 'undefined') return;
+    this.heartbeatTimer = setInterval(() => {
+      const now = Date.now();
+      if (this.broadcastChannel) {
+        try {
+          this.broadcastChannel.postMessage({ type: 'HEARTBEAT_PULSE', timestamp: now });
+        } catch {
+          // ignore
+        }
+      }
+      this.notifyBroadcastHeartbeat(now);
+    }, 3500);
+  }
+
+  /**
+   * Subscribes to background sync status changes (isSyncing: boolean)
+   */
+  public subscribeSyncStatus(listener: SyncStatusListener): () => void {
+    this.syncStatusListeners.add(listener);
+    listener(this.isFlushing);
+    return () => this.syncStatusListeners.delete(listener);
+  }
+
+  /**
+   * Subscribes to background sync progress updates (percent: 0-100)
+   */
+  public subscribeSyncProgress(listener: SyncProgressListener): () => void {
+    this.syncProgressListeners.add(listener);
+    listener(this.currentProgress);
+    return () => this.syncProgressListeners.delete(listener);
+  }
+
+  /**
+   * Subscribes to cross-tab broadcast heartbeat pulses
+   */
+  public subscribeBroadcastHeartbeat(listener: BroadcastHeartbeatListener): () => void {
+    this.broadcastHeartbeatListeners.add(listener);
+    return () => this.broadcastHeartbeatListeners.delete(listener);
+  }
+
+  /**
+   * Returns current sync progress (0 - 100%)
+   */
+  public getCurrentSyncProgress(): number {
+    return this.currentProgress;
   }
 
   /**
@@ -274,7 +374,7 @@ class OfflineAuditSyncService {
     const queue = this.getQueue();
     if (queue.length === 0) {
       if (force) {
-        this.isFlushing = true;
+        this.setFlushing(true);
         try {
           const response = await fetch('/api/v1/audit/sync', {
             method: 'POST',
@@ -310,15 +410,17 @@ class OfflineAuditSyncService {
           console.warn('[OfflineAuditSync] Force sync verification failed:', err.message);
           return { flushedCount: 0, success: false, error: err.message };
         } finally {
-          this.isFlushing = false;
+          this.setFlushing(false);
         }
       }
       return { flushedCount: 0, success: true, message: 'Queue is empty. No pending audit logs to flush.' };
     }
 
-    this.isFlushing = true;
+    this.setFlushing(true);
+    this.setProgress(15);
 
     try {
+      this.setProgress(35);
       const response = await fetch('/api/v1/audit/sync', {
         method: 'POST',
         headers: {
@@ -332,10 +434,13 @@ class OfflineAuditSyncService {
         }),
       });
 
+      this.setProgress(75);
+
       if (!response.ok) {
         throw new Error(`Server sync failed with HTTP ${response.status}`);
       }
 
+      this.setProgress(95);
       const flushedCount = queue.length;
       // Clear queue upon successful server confirmation
       this.saveQueue([]);
@@ -348,6 +453,7 @@ class OfflineAuditSyncService {
       this.recordSyncSuccess(now);
       this.notifyListeners([]);
       triggerVibration('snapshot');
+      this.setProgress(100);
 
       const msg = `Successfully flushed ${flushedCount} pending audit event${flushedCount > 1 ? 's' : ''} to primary ledger.`;
       console.log(`[OfflineAuditSync] ${msg}`);
@@ -359,7 +465,7 @@ class OfflineAuditSyncService {
       this.saveQueue(updatedQueue);
       return { flushedCount: 0, success: false, error: err.message };
     } finally {
-      this.isFlushing = false;
+      this.setFlushing(false);
     }
   }
 

@@ -45,8 +45,9 @@ import { SystemEvent } from '../SystemEventsSidebar';
 import { ExecutiveSummaryInfographic } from './ExecutiveSummaryInfographic';
 import { CourtEvidenceTimeline } from './CourtEvidenceTimeline';
 import { CourtEvidenceManifestPanel } from './CourtEvidenceManifestPanel';
+import { ExecutiveDryRunPlaybook } from './ExecutiveDryRunPlaybook';
 
-export type BriefingSubTab = 'infographic' | 'timeline' | 'dashboard' | 'manifest';
+export type BriefingSubTab = 'infographic' | 'timeline' | 'dashboard' | 'manifest' | 'speech_playbook';
 
 interface ExecutiveCourtBriefingProps {
   onNavigate?: (view: ViewType) => void;
@@ -621,6 +622,21 @@ export const ExecutiveCourtBriefing: React.FC<ExecutiveCourtBriefingProps> = ({
           <Award className="w-4 h-4" />
           <span>4. แฟ้มสำนวนพยาน จพ.01–จพ.07 & Manifest</span>
         </button>
+
+        <button
+          onClick={() => {
+            setActiveTab('speech_playbook');
+            playTone(640, 0.05);
+          }}
+          className={`px-4 py-2.5 rounded-lg text-xs font-medium transition-all flex items-center gap-2 shrink-0 ${
+            activeTab === 'speech_playbook'
+              ? 'bg-gradient-to-r from-cyan-500/30 to-emerald-500/30 text-cyan-200 border border-cyan-400/60 shadow-lg font-bold'
+              : 'text-cyan-400 hover:text-cyan-200 hover:bg-cyan-950/40 border border-cyan-500/20'
+          }`}
+        >
+          <Sparkles className="w-4 h-4 text-cyan-300 animate-pulse" />
+          <span>5. บทประเมินการซ้อมแถลงการณ์ & Q&A Playbook (3:45 Min)</span>
+        </button>
       </div>
 
       {/* ============================================================ */}
@@ -781,6 +797,16 @@ export const ExecutiveCourtBriefing: React.FC<ExecutiveCourtBriefingProps> = ({
       {/* ============================================================ */}
       {activeTab === 'manifest' && (
         <CourtEvidenceManifestPanel />
+      )}
+
+      {/* ============================================================ */}
+      {/* SUBTAB 5: EXECUTIVE DRY RUN & SPEECH PLAYBOOK (3:45 MIN)     */}
+      {/* ============================================================ */}
+      {activeTab === 'speech_playbook' && (
+        <ExecutiveDryRunPlaybook
+          onNavigate={onNavigate}
+          onOpenCertificate={onOpenCertificate}
+        />
       )}
 
       {/* ============================================================ */}
