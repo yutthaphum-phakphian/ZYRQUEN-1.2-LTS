@@ -23,15 +23,19 @@ const STORAGE_KEY = 'zyrquen_offline_audit_queue_v1';
 const LAST_SYNC_KEY = 'zyrquen_last_audit_sync_time_v1';
 const AUTO_SYNC_KEY = 'zyrquen_auto_sync_enabled_v1';
 const SYNC_HISTORY_KEY = 'zyrquen_audit_sync_history_v1';
+const PENDING_THRESHOLD_KEY = 'zyrquen_pending_logs_threshold_v1';
+const DEFAULT_PENDING_THRESHOLD = 50;
 
 type QueueListener = (count: number, items: QueuedAuditEvent[]) => void;
 type AutoSyncListener = (enabled: boolean) => void;
 type SyncHistoryListener = (history: string[]) => void;
+type ThresholdListener = (threshold: number) => void;
 
 class OfflineAuditSyncService {
   private listeners: Set<QueueListener> = new Set();
   private autoSyncListeners: Set<AutoSyncListener> = new Set();
   private historyListeners: Set<SyncHistoryListener> = new Set();
+  private thresholdListeners: Set<ThresholdListener> = new Set();
   private isFlushing = false;
   private autoSyncTimer: ReturnType<typeof setInterval> | null = null;
   private readonly AUTO_SYNC_INTERVAL_MS = 5 * 60 * 1000; // 5 minutes
@@ -409,6 +413,48 @@ class OfflineAuditSyncService {
     this.autoSyncListeners.add(listener);
     listener(this.isAutoSyncEnabled());
     return () => this.autoSyncListeners.delete(listener);
+  }
+
+  /**
+   * Retrieves the configured pending logs buffer limit threshold (default: 50)
+   */
+  public getPendingThreshold(): number {
+    if (typeof window === 'undefined') return DEFAULT_PENDING_THRESHOLD;
+    try {
+      const val = localStorage.getItem(PENDING_THRESHOLD_KEY);
+      if (val !== null) {
+        const parsed = parseInt(val, 10);
+        if (!isNaN(parsed) && parsed > 0) return parsed;
+      }
+    } catch {
+      // ignore
+    }
+    return DEFAULT_PENDING_THRESHOLD;
+  }
+
+  /**
+   * Updates the pending logs buffer limit threshold
+   */
+  public setPendingThreshold(threshold: number): void {
+    const valid = Math.max(5, Math.min(500, Math.round(threshold)));
+    if (typeof window !== 'undefined') {
+      try {
+        localStorage.setItem(PENDING_THRESHOLD_KEY, String(valid));
+      } catch {
+        // ignore
+      }
+    }
+    this.thresholdListeners.forEach((fn) => fn(valid));
+    console.log(`[OfflineAuditSync] Configured Pending Logs Alert Threshold: ${valid} logs`);
+  }
+
+  /**
+   * Subscribes to changes in the pending logs buffer threshold
+   */
+  public subscribePendingThreshold(listener: ThresholdListener): () => void {
+    this.thresholdListeners.add(listener);
+    listener(this.getPendingThreshold());
+    return () => this.thresholdListeners.delete(listener);
   }
 
   private startAutoSyncTimer(): void {

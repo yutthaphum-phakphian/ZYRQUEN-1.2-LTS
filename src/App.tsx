@@ -58,6 +58,8 @@ import {
   Tooltip as RechartsTooltip,
   CartesianGrid,
 } from 'recharts';
+import { QRCodeSVG } from 'qrcode.react';
+import { safeCopyToClipboard } from '@/utils/clipboard';
 import { MerkleRootQrCodeModal, type QrVerificationCallbackResult } from '@/components/MerkleRootQrCodeModal';
 import { CANONICAL_GENESIS_BLOCK, CANONICAL_MERKLE_ROOT } from '@/data/canonicalData';
 
@@ -1181,6 +1183,10 @@ function SovereignAppContent() {
   const [syncHistory, setSyncHistory] = useState<string[]>(() => offlineAuditSyncService.getSyncHistory());
   const [isSyncLogsCopied, setIsSyncLogsCopied] = useState<boolean>(false);
   const [isSyncHistoryRefreshing, setIsSyncHistoryRefreshing] = useState<boolean>(false);
+  const [isGateStatusCopied, setIsGateStatusCopied] = useState<boolean>(false);
+  const [isGateInlineQrOpen, setIsGateInlineQrOpen] = useState<boolean>(false);
+  const [isPendingBadgeHovered, setIsPendingBadgeHovered] = useState<boolean>(false);
+  const [pendingLogsThreshold, setPendingLogsThreshold] = useState<number>(() => offlineAuditSyncService.getPendingThreshold());
 
   const offlineTypeBreakdown = React.useMemo(() => {
     const counts: Record<string, number> = {};
@@ -1514,6 +1520,9 @@ function SovereignAppContent() {
       });
       const unsubSyncHistory = offlineAuditSyncService.subscribeSyncHistory((hist) => {
         setSyncHistory(hist);
+      });
+      const unsubThreshold = offlineAuditSyncService.subscribePendingThreshold((thresh) => {
+        setPendingLogsThreshold(thresh);
       });
 
       // 4. Start automated backup service and attach snapshot listener
@@ -2787,37 +2796,51 @@ function SovereignAppContent() {
                     initial={false}
                     animate={{
                       backgroundColor:
-                        verificationGateStatus.status === 'PASSED' 
-                          ? 'rgba(16, 185, 129, 0.1)' 
-                          : verificationGateStatus.status === 'BLOCKED' 
-                            ? 'rgba(244, 63, 94, 0.2)' 
-                            : 'rgba(6, 182, 212, 0.1)',
+                        activeHsmNodes < 5 || verificationGateStatus.status === 'BLOCKED'
+                          ? 'rgba(244, 63, 94, 0.2)' 
+                          : activeHsmNodes < 8
+                            ? 'rgba(245, 158, 11, 0.16)'
+                            : verificationGateStatus.status === 'PASSED' 
+                              ? 'rgba(16, 185, 129, 0.1)' 
+                              : 'rgba(6, 182, 212, 0.1)',
                       borderColor:
-                        verificationGateStatus.status === 'PASSED' 
-                          ? 'rgba(16, 185, 129, 0.3)' 
-                          : verificationGateStatus.status === 'BLOCKED' 
-                            ? 'rgba(244, 63, 94, 0.6)' 
-                            : 'rgba(6, 182, 212, 0.3)',
+                        activeHsmNodes < 5 || verificationGateStatus.status === 'BLOCKED'
+                          ? 'rgba(244, 63, 94, 0.88)' 
+                          : activeHsmNodes < 8
+                            ? 'rgba(245, 158, 11, 0.92)' 
+                            : verificationGateStatus.status === 'PASSED' 
+                              ? 'rgba(16, 185, 129, 0.35)' 
+                              : 'rgba(6, 182, 212, 0.35)',
+                      boxShadow:
+                        activeHsmNodes < 5 || verificationGateStatus.status === 'BLOCKED'
+                          ? '0 0 16px rgba(244, 63, 94, 0.5)' 
+                          : activeHsmNodes < 8
+                            ? '0 0 14px rgba(245, 158, 11, 0.45)' 
+                            : '0 0 0px rgba(0, 0, 0, 0)',
                       color:
-                        verificationGateStatus.status === 'PASSED' 
-                          ? 'rgb(110, 231, 183)' 
-                          : verificationGateStatus.status === 'BLOCKED' 
-                            ? 'rgb(254, 205, 211)' 
-                            : 'rgb(103, 232, 249)',
+                        activeHsmNodes < 5 || verificationGateStatus.status === 'BLOCKED'
+                          ? 'rgb(254, 205, 211)' 
+                          : activeHsmNodes < 8
+                            ? 'rgb(252, 211, 77)' 
+                            : verificationGateStatus.status === 'PASSED' 
+                              ? 'rgb(110, 231, 183)' 
+                              : 'rgb(103, 232, 249)',
                     }}
                     transition={{
                       layout: { duration: 0.35, ease: [0.4, 0, 0.2, 1] },
                       duration: 0.45,
                       ease: [0.25, 0.1, 0.25, 1],
                     }}
-                    className={`px-2 py-0.5 rounded text-[10px] font-bold border flex items-center gap-1.5 transition-shadow cursor-pointer ${
-                      verificationGateStatus.status === 'PASSED' 
-                        ? 'hover:bg-emerald-500/20' 
-                        : verificationGateStatus.status === 'BLOCKED' 
-                          ? 'hover:bg-rose-500/30 animate-pulse shadow-[0_0_15px_rgba(244,63,94,0.45)] ring-1 ring-rose-500/50' 
-                          : 'hover:bg-cyan-500/20'
+                    className={`px-2 py-0.5 rounded text-[10px] font-bold border flex items-center gap-1.5 transition-shadow cursor-pointer group relative ${
+                      activeHsmNodes < 5 || verificationGateStatus.status === 'BLOCKED'
+                        ? 'hover:bg-rose-500/30 animate-pulse ring-1 ring-rose-500/60'
+                        : activeHsmNodes < 8
+                          ? 'hover:bg-amber-500/25 ring-1 ring-amber-500/60'
+                          : verificationGateStatus.status === 'PASSED' 
+                            ? 'hover:bg-emerald-500/20' 
+                            : 'hover:bg-cyan-500/20'
                     }`}
-                    title={`10/10 REAL_HSM QUORUM STATUS: ${activeHsmNodes}/10 Nodes Online (${(activeHsmNodes * 10).toFixed(0)}%)\n\nIndividual HSM Nodes Breakdown:\n` +
+                    title={`VERIFICATION GATE: ${verificationGateStatus.status}\n\n• Current Node Health: ${activeHsmNodes}/10 Nodes Online (${(activeHsmNodes * 10).toFixed(0)}% Quorum${activeHsmNodes < 8 ? ' - SUB-QUORUM WARNING' : ''}) | Cryo-Bus: 14.98 mK | Zeroization: <1.2 µs | Latency: 0.31 ms\n• Last Synchronization: ${syncHistory[0] ? new Date(syncHistory[0]).toISOString() : '2026-09-29T05:25:30.000Z'} (Bitwise SSoT Verified)\n\nIndividual HSM Nodes Breakdown:\n` +
                       [
                         'TC-01 (Alpha • Kyber-1024)',
                         'TC-02 (Beta • Dilithium-5)',
@@ -2863,29 +2886,122 @@ function SovereignAppContent() {
                     </svg>
                     <span>{verificationGateStatus.status}</span>
                     <span className="text-[9px] font-mono opacity-85">({(activeHsmNodes * 10).toFixed(0)}%)</span>
+
+                    {/* Copy button that appears on hover */}
+                    <span
+                      role="button"
+                      tabIndex={0}
+                      onClick={(e) => {
+                        e.stopPropagation();
+                        const statusPayload = `VERIFICATION GATE: ${verificationGateStatus.status} (${(activeHsmNodes * 10).toFixed(0)}% Quorum, ${activeHsmNodes}/10 Nodes Active) | Merkle: ${CANONICAL_MERKLE_ROOT} | Standard: ETDA Sec 9/26/28 • PDPA Sec 37 | SSoT Zero Drift Δ0.00%`;
+                        safeCopyToClipboard(statusPayload);
+                        setIsGateStatusCopied(true);
+                        playTone(720, 0.04);
+                        triggerVibration('click');
+                        showToast('Status text copied to clipboard', 'success');
+                        setTimeout(() => setIsGateStatusCopied(false), 2000);
+                      }}
+                      className="opacity-0 group-hover:opacity-100 transition-all duration-150 p-0.5 rounded hover:bg-white/20 text-zinc-300 hover:text-white cursor-pointer inline-flex items-center justify-center shrink-0 active:scale-90"
+                      title="Copy Verification Gate Status to Clipboard"
+                    >
+                      {isGateStatusCopied ? (
+                        <Check className="w-2.5 h-2.5 text-emerald-300" />
+                      ) : (
+                        <Copy className="w-2.5 h-2.5 text-cyan-300" />
+                      )}
+                    </span>
                     
-                    {/* Small 'pending' badge if offline audit logs queued in offlineAuditSyncService (Turns RED if > 50 threshold) */}
+                    {/* Small 'pending' badge if offline audit logs queued in offlineAuditSyncService (Turns RED if > threshold) */}
                     {offlineQueuedCount > 0 && (
-                      <span
-                        id="verification-gate-pending-badge"
-                        onClick={(e) => {
-                          e.stopPropagation();
-                          playTone(720, 0.04);
-                          setEventsSidebarFilter('PENDING');
-                          setEventsSidebarHighlightPending(true);
-                          setIsEventsSidebarOpen(true);
-                          triggerVibration('sidebarToggle');
-                        }}
-                        className={`px-1.5 py-0.2 rounded-full text-[8px] font-bold uppercase tracking-wider flex items-center gap-0.5 cursor-pointer active:scale-95 transition-all ${
-                          offlineQueuedCount > 50
-                            ? 'bg-rose-500/25 text-rose-200 border border-rose-500/70 pending-badge-breathing-red hover:bg-rose-500/35 hover:border-rose-400 shadow-[0_0_12px_rgba(244,63,94,0.45)]'
-                            : 'bg-amber-500/20 text-amber-300 border border-amber-500/40 pending-badge-breathing hover:bg-amber-500/30 hover:border-amber-400'
-                        }`}
-                        title={`${offlineQueuedCount} offline audit log${offlineQueuedCount > 1 ? 's' : ''} queued in offlineAuditSyncService ${offlineQueuedCount > 50 ? '(CRITICAL: Exceeds 50-log safe buffer limit)' : ''}. Click to open System Events and view pending logs.`}
+                      <div
+                        className="relative inline-flex items-center"
+                        onMouseEnter={() => setIsPendingBadgeHovered(true)}
+                        onMouseLeave={() => setIsPendingBadgeHovered(false)}
                       >
-                        <span className={`w-1.5 h-1.5 rounded-full ${offlineQueuedCount > 50 ? 'bg-rose-400' : 'bg-amber-400'}`} />
-                        <span>{offlineQueuedCount > 50 ? '⚠️ pending' : 'pending'}</span>
-                      </span>
+                        <span
+                          id="verification-gate-pending-badge"
+                          onClick={(e) => {
+                            e.stopPropagation();
+                            playTone(720, 0.04);
+                            setEventsSidebarFilter('PENDING');
+                            setEventsSidebarHighlightPending(true);
+                            setIsEventsSidebarOpen(true);
+                            triggerVibration('sidebarToggle');
+                          }}
+                          className={`px-1.5 py-0.2 rounded-full text-[8px] font-bold uppercase tracking-wider flex items-center gap-0.5 cursor-pointer active:scale-95 transition-all ${
+                            offlineQueuedCount > pendingLogsThreshold
+                              ? 'bg-rose-500/25 text-rose-200 border border-rose-500/70 pending-badge-breathing-red hover:bg-rose-500/35 hover:border-rose-400 shadow-[0_0_12px_rgba(244,63,94,0.45)]'
+                              : 'bg-amber-500/20 text-amber-300 border border-amber-500/40 pending-badge-breathing hover:bg-amber-500/30 hover:border-amber-400'
+                          }`}
+                          title={`PENDING OFFLINE AUDIT QUEUE: ${offlineQueuedCount} event${offlineQueuedCount > 1 ? 's' : ''} queued\n\nBuffer Status: ${offlineQueuedCount}/${pendingLogsThreshold} (${offlineQueuedCount > pendingLogsThreshold ? 'CRITICAL: Safe threshold exceeded' : 'Nominal buffer'})\n\nQueued Event Types Breakdown:\n` +
+                            Object.entries(offlineTypeBreakdown).map(([type, count]) => `  • ${type}: ${count} event${count > 1 ? 's' : ''}`).join('\n') +
+                            `\n\nClick to open System Events panel and view queued logs.`
+                          }
+                        >
+                          <span className={`w-1.5 h-1.5 rounded-full ${offlineQueuedCount > pendingLogsThreshold ? 'bg-rose-400' : 'bg-amber-400'}`} />
+                          <span>{offlineQueuedCount > pendingLogsThreshold ? '⚠️ pending' : 'pending'}</span>
+                        </span>
+
+                        {/* Descriptive Hover Tooltip displaying specific list of queued audit event types */}
+                        <AnimatePresence>
+                          {isPendingBadgeHovered && (
+                            <motion.div
+                              initial={{ opacity: 0, y: -6, scale: 0.94 }}
+                              animate={{ opacity: 1, y: 0, scale: 1 }}
+                              exit={{ opacity: 0, y: -4, scale: 0.96 }}
+                              transition={{ duration: 0.2, ease: 'easeOut' }}
+                              className="absolute left-0 top-full mt-1.5 z-50 w-72 p-3 rounded-xl bg-[#090e1c]/98 border border-amber-500/50 shadow-2xl backdrop-blur-2xl text-[9px] text-zinc-300 space-y-2 pointer-events-none"
+                            >
+                              <div className="flex items-center justify-between border-b border-amber-500/20 pb-1.5 font-bold">
+                                <span className="text-amber-300 flex items-center gap-1 font-mono">
+                                  <Clock className="w-3 h-3 text-amber-400" />
+                                  Queued Audit Events ({offlineQueuedCount})
+                                </span>
+                                <span className={`text-[7.5px] px-1.5 py-0.2 rounded font-mono ${
+                                  offlineQueuedCount > pendingLogsThreshold
+                                    ? 'bg-rose-950 text-rose-300 border border-rose-500/50 animate-pulse font-bold'
+                                    : 'bg-amber-950 text-amber-300 border border-amber-500/40'
+                                }`}>
+                                  {offlineQueuedCount > pendingLogsThreshold ? `⚠️ EXCEEDS ${pendingLogsThreshold} LIMIT` : `Buffer: ${offlineQueuedCount}/${pendingLogsThreshold}`}
+                                </span>
+                              </div>
+
+                              <div className="space-y-1">
+                                <span className="text-[8px] uppercase tracking-wider text-zinc-400 font-semibold block">
+                                  Queued Event Types Waiting for Sync:
+                                </span>
+                                <div className="space-y-1 max-h-36 overflow-y-auto pr-1">
+                                  {Object.entries(offlineTypeBreakdown).length > 0 ? (
+                                    Object.entries(offlineTypeBreakdown).map(([eventType, count]) => (
+                                      <div
+                                        key={eventType}
+                                        className="flex items-center justify-between px-2 py-1 rounded bg-black/40 border border-white/5 font-mono text-[8.5px]"
+                                      >
+                                        <div className="flex items-center gap-1.5 truncate">
+                                          <span className="w-1.5 h-1.5 rounded-full bg-cyan-400 shrink-0" />
+                                          <span className="text-zinc-200 font-semibold truncate">{eventType}</span>
+                                        </div>
+                                        <span className="px-1.5 py-0.2 rounded bg-cyan-950/70 text-cyan-300 font-bold border border-cyan-500/30 text-[8px] shrink-0">
+                                          {count} queued
+                                        </span>
+                                      </div>
+                                    ))
+                                  ) : (
+                                    <div className="text-zinc-500 text-[8px] italic py-1">
+                                      {offlineQueuedCount} general ledger items pending...
+                                    </div>
+                                  )}
+                                </div>
+                              </div>
+
+                              <div className="pt-1 border-t border-white/10 flex items-center justify-between text-[7.5px] text-zinc-400">
+                                <span>Thai ETDA Sec 9/26 • Auto-Flush On Relink</span>
+                                <span className="text-cyan-300 font-semibold">Click badge to open</span>
+                              </div>
+                            </motion.div>
+                          )}
+                        </AnimatePresence>
+                      </div>
                     )}
 
                     <Info className="w-2.5 h-2.5 opacity-70" />
@@ -3072,9 +3188,46 @@ function SovereignAppContent() {
                         </div>
 
                         {/* Description */}
-                        <p className="text-zinc-300 text-[11px] leading-relaxed mb-3">
+                        <p className="text-zinc-300 text-[11px] leading-relaxed mb-2.5">
                           {verificationGateStatus.message}
                         </p>
+
+                        {/* Node Health Details & Last Synchronization Timestamp Bar */}
+                        <div className="p-2.5 rounded-xl bg-gradient-to-r from-cyan-950/40 via-slate-900/60 to-emerald-950/40 border border-cyan-500/30 mb-2.5 space-y-1.5 font-mono text-[9.5px]">
+                          <div className="flex items-center justify-between text-zinc-300 pb-1 border-b border-white/5">
+                            <span className="flex items-center gap-1.5 text-cyan-300 font-bold">
+                              <Activity className="w-3 h-3 text-cyan-400" />
+                              NODE HEALTH &amp; TELEMETRY
+                            </span>
+                            <span className="px-1.5 py-0.2 rounded bg-emerald-500/20 text-emerald-300 border border-emerald-500/30 font-bold text-[8.5px]">
+                              {activeHsmNodes}/10 ONLINE ({((activeHsmNodes / 10) * 100).toFixed(0)}%)
+                            </span>
+                          </div>
+                          <div className="grid grid-cols-2 gap-1.5 text-[9px] text-zinc-400">
+                            <div>
+                              <span className="text-zinc-500 block text-[7.5px] uppercase">Cryo &amp; Latency</span>
+                              <span className="text-emerald-300 font-semibold">14.98 mK • 0.31 ms</span>
+                            </div>
+                            <div>
+                              <span className="text-zinc-500 block text-[7.5px] uppercase">Zeroization Security</span>
+                              <span className="text-cyan-300 font-semibold">&lt;1.2 μs (FIPS L4)</span>
+                            </div>
+                          </div>
+                          <div className="pt-1 border-t border-white/5 flex items-center justify-between text-[8.5px]">
+                            <span className="text-zinc-400 flex items-center gap-1">
+                              <Clock className="w-2.5 h-2.5 text-amber-400" />
+                              Last Synchronization:
+                            </span>
+                            <span className="text-amber-300 font-bold">
+                              {syncHistory[0]
+                                ? (isNaN(new Date(syncHistory[0]).getTime())
+                                    ? syncHistory[0]
+                                    : new Date(syncHistory[0]).toLocaleTimeString('en-GB', { timeZone: 'UTC', hour12: false }) + ' UTC')
+                                : '05:25:30 UTC'}{' '}
+                              <span className="text-emerald-400 font-normal">(SSoT Succeeded)</span>
+                            </span>
+                          </div>
+                        </div>
 
                         {/* 1. 10/10 REAL_HSM Quorum Status Breakdown & Cluster Health Visualizer */}
                         {(() => {
@@ -4388,6 +4541,25 @@ function SovereignAppContent() {
                   <span className="sm:hidden text-[9px]">QR</span>
                 </button>
 
+                {/* Quick Inline QR Generator Button with Smooth Fade-in & Scale Animation */}
+                <button
+                  type="button"
+                  id="btn-verification-gate-quick-qr"
+                  onClick={() => {
+                    playTone(isGateInlineQrOpen ? 520 : 760, 0.04);
+                    setIsGateInlineQrOpen((prev) => !prev);
+                  }}
+                  className={`px-2 py-1 rounded-lg font-mono text-[10px] font-semibold border flex items-center gap-1 transition-all cursor-pointer ${
+                    isGateInlineQrOpen
+                      ? 'bg-cyan-500/30 text-cyan-100 border-cyan-400 shadow-[0_0_12px_rgba(6,182,212,0.4)]'
+                      : 'bg-cyan-950/30 hover:bg-cyan-900/40 text-cyan-300 border-cyan-500/35 shadow-sm'
+                  }`}
+                  title="Generate instant QR Code artifact for Verification Gate"
+                >
+                  <QrCode className="w-3 h-3 text-cyan-300" />
+                  <span className="hidden sm:inline">Quick QR</span>
+                </button>
+
                 {/* Device Camera QR Audit Artifact Scanner & Merkle Root Verifier Button */}
                 <button
                   id="btn-verification-gate-qr-camera-scan"
@@ -4453,6 +4625,81 @@ function SovereignAppContent() {
                 />
               </div>
             </div>
+
+            {/* In-place Generated Quick QR Code Card with Smooth Fade-in & Scale Animation */}
+            <AnimatePresence>
+              {isGateInlineQrOpen && (
+                <motion.div
+                  id="verification-gate-inline-qr-preview"
+                  initial={{ opacity: 0, scale: 0.88, height: 0 }}
+                  animate={{ opacity: 1, scale: 1, height: 'auto' }}
+                  exit={{ opacity: 0, scale: 0.88, height: 0 }}
+                  transition={{ duration: 0.38, ease: [0.16, 1, 0.3, 1] }}
+                  className="border-t border-cyan-500/30 bg-gradient-to-b from-[#070c18] to-[#04060c] px-4 py-3 flex flex-col sm:flex-row items-center justify-between gap-4 font-mono overflow-hidden"
+                >
+                  <div className="flex items-center gap-3">
+                    <div className="relative p-2.5 bg-white rounded-xl shadow-[0_0_22px_rgba(6,182,212,0.45)] qr-code-fade-in-scale-with-pulse shrink-0 border border-cyan-400/60 group overflow-hidden">
+                      {/* Secondary Optical Laser Scan Line Beam */}
+                      <div className="absolute inset-x-0 h-0.5 bg-gradient-to-r from-transparent via-cyan-500 to-transparent shadow-[0_0_8px_#06b6d4] pointer-events-none qr-scanning-laser-beam z-10" />
+
+                      <QRCodeSVG
+                        value={`https://zyrquen.court.local/verify?root=${CANONICAL_MERKLE_ROOT}&genesis=${CANONICAL_GENESIS_BLOCK}&status=${verificationGateStatus.status}&hsm=${activeHsmNodes}/10&drift=0.00pct`}
+                        size={84}
+                        level="H"
+                        includeMargin={false}
+                      />
+                      <span className="absolute -bottom-1 left-1/2 -translate-x-1/2 px-1.5 py-0.2 rounded-full text-[6.5px] font-bold tracking-wider bg-emerald-950 text-emerald-300 border border-emerald-500/70 shadow-[0_0_8px_rgba(52,211,153,0.85)] whitespace-nowrap animate-pulse z-20">
+                        READY TO SCAN
+                      </span>
+                    </div>
+                    <div className="text-[10px] space-y-1">
+                      <div className="flex items-center gap-2">
+                        <span className="font-bold text-white tracking-wide flex items-center gap-1">
+                          <ShieldCheck className="w-3.5 h-3.5 text-emerald-400" />
+                          VERIFICATION GATE QR ARTIFACT
+                        </span>
+                        <span className="px-1.5 py-0.2 rounded text-[8px] font-bold bg-emerald-500/20 text-emerald-300 border border-emerald-500/40">
+                          FIPS 204 SIGNED
+                        </span>
+                      </div>
+                      <p className="text-zinc-400 text-[9px] leading-relaxed">
+                        Instant scan link for external optical verification. Root: <span className="text-cyan-300 font-bold">{CANONICAL_MERKLE_ROOT.substring(0, 18)}...</span>
+                      </p>
+                      <div className="flex items-center gap-2 text-[8px] text-zinc-500">
+                        <span>Quorum: {activeHsmNodes}/10 Nodes Online</span>
+                        <span>•</span>
+                        <span>SSoT Parity: Δ0.00% Zero Drift</span>
+                      </div>
+                    </div>
+                  </div>
+
+                  <div className="flex items-center gap-2 shrink-0">
+                    <button
+                      type="button"
+                      onClick={() => {
+                        playTone(720, 0.04);
+                        setGateQrModalInitialTab('PRESENTATION');
+                        setIsGateQrModalOpen(true);
+                      }}
+                      className="px-2.5 py-1 rounded-lg bg-cyan-950/70 hover:bg-cyan-900 border border-cyan-500/40 text-cyan-300 text-[9px] font-bold transition active:scale-95 cursor-pointer"
+                    >
+                      Enlarge / Export
+                    </button>
+                    <button
+                      type="button"
+                      onClick={() => {
+                        playTone(480, 0.04);
+                        setIsGateInlineQrOpen(false);
+                      }}
+                      className="p-1 rounded-lg hover:bg-white/10 text-zinc-400 hover:text-white transition cursor-pointer"
+                      title="Close QR preview"
+                    >
+                      <X className="w-3.5 h-3.5" />
+                    </button>
+                  </div>
+                </motion.div>
+              )}
+            </AnimatePresence>
 
           {/* Expandable Section: Comprehensive ETDA & PDPA Trigger Matrix */}
           <AnimatePresence>

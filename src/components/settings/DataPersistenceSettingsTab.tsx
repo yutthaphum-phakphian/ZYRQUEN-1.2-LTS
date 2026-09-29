@@ -74,14 +74,21 @@ export const DataPersistenceSettingsTab: React.FC<DataPersistenceSettingsTabProp
   const [queuedEvents, setQueuedEvents] = useState<QueuedAuditEvent[]>(() => offlineAuditSyncService.getQueue());
   const [isSyncingQueue, setIsSyncingQueue] = useState<boolean>(false);
   const [lastSyncTimestamp, setLastSyncTimestamp] = useState<string | null>(() => offlineAuditSyncService.getLastSyncTime());
+  const [pendingThreshold, setPendingThreshold] = useState<number>(() => offlineAuditSyncService.getPendingThreshold());
 
   useEffect(() => {
-    const unsub = offlineAuditSyncService.subscribe((count, items) => {
+    const unsubQueue = offlineAuditSyncService.subscribe((count, items) => {
       setQueueCount(count);
       setQueuedEvents(items);
       setLastSyncTimestamp(offlineAuditSyncService.getLastSyncTime());
     });
-    return unsub;
+    const unsubThreshold = offlineAuditSyncService.subscribePendingThreshold((thresh) => {
+      setPendingThreshold(thresh);
+    });
+    return () => {
+      unsubQueue();
+      unsubThreshold();
+    };
   }, []);
 
   // Compute live storage details from browser CacheStorage and navigator.storage
@@ -594,6 +601,71 @@ export const DataPersistenceSettingsTab: React.FC<DataPersistenceSettingsTabProp
           When the system operates disconnected from sovereign satellite relays, audit events are queued in client-side persistence
           and flushed upon reconnection under Thai ETDA Section 26. Use the <strong className="text-cyan-300">Force Sync</strong> button below to manually flush all pending audit logs directly to the primary ledger.
         </p>
+
+        {/* Configurable Pending Log Urgency Threshold Slider */}
+        <div className="p-3.5 rounded-xl bg-black/50 border border-cyan-500/25 space-y-3 font-mono">
+          <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2">
+            <div>
+              <div className="flex items-center gap-2">
+                <span className="text-xs font-bold text-cyan-200">
+                  PENDING LOG URGENCY ALERT THRESHOLD
+                </span>
+                <span className={`px-2 py-0.5 rounded text-[10px] font-bold border ${
+                  queueCount > pendingThreshold
+                    ? 'bg-rose-500/20 text-rose-300 border-rose-500/50 animate-pulse'
+                    : 'bg-cyan-500/15 text-cyan-300 border-cyan-500/30'
+                }`}>
+                  {pendingThreshold} LOGS (CURRENT: {queueCount})
+                </span>
+              </div>
+              <p className="text-[10px] text-zinc-400 mt-0.5">
+                Controls the buffer limit before Verification Gate pending badge triggers the accelerated emergency breathing alert.
+              </p>
+            </div>
+
+            {/* Quick Presets */}
+            <div className="flex items-center gap-1">
+              {[25, 50, 75, 100, 150].map((preset) => (
+                <button
+                  key={preset}
+                  type="button"
+                  onClick={() => {
+                    playTone(680, 0.03);
+                    offlineAuditSyncService.setPendingThreshold(preset);
+                  }}
+                  className={`px-2 py-0.5 rounded text-[9px] font-bold border transition cursor-pointer ${
+                    pendingThreshold === preset
+                      ? 'bg-cyan-500/30 text-cyan-200 border-cyan-400 shadow-[0_0_8px_rgba(6,182,212,0.4)]'
+                      : 'bg-white/5 text-zinc-400 hover:text-zinc-200 border-white/10 hover:border-cyan-500/30'
+                  }`}
+                >
+                  {preset}
+                </button>
+              ))}
+            </div>
+          </div>
+
+          <div className="space-y-1.5">
+            <div className="flex justify-between text-[10px] text-zinc-400">
+              <span>Min Buffer (10 logs)</span>
+              <span className="text-cyan-300 font-bold">{pendingThreshold} Logs Safe Buffer Limit</span>
+              <span>Max Buffer (200 logs)</span>
+            </div>
+            <input
+              type="range"
+              id="input-pending-logs-threshold-slider"
+              min={10}
+              max={200}
+              step={5}
+              value={pendingThreshold}
+              onChange={(e) => {
+                const val = parseInt(e.target.value, 10);
+                offlineAuditSyncService.setPendingThreshold(val);
+              }}
+              className="w-full h-1.5 bg-zinc-800 rounded-lg appearance-none cursor-pointer accent-cyan-400 focus:outline-none"
+            />
+          </div>
+        </div>
 
         <div className="flex flex-wrap items-center gap-3 pt-1">
           {/* Main Force Sync Button */}

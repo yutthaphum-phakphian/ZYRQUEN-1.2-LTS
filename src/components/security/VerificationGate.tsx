@@ -8,6 +8,7 @@ export const VerificationGate: React.FC = () => {
   const [gateStatus, setGateStatus] = useState<'ACTIVE_GUARD' | 'VERIFYING' | 'PASSED'>('ACTIVE_GUARD');
   const [lastCheck, setLastCheck] = useState<string>('05:25:30 UTC');
   const [offlinePendingCount, setOfflinePendingCount] = useState<number>(() => offlineAuditSyncService.getQueueCount());
+  const [pendingThreshold, setPendingThreshold] = useState<number>(() => offlineAuditSyncService.getPendingThreshold());
   const [isGateTooltipVisible, setIsGateTooltipVisible] = useState<boolean>(false);
   const [syncHistory, setSyncHistory] = useState<string[]>(() => offlineAuditSyncService.getSyncHistory());
   const [isCopied, setIsCopied] = useState<boolean>(false);
@@ -20,9 +21,13 @@ export const VerificationGate: React.FC = () => {
     const unsubHistory = offlineAuditSyncService.subscribeSyncHistory((history) => {
       setSyncHistory(history);
     });
+    const unsubThreshold = offlineAuditSyncService.subscribePendingThreshold((thresh) => {
+      setPendingThreshold(thresh);
+    });
     return () => {
       unsub();
       unsubHistory();
+      unsubThreshold();
     };
   }, []);
 
@@ -107,18 +112,18 @@ export const VerificationGate: React.FC = () => {
               />
               <span>{gateStatus}</span>
 
-              {/* Offline Pending Badge (Turns RED if > 50 threshold) */}
+              {/* Offline Pending Badge (Turns RED if > threshold) */}
               {offlinePendingCount > 0 && (
                 <span
                   className={`px-1 py-0.2 rounded-full text-[8px] font-bold uppercase tracking-wider flex items-center gap-0.5 ${
-                    offlinePendingCount > 50
+                    offlinePendingCount > pendingThreshold
                       ? 'bg-rose-500/25 text-rose-200 border border-rose-500/70 pending-badge-breathing-red shadow-[0_0_10px_rgba(244,63,94,0.4)]'
                       : 'bg-amber-500/20 text-amber-300 border border-amber-500/40 pending-badge-breathing'
                   }`}
-                  title={`${offlinePendingCount} offline audit log${offlinePendingCount > 1 ? 's' : ''} pending sync ${offlinePendingCount > 50 ? '(CRITICAL: > 50 Logs)' : ''}`}
+                  title={`${offlinePendingCount} offline audit log${offlinePendingCount > 1 ? 's' : ''} pending sync ${offlinePendingCount > pendingThreshold ? `(CRITICAL: > ${pendingThreshold} Logs Limit)` : ''}`}
                 >
-                  <span className={`w-1 h-1 rounded-full ${offlinePendingCount > 50 ? 'bg-rose-400' : 'bg-amber-400'}`} />
-                  <span>{offlinePendingCount > 50 ? '⚠️ pending' : 'pending'}</span>
+                  <span className={`w-1 h-1 rounded-full ${offlinePendingCount > pendingThreshold ? 'bg-rose-400' : 'bg-amber-400'}`} />
+                  <span>{offlinePendingCount > pendingThreshold ? '⚠️ pending' : 'pending'}</span>
                 </span>
               )}
             </motion.div>

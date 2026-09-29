@@ -930,7 +930,7 @@ export const MerkleRootQrCodeModal: React.FC<MerkleRootQrCodeModalProps> = ({
                         <span className="text-xs font-mono">Generating PQC Signed QR...</span>
                       </div>
                     ) : qrDataUrl ? (
-                      <div className="relative p-2 bg-[#070913] rounded-2xl border border-cyan-500/30 shadow-inner">
+                      <div className="relative p-2 bg-[#070913] rounded-2xl border border-cyan-500/30 shadow-inner qr-code-fade-in-scale-with-pulse">
                         <img
                           src={qrDataUrl}
                           alt="Sovereign Merkle Root QR Code"
