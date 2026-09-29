@@ -1113,6 +1113,7 @@ function SovereignAppContent() {
     sealCount: 14902,
     message: 'Verification Gate Active: Enforcing COMPLIANCE invariant binding before ledger append.',
   });
+  const [offlineQueuedCount, setOfflineQueuedCount] = useState<number>(() => offlineAuditSyncService.getQueueCount());
 
   const TELEMETRY_AUDIT_INTERVAL_SEC = 30;
   const [auditCountdownSec, setAuditCountdownSec] = useState<number>(TELEMETRY_AUDIT_INTERVAL_SEC);
@@ -1453,6 +1454,7 @@ function SovereignAppContent() {
       // 3. Attach Offline Audit Sync listener
       let previousPending = offlineAuditSyncService.getQueueCount();
       const unsubOffline = offlineAuditSyncService.subscribe((count) => {
+        setOfflineQueuedCount(count);
         if (previousPending > 0 && count === 0) {
           showToast(
             `Background Sync: ${previousPending} offline audit logs flushed to sovereign ledger.`,
@@ -2723,16 +2725,43 @@ function SovereignAppContent() {
                     }
                   }}
                 >
-                  <button
+                  <motion.button
                     id="verification-gate-status"
+                    layout
                     type="button"
                     onClick={() => setIsGateDetailsExpanded((prev) => !prev)}
-                    className={`px-2 py-0.5 rounded text-[10px] font-bold border flex items-center gap-1.5 transition-all cursor-pointer ${
+                    initial={false}
+                    animate={{
+                      backgroundColor:
+                        verificationGateStatus.status === 'PASSED' 
+                          ? 'rgba(16, 185, 129, 0.1)' 
+                          : verificationGateStatus.status === 'BLOCKED' 
+                            ? 'rgba(244, 63, 94, 0.2)' 
+                            : 'rgba(6, 182, 212, 0.1)',
+                      borderColor:
+                        verificationGateStatus.status === 'PASSED' 
+                          ? 'rgba(16, 185, 129, 0.3)' 
+                          : verificationGateStatus.status === 'BLOCKED' 
+                            ? 'rgba(244, 63, 94, 0.6)' 
+                            : 'rgba(6, 182, 212, 0.3)',
+                      color:
+                        verificationGateStatus.status === 'PASSED' 
+                          ? 'rgb(110, 231, 183)' 
+                          : verificationGateStatus.status === 'BLOCKED' 
+                            ? 'rgb(254, 205, 211)' 
+                            : 'rgb(103, 232, 249)',
+                    }}
+                    transition={{
+                      layout: { duration: 0.35, ease: [0.4, 0, 0.2, 1] },
+                      duration: 0.45,
+                      ease: [0.25, 0.1, 0.25, 1],
+                    }}
+                    className={`px-2 py-0.5 rounded text-[10px] font-bold border flex items-center gap-1.5 transition-shadow cursor-pointer ${
                       verificationGateStatus.status === 'PASSED' 
-                        ? 'bg-emerald-500/10 text-emerald-300 border-emerald-500/30 hover:bg-emerald-500/20' 
+                        ? 'hover:bg-emerald-500/20' 
                         : verificationGateStatus.status === 'BLOCKED' 
-                          ? 'bg-rose-500/20 text-rose-200 border-rose-500/60 hover:bg-rose-500/30 animate-pulse shadow-[0_0_15px_rgba(244,63,94,0.45)] ring-1 ring-rose-500/50' 
-                          : 'bg-cyan-500/10 text-cyan-300 border-cyan-500/30 hover:bg-cyan-500/20'
+                          ? 'hover:bg-rose-500/30 animate-pulse shadow-[0_0_15px_rgba(244,63,94,0.45)] ring-1 ring-rose-500/50' 
+                          : 'hover:bg-cyan-500/20'
                     }`}
                     title={`10/10 REAL_HSM QUORUM STATUS: ${activeHsmNodes}/10 Nodes Online (${(activeHsmNodes * 10).toFixed(0)}%)\n\nIndividual HSM Nodes Breakdown:\n` +
                       [
@@ -2780,8 +2809,21 @@ function SovereignAppContent() {
                     </svg>
                     <span>{verificationGateStatus.status}</span>
                     <span className="text-[9px] font-mono opacity-85">({(activeHsmNodes * 10).toFixed(0)}%)</span>
+                    
+                    {/* Small 'pending' badge if offline audit logs queued in offlineAuditSyncService */}
+                    {offlineQueuedCount > 0 && (
+                      <span
+                        id="verification-gate-pending-badge"
+                        className="px-1.5 py-0.2 rounded-full bg-amber-500/20 text-amber-300 border border-amber-500/40 text-[8px] font-bold uppercase tracking-wider flex items-center gap-0.5 animate-pulse"
+                        title={`${offlineQueuedCount} offline audit log${offlineQueuedCount > 1 ? 's' : ''} queued in offlineAuditSyncService`}
+                      >
+                        <span className="w-1.5 h-1.5 rounded-full bg-amber-400" />
+                        <span>pending</span>
+                      </span>
+                    )}
+
                     <Info className="w-2.5 h-2.5 opacity-70" />
-                  </button>
+                  </motion.button>
 
                   {/* Quick Pin Toggle on Status Pill */}
                   <button
