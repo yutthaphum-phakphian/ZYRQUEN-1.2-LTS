@@ -30,7 +30,8 @@ export type ViewType =
   | 'sovereign-wallet'
   | 'sovereign'
   | 'ai-workspace'
-  | 'compliance-coverage';
+  | 'compliance-coverage'
+  | 'treasury-variance';
 
 export interface AuditStage {
   id: string;

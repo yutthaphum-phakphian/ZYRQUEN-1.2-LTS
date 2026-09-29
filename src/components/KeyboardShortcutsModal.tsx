@@ -64,6 +64,7 @@ export const KeyboardShortcutsModal: React.FC<KeyboardShortcutsModalProps> = ({
 
   const viewNumberShortcuts = [
     { key: '1', view: 'dashboard' as ViewType, name: 'Dashboard' },
+    { key: 'T', view: 'treasury-variance' as ViewType, name: 'Treasury & SAP Audit' },
     { key: 'U', view: 'unified' as ViewType, name: 'Multiverse Panel' },
     { key: 'H', view: 'heatmap' as ViewType, name: '14.9K Seals Heatmap' },
     { key: 'C', view: 'council' as ViewType, name: 'Council 10/10' },

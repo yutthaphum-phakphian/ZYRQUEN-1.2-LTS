@@ -234,7 +234,7 @@ export const SovereignControlDock: React.FC<SovereignControlDockProps> = ({
                 title="Trigger Sovereign Upgrade Cycle & Epoch #849205 Consensus Audit"
               >
                 <Sparkles className="w-3.5 h-3.5 text-cyan-300 animate-pulse" />
-                <span>🚀 Sovereign Upgrade Cycle (อัปเกรด)</span>
+                <span>🚀 Sovereign Upgrade Cycle</span>
               </button>
             )}
           </div>

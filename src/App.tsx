@@ -113,6 +113,7 @@ const SecurityPipelineView = React.lazy(() => import('@/components/views/Securit
 const ExecutiveCourtBriefing = React.lazy(() => import('@/components/executive/ExecutiveCourtBriefing').then(m => ({ default: m.ExecutiveCourtBriefing })));
 const SovereignWalletView = React.lazy(() => import('@/components/views/SovereignWalletView').then(m => ({ default: m.SovereignWalletView })));
 const SovereignDashboard = React.lazy(() => import('@/pages/SovereignDashboard').then(m => ({ default: m.SovereignDashboard })));
+const TreasuryVarianceDashboard = React.lazy(() => import('@/components/views/TreasuryVarianceDashboard').then(m => ({ default: m.TreasuryVarianceDashboard })));
 import AIWorkspace from '@/components/AIWorkspace';
 import { AuditCertificateModal } from '@/components/AuditCertificateModal';
 import { GitHubPwaModal } from '@/components/GitHubPwaModal';
@@ -387,6 +388,13 @@ const VIEW_PERSONAS: Record<ViewType, ViewPersona> = {
     orb2: 'bg-emerald-600/12',
     orb3: 'bg-purple-600/10',
     accentGlow: 'rgba(6,182,212,0.1)',
+  },
+  'treasury-variance': {
+    name: 'Treasury Variance & SAP ERP Audit Dashboard',
+    orb1: 'bg-emerald-600/18',
+    orb2: 'bg-cyan-600/15',
+    orb3: 'bg-amber-600/12',
+    accentGlow: 'rgba(16,185,129,0.12)',
   },
 };
 
@@ -2261,6 +2269,8 @@ function SovereignAppContent() {
           'X': 'securitypipeline',
           'e': 'briefing',
           'E': 'briefing',
+          't': 'treasury-variance',
+          'T': 'treasury-variance',
         };
 
         if (viewKeyMap[e.key]) {
@@ -2493,6 +2503,13 @@ function SovereignAppContent() {
       case 'compliance-coverage':
         return (
           <ComplianceCoverageView
+            onNavigate={setCurrentView}
+            onAddSystemEvent={addSystemEvent as any}
+          />
+        );
+      case 'treasury-variance':
+        return (
+          <TreasuryVarianceDashboard
             onNavigate={setCurrentView}
             onAddSystemEvent={addSystemEvent as any}
           />

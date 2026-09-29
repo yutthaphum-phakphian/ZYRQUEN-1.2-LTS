@@ -96,6 +96,7 @@ interface NavItem {
 
 export const NAVIGATION_ITEMS: NavItem[] = [
   { id: 'dashboard', labelEn: 'Dashboard', labelTh: 'ศูนย์บัญชาการ', icon: LayoutDashboard, dotColor: '#06B6D4', badge: 'HQ', shortcut: '1' },
+  { id: 'treasury-variance', labelEn: 'Treasury & SAP Audit', labelTh: 'การกระทบยอดคลัง & SAP ERP', icon: Landmark, dotColor: '#10B981', badge: '฿0.00 SSoT', shortcut: 'T' },
   { id: 'sovereign', labelEn: 'Autonomous Self-Tuning Engine', labelTh: 'ศูนย์ควบคุมอัตโนมัติ Phase 11', icon: ShieldAlert, dotColor: '#06B6D4', badge: 'PHASE 11', shortcut: 'V' },
   { id: 'ai-workspace', labelEn: 'AI Workspace', labelTh: 'พื้นที่ทำงาน AI & แซนด์บ็อกซ์', icon: Sparkles, dotColor: '#06B6D4', badge: 'AI BOUNDARY', shortcut: 'M' },
   { id: 'briefing', labelEn: 'Executive & Court', labelTh: 'สรุปผู้บริหาร & ศาล', icon: Landmark, dotColor: '#D4AF37', badge: 'EXECUTIVE', shortcut: 'E' },
