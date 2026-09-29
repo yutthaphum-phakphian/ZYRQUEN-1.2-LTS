@@ -40,6 +40,7 @@ export interface LeftSidebarProps {
   selectedChamberId?: string;
   onSelectChamber?: (id: string) => void;
   liveCryo?: number;
+  onOpenUpgradeCycle?: () => void;
 }
 
 const CHAMBER_ICONS: Record<string, React.ElementType> = {
@@ -72,6 +73,7 @@ export const LeftSidebar: React.FC<LeftSidebarProps> = ({
   selectedChamberId = '00',
   onSelectChamber,
   liveCryo = 14.98,
+  onOpenUpgradeCycle,
 }) => {
   const [activeTab, setActiveTab] = useState<'views' | 'chambers' | 'modules'>('views');
   const [searchQuery, setSearchQuery] = useState('');
@@ -452,6 +454,27 @@ export const LeftSidebar: React.FC<LeftSidebarProps> = ({
                 ))
               )}
             </div>
+
+            {/* Sovereign Upgrade Cycle Quick Action */}
+            {onOpenUpgradeCycle && (
+              <div className="p-3 border-t border-cyan-500/20 bg-cyan-950/20">
+                <button
+                  type="button"
+                  onClick={() => {
+                    playTone(880, 0.06);
+                    onOpenUpgradeCycle();
+                    if (typeof window !== 'undefined' && window.innerWidth < 1024) {
+                      onClose();
+                    }
+                  }}
+                  className="w-full py-2 px-3 rounded-xl bg-gradient-to-r from-cyan-500/20 via-blue-600/30 to-emerald-500/20 hover:from-cyan-500/30 hover:to-emerald-500/30 border border-cyan-400/40 text-cyan-200 hover:text-white font-mono text-xs font-bold flex items-center justify-center gap-2 shadow-[0_0_12px_rgba(6,182,212,0.2)] active:scale-95 transition-all cursor-pointer"
+                  title="Sovereign Consensus Upgrade Cycle (อัปเกรดระบบ)"
+                >
+                  <Sparkles className="w-3.5 h-3.5 text-cyan-300 animate-pulse" />
+                  <span>🚀 Sovereign Upgrade Cycle</span>
+                </button>
+              </div>
+            )}
 
             {/* Emergency Thermal & Quarantine Guard Monitor */}
             <div className="p-3 border-t border-slate-800/80 bg-slate-950/80 text-xs">

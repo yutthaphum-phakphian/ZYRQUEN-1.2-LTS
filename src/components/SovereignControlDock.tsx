@@ -28,6 +28,7 @@ export interface SovereignControlDockProps {
   onToggleZeroDrift?: () => void;
   pqcLevel?: 'DILITHIUM5' | 'KYBER1024';
   onTogglePqcLevel?: () => void;
+  onOpenUpgradeCycle?: () => void;
   className?: string;
 }
 
@@ -43,6 +44,7 @@ export const SovereignControlDock: React.FC<SovereignControlDockProps> = ({
   onToggleZeroDrift,
   pqcLevel: controlledPqc,
   onTogglePqcLevel,
+  onOpenUpgradeCycle,
   className = ''
 }) => {
   const [internalIsOpen, setInternalIsOpen] = useState(false);
@@ -218,6 +220,23 @@ export const SovereignControlDock: React.FC<SovereignControlDockProps> = ({
                 {currentPqc === 'DILITHIUM5' ? 'ML-DSA-87' : 'ML-KEM-1024'}
               </button>
             </div>
+
+            {/* Sovereign Upgrade Cycle Action */}
+            {onOpenUpgradeCycle && (
+              <button
+                type="button"
+                onClick={() => {
+                  triggerVibration('click');
+                  playTone(880, 0.06);
+                  onOpenUpgradeCycle();
+                }}
+                className="w-full mt-1.5 py-2 px-3 rounded-xl bg-gradient-to-r from-cyan-500/20 via-blue-600/25 to-emerald-500/20 hover:from-cyan-500/30 hover:to-emerald-500/30 border border-cyan-500/50 text-cyan-200 hover:text-white font-mono text-xs font-bold flex items-center justify-center gap-2 transition-all shadow-[0_0_15px_rgba(6,182,212,0.25)] active:scale-95 cursor-pointer"
+                title="Trigger Sovereign Upgrade Cycle & Epoch #849205 Consensus Audit"
+              >
+                <Sparkles className="w-3.5 h-3.5 text-cyan-300 animate-pulse" />
+                <span>🚀 Sovereign Upgrade Cycle (อัปเกรด)</span>
+              </button>
+            )}
           </div>
 
           {/* Footer Quick Telemetry Status */}

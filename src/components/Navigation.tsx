@@ -80,6 +80,7 @@ interface NavigationProps {
   onTriggerLoginLoader?: (mode?: 'login' | 'register' | 'switch_tenant') => void;
   isCopilotOpen?: boolean;
   onToggleCopilot?: () => void;
+  onOpenUpgradeCycle?: () => void;
 }
 
 interface NavItem {
@@ -154,6 +155,7 @@ export const Navigation: React.FC<NavigationProps> = ({
   onTriggerLoginLoader,
   isCopilotOpen: externalIsCopilotOpen,
   onToggleCopilot,
+  onOpenUpgradeCycle,
 }) => {
   const [carrierData, setCarrierData] = useState<{ volume: number; wavePath: string; frequency: number }>({
     volume: 0,
@@ -300,9 +302,18 @@ export const Navigation: React.FC<NavigationProps> = ({
               <span className="font-mono font-bold text-xs sm:text-base tracking-widest text-white uppercase whitespace-nowrap">
                 ZYRQUEN <span className="text-cyan-400">Ω∞</span>
               </span>
-              <span className="hidden md:inline-flex px-2 py-0.5 text-[10px] font-mono rounded-full bg-cyan-950/60 text-cyan-300 border-cyan-500/40 shadow-sm shrink-0">
-                FROZEN v1.2 LTS
-              </span>
+              <button
+                type="button"
+                onClick={() => {
+                  playTone(880, 0.05);
+                  onOpenUpgradeCycle?.();
+                }}
+                className="hidden md:inline-flex items-center gap-1 px-2 py-0.5 text-[10px] font-mono rounded-full bg-cyan-950/60 hover:bg-cyan-900/80 text-cyan-300 hover:text-cyan-100 border border-cyan-500/40 hover:border-cyan-400 shadow-sm shrink-0 cursor-pointer transition-all active:scale-95"
+                title="Sovereign Consensus Upgrade Cycle (อัปเกรดระบบ)"
+              >
+                <span>FROZEN v1.2 LTS</span>
+                <span className="text-[9px] px-1 rounded bg-cyan-500/20 text-cyan-200">🚀 อัปเกรด</span>
+              </button>
               <span className="hidden 2xl:inline-flex px-2 py-0.5 text-[10px] font-mono rounded-full bg-emerald-950/60 text-emerald-300 border-emerald-500/40 shadow-sm items-center gap-1.5 shrink-0">
                 <span className="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse" />
                 SSoT MUTATION = 0
@@ -415,6 +426,22 @@ export const Navigation: React.FC<NavigationProps> = ({
 
         {/* Right Actions */}
         <div className="flex items-center gap-1 sm:gap-2 shrink-0">
+          {/* Sovereign Upgrade Cycle Trigger Button */}
+          {onOpenUpgradeCycle && (
+            <button
+              type="button"
+              onClick={() => {
+                playTone(880, 0.05);
+                onOpenUpgradeCycle();
+              }}
+              className="flex md:hidden items-center gap-1 px-2 py-1 rounded-xl bg-gradient-to-r from-cyan-500/25 to-blue-600/25 hover:from-cyan-500/35 hover:to-blue-600/35 border border-cyan-400/50 text-cyan-200 font-mono text-[11px] font-bold shadow-sm active:scale-95 transition-all cursor-pointer shrink-0"
+              title="Sovereign Upgrade Cycle (อัปเกรดระบบ)"
+            >
+              <Sparkles className="w-3.5 h-3.5 text-cyan-300 animate-pulse" />
+              <span>อัปเกรด</span>
+            </button>
+          )}
+
           {/* PWA Install & Copilot Assistant Layer (Sovereign Epoch #849202) Trigger Button */}
           <PWAInstallButton />
 

@@ -436,6 +436,18 @@ export const CANONICAL_COMMANDS: CommandItem[] = [
     severity: 'success',
     timestamp: 'Active Continuous',
   },
+  {
+    id: 'cmd-upgrade-cycle',
+    title: 'Sovereign Upgrade Cycle (อัปเกรดระบบ)',
+    subtitle: 'Artifact State Audit & Epoch #849205 Binding',
+    description: 'รันการตรวจสอบฉันทามติ 5 ขั้นตอน (Digest, Diff, HSM Quorum, Telemetry, Canonical Anchor) เพื่ออัปเกรดสู่ Epoch Block #849205',
+    category: 'legal',
+    icon: Sparkles,
+    tags: ['upgrade', 'update', 'epoch', 'promotion', 'cycle', 'อัปเกรด', '849205'],
+    status: 'READY TO RUN',
+    severity: 'info',
+    actionPayload: 'trigger-upgrade-cycle',
+  },
 ];
 
 interface GlobalCommandSearchProps {
@@ -445,6 +457,7 @@ interface GlobalCommandSearchProps {
   onExecuteLegalAction?: (actionId: string) => void;
   onShowEventDetail?: (eventItem: CommandItem) => void;
   onExportPDF?: () => void;
+  onOpenUpgradeCycle?: () => void;
 }
 
 export const GlobalCommandSearch: React.FC<GlobalCommandSearchProps> = ({
@@ -454,6 +467,7 @@ export const GlobalCommandSearch: React.FC<GlobalCommandSearchProps> = ({
   onExecuteLegalAction,
   onShowEventDetail,
   onExportPDF,
+  onOpenUpgradeCycle,
 }) => {
   const [internalIsOpen, setInternalIsOpen] = useState(false);
   const [query, setQuery] = useState('');
@@ -579,6 +593,9 @@ export const GlobalCommandSearch: React.FC<GlobalCommandSearchProps> = ({
 
     if (cmd.category === 'navigation' && cmd.targetView) {
       if (onSelectView) onSelectView(cmd.targetView);
+      handleClose();
+    } else if (cmd.actionPayload === 'trigger-upgrade-cycle' && onOpenUpgradeCycle) {
+      onOpenUpgradeCycle();
       handleClose();
     } else if (cmd.category === 'legal') {
       if (cmd.actionPayload === 'export-dossier-pdf' && onExportPDF) {
