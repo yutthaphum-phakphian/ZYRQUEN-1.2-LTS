@@ -852,6 +852,31 @@ async function startServer() {
     });
   });
 
+  app.post('/api/admin/users', (req: Request, res: Response) => {
+    const { username, email, role } = req.body || {};
+    if (!username || !email) {
+      return res.status(400).json({ error: 'MISSING_FIELDS', message: 'Username and email are required.' });
+    }
+    if (role === 'owner') {
+      return res.status(403).json({ error: 'OWNER_IMMUTABLE', message: 'Only a single sovereign project owner is permitted by cryptographic invariant.' });
+    }
+    const newUser = {
+      id: `usr_sec_${Date.now().toString(36)}`,
+      username: String(username).trim(),
+      email: String(email).trim(),
+      role: role === 'admin' ? 'admin' : 'user',
+      createdAt: new Date().toISOString(),
+      lastActiveUtc: new Date().toISOString(),
+      status: 'active' as const,
+    };
+    adminUsersDirectory.push(newUser);
+    res.status(201).json({
+      status: 'SUCCESS',
+      message: `New principal ${newUser.username} registered with role ${newUser.role.toUpperCase()}.`,
+      user: newUser,
+    });
+  });
+
   // POST /api/copilot/chat (Sovereign Coding & System Assistant Copilot Bridge)
   app.post('/api/copilot/chat', async (req: Request, res: Response) => {
     const { message, context } = req.body || {};
