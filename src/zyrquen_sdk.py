@@ -4,8 +4,14 @@ import os
 import time
 from dataclasses import dataclass, field
 from typing import Any, Dict, List
+import urllib.request
+import urllib.error
 
-import requests
+try:
+    import requests
+    _HAS_REQUESTS = True
+except ImportError:
+    _HAS_REQUESTS = False
 
 logger = logging.getLogger(__name__)
 
@@ -38,37 +44,56 @@ class ZyrquenConfig:
 class ZyrquenPythonSDK:
     def __init__(self, config: ZyrquenConfig | None = None):
         self.config = config or ZyrquenConfig()
-        self.session = requests.Session()
-        self.session.headers.update(
-            {
-                "Authorization": f"Bearer {self.config.api_key}",
-                "X-Sovereign-Principal": self.config.sovereign_id,
-                "X-PQC-Algorithm": "ML-DSA-87",
-                "Content-Type": "application/json",
-            }
-        )
+        self.headers = {
+            "Authorization": f"Bearer {self.config.api_key}",
+            "X-Sovereign-Principal": self.config.sovereign_id,
+            "X-PQC-Algorithm": "ML-DSA-87",
+            "Content-Type": "application/json",
+        }
+        if _HAS_REQUESTS:
+            self.session = requests.Session()
+            self.session.headers.update(self.headers)
+        else:
+            self.session = None
 
     def _request(self, method: str, endpoint: str, **kwargs: Any) -> Dict[str, Any]:
         url = f"{self.config.gateway_url.rstrip('/')}/{endpoint.lstrip('/')}"
-        response = self.session.request(
-            method=method,
-            url=url,
-            timeout=self.config.timeout_seconds,
-            **kwargs,
-        )
-        try:
-            response.raise_for_status()
-        except requests.HTTPError as exc:
-            raise RuntimeError(
-                f"Request failed for {method.upper()} {url}: "
-                f"{response.status_code} {response.text}"
-            ) from exc
+        if _HAS_REQUESTS and self.session is not None:
+            response = self.session.request(
+                method=method,
+                url=url,
+                timeout=self.config.timeout_seconds,
+                **kwargs,
+            )
+            try:
+                response.raise_for_status()
+            except requests.HTTPError as exc:
+                raise RuntimeError(
+                    f"Request failed for {method.upper()} {url}: "
+                    f"{response.status_code} {response.text}"
+                ) from exc
 
-        try:
-            payload = response.json()
-        except ValueError as exc:
-            raise RuntimeError(f"Invalid JSON returned from {url}: {response.text}") from exc
-        return payload
+            try:
+                payload = response.json()
+            except ValueError as exc:
+                raise RuntimeError(f"Invalid JSON returned from {url}: {response.text}") from exc
+            return payload
+        else:
+            req = urllib.request.Request(url, headers=self.headers, method=method.upper())
+            json_data = kwargs.get("json")
+            if json_data is not None:
+                req.data = json.dumps(json_data).encode("utf-8")
+            try:
+                with urllib.request.urlopen(req, timeout=self.config.timeout_seconds) as resp:
+                    data = resp.read().decode("utf-8")
+                    return json.loads(data)
+            except urllib.error.HTTPError as exc:
+                err_text = exc.read().decode("utf-8") if exc.fp else ""
+                raise RuntimeError(f"Request failed for {method.upper()} {url}: {exc.code} {err_text}") from exc
+            except urllib.error.URLError as exc:
+                raise RuntimeError(f"Request failed for {method.upper()} {url}: {exc.reason}") from exc
+            except json.JSONDecodeError as exc:
+                raise RuntimeError(f"Invalid JSON returned from {url}") from exc
 
     def verify_quantum_radar(self) -> Dict[str, Any]:
         start = time.perf_counter()
