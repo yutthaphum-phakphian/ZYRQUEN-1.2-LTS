@@ -160,6 +160,7 @@ export const VerificationGate: React.FC = () => {
                       <div className="flex items-center gap-1">
                         <button
                           type="button"
+                          id="btn-refresh-sync-history-logs-gate"
                           onClick={(e) => {
                             e.stopPropagation();
                             playTone(660, 0.04);
@@ -169,10 +170,10 @@ export const VerificationGate: React.FC = () => {
                             setTimeout(() => setIsRefreshing(false), 500);
                           }}
                           className="px-1.5 py-0.2 rounded bg-zinc-900 border border-zinc-700 text-zinc-300 hover:text-white text-[7.5px] font-bold flex items-center gap-0.5 cursor-pointer pointer-events-auto"
-                          title="Refresh Sync History"
+                          title="Refresh Sync History from offlineAuditSyncService"
                         >
                           <RefreshCw className={`w-2 h-2 text-cyan-400 ${isRefreshing ? 'animate-spin' : ''}`} />
-                          <span>Refresh</span>
+                          <span>Refresh Log</span>
                         </button>
                         <button
                           type="button"
