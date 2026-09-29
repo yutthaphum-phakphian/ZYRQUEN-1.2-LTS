@@ -25,3 +25,6 @@ cloud-workspace-command-center/
 .aistudio/
 
 >>>>>>> 7ac074a8c3e45abf1566a4b8ba5538579dc45192
+# generated forensic heatmaps - runtime only
+ZYRQUEN_Heatmap*.pdf
+archive/heatmap/
