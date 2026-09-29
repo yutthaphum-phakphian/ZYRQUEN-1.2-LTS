@@ -143,7 +143,7 @@ export const VerificationGate: React.FC = () => {
                     opacity: { duration: 0.22, ease: 'easeOut' },
                     y: { duration: 0.3, ease: 'easeOut' },
                   }}
-                  className="absolute right-0 top-full mt-2 z-50 w-72 p-3 rounded-xl bg-slate-950/95 border border-cyan-500/40 shadow-2xl backdrop-blur-xl text-[10px] text-zinc-300 space-y-2 pointer-events-none"
+                  className="absolute right-0 top-full mt-2 z-50 w-72 p-3 rounded-xl bg-slate-950/95 border border-cyan-500/40 shadow-2xl backdrop-blur-xl text-[10px] text-zinc-300 space-y-2 pointer-events-auto"
                 >
                   <div className="flex items-center justify-between border-b border-white/10 pb-1.5 font-bold">
                     <span className="text-cyan-300 flex items-center gap-1">
@@ -154,6 +154,33 @@ export const VerificationGate: React.FC = () => {
                       SSoT Δ0.00%
                     </span>
                   </div>
+
+                  {/* Pending Offline Queue Flush Action */}
+                  {offlinePendingCount > 0 && (
+                    <div className="p-2 rounded-lg bg-amber-950/40 border border-amber-500/30 flex items-center justify-between gap-2">
+                      <div className="flex items-center gap-1.5 min-w-0">
+                        <span className="w-2 h-2 rounded-full bg-amber-400 animate-pulse shrink-0" />
+                        <span className="text-amber-200 font-bold truncate">
+                          {offlinePendingCount} Offline Logs
+                        </span>
+                      </div>
+                      <button
+                        type="button"
+                        id="btn-gate-flush-sync"
+                        onClick={async (e) => {
+                          e.stopPropagation();
+                          playTone(720, 0.04);
+                          setIsRefreshing(true);
+                          await offlineAuditSyncService.flushQueue(true);
+                          setIsRefreshing(false);
+                        }}
+                        className="px-2 py-0.5 rounded bg-amber-500/25 hover:bg-amber-500/40 border border-amber-500/50 text-amber-200 text-[8px] font-bold flex items-center gap-1 cursor-pointer transition-all shrink-0"
+                      >
+                        <RefreshCw className={`w-2.5 h-2.5 ${isRefreshing ? 'animate-spin' : ''}`} />
+                        <span>Force Sync</span>
+                      </button>
+                    </div>
+                  )}
 
                   {/* Sync History Log Section */}
                   <div className="space-y-1">
