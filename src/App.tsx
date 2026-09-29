@@ -34,6 +34,8 @@ import {
   FileDown,
   Pin,
   PinOff,
+  Minimize2,
+  Maximize2,
   QrCode,
   Settings,
   Sparkles,
@@ -1237,6 +1239,7 @@ function SovereignAppContent() {
   const [isGateDetailsExpanded, setIsGateDetailsExpanded] = useState<boolean>(false);
   const [isGateTooltipVisible, setIsGateTooltipVisible] = useState<boolean>(false);
   const [isGateTooltipPinned, setIsGateTooltipPinned] = useState<boolean>(false);
+  const [isGateTooltipMinimized, setIsGateTooltipMinimized] = useState<boolean>(false);
   const [isAutoSyncEnabled, setIsAutoSyncEnabled] = useState<boolean>(() => offlineAuditSyncService.isAutoSyncEnabled());
   const [syncHistory, setSyncHistory] = useState<string[]>(() => offlineAuditSyncService.getSyncHistory());
   const [isSyncLogsCopied, setIsSyncLogsCopied] = useState<boolean>(false);
@@ -3416,7 +3419,14 @@ function SovereignAppContent() {
                     onClick={(e) => {
                       e.stopPropagation();
                       playTone(isGateTooltipPinned ? 520 : 780, 0.05);
-                      setIsGateTooltipPinned((prev) => !prev);
+                      setIsGateTooltipPinned((prev) => {
+                        const next = !prev;
+                        if (!next) {
+                          setIsGateTooltipVisible(false);
+                          setIsGateTooltipMinimized(false);
+                        }
+                        return next;
+                      });
                       setIsGateTooltipVisible(true);
                     }}
                     className={`p-1 rounded transition-all cursor-pointer border ${
@@ -3448,14 +3458,18 @@ function SovereignAppContent() {
                           opacity: { duration: 0.22, ease: 'easeOut' },
                           y: { duration: 0.3, ease: [0.16, 1, 0.3, 1] },
                         }}
-                        className={`absolute left-0 top-full mt-2.5 z-50 w-80 sm:w-[480px] p-4 rounded-2xl bg-[#070914]/98 border backdrop-blur-2xl transition-all duration-200 pointer-events-auto ${
+                        className={`absolute left-0 top-full mt-2.5 z-50 w-[calc(100vw-28px)] sm:w-[480px] max-w-[480px] p-4 rounded-2xl bg-[#070914]/98 border backdrop-blur-2xl transition-all duration-200 pointer-events-auto ${
+                          isGateTooltipMinimized
+                            ? 'max-h-auto shadow-[0_10px_30px_rgba(0,0,0,0.85)]'
+                            : 'max-h-[72vh] sm:max-h-[78vh] overflow-y-auto custom-scrollbar'
+                        } ${
                           isGateTooltipPinned
                             ? 'border-cyan-400/80 shadow-[0_0_35px_rgba(6,182,212,0.35),0_25px_60px_rgba(0,0,0,0.95)] ring-1 ring-cyan-400/50'
                             : 'border-cyan-500/40 shadow-[0_20px_50px_rgba(0,0,0,0.85)] hover:border-cyan-400/60'
                         } text-[11px] font-sans text-zinc-300`}
                       >
                         {/* Header with Title, Badges, Pin & Close Controls */}
-                        <div className="flex items-center justify-between pb-2 mb-2.5 border-b border-white/10 font-mono text-[11px] gap-2">
+                        <div className={`sticky -top-4 -mx-4 -mt-4 px-4 pt-3 pb-2.5 ${isGateTooltipMinimized ? 'mb-0 border-b-0' : 'mb-2.5 border-b border-white/10'} bg-[#070914]/98 backdrop-blur-xl z-20 flex items-center justify-between font-mono text-[11px] gap-2 rounded-t-2xl shadow-md`}>
                           <div className="flex items-center gap-2 min-w-0">
                             <div className="p-1.5 rounded-lg bg-emerald-500/10 border border-emerald-500/30 text-emerald-400 shrink-0">
                               <ShieldCheck className="w-4 h-4" />
@@ -3539,13 +3553,40 @@ function SovereignAppContent() {
                               SSoT Δ0.00%
                             </span>
 
+                            {/* Minimize / Expand Toggle Button when Pinned */}
+                            {isGateTooltipPinned && (
+                              <button
+                                type="button"
+                                onClick={(e) => {
+                                  e.stopPropagation();
+                                  playTone(isGateTooltipMinimized ? 720 : 520, 0.04);
+                                  setIsGateTooltipMinimized((prev) => !prev);
+                                }}
+                                className="p-1 rounded-lg bg-white/5 hover:bg-cyan-500/20 text-zinc-400 hover:text-cyan-300 border border-white/10 hover:border-cyan-500/30 transition-colors cursor-pointer"
+                                title={isGateTooltipMinimized ? 'Expand full verification details' : 'Minimize pinned summary (prevents covering screen)'}
+                              >
+                                {isGateTooltipMinimized ? (
+                                  <Maximize2 className="w-3.5 h-3.5 text-cyan-300" />
+                                ) : (
+                                  <Minimize2 className="w-3.5 h-3.5 text-zinc-400" />
+                                )}
+                              </button>
+                            )}
+
                             {/* Pin / Unpin Button */}
                             <button
                               type="button"
                               onClick={(e) => {
                                 e.stopPropagation();
                                 playTone(isGateTooltipPinned ? 520 : 780, 0.05);
-                                setIsGateTooltipPinned((prev) => !prev);
+                                setIsGateTooltipPinned((prev) => {
+                                  const next = !prev;
+                                  if (!next) {
+                                    setIsGateTooltipVisible(false);
+                                    setIsGateTooltipMinimized(false);
+                                  }
+                                  return next;
+                                });
                               }}
                               className={`px-2 py-1 rounded-lg border text-xs flex items-center gap-1 transition-all cursor-pointer ${
                                 isGateTooltipPinned
@@ -3580,6 +3621,7 @@ function SovereignAppContent() {
                                   playTone(500, 0.04);
                                   setIsGateTooltipPinned(false);
                                   setIsGateTooltipVisible(false);
+                                  setIsGateTooltipMinimized(false);
                                 }}
                                 className="p-1 rounded-lg bg-white/5 hover:bg-rose-500/20 text-zinc-400 hover:text-rose-300 border border-white/10 hover:border-rose-500/30 transition-colors cursor-pointer"
                                 title="Close pinned tooltip"
@@ -3590,22 +3632,46 @@ function SovereignAppContent() {
                           </div>
                         </div>
 
-                        {/* Description */}
-                        <p className="text-zinc-300 text-[11px] leading-relaxed mb-2.5">
-                          {verificationGateStatus.message}
-                        </p>
-
-                        {/* Node Health Details & Last Synchronization Timestamp Bar */}
-                        <div className="p-2.5 rounded-xl bg-gradient-to-r from-cyan-950/40 via-slate-900/60 to-emerald-950/40 border border-cyan-500/30 mb-2.5 space-y-1.5 font-mono text-[9.5px]">
-                          <div className="flex items-center justify-between text-zinc-300 pb-1 border-b border-white/5">
-                            <span className="flex items-center gap-1.5 text-cyan-300 font-bold">
-                              <Activity className="w-3 h-3 text-cyan-400" />
-                              NODE HEALTH &amp; TELEMETRY
-                            </span>
-                            <span className="px-1.5 py-0.2 rounded bg-emerald-500/20 text-emerald-300 border border-emerald-500/30 font-bold text-[8.5px]">
-                              {activeHsmNodes}/10 ONLINE ({((activeHsmNodes / 10) * 100).toFixed(0)}%)
-                            </span>
+                        {/* If Minimized: Show Slim Compact Bar */}
+                        {isGateTooltipMinimized ? (
+                          <div className="pt-1 flex items-center justify-between gap-2 font-mono text-[10px]">
+                            <div className="flex items-center gap-2 min-w-0">
+                              <span className="w-2 h-2 rounded-full bg-emerald-400 animate-pulse shrink-0" />
+                              <span className="text-emerald-300 font-bold truncate">10/10 HSM Quorum Verified</span>
+                              <span className="text-zinc-500 hidden sm:inline">•</span>
+                              <span className="text-cyan-300 truncate hidden sm:inline">14,902 Seals (Δ0.00%)</span>
+                            </div>
+                            <button
+                              type="button"
+                              onClick={(e) => {
+                                e.stopPropagation();
+                                playTone(680, 0.04);
+                                setIsGateTooltipMinimized(false);
+                              }}
+                              className="px-2 py-0.5 rounded bg-cyan-500/20 hover:bg-cyan-500/30 border border-cyan-400/40 text-cyan-200 text-[9px] font-bold flex items-center gap-1 cursor-pointer shrink-0"
+                            >
+                              <span>Expand Details</span>
+                              <ChevronDown className="w-3 h-3" />
+                            </button>
                           </div>
+                        ) : (
+                          <>
+                            {/* Description */}
+                            <p className="text-zinc-300 text-[11px] leading-relaxed mb-2.5">
+                              {verificationGateStatus.message}
+                            </p>
+
+                            {/* Node Health Details & Last Synchronization Timestamp Bar */}
+                            <div className="p-2.5 rounded-xl bg-gradient-to-r from-cyan-950/40 via-slate-900/60 to-emerald-950/40 border border-cyan-500/30 mb-2.5 space-y-1.5 font-mono text-[9.5px]">
+                              <div className="flex items-center justify-between text-zinc-300 pb-1 border-b border-white/5">
+                                <span className="flex items-center gap-1.5 text-cyan-300 font-bold">
+                                  <Activity className="w-3 h-3 text-cyan-400" />
+                                  NODE HEALTH &amp; TELEMETRY
+                                </span>
+                                <span className="px-1.5 py-0.2 rounded bg-emerald-500/20 text-emerald-300 border border-emerald-500/30 font-bold text-[8.5px]">
+                                  {activeHsmNodes}/10 ONLINE ({((activeHsmNodes / 10) * 100).toFixed(0)}%)
+                                </span>
+                              </div>
                           <div className="grid grid-cols-2 gap-1.5 text-[9px] text-zinc-400">
                             <div>
                               <span className="text-zinc-500 block text-[7.5px] uppercase">Cryo &amp; Latency</span>
@@ -4927,9 +4993,11 @@ function SovereignAppContent() {
                             ? 'Pinned mode active • You can browse other screens while keeping this visible'
                             : 'Click status pill or ETDA/PDPA button to expand trigger matrix ↓'}
                         </p>
-                      </motion.div>
+                      </>
                     )}
-                  </AnimatePresence>
+                  </motion.div>
+                )}
+              </AnimatePresence>
                 </div>
               </div>
 

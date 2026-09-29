@@ -143,7 +143,7 @@ export const VerificationGate: React.FC = () => {
                     opacity: { duration: 0.22, ease: 'easeOut' },
                     y: { duration: 0.3, ease: 'easeOut' },
                   }}
-                  className="absolute right-0 top-full mt-2 z-50 w-72 p-3 rounded-xl bg-slate-950/95 border border-cyan-500/40 shadow-2xl backdrop-blur-xl text-[10px] text-zinc-300 space-y-2 pointer-events-auto"
+                  className="absolute right-0 top-full mt-2 z-50 w-[calc(100vw-32px)] sm:w-72 max-w-sm max-h-[70vh] overflow-y-auto custom-scrollbar p-3 rounded-xl bg-slate-950/95 border border-cyan-500/40 shadow-2xl backdrop-blur-xl text-[10px] text-zinc-300 space-y-2 pointer-events-auto"
                 >
                   <div className="flex items-center justify-between border-b border-white/10 pb-1.5 font-bold">
                     <span className="text-cyan-300 flex items-center gap-1">
