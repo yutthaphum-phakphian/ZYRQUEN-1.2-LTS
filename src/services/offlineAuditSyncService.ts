@@ -70,9 +70,15 @@ class OfflineAuditSyncService {
         }
       }
 
-      // Initialize Auto-Sync timer if enabled
+      // Initialize Auto-Sync timer if enabled (default ON)
       if (this.isAutoSyncEnabled()) {
         this.startAutoSyncTimer();
+        // If already online and items pending in queue, flush automatically without user intervention
+        if (typeof navigator !== 'undefined' && navigator.onLine && this.getQueueCount() > 0) {
+          setTimeout(() => {
+            this.flushQueue(false);
+          }, 1200);
+        }
       }
     }
   }
@@ -219,6 +225,16 @@ class OfflineAuditSyncService {
     this.registerBackgroundSync(item);
 
     console.log(`[OfflineAuditSync] Queued event: ${item.title} (Queue depth: ${queue.length})`);
+
+    // If online and auto-sync is enabled by default, schedule automatic queue flush without user intervention
+    if (typeof navigator !== 'undefined' && navigator.onLine && this.isAutoSyncEnabled() && !this.isFlushing) {
+      setTimeout(() => {
+        if (navigator.onLine && !this.isFlushing && this.getQueueCount() > 0) {
+          this.flushQueue(false);
+        }
+      }, 1500);
+    }
+
     return item;
   }
 
@@ -344,13 +360,13 @@ class OfflineAuditSyncService {
   }
 
   /**
-   * Checks if Scheduled Auto-Sync is enabled
+   * Checks if Scheduled Auto-Sync is enabled (defaults to true)
    */
   public isAutoSyncEnabled(): boolean {
     if (typeof window === 'undefined') return true;
     try {
       const val = localStorage.getItem(AUTO_SYNC_KEY);
-      return val === null ? true : val === 'true';
+      return val === null || val === undefined ? true : val !== 'false';
     } catch {
       return true;
     }

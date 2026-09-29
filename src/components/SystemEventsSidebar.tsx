@@ -253,6 +253,7 @@ export const SystemEventsSidebar: React.FC<SystemEventsSidebarProps> = ({
   highlightPending = false,
 }) => {
   const [filter, setFilter] = useState<SystemEventFilterType>(() => initialFilter || 'ALL');
+  const [severityFilter, setSeverityFilter] = useState<'ALL' | 'critical' | 'warning' | 'success' | 'info'>('ALL');
   const [isHighlightedPending, setIsHighlightedPending] = useState<boolean>(false);
   const [searchQuery, setSearchQuery] = useState<string>('');
   const [copiedId, setCopiedId] = useState<string | null>(null);
@@ -262,6 +263,10 @@ export const SystemEventsSidebar: React.FC<SystemEventsSidebarProps> = ({
   const [isBulkAffirmed, setIsBulkAffirmed] = useState<boolean>(false);
   const [selectedIds, setSelectedIds] = useState<Set<string>>(new Set());
   const [tickerTime, setTickerTime] = useState<number>(() => Date.now());
+
+  // Pagination & Lazy-Loading State
+  const [currentPage, setCurrentPage] = useState<number>(1);
+  const [pageSize, setPageSize] = useState<number>(15);
 
   // Batch Cryptographic Export Verification Toast State
   const [batchVerificationResult, setBatchVerificationResult] = useState<{
@@ -278,6 +283,12 @@ export const SystemEventsSidebar: React.FC<SystemEventsSidebarProps> = ({
   const [lastNotificationStatus, setLastNotificationStatus] = useState<string | null>(null);
   const [isNotificationPanelOpen, setIsNotificationPanelOpen] = useState<boolean>(false);
   const [auditDownloadedToast, setAuditDownloadedToast] = useState<boolean>(false);
+  const [auditPdfPreviewUrl, setAuditPdfPreviewUrl] = useState<string | null>(null);
+
+  // Reset page when filter or search changes
+  useEffect(() => {
+    setCurrentPage(1);
+  }, [filter, severityFilter, searchQuery, pageSize]);
 
   // Effect to apply initialFilter and temporary highlight for PENDING logs
   useEffect(() => {
@@ -349,33 +360,51 @@ export const SystemEventsSidebar: React.FC<SystemEventsSidebarProps> = ({
     return counts;
   }, [mergedEvents]);
 
-  // Filtered events based on selected filter dropdown & text search query (title or statute reference)
-  const filteredEvents = mergedEvents.filter((ev) => {
-    // 1. Category Filter Match
-    let categoryMatch = true;
-    if (filter === 'PENDING') {
-      categoryMatch = ev.bindingStatus === 'PENDING';
-    } else if (filter === 'COMPLIANCE') {
-      categoryMatch = ev.type === 'COMPLIANCE' || ev.type === 'LEGAL_SEARCH' || Boolean(ev.isComplianceDrift);
-    } else if (filter === 'ANOMALY') {
-      categoryMatch = ev.type === 'ANOMALY' || ev.severity === 'critical' || ev.severity === 'warning';
-    } else if (filter !== 'ALL') {
-      categoryMatch = ev.type === filter;
-    }
-    if (!categoryMatch) return false;
+  // Filtered events based on selected filter dropdown, severity filter & real-time text search query
+  const filteredEvents = React.useMemo(() => {
+    return mergedEvents.filter((ev) => {
+      // 1. Category Filter Match
+      let categoryMatch = true;
+      if (filter === 'PENDING') {
+        categoryMatch = ev.bindingStatus === 'PENDING';
+      } else if (filter === 'COMPLIANCE') {
+        categoryMatch = ev.type === 'COMPLIANCE' || ev.type === 'LEGAL_SEARCH' || Boolean(ev.isComplianceDrift);
+      } else if (filter === 'ANOMALY') {
+        categoryMatch = ev.type === 'ANOMALY' || ev.severity === 'critical' || ev.severity === 'warning';
+      } else if (filter !== 'ALL') {
+        categoryMatch = ev.type === filter;
+      }
+      if (!categoryMatch) return false;
 
-    // 2. Text Search Query Match (Title or Statute Reference or Description)
-    if (searchQuery.trim()) {
-      const q = searchQuery.trim().toLowerCase();
-      const titleMatches = ev.title ? ev.title.toLowerCase().includes(q) : false;
-      const statuteMatches = ev.statuteRef ? ev.statuteRef.toLowerCase().includes(q) : false;
-      const descMatches = ev.description ? ev.description.toLowerCase().includes(q) : false;
-      const metaMatches = ev.metaHash ? ev.metaHash.toLowerCase().includes(q) : false;
-      return titleMatches || statuteMatches || descMatches || metaMatches;
-    }
+      // 2. Severity Level Filter Match
+      if (severityFilter !== 'ALL') {
+        if (ev.severity !== severityFilter) return false;
+      }
 
-    return true;
-  });
+      // 3. Text Search Query Match (Title, Statute Reference, Description, MetaHash, Severity, or Type)
+      if (searchQuery.trim()) {
+        const q = searchQuery.trim().toLowerCase();
+        const titleMatches = ev.title ? ev.title.toLowerCase().includes(q) : false;
+        const statuteMatches = ev.statuteRef ? ev.statuteRef.toLowerCase().includes(q) : false;
+        const descMatches = ev.description ? ev.description.toLowerCase().includes(q) : false;
+        const metaMatches = ev.metaHash ? ev.metaHash.toLowerCase().includes(q) : false;
+        const severityMatches = ev.severity ? ev.severity.toLowerCase().includes(q) : false;
+        const typeMatches = ev.type ? ev.type.toLowerCase().includes(q) : false;
+        return titleMatches || statuteMatches || descMatches || metaMatches || severityMatches || typeMatches;
+      }
+
+      return true;
+    });
+  }, [mergedEvents, filter, severityFilter, searchQuery]);
+
+  // Pagination Slice Calculation
+  const totalPages = Math.max(1, Math.ceil(filteredEvents.length / pageSize));
+  const effectivePage = Math.min(currentPage, totalPages);
+  const startIndex = (effectivePage - 1) * pageSize;
+  const paginatedEvents = React.useMemo(() => {
+    if (pageSize >= 1000) return filteredEvents;
+    return filteredEvents.slice(startIndex, startIndex + pageSize);
+  }, [filteredEvents, startIndex, pageSize]);
 
   // Calculate 60-second rolling event frequency sparkline (12 buckets of 5 seconds each)
   const sparklineData = React.useMemo(() => {
@@ -1172,9 +1201,11 @@ export const SystemEventsSidebar: React.FC<SystemEventsSidebarProps> = ({
                 onClick={() => {
                   triggerVibration('auditReport');
                   playTone(840, 0.05);
-                  generateAndDownloadFullAuditPdfReport({ events, isForensicAuditMode });
+                  const result = generateAndDownloadFullAuditPdfReport({ events, isForensicAuditMode });
+                  const url = (result as any)?.previewUrl || null;
+                  setAuditPdfPreviewUrl(url);
                   setAuditDownloadedToast(true);
-                  setTimeout(() => setAuditDownloadedToast(false), 4000);
+                  setTimeout(() => setAuditDownloadedToast(false), 8000);
                 }}
                 className="w-full py-2 px-3 rounded-xl bg-gradient-to-r from-purple-600 via-indigo-600 to-cyan-600 hover:from-purple-500 hover:to-cyan-500 text-white font-bold text-xs flex items-center justify-center gap-2 shadow-[0_0_15px_rgba(168,85,247,0.35)] active:scale-[0.98] transition-all cursor-pointer"
                 title="Generate signed PDF file of the current session audit logs using jsPDF and auto-download it"
@@ -1183,9 +1214,40 @@ export const SystemEventsSidebar: React.FC<SystemEventsSidebarProps> = ({
                 <span>Download Full Audit Report (Signed PDF)</span>
               </button>
               {auditDownloadedToast && (
-                <div className="p-1.5 rounded-lg bg-emerald-500/15 border-emerald-500/30 text-[10px] text-emerald-300 text-center font-mono flex items-center justify-center gap-1 animate-in fade-in">
-                  <Check className="w-3 h-3" />
-                  <span>Audit report downloaded & signed via Dilithium-5</span>
+                <div className="p-2.5 rounded-xl bg-emerald-950/80 border border-emerald-500/50 text-[11px] text-emerald-200 font-mono space-y-2 animate-in fade-in slide-in-from-top-1 shadow-[0_0_15px_rgba(16,185,129,0.25)]">
+                  <div className="flex items-center justify-between">
+                    <span className="flex items-center gap-1.5 font-bold text-emerald-300">
+                      <Check className="w-3.5 h-3.5 text-emerald-400" />
+                      <span>Audit PDF Generated &amp; Signed</span>
+                    </span>
+                    <span className="text-[9px] px-1.5 py-0.2 rounded bg-emerald-500/20 text-emerald-300 border border-emerald-500/30">
+                      ML-DSA-87
+                    </span>
+                  </div>
+                  <div className="flex items-center gap-2 pt-0.5">
+                    {auditPdfPreviewUrl && (
+                      <button
+                        type="button"
+                        id="btn-view-pdf-preview"
+                        onClick={() => {
+                          playTone(720, 0.04);
+                          window.open(auditPdfPreviewUrl, '_blank');
+                        }}
+                        className="px-3 py-1 rounded-lg bg-emerald-500/30 hover:bg-emerald-500/45 text-white font-bold text-xs border border-emerald-400/60 flex items-center gap-1.5 transition-all shadow-sm active:scale-95 cursor-pointer"
+                        title="Open generated PDF report in a new tab"
+                      >
+                        <Eye className="w-3.5 h-3.5 text-emerald-300" />
+                        <span>View PDF</span>
+                      </button>
+                    )}
+                    <button
+                      type="button"
+                      onClick={() => setAuditDownloadedToast(false)}
+                      className="px-2 py-1 rounded-lg bg-white/5 hover:bg-white/10 text-zinc-400 hover:text-white text-xs transition-colors ml-auto cursor-pointer"
+                    >
+                      Dismiss
+                    </button>
+                  </div>
                 </div>
               )}
             </div>
@@ -1195,18 +1257,20 @@ export const SystemEventsSidebar: React.FC<SystemEventsSidebarProps> = ({
 
       {/* Event Filter Dropdown, Search Input & Quick Selector */}
       <div className="px-4 py-2.5 border-b border-white/8 bg-[#080c18] space-y-2.5">
-        {/* Text-based Filter Input (Title or Statute Reference) */}
+        {/* Text-based Filter Input (Title, Statute Reference, Severity, or Description) */}
         <div className="space-y-1.5">
           <div className="flex items-center justify-between text-zinc-400 text-xs">
             <label htmlFor="system-event-search-input" className="text-[11px] text-zinc-300 font-bold flex items-center gap-1.5">
               <Search className="w-3.5 h-3.5 text-cyan-400" />
-              <span>Search Audit Logs:</span>
+              <span>Real-Time Audit Filter:</span>
             </label>
-            {searchQuery && (
-              <span className="text-[10px] font-mono text-cyan-300 bg-cyan-950/60 px-2 py-0.5 rounded border-cyan-500/30">
-                {filteredEvents.length} {filteredEvents.length === 1 ? 'match' : 'matches'}
-              </span>
-            )}
+            <div className="flex items-center gap-1.5">
+              {searchQuery && (
+                <span className="text-[10px] font-mono text-cyan-300 bg-cyan-950/60 px-2 py-0.5 rounded border-cyan-500/30">
+                  {filteredEvents.length} {filteredEvents.length === 1 ? 'match' : 'matches'}
+                </span>
+              )}
+            </div>
           </div>
           
           <div className="relative">
@@ -1216,7 +1280,7 @@ export const SystemEventsSidebar: React.FC<SystemEventsSidebarProps> = ({
               type="text"
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
-              placeholder="Search by title or statute (e.g. ETDA Sec 26, PDPA, Quorum)..."
+              placeholder="Search by title, statute (e.g. §26, PDPA), or severity (critical, warning)..."
               className="w-full pl-9 pr-8 py-1.5 rounded-xl bg-[#0e1428] border-cyan-500/30 hover:border-cyan-500/50 focus:border-cyan-400 text-xs font-mono text-zinc-200 placeholder:text-zinc-500 focus:outline-none focus:ring-1 focus:ring-cyan-400/40 transition-all shadow-inner"
             />
             {searchQuery && (
@@ -1234,7 +1298,7 @@ export const SystemEventsSidebar: React.FC<SystemEventsSidebarProps> = ({
             )}
           </div>
 
-          {/* Quick Statute Filter Chips */}
+          {/* Quick Statute & Severity Filter Chips */}
           <div className="flex items-center gap-1.5 overflow-x-auto text-[10px] font-mono no-scrollbar pt-0.5">
             <span className="text-zinc-500 shrink-0 text-[9px] uppercase tracking-wider">Statute:</span>
             {[
@@ -1264,19 +1328,47 @@ export const SystemEventsSidebar: React.FC<SystemEventsSidebarProps> = ({
                 </button>
               );
             })}
-            {searchQuery && (
-              <button
-                type="button"
-                onClick={() => setSearchQuery('')}
-                className="px-1.5 py-0.5 rounded-md text-[9px] text-rose-300 hover:text-rose-200 bg-rose-500/10 border-rose-500/20 shrink-0 cursor-pointer"
-              >
-                Clear
-              </button>
-            )}
+          </div>
+
+          {/* Severity Level Filter Quick Selector */}
+          <div className="flex items-center gap-1.5 overflow-x-auto text-[10px] font-mono no-scrollbar pt-1">
+            <span className="text-zinc-500 shrink-0 text-[9px] uppercase tracking-wider">Severity:</span>
+            {[
+              { id: 'ALL', label: 'All Levels', color: 'text-zinc-300' },
+              { id: 'critical', label: 'Critical', color: 'text-rose-400' },
+              { id: 'warning', label: 'Warning', color: 'text-amber-400' },
+              { id: 'success', label: 'Success', color: 'text-emerald-400' },
+              { id: 'info', label: 'Info', color: 'text-cyan-400' },
+            ].map((sev) => {
+              const isSelected = severityFilter === sev.id;
+              return (
+                <button
+                  key={sev.id}
+                  type="button"
+                  onClick={() => {
+                    playTone(580, 0.03);
+                    setSeverityFilter(sev.id as any);
+                  }}
+                  className={`px-2 py-0.5 rounded-md border shrink-0 transition-all cursor-pointer text-[9.5px] ${
+                    isSelected
+                      ? sev.id === 'critical'
+                        ? 'bg-rose-500/25 text-rose-200 border-rose-400/60 font-bold shadow-[0_0_8px_rgba(244,63,94,0.3)]'
+                        : sev.id === 'warning'
+                        ? 'bg-amber-500/25 text-amber-200 border-amber-400/60 font-bold shadow-[0_0_8px_rgba(245,158,11,0.3)]'
+                        : sev.id === 'success'
+                        ? 'bg-emerald-500/25 text-emerald-200 border-emerald-400/60 font-bold shadow-[0_0_8px_rgba(16,185,129,0.3)]'
+                        : 'bg-cyan-500/25 text-cyan-200 border-cyan-400/60 font-bold shadow-[0_0_8px_rgba(6,182,212,0.3)]'
+                      : 'bg-white/5 text-zinc-400 hover:text-zinc-200 border-white/10'
+                  }`}
+                >
+                  <span>{sev.label}</span>
+                </button>
+              );
+            })}
           </div>
         </div>
 
-        {/* Category Dropdown */}
+        {/* Category Dropdown & Page Size */}
         <div className="flex items-center justify-between gap-2 pt-1 border-t border-white/5">
           <div className="flex items-center gap-1.5 text-zinc-400 text-xs font-medium">
             <Filter className="w-3.5 h-3.5 text-cyan-400" />
@@ -1285,27 +1377,46 @@ export const SystemEventsSidebar: React.FC<SystemEventsSidebarProps> = ({
             </label>
           </div>
           
-          <select
-            id="system-event-filter-select"
-            value={filter}
-            onChange={(e) => {
-              playTone(560, 0.03);
-              setFilter(e.target.value as SystemEventFilterType);
-            }}
-            className="px-2.5 py-1 rounded-xl bg-[#0e1428] border-cyan-500/40 text-cyan-200 text-xs font-mono font-medium focus:outline-none focus:border-cyan-300 transition-colors cursor-pointer shadow-sm"
-          >
-            <option value="ALL">All Categories ({filterCounts.ALL})</option>
-            <option value="PENDING">⏳ PENDING Offline Logs ({filterCounts.PENDING})</option>
-            <option value="COMPLIANCE">⚖️ COMPLIANCE & Legal Drift ({filterCounts.COMPLIANCE})</option>
-            <option value="HARDWARE">💻 HARDWARE & Cryo ({filterCounts.HARDWARE})</option>
-            <option value="ANOMALY">⚠️ ANOMALY & High Severity ({filterCounts.ANOMALY})</option>
-            <option value="SECURITY">🛡️ SECURITY & Tripwire ({filterCounts.SECURITY})</option>
-            <option value="CRYPTO">🔐 CRYPTO & PQC Seals ({filterCounts.CRYPTO})</option>
-            <option value="BACKUP">📦 BACKUP & Snapshots ({filterCounts.BACKUP})</option>
-            <option value="LEGAL_SEARCH">🔍 LEGAL_SEARCH ({filterCounts.LEGAL_SEARCH})</option>
-            <option value="EVIDENCE_IMPORTED">📑 EVIDENCE_IMPORTED ({filterCounts.EVIDENCE_IMPORTED})</option>
-            <option value="EVIDENCE_INGESTED">📷 EVIDENCE_INGESTED ({filterCounts.EVIDENCE_INGESTED})</option>
-          </select>
+          <div className="flex items-center gap-1.5">
+            <select
+              id="system-event-filter-select"
+              value={filter}
+              onChange={(e) => {
+                playTone(560, 0.03);
+                setFilter(e.target.value as SystemEventFilterType);
+              }}
+              className="px-2.5 py-1 rounded-xl bg-[#0e1428] border-cyan-500/40 text-cyan-200 text-xs font-mono font-medium focus:outline-none focus:border-cyan-300 transition-colors cursor-pointer shadow-sm max-w-[200px] truncate"
+            >
+              <option value="ALL">All Categories ({filterCounts.ALL})</option>
+              <option value="PENDING">⏳ PENDING Offline Logs ({filterCounts.PENDING})</option>
+              <option value="COMPLIANCE">⚖️ COMPLIANCE & Legal Drift ({filterCounts.COMPLIANCE})</option>
+              <option value="HARDWARE">💻 HARDWARE & Cryo ({filterCounts.HARDWARE})</option>
+              <option value="ANOMALY">⚠️ ANOMALY & High Severity ({filterCounts.ANOMALY})</option>
+              <option value="SECURITY">🛡️ SECURITY & Tripwire ({filterCounts.SECURITY})</option>
+              <option value="CRYPTO">🔐 CRYPTO & PQC Seals ({filterCounts.CRYPTO})</option>
+              <option value="BACKUP">📦 BACKUP & Snapshots ({filterCounts.BACKUP})</option>
+              <option value="LEGAL_SEARCH">🔍 LEGAL_SEARCH ({filterCounts.LEGAL_SEARCH})</option>
+              <option value="EVIDENCE_IMPORTED">📑 EVIDENCE_IMPORTED ({filterCounts.EVIDENCE_IMPORTED})</option>
+              <option value="EVIDENCE_INGESTED">📷 EVIDENCE_INGESTED ({filterCounts.EVIDENCE_INGESTED})</option>
+            </select>
+
+            <select
+              id="system-event-page-size-select"
+              value={pageSize}
+              onChange={(e) => {
+                playTone(540, 0.03);
+                setPageSize(Number(e.target.value));
+              }}
+              className="px-2 py-1 rounded-xl bg-[#0e1428] border-zinc-700 text-zinc-300 text-[10px] font-mono focus:outline-none cursor-pointer"
+              title="Select events per page"
+            >
+              <option value={10}>10 / page</option>
+              <option value={15}>15 / page</option>
+              <option value={25}>25 / page</option>
+              <option value={50}>50 / page</option>
+              <option value={1000}>All</option>
+            </select>
+          </div>
         </div>
 
         {/* Quick Filter Pill Buttons */}
@@ -1543,8 +1654,21 @@ export const SystemEventsSidebar: React.FC<SystemEventsSidebarProps> = ({
         </div>
       )}
 
-      {/* Events Stream List */}
+      {/* Events Stream List with Pagination & Lazy-Loading Controls */}
       <div className="flex-1 overflow-y-auto p-4 space-y-3 scrollbar-thin scrollbar-thumb-white/10">
+        {/* Pagination Status Ribbon */}
+        {filteredEvents.length > 0 && (
+          <div className="flex items-center justify-between text-[10px] text-zinc-400 font-mono pb-1 border-b border-white/5 px-1">
+            <span className="flex items-center gap-1.5">
+              <span className="w-1.5 h-1.5 rounded-full bg-cyan-400" />
+              <span>Showing <strong>{startIndex + 1}–{Math.min(startIndex + pageSize, filteredEvents.length)}</strong> of <strong>{filteredEvents.length}</strong> events</span>
+            </span>
+            <span className="text-zinc-500">
+              Page <strong>{effectivePage}</strong> / <strong>{totalPages}</strong>
+            </span>
+          </div>
+        )}
+
         {filteredEvents.length === 0 ? (
           <div className="h-64 flex flex-col items-center justify-center text-center p-6 text-zinc-500 space-y-2.5">
             <Radio className="w-8 h-8 text-zinc-600 animate-pulse" />
@@ -1574,7 +1698,7 @@ export const SystemEventsSidebar: React.FC<SystemEventsSidebarProps> = ({
             )}
           </div>
         ) : (
-          filteredEvents.map((ev) => {
+          paginatedEvents.map((ev) => {
             const badge = getEventBadge(ev.type, ev.isComplianceDrift, ev.severity);
             const isCompliance = ev.type === 'COMPLIANCE' || !!ev.statuteRef || !!ev.isComplianceDrift;
             const isSuccess = ev.severity === 'success' || ev.type === 'BACKUP';
@@ -1703,6 +1827,80 @@ export const SystemEventsSidebar: React.FC<SystemEventsSidebarProps> = ({
               </div>
             );
           })
+        )}
+
+        {/* Pagination & Load More Footer Bar */}
+        {filteredEvents.length > 0 && totalPages > 1 && (
+          <div className="pt-2 pb-1 space-y-2 border-t border-white/8">
+            <div className="flex items-center justify-between gap-1 text-[10px] font-mono">
+              <button
+                type="button"
+                disabled={effectivePage <= 1}
+                onClick={() => {
+                  playTone(550, 0.03);
+                  setCurrentPage((p) => Math.max(1, p - 1));
+                }}
+                className="px-2.5 py-1 rounded-lg bg-zinc-900 border border-white/10 hover:border-cyan-500/40 text-zinc-300 hover:text-white disabled:opacity-30 disabled:pointer-events-none transition-all cursor-pointer"
+              >
+                ◀ Prev
+              </button>
+
+              <div className="flex items-center gap-1 overflow-x-auto no-scrollbar">
+                {Array.from({ length: Math.min(5, totalPages) }, (_, idx) => {
+                  let pageNum = idx + 1;
+                  if (totalPages > 5 && effectivePage > 3) {
+                    pageNum = effectivePage - 2 + idx;
+                    if (pageNum > totalPages) pageNum = totalPages - (4 - idx);
+                  }
+                  const isCurrent = pageNum === effectivePage;
+                  return (
+                    <button
+                      key={pageNum}
+                      type="button"
+                      onClick={() => {
+                        playTone(580, 0.03);
+                        setCurrentPage(pageNum);
+                      }}
+                      className={`w-6 h-6 rounded-md text-[10px] font-bold flex items-center justify-center transition-all cursor-pointer ${
+                        isCurrent
+                          ? 'bg-cyan-500/30 text-cyan-200 border border-cyan-400 shadow-[0_0_8px_rgba(6,182,212,0.3)]'
+                          : 'bg-white/5 text-zinc-400 hover:text-white hover:bg-white/10'
+                      }`}
+                    >
+                      {pageNum}
+                    </button>
+                  );
+                })}
+              </div>
+
+              <button
+                type="button"
+                disabled={effectivePage >= totalPages}
+                onClick={() => {
+                  playTone(550, 0.03);
+                  setCurrentPage((p) => Math.min(totalPages, p + 1));
+                }}
+                className="px-2.5 py-1 rounded-lg bg-zinc-900 border border-white/10 hover:border-cyan-500/40 text-zinc-300 hover:text-white disabled:opacity-30 disabled:pointer-events-none transition-all cursor-pointer"
+              >
+                Next ▶
+              </button>
+            </div>
+
+            {/* Load More Button for Continuous Lazy-Reading */}
+            {pageSize < filteredEvents.length && (
+              <button
+                type="button"
+                onClick={() => {
+                  playTone(620, 0.03);
+                  setPageSize((prev) => prev + 15);
+                }}
+                className="w-full py-1.5 rounded-xl bg-cyan-950/40 hover:bg-cyan-900/50 border border-cyan-500/30 text-cyan-300 text-[10px] font-bold flex items-center justify-center gap-1.5 transition-all cursor-pointer active:scale-98"
+              >
+                <RefreshCw className="w-3 h-3 text-cyan-400" />
+                <span>Load More (+15 Events)</span>
+              </button>
+            )}
+          </div>
         )}
       </div>
 

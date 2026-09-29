@@ -685,13 +685,17 @@ export const ForensicAuditStepper: React.FC<ForensicAuditStepperProps> = ({
   return (
     <div
       id="forensic-audit-stepper"
-      className={`rounded-2xl bg-[#090d1a]/95 border-cyan-500/30 backdrop-blur-xl shadow-[0_12px_40px_rgba(0,0,0,0.6)] overflow-hidden transition-all duration-300 font-sans ${className}`}
+      className={`relative rounded-2xl bg-[#090d1a]/95 border-2 border-cyan-400/50 shadow-[0_0_30px_rgba(6,182,212,0.22),inset_0_0_25px_rgba(6,182,212,0.04)] ring-1 ring-cyan-300/40 hover:border-cyan-300/70 backdrop-blur-xl overflow-hidden transition-all duration-300 font-sans ${className}`}
     >
+      {/* Subtle CRT Mesh & Scanline Animation Overlays matching Frozen v1.2 Aesthetic */}
+      <div className="absolute inset-0 forensic-crt-mesh opacity-30 pointer-events-none z-0" />
+      <div className="forensic-scanline-beam opacity-35 pointer-events-none z-10" />
+
       {/* Top Header Bar */}
-      <div className="px-4 py-3 bg-gradient-to-r from-[#070b16] via-[#091024] to-[#070b16] border-b border-cyan-500/20 flex flex-wrap items-center justify-between gap-3">
+      <div className="relative z-10 px-4 py-3 bg-gradient-to-r from-[#070b16] via-[#091024] to-[#070b16] border-b border-cyan-500/30 flex flex-wrap items-center justify-between gap-3">
         {/* Left: Branding & Status */}
         <div className="flex items-center gap-2.5">
-          <div className="p-1.5 rounded-lg bg-cyan-500/15 border-cyan-500/35 text-cyan-400">
+          <div className="p-1.5 rounded-lg bg-cyan-500/20 border border-cyan-400/50 text-cyan-300 shadow-[0_0_10px_rgba(6,182,212,0.3)]">
             <Scale className="w-4 h-4" />
           </div>
           <div>
@@ -699,7 +703,10 @@ export const ForensicAuditStepper: React.FC<ForensicAuditStepperProps> = ({
               <span className="text-xs font-bold text-white font-mono tracking-tight flex items-center gap-1.5">
                 16-STEP FORENSIC AUDIT PIPELINE
               </span>
-              <span className="px-2 py-0.5 rounded-full bg-emerald-500/15 border-emerald-500/30 text-emerald-300 font-mono text-[10px] font-bold">
+              <span className="px-2 py-0.5 rounded-full bg-cyan-500/20 border border-cyan-400/50 text-cyan-300 font-mono text-[9px] font-bold tracking-wider">
+                FROZEN v1.2 LTS
+              </span>
+              <span className="px-2 py-0.5 rounded-full bg-emerald-500/15 border border-emerald-500/40 text-emerald-300 font-mono text-[10px] font-bold shadow-[0_0_10px_rgba(16,185,129,0.2)]">
                 {progressPercent}% PASSED ({passedCount}/16)
               </span>
             </div>

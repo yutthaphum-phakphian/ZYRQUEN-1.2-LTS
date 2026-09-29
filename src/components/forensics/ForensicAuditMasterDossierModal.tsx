@@ -34,6 +34,7 @@ import {
   Play,
   Zap,
   Gauge,
+  RotateCcw,
 } from 'lucide-react';
 import { QRCodeSVG } from 'qrcode.react';
 import { FORENSIC_DOSSIER_V9, TechnicalPillar, ForensicAuditStep, ForensicEventType } from '../../data/forensicAuditMasterDossierData';
@@ -125,6 +126,21 @@ export const ForensicAuditMasterDossierModal: React.FC<ForensicAuditMasterDossie
     } finally {
       setIsBatchVerifying(false);
     }
+  };
+
+  // Handler to clear and reset simulation state for a clean session
+  const handleClearAllSimulationData = () => {
+    setIsBatchVerifying(false);
+    setBatchProgress(0);
+    setBatchStageName('Session Reset: 0 / 14,902 Seals Ingested (Fresh Forensic Session)');
+    setBatchSealsVerified(0);
+    setBatchStepsPassed(0);
+    setSelectedStep(null);
+    setEventTypeFilter('ALL');
+    setQrFormat('url');
+    setQrEvidenceId('master-dossier');
+    playTone(420, 0.08);
+    triggerVibration('warning');
   };
 
   // Filtered audit steps based on eventType filter dropdown
@@ -294,6 +310,19 @@ export const ForensicAuditMasterDossierModal: React.FC<ForensicAuditMasterDossie
           </div>
 
           <div className="flex items-center gap-2 flex-wrap sm:flex-nowrap">
+            {/* Clear All Simulation Data Button */}
+            <button
+              id="btn-clear-all-dossier-simulation"
+              type="button"
+              onClick={handleClearAllSimulationData}
+              className="flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-rose-950/40 hover:bg-rose-900/60 border border-rose-500/40 text-rose-300 hover:text-rose-100 font-bold text-xs transition cursor-pointer active:scale-95 shadow-sm"
+              title="Clear all forensic simulation data, verification stages, and active filters for a fresh session"
+            >
+              <RotateCcw className="w-3.5 h-3.5 text-rose-400" />
+              <span className="hidden sm:inline">Clear All</span>
+              <span className="sm:hidden">Clear</span>
+            </button>
+
             {/* Batch Verification Run Button */}
             <button
               id="btn-run-batch-verification-header"

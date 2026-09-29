@@ -538,11 +538,19 @@ export function generateAndDownloadFullAuditPdfReport({
 
   // Trigger auto-download
   const filename = `ZYRQUEN_Full_Audit_Report_14902_Seals_${new Date().toISOString().substring(0, 10)}_${Date.now().toString().slice(-4)}.pdf`;
+  const blob = doc.output('blob');
+  const previewUrl = URL.createObjectURL(blob);
+  
   doc.save(filename);
 
   // Trigger tactile vibration confirmation
   triggerVibration('auditReport');
 
-  return filename;
+  return Object.assign(filename, {
+    filename,
+    blob,
+    previewUrl,
+    toString: () => filename,
+  });
 }
 

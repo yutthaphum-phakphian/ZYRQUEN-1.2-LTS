@@ -47,7 +47,17 @@ import {
   RefreshCw,
   Trash2,
   AlertTriangle,
+  TrendingUp,
 } from 'lucide-react';
+import {
+  ResponsiveContainer,
+  AreaChart,
+  Area,
+  XAxis,
+  YAxis,
+  Tooltip as RechartsTooltip,
+  CartesianGrid,
+} from 'recharts';
 import { MerkleRootQrCodeModal, type QrVerificationCallbackResult } from '@/components/MerkleRootQrCodeModal';
 import { CANONICAL_GENESIS_BLOCK, CANONICAL_MERKLE_ROOT } from '@/data/canonicalData';
 
@@ -373,6 +383,21 @@ const VIEW_PERSONAS: Record<ViewType, ViewPersona> = {
     accentGlow: 'rgba(6,182,212,0.1)',
   },
 };
+
+const SEAL_CREATION_RATE_24H_DATA = [
+  { hour: '00:00', rate: 580, baseline: 500 },
+  { hour: '02:00', rate: 610, baseline: 500 },
+  { hour: '04:00', rate: 595, baseline: 500 },
+  { hour: '06:00', rate: 640, baseline: 500 },
+  { hour: '08:00', rate: 720, baseline: 500 },
+  { hour: '10:00', rate: 810, baseline: 500 },
+  { hour: '12:00', rate: 790, baseline: 500 },
+  { hour: '14:00', rate: 835, baseline: 500 },
+  { hour: '16:00', rate: 860, baseline: 500 },
+  { hour: '18:00', rate: 780, baseline: 500 },
+  { hour: '20:00', rate: 690, baseline: 500 },
+  { hour: '22:00', rate: 620, baseline: 500 },
+];
 
 interface BannerAnimatedSealCountProps {
   sealCount: number;
@@ -3366,6 +3391,41 @@ function SovereignAppContent() {
                                 );
                               })()}
 
+                              {/* 24-Hour Seal Creation Rate Recharts Area Chart */}
+                              <div className="p-2.5 rounded-lg bg-zinc-950/90 border border-cyan-500/30 space-y-1.5">
+                                <div className="flex items-center justify-between text-[9px] font-mono">
+                                  <span className="text-cyan-300 font-bold flex items-center gap-1">
+                                    <TrendingUp className="w-3 h-3 text-cyan-400" />
+                                    <span>24-HOUR SEAL CREATION RATE TREND (RECHARTS)</span>
+                                  </span>
+                                  <span className="px-1.5 py-0.2 rounded font-bold text-[8px] bg-cyan-500/15 text-cyan-300 border border-cyan-500/30">
+                                    MEAN: 712.5 SEALS/HR • 14,902 TOTAL
+                                  </span>
+                                </div>
+
+                                <div className="h-20 w-full pt-1">
+                                  <ResponsiveContainer width="100%" height="100%">
+                                    <AreaChart data={SEAL_CREATION_RATE_24H_DATA} margin={{ top: 2, right: 6, left: -24, bottom: 0 }}>
+                                      <defs>
+                                        <linearGradient id="gateSealRateGradient" x1="0%" y1="0%" x2="0%" y2="100%">
+                                          <stop offset="0%" stopColor="#06b6d4" stopOpacity={0.45} />
+                                          <stop offset="100%" stopColor="#06b6d4" stopOpacity={0.02} />
+                                        </linearGradient>
+                                      </defs>
+                                      <CartesianGrid strokeDasharray="2 2" stroke="rgba(255,255,255,0.05)" vertical={false} />
+                                      <XAxis dataKey="hour" stroke="#64748b" tick={{ fontSize: 8, fill: '#94a3b8' }} tickLine={false} />
+                                      <YAxis stroke="#64748b" tick={{ fontSize: 8, fill: '#94a3b8' }} tickLine={false} domain={['dataMin - 50', 'dataMax + 50']} />
+                                      <RechartsTooltip
+                                        contentStyle={{ backgroundColor: '#090d1a', borderColor: 'rgba(6,182,212,0.4)', borderRadius: 8, fontSize: 10, color: '#e2e8f0', fontFamily: 'monospace' }}
+                                        labelStyle={{ color: '#06b6d4', fontWeight: 'bold' }}
+                                        formatter={(value: any) => [`${value} seals/hr`, 'Creation Rate']}
+                                      />
+                                      <Area type="monotone" dataKey="rate" stroke="#06b6d4" strokeWidth={2} fill="url(#gateSealRateGradient)" />
+                                    </AreaChart>
+                                  </ResponsiveContainer>
+                                </div>
+                              </div>
+
                               {/* HSM Cluster Health Visual Array & Individual Node Breakdown (10 Nodes) */}
                               <div className="space-y-2">
                                 <div className="flex items-center justify-between text-[9px] font-mono text-zinc-400">
@@ -4201,6 +4261,53 @@ function SovereignAppContent() {
                               >
                                 {isSyncLogsCopied ? <Check className="w-2.5 h-2.5 text-emerald-400" /> : <Copy className="w-2.5 h-2.5 text-cyan-400" />}
                                 <span>{isSyncLogsCopied ? 'Copied' : 'Copy Logs'}</span>
+                              </button>
+
+                              {/* Simulate QR Verification Failure Button */}
+                              <button
+                                type="button"
+                                id="btn-simulate-qr-failure"
+                                onClick={(e) => {
+                                  e.stopPropagation();
+                                  playTone(280, 0.08);
+                                  const simulatedFailResult: QrVerificationCallbackResult = {
+                                    verified: false,
+                                    evidenceId: 'SIM-TAMPER-ALERT',
+                                    merkleRootMatched: CANONICAL_MERKLE_ROOT,
+                                    blockHeight: CANONICAL_GENESIS_BLOCK,
+                                    timestamp: new Date().toISOString().substring(11, 19) + ' UTC',
+                                    source: 'SIMULATED',
+                                    rawPayload: JSON.stringify({
+                                      evidenceId: 'SIM-TAMPER-ALERT',
+                                      root: '0x0000000000000000000000000000000000000000000000000000000000000000',
+                                      blockHeight: CANONICAL_GENESIS_BLOCK,
+                                      tamperBit: true,
+                                    }),
+                                    message: 'Cryptographic Merkle Root Mismatch: Scanner rejected QR artifact due to bit-flip drift anomaly (ETDA §26 Safe Harbor Fail-Closed).',
+                                  };
+                                  setQrArtifactVerificationState(simulatedFailResult);
+                                  setVerificationGateStatus((curr) => ({
+                                    ...curr,
+                                    status: 'BLOCKED',
+                                    lastCheckedTime: simulatedFailResult.timestamp,
+                                    message: 'Verification Gate BLOCKED: Simulated untrusted QR artifact rejected (Fail-Closed Tripwire).',
+                                  }));
+                                  addSystemEvent(
+                                    'SECURITY',
+                                    'QR Verification Rejected (Simulated Failure)',
+                                    'Tamper tripwire: Scanner rejected simulated untrusted QR artifact. Merkle root mismatch detected.',
+                                    'sim:tamper_drift_anomaly',
+                                    'critical',
+                                    'ETDA B.E. 2544 มาตรา ๒๖ (Fail-Closed)',
+                                    'security'
+                                  );
+                                  showToast('Simulated QR verification failure triggered: Scanner rejection UI active.', 'warning');
+                                }}
+                                className="px-1.5 py-0.5 rounded bg-rose-950/70 hover:bg-rose-900/80 border border-rose-500/40 hover:border-rose-400 text-rose-300 hover:text-white font-bold text-[7.5px] flex items-center gap-0.5 transition-all active:scale-95 cursor-pointer"
+                                title="Trigger simulated QR verification failure for testing scanner rejection UI"
+                              >
+                                <AlertTriangle className="w-2.5 h-2.5 text-rose-400" />
+                                <span>Simulate QR Failure</span>
                               </button>
 
                               <span className="px-1.5 py-0.2 rounded bg-emerald-500/15 border border-emerald-500/30 text-emerald-300 font-bold text-[8px]">
