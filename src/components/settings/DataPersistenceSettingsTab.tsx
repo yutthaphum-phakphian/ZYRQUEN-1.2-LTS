@@ -18,6 +18,7 @@ import {
 } from 'lucide-react';
 import { playAuditChime, playTone } from '../AudioSynthesizer';
 import { offlineAuditSyncService, QueuedAuditEvent } from '../../services/offlineAuditSyncService';
+import { OfflineSyncHeatmap } from '../OfflineSyncHeatmap';
 
 interface StorageStats {
   usedBytes: number;
@@ -72,6 +73,7 @@ export const DataPersistenceSettingsTab: React.FC<DataPersistenceSettingsTabProp
   // Offline Audit Sync Queue State
   const [queueCount, setQueueCount] = useState<number>(() => offlineAuditSyncService.getQueueCount());
   const [queuedEvents, setQueuedEvents] = useState<QueuedAuditEvent[]>(() => offlineAuditSyncService.getQueue());
+  const [syncHistory, setSyncHistory] = useState<string[]>(() => offlineAuditSyncService.getSyncHistory());
   const [isSyncingQueue, setIsSyncingQueue] = useState<boolean>(false);
   const [lastSyncTimestamp, setLastSyncTimestamp] = useState<string | null>(() => offlineAuditSyncService.getLastSyncTime());
   const [pendingThreshold, setPendingThreshold] = useState<number>(() => offlineAuditSyncService.getPendingThreshold());
@@ -82,11 +84,15 @@ export const DataPersistenceSettingsTab: React.FC<DataPersistenceSettingsTabProp
       setQueuedEvents(items);
       setLastSyncTimestamp(offlineAuditSyncService.getLastSyncTime());
     });
+    const unsubHistory = offlineAuditSyncService.subscribeSyncHistory((hist) => {
+      setSyncHistory(hist);
+    });
     const unsubThreshold = offlineAuditSyncService.subscribePendingThreshold((thresh) => {
       setPendingThreshold(thresh);
     });
     return () => {
       unsubQueue();
+      unsubHistory();
       unsubThreshold();
     };
   }, []);
@@ -771,6 +777,11 @@ export const DataPersistenceSettingsTab: React.FC<DataPersistenceSettingsTabProp
             <Trash2 className="w-3.5 h-3.5" />
             <span>Clear Queue Only</span>
           </button>
+        </div>
+
+        {/* Visual Heatmap: Time-of-Day Activity & Peak Log Generation */}
+        <div className="mt-4">
+          <OfflineSyncHeatmap queuedEvents={queuedEvents} syncHistory={syncHistory} />
         </div>
 
         {/* Queued Items Preview */}

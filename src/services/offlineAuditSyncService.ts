@@ -19,12 +19,47 @@ export interface QueuedAuditEvent {
   retryCount: number;
 }
 
+export type SyncErrorStage =
+  | 'NETWORK'
+  | 'SERVER_REJECTION'
+  | 'SERVICE_WORKER'
+  | 'PAYLOAD_ENCODING'
+  | 'OFFLINE'
+  | 'TIMEOUT'
+  | 'UNKNOWN';
+
+export interface SyncErrorInfo {
+  traceId: string;
+  message: string;
+  stage: SyncErrorStage;
+  httpStatus?: number;
+  failedAt: string;
+  pendingCount: number;
+  retryCount: number;
+  errorDetails?: string;
+  userFeedbackMessage: string;
+}
+
+export interface SyncHealthStatus {
+  isOnline: boolean;
+  isSyncing: boolean;
+  pendingCount: number;
+  autoSyncEnabled: boolean;
+  lastSyncTime: string | null;
+  lastError: SyncErrorInfo | null;
+  errorHistoryCount: number;
+}
+
 const STORAGE_KEY = 'zyrquen_offline_audit_queue_v1';
 const LAST_SYNC_KEY = 'zyrquen_last_audit_sync_time_v1';
 const AUTO_SYNC_KEY = 'zyrquen_auto_sync_enabled_v1';
 const SYNC_HISTORY_KEY = 'zyrquen_audit_sync_history_v1';
 const PENDING_THRESHOLD_KEY = 'zyrquen_pending_logs_threshold_v1';
+const LAST_ERROR_KEY = 'zyrquen_last_audit_sync_error_v1';
+const ERROR_HISTORY_KEY = 'zyrquen_audit_sync_error_history_v1';
 const DEFAULT_PENDING_THRESHOLD = 50;
+const MAX_ERROR_HISTORY = 10;
+const SYNC_FETCH_TIMEOUT_MS = 8000;
 
 type QueueListener = (count: number, items: QueuedAuditEvent[]) => void;
 type AutoSyncListener = (enabled: boolean) => void;
@@ -33,6 +68,7 @@ type ThresholdListener = (threshold: number) => void;
 type SyncStatusListener = (isSyncing: boolean) => void;
 type SyncProgressListener = (progressPercent: number) => void;
 type BroadcastHeartbeatListener = (timestamp: number) => void;
+type SyncErrorListener = (error: SyncErrorInfo | null) => void;
 
 class OfflineAuditSyncService {
   private listeners: Set<QueueListener> = new Set();
@@ -42,6 +78,8 @@ class OfflineAuditSyncService {
   private syncStatusListeners: Set<SyncStatusListener> = new Set();
   private syncProgressListeners: Set<SyncProgressListener> = new Set();
   private broadcastHeartbeatListeners: Set<BroadcastHeartbeatListener> = new Set();
+  private syncErrorListeners: Set<SyncErrorListener> = new Set();
+  private lastSyncError: SyncErrorInfo | null = null;
   private isFlushing = false;
   private currentProgress = 0;
   private autoSyncTimer: ReturnType<typeof setInterval> | null = null;
@@ -50,7 +88,17 @@ class OfflineAuditSyncService {
   private readonly AUTO_SYNC_INTERVAL_MS = 5 * 60 * 1000; // 5 minutes
 
   constructor() {
+    // Restore persisted error if available
     if (typeof window !== 'undefined') {
+      try {
+        const rawErr = localStorage.getItem(LAST_ERROR_KEY);
+        if (rawErr) {
+          this.lastSyncError = JSON.parse(rawErr);
+        }
+      } catch {
+        // ignore
+      }
+
       window.addEventListener('online', () => {
         console.log('[OfflineAuditSync] Connectivity restored. Initiating automatic flush...');
         this.flushQueue();
@@ -64,6 +112,7 @@ class OfflineAuditSyncService {
             this.saveQueue([]);
             this.notifyListeners([]);
             this.recordSyncSuccess();
+            this.clearSyncError();
             this.notifyBroadcastHeartbeat(Date.now());
           }
         });
@@ -77,6 +126,7 @@ class OfflineAuditSyncService {
               this.saveQueue([]);
               this.notifyListeners([]);
               this.recordSyncSuccess();
+              this.clearSyncError();
               this.notifyBroadcastHeartbeat(Date.now());
             } else if (event.data?.type === 'HEARTBEAT_PULSE') {
               this.notifyBroadcastHeartbeat(event.data.timestamp || Date.now());
@@ -113,7 +163,7 @@ class OfflineAuditSyncService {
       if (reg.active) {
         reg.active.postMessage({
           type: 'QUEUE_AUDIT_LOG',
-          payload: item
+          payload: item,
         });
       }
       if ('sync' in reg) {
@@ -158,7 +208,7 @@ class OfflineAuditSyncService {
               pendingLogsCount: event.data.pendingLogsCount,
               cacheName: event.data.cacheName,
               cachedAssetsCount: event.data.cachedAssetsCount,
-              isSyncSupported: event.data.isSyncSupported
+              isSyncSupported: event.data.isSyncSupported,
             });
           } else {
             resolve({ pendingLogsCount: this.getQueueCount() });
@@ -167,7 +217,7 @@ class OfflineAuditSyncService {
 
         targetWorker.postMessage({ type: 'GET_CACHE_STATUS' }, [messageChannel.port2]);
       });
-    } catch (e) {
+    } catch {
       return { pendingLogsCount: this.getQueueCount() };
     }
   }
@@ -224,6 +274,156 @@ class OfflineAuditSyncService {
   }
 
   /**
+   * Subscribes to sync error notifications
+   */
+  public subscribeSyncError(listener: SyncErrorListener): () => void {
+    this.syncErrorListeners.add(listener);
+    listener(this.lastSyncError);
+    return () => this.syncErrorListeners.delete(listener);
+  }
+
+  /**
+   * Returns the most recent sync error information, if any
+   */
+  public getLastSyncError(): SyncErrorInfo | null {
+    if (this.lastSyncError) return this.lastSyncError;
+    if (typeof window === 'undefined') return null;
+    try {
+      const raw = localStorage.getItem(LAST_ERROR_KEY);
+      if (raw) return JSON.parse(raw);
+    } catch {
+      // ignore
+    }
+    return null;
+  }
+
+  /**
+   * Returns historical sync errors (up to 10 entries) for forensic auditing
+   */
+  public getSyncErrorHistory(): SyncErrorInfo[] {
+    if (typeof window === 'undefined') return [];
+    try {
+      const raw = localStorage.getItem(ERROR_HISTORY_KEY);
+      if (raw) {
+        const parsed = JSON.parse(raw);
+        if (Array.isArray(parsed)) return parsed.slice(0, MAX_ERROR_HISTORY);
+      }
+    } catch {
+      // ignore
+    }
+    return [];
+  }
+
+  /**
+   * Clears the current sync error state and resets feedback
+   */
+  public clearSyncError(): void {
+    this.lastSyncError = null;
+    if (typeof window !== 'undefined') {
+      try {
+        localStorage.removeItem(LAST_ERROR_KEY);
+      } catch {
+        // ignore
+      }
+    }
+    this.syncErrorListeners.forEach((fn) => {
+      try {
+        fn(null);
+      } catch (e) {
+        console.warn('[OfflineAuditSync] Listener error on clear error:', e);
+      }
+    });
+  }
+
+  /**
+   * Formats human-friendly feedback message for non-disruptive UI presentation
+   */
+  private generateUserFeedback(stage: SyncErrorStage, pendingCount: number, message: string): string {
+    switch (stage) {
+      case 'OFFLINE':
+        return `Offline: ${pendingCount} audit log${pendingCount !== 1 ? 's' : ''} safely buffered locally. Automatic sync will resume upon reconnection.`;
+      case 'TIMEOUT':
+        return `Network sync timed out (${SYNC_FETCH_TIMEOUT_MS / 1000}s). ${pendingCount} log${pendingCount !== 1 ? 's' : ''} retained safely in local storage buffer.`;
+      case 'SERVER_REJECTION':
+        return `Server ledger temporarily rejected sync (${message}). Retaining ${pendingCount} pending log${pendingCount !== 1 ? 's' : ''} for automatic retry.`;
+      case 'NETWORK':
+        return `Network transport error: ${message}. ${pendingCount} log${pendingCount !== 1 ? 's' : ''} preserved in local buffer.`;
+      case 'SERVICE_WORKER':
+        return `Service worker background sync unavailable. Falling back to in-memory/localStorage buffer (${pendingCount} logs).`;
+      default:
+        return `Audit sync deferred: ${message}. Zero data loss guaranteed.`;
+    }
+  }
+
+  /**
+   * Records detailed error information with trace IDs, stores in history, and notifies listeners without disrupting UI
+   */
+  private recordSyncError(info: {
+    message: string;
+    stage: SyncErrorStage;
+    httpStatus?: number;
+    pendingCount: number;
+    retryCount: number;
+    errorDetails?: string;
+  }): SyncErrorInfo {
+    const traceId = `TRC-SYNC-ERR-${Date.now()}-${Math.random().toString(36).substring(2, 7).toUpperCase()}`;
+    const userFeedbackMessage = this.generateUserFeedback(info.stage, info.pendingCount, info.message);
+
+    const errorInfo: SyncErrorInfo = {
+      traceId,
+      message: info.message,
+      stage: info.stage,
+      httpStatus: info.httpStatus,
+      failedAt: new Date().toISOString(),
+      pendingCount: info.pendingCount,
+      retryCount: info.retryCount,
+      errorDetails: info.errorDetails,
+      userFeedbackMessage,
+    };
+
+    this.lastSyncError = errorInfo;
+
+    if (typeof window !== 'undefined') {
+      try {
+        localStorage.setItem(LAST_ERROR_KEY, JSON.stringify(errorInfo));
+
+        // Append to error history
+        const existingHistory = this.getSyncErrorHistory();
+        const updatedHistory = [errorInfo, ...existingHistory.filter((e) => e.traceId !== traceId)].slice(
+          0,
+          MAX_ERROR_HISTORY
+        );
+        localStorage.setItem(ERROR_HISTORY_KEY, JSON.stringify(updatedHistory));
+      } catch {
+        // ignore storage errors
+      }
+    }
+
+    // Notify registered error subscribers
+    this.syncErrorListeners.forEach((fn) => {
+      try {
+        fn(errorInfo);
+      } catch (e) {
+        console.warn('[OfflineAuditSync] Error listener failure:', e);
+      }
+    });
+
+    // Non-disruptive haptic feedback to operator (fail-safe)
+    try {
+      triggerVibration('warning');
+    } catch {
+      // safe fallback
+    }
+
+    // Detailed structured logging for dev / telemetry debugging
+    console.warn(
+      `[OfflineAuditSync][SyncFailed][Trace: ${traceId}] Stage: [${errorInfo.stage}] | HTTP: ${errorInfo.httpStatus || 'N/A'} | Pending: ${errorInfo.pendingCount} | Retries: ${errorInfo.retryCount} | Error: "${errorInfo.message}"`
+    );
+
+    return errorInfo;
+  }
+
+  /**
    * Subscribes to background sync status changes (isSyncing: boolean)
    */
   public subscribeSyncStatus(listener: SyncStatusListener): () => void {
@@ -273,6 +473,22 @@ class OfflineAuditSyncService {
     } catch {
       return null;
     }
+  }
+
+  /**
+   * Returns full health summary of the offline audit sync service
+   */
+  public getSyncHealthStatus(): SyncHealthStatus {
+    const isOnline = typeof navigator !== 'undefined' ? navigator.onLine : true;
+    return {
+      isOnline,
+      isSyncing: this.isFlushing,
+      pendingCount: this.getQueueCount(),
+      autoSyncEnabled: this.isAutoSyncEnabled(),
+      lastSyncTime: this.getLastSyncTime(),
+      lastError: this.getLastSyncError(),
+      errorHistoryCount: this.getSyncErrorHistory().length,
+    };
   }
 
   /**
@@ -354,7 +570,9 @@ class OfflineAuditSyncService {
   /**
    * Flushes queued audit events to the server endpoint (alias to flushQueue).
    */
-  public async flush(force: boolean = false): Promise<{ flushedCount: number; success: boolean; error?: string; message?: string }> {
+  public async flush(
+    force: boolean = false
+  ): Promise<{ flushedCount: number; success: boolean; error?: string; message?: string; traceId?: string }> {
     return this.flushQueue(force);
   }
 
@@ -362,20 +580,37 @@ class OfflineAuditSyncService {
    * Flushes queued audit events to the server endpoint.
    * If force is true, actively validates and reconciles with the primary ledger even if queue is empty.
    */
-  public async flushQueue(force: boolean = false): Promise<{ flushedCount: number; success: boolean; error?: string; message?: string }> {
+  public async flushQueue(
+    force: boolean = false
+  ): Promise<{ flushedCount: number; success: boolean; error?: string; message?: string; traceId?: string }> {
     if (this.isFlushing || typeof window === 'undefined') {
       return { flushedCount: 0, success: false, error: 'Synchronization already in progress' };
     }
 
-    if (!navigator.onLine) {
-      return { flushedCount: 0, success: false, error: 'System is currently offline. Pending logs safely retained.' };
+    const queue = this.getQueue();
+
+    if (typeof navigator !== 'undefined' && !navigator.onLine) {
+      const errInfo = this.recordSyncError({
+        message: 'System is currently offline. Pending logs safely retained in local buffer.',
+        stage: 'OFFLINE',
+        pendingCount: queue.length,
+        retryCount: queue[0]?.retryCount || 0,
+      });
+      return {
+        flushedCount: 0,
+        success: false,
+        error: errInfo.message,
+        traceId: errInfo.traceId,
+      };
     }
 
-    const queue = this.getQueue();
     if (queue.length === 0) {
       if (force) {
         this.setFlushing(true);
         try {
+          const controller = new AbortController();
+          const timeoutId = setTimeout(() => controller.abort(), SYNC_FETCH_TIMEOUT_MS);
+
           const response = await fetch('/api/v1/audit/sync', {
             method: 'POST',
             headers: {
@@ -387,10 +622,18 @@ class OfflineAuditSyncService {
               clientSyncProtocol: 'ZYRQUEN-OFFLINE-FORCE-SYNC-v1.2',
               manualTrigger: true,
             }),
-          });
+            signal: controller.signal,
+          }).finally(() => clearTimeout(timeoutId));
 
           if (!response.ok) {
-            throw new Error(`Server ledger ping returned HTTP ${response.status}`);
+            const errInfo = this.recordSyncError({
+              message: `Server ledger ping returned HTTP ${response.status}`,
+              stage: 'SERVER_REJECTION',
+              httpStatus: response.status,
+              pendingCount: 0,
+              retryCount: 0,
+            });
+            throw new Error(errInfo.message);
           }
 
           const now = new Date().toISOString();
@@ -400,6 +643,7 @@ class OfflineAuditSyncService {
             // ignore
           }
           this.recordSyncSuccess(now);
+          this.clearSyncError();
           triggerVibration('snapshot');
           return {
             flushedCount: 0,
@@ -407,8 +651,24 @@ class OfflineAuditSyncService {
             message: 'Primary ledger verified in sync. Zero pending offline audit logs.',
           };
         } catch (err: any) {
-          console.warn('[OfflineAuditSync] Force sync verification failed:', err.message);
-          return { flushedCount: 0, success: false, error: err.message };
+          const isTimeout = err?.name === 'AbortError';
+          const stage: SyncErrorStage = isTimeout ? 'TIMEOUT' : 'NETWORK';
+          const errInfo = this.recordSyncError({
+            message: isTimeout
+              ? `Sync request timed out after ${SYNC_FETCH_TIMEOUT_MS}ms`
+              : err?.message || 'Force sync verification network failure',
+            stage,
+            pendingCount: 0,
+            retryCount: 0,
+            errorDetails: err?.stack,
+          });
+          console.warn('[OfflineAuditSync] Force sync verification failed:', errInfo.message);
+          return {
+            flushedCount: 0,
+            success: false,
+            error: errInfo.message,
+            traceId: errInfo.traceId,
+          };
         } finally {
           this.setFlushing(false);
         }
@@ -421,6 +681,9 @@ class OfflineAuditSyncService {
 
     try {
       this.setProgress(35);
+      const controller = new AbortController();
+      const timeoutId = setTimeout(() => controller.abort(), SYNC_FETCH_TIMEOUT_MS);
+
       const response = await fetch('/api/v1/audit/sync', {
         method: 'POST',
         headers: {
@@ -429,15 +692,25 @@ class OfflineAuditSyncService {
         body: JSON.stringify({
           events: queue,
           flushedAt: new Date().toISOString(),
-          clientSyncProtocol: force ? 'ZYRQUEN-OFFLINE-FORCE-SYNC-v1.2' : 'ZYRQUEN-OFFLINE-RECONCILIATION-v1.2',
+          clientSyncProtocol: force
+            ? 'ZYRQUEN-OFFLINE-FORCE-SYNC-v1.2'
+            : 'ZYRQUEN-OFFLINE-RECONCILIATION-v1.2',
           manualTrigger: force,
         }),
-      });
+        signal: controller.signal,
+      }).finally(() => clearTimeout(timeoutId));
 
       this.setProgress(75);
 
       if (!response.ok) {
-        throw new Error(`Server sync failed with HTTP ${response.status}`);
+        const errInfo = this.recordSyncError({
+          message: `Server sync failed with HTTP ${response.status}`,
+          stage: 'SERVER_REJECTION',
+          httpStatus: response.status,
+          pendingCount: queue.length,
+          retryCount: (queue[0]?.retryCount || 0) + 1,
+        });
+        throw new Error(errInfo.message);
       }
 
       this.setProgress(95);
@@ -451,6 +724,7 @@ class OfflineAuditSyncService {
         // ignore
       }
       this.recordSyncSuccess(now);
+      this.clearSyncError();
       this.notifyListeners([]);
       triggerVibration('snapshot');
       this.setProgress(100);
@@ -459,11 +733,30 @@ class OfflineAuditSyncService {
       console.log(`[OfflineAuditSync] ${msg}`);
       return { flushedCount, success: true, message: msg };
     } catch (err: any) {
+      const isTimeout = err?.name === 'AbortError';
+      const stage: SyncErrorStage = isTimeout ? 'TIMEOUT' : 'NETWORK';
       console.warn('[OfflineAuditSync] Sync flush attempt failed, keeping queue:', err.message);
-      // Increment retry counts
+
+      // Increment retry counts on queue items
       const updatedQueue = queue.map((item) => ({ ...item, retryCount: item.retryCount + 1 }));
       this.saveQueue(updatedQueue);
-      return { flushedCount: 0, success: false, error: err.message };
+
+      const errInfo = this.recordSyncError({
+        message: isTimeout
+          ? `Audit log sync timed out after ${SYNC_FETCH_TIMEOUT_MS}ms`
+          : err.message || 'Unknown network error during audit log sync flush',
+        stage,
+        pendingCount: updatedQueue.length,
+        retryCount: updatedQueue[0]?.retryCount || 1,
+        errorDetails: err?.stack,
+      });
+
+      return {
+        flushedCount: 0,
+        success: false,
+        error: errInfo.message,
+        traceId: errInfo.traceId,
+      };
     } finally {
       this.setFlushing(false);
     }
@@ -643,7 +936,13 @@ class OfflineAuditSyncService {
   /**
    * Manually triggers immediate synchronization of pending offline audit logs to the primary ledger
    */
-  public async forceSync(): Promise<{ flushedCount: number; success: boolean; error?: string; message?: string }> {
+  public async forceSync(): Promise<{
+    flushedCount: number;
+    success: boolean;
+    error?: string;
+    message?: string;
+    traceId?: string;
+  }> {
     return this.flushQueue(true);
   }
 

@@ -9,5 +9,9 @@ export function startContinuumStream(frequency: number = 60): () => void {
     // Sovereign audit particle telemetry pulse
   }, 1000 / frequency);
 
+  if (typeof interval === 'object' && interval !== null && typeof (interval as any).unref === 'function') {
+    (interval as any).unref();
+  }
+
   return () => clearInterval(interval);
 }

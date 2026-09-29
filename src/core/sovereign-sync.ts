@@ -25,6 +25,7 @@ export async function sovereignSyncCommit(): Promise<SovereignSyncCommitResult> 
 
   // 2️⃣ Start Continuum Particle Stream @ 60Hz
   const stopStream = startContinuumStream(60);
+  stopStream();
 
   // 3️⃣ Commit message following Sovereign Sync Commit Ω∞ convention
   const commitMessage = `ZYRQUEN Ω∞ — Sovereign Sync Commit Ω∞ [Merkle: ${frozenCore.merkleRoot}] [Block: #849202] [Δ0.00%]`;

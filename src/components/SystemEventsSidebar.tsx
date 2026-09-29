@@ -210,6 +210,7 @@ export interface SystemEvent {
   merkleProofHash?: string;
   severity: 'info' | 'success' | 'warning' | 'critical';
   latencyMs?: number;
+  traceId?: string;
 }
 
 interface SystemEventsSidebarProps {

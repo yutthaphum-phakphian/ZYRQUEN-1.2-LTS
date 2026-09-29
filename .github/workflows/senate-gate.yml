@@ -7,6 +7,9 @@ on:
     branches: [ main ]
   workflow_dispatch:
 
+permissions:
+  contents: read
+
 jobs:
   senate-gate:
     name: 🛡️ Senate Gate - Helm Chart & Enterprise Performance
@@ -15,17 +18,16 @@ jobs:
     steps:
       - name: 📥 Checkout Repository
         uses: actions/checkout@v4
+
+      - name: 🐍 Setup Python 3.12 Environment
+        uses: actions/setup-python@v5
         with:
-          sparse-checkout: |
-            /*
-            !cloud-workspace-command-center/
-          sparse-checkout-cone-mode: false
+          python-version: '3.12'
 
       - name: ⚙️ Setup Node.js Environment
         uses: actions/setup-node@v4
         with:
           node-version: 20
-
 
       - name: 📦 Install Node & Dev Dependencies
         run: |

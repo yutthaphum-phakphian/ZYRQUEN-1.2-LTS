@@ -772,6 +772,7 @@ function createNormalizedSystemEvent(
     bindingStatus?: SystemEvent['bindingStatus'];
     anchoredSealNumber?: number;
     merkleProofHash?: string;
+    traceId?: string;
   },
   sealCounter?: number
 ): SystemEvent {
@@ -783,6 +784,9 @@ function createNormalizedSystemEvent(
   const isCrypto = payload.type === 'CRYPTO';
 
   const timestamp = new Date().toLocaleTimeString('en-GB', { hour12: false }) + ' ICT';
+  const traceId =
+    payload.traceId ||
+    `TRC-EVT-${Date.now()}-${Math.floor(Math.random() * 10000).toString(16).padStart(4, '0')}`;
 
   let bindingStatus: SystemEvent['bindingStatus'] = payload.bindingStatus;
   if (!bindingStatus) {
@@ -829,12 +833,14 @@ function createNormalizedSystemEvent(
       payload.anchoredSealNumber ?? (bindingStatus === 'VERIFIED' ? (sealCounter ?? 14902) : undefined),
     merkleProofHash: payload.merkleProofHash,
     severity: payload.severity || 'info',
+    traceId,
   };
 }
 
 /**
  * Pure reducer for predictable, atomic, and race-condition-free system event state management.
  * Guarantees zero out-of-order inconsistencies during high-frequency telemetry and batch compliance verification.
+ * Captures comprehensive trace IDs, forensic metadata, and queue state transitions for high-fidelity debugging.
  */
 function systemEventsReducer(
   state: SystemEvent[],
@@ -843,39 +849,83 @@ function systemEventsReducer(
     | { type: 'HYDRATE_EVENTS'; payload: SystemEvent[] }
     | { type: 'APPEND_NORMALIZED_EVENTS'; payload: SystemEvent[] }
 ): SystemEvent[] {
+  const transitionStart = performance.now();
+  const prevDepth = state.length;
+
   switch (action.type) {
     case 'EMIT_SYSTEM_EVENT': {
       const normalizedEvt = createNormalizedSystemEvent(
         action.payload,
         systemStateStore.getState().sealCount
       );
+      const executionDurationMs = Number((performance.now() - transitionStart).toFixed(3));
+      console.debug(
+        `[SystemEventsReducer][EMIT] Trace: ${normalizedEvt.traceId} | EventID: ${normalizedEvt.id} | Type: ${normalizedEvt.type} | Severity: ${normalizedEvt.severity} | Binding: ${normalizedEvt.bindingStatus} | Target: ${normalizedEvt.targetView || 'GLOBAL'} | Statute: "${normalizedEvt.statuteRef || 'N/A'}" | Title: "${normalizedEvt.title}" | Queue: ${prevDepth} -> ${prevDepth + 1} (${executionDurationMs}ms)`
+      );
       return [normalizedEvt, ...state];
     }
 
     case 'BATCH_SYSTEM_EVENTS': {
+      const currentSeal = systemStateStore.getState().sealCount;
       const normalizedList = action.payload.map((p) =>
-        createNormalizedSystemEvent(p, systemStateStore.getState().sealCount)
+        createNormalizedSystemEvent(p, currentSeal)
+      );
+      const executionDurationMs = Number((performance.now() - transitionStart).toFixed(3));
+      const traceMap = normalizedList.map((e) => `[${e.traceId} => ${e.type}:${e.severity}]`).join('; ');
+      console.debug(
+        `[SystemEventsReducer][BATCH] Ingested ${normalizedList.length} events | Traces: ${traceMap} | Queue Depth: ${prevDepth} -> ${prevDepth + normalizedList.length} (${executionDurationMs}ms)`
       );
       return [...normalizedList, ...state];
     }
 
     case 'APPEND_NORMALIZED_EVENTS': {
+      const executionDurationMs = Number((performance.now() - transitionStart).toFixed(3));
+      const traceSummary = action.payload
+        .slice(0, 5)
+        .map((e) => e.traceId || e.id)
+        .join(', ');
+      const moreCount = action.payload.length > 5 ? ` (+${action.payload.length - 5} more)` : '';
+      console.debug(
+        `[SystemEventsReducer][APPEND] Appended ${action.payload.length} pre-normalized events | Sample Traces: [${traceSummary}${moreCount}] | Queue Depth: ${prevDepth} -> ${prevDepth + action.payload.length} (${executionDurationMs}ms)`
+      );
       return [...action.payload, ...state];
     }
 
     case 'SYNC_REMOTE_EVENT': {
       const remoteEvt = action.payload;
-      if (state.some((e) => e.id === remoteEvt.id)) {
+      const traceId = remoteEvt.traceId || remoteEvt.id || `TRC-REMOTE-${Date.now()}`;
+      const duplicate = state.find((e) => e.id === remoteEvt.id || (remoteEvt.traceId && e.traceId === remoteEvt.traceId));
+      if (duplicate) {
+        console.debug(
+          `[SystemEventsReducer][SYNC_SKIPPED] Trace: ${traceId} | Event ${remoteEvt.id} already exists in local buffer. Deduplication active.`
+        );
         return state;
       }
+      const executionDurationMs = Number((performance.now() - transitionStart).toFixed(3));
+      console.debug(
+        `[SystemEventsReducer][SYNC_REMOTE] Trace: ${traceId} | EventID: ${remoteEvt.id} | Severity: ${remoteEvt.severity} | Title: "${remoteEvt.title}" | Queue Depth: ${prevDepth} -> ${prevDepth + 1} (${executionDurationMs}ms)`
+      );
       return [remoteEvt, ...state];
     }
 
+    case 'HYDRATE_EVENTS': {
+      const executionDurationMs = Number((performance.now() - transitionStart).toFixed(3));
+      console.debug(
+        `[SystemEventsReducer][HYDRATE] Replaced state with ${action.payload.length} hydrated events (Previous: ${prevDepth}) (${executionDurationMs}ms)`
+      );
+      return action.payload;
+    }
+
     case 'CLEAR_SYSTEM_EVENTS': {
+      const executionDurationMs = Number((performance.now() - transitionStart).toFixed(3));
+      console.debug(
+        `[SystemEventsReducer][CLEAR] Flushed all ${prevDepth} active system events from in-memory queue (${executionDurationMs}ms)`
+      );
       return [];
     }
 
     default:
+      console.warn(`[SystemEventsReducer][UNKNOWN_ACTION] Unhandled action type received:`, action);
       return state;
   }
 }
