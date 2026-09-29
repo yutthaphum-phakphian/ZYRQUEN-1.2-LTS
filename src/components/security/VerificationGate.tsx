@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { ShieldCheck, Lock, CheckCircle2, RefreshCw, Zap, ShieldAlert, Activity, History, Clock } from 'lucide-react';
+import { ShieldCheck, Lock, CheckCircle2, RefreshCw, Zap, ShieldAlert, Activity, History, Clock, Copy, Check } from 'lucide-react';
 import { motion, AnimatePresence } from 'motion/react';
 import { playAuditChime, playTone } from '../AudioSynthesizer';
 import { offlineAuditSyncService } from '../../services/offlineAuditSyncService';
@@ -10,6 +10,8 @@ export const VerificationGate: React.FC = () => {
   const [offlinePendingCount, setOfflinePendingCount] = useState<number>(() => offlineAuditSyncService.getQueueCount());
   const [isGateTooltipVisible, setIsGateTooltipVisible] = useState<boolean>(false);
   const [syncHistory, setSyncHistory] = useState<string[]>(() => offlineAuditSyncService.getSyncHistory());
+  const [isCopied, setIsCopied] = useState<boolean>(false);
+  const [isRefreshing, setIsRefreshing] = useState<boolean>(false);
 
   useEffect(() => {
     const unsub = offlineAuditSyncService.subscribe((count) => {
@@ -125,15 +127,16 @@ export const VerificationGate: React.FC = () => {
             <AnimatePresence>
               {isGateTooltipVisible && (
                 <motion.div
+                  id="verification-gate-status-tooltip"
                   initial={{ opacity: 0, y: -10, scale: 0.94, filter: 'blur(6px)' }}
                   animate={{ opacity: 1, y: 0, scale: 1, filter: 'blur(0px)' }}
                   exit={{ opacity: 0, y: -8, scale: 0.95, filter: 'blur(4px)' }}
                   transition={{
-                    duration: 0.32,
-                    ease: [0.16, 1, 0.3, 1],
-                    scale: { duration: 0.34, ease: [0.16, 1, 0.3, 1] },
-                    opacity: { duration: 0.24, ease: 'easeOut' },
-                    y: { duration: 0.32, ease: [0.16, 1, 0.3, 1] },
+                    duration: 0.3,
+                    ease: 'easeOut',
+                    scale: { duration: 0.3, ease: 'easeOut' },
+                    opacity: { duration: 0.22, ease: 'easeOut' },
+                    y: { duration: 0.3, ease: 'easeOut' },
                   }}
                   className="absolute right-0 top-full mt-2 z-50 w-72 p-3 rounded-xl bg-slate-950/95 border border-cyan-500/40 shadow-2xl backdrop-blur-xl text-[10px] text-zinc-300 space-y-2 pointer-events-none"
                 >
@@ -149,12 +152,50 @@ export const VerificationGate: React.FC = () => {
 
                   {/* Sync History Log Section */}
                   <div className="space-y-1">
-                    <div className="flex items-center justify-between text-[8.5px] text-zinc-400 font-bold">
+                    <div className="flex items-center justify-between text-[8.5px] text-zinc-400 font-bold gap-1">
                       <span className="flex items-center gap-1 text-cyan-300">
-                        <History className="w-3 h-3 text-cyan-400" />
-                        SYNC HISTORY (LAST 5 FLUSHES)
+                        <History className="w-3 h-3 text-cyan-400 shrink-0" />
+                        SYNC HISTORY
                       </span>
-                      <span className="text-[7.5px] text-zinc-500">5 ENTRIES</span>
+                      <div className="flex items-center gap-1">
+                        <button
+                          type="button"
+                          onClick={(e) => {
+                            e.stopPropagation();
+                            playTone(660, 0.04);
+                            const updated = offlineAuditSyncService.getSyncHistory();
+                            setSyncHistory(updated);
+                            setIsRefreshing(true);
+                            setTimeout(() => setIsRefreshing(false), 500);
+                          }}
+                          className="px-1.5 py-0.2 rounded bg-zinc-900 border border-zinc-700 text-zinc-300 hover:text-white text-[7.5px] font-bold flex items-center gap-0.5 cursor-pointer pointer-events-auto"
+                          title="Refresh Sync History"
+                        >
+                          <RefreshCw className={`w-2 h-2 text-cyan-400 ${isRefreshing ? 'animate-spin' : ''}`} />
+                          <span>Refresh</span>
+                        </button>
+                        <button
+                          type="button"
+                          onClick={(e) => {
+                            e.stopPropagation();
+                            playTone(700, 0.04);
+                            if (syncHistory.length === 0) return;
+                            const logsText = syncHistory
+                              .slice(0, 5)
+                              .map((ts, idx) => `[#${idx + 1}] ${ts}`)
+                              .join('\n');
+                            navigator.clipboard.writeText(logsText);
+                            setIsCopied(true);
+                            setTimeout(() => setIsCopied(false), 2000);
+                          }}
+                          className="px-1.5 py-0.2 rounded bg-cyan-950 border border-cyan-500/30 text-cyan-300 hover:text-white text-[7.5px] font-bold flex items-center gap-0.5 cursor-pointer pointer-events-auto"
+                          title="Copy Logs"
+                        >
+                          {isCopied ? <Check className="w-2 h-2 text-emerald-400" /> : <Copy className="w-2 h-2 text-cyan-400" />}
+                          <span>{isCopied ? 'Copied' : 'Copy'}</span>
+                        </button>
+                        <span className="text-[7.5px] text-zinc-500">{syncHistory.length}</span>
+                      </div>
                     </div>
 
                     <div className="space-y-1 max-h-24 overflow-y-auto">
@@ -166,13 +207,13 @@ export const VerificationGate: React.FC = () => {
                         return (
                           <div
                             key={`${ts}-${idx}`}
-                            className="flex items-center justify-between p-1 rounded bg-black/60 border border-white/5 text-[8px] font-mono"
+                            className="group flex items-center justify-between p-1 rounded bg-black/60 border border-white/5 hover:bg-zinc-800/90 hover:border-cyan-400/50 hover:translate-x-1 hover:text-white transition-all duration-150 text-[8px] font-mono shadow-sm"
                           >
-                            <div className="flex items-center gap-1">
-                              <span className="w-1.5 h-1.5 rounded-full bg-emerald-400" />
-                              <span className="text-zinc-200">{timeFormatted}</span>
+                            <div className="flex items-center gap-1 min-w-0">
+                              <span className="w-1.5 h-1.5 rounded-full bg-emerald-400 shrink-0 group-hover:scale-125 transition-transform" />
+                              <span className="text-zinc-200 group-hover:text-white group-hover:drop-shadow-[0_0_4px_rgba(255,255,255,0.4)] whitespace-nowrap transition-colors">{timeFormatted}</span>
                             </div>
-                            <span className="text-emerald-400 text-[7px] font-bold">
+                            <span className="text-emerald-400 group-hover:text-emerald-300 text-[7px] font-bold shrink-0 transition-colors">
                               {idx === 0 ? 'LATEST' : `#${idx + 1}`}
                             </span>
                           </div>

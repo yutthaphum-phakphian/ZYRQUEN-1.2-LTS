@@ -30,6 +30,7 @@ import {
   X,
   Bot,
   Copy,
+  Check,
   FileDown,
   Pin,
   PinOff,
@@ -1153,6 +1154,8 @@ function SovereignAppContent() {
   const [isGateTooltipPinned, setIsGateTooltipPinned] = useState<boolean>(false);
   const [isAutoSyncEnabled, setIsAutoSyncEnabled] = useState<boolean>(() => offlineAuditSyncService.isAutoSyncEnabled());
   const [syncHistory, setSyncHistory] = useState<string[]>(() => offlineAuditSyncService.getSyncHistory());
+  const [isSyncLogsCopied, setIsSyncLogsCopied] = useState<boolean>(false);
+  const [isSyncHistoryRefreshing, setIsSyncHistoryRefreshing] = useState<boolean>(false);
 
   const offlineTypeBreakdown = React.useMemo(() => {
     const counts: Record<string, number> = {};
@@ -2897,7 +2900,7 @@ function SovereignAppContent() {
                         transition={{
                           duration: 0.3,
                           ease: [0.16, 1, 0.3, 1],
-                          scale: { duration: 0.3, ease: [0.16, 1, 0.3, 1] },
+                          scale: { duration: 0.3, ease: 'easeOut' },
                           opacity: { duration: 0.22, ease: 'easeOut' },
                           y: { duration: 0.3, ease: [0.16, 1, 0.3, 1] },
                         }}
@@ -3937,14 +3940,66 @@ function SovereignAppContent() {
 
                           {/* Sync History Log (Last 5 Successful Flushes) */}
                           <div className="space-y-1.5 pt-1 border-t border-white/10">
-                            <div className="flex items-center justify-between font-mono text-[9px]">
+                            <div className="flex flex-wrap items-center justify-between font-mono text-[9px] gap-1.5">
                               <span className="text-zinc-400 font-bold flex items-center gap-1">
-                                <History className="w-3 h-3 text-cyan-400" />
-                                <span>SYNC HISTORY (LAST 5 SUCCESSFUL FLUSHES)</span>
+                                <History className="w-3 h-3 text-cyan-400 shrink-0" />
+                                <span>SYNC HISTORY (LAST 5 FLUSHES)</span>
                               </span>
-                              <span className="px-1.5 py-0.2 rounded bg-cyan-950/60 border border-cyan-500/30 text-cyan-300 font-bold text-[8px]">
-                                {syncHistory.length} AUDITED {syncHistory.length === 1 ? 'ENTRY' : 'ENTRIES'}
-                              </span>
+                              <div className="flex items-center gap-1 ml-auto">
+                                <button
+                                  type="button"
+                                  id="btn-refresh-sync-history-logs-mid"
+                                  onClick={(e) => {
+                                    e.stopPropagation();
+                                    playTone(660, 0.04);
+                                    const updated = offlineAuditSyncService.getSyncHistory();
+                                    setSyncHistory(updated);
+                                    setIsSyncHistoryRefreshing(true);
+                                    setTimeout(() => setIsSyncHistoryRefreshing(false), 500);
+                                    showToast(`Refreshed Sync History (${updated.length} entries verified).`, 'info');
+                                  }}
+                                  className="px-1.5 py-0.5 rounded bg-zinc-900/90 hover:bg-zinc-800 border border-zinc-700/80 hover:border-cyan-500/50 text-zinc-300 hover:text-white font-bold text-[7.5px] flex items-center gap-0.5 transition-all active:scale-95 cursor-pointer"
+                                  title="Manually refresh sync history from offlineAuditSyncService"
+                                >
+                                  <RefreshCw className={`w-2.5 h-2.5 text-cyan-400 ${isSyncHistoryRefreshing ? 'animate-spin' : ''}`} />
+                                  <span>Refresh Log</span>
+                                </button>
+                                <button
+                                  type="button"
+                                  id="btn-copy-sync-history-logs-mid"
+                                  onClick={(e) => {
+                                    e.stopPropagation();
+                                    playTone(700, 0.04);
+                                    if (syncHistory.length === 0) {
+                                      showToast('No sync history logs available to copy.', 'info');
+                                      return;
+                                    }
+                                    const logsText = syncHistory
+                                      .slice(0, 5)
+                                      .map((ts, idx) => {
+                                        const d = new Date(ts);
+                                        const formattedTime = isNaN(d.getTime()) ? ts : d.toISOString();
+                                        return `[#${idx + 1}] ${formattedTime} • BITWISE VERIFIED`;
+                                      })
+                                      .join('\n');
+                                    navigator.clipboard.writeText(logsText).then(() => {
+                                      setIsSyncLogsCopied(true);
+                                      setTimeout(() => setIsSyncLogsCopied(false), 2000);
+                                      showToast(`${Math.min(syncHistory.length, 5)} Sync History timestamps copied to clipboard.`, 'success');
+                                    }).catch(() => {
+                                      showToast('Failed to copy logs to clipboard.', 'warning');
+                                    });
+                                  }}
+                                  className="px-1.5 py-0.5 rounded bg-cyan-950/70 hover:bg-cyan-900/80 border border-cyan-500/40 hover:border-cyan-400 text-cyan-300 hover:text-white font-bold text-[7.5px] flex items-center gap-0.5 transition-all active:scale-95 cursor-pointer"
+                                  title="Copy visible sync history timestamps to clipboard"
+                                >
+                                  {isSyncLogsCopied ? <Check className="w-2.5 h-2.5 text-emerald-400" /> : <Copy className="w-2.5 h-2.5 text-cyan-400" />}
+                                  <span>{isSyncLogsCopied ? 'Copied' : 'Copy Logs'}</span>
+                                </button>
+                                <span className="px-1.5 py-0.2 rounded bg-cyan-950/60 border border-cyan-500/30 text-cyan-300 font-bold text-[8px]">
+                                  {syncHistory.length} AUDITED
+                                </span>
+                              </div>
                             </div>
                             <div className="space-y-1 max-h-28 overflow-y-auto pr-0.5">
                               {syncHistory.map((ts, idx) => {
@@ -3958,22 +4013,22 @@ function SovereignAppContent() {
                                 return (
                                   <div
                                     key={`${ts}-${idx}`}
-                                    className="flex items-center justify-between p-1.5 rounded bg-zinc-950/80 border border-zinc-800/80 text-[8.5px] font-mono hover:border-cyan-500/30 transition-colors"
+                                    className="group flex items-center justify-between p-1.5 rounded bg-zinc-950/80 border border-zinc-800/80 hover:bg-zinc-800/90 hover:border-cyan-400/60 hover:translate-x-1 hover:text-white transition-all duration-150 text-[8.5px] font-mono cursor-default shadow-sm hover:shadow-[0_0_12px_rgba(6,182,212,0.2)]"
                                   >
                                     <div className="flex items-center gap-1.5 min-w-0">
-                                      <span className="w-1.5 h-1.5 rounded-full bg-emerald-400 shadow-[0_0_4px_rgba(52,211,153,0.8)] shrink-0" />
-                                      <span className="font-bold text-zinc-200 whitespace-nowrap">{timeFormatted}</span>
+                                      <span className="w-1.5 h-1.5 rounded-full bg-emerald-400 shadow-[0_0_4px_rgba(52,211,153,0.8)] shrink-0 group-hover:scale-125 transition-transform" />
+                                      <span className="font-bold text-zinc-200 group-hover:text-white group-hover:drop-shadow-[0_0_6px_rgba(255,255,255,0.4)] whitespace-nowrap transition-colors">{timeFormatted}</span>
                                       {dateFormatted && (
-                                        <span className="text-zinc-500 text-[8px] truncate hidden sm:inline">
+                                        <span className="text-zinc-500 group-hover:text-zinc-300 text-[8px] truncate hidden sm:inline transition-colors">
                                           ({dateFormatted})
                                         </span>
                                       )}
                                     </div>
                                     <div className="flex items-center gap-1.5 shrink-0">
-                                      <span className="px-1.5 py-0.2 rounded bg-emerald-500/15 border border-emerald-500/30 text-emerald-300 font-semibold text-[7.5px]">
+                                      <span className="px-1.5 py-0.2 rounded bg-emerald-500/15 group-hover:bg-emerald-500/25 border border-emerald-500/30 group-hover:border-emerald-400/50 text-emerald-300 font-semibold text-[7.5px] transition-colors">
                                         BITWISE VERIFIED
                                       </span>
-                                      <span className="text-[7.5px] text-cyan-400/90 font-mono">
+                                      <span className="text-[7.5px] text-cyan-400/90 group-hover:text-cyan-300 font-mono transition-colors">
                                         {idx === 0 ? 'LATEST' : `#${idx + 1}`}
                                       </span>
                                     </div>
@@ -4088,14 +4143,70 @@ function SovereignAppContent() {
                           id="verification-gate-bottom-sync-history"
                           className="p-2.5 rounded-xl bg-zinc-950/90 border border-cyan-500/30 mb-2 space-y-1.5 font-mono shadow-inner"
                         >
-                          <div className="flex items-center justify-between text-[9px] pb-1 border-b border-cyan-500/20">
+                          <div className="flex flex-wrap items-center justify-between text-[9px] pb-1 border-b border-cyan-500/20 gap-1.5">
                             <span className="text-cyan-300 font-bold flex items-center gap-1.5">
                               <History className="w-3.5 h-3.5 text-cyan-400 shrink-0" />
                               <span>OFFLINE AUDIT SYNC HISTORY (LAST 5 FLUSHES)</span>
                             </span>
-                            <span className="px-1.5 py-0.2 rounded bg-emerald-500/15 border border-emerald-500/30 text-emerald-300 font-bold text-[8px]">
-                              {syncHistory.length} AUDIT {syncHistory.length === 1 ? 'RECORD' : 'RECORDS'}
-                            </span>
+                            <div className="flex items-center gap-1 ml-auto">
+                              {/* Refresh Log Button */}
+                              <button
+                                type="button"
+                                id="btn-refresh-sync-history-logs"
+                                onClick={(e) => {
+                                  e.stopPropagation();
+                                  playTone(660, 0.04);
+                                  const updated = offlineAuditSyncService.getSyncHistory();
+                                  setSyncHistory(updated);
+                                  setIsSyncHistoryRefreshing(true);
+                                  setTimeout(() => setIsSyncHistoryRefreshing(false), 500);
+                                  showToast(`Refreshed Sync History (${updated.length} entries verified).`, 'info');
+                                }}
+                                className="px-1.5 py-0.5 rounded bg-zinc-900/90 hover:bg-zinc-800 border border-zinc-700/80 hover:border-cyan-500/50 text-zinc-300 hover:text-white font-bold text-[7.5px] flex items-center gap-0.5 transition-all active:scale-95 cursor-pointer"
+                                title="Manually refresh sync history from offlineAuditSyncService"
+                              >
+                                <RefreshCw className={`w-2.5 h-2.5 text-cyan-400 ${isSyncHistoryRefreshing ? 'animate-spin' : ''}`} />
+                                <span>Refresh Log</span>
+                              </button>
+
+                              {/* Copy Logs Button */}
+                              <button
+                                type="button"
+                                id="btn-copy-sync-history-logs"
+                                onClick={(e) => {
+                                  e.stopPropagation();
+                                  playTone(700, 0.04);
+                                  if (syncHistory.length === 0) {
+                                    showToast('No sync history logs available to copy.', 'info');
+                                    return;
+                                  }
+                                  const logsText = syncHistory
+                                    .slice(0, 5)
+                                    .map((ts, idx) => {
+                                      const d = new Date(ts);
+                                      const formattedTime = isNaN(d.getTime()) ? ts : d.toISOString();
+                                      return `[#${idx + 1}] ${formattedTime} • BITWISE VERIFIED`;
+                                    })
+                                    .join('\n');
+                                  navigator.clipboard.writeText(logsText).then(() => {
+                                    setIsSyncLogsCopied(true);
+                                    setTimeout(() => setIsSyncLogsCopied(false), 2000);
+                                    showToast(`${Math.min(syncHistory.length, 5)} Sync History timestamps copied to clipboard.`, 'success');
+                                  }).catch(() => {
+                                    showToast('Failed to copy logs to clipboard.', 'warning');
+                                  });
+                                }}
+                                className="px-1.5 py-0.5 rounded bg-cyan-950/70 hover:bg-cyan-900/80 border border-cyan-500/40 hover:border-cyan-400 text-cyan-300 hover:text-white font-bold text-[7.5px] flex items-center gap-0.5 transition-all active:scale-95 cursor-pointer"
+                                title="Copy all visible sync history timestamps to clipboard"
+                              >
+                                {isSyncLogsCopied ? <Check className="w-2.5 h-2.5 text-emerald-400" /> : <Copy className="w-2.5 h-2.5 text-cyan-400" />}
+                                <span>{isSyncLogsCopied ? 'Copied' : 'Copy Logs'}</span>
+                              </button>
+
+                              <span className="px-1.5 py-0.2 rounded bg-emerald-500/15 border border-emerald-500/30 text-emerald-300 font-bold text-[8px]">
+                                {syncHistory.length} AUDIT {syncHistory.length === 1 ? 'RECORD' : 'RECORDS'}
+                              </span>
+                            </div>
                           </div>
 
                           <div className="space-y-1 max-h-28 overflow-y-auto pr-0.5">
@@ -4110,22 +4221,22 @@ function SovereignAppContent() {
                               return (
                                 <div
                                   key={`bottom-sync-hist-${ts}-${idx}`}
-                                  className="flex items-center justify-between p-1.5 rounded bg-black/60 border border-zinc-800/80 hover:border-cyan-500/30 transition-colors text-[8.5px]"
+                                  className="group flex items-center justify-between p-1.5 rounded bg-black/60 border border-zinc-800/80 hover:bg-zinc-800/90 hover:border-cyan-400/60 hover:translate-x-1.5 hover:text-white transition-all duration-150 text-[8.5px] cursor-default shadow-sm hover:shadow-[0_0_12px_rgba(6,182,212,0.25)]"
                                 >
                                   <div className="flex items-center gap-1.5 min-w-0">
-                                    <span className="w-1.5 h-1.5 rounded-full bg-emerald-400 shadow-[0_0_4px_rgba(52,211,153,0.9)] shrink-0 animate-pulse" />
-                                    <span className="font-bold text-zinc-200 whitespace-nowrap">{timeFormatted}</span>
+                                    <span className="w-1.5 h-1.5 rounded-full bg-emerald-400 shadow-[0_0_4px_rgba(52,211,153,0.9)] shrink-0 animate-pulse group-hover:scale-125 transition-transform" />
+                                    <span className="font-bold text-zinc-300 group-hover:text-white group-hover:drop-shadow-[0_0_6px_rgba(255,255,255,0.4)] whitespace-nowrap transition-colors">{timeFormatted}</span>
                                     {dateFormatted && (
-                                      <span className="text-zinc-500 text-[8px] truncate hidden sm:inline">
+                                      <span className="text-zinc-500 group-hover:text-zinc-300 text-[8px] truncate hidden sm:inline transition-colors">
                                         • {dateFormatted}
                                       </span>
                                     )}
                                   </div>
                                   <div className="flex items-center gap-1.5 shrink-0">
-                                    <span className="px-1.5 py-0.2 rounded bg-emerald-500/15 border border-emerald-500/30 text-emerald-300 font-semibold text-[7.5px]">
+                                    <span className="px-1.5 py-0.2 rounded bg-emerald-500/15 group-hover:bg-emerald-500/25 border border-emerald-500/30 group-hover:border-emerald-400/50 text-emerald-300 font-semibold text-[7.5px] transition-colors">
                                       FLUSH CONFIRMED
                                     </span>
-                                    <span className="text-[7.5px] text-cyan-400/90 font-mono">
+                                    <span className="text-[7.5px] text-cyan-400/90 group-hover:text-cyan-300 font-mono transition-colors">
                                       {idx === 0 ? 'LATEST' : `#${idx + 1}`}
                                     </span>
                                   </div>
