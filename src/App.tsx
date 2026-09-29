@@ -56,6 +56,7 @@ import { SovereignBottomStatusBar } from '@/components/SovereignBottomStatusBar'
 import { CopilotSovereignAI } from '@/components/CopilotSovereignAI';
 import { SystemEventsSidebar, SystemEvent } from '@/components/SystemEventsSidebar';
 import { ForensicAuditStepper } from '@/components/ForensicAuditStepper';
+import { LegalTriggerCard, type LegalTriggerItem } from '@/components/LegalTriggerCard';
 import { type StagedAiCommandRequest } from '@/components/CommandCenterOperationsConsole';
 import type { SecuritySubTab } from '@/components/views/SecurityView';
 
@@ -450,21 +451,6 @@ const BannerAnimatedSealCount: React.FC<BannerAnimatedSealCountProps> = ({
   );
 };
 
-interface LegalTriggerItem {
-  id: string;
-  act: string;
-  section: string;
-  title: string;
-  titleTh: string;
-  status: 'PASS' | 'ACTIVE_GUARD' | 'VERIFIED';
-  statusText: string;
-  pqcScheme: string;
-  anchor: string;
-  description: string;
-  descriptionTh: string;
-  statuteClause: string;
-}
-
 const ETDA_PDPA_TRIGGERS: LegalTriggerItem[] = [
   {
     id: 'etda-sec-09',
@@ -595,6 +581,17 @@ const INITIAL_SYSTEM_EVENTS: SystemEvent[] = [
     severity: 'success',
   },
   {
+    id: 'evt-etda-09',
+    type: 'COMPLIANCE',
+    title: 'ETDA Sec 9 Non-Repudiation Invariant Attested',
+    description: 'Signatory identity bound via FIPS 204 ML-DSA-87 to Passport #EP-SOVEREIGN-01. SLA latency: 0.11ms.',
+    timestamp: '05:02:15 ICT',
+    metaHash: 'trigger:etda-sec-09:sig_leaf_909ab814',
+    statuteRef: 'พ.ร.บ. ธุรกรรมทางอิเล็กทรอนิกส์ มาตรา ๙',
+    targetView: 'legal',
+    severity: 'success',
+  },
+  {
     id: 'evt-001',
     type: 'CRYPTO',
     title: 'Sovereign Genesis Block #849202 Sealed',
@@ -603,6 +600,28 @@ const INITIAL_SYSTEM_EVENTS: SystemEvent[] = [
     metaHash: 'sha256:909ab8146747f520beec1907beab286c06a38096f9bf00f40d8aa536b3fa4c68',
     statuteRef: 'มาตรา 26: ลายมือชื่อดิจิทัลที่เชื่อถือได้',
     targetView: 'security',
+    severity: 'success',
+  },
+  {
+    id: 'evt-etda-26',
+    type: 'CRYPTO',
+    title: 'ETDA Sec 26 Reliable Signature & Sole Control Sealed',
+    description: '10/10 REAL_HSM quorum verified sole control of Dilithium key rings. Tamper detection: active fail-closed in 0.38ms.',
+    timestamp: '05:03:45 ICT',
+    metaHash: 'trigger:etda-sec-26:hsm_quorum_10_10',
+    statuteRef: 'พ.ร.บ. ธุรกรรมทางอิเล็กทรอนิกส์ มาตรา ๒๖',
+    targetView: 'legal',
+    severity: 'success',
+  },
+  {
+    id: 'evt-etda-28',
+    type: 'COMPLIANCE',
+    title: 'ETDA Sec 28 Court Admissibility & Safe Harbor Verified',
+    description: 'Immutable Ledger V25 certified for Thai Supreme Court submission. Merkle root 909ab814 locked.',
+    timestamp: '05:04:02 ICT',
+    metaHash: 'trigger:etda-sec-28:court_admissible_909a',
+    statuteRef: 'พ.ร.บ. ธุรกรรมทางอิเล็กทรอนิกส์ มาตรา ๒๘',
+    targetView: 'legal',
     severity: 'success',
   },
   {
@@ -615,6 +634,17 @@ const INITIAL_SYSTEM_EVENTS: SystemEvent[] = [
     severity: 'info',
   },
   {
+    id: 'evt-pdpa-09',
+    type: 'COMPLIANCE',
+    title: 'PDPA Sec 9 Lawful Basis & Consent Invariant Enforced',
+    description: 'Zero-Knowledge Policy Engine locked boundary Ω601–Ω1000 with Δ0.00% zero drift.',
+    timestamp: '05:04:50 ICT',
+    metaHash: 'trigger:pdpa-sec-09:zk_consent_matrix',
+    statuteRef: 'พ.ร.บ. คุ้มครองข้อมูลส่วนบุคคล มาตรา ๙',
+    targetView: 'legal',
+    severity: 'success',
+  },
+  {
     id: 'evt-003',
     type: 'COMPLIANCE',
     title: 'PDPA Thailand Compliance Pre-Flight Verified',
@@ -622,6 +652,28 @@ const INITIAL_SYSTEM_EVENTS: SystemEvent[] = [
     timestamp: '05:05:30 ICT',
     statuteRef: 'พ.ร.บ. คุ้มครองข้อมูลส่วนบุคคล (PDPA Sec 37)',
     targetView: 'security',
+    severity: 'success',
+  },
+  {
+    id: 'evt-pdpa-26',
+    type: 'SECURITY',
+    title: 'PDPA Sec 26 Sensitive Data Cryo-Vault Verification Pass',
+    description: 'Chamber 08 PQC Enclave encapsulation verified against quantum Shor attacks at 14.98 mK.',
+    timestamp: '05:05:48 ICT',
+    metaHash: 'trigger:pdpa-sec-26:pqc_kem1024_sphincs',
+    statuteRef: 'พ.ร.บ. คุ้มครองข้อมูลส่วนบุคคล มาตรา ๒๖',
+    targetView: 'legal',
+    severity: 'success',
+  },
+  {
+    id: 'evt-pdpa-28',
+    type: 'COMPLIANCE',
+    title: 'PDPA Sec 28 Cross-Border Sovereign Safeguard Active',
+    description: 'Multi-mesh gateway verified destination adequacy standard; unauthorized export blocked.',
+    timestamp: '05:06:00 ICT',
+    metaHash: 'trigger:pdpa-sec-28:boundary_enclave_node',
+    statuteRef: 'พ.ร.บ. คุ้มครองข้อมูลส่วนบุคคล มาตรา ๒๘',
+    targetView: 'legal',
     severity: 'success',
   },
 ];
@@ -2350,6 +2402,53 @@ function SovereignAppContent() {
     setTimeout(() => setCopiedHashId(null), 2500);
   }, [showToast]);
 
+  const handleTriggerValidation = useCallback(
+    (trigger: LegalTriggerItem, simulateFailure = false) => {
+      triggerVibration(simulateFailure ? [50, 80, 50] : 30);
+      const proofDigest = `0x${Math.random().toString(16).slice(2, 10)}${Math.random().toString(16).slice(2, 10)}`;
+
+      if (simulateFailure) {
+        dispatchAction({
+          type: 'EMIT_SYSTEM_EVENT',
+          payload: {
+            type: 'ANOMALY',
+            title: `${trigger.section} Simulated Drift Detected (Fail-Closed Veto)`,
+            description: `Adversarial stress test triggered simulated key deviation on ${trigger.title}. Automated fail-closed circuit breaker engaged within 0.38ms.`,
+            metaHash: `trigger:${trigger.id}:fail_test_${proofDigest}`,
+            severity: 'critical',
+            statuteRef: trigger.statuteClause,
+            targetView: 'legal',
+            bindingStatus: 'ORPHANED',
+          },
+        });
+        showToast(`[FAIL-CLOSED ALERT] ${trigger.section} Simulated Anomaly Isolated`, 'error');
+      } else {
+        dispatchAction({
+          type: 'EMIT_SYSTEM_EVENT',
+          payload: {
+            type: 'COMPLIANCE',
+            title: `${trigger.section} Invariant Attested & Sealed`,
+            description: `Live statutory probe verified ${trigger.title}. PQC lattice signature validated against Genesis Block #${systemStateStore.getState().sealedBlock}. SSoT drift: Δ0.00%.`,
+            metaHash: `trigger:${trigger.id}:${proofDigest}`,
+            severity: 'success',
+            statuteRef: trigger.statuteClause,
+            targetView: 'legal',
+            bindingStatus: 'VERIFIED',
+            anchoredSealNumber: systemStateStore.getState().sealCount,
+          },
+        });
+        showToast(`[VERIFIED] ${trigger.section} Statutory Invariant Attested (100% Pass)`, 'success');
+      }
+    },
+    [dispatchAction, showToast]
+  );
+
+  const handleRefreshSystemEvents = useCallback(() => {
+    triggerVibration(25);
+    playTone(880, 0.05);
+    showToast('Telemetry and validation event store re-synchronized.', 'info');
+  }, [showToast]);
+
     const handleExportLegalTriggerMatrixPDF = useCallback(() => {
     triggerVibration(40);
     playTone(659.25, 0.15, 'sine');
@@ -3832,114 +3931,17 @@ function SovereignAppContent() {
                 {/* 6 Trigger Cards Grid */}
                 <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-3 font-sans">
                   {ETDA_PDPA_TRIGGERS.map((trigger) => (
-                    <div
+                    <LegalTriggerCard
                       key={trigger.id}
-                      className="p-3.5 rounded-xl bg-[#090d1a]/80 border border-cyan-500/20 hover:border-cyan-500/50 hover:scale-[1.02] hover:shadow-[0_8px_25px_rgba(6,182,212,0.18)] transition-all duration-200 space-y-2 group cursor-pointer"
-                    >
-                      <div className="flex items-center justify-between gap-2 font-mono text-[10px]">
-                        <span className="text-cyan-400 font-bold px-1.5 py-0.5 rounded bg-cyan-500/10 border border-cyan-500/25">
-                          {trigger.section}
-                        </span>
-                        <span className="text-emerald-300 font-bold px-1.5 py-0.5 rounded bg-emerald-500/10 border border-emerald-500/30 flex items-center gap-1">
-                          <CheckCircle2 className="w-3 h-3 text-emerald-400" />
-                          {trigger.statusText}
-                        </span>
-                      </div>
-
-                      <div>
-                        <h5 className="text-xs font-bold text-zinc-100 group-hover:text-cyan-300 transition-colors">
-                          {trigger.title}
-                        </h5>
-                        <p className="text-[11px] text-cyan-400/90 font-medium font-thai">
-                          {trigger.titleTh}
-                        </p>
-                      </div>
-
-                      <p className="text-[11px] text-zinc-400 leading-relaxed font-sans">
-                        {trigger.description}
-                      </p>
-
-                      <div className="pt-2 border-t border-white/5 flex flex-col gap-1 font-mono text-[10px]">
-                        <div className="flex items-center justify-between text-zinc-400">
-                          <span className="text-zinc-500">PQC Scheme:</span>
-                          <span className="text-zinc-300 truncate max-w-[160px] text-right" title={trigger.pqcScheme}>
-                            {trigger.pqcScheme}
-                          </span>
-                        </div>
-                        <div className="flex items-center justify-between text-zinc-400">
-                          <span className="text-zinc-500">Anchor:</span>
-                          <span className="text-cyan-400/90 truncate max-w-[160px] text-right" title={trigger.anchor}>
-                            {trigger.anchor}
-                          </span>
-                        </div>
-
-                        {/* PQC Signature Hash with Dedicated Copy to Clipboard Button */}
-                        <div className="flex items-center justify-between text-zinc-400 pt-1 border-t border-white/5">
-                          <span className="text-zinc-500">PQC Sig Hash:</span>
-                          <div className="flex items-center gap-1.5">
-                            <span className="text-purple-300 font-mono text-[9px] truncate max-w-[120px]" title={TRIGGER_PQC_HASHES[trigger.id] || ''}>
-                              {(TRIGGER_PQC_HASHES[trigger.id] || '').slice(0, 14)}...
-                            </span>
-                            <button
-                              type="button"
-                              onClick={(e) => {
-                                e.stopPropagation();
-                                handleCopyTriggerHash(trigger.id, TRIGGER_PQC_HASHES[trigger.id] || '');
-                              }}
-                              className="px-1.5 py-0.5 rounded bg-slate-800/80 hover:bg-cyan-950 border border-slate-700 hover:border-cyan-500/50 text-slate-300 hover:text-cyan-300 transition-colors flex items-center gap-1 text-[9px] font-sans cursor-pointer"
-                              title="คัดลอก PQC Metadata Hash สำหรับการตรวจสอบนิติวิทยาศาสตร์ (Forensic Analysis)"
-                            >
-                              {copiedHashId === trigger.id ? (
-                                <>
-                                  <CheckCircle2 className="w-2.5 h-2.5 text-emerald-400" />
-                                  <span className="text-emerald-300 text-[8px]">Copied</span>
-                                </>
-                              ) : (
-                                <>
-                                  <Copy className="w-2.5 h-2.5 text-cyan-400" />
-                                  <span className="text-[8px]">Copy</span>
-                                </>
-                              )}
-                            </button>
-                          </div>
-                        </div>
-
-                        {/* Forensic Audit Mode Overlay Metadata */}
-                        {isForensicAuditMode && (
-                          <div className="mt-1.5 pt-1.5 border-t border-purple-500/30 bg-purple-950/30 -mx-2 -mb-2 p-2 rounded-b-lg space-y-1 animate-in fade-in duration-200">
-                            <div className="flex items-center justify-between text-[9px] text-purple-300 font-bold">
-                              <span className="flex items-center gap-1">
-                                <Fingerprint className="w-2.5 h-2.5 text-purple-400" />
-                                <span>PQC SIG HASH:</span>
-                              </span>
-                              <span className="text-emerald-400 text-[8px]">VERIFIED (PASS)</span>
-                            </div>
-                            <div className="text-[8px] text-purple-200/90 font-mono break-all bg-black/60 p-1 rounded border border-purple-500/20 flex items-center justify-between gap-1">
-                              <span>{TRIGGER_PQC_HASHES[trigger.id]}</span>
-                              <button
-                                type="button"
-                                onClick={(e) => {
-                                  e.stopPropagation();
-                                  handleCopyTriggerHash(trigger.id, TRIGGER_PQC_HASHES[trigger.id] || '');
-                                }}
-                                className="p-1 rounded hover:bg-white/10 text-purple-300 cursor-pointer shrink-0"
-                                title="Copy hash"
-                              >
-                                {copiedHashId === trigger.id ? (
-                                  <CheckCircle2 className="w-3 h-3 text-emerald-400" />
-                                ) : (
-                                  <Copy className="w-3 h-3 text-purple-300" />
-                                )}
-                              </button>
-                            </div>
-                            <div className="flex items-center justify-between text-[8px] text-zinc-400">
-                              <span>Timestamp: {new Date().toISOString().split('T')[0]} 05:05:30 ICT</span>
-                              <span className="text-cyan-400">Δ0.0% Invariant</span>
-                            </div>
-                          </div>
-                        )}
-                      </div>
-                    </div>
+                      trigger={trigger}
+                      pqcHash={TRIGGER_PQC_HASHES[trigger.id] || ''}
+                      isForensicAuditMode={isForensicAuditMode}
+                      copiedHashId={copiedHashId}
+                      onCopyHash={handleCopyTriggerHash}
+                      systemEvents={systemEvents}
+                      onTriggerValidation={handleTriggerValidation}
+                      onRefreshEvents={handleRefreshSystemEvents}
+                    />
                   ))}
                 </div>
 

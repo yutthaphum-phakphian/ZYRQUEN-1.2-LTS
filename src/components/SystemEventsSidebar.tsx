@@ -202,10 +202,13 @@ export interface SystemEvent {
   targetView?: ViewType;
   targetTab?: SecuritySubTab;
   isComplianceDrift?: boolean;
+  isQuarantined?: boolean;
+  isAnomaly?: boolean;
   bindingStatus?: 'ANCHORED' | 'PENDING' | 'ORPHANED' | 'VERIFIED';
   anchoredSealNumber?: number;
   merkleProofHash?: string;
   severity: 'info' | 'success' | 'warning' | 'critical';
+  latencyMs?: number;
 }
 
 interface SystemEventsSidebarProps {

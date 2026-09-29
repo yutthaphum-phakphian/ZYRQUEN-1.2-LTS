@@ -724,7 +724,7 @@ export const ForensicAuditMasterDossierModal: React.FC<ForensicAuditMasterDossie
                 <div className="flex items-center gap-2 flex-wrap sm:flex-nowrap">
                   <div
                     role="group"
-                    aria-label="Filter events by verification status"
+                    aria-label="Filter events button group"
                     className="inline-flex items-center bg-black/70 p-1 rounded-2xl border border-cyan-500/30 shadow-inner font-mono text-xs"
                   >
                     <button

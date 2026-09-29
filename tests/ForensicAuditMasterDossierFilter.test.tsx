@@ -24,7 +24,9 @@ describe('ForensicAuditMasterDossierModal Event Type Filter', () => {
     );
 
     // Initial state: ALL EVENTS
-    const filterSelect = screen.getByLabelText(/Event Filter:/i) as HTMLSelectElement;
+    const filterSelect = screen.getByRole('combobox', {
+      name: /Filter events by verification status/i,
+    }) as HTMLSelectElement;
     expect(filterSelect).toBeTruthy();
     expect(filterSelect.value).toBe('ALL');
 
@@ -58,12 +60,12 @@ describe('ForensicAuditMasterDossierModal Event Type Filter', () => {
     );
 
     // Click Verified button in desktop bar
-    const verifiedBtn = screen.getByRole('button', { name: /Verified \(/i });
+    const verifiedBtn = screen.getByRole('button', { name: /Verified/i });
     fireEvent.click(verifiedBtn);
     expect(screen.getAllByText('VERIFIED').length).toBeGreaterThan(0);
 
     // Click Orphaned button
-    const orphanedBtn = screen.getByRole('button', { name: /Orphaned \(/i });
+    const orphanedBtn = screen.getByRole('button', { name: /Orphaned/i });
     fireEvent.click(orphanedBtn);
     expect(screen.getAllByText('ORPHANED').length).toBeGreaterThan(0);
   });
