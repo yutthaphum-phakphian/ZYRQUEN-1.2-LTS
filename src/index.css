@@ -67,8 +67,50 @@
   animation: untestedCoverageSubtlePulse 2.2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
 }
 
+/* Subtle breathing animation for Verification Gate Pending Offline Logs Badge */
+@keyframes pendingBadgeBreathing {
+  0%, 100% {
+    transform: scale(1);
+    box-shadow: 0 0 0 0 rgba(245, 158, 11, 0), inset 0 0 4px rgba(245, 158, 11, 0.1);
+    border-color: rgba(245, 158, 11, 0.4);
+    opacity: 0.92;
+  }
+  50% {
+    transform: scale(1.06);
+    box-shadow: 0 0 12px 2px rgba(245, 158, 11, 0.4), inset 0 0 8px rgba(245, 158, 11, 0.25);
+    border-color: rgba(251, 191, 36, 0.9);
+    opacity: 1;
+  }
+}
+
+.pending-badge-breathing {
+  animation: pendingBadgeBreathing 2.4s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+}
+
+/* Critical threshold (> 50 logs) breathing animation for Verification Gate Pending Badge */
+@keyframes pendingBadgeBreathingRed {
+  0%, 100% {
+    transform: scale(1);
+    box-shadow: 0 0 0 0 rgba(239, 68, 68, 0), inset 0 0 6px rgba(239, 68, 68, 0.2);
+    border-color: rgba(239, 68, 68, 0.5);
+    opacity: 0.95;
+  }
+  50% {
+    transform: scale(1.08);
+    box-shadow: 0 0 16px 3px rgba(239, 68, 68, 0.6), inset 0 0 10px rgba(239, 68, 68, 0.4);
+    border-color: rgba(248, 113, 113, 1);
+    opacity: 1;
+  }
+}
+
+.pending-badge-breathing-red {
+  animation: pendingBadgeBreathingRed 1.2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+}
+
 @media (prefers-reduced-motion: reduce) {
-  .untested-coverage-cell-pulse {
+  .untested-coverage-cell-pulse,
+  .pending-badge-breathing,
+  .pending-badge-breathing-red {
     animation: none;
     border-color: rgba(251, 191, 36, 0.85);
   }

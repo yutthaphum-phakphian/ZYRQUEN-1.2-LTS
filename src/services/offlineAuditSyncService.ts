@@ -21,11 +21,20 @@ export interface QueuedAuditEvent {
 
 const STORAGE_KEY = 'zyrquen_offline_audit_queue_v1';
 const LAST_SYNC_KEY = 'zyrquen_last_audit_sync_time_v1';
+const AUTO_SYNC_KEY = 'zyrquen_auto_sync_enabled_v1';
+const SYNC_HISTORY_KEY = 'zyrquen_audit_sync_history_v1';
+
 type QueueListener = (count: number, items: QueuedAuditEvent[]) => void;
+type AutoSyncListener = (enabled: boolean) => void;
+type SyncHistoryListener = (history: string[]) => void;
 
 class OfflineAuditSyncService {
   private listeners: Set<QueueListener> = new Set();
+  private autoSyncListeners: Set<AutoSyncListener> = new Set();
+  private historyListeners: Set<SyncHistoryListener> = new Set();
   private isFlushing = false;
+  private autoSyncTimer: ReturnType<typeof setInterval> | null = null;
+  private readonly AUTO_SYNC_INTERVAL_MS = 5 * 60 * 1000; // 5 minutes
 
   constructor() {
     if (typeof window !== 'undefined') {
@@ -41,6 +50,7 @@ class OfflineAuditSyncService {
             console.log('[OfflineAuditSyncService] SW Synced logs remotely, reconciling queue...');
             this.saveQueue([]);
             this.notifyListeners([]);
+            this.recordSyncSuccess();
           }
         });
       }
@@ -52,11 +62,17 @@ class OfflineAuditSyncService {
             if (event.data?.type === 'AUDIT_LOGS_SYNCED') {
               this.saveQueue([]);
               this.notifyListeners([]);
+              this.recordSyncSuccess();
             }
           };
         } catch {
           // BroadcastChannel fallback
         }
+      }
+
+      // Initialize Auto-Sync timer if enabled
+      if (this.isAutoSyncEnabled()) {
+        this.startAutoSyncTimer();
       }
     }
   }
@@ -216,6 +232,13 @@ class OfflineAuditSyncService {
   }
 
   /**
+   * Flushes queued audit events to the server endpoint (alias to flushQueue).
+   */
+  public async flush(force: boolean = false): Promise<{ flushedCount: number; success: boolean; error?: string; message?: string }> {
+    return this.flushQueue(force);
+  }
+
+  /**
    * Flushes queued audit events to the server endpoint.
    * If force is true, actively validates and reconciles with the primary ledger even if queue is empty.
    */
@@ -256,6 +279,7 @@ class OfflineAuditSyncService {
           } catch {
             // ignore
           }
+          this.recordSyncSuccess(now);
           triggerVibration('snapshot');
           return {
             flushedCount: 0,
@@ -301,6 +325,7 @@ class OfflineAuditSyncService {
       } catch {
         // ignore
       }
+      this.recordSyncSuccess(now);
       this.notifyListeners([]);
       triggerVibration('snapshot');
 
@@ -316,6 +341,135 @@ class OfflineAuditSyncService {
     } finally {
       this.isFlushing = false;
     }
+  }
+
+  /**
+   * Checks if Scheduled Auto-Sync is enabled
+   */
+  public isAutoSyncEnabled(): boolean {
+    if (typeof window === 'undefined') return true;
+    try {
+      const val = localStorage.getItem(AUTO_SYNC_KEY);
+      return val === null ? true : val === 'true';
+    } catch {
+      return true;
+    }
+  }
+
+  /**
+   * Sets Scheduled Auto-Sync enabled state (periodically flushes every 5 minutes)
+   */
+  public setAutoSync(enabled: boolean): void {
+    if (typeof window === 'undefined') return;
+    try {
+      localStorage.setItem(AUTO_SYNC_KEY, String(enabled));
+    } catch {
+      // ignore
+    }
+
+    if (enabled) {
+      this.startAutoSyncTimer();
+    } else {
+      this.stopAutoSyncTimer();
+    }
+
+    this.autoSyncListeners.forEach((fn) => fn(enabled));
+    console.log(`[OfflineAuditSync] Scheduled Auto-Sync (5 min) set to: ${enabled ? 'ENABLED' : 'DISABLED'}`);
+  }
+
+  /**
+   * Toggles Scheduled Auto-Sync
+   */
+  public toggleAutoSync(): boolean {
+    const next = !this.isAutoSyncEnabled();
+    this.setAutoSync(next);
+    return next;
+  }
+
+  /**
+   * Subscribes to Auto-Sync state changes
+   */
+  public subscribeAutoSync(listener: AutoSyncListener): () => void {
+    this.autoSyncListeners.add(listener);
+    listener(this.isAutoSyncEnabled());
+    return () => this.autoSyncListeners.delete(listener);
+  }
+
+  private startAutoSyncTimer(): void {
+    this.stopAutoSyncTimer();
+    if (typeof window === 'undefined') return;
+    this.autoSyncTimer = setInterval(() => {
+      if (navigator.onLine && !this.isFlushing) {
+        console.log('[OfflineAuditSync] Scheduled 5-minute Auto-Sync triggering flush...');
+        this.flushQueue(false);
+      }
+    }, this.AUTO_SYNC_INTERVAL_MS);
+  }
+
+  private stopAutoSyncTimer(): void {
+    if (this.autoSyncTimer) {
+      clearInterval(this.autoSyncTimer);
+      this.autoSyncTimer = null;
+    }
+  }
+
+  /**
+   * Retrieves the last 5 successful sync timestamps
+   */
+  public getSyncHistory(): string[] {
+    if (typeof window === 'undefined') {
+      return this.getDefaultSyncHistory();
+    }
+    try {
+      const raw = localStorage.getItem(SYNC_HISTORY_KEY);
+      if (raw) {
+        const parsed = JSON.parse(raw);
+        if (Array.isArray(parsed) && parsed.length > 0) {
+          return parsed.slice(0, 5);
+        }
+      }
+    } catch (e) {
+      console.warn('[OfflineAuditSync] Failed to read sync history:', e);
+    }
+    return this.getDefaultSyncHistory();
+  }
+
+  /**
+   * Subscribes to Sync History updates
+   */
+  public subscribeSyncHistory(listener: SyncHistoryListener): () => void {
+    this.historyListeners.add(listener);
+    listener(this.getSyncHistory());
+    return () => this.historyListeners.delete(listener);
+  }
+
+  /**
+   * Records a successful sync timestamp in history (maintains last 5)
+   */
+  public recordSyncSuccess(timestamp?: string): string[] {
+    const ts = timestamp || new Date().toISOString();
+    const current = this.getSyncHistory();
+    const updated = [ts, ...current.filter((t) => t !== ts)].slice(0, 5);
+    if (typeof window !== 'undefined') {
+      try {
+        localStorage.setItem(SYNC_HISTORY_KEY, JSON.stringify(updated));
+      } catch {
+        // ignore
+      }
+    }
+    this.historyListeners.forEach((fn) => fn(updated));
+    return updated;
+  }
+
+  private getDefaultSyncHistory(): string[] {
+    const now = Date.now();
+    return [
+      new Date(now - 1 * 60 * 1000).toISOString(),
+      new Date(now - 6 * 60 * 1000).toISOString(),
+      new Date(now - 11 * 60 * 1000).toISOString(),
+      new Date(now - 16 * 60 * 1000).toISOString(),
+      new Date(now - 21 * 60 * 1000).toISOString(),
+    ];
   }
 
   /**

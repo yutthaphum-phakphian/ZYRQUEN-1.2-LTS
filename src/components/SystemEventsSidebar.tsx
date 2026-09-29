@@ -55,6 +55,7 @@ import {
 import { FcmPushNotificationManager } from './notifications/FcmPushNotificationManager';
 import { generateAndDownloadFullAuditPdfReport } from '../utils/fullAuditPdfExport';
 import { triggerVibration } from '../utils/vibration';
+import { offlineAuditSyncService } from '../services/offlineAuditSyncService';
 
 interface ActionTooltipDetails {
   title: string;
@@ -221,10 +222,13 @@ interface SystemEventsSidebarProps {
   latestSealCount?: number;
   isForensicAuditMode?: boolean;
   onToggleForensicAuditMode?: () => void;
+  initialFilter?: SystemEventFilterType;
+  highlightPending?: boolean;
 }
 
 export type SystemEventFilterType =
   | 'ALL'
+  | 'PENDING'
   | 'COMPLIANCE'
   | 'HARDWARE'
   | 'ANOMALY'
@@ -245,8 +249,11 @@ export const SystemEventsSidebar: React.FC<SystemEventsSidebarProps> = ({
   latestSealCount = 14902,
   isForensicAuditMode = false,
   onToggleForensicAuditMode,
+  initialFilter,
+  highlightPending = false,
 }) => {
-  const [filter, setFilter] = useState<SystemEventFilterType>('ALL');
+  const [filter, setFilter] = useState<SystemEventFilterType>(() => initialFilter || 'ALL');
+  const [isHighlightedPending, setIsHighlightedPending] = useState<boolean>(false);
   const [searchQuery, setSearchQuery] = useState<string>('');
   const [copiedId, setCopiedId] = useState<string | null>(null);
   const [backupState, setBackupState] = useState<AutomatedBackupState>(() => automatedBackupService.getState());
@@ -272,18 +279,45 @@ export const SystemEventsSidebar: React.FC<SystemEventsSidebarProps> = ({
   const [isNotificationPanelOpen, setIsNotificationPanelOpen] = useState<boolean>(false);
   const [auditDownloadedToast, setAuditDownloadedToast] = useState<boolean>(false);
 
-  // 1-second live ticker to keep the 60s sparkline smoothly animating in real time
+  // Effect to apply initialFilter and temporary highlight for PENDING logs
   useEffect(() => {
-    const timer = setInterval(() => {
-      setTickerTime(Date.now());
-    }, 1000);
-    return () => clearInterval(timer);
-  }, []);
+    if (isOpen && (initialFilter === 'PENDING' || highlightPending)) {
+      setFilter('PENDING');
+      setIsHighlightedPending(true);
+      const timer = setTimeout(() => {
+        setIsHighlightedPending(false);
+      }, 4500);
+      return () => clearTimeout(timer);
+    } else if (isOpen && initialFilter) {
+      setFilter(initialFilter);
+    }
+  }, [isOpen, initialFilter, highlightPending]);
+
+  // Merge offline queued audit events into the active event list if they aren't already represented
+  const mergedEvents = React.useMemo(() => {
+    const queue = offlineAuditSyncService.getQueue();
+    const offlineAsSystemEvents: SystemEvent[] = queue.map((q) => ({
+      id: q.id,
+      type: (q.type as SystemEvent['type']) || 'COMPLIANCE',
+      title: q.title,
+      description: q.description,
+      timestamp: new Date(q.queuedAt).toLocaleTimeString('en-GB', { hour12: false }) + ' ICT',
+      metaHash: q.metaHash,
+      statuteRef: q.statuteRef || 'Offline Audit Queue / SSoT Buffer',
+      bindingStatus: 'PENDING',
+      severity: q.severity || 'warning',
+    }));
+
+    const existingIds = new Set(events.map((e) => e.id));
+    const uniqueOffline = offlineAsSystemEvents.filter((e) => !existingIds.has(e.id));
+    return [...uniqueOffline, ...events];
+  }, [events, tickerTime]);
 
   // Compute category counts for dropdown and quick pills
   const filterCounts = React.useMemo(() => {
     const counts: Record<SystemEventFilterType, number> = {
-      ALL: events.length,
+      ALL: mergedEvents.length,
+      PENDING: 0,
       COMPLIANCE: 0,
       HARDWARE: 0,
       ANOMALY: 0,
@@ -294,7 +328,10 @@ export const SystemEventsSidebar: React.FC<SystemEventsSidebarProps> = ({
       EVIDENCE_IMPORTED: 0,
       EVIDENCE_INGESTED: 0,
     };
-    events.forEach((ev) => {
+    mergedEvents.forEach((ev) => {
+      if (ev.bindingStatus === 'PENDING') {
+        counts.PENDING += 1;
+      }
       if (ev.type === 'COMPLIANCE' || ev.type === 'LEGAL_SEARCH' || ev.isComplianceDrift) {
         counts.COMPLIANCE += 1;
       }
@@ -310,13 +347,15 @@ export const SystemEventsSidebar: React.FC<SystemEventsSidebarProps> = ({
       if (ev.type === 'EVIDENCE_INGESTED') counts.EVIDENCE_INGESTED += 1;
     });
     return counts;
-  }, [events]);
+  }, [mergedEvents]);
 
   // Filtered events based on selected filter dropdown & text search query (title or statute reference)
-  const filteredEvents = events.filter((ev) => {
+  const filteredEvents = mergedEvents.filter((ev) => {
     // 1. Category Filter Match
     let categoryMatch = true;
-    if (filter === 'COMPLIANCE') {
+    if (filter === 'PENDING') {
+      categoryMatch = ev.bindingStatus === 'PENDING';
+    } else if (filter === 'COMPLIANCE') {
       categoryMatch = ev.type === 'COMPLIANCE' || ev.type === 'LEGAL_SEARCH' || Boolean(ev.isComplianceDrift);
     } else if (filter === 'ANOMALY') {
       categoryMatch = ev.type === 'ANOMALY' || ev.severity === 'critical' || ev.severity === 'warning';
@@ -1256,6 +1295,7 @@ export const SystemEventsSidebar: React.FC<SystemEventsSidebarProps> = ({
             className="px-2.5 py-1 rounded-xl bg-[#0e1428] border-cyan-500/40 text-cyan-200 text-xs font-mono font-medium focus:outline-none focus:border-cyan-300 transition-colors cursor-pointer shadow-sm"
           >
             <option value="ALL">All Categories ({filterCounts.ALL})</option>
+            <option value="PENDING">⏳ PENDING Offline Logs ({filterCounts.PENDING})</option>
             <option value="COMPLIANCE">⚖️ COMPLIANCE & Legal Drift ({filterCounts.COMPLIANCE})</option>
             <option value="HARDWARE">💻 HARDWARE & Cryo ({filterCounts.HARDWARE})</option>
             <option value="ANOMALY">⚠️ ANOMALY & High Severity ({filterCounts.ANOMALY})</option>
@@ -1270,7 +1310,7 @@ export const SystemEventsSidebar: React.FC<SystemEventsSidebarProps> = ({
 
         {/* Quick Filter Pill Buttons */}
         <div className="flex items-center gap-1.5 overflow-x-auto text-[11px] no-scrollbar pt-0.5">
-          {(['ALL', 'COMPLIANCE', 'HARDWARE', 'ANOMALY', 'CRYPTO', 'SECURITY'] as const).map((f) => (
+          {(['ALL', 'PENDING', 'COMPLIANCE', 'HARDWARE', 'ANOMALY', 'CRYPTO', 'SECURITY'] as const).map((f) => (
             <button
               key={f}
               onClick={() => {
@@ -1286,6 +1326,8 @@ export const SystemEventsSidebar: React.FC<SystemEventsSidebarProps> = ({
               <span>
                 {f === 'ALL'
                   ? 'All'
+                  : f === 'PENDING'
+                  ? '⏳ Pending'
                   : f === 'COMPLIANCE'
                   ? '⚖️ Compliance'
                   : f === 'HARDWARE'
@@ -1296,7 +1338,11 @@ export const SystemEventsSidebar: React.FC<SystemEventsSidebarProps> = ({
                   ? '🔐 Crypto'
                   : '🛡️ Security'}
               </span>
-              <span className="text-[9px] px-1 rounded bg-black/40 text-zinc-400 font-normal">
+              <span className={`text-[9px] px-1 rounded font-normal ${
+                f === 'PENDING' && filterCounts.PENDING > 0
+                  ? 'bg-amber-500/30 text-amber-200 font-bold'
+                  : 'bg-black/40 text-zinc-400'
+              }`}>
                 {filterCounts[f]}
               </span>
             </button>
@@ -1534,6 +1580,8 @@ export const SystemEventsSidebar: React.FC<SystemEventsSidebarProps> = ({
             const isSuccess = ev.severity === 'success' || ev.type === 'BACKUP';
             const isCritical = ev.isComplianceDrift || ev.severity === 'critical';
             const isWarning = ev.severity === 'warning' || ev.type === 'ANOMALY';
+            const isPending = ev.bindingStatus === 'PENDING';
+            const isPendingHighlighted = isHighlightedPending && isPending;
             const isCriticalOrDrift = isCritical || isWarning;
             const isSelected = selectedIds.has(ev.id);
 
@@ -1544,9 +1592,11 @@ export const SystemEventsSidebar: React.FC<SystemEventsSidebarProps> = ({
                 className={`p-3.5 rounded-2xl border transition-all duration-150 space-y-2 text-xs shadow-md group hover:scale-[1.01] cursor-pointer ${
                   isSelected
                     ? 'ring-2 ring-cyan-400/80 bg-[#0f1b33] border-cyan-400 shadow-[0_0_20px_rgba(6,182,212,0.35)]'
+                    : isPendingHighlighted
+                    ? 'ring-2 ring-amber-400 bg-amber-950/60 border-amber-400 shadow-[0_0_25px_rgba(245,158,11,0.5)] animate-pulse'
                     : isCritical
                     ? 'bg-[#2a080c] border-rose-500/70 hover:border-rose-400 hover:shadow-[0_0_20px_rgba(244,63,94,0.3)]'
-                    : isWarning
+                    : isWarning || isPending
                     ? 'bg-[#261405] border-amber-500/60 hover:border-amber-400 hover:shadow-[0_0_20px_rgba(245,158,11,0.25)]'
                     : isSuccess
                     ? 'bg-[#042017] border-emerald-500/60 hover:border-emerald-400 hover:shadow-[0_0_20px_rgba(16,185,129,0.25)]'
@@ -1556,7 +1606,7 @@ export const SystemEventsSidebar: React.FC<SystemEventsSidebarProps> = ({
                 }`}
               >
                 <div className="flex items-center justify-between gap-2">
-                  <div className="flex items-center gap-2">
+                  <div className="flex items-center gap-2 flex-wrap">
                     <input
                       type="checkbox"
                       checked={isSelected}
@@ -1567,6 +1617,12 @@ export const SystemEventsSidebar: React.FC<SystemEventsSidebarProps> = ({
                       {badge.icon}
                       <span>{badge.label}</span>
                     </span>
+                    {isPending && (
+                      <span className="px-1.5 py-0.2 rounded-full bg-amber-500/20 text-amber-300 border border-amber-500/40 text-[9px] font-bold uppercase tracking-wider flex items-center gap-1 animate-pulse">
+                        <Clock className="w-2.5 h-2.5" />
+                        <span>PENDING SYNC</span>
+                      </span>
+                    )}
                   </div>
 
                   <div className="flex items-center gap-2 text-[10px] text-zinc-500">

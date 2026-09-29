@@ -43,6 +43,9 @@ import {
   History,
   Camera,
   Scan,
+  RefreshCw,
+  Trash2,
+  AlertTriangle,
 } from 'lucide-react';
 import { MerkleRootQrCodeModal, type QrVerificationCallbackResult } from '@/components/MerkleRootQrCodeModal';
 import { CANONICAL_GENESIS_BLOCK, CANONICAL_MERKLE_ROOT } from '@/data/canonicalData';
@@ -54,7 +57,7 @@ import { MainFooter } from '@/components/MainFooter';
 import { SovereignControlDock } from '@/components/SovereignControlDock';
 import { SovereignBottomStatusBar } from '@/components/SovereignBottomStatusBar';
 import { CopilotSovereignAI } from '@/components/CopilotSovereignAI';
-import { SystemEventsSidebar, SystemEvent } from '@/components/SystemEventsSidebar';
+import { SystemEventsSidebar, SystemEvent, type SystemEventFilterType } from '@/components/SystemEventsSidebar';
 import { ForensicAuditStepper } from '@/components/ForensicAuditStepper';
 import { LegalTriggerCard, type LegalTriggerItem } from '@/components/LegalTriggerCard';
 import { type StagedAiCommandRequest } from '@/components/CommandCenterOperationsConsole';
@@ -1114,6 +1117,9 @@ function SovereignAppContent() {
     message: 'Verification Gate Active: Enforcing COMPLIANCE invariant binding before ledger append.',
   });
   const [offlineQueuedCount, setOfflineQueuedCount] = useState<number>(() => offlineAuditSyncService.getQueueCount());
+  const [eventsSidebarFilter, setEventsSidebarFilter] = useState<SystemEventFilterType>('ALL');
+  const [eventsSidebarHighlightPending, setEventsSidebarHighlightPending] = useState<boolean>(false);
+  const [isSyncingOfflineLogs, setIsSyncingOfflineLogs] = useState<boolean>(false);
 
   const TELEMETRY_AUDIT_INTERVAL_SEC = 30;
   const [auditCountdownSec, setAuditCountdownSec] = useState<number>(TELEMETRY_AUDIT_INTERVAL_SEC);
@@ -1145,6 +1151,18 @@ function SovereignAppContent() {
   const [isGateDetailsExpanded, setIsGateDetailsExpanded] = useState<boolean>(false);
   const [isGateTooltipVisible, setIsGateTooltipVisible] = useState<boolean>(false);
   const [isGateTooltipPinned, setIsGateTooltipPinned] = useState<boolean>(false);
+  const [isAutoSyncEnabled, setIsAutoSyncEnabled] = useState<boolean>(() => offlineAuditSyncService.isAutoSyncEnabled());
+  const [syncHistory, setSyncHistory] = useState<string[]>(() => offlineAuditSyncService.getSyncHistory());
+
+  const offlineTypeBreakdown = React.useMemo(() => {
+    const counts: Record<string, number> = {};
+    const queue = offlineAuditSyncService.getQueue();
+    queue.forEach((item) => {
+      const typeKey = item.type || 'EVIDENCE_IMPORTED';
+      counts[typeKey] = (counts[typeKey] || 0) + 1;
+    });
+    return counts;
+  }, [offlineQueuedCount, isGateTooltipVisible]);
   const [isGateQrModalOpen, setIsGateQrModalOpen] = useState<boolean>(false);
   const [gateQrModalInitialTab, setGateQrModalInitialTab] = useState<'PRESENTATION' | 'SCANNER'>('PRESENTATION');
   const [gateQrModalAutoCamera, setGateQrModalAutoCamera] = useState<boolean>(false);
@@ -1463,6 +1481,12 @@ function SovereignAppContent() {
         }
         previousPending = count;
       });
+      const unsubAutoSync = offlineAuditSyncService.subscribeAutoSync((enabled) => {
+        setIsAutoSyncEnabled(enabled);
+      });
+      const unsubSyncHistory = offlineAuditSyncService.subscribeSyncHistory((hist) => {
+        setSyncHistory(hist);
+      });
 
       // 4. Start automated backup service and attach snapshot listener
       automatedBackupService.start();
@@ -1524,6 +1548,8 @@ function SovereignAppContent() {
         unsubFirewall();
         unsubBackupLogger();
         unsubBackupSnap();
+        unsubSyncHistory();
+        unsubAutoSync();
         unsubOffline();
         unsubLock();
         unsubSnap();
@@ -2810,15 +2836,27 @@ function SovereignAppContent() {
                     <span>{verificationGateStatus.status}</span>
                     <span className="text-[9px] font-mono opacity-85">({(activeHsmNodes * 10).toFixed(0)}%)</span>
                     
-                    {/* Small 'pending' badge if offline audit logs queued in offlineAuditSyncService */}
+                    {/* Small 'pending' badge if offline audit logs queued in offlineAuditSyncService (Turns RED if > 50 threshold) */}
                     {offlineQueuedCount > 0 && (
                       <span
                         id="verification-gate-pending-badge"
-                        className="px-1.5 py-0.2 rounded-full bg-amber-500/20 text-amber-300 border border-amber-500/40 text-[8px] font-bold uppercase tracking-wider flex items-center gap-0.5 animate-pulse"
-                        title={`${offlineQueuedCount} offline audit log${offlineQueuedCount > 1 ? 's' : ''} queued in offlineAuditSyncService`}
+                        onClick={(e) => {
+                          e.stopPropagation();
+                          playTone(720, 0.04);
+                          setEventsSidebarFilter('PENDING');
+                          setEventsSidebarHighlightPending(true);
+                          setIsEventsSidebarOpen(true);
+                          triggerVibration('sidebarToggle');
+                        }}
+                        className={`px-1.5 py-0.2 rounded-full text-[8px] font-bold uppercase tracking-wider flex items-center gap-0.5 cursor-pointer active:scale-95 transition-all ${
+                          offlineQueuedCount > 50
+                            ? 'bg-rose-500/25 text-rose-200 border border-rose-500/70 pending-badge-breathing-red hover:bg-rose-500/35 hover:border-rose-400 shadow-[0_0_12px_rgba(244,63,94,0.45)]'
+                            : 'bg-amber-500/20 text-amber-300 border border-amber-500/40 pending-badge-breathing hover:bg-amber-500/30 hover:border-amber-400'
+                        }`}
+                        title={`${offlineQueuedCount} offline audit log${offlineQueuedCount > 1 ? 's' : ''} queued in offlineAuditSyncService ${offlineQueuedCount > 50 ? '(CRITICAL: Exceeds 50-log safe buffer limit)' : ''}. Click to open System Events and view pending logs.`}
                       >
-                        <span className="w-1.5 h-1.5 rounded-full bg-amber-400" />
-                        <span>pending</span>
+                        <span className={`w-1.5 h-1.5 rounded-full ${offlineQueuedCount > 50 ? 'bg-rose-400' : 'bg-amber-400'}`} />
+                        <span>{offlineQueuedCount > 50 ? '⚠️ pending' : 'pending'}</span>
                       </span>
                     )}
 
@@ -2853,10 +2891,16 @@ function SovereignAppContent() {
                     {isGateTooltipVisible && (
                       <motion.div
                         id="verification-gate-status-tooltip"
-                        initial={{ opacity: 0, y: -8, scale: 0.97, filter: 'blur(4px)' }}
+                        initial={{ opacity: 0, y: -10, scale: 0.94, filter: 'blur(6px)' }}
                         animate={{ opacity: 1, y: 0, scale: 1, filter: 'blur(0px)' }}
-                        exit={{ opacity: 0, y: -6, scale: 0.97, filter: 'blur(3px)' }}
-                        transition={{ type: 'spring', stiffness: 450, damping: 32, mass: 0.8 }}
+                        exit={{ opacity: 0, y: -8, scale: 0.95, filter: 'blur(4px)' }}
+                        transition={{
+                          duration: 0.3,
+                          ease: [0.16, 1, 0.3, 1],
+                          scale: { duration: 0.3, ease: [0.16, 1, 0.3, 1] },
+                          opacity: { duration: 0.22, ease: 'easeOut' },
+                          y: { duration: 0.3, ease: [0.16, 1, 0.3, 1] },
+                        }}
                         className={`absolute left-0 top-full mt-2.5 z-50 w-80 sm:w-[480px] p-4 rounded-2xl bg-[#070914]/98 border backdrop-blur-2xl transition-all duration-200 pointer-events-auto ${
                           isGateTooltipPinned
                             ? 'border-cyan-400/80 shadow-[0_0_35px_rgba(6,182,212,0.35),0_25px_60px_rgba(0,0,0,0.95)] ring-1 ring-cyan-400/50'
@@ -3758,8 +3802,253 @@ function SovereignAppContent() {
                           </div>
                         </div>
 
+                        {/* 4. Offline Audit Synchronization & Pending Logs Section */}
+                        <div className={`p-2.5 rounded-xl border mb-2.5 space-y-2 ${
+                          offlineQueuedCount > 50
+                            ? 'bg-rose-950/40 border-rose-500/50 shadow-[0_0_15px_rgba(244,63,94,0.15)]'
+                            : 'bg-slate-950/80 border-amber-500/30'
+                        }`}>
+                          <div className="flex items-center justify-between font-mono text-[10px]">
+                            <span className={`font-bold flex items-center gap-1.5 ${
+                              offlineQueuedCount > 50 ? 'text-rose-300' : 'text-amber-300'
+                            }`}>
+                              <Clock className={`w-3.5 h-3.5 ${offlineQueuedCount > 50 ? 'text-rose-400' : 'text-amber-400'}`} />
+                              <span>OFFLINE AUDIT QUEUE STATUS</span>
+                            </span>
+                            <span className={`px-1.5 py-0.2 rounded border text-[9px] font-bold ${
+                              offlineQueuedCount > 50
+                                ? 'bg-rose-500/25 text-rose-200 border-rose-500/70 animate-pulse'
+                                : offlineQueuedCount > 0 
+                                ? 'bg-amber-500/20 text-amber-300 border-amber-500/40 animate-pulse' 
+                                : 'bg-emerald-500/20 text-emerald-300 border-emerald-500/40'
+                            }`}>
+                              {offlineQueuedCount > 50 
+                                ? `⚠️ ${offlineQueuedCount} PENDING (OVERFLOW)` 
+                                : offlineQueuedCount > 0 
+                                ? `${offlineQueuedCount} PENDING LOGS` 
+                                : '0 PENDING (ALL SYNCED)'}
+                            </span>
+                          </div>
+
+                          {/* Critical Threshold Warning Banner (> 50 Logs) */}
+                          {offlineQueuedCount > 50 && (
+                            <div className="p-2 rounded-lg bg-rose-950/80 border border-rose-500/70 text-rose-200 flex items-center gap-2 animate-pulse font-mono text-[10px]">
+                              <AlertTriangle className="w-4 h-4 text-rose-400 shrink-0" />
+                              <div className="min-w-0">
+                                <span className="font-bold block text-rose-100">CRITICAL QUEUE OVERFLOW ({offlineQueuedCount} / 50 SAFE LIMIT)</span>
+                                <p className="text-[9px] text-rose-300/90 leading-tight">Queued offline logs exceed safe buffer capacity. Flush to primary ledger or clear queue.</p>
+                              </div>
+                            </div>
+                          )}
+
+                          {/* Summarized Breakdown of Queued Log Types */}
+                          {offlineQueuedCount > 0 && Object.keys(offlineTypeBreakdown).length > 0 && (
+                            <div className="space-y-1.5 pt-1 border-t border-white/10">
+                              <div className="text-[9px] text-zinc-400 font-mono font-bold flex items-center justify-between">
+                                <span>QUEUED LOG TYPES BREAKDOWN:</span>
+                                <span className="text-cyan-300">{Object.keys(offlineTypeBreakdown).length} Categories</span>
+                              </div>
+                              <div className="grid grid-cols-2 sm:grid-cols-3 gap-1">
+                                {Object.entries(offlineTypeBreakdown).map(([type, count]) => (
+                                  <div
+                                    key={type}
+                                    className="p-1.5 rounded bg-black/60 border border-white/10 flex items-center justify-between text-[9px] font-mono"
+                                  >
+                                    <span className="text-zinc-300 truncate max-w-[95px]" title={type}>
+                                      {type.replace(/_/g, ' ')}
+                                    </span>
+                                    <span className={`px-1 py-0.2 rounded font-bold ${
+                                      offlineQueuedCount > 50
+                                        ? 'bg-rose-500/20 text-rose-300 border border-rose-500/40'
+                                        : 'bg-cyan-500/20 text-cyan-300 border border-cyan-500/40'
+                                    }`}>
+                                      {count}
+                                    </span>
+                                  </div>
+                                ))}
+                              </div>
+                            </div>
+                          )}
+
+                          {/* Scheduled Auto-Sync Toggle Switch (Every 5 Minutes) */}
+                          <div className="flex items-center justify-between p-2 rounded-lg bg-black/60 border border-white/10 font-mono text-[10px]">
+                            <div className="flex items-center gap-2 min-w-0">
+                              <div className={`p-1 rounded-md border ${
+                                isAutoSyncEnabled
+                                  ? 'bg-cyan-500/20 border-cyan-400/50 text-cyan-300 shadow-[0_0_8px_rgba(6,182,212,0.3)]'
+                                  : 'bg-zinc-900 border-zinc-700 text-zinc-400'
+                              }`}>
+                                <Clock className="w-3.5 h-3.5 shrink-0" />
+                              </div>
+                              <div className="min-w-0">
+                                <div className="flex items-center gap-1.5 flex-wrap">
+                                  <span className="font-bold text-zinc-100">Scheduled Auto-Sync (5 min)</span>
+                                  <span className={`px-1.5 py-0.2 rounded text-[8px] font-bold ${
+                                    isAutoSyncEnabled
+                                      ? 'bg-cyan-500/20 text-cyan-300 border border-cyan-500/40 animate-pulse'
+                                      : 'bg-zinc-800 text-zinc-400 border border-zinc-700'
+                                  }`}>
+                                    {isAutoSyncEnabled ? 'ENABLED (300s)' : 'DISABLED'}
+                                  </span>
+                                </div>
+                                <p className="text-[8.5px] text-zinc-400 leading-tight">
+                                  {isAutoSyncEnabled
+                                    ? 'Automatically flushes pending offline logs to primary ledger every 5 min.'
+                                    : 'Auto-flush paused. Requires manual "Sync Now" trigger.'}
+                                </p>
+                              </div>
+                            </div>
+                            <button
+                              type="button"
+                              id="verification-gate-auto-sync-toggle"
+                              onClick={(e) => {
+                                e.stopPropagation();
+                                playTone(isAutoSyncEnabled ? 480 : 720, 0.04);
+                                const nextState = offlineAuditSyncService.toggleAutoSync();
+                                setIsAutoSyncEnabled(nextState);
+                                showToast(
+                                  nextState
+                                    ? 'Scheduled Auto-Sync ENABLED (5-min interval active).'
+                                    : 'Scheduled Auto-Sync DISABLED (Manual sync mode).',
+                                  nextState ? 'success' : 'info'
+                                );
+                              }}
+                              className={`relative inline-flex h-5 w-9 shrink-0 cursor-pointer rounded-full border-2 border-transparent transition-colors duration-200 ease-in-out focus:outline-none ml-2 ${
+                                isAutoSyncEnabled
+                                  ? 'bg-cyan-500 shadow-[0_0_10px_rgba(6,182,212,0.6)]'
+                                  : 'bg-zinc-700'
+                              }`}
+                              role="switch"
+                              aria-checked={isAutoSyncEnabled}
+                              title={
+                                isAutoSyncEnabled
+                                  ? 'Click to disable scheduled 5-minute auto-sync'
+                                  : 'Click to enable scheduled 5-minute auto-sync'
+                              }
+                            >
+                              <span
+                                aria-hidden="true"
+                                className={`pointer-events-none inline-block h-4 w-4 transform rounded-full bg-white shadow-md ring-0 transition duration-200 ease-in-out ${
+                                  isAutoSyncEnabled ? 'translate-x-4' : 'translate-x-0'
+                                }`}
+                              />
+                            </button>
+                          </div>
+
+                          {/* Sync History Log (Last 5 Successful Flushes) */}
+                          <div className="space-y-1.5 pt-1 border-t border-white/10">
+                            <div className="flex items-center justify-between font-mono text-[9px]">
+                              <span className="text-zinc-400 font-bold flex items-center gap-1">
+                                <History className="w-3 h-3 text-cyan-400" />
+                                <span>SYNC HISTORY (LAST 5 SUCCESSFUL FLUSHES)</span>
+                              </span>
+                              <span className="px-1.5 py-0.2 rounded bg-cyan-950/60 border border-cyan-500/30 text-cyan-300 font-bold text-[8px]">
+                                {syncHistory.length} AUDITED {syncHistory.length === 1 ? 'ENTRY' : 'ENTRIES'}
+                              </span>
+                            </div>
+                            <div className="space-y-1 max-h-28 overflow-y-auto pr-0.5">
+                              {syncHistory.map((ts, idx) => {
+                                const dateObj = new Date(ts);
+                                const timeFormatted = isNaN(dateObj.getTime())
+                                  ? ts
+                                  : dateObj.toLocaleTimeString('en-GB', { timeZone: 'UTC', hour12: false }) + ' UTC';
+                                const dateFormatted = isNaN(dateObj.getTime())
+                                  ? ''
+                                  : dateObj.toLocaleDateString('en-GB', { day: '2-digit', month: 'short' });
+                                return (
+                                  <div
+                                    key={`${ts}-${idx}`}
+                                    className="flex items-center justify-between p-1.5 rounded bg-zinc-950/80 border border-zinc-800/80 text-[8.5px] font-mono hover:border-cyan-500/30 transition-colors"
+                                  >
+                                    <div className="flex items-center gap-1.5 min-w-0">
+                                      <span className="w-1.5 h-1.5 rounded-full bg-emerald-400 shadow-[0_0_4px_rgba(52,211,153,0.8)] shrink-0" />
+                                      <span className="font-bold text-zinc-200 whitespace-nowrap">{timeFormatted}</span>
+                                      {dateFormatted && (
+                                        <span className="text-zinc-500 text-[8px] truncate hidden sm:inline">
+                                          ({dateFormatted})
+                                        </span>
+                                      )}
+                                    </div>
+                                    <div className="flex items-center gap-1.5 shrink-0">
+                                      <span className="px-1.5 py-0.2 rounded bg-emerald-500/15 border border-emerald-500/30 text-emerald-300 font-semibold text-[7.5px]">
+                                        BITWISE VERIFIED
+                                      </span>
+                                      <span className="text-[7.5px] text-cyan-400/90 font-mono">
+                                        {idx === 0 ? 'LATEST' : `#${idx + 1}`}
+                                      </span>
+                                    </div>
+                                  </div>
+                                );
+                              })}
+                            </div>
+                          </div>
+
+                          {/* Queue Status Description & Action Buttons */}
+                          <div className="flex flex-wrap items-center justify-between gap-2 text-[10px] font-mono pt-1">
+                            <span className="text-zinc-400">
+                              {offlineQueuedCount > 0
+                                ? `Total ${offlineQueuedCount} offline audit log${offlineQueuedCount > 1 ? 's' : ''} queued in buffer.`
+                                : 'All offline audit telemetry synchronized to primary ledger.'}
+                            </span>
+                            <div className="flex items-center gap-1.5 ml-auto">
+                              {/* Clear Queue Action Button */}
+                              <button
+                                type="button"
+                                id="btn-tooltip-clear-queue"
+                                onClick={(e) => {
+                                  e.stopPropagation();
+                                  playTone(480, 0.04);
+                                  const cleared = offlineAuditSyncService.clearQueue();
+                                  playAuditChime();
+                                  showToast(`Discarded ${cleared} pending offline audit log${cleared > 1 ? 's' : ''}. Queue reset to 0.`, 'info');
+                                }}
+                                disabled={offlineQueuedCount === 0}
+                                className="px-2.5 py-1 rounded-lg bg-rose-500/20 hover:bg-rose-500/30 border border-rose-500/40 text-rose-200 hover:text-white text-[10px] font-bold transition-all flex items-center gap-1 cursor-pointer disabled:opacity-40 disabled:cursor-not-allowed shrink-0 active:scale-95"
+                                title="Discard all pending offline audit logs"
+                              >
+                                <Trash2 className="w-3 h-3 text-rose-300" />
+                                <span>Clear Queue</span>
+                              </button>
+
+                              {/* Sync Now Action Button */}
+                              <button
+                                type="button"
+                                id="btn-tooltip-sync-now"
+                                onClick={async (e) => {
+                                  e.stopPropagation();
+                                  playTone(660, 0.04);
+                                  setIsSyncingOfflineLogs(true);
+                                  try {
+                                    const res = await offlineAuditSyncService.flush(true);
+                                    if (res.success) {
+                                      playAuditChime();
+                                      showToast(res.message || 'Audit logs flushed successfully.', 'success');
+                                    } else {
+                                      showToast(res.error || 'Sync attempt failed.', 'warning');
+                                    }
+                                  } catch (err: any) {
+                                    showToast(err.message || 'Sync failed.', 'warning');
+                                  } finally {
+                                    setIsSyncingOfflineLogs(false);
+                                  }
+                                }}
+                                disabled={isSyncingOfflineLogs || offlineQueuedCount === 0}
+                                className={`px-2.5 py-1 rounded-lg border text-[10px] font-bold transition-all flex items-center gap-1 cursor-pointer disabled:opacity-40 disabled:cursor-not-allowed shrink-0 active:scale-95 ${
+                                  offlineQueuedCount > 50
+                                    ? 'bg-rose-500/25 hover:bg-rose-500/35 border-rose-400 text-rose-100 shadow-[0_0_10px_rgba(244,63,94,0.3)]'
+                                    : 'bg-amber-500/20 hover:bg-amber-500/30 border-amber-500/40 text-amber-200 hover:text-white'
+                                }`}
+                                title="Flush offline audit logs to primary ledger"
+                              >
+                                <RefreshCw className={`w-3 h-3 ${isSyncingOfflineLogs ? 'animate-spin' : ''}`} />
+                                <span>{isSyncingOfflineLogs ? 'Syncing...' : 'Sync Now'}</span>
+                              </button>
+                            </div>
+                          </div>
+                        </div>
+
                         {/* Quick Mobile Audit QR Trigger & Camera Scanner Buttons */}
-                        <div className="grid grid-cols-1 sm:grid-cols-2 gap-1.5 mb-2">
+                        <div className="grid grid-cols-1 sm:grid-cols-2 gap-1.5 mb-2.5">
                           <button
                             type="button"
                             onClick={(e) => {
@@ -3792,6 +4081,58 @@ function SovereignAppContent() {
                             <Camera className="w-3.5 h-3.5 text-emerald-400 shrink-0" />
                             <span className="truncate">Scan &amp; Verify QR Artifact</span>
                           </button>
+                        </div>
+
+                        {/* Dedicated Bottom Sync History Log Section */}
+                        <div
+                          id="verification-gate-bottom-sync-history"
+                          className="p-2.5 rounded-xl bg-zinc-950/90 border border-cyan-500/30 mb-2 space-y-1.5 font-mono shadow-inner"
+                        >
+                          <div className="flex items-center justify-between text-[9px] pb-1 border-b border-cyan-500/20">
+                            <span className="text-cyan-300 font-bold flex items-center gap-1.5">
+                              <History className="w-3.5 h-3.5 text-cyan-400 shrink-0" />
+                              <span>OFFLINE AUDIT SYNC HISTORY (LAST 5 FLUSHES)</span>
+                            </span>
+                            <span className="px-1.5 py-0.2 rounded bg-emerald-500/15 border border-emerald-500/30 text-emerald-300 font-bold text-[8px]">
+                              {syncHistory.length} AUDIT {syncHistory.length === 1 ? 'RECORD' : 'RECORDS'}
+                            </span>
+                          </div>
+
+                          <div className="space-y-1 max-h-28 overflow-y-auto pr-0.5">
+                            {syncHistory.slice(0, 5).map((ts, idx) => {
+                              const dateObj = new Date(ts);
+                              const timeFormatted = isNaN(dateObj.getTime())
+                                ? ts
+                                : dateObj.toLocaleTimeString('en-GB', { timeZone: 'UTC', hour12: false }) + ' UTC';
+                              const dateFormatted = isNaN(dateObj.getTime())
+                                ? ''
+                                : dateObj.toLocaleDateString('en-GB', { day: '2-digit', month: 'short' });
+                              return (
+                                <div
+                                  key={`bottom-sync-hist-${ts}-${idx}`}
+                                  className="flex items-center justify-between p-1.5 rounded bg-black/60 border border-zinc-800/80 hover:border-cyan-500/30 transition-colors text-[8.5px]"
+                                >
+                                  <div className="flex items-center gap-1.5 min-w-0">
+                                    <span className="w-1.5 h-1.5 rounded-full bg-emerald-400 shadow-[0_0_4px_rgba(52,211,153,0.9)] shrink-0 animate-pulse" />
+                                    <span className="font-bold text-zinc-200 whitespace-nowrap">{timeFormatted}</span>
+                                    {dateFormatted && (
+                                      <span className="text-zinc-500 text-[8px] truncate hidden sm:inline">
+                                        • {dateFormatted}
+                                      </span>
+                                    )}
+                                  </div>
+                                  <div className="flex items-center gap-1.5 shrink-0">
+                                    <span className="px-1.5 py-0.2 rounded bg-emerald-500/15 border border-emerald-500/30 text-emerald-300 font-semibold text-[7.5px]">
+                                      FLUSH CONFIRMED
+                                    </span>
+                                    <span className="text-[7.5px] text-cyan-400/90 font-mono">
+                                      {idx === 0 ? 'LATEST' : `#${idx + 1}`}
+                                    </span>
+                                  </div>
+                                </div>
+                              );
+                            })}
+                          </div>
                         </div>
 
                         <p className="text-[10px] text-cyan-400/80 font-mono text-center">
@@ -4068,12 +4409,15 @@ function SovereignAppContent() {
         onClose={() => {
           triggerVibration('sidebarToggle');
           setIsEventsSidebarOpen(false);
+          setEventsSidebarHighlightPending(false);
         }}
         events={systemEvents}
         latestSealCount={verificationGateStatus.sealCount}
         onClearEvents={() => dispatchAction({ type: 'CLEAR_SYSTEM_EVENTS' })}
         isForensicAuditMode={isForensicAuditMode}
         onToggleForensicAuditMode={handleToggleForensicAuditMode}
+        initialFilter={eventsSidebarFilter}
+        highlightPending={eventsSidebarHighlightPending}
         onNavigateToView={(v) => {
           setCurrentView(v);
           setIsEventsSidebarOpen(false);
