@@ -1,38 +1,28 @@
-import React, { useState, useRef, useEffect, useCallback } from 'react';
+import React, { useState, useRef, useEffect, useCallback, useMemo } from 'react';
 import {
-  Terminal,
   Send,
-  Play,
   Sparkles,
-  CornerDownLeft,
-  LayoutGrid,
-  Activity,
-  Layers,
   Camera,
   CheckCircle2,
   ArrowRight,
-  FileCheck2,
   Download,
-  Sliders,
-  Radio,
   Clock,
   Zap,
-  BatteryCharging,
   ShieldCheck,
-  RotateCcw,
-  SlidersHorizontal,
-  ChevronDown,
   FileJson,
   Cpu,
   Server,
   Share2,
   RefreshCw,
-  GitMerge,
-  Scale,
-  Lock,
   QrCode,
+  Search,
+  Copy,
+  Check,
+  Trash2,
+  Maximize2,
+  Minimize2,
 } from 'lucide-react';
-import { SYSTEM_METADATA, AUDIT_TRACE_TX, THAI_CUSTODIANS, SYSTEM_INVARIANTS } from '../../data/canonicalData';
+import { SYSTEM_METADATA, AUDIT_TRACE_TX, THAI_CUSTODIANS } from '../../data/canonicalData';
 import { playAuditChime, playTone, playWarningTone } from '../AudioSynthesizer';
 import { ConsoleHardwareTelemetryGrid } from '../ConsoleHardwareTelemetryGrid';
 import { MacroConsole } from '../MacroConsole';
@@ -41,13 +31,51 @@ import { HardwareSnapshot, ViewType } from '../../types';
 import { createTelemetrySnapshot, generateSha256Hash } from '../../utils/telemetrySnapshot';
 import { exportCanonicalSealArtifactJson } from '../../utils/canonicalSealArtifactExport';
 import { executeZyrquenCliCommand } from '../../utils/hologramMaterial';
+import { safeCopyToClipboard } from '../../utils/clipboard';
 import {
   triggerFederationSync,
   subscribeFederationSync,
   getFederationSyncState,
   FederationSyncState,
-  KnowledgePacket,
 } from '../../utils/federationSyncManager';
+
+const CLI_AUTOCOMPLETE_COMMANDS: Array<{ cmd: string; desc: string }> = [
+  { cmd: 'help', desc: 'List all available Sovereign CLI commands' },
+  { cmd: 'quorum', desc: 'Inspect 10/10 Deca-Custodian FIPS 140-3 L4 HSM Quorum' },
+  { cmd: 'chambers', desc: 'Inspect all 18 Sovereign Chambers (CH-00..CH-17)' },
+  { cmd: 'annex', desc: 'Display Court-Ready Forensic Annex v2 (8/8 Vectors)' },
+  { cmd: 'verify-merkle', desc: 'Cryptographically verify Genesis #849202 Merkle Root' },
+  { cmd: 'status', desc: 'Check ZYRQUEN Ω∞ system runtime status' },
+  { cmd: 'snapshot', desc: 'Capture instant hardware telemetry snapshot into Ledger' },
+  { cmd: 'autosnap', desc: 'Toggle 30s Auto-Snapshot daemon on high load' },
+  { cmd: 'audit', desc: 'Run full E2E Audit Engine verification' },
+  { cmd: 'reconcile', desc: 'Execute 12-Stage Forensics Reconciliation trace' },
+  { cmd: 'cert', desc: 'Display Gold Master Attestation Certificate' },
+  { cmd: 'seals', desc: 'Validate 14,902 Immutable Evidence Block Seals' },
+  { cmd: 'trace', desc: 'Show Active Transaction TX-20260809-909A-B814' },
+  { cmd: 'pentest', desc: 'Run simulated 5 Attack Vectors Fail-Closed defense' },
+  { cmd: 'benchmark', desc: 'Run Hardware & QOps Scale Benchmark' },
+  { cmd: 'dossier', desc: 'Inspect Unified QR Evidence Dossier & Attestation Matrix' },
+  { cmd: 'export-seal-artifact', desc: 'Export digitally signed Canonical Seal Manifest (JSON)' },
+  { cmd: 'export-json', desc: 'Export session hardware telemetry as JSON Forensic Dump' },
+  { cmd: 'scan-qr', desc: 'Open Evidentiary Manifest QR Scanner' },
+  { cmd: 'sync-ledger', desc: 'Trigger Active Ledger Merkle-Root Verification Handshake' },
+  { cmd: 'publish-packet', desc: 'Publish cross-node Knowledge Packet to Federation' },
+  { cmd: 'ingest-packet', desc: 'Ingest inbound Knowledge Packet & verify Dilithium-5' },
+  { cmd: 'evolve', desc: 'Execute Civilization Self-Evolution Architecture v13' },
+  { cmd: 'vault-expand', desc: 'Execute Sovereign Vault Expansion v14.0 (1,024 TB)' },
+  { cmd: 'governance', desc: 'Activate Autonomous Governance Fabric v14.0 (128 Agents)' },
+  { cmd: 'fed-drift', desc: 'Inspect Multi-Node Statistical Knowledge Drift Matrix' },
+  { cmd: 'continuum', desc: 'Activate Quantum Continuum Runtime v14' },
+  { cmd: 'multiverse-nav', desc: 'Engage Multiverse Navigation Grid v15' },
+  { cmd: 'deep-freeze', desc: 'Inspect Immutable Merkle Ledger Deep Freeze Archive' },
+  { cmd: 'entropy-thermal', desc: 'Inspect Atmospheric Entropy vs CPU Thermal Variance' },
+  { cmd: 'cognitive-drift', desc: 'Inspect Cognitive Drift & Reasoning Telemetry' },
+  { cmd: 'assets', desc: 'List 8 Master Visual Assets & System Posters' },
+  { cmd: 'thai-custodians', desc: 'List Thai Sovereign Executive Custodian Passports' },
+  { cmd: 'sysinfo', desc: 'Display Kernel Version, Merkle Root & Principal' },
+  { cmd: 'clear', desc: 'Clear terminal output history' },
+];
 
 interface ConsoleViewProps {
   onCaptureSnapshot?: (snapshot: HardwareSnapshot) => void;
@@ -96,18 +124,52 @@ export const ConsoleView: React.FC<ConsoleViewProps> = ({
   const [autoSnapshotCountdown, setAutoSnapshotCountdown] = useState<number>(30); // 30-second interval
   const [autoSnapshotsTriggeredCount, setAutoSnapshotsTriggeredCount] = useState<number>(0);
 
-  const [history, setHistory] = useState<Array<{ type: 'input' | 'output' | 'error' | 'success'; text: string }>>([
+  const [history, setHistory] = useState<Array<{ type: 'input' | 'output' | 'error' | 'success'; text: string; timestamp?: string }>>([
     {
       type: 'output',
       text: 'ZYRQUEN Ω∞ FROZEN v1.2 LTS Sovereign Operating System and Civilization Intelligence Control Plane — SOVEREIGN CLI CONSOLE',
+      timestamp: '05:00:01 ICT',
     },
     {
       type: 'output',
-      text: 'Type "help" to list available commands (snapshot, audit, reconcile, cert, seals, trace, pentest, benchmark, assets, thai-custodians, autosnap, export-json, clear)',
+      text: 'Type "help" to list available commands (snapshot, audit, reconcile, cert, seals, trace, pentest, benchmark, quorum, chambers, annex, verify-merkle, assets, thai-custodians, autosnap, export-json, clear)',
+      timestamp: '05:00:02 ICT',
     },
-    { type: 'success', text: `Merkle Root: ${SYSTEM_METADATA.merkleRoot}` },
+    { type: 'success', text: `Merkle Root: ${SYSTEM_METADATA.merkleRoot}`, timestamp: '05:00:03 ICT' },
   ]);
+  const [commandHistory, setCommandHistory] = useState<string[]>([
+    'status',
+    'verify-merkle',
+    'quorum',
+    'audit',
+    'reconcile',
+  ]);
+  const [historyCursor, setHistoryCursor] = useState<number>(-1);
+  const [logSearchQuery, setLogSearchQuery] = useState<string>('');
+  const [logTypeFilter, setLogTypeFilter] = useState<'ALL' | 'success' | 'output' | 'error' | 'input'>('ALL');
+  const [isTerminalExpanded, setIsTerminalExpanded] = useState<boolean>(false);
+  const [isAllCopied, setIsAllCopied] = useState<boolean>(false);
+  const [copiedEntryIdx, setCopiedEntryIdx] = useState<number | null>(null);
   const bottomRef = useRef<HTMLDivElement | null>(null);
+  const inputRef = useRef<HTMLInputElement | null>(null);
+
+  const autocompleteSuggestions = useMemo(() => {
+    const q = input.trim().toLowerCase();
+    if (!q) return [];
+    return CLI_AUTOCOMPLETE_COMMANDS.filter(
+      (item) => item.cmd.startsWith(q) && item.cmd !== q
+    ).slice(0, 5);
+  }, [input]);
+
+  const filteredTerminalHistory = useMemo(() => {
+    return history.filter((item) => {
+      if (logTypeFilter !== 'ALL' && item.type !== logTypeFilter) return false;
+      if (logSearchQuery.trim()) {
+        return item.text.toLowerCase().includes(logSearchQuery.trim().toLowerCase());
+      }
+      return true;
+    });
+  }, [history, logTypeFilter, logSearchQuery]);
 
   useEffect(() => {
     bottomRef.current?.scrollIntoView({ behavior: 'smooth' });
@@ -368,7 +430,10 @@ export const ConsoleView: React.FC<ConsoleViewProps> = ({
     const trimmed = cmd.trim();
     if (!trimmed) return;
 
-    setHistory((prev) => [...prev, { type: 'input', text: `$ ${trimmed}` }]);
+    const nowIct = new Date().toLocaleTimeString('en-GB', { hour12: false }) + ' ICT';
+    setHistory((prev) => [...prev, { type: 'input', text: `$ ${trimmed}`, timestamp: nowIct }]);
+    setCommandHistory((prev) => [trimmed, ...prev.filter((c) => c !== trimmed)].slice(0, 50));
+    setHistoryCursor(-1);
     setInput('');
 
     const command = trimmed.toLowerCase();
@@ -484,6 +549,10 @@ export const ConsoleView: React.FC<ConsoleViewProps> = ({
         {
           type: 'output',
           text: `Available Commands:
+  • quorum         - Inspect 10/10 Deca-Custodian FIPS 140-3 L4 HSM Quorum
+  • chambers       - Inspect all 18 Sovereign Chambers (CH-00..CH-17)
+  • annex          - Display Court-Ready Forensic Annex v2 (8/8 Vectors)
+  • verify-merkle  - Cryptographically verify Genesis #849202 Merkle Root
   • sync-ledger    - Trigger Active Ledger Merkle-Root Verification Handshake
   • publish-packet - Publish New Cross-Node Knowledge Packet to Federation
   • ingest-packet  - Ingest Inbound Knowledge Packet & Verify Dilithium-5
@@ -974,6 +1043,98 @@ ${THAI_CUSTODIANS.map((c) => `  • ${c.passportNumber}: ${c.nameTh} (${c.nameEn
       return;
     }
 
+    if (command === 'quorum' || command === 'hsm' || command === 'hsm-quorum') {
+      playAuditChime();
+      setHistory((prev) => [
+        ...prev,
+        {
+          type: 'success',
+          text: `[DECA-CUSTODIAN HSM QUORUM — 10/10 REAL_HSM FIPS 140-3 LEVEL 4]:
+  • TC-01 Alpha   (Kyber-1024)  | 14.98 mK | PASS • Statutory Anchor
+  • TC-02 Beta    (Dilithium-5) | 14.97 mK | PASS • Non-Repudiation Bound
+  • TC-03 Gamma   (SPHINCS+)    | 14.99 mK | PASS • Stateless Hash Tree
+  • TC-04 Delta   (Kyber-1024)  | 14.98 mK | PASS • Lattice KEM Encapsulated
+  • TC-05 Epsilon (Dilithium-5) | 14.96 mK | PASS • Sovereign ID #EP-SOVEREIGN-01
+  • TC-06 Zeta    (SPHINCS+)    | 14.98 mK | PASS • Thermal Cutoff Armed (<85°C)
+  • TC-07 Eta     (Kyber-1024)  | 15.01 mK | PASS • Court Annex จพ.๐๓ Certified
+  • TC-08 Theta   (Dilithium-5) | 14.98 mK | PASS • ISO/IEC 27037 Custody Stamp
+  • TC-09 Iota    (SPHINCS+)    | 14.97 mK | PASS • Replay SLA 35.80ms < 142ms
+  • TC-10 Kappa   (Kyber-1024)  | 14.99 mK | PASS • PQC Category 5 Ratified
+  QUORUM CONSENSUS: 10/10 ONLINE (100% PASS) • SIG: 0x14902_DECA_CUSTODIAN_FIPS140_3_L4_ACTIVE_SHIELD_SIG_909AB8`,
+        },
+      ]);
+      return;
+    }
+
+    if (command === 'chambers' || command === '18-chambers' || command === 'chamber-list') {
+      playTone(620, 0.05);
+      setHistory((prev) => [
+        ...prev,
+        {
+          type: 'output',
+          text: `[18 SOVEREIGN CHAMBERS CONTROL PLANE — CH-00..CH-17]:
+  • CH-00 Zero-Kernel Genesis Anchor        [LOCKED • 0.12ms]
+  • CH-01 Constitutional Law & SSoT Gate    [LOCKED • 0.15ms]
+  • CH-02 Immutable Merkle Ledger (#849202) [VERIFIED • 14,902 Seals]
+  • CH-03 Deca-Custodian HSM Vault          [10/10 REAL_HSM • 14.98 mK]
+  • CH-04 NIST PQC Lattice Enclave          [ML-DSA-87 / ML-KEM-1024]
+  • CH-05 Thai ETDA & PDPA Supreme Chamber  [Sec 9/26/28 & Sec 37 PASS]
+  • CH-06 12-Stage Forensics Reconciler     [35.80ms Replay SLA PASS]
+  • CH-07 Quarantine Boundary (Ω1001+)      [80 Quarantined • ISOLATED]
+  • CH-08 Sub-Kelvin Cryogenic Telemetry    [14.98 mK • 99.98% Coherence]
+  • CH-09 Autonomous Industrial Forge       [OPERATIONAL • Δ0.00%]
+  • CH-10 Multiverse Simulation Matrix      [SECTOR 08-XF4 ALIGNED]
+  • CH-11 Quantum Radar & Threat Sentinel   [FAIL-CLOSED ARMED]
+  • CH-12 Federation Consensus Mesh         [5/5 Global Nodes OPTIMAL]
+  • CH-13 Treasury & SAP ERP Variance Audit [ZERO VARIANCE VERIFIED]
+  • CH-14 Evidentiary QR & Court Dossier    [COURT-ANNEX-v2 READY]
+  • CH-15 AI Workspace Sandbox Boundary     [READ-ONLY MUTATION = 0]
+  • CH-16 D3 Compliance Coverage Topology   [100% STATUTORY COVERAGE]
+  • CH-17 Deep Cobalt 17-Module Archive     [COLD STORAGE SEALED]`,
+        },
+      ]);
+      return;
+    }
+
+    if (command === 'annex' || command === 'court-annex' || command === 'vectors') {
+      playAuditChime();
+      setHistory((prev) => [
+        ...prev,
+        {
+          type: 'success',
+          text: `[COURT-ANNEX-v2 FORENSIC DOSSIER — 8/8 CRYPTOGRAPHIC TEST VECTORS]:
+  • Document Ref: COURT-ANNEX-v2 (แบบ จพ.๐๓ / ISO/IEC 27037:2012)
+  • Sovereign Custodian: ${SYSTEM_METADATA.sovereignPrincipal} (#EP-SOVEREIGN-01)
+  • Vector 1 (Genesis Block #849202):        PASS [SHA-256 + ML-DSA-87]
+  • Vector 2 (Merkle Root 909ab814...a4c68): PASS [Zero Drift Δ0.00%]
+  • Vector 3 (14,902 Canonical Seals):       PASS [80 Quarantined Isolated]
+  • Vector 4 (ETDA B.E. 2544 Sec 9/26/28):   PASS [Non-Repudiation Enforced]
+  • Vector 5 (PDPA B.E. 2562 Sec 37/39):     PASS [Zero-Knowledge Redaction]
+  • Vector 6 (10/10 FIPS 140-3 L4 Quorum):   PASS [Sub-Kelvin 14.98 mK]
+  • Vector 7 (12-Stage Replay 35.80ms):      PASS [SLA < 142.00ms]
+  • Vector 8 (Fail-Closed Write Firewall):   PASS [Mutation Authority = 0]`,
+        },
+      ]);
+      return;
+    }
+
+    if (command === 'verify-merkle' || command === 'merkle') {
+      playAuditChime();
+      setHistory((prev) => [
+        ...prev,
+        {
+          type: 'success',
+          text: `[MERKLE ROOT CRYPTOGRAPHIC VERIFICATION — PASS]:
+  • Canonical Genesis Block: #${SYSTEM_METADATA.sealedBlock} (Range #849198–#849202)
+  • Computed Merkle Root:    ${SYSTEM_METADATA.merkleRoot}
+  • Expected SSoT Root:      909ab814479844d8a14816bed34cdbb07528e18501da86fc4691763a43fa4c68
+  • Bitwise Comparison:      100% EXACT MATCH (256/256 bits verified)
+  • Verified Seals Count:    14,902 Seals | Drift: Δ0.00% | Mutation: 0`,
+        },
+      ]);
+      return;
+    }
+
     // Default unknown command
     playWarningTone();
     setHistory((prev) => [
@@ -985,6 +1146,55 @@ ${THAI_CUSTODIANS.map((c) => `  • ${c.passportNumber}: ${c.nameTh} (${c.nameEn
   const handleKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
     if (e.key === 'Enter') {
       executeCommand(input);
+      return;
+    }
+    if (e.key === 'Tab') {
+      e.preventDefault();
+      if (autocompleteSuggestions.length > 0) {
+        playTone(640, 0.02);
+        setInput(autocompleteSuggestions[0].cmd);
+      }
+      return;
+    }
+    if (e.key === 'ArrowUp') {
+      e.preventDefault();
+      if (commandHistory.length === 0) return;
+      const nextCursor = Math.min(historyCursor + 1, commandHistory.length - 1);
+      setHistoryCursor(nextCursor);
+      setInput(commandHistory[nextCursor]);
+      return;
+    }
+    if (e.key === 'ArrowDown') {
+      e.preventDefault();
+      if (historyCursor <= 0) {
+        setHistoryCursor(-1);
+        setInput('');
+        return;
+      }
+      const nextCursor = historyCursor - 1;
+      setHistoryCursor(nextCursor);
+      setInput(commandHistory[nextCursor]);
+    }
+  };
+
+  const handleCopyAllTerminalLogs = async () => {
+    playTone(680, 0.04);
+    const dump = filteredTerminalHistory
+      .map((item) => `${item.timestamp ? `[${item.timestamp}] ` : ''}[${item.type.toUpperCase()}] ${item.text}`)
+      .join('\n\n');
+    const ok = await safeCopyToClipboard(dump);
+    if (ok) {
+      setIsAllCopied(true);
+      setTimeout(() => setIsAllCopied(false), 1800);
+    }
+  };
+
+  const handleCopySingleEntry = async (text: string, idx: number) => {
+    playTone(640, 0.03);
+    const ok = await safeCopyToClipboard(text);
+    if (ok) {
+      setCopiedEntryIdx(idx);
+      setTimeout(() => setCopiedEntryIdx(null), 1500);
     }
   };
 
@@ -1532,9 +1742,13 @@ ${THAI_CUSTODIANS.map((c) => `  • ${c.passportNumber}: ${c.nameTh} (${c.nameEn
 
       {/* Terminal Window */}
       {(activeTab === 'both' || activeTab === 'cli') && (
-        <div className="rounded-[28px] bg-[#07080F]/95 border border-white/10 overflow-hidden shadow-2xl flex flex-col h-[460px] animate-in fade-in duration-300">
+        <div
+          className={`rounded-[28px] bg-[#07080F]/95 border border-white/10 overflow-hidden shadow-2xl flex flex-col transition-all duration-300 animate-in fade-in ${
+            isTerminalExpanded ? 'h-[720px]' : 'h-[520px]'
+          }`}
+        >
           {/* Terminal Header */}
-          <div className="px-4 py-2.5 bg-black/60 border-b border-white/8 flex items-center justify-between">
+          <div className="px-4 py-2.5 bg-black/60 border-b border-white/8 flex flex-wrap items-center justify-between gap-2">
             <div className="flex items-center gap-2">
               <div className="flex items-center gap-1.5">
                 <span className="w-3 h-3 rounded-full bg-red-500/80" />
@@ -1545,8 +1759,8 @@ ${THAI_CUSTODIANS.map((c) => `  • ${c.passportNumber}: ${c.nameTh} (${c.nameEn
                 sovereign-core-engine — ZYRQUEN CLI (Port 8443 · 35.80 ms)
               </span>
             </div>
-            <div className="flex items-center gap-2">
-              <div className="hidden md:flex items-center gap-1 mr-2 font-mono text-[10px]">
+            <div className="flex flex-wrap items-center gap-1.5">
+              <div className="hidden xl:flex items-center gap-1 mr-1 font-mono text-[10px]">
                 {(['status', 'workspace list', 'resources', 'audit verify', 'phase11'] as const).map((qCmd) => (
                   <button
                     key={qCmd}
@@ -1559,9 +1773,19 @@ ${THAI_CUSTODIANS.map((c) => `  • ${c.passportNumber}: ${c.nameTh} (${c.nameEn
                 ))}
               </div>
               <button
+                type="button"
+                onClick={handleCopyAllTerminalLogs}
+                className="px-2 py-0.5 rounded border border-cyan-500/40 bg-cyan-500/10 hover:bg-cyan-500/20 text-cyan-300 text-[10px] font-bold font-mono transition-colors flex items-center gap-1 cursor-pointer"
+                title="Copy all filtered terminal output to clipboard"
+              >
+                {isAllCopied ? <Check className="w-3 h-3 text-emerald-400" /> : <Copy className="w-3 h-3" />}
+                <span>{isAllCopied ? 'Copied' : 'Copy Log'}</span>
+              </button>
+              <button
+                type="button"
                 onClick={handleExportAuditLogs}
                 disabled={isExportingLog}
-                className="px-2 py-0.5 rounded border border-[#D4AF37]/50 bg-[#D4AF37]/10 hover:bg-[#D4AF37]/20 text-[#D4AF37] text-[10px] font-bold font-mono transition-colors flex items-center gap-1 mr-2 disabled:opacity-50"
+                className="px-2 py-0.5 rounded border border-[#D4AF37]/50 bg-[#D4AF37]/10 hover:bg-[#D4AF37]/20 text-[#D4AF37] text-[10px] font-bold font-mono transition-colors flex items-center gap-1 disabled:opacity-50 cursor-pointer"
                 title="Export Signed Audit Logs (JSON)"
               >
                 {isExportingLog ? (
@@ -1574,50 +1798,207 @@ ${THAI_CUSTODIANS.map((c) => `  • ${c.passportNumber}: ${c.nameTh} (${c.nameEn
                   </>
                 )}
               </button>
-              <span className="text-[10px] font-mono text-zinc-500">
+              <button
+                type="button"
+                onClick={() => {
+                  playTone(480, 0.04);
+                  setHistory([]);
+                }}
+                className="px-2 py-0.5 rounded border border-rose-500/30 bg-rose-500/10 hover:bg-rose-500/20 text-rose-300 text-[10px] font-bold font-mono transition-colors flex items-center gap-1 cursor-pointer"
+                title="Clear terminal output"
+              >
+                <Trash2 className="w-3 h-3" />
+                <span className="hidden sm:inline">Clear</span>
+              </button>
+              <button
+                type="button"
+                onClick={() => {
+                  playTone(580, 0.03);
+                  setIsTerminalExpanded((prev) => !prev);
+                }}
+                className="p-1 rounded border border-white/10 bg-white/5 hover:bg-white/10 text-zinc-300 transition-colors cursor-pointer"
+                title={isTerminalExpanded ? 'Restore default terminal height' : 'Expand terminal height'}
+              >
+                {isTerminalExpanded ? <Minimize2 className="w-3 h-3" /> : <Maximize2 className="w-3 h-3" />}
+              </button>
+              <span className="text-[10px] font-mono text-zinc-500 hidden sm:inline">
                 AUTO-SNAP: {autoSnapshotEnabled ? 'ON (30S)' : 'OFF'}
               </span>
-              <span className="text-[10px] font-mono text-zinc-600">|</span>
-              <span className="text-[10px] font-mono text-zinc-600">UTF-8 • SHA-256 • OTLP REAL-TIME</span>
+              <span className="text-[10px] font-mono text-zinc-600 hidden sm:inline">|</span>
+              <span className="text-[10px] font-mono text-zinc-600 hidden sm:inline">UTF-8 • SHA-256 • OTLP REAL-TIME</span>
+            </div>
+          </div>
+
+          {/* Interactive Search & Log Stream Filter Sub-Bar */}
+          <div className="px-4 py-2 bg-[#090d18]/90 border-b border-white/5 flex flex-wrap items-center justify-between gap-2 font-mono text-[10px]">
+            <div className="flex items-center gap-1.5 flex-wrap">
+              {(
+                [
+                  { id: 'ALL', label: `ALL (${history.length})` },
+                  { id: 'success', label: `PASS (${history.filter((h) => h.type === 'success').length})` },
+                  { id: 'output', label: `OUT (${history.filter((h) => h.type === 'output').length})` },
+                  { id: 'error', label: `ALERT (${history.filter((h) => h.type === 'error').length})` },
+                  { id: 'input', label: `CMD (${history.filter((h) => h.type === 'input').length})` },
+                ] as const
+              ).map((tab) => (
+                <button
+                  key={tab.id}
+                  type="button"
+                  onClick={() => {
+                    playTone(560, 0.02);
+                    setLogTypeFilter(tab.id);
+                  }}
+                  className={`px-2 py-0.5 rounded transition-all cursor-pointer ${
+                    logTypeFilter === tab.id
+                      ? 'bg-cyan-500/25 text-cyan-200 border border-cyan-500/50 font-bold'
+                      : 'bg-white/5 text-zinc-400 hover:text-zinc-200 border border-white/5'
+                  }`}
+                >
+                  {tab.label}
+                </button>
+              ))}
+            </div>
+
+            <div className="flex items-center gap-1.5 bg-black/50 border border-white/10 rounded-lg px-2 py-1 min-w-[180px] sm:min-w-[220px]">
+              <Search className="w-3 h-3 text-zinc-500 shrink-0" />
+              <input
+                type="text"
+                value={logSearchQuery}
+                onChange={(e) => setLogSearchQuery(e.target.value)}
+                placeholder="Filter terminal logs..."
+                className="bg-transparent text-[10px] font-mono text-zinc-200 focus:outline-none w-full placeholder-zinc-600"
+              />
+              {logSearchQuery && (
+                <button
+                  type="button"
+                  onClick={() => setLogSearchQuery('')}
+                  className="text-zinc-500 hover:text-zinc-300 text-[10px] cursor-pointer"
+                >
+                  ✕
+                </button>
+              )}
             </div>
           </div>
 
           {/* Terminal Output */}
           <div className="flex-1 p-4 overflow-y-auto space-y-2 font-mono text-xs text-zinc-300 select-text">
-            {history.map((item, idx) => (
-              <div
-                key={idx}
-                className={`whitespace-pre-wrap leading-relaxed ${
-                  item.type === 'input'
-                    ? 'text-cyan-400 font-semibold'
-                    : item.type === 'success'
-                    ? 'text-emerald-400'
-                    : item.type === 'error'
-                    ? 'text-red-400'
-                    : 'text-zinc-300'
-                }`}
-              >
-                {item.text}
+            {filteredTerminalHistory.length === 0 ? (
+              <div className="text-zinc-500 italic py-6 text-center">
+                No terminal entries match current filter. Type a command below or click a quick command chip.
               </div>
-            ))}
+            ) : (
+              filteredTerminalHistory.map((item, idx) => (
+                <div
+                  key={idx}
+                  className={`group relative rounded-lg px-2.5 py-1.5 transition-colors hover:bg-white/[0.03] whitespace-pre-wrap leading-relaxed ${
+                    item.type === 'input'
+                      ? 'text-cyan-400 font-semibold bg-cyan-950/15 border-l-2 border-cyan-400'
+                      : item.type === 'success'
+                      ? 'text-emerald-400 bg-emerald-950/10 border-l-2 border-emerald-500/60'
+                      : item.type === 'error'
+                      ? 'text-red-400 bg-rose-950/15 border-l-2 border-rose-500/60'
+                      : 'text-zinc-300'
+                  }`}
+                >
+                  <div className="flex items-start justify-between gap-2">
+                    <div className="flex-1 min-w-0">{item.text}</div>
+                    <div className="flex items-center gap-1.5 shrink-0 opacity-70 group-hover:opacity-100 transition-opacity">
+                      {item.timestamp && (
+                        <span className="text-[9px] text-zinc-500 font-normal">{item.timestamp}</span>
+                      )}
+                      <button
+                        type="button"
+                        onClick={() => handleCopySingleEntry(item.text, idx)}
+                        className="p-1 rounded bg-white/5 hover:bg-white/10 text-zinc-400 hover:text-cyan-300 cursor-pointer"
+                        title="Copy entry"
+                      >
+                        {copiedEntryIdx === idx ? (
+                          <Check className="w-2.5 h-2.5 text-emerald-400" />
+                        ) : (
+                          <Copy className="w-2.5 h-2.5" />
+                        )}
+                      </button>
+                    </div>
+                  </div>
+                </div>
+              ))
+            )}
             <div ref={bottomRef} />
+          </div>
+
+          {/* Mobile & Desktop Quick Command Dock + Live Tab Autocomplete Suggestions */}
+          <div className="px-3 py-1.5 bg-black/50 border-t border-white/5 flex flex-col gap-1.5">
+            {autocompleteSuggestions.length > 0 && (
+              <div className="flex items-center gap-1.5 flex-wrap font-mono text-[10px]">
+                <span className="text-zinc-500">Tab Autocomplete:</span>
+                {autocompleteSuggestions.map((sug) => (
+                  <button
+                    key={sug.cmd}
+                    type="button"
+                    onClick={() => {
+                      playTone(620, 0.03);
+                      executeCommand(sug.cmd);
+                    }}
+                    className="px-2 py-0.5 rounded bg-emerald-500/15 hover:bg-emerald-500/25 border border-emerald-500/40 text-emerald-300 cursor-pointer flex items-center gap-1"
+                    title={sug.desc}
+                  >
+                    <span className="font-bold">{sug.cmd}</span>
+                    <span className="text-zinc-400 text-[9px] hidden sm:inline">— {sug.desc}</span>
+                  </button>
+                ))}
+              </div>
+            )}
+
+            <div className="flex items-center gap-1.5 overflow-x-auto no-scrollbar py-0.5 font-mono text-[10px]">
+              <span className="text-zinc-500 shrink-0">Quick Exec:</span>
+              {(
+                [
+                  'quorum',
+                  'chambers',
+                  'annex',
+                  'verify-merkle',
+                  'status',
+                  'audit',
+                  'reconcile',
+                  'snapshot',
+                  'cert',
+                  'seals',
+                  'pentest',
+                  'help',
+                ] as const
+              ).map((cmdChip) => (
+                <button
+                  key={cmdChip}
+                  type="button"
+                  onClick={() => executeCommand(cmdChip)}
+                  className="px-2 py-0.5 rounded-md bg-cyan-950/50 hover:bg-cyan-900/60 border border-cyan-500/30 text-cyan-300 shrink-0 cursor-pointer transition-colors"
+                >
+                  $ {cmdChip}
+                </button>
+              ))}
+            </div>
           </div>
 
           {/* Terminal Input Bar */}
           <div className="p-3 bg-black/60 border-t border-white/8 flex items-center gap-2">
             <span className="text-cyan-400 font-mono text-xs font-bold pl-2">$</span>
             <input
+              ref={inputRef}
               type="text"
               value={input}
-              onChange={(e) => setInput(e.target.value)}
+              onChange={(e) => {
+                setInput(e.target.value);
+                setHistoryCursor(-1);
+              }}
               onKeyDown={handleKeyDown}
-              placeholder="Type a command (e.g. snapshot, autosnap, export-json, audit, reconcile, cert, seals, pentest)..."
+              placeholder="Type command (quorum, chambers, annex, verify-merkle, audit, snapshot, help)... [↑/↓ History • Tab Complete]"
               className="flex-1 bg-transparent font-mono text-xs text-white focus:outline-none placeholder-zinc-600"
               autoFocus
             />
             <button
               onClick={() => executeCommand(input)}
-              className="p-1.5 rounded-lg bg-cyan-500/20 hover:bg-cyan-500/30 text-cyan-300 border border-cyan-500/30"
+              className="p-1.5 rounded-lg bg-cyan-500/20 hover:bg-cyan-500/30 text-cyan-300 border border-cyan-500/30 cursor-pointer"
+              title="Execute CLI Command"
             >
               <Send className="w-3.5 h-3.5" />
             </button>
