@@ -570,8 +570,6 @@ export const ThaiLegalSearchModal: React.FC<ThaiLegalSearchModalProps> = ({
     }
   };
 
-  if (!isOpen) return null;
-
   // Execute Search with Category Scoping
   const handleSearch = async (searchQuery: string, overrideCategory?: LegalCategory) => {
     const q = searchQuery.trim();
@@ -686,6 +684,8 @@ export const ThaiLegalSearchModal: React.FC<ThaiLegalSearchModalProps> = ({
     });
     return counts;
   }, [pinnedStatutes]);
+
+  if (!isOpen) return null;
 
   return (
     <div id="thai-legal-search-modal-backdrop" className="fixed inset-0 z-50 flex items-center justify-center p-3 sm:p-4 bg-black/80 backdrop-blur-xl animate-in fade-in duration-300">
