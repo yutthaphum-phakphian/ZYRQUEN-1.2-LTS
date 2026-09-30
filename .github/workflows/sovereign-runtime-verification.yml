@@ -2,9 +2,9 @@ name: Sovereign Runtime Verification
 
 on:
   push:
-    branches: [main]
+    branches: [ main ]
   pull_request:
-    branches: [main]
+    branches: [ main ]
 
 permissions:
   contents: read
@@ -12,26 +12,22 @@ permissions:
 jobs:
   sovereign-runtime-test:
     runs-on: ubuntu-latest
+
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
-        with:
-          sparse-checkout: |
-            /*
-            !cloud-workspace-command-center/
-          sparse-checkout-cone-mode: false
 
       - name: Setup Node.js
         uses: actions/setup-node@v4
         with:
           node-version: 20
-
+          cache: 'npm'
 
       - name: Install dependencies
-        run: npm ci --legacy-peer-deps || npm install --legacy-peer-deps
+        run: npm install --legacy-peer-deps
 
       - name: Run TypeScript typecheck
         run: npx tsc --noEmit --skipLibCheck
 
-      - name: Run Sovereign Runtime Verification
-        run: npx vitest run tests/sovereign-runtime-verification.test.tsx
+      - name: Run Sovereign Runtime Verification Test
+        run: npx vitest run tests/sovereign-runtime-verification.test.tsx --environment jsdom
