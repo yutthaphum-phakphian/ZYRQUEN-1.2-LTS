@@ -13,10 +13,8 @@ import {
   Terminal,
   Keyboard,
   Activity,
-  Heart,
   Waves,
   ShieldCheck,
-  CheckCircle2,
   Lock,
   ChevronDown,
   ChevronUp,
@@ -24,11 +22,9 @@ import {
   FileText,
   Info,
   BookOpen,
-  Fingerprint,
   Clock,
   Download,
   X,
-  Bot,
   Copy,
   Check,
   FileDown,
@@ -39,7 +35,6 @@ import {
   QrCode,
   Settings,
   Sparkles,
-  SlidersHorizontal,
   Cpu,
   Radio,
   Zap,
@@ -71,7 +66,6 @@ import { Navigation } from '@/components/Navigation';
 import { LeftSidebar } from '@/components/LeftSidebar';
 import { MainFooter } from '@/components/MainFooter';
 import { SovereignControlDock } from '@/components/SovereignControlDock';
-import { SovereignBottomStatusBar } from '@/components/SovereignBottomStatusBar';
 import { CopilotSovereignAI } from '@/components/CopilotSovereignAI';
 import { SystemEventsSidebar, SystemEvent, type SystemEventFilterType } from '@/components/SystemEventsSidebar';
 import { ForensicAuditStepper } from '@/components/ForensicAuditStepper';
@@ -79,41 +73,57 @@ import { LegalTriggerCard, type LegalTriggerItem } from '@/components/LegalTrigg
 import { type StagedAiCommandRequest } from '@/components/CommandCenterOperationsConsole';
 import type { SecuritySubTab } from '@/components/views/SecurityView';
 
-// High-Performance Lazy Loading for Sovereign Views (Zero Main-Thread Latency)
-const DashboardView = React.lazy(() => import('@/components/views/DashboardView').then(m => ({ default: m.DashboardView })));
-const QuantumView = React.lazy(() => import('@/components/views/QuantumView').then(m => ({ default: m.QuantumView })));
-const Chamber11QuantumRadar = React.lazy(() => import('@/components/views/Chamber11QuantumRadar').then(m => ({ default: m.Chamber11QuantumRadar })));
-const G11CanonicalCore = React.lazy(() => import('@/components/views/G11CanonicalCore').then(m => ({ default: m.G11CanonicalCore })));
-const NexusView = React.lazy(() => import('@/components/views/NexusView').then(m => ({ default: m.NexusView })));
-const VaultView = React.lazy(() => import('@/components/views/VaultView').then(m => ({ default: m.VaultView })));
-const LedgerView = React.lazy(() => import('@/components/views/LedgerView').then(m => ({ default: m.LedgerView })));
-const PulseView = React.lazy(() => import('@/components/views/PulseView').then(m => ({ default: m.PulseView })));
-const ForgeView = React.lazy(() => import('@/components/views/ForgeView').then(m => ({ default: m.ForgeView })));
-const MatrixView = React.lazy(() => import('@/components/views/MatrixView').then(m => ({ default: m.MatrixView })));
-const ArchiveView = React.lazy(() => import('@/components/views/ArchiveView').then(m => ({ default: m.ArchiveView })));
-const ConsoleView = React.lazy(() => import('@/components/views/ConsoleView').then(m => ({ default: m.ConsoleView })));
-const SecurityView = React.lazy(() => import('@/components/views/SecurityView').then(m => ({ default: m.SecurityView })));
-const SettingsView = React.lazy(() => import('@/components/views/SettingsView').then(m => ({ default: m.SettingsView })));
-const ProductionReadinessView = React.lazy(() => import('@/components/views/ProductionReadinessView').then(m => ({ default: m.ProductionReadinessView })));
-const CouncilView = React.lazy(() => import('@/components/views/CouncilView').then(m => ({ default: m.CouncilView })));
-const LegalView = React.lazy(() => import('@/components/views/LegalView').then(m => ({ default: m.LegalView })));
-const StudioView = React.lazy(() => import('@/components/views/StudioView').then(m => ({ default: m.StudioView })));
-const UnifiedMultiverseControlPanel = React.lazy(() => import('@/components/views/UnifiedMultiverseControlPanel').then(m => ({ default: m.UnifiedMultiverseControlPanel })));
-const UnifiedAuditPlaybackConsole = React.lazy(() => import('@/components/views/UnifiedAuditPlaybackConsole').then(m => ({ default: m.UnifiedAuditPlaybackConsole })));
-const GovernanceHealthHeatmap = React.lazy(() => import('@/components/views/GovernanceHealthHeatmap').then(m => ({ default: m.GovernanceHealthHeatmap })));
-const ComplianceCoverageView = React.lazy(() => import('@/components/views/ComplianceCoverageView').then(m => ({ default: m.ComplianceCoverageView })));
-const CivilizationEngineView = React.lazy(() => import('@/components/views/CivilizationEngineView').then(m => ({ default: m.CivilizationEngineView })));
-const CanonicalIntegrityDashboardView = React.lazy(() => import('@/components/views/CanonicalIntegrityDashboardView').then(m => ({ default: m.CanonicalIntegrityDashboardView })));
-const QuantumAuditFusionView = React.lazy(() => import('@/components/views/QuantumAuditFusionView').then(m => ({ default: m.QuantumAuditFusionView })));
-const AdminConsole = React.lazy(() => import('@/components/AdminConsole').then(m => ({ default: m.AdminConsole })));
-const AuditAnalyticsDashboard = React.lazy(() => import('@/components/AuditAnalyticsDashboard').then(m => ({ default: m.AuditAnalyticsDashboard })));
-const SovereignChambersControlPlane = React.lazy(() => import('@/components/SovereignChambersControlPlane').then(m => ({ default: m.SovereignChambersControlPlane })));
-const AuditHistoryView = React.lazy(() => import('@/components/views/AuditHistoryView').then(m => ({ default: m.AuditHistoryView })));
-const SecurityPipelineView = React.lazy(() => import('@/components/views/SecurityPipelineView').then(m => ({ default: m.SecurityPipelineView })));
-const ExecutiveCourtBriefing = React.lazy(() => import('@/components/executive/ExecutiveCourtBriefing').then(m => ({ default: m.ExecutiveCourtBriefing })));
-const SovereignWalletView = React.lazy(() => import('@/components/views/SovereignWalletView').then(m => ({ default: m.SovereignWalletView })));
+// Static import for primary landing view (DashboardView) + resilient lazy loader with auto-retry for secondary views
+import { DashboardView } from '@/components/views/DashboardView';
+
+function lazyWithRetry<T extends React.ComponentType<any>>(
+  factory: () => Promise<{ default: T }>
+): React.LazyExoticComponent<T> {
+  return React.lazy(() =>
+    factory().catch((err) => {
+      // Retry once after a brief delay if Vite dev server is re-optimizing chunks
+      return new Promise<{ default: T }>((resolve, reject) => {
+        setTimeout(() => {
+          factory().then(resolve).catch(reject);
+        }, 250);
+      });
+    })
+  );
+}
+
+const QuantumView = lazyWithRetry(() => import('@/components/views/QuantumView').then(m => ({ default: m.QuantumView })));
+const Chamber11QuantumRadar = lazyWithRetry(() => import('@/components/views/Chamber11QuantumRadar').then(m => ({ default: m.Chamber11QuantumRadar })));
+const G11CanonicalCore = lazyWithRetry(() => import('@/components/views/G11CanonicalCore').then(m => ({ default: m.G11CanonicalCore })));
+const NexusView = lazyWithRetry(() => import('@/components/views/NexusView').then(m => ({ default: m.NexusView })));
+const VaultView = lazyWithRetry(() => import('@/components/views/VaultView').then(m => ({ default: m.VaultView })));
+const LedgerView = lazyWithRetry(() => import('@/components/views/LedgerView').then(m => ({ default: m.LedgerView })));
+const PulseView = lazyWithRetry(() => import('@/components/views/PulseView').then(m => ({ default: m.PulseView })));
+const ForgeView = lazyWithRetry(() => import('@/components/views/ForgeView').then(m => ({ default: m.ForgeView })));
+const MatrixView = lazyWithRetry(() => import('@/components/views/MatrixView').then(m => ({ default: m.MatrixView })));
+const ArchiveView = lazyWithRetry(() => import('@/components/views/ArchiveView').then(m => ({ default: m.ArchiveView })));
+const ConsoleView = lazyWithRetry(() => import('@/components/views/ConsoleView').then(m => ({ default: m.ConsoleView })));
+const SecurityView = lazyWithRetry(() => import('@/components/views/SecurityView').then(m => ({ default: m.SecurityView })));
+const SettingsView = lazyWithRetry(() => import('@/components/views/SettingsView').then(m => ({ default: m.SettingsView })));
+const ProductionReadinessView = lazyWithRetry(() => import('@/components/views/ProductionReadinessView').then(m => ({ default: m.ProductionReadinessView })));
+const CouncilView = lazyWithRetry(() => import('@/components/views/CouncilView').then(m => ({ default: m.CouncilView })));
+const LegalView = lazyWithRetry(() => import('@/components/views/LegalView').then(m => ({ default: m.LegalView })));
+const StudioView = lazyWithRetry(() => import('@/components/views/StudioView').then(m => ({ default: m.StudioView })));
+const UnifiedMultiverseControlPanel = lazyWithRetry(() => import('@/components/views/UnifiedMultiverseControlPanel').then(m => ({ default: m.UnifiedMultiverseControlPanel })));
+const UnifiedAuditPlaybackConsole = lazyWithRetry(() => import('@/components/views/UnifiedAuditPlaybackConsole').then(m => ({ default: m.UnifiedAuditPlaybackConsole })));
+const GovernanceHealthHeatmap = lazyWithRetry(() => import('@/components/views/GovernanceHealthHeatmap').then(m => ({ default: m.GovernanceHealthHeatmap })));
+const ComplianceCoverageView = lazyWithRetry(() => import('@/components/views/ComplianceCoverageView').then(m => ({ default: m.ComplianceCoverageView })));
+const CivilizationEngineView = lazyWithRetry(() => import('@/components/views/CivilizationEngineView').then(m => ({ default: m.CivilizationEngineView })));
+const CanonicalIntegrityDashboardView = lazyWithRetry(() => import('@/components/views/CanonicalIntegrityDashboardView').then(m => ({ default: m.CanonicalIntegrityDashboardView })));
+const QuantumAuditFusionView = lazyWithRetry(() => import('@/components/views/QuantumAuditFusionView').then(m => ({ default: m.QuantumAuditFusionView })));
+const AdminConsole = lazyWithRetry(() => import('@/components/AdminConsole').then(m => ({ default: m.AdminConsole })));
+const AuditAnalyticsDashboard = lazyWithRetry(() => import('@/components/AuditAnalyticsDashboard').then(m => ({ default: m.AuditAnalyticsDashboard })));
+const SovereignChambersControlPlane = lazyWithRetry(() => import('@/components/SovereignChambersControlPlane').then(m => ({ default: m.SovereignChambersControlPlane })));
+const AuditHistoryView = lazyWithRetry(() => import('@/components/views/AuditHistoryView').then(m => ({ default: m.AuditHistoryView })));
+const SecurityPipelineView = lazyWithRetry(() => import('@/components/views/SecurityPipelineView').then(m => ({ default: m.SecurityPipelineView })));
+const ExecutiveCourtBriefing = lazyWithRetry(() => import('@/components/executive/ExecutiveCourtBriefing').then(m => ({ default: m.ExecutiveCourtBriefing })));
+const SovereignWalletView = lazyWithRetry(() => import('@/components/views/SovereignWalletView').then(m => ({ default: m.SovereignWalletView })));
 import { SovereignDashboard } from '@/pages/SovereignDashboard';
-const TreasuryVarianceDashboard = React.lazy(() => import('@/components/views/TreasuryVarianceDashboard').then(m => ({ default: m.TreasuryVarianceDashboard })));
+const TreasuryVarianceDashboard = lazyWithRetry(() => import('@/components/views/TreasuryVarianceDashboard').then(m => ({ default: m.TreasuryVarianceDashboard })));
 import AIWorkspace from '@/components/AIWorkspace';
 import { AuditCertificateModal } from '@/components/AuditCertificateModal';
 import { GitHubPwaModal } from '@/components/GitHubPwaModal';
@@ -127,11 +137,10 @@ import { SovereignLoginLoader } from '@/components/SovereignLoginLoader';
 import { ExecutiveCommandPalette } from '@/components/ExecutiveCommandPalette';
 import { GlobalCommandSearch } from '@/components/GlobalCommandSearch';
 import { ForensicAuditMasterDossierModal } from '@/components/forensics/ForensicAuditMasterDossierModal';
-import { ThemeSwitcher, useTheme } from '@/components/ThemeSwitcher';
+import { useTheme } from '@/components/ThemeSwitcher';
 import { EmergencySovereignLockdown } from '@/components/EmergencySovereignLockdown';
 import { SovereignWatermarkOverlay } from '@/components/SovereignWatermark';
 import { SovereignUpgradeCycleModal } from '@/components/SovereignUpgradeCycleModal';
-import { LiveQuantumEntropyTicker } from '@/components/LiveQuantumEntropyTicker';
 import { ToastNotification, ToastMessage } from '@/components/ToastNotification';
 import {
   SsotDriftWarning,
@@ -1708,9 +1717,8 @@ function SovereignAppContent() {
   const syncHistorySummaryText = React.useMemo(() => {
     const totalCount = allSyncHistoryEntries.all.length;
     const shownCount = filteredSyncHistoryEntries.length;
-    const label = syncHistoryStatusFilter === 'ALL' ? 'Audit Logs' : `${syncHistoryStatusFilter} Logs`;
-    return `Showing ${shownCount} of ${totalCount} ${label}`;
-  }, [allSyncHistoryEntries.all.length, filteredSyncHistoryEntries.length, syncHistoryStatusFilter]);
+    return `Showing ${shownCount} of ${totalCount} Logs`;
+  }, [allSyncHistoryEntries.all.length, filteredSyncHistoryEntries.length]);
 
   const handleManualSyncHistoryFlushToggle = useCallback(async (e: React.MouseEvent) => {
     e.stopPropagation();

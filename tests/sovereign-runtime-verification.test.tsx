@@ -20,6 +20,7 @@ import {
 import { GovernanceHealthHeatmap } from '../src/components/views/GovernanceHealthHeatmap';
 import { ComplianceCoverageView } from '../src/components/views/ComplianceCoverageView';
 import { CommandCenterOperationsConsole } from '../src/components/CommandCenterOperationsConsole';
+import { MerkleRootQrCodeModal, type QrVerificationCallbackResult } from '../src/components/MerkleRootQrCodeModal';
 import App from '../src/App';
 
 afterEach(() => {
@@ -600,5 +601,55 @@ describe('Sovereign runtime verification', () => {
     fireEvent.click(clearDiffBtn);
     expect(document.getElementById('heatmap-historical-diff-banner')).toBeNull();
     expect(document.getElementById('heatmap-side-by-side-diff-grid')).toBeNull();
+  });
+
+  it('9. simulates a tamper detection event and asserts QrVerificationCallbackResult sets verified to false on Merkle root mismatch and displays Showing X of Y Logs in sync history', () => {
+    const capturedResults: QrVerificationCallbackResult[] = [];
+    const handleVerificationResult = vi.fn((res: QrVerificationCallbackResult) => {
+      capturedResults.push(res);
+    });
+
+    const { unmount } = render(
+      <MerkleRootQrCodeModal
+        isOpen={true}
+        onClose={vi.fn()}
+        initialTab="SCANNER"
+        autoStartCamera={false}
+        onVerificationResult={handleVerificationResult}
+      />
+    );
+
+    const simulateMismatchBtn = document.getElementById('btn-simulate-qr-mismatch')!;
+    expect(simulateMismatchBtn).toBeTruthy();
+    fireEvent.click(simulateMismatchBtn);
+
+    expect(handleVerificationResult).toHaveBeenCalledTimes(1);
+    const tamperResult = capturedResults[0];
+    expect(tamperResult).toBeDefined();
+    expect(tamperResult.verified).toBe(false);
+    expect(tamperResult.source).toBe('SIMULATED');
+    expect(tamperResult.rawPayload).toContain('0xdeadbeef0000tampered_invalid_merkle_root');
+    expect(tamperResult.message).toMatch(/FAIL-CLOSED/i);
+
+    unmount();
+
+    // Also verify the Sync History summary component ('Showing X of Y Logs') and simulated QR failure in App
+    render(<App />);
+    const gateStatusBtn = document.getElementById('verification-gate-status')!;
+    expect(gateStatusBtn).toBeTruthy();
+    fireEvent.mouseEnter(gateStatusBtn.parentElement!);
+
+    const summaryCounter = document.querySelector('[data-testid="sync-history-summary-counter"]')!;
+    expect(summaryCounter).toBeTruthy();
+    expect(summaryCounter.textContent).toMatch(/Showing \d+ of \d+ Logs/);
+
+    const simulateFailureBtn = document.getElementById('btn-simulate-qr-failure')!;
+    expect(simulateFailureBtn).toBeTruthy();
+    fireEvent.click(simulateFailureBtn);
+
+    const qrBadge = document.getElementById('verification-gate-qr-verification-badge')!;
+    expect(qrBadge).toBeTruthy();
+    expect(qrBadge.getAttribute('data-verified')).toBe('false');
+    expect(qrBadge.textContent).toContain('QR MISMATCH REJECTED');
   });
 });
