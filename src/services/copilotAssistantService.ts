@@ -685,15 +685,15 @@ let state: CopilotAssistantState = {
   entropyStats: CANONICAL_ENTROPY_STATS,
   peakEvents: CANONICAL_PEAK_EVENTS,
   enclaveContributions: CANONICAL_ENCLAVE_CONTRIBUTIONS,
-  version: 'v6.0 Sovereign Ultra Quantum',
+  version: 'v7.0 Sovereign Neural Oracle',
   chatHistory: [
     {
       id: 'MSG-INIT-001',
       sender: 'copilot',
       message:
-        'สวัสดีครับท่าน Sovereign Architect นายยุทธภูมิ พากเพียร (#EP-SOVEREIGN-01) — ระบบ Copilot Autonomy Layer v6.0 Sovereign Ultra พร้อมทำงานแล้วครับ ดึงและอัปเดทครบทุกไฟล์ (12/12 Core Modules & Workflows), รองรับการส่งออก Signed Immutable Snapshot (FIPS 204 JSON), ตรวจสอบ PQC Dilithium-5, สั่งการ Quantum Multi-Agent Swarm, และควบคุม 3D Continuum ทันทีครับ',
+        'สวัสดีครับท่าน Sovereign Architect นายยุทธภูมิ พากเพียร (#EP-SOVEREIGN-01) — ระบบ Copilot Autonomy Layer v7.0 Sovereign Neural Oracle (7-Layer Architecture) พร้อมทำงานแล้วครับ ดึงและซิงค์ครบทุกไฟล์ (14/14 Core Modules & Workflows), รองรับ COURT-ANNEX-v2 (8/8 Vectors • แบบ จพ.๐๓), ส่งออก Signed Immutable Snapshot (FIPS 204 JSON), ตรวจสอบ PQC Dilithium-5, สั่งการ Quantum Multi-Agent Swarm, และปรับจูน 16 ขั้นตอนอัตโนมัติทันทีครับ',
       timestamp: new Date().toISOString(),
-      actionMetadata: 'COPILOT_ONLINE_V6',
+      actionMetadata: 'COPILOT_ONLINE_V7',
       actionPayload: {
         type: 'DOWNLOAD_SNAPSHOT',
         label: '📥 ดาวน์โหลด Signed Snapshot ทันที',

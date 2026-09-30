@@ -1291,6 +1291,7 @@ function SovereignAppContent() {
   const [isAutoSyncEnabled, setIsAutoSyncEnabled] = useState<boolean>(() => offlineAuditSyncService.isAutoSyncEnabled());
   const [syncHistory, setSyncHistory] = useState<string[]>(() => offlineAuditSyncService.getSyncHistory());
   const [isSyncLogsCopied, setIsSyncLogsCopied] = useState<boolean>(false);
+  const [isSyncLogsMarkdownSaved, setIsSyncLogsMarkdownSaved] = useState<boolean>(false);
   const [isSyncHistoryRefreshing, setIsSyncHistoryRefreshing] = useState<boolean>(false);
   const [isGateStatusCopied, setIsGateStatusCopied] = useState<boolean>(false);
   const [isGateInlineQrOpen, setIsGateInlineQrOpen] = useState<boolean>(false);
@@ -1725,6 +1726,70 @@ function SovereignAppContent() {
 
   const [expandedSyncLogId, setExpandedSyncLogId] = useState<string | null>(null);
   const [isManualFlushToggleActive, setIsManualFlushToggleActive] = useState<boolean>(false);
+
+  const handleExportSyncHistoryMarkdown = useCallback(
+    (e: React.MouseEvent) => {
+      e.stopPropagation();
+      playTone(740, 0.05);
+      triggerVibration('auditReport');
+
+      if (filteredSyncHistoryEntries.length === 0) {
+        showToast('No sync history logs available to export as Markdown.', 'info');
+        return;
+      }
+
+      const nowIso = new Date().toISOString();
+      const filterLabel = syncHistoryStatusFilter === 'ALL' ? 'ALL STATUSES' : syncHistoryStatusFilter.toUpperCase();
+      const lines: string[] = [
+        `# ZYRQUEN Ω∞ — Condensed Sync History Audit Summary`,
+        ``,
+        `- **Generated At (UTC)**: \`${nowIso}\``,
+        `- **Active Filter**: \`${filterLabel}\``,
+        `- **Showing**: \`Showing ${filteredSyncHistoryEntries.length} of ${allSyncHistoryEntries.all.length} Logs\``,
+        `- **Status Breakdown**: \`${allSyncHistoryEntries.Success.length} Success\` · \`${allSyncHistoryEntries.Pending.length} Pending\` · \`${allSyncHistoryEntries.Failed.length} Failed\``,
+        `- **Genesis Block**: \`#${CANONICAL_GENESIS_BLOCK}\` | **Merkle Root**: \`${CANONICAL_MERKLE_ROOT}\` | **SSoT Drift**: \`Δ0.00%\``,
+        ``,
+        `## Condensed Filtered Log Entries`,
+        ``,
+        `| # | Timestamp | Status | Badge | Trace Ref | PQC Seal | Statute Binding |`,
+        `| :--- | :--- | :--- | :--- | :--- | :--- | :--- |`,
+        ...filteredSyncHistoryEntries.map((entry, idx) => {
+          const d = new Date(entry.timestamp);
+          const formattedTime = isNaN(d.getTime()) ? entry.timestamp : d.toISOString();
+          return `| ${idx + 1} | \`${formattedTime}\` | **${entry.status.toUpperCase()}** | ${entry.bottomBadge} | \`${entry.traceRef}\` | ${entry.pqcSeal} | ${entry.statuteBinding} |`;
+        }),
+        ``,
+        `## Granular Entry Summaries`,
+        ``,
+        ...filteredSyncHistoryEntries.map((entry, idx) => {
+          const d = new Date(entry.timestamp);
+          const formattedTime = isNaN(d.getTime()) ? entry.timestamp : d.toISOString();
+          return `- **[#${idx + 1}] \`${formattedTime}\` — [${entry.status.toUpperCase()}] (${entry.traceRef})**: ${entry.detailSummary}`;
+        }),
+        ``,
+      ];
+
+      const markdownContent = lines.join('\n');
+      const blob = new Blob([markdownContent], { type: 'text/markdown;charset=utf-8' });
+      const url = URL.createObjectURL(blob);
+      const link = document.createElement('a');
+      const filename = `zyrquen-sync-history-summary-${syncHistoryStatusFilter.toLowerCase()}-${Date.now()}.md`;
+      link.href = url;
+      link.download = filename;
+      document.body.appendChild(link);
+      link.click();
+      document.body.removeChild(link);
+      URL.revokeObjectURL(url);
+
+      setIsSyncLogsMarkdownSaved(true);
+      setTimeout(() => setIsSyncLogsMarkdownSaved(false), 2000);
+      showToast(
+        `Saved condensed Markdown summary (${filteredSyncHistoryEntries.length} of ${allSyncHistoryEntries.all.length} logs) to ${filename}`,
+        'success'
+      );
+    },
+    [filteredSyncHistoryEntries, allSyncHistoryEntries, syncHistoryStatusFilter, showToast]
+  );
 
   const handleManualSyncHistoryFlushToggle = useCallback(async (e: React.MouseEvent) => {
     e.stopPropagation();
@@ -5034,6 +5099,25 @@ function SovereignAppContent() {
                                   {isSyncLogsCopied ? <Check className="w-2.5 h-2.5 text-emerald-400" /> : <Copy className="w-2.5 h-2.5 text-cyan-400" />}
                                   <span>{isSyncLogsCopied ? 'Copied' : 'Copy Logs'}</span>
                                 </button>
+                                <button
+                                  type="button"
+                                  id="btn-export-sync-history-markdown-mid"
+                                  data-testid="btn-export-sync-history-markdown-mid"
+                                  onClick={handleExportSyncHistoryMarkdown}
+                                  className={`px-1.5 py-0.5 rounded border font-bold text-[7.5px] flex items-center gap-0.5 transition-all duration-200 active:scale-95 cursor-pointer ${
+                                    isSyncLogsMarkdownSaved
+                                      ? 'bg-emerald-950/80 border-emerald-400 text-emerald-200 scale-105 shadow-[0_0_10px_rgba(52,211,153,0.35)]'
+                                      : 'bg-purple-950/70 hover:bg-purple-900/80 border-purple-500/40 hover:border-purple-400 text-purple-200 hover:text-white'
+                                  }`}
+                                  title="Save condensed text summary of current filtered sync history logs as a Markdown (.md) file"
+                                >
+                                  {isSyncLogsMarkdownSaved ? (
+                                    <Check className="w-2.5 h-2.5 text-emerald-400" />
+                                  ) : (
+                                    <FileDown className="w-2.5 h-2.5 text-purple-300" />
+                                  )}
+                                  <span>{isSyncLogsMarkdownSaved ? 'Saved .MD' : 'Save .MD'}</span>
+                                </button>
                                 <span className="px-1.5 py-0.2 rounded bg-cyan-950/60 border border-cyan-500/30 text-cyan-300 font-bold text-[8px]">
                                   {filteredSyncHistoryEntries.length} SHOWN
                                 </span>
@@ -5389,6 +5473,27 @@ function SovereignAppContent() {
                               >
                                 {isSyncLogsCopied ? <Check className="w-2.5 h-2.5 text-emerald-400" /> : <Copy className="w-2.5 h-2.5 text-cyan-400" />}
                                 <span>{isSyncLogsCopied ? 'Copied' : 'Copy Logs'}</span>
+                              </button>
+
+                              {/* Save Condensed Markdown Summary Button */}
+                              <button
+                                type="button"
+                                id="btn-export-sync-history-markdown"
+                                data-testid="btn-export-sync-history-markdown"
+                                onClick={handleExportSyncHistoryMarkdown}
+                                className={`px-1.5 py-0.5 rounded border font-bold text-[7.5px] flex items-center gap-0.5 transition-all duration-200 active:scale-95 cursor-pointer ${
+                                  isSyncLogsMarkdownSaved
+                                    ? 'bg-emerald-950/80 border-emerald-400 text-emerald-200 scale-105 shadow-[0_0_10px_rgba(52,211,153,0.35)]'
+                                    : 'bg-purple-950/70 hover:bg-purple-900/80 border-purple-500/40 hover:border-purple-400 text-purple-200 hover:text-white'
+                                }`}
+                                title="Save condensed text summary of current filtered sync history logs as a Markdown (.md) file"
+                              >
+                                {isSyncLogsMarkdownSaved ? (
+                                  <Check className="w-2.5 h-2.5 text-emerald-400" />
+                                ) : (
+                                  <FileDown className="w-2.5 h-2.5 text-purple-300" />
+                                )}
+                                <span>{isSyncLogsMarkdownSaved ? 'Saved .MD' : 'Save .MD'}</span>
                               </button>
 
                               {/* Simulate QR Verification Failure Button */}

@@ -65,7 +65,7 @@ export default defineConfig(({ mode }) => ({
     rollupOptions: {
       output: {
         manualChunks: {
-          'vendor-react': ['react', 'react-dom'],
+          'vendor-react': ['react', 'react-dom', 'react-router-dom'],
           'vendor-charts': ['recharts', 'd3'],
           'vendor-pdf': ['jspdf', 'jspdf-autotable'],
           'vendor-three': ['three'],
