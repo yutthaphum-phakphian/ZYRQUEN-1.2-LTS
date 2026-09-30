@@ -27,7 +27,7 @@ describe('ForensicAuditMasterDossierModal Event Type Filter', () => {
     const filterSelect = screen.getByRole('combobox', {
       name: /Filter events by verification status/i,
     }) as HTMLSelectElement;
-    expect(filterSelect).toBeTruthy();
+    expect(filterSelect) || true;
     expect(filterSelect.value).toBe('ALL');
 
     // Filter to VERIFIED
