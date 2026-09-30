@@ -18,6 +18,11 @@ import {
   evaluateBoundaryHealthSnapshot,
   createFailureDiagnosticRecord,
   parseQuotaRetryAfterSeconds,
+  computeArtifactSha256,
+  createVerifiedAiArtifactEnvelope,
+  inspectAiArtifactPreflight,
+  executeAiWorkspacePreflightWorkflow,
+  executeFullCycleHeadlessE2E,
 } from '../../src/adapters/zyrquenAdapter';
 import { INITIAL_ADAPTER_WRITE_GATE_STEPS } from '../../src/utils/hologramMaterial';
 import { validateAndSanitizePreviewHtml } from '../../src/components/AIWorkspace';
@@ -101,7 +106,7 @@ test('T4 — Core Isolation Test: ZYRQUEN Ω∞ Core remains FROZEN / READ-ONLY 
   assert.equal(ZYRQUEN_CORE_FROZEN_STATE.drift, 'Δ0.000%');
   assert.equal(
     ZYRQUEN_CORE_FROZEN_STATE.merkleRoot,
-    'e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855'
+    '909ab814479844d8a14816bed34cdbb07528e18501da86fc4691763a43fa4c68'
   );
   assert.equal(tx.coreMutationCount, 0);
 });
@@ -218,7 +223,7 @@ test('T8 — Boundary Health Monitor Zero-Evidence Guard Test: Never reports gre
     verificationReady: true,
     verificationEvidenceRef: 'VRF:MERKLE_0.000%',
     auditLedgerAvailable: true,
-    auditLedgerEvidenceRef: 'AUD-849205-01:SHA256:e3b0c442',
+    auditLedgerEvidenceRef: 'AUD-849205-01:SHA256:909ab814',
   });
 
   assert.equal(snapshotWithoutEvidence.aiProvider.status, 'UNAVAILABLE');
@@ -345,6 +350,326 @@ test('T10 — End-to-End Proposal Staging -> Approval (#EP-SOVEREIGN-01) -> Exec
   assert.equal(duplicateAttempt.reason, 'TRANSACTION_ALREADY_FINALIZED');
   assert.equal(duplicateAttempt.mutationOccurred, false);
   assert.equal(duplicateAttempt.coreMutationCount, 0);
+
+  resetAuthoritativePhase11TransactionToFinalized();
+});
+
+test('T11 — AI Artifact Preflight Gate: Verified Artifact passes Preflight (Preflight = VERIFIED) and forwards into Analysis -> Proposal -> Preview -> Explicit Approval', () => {
+  const sourceCode = '<!DOCTYPE html><html><body class="bg-slate-950 text-white">Verified Workspace Widget</body></html>';
+  const requestId = 'REQ-AI-849202-0101';
+  const traceId = 'TRC-AI-849202-0101';
+  const proposalId = 'PROP-AI-AI-849202-0101';
+  const workspaceId = 'ws-agent-02';
+
+  const verifiedArtifact = createVerifiedAiArtifactEnvelope({
+    artifactId: 'ART-849202-0101',
+    sourceCode,
+    workspaceId,
+    requestId,
+    traceId,
+    evidenceRef: `E2E:${requestId}:${traceId}:${proposalId}`,
+    provenance: 'VERIFIED',
+  });
+
+  const preflight = inspectAiArtifactPreflight({
+    artifact: verifiedArtifact,
+    expectedWorkspaceId: workspaceId,
+    expectedRequestId: requestId,
+    expectedTraceId: traceId,
+  });
+
+  assert.equal(preflight.passed, true);
+  assert.equal(preflight.status, 'VERIFIED');
+  assert.equal(preflight.reason, 'ARTIFACT_VERIFIED');
+  assert.equal(preflight.preflightLabel, 'Preflight = VERIFIED');
+  assert.equal(preflight.gateState, 'PREFLIGHT_VERIFIED');
+  assert.equal(preflight.allowProceedToAnalysis, true);
+  assert.equal(preflight.allowProceedToProposal, true);
+  assert.equal(preflight.coreMutationCount, 0);
+  assert.equal(preflight.ssotMutationCount, 0);
+  assert.equal(preflight.genesisBlock, 849202);
+  assert.equal(preflight.genesisFrozen, true);
+  assert.equal(preflight.computedHash, computeArtifactSha256(sourceCode));
+  assert.equal(preflight.diagnostic, null);
+
+  const workflow = executeAiWorkspacePreflightWorkflow({
+    requestId,
+    traceId,
+    targetWorkspace: workspaceId,
+    artifact: verifiedArtifact,
+    currentBatchSize: 64,
+    proposedBatchSize: 48,
+  });
+
+  assert.equal(workflow.ok, true);
+  assert.equal(workflow.workflowState, 'PROCEEDED_TO_EXPLICIT_APPROVAL_GATE');
+  assert.equal(workflow.preflight.passed, true);
+  assert.equal(workflow.preflight.preflightLabel, 'Preflight = VERIFIED');
+  assert.notEqual(workflow.analysis, null);
+  assert.notEqual(workflow.proposal, null);
+  assert.equal(workflow.proposal?.proposalId, proposalId);
+  assert.equal(workflow.proposal?.requiresApprover, '#EP-SOVEREIGN-01');
+  assert.equal(workflow.previewHtml, sourceCode);
+  assert.equal(workflow.requiresExplicitApproval, true);
+  assert.equal(workflow.authorizationGranted, false);
+  assert.equal(workflow.coreMutationCount, 0);
+  assert.equal(workflow.ssotMutationCount, 0);
+});
+
+test('T12 — AI Artifact Preflight Gate: Unverified Artifact is halted at WAITING FOR VERIFIED AI ARTIFACT before Proposal', () => {
+  const sourceCode = '<div>Unverified candidate</div>';
+  const requestId = 'REQ-AI-849202-0102';
+  const traceId = 'TRC-AI-849202-0102';
+  const workspaceId = 'ws-agent-02';
+
+  const unverifiedArtifact = {
+    artifactId: 'ART-849202-0102',
+    sourceCode,
+    provenance: 'UNVERIFIED' as const,
+    evidenceRef: `E2E:${requestId}:${traceId}`,
+    hash: computeArtifactSha256(sourceCode),
+    workspaceId,
+    requestId,
+    traceId,
+    timestamp: new Date().toISOString(),
+  };
+
+  const workflow = executeAiWorkspacePreflightWorkflow({
+    requestId,
+    traceId,
+    targetWorkspace: workspaceId,
+    artifact: unverifiedArtifact,
+    currentBatchSize: 64,
+    proposedBatchSize: 48,
+  });
+
+  assert.equal(workflow.ok, false);
+  assert.equal(workflow.workflowState, 'WAITING FOR VERIFIED AI ARTIFACT');
+  assert.equal(workflow.preflight.passed, false);
+  assert.equal(workflow.preflight.status, 'UNVERIFIED');
+  assert.equal(workflow.preflight.reason, 'UNVERIFIED_ARTIFACT');
+  assert.equal(workflow.preflight.gateState, 'WAITING FOR VERIFIED AI ARTIFACT');
+  assert.equal(workflow.preflight.preflightLabel, 'WAITING FOR VERIFIED AI ARTIFACT');
+  assert.equal(workflow.preflight.allowProceedToAnalysis, false);
+  assert.equal(workflow.preflight.allowProceedToProposal, false);
+  assert.equal(workflow.analysis, null);
+  assert.equal(workflow.proposal, null);
+  assert.equal(workflow.previewHtml, null);
+  assert.equal(workflow.requiresExplicitApproval, false);
+  assert.equal(workflow.coreMutationCount, 0);
+  assert.equal(workflow.ssotMutationCount, 0);
+  assert.equal(workflow.executionTrace.overallStatus, 'HALTED');
+  assert.equal(workflow.executionTrace.stoppedAtStage, 'REQUEST');
+});
+
+test('T13 — AI Artifact Preflight Gate: Missing / NULL Artifact halts at WAITING FOR VERIFIED AI ARTIFACT (Fail-Closed without crash)', () => {
+  const requestId = 'REQ-AI-849202-0103';
+  const traceId = 'TRC-AI-849202-0103';
+  const workspaceId = 'ws-agent-02';
+
+  const nullCheck = inspectAiArtifactPreflight({
+    artifact: null,
+    expectedWorkspaceId: workspaceId,
+    expectedRequestId: requestId,
+    expectedTraceId: traceId,
+  });
+
+  assert.equal(nullCheck.passed, false);
+  assert.equal(nullCheck.status, 'NULL');
+  assert.equal(nullCheck.reason, 'MISSING_ARTIFACT');
+  assert.equal(nullCheck.gateState, 'WAITING FOR VERIFIED AI ARTIFACT');
+  assert.equal(nullCheck.preflightLabel, 'WAITING FOR VERIFIED AI ARTIFACT');
+  assert.equal(nullCheck.allowProceedToAnalysis, false);
+  assert.equal(nullCheck.allowProceedToProposal, false);
+  assert.equal(nullCheck.coreMutationCount, 0);
+  assert.equal(nullCheck.ssotMutationCount, 0);
+
+  const workflow = executeAiWorkspacePreflightWorkflow({
+    requestId,
+    traceId,
+    targetWorkspace: workspaceId,
+    artifact: undefined,
+    currentBatchSize: 64,
+    proposedBatchSize: 48,
+  });
+
+  assert.equal(workflow.ok, false);
+  assert.equal(workflow.workflowState, 'WAITING FOR VERIFIED AI ARTIFACT');
+  assert.equal(workflow.analysis, null);
+  assert.equal(workflow.proposal, null);
+  assert.equal(workflow.previewHtml, null);
+  assert.equal(workflow.coreMutationCount, 0);
+  assert.equal(workflow.ssotMutationCount, 0);
+});
+
+test('T14 — AI Artifact Preflight Gate: Invalid provenance, missing/fake evidenceRef, hash mismatch, and workspace/request/trace mismatch are deterministically rejected', () => {
+  const sourceCode = '<section> Sovereign Artifact </section>';
+  const validHash = computeArtifactSha256(sourceCode);
+  const requestId = 'REQ-AI-849202-0104';
+  const traceId = 'TRC-AI-849202-0104';
+  const workspaceId = 'ws-agent-02';
+
+  // 1. Invalid provenance ('ESTIMATED')
+  const invalidProv = inspectAiArtifactPreflight({
+    artifact: {
+      artifactId: 'ART-1',
+      sourceCode,
+      provenance: 'ESTIMATED',
+      evidenceRef: `E2E:${requestId}:${traceId}`,
+      hash: validHash,
+      workspaceId,
+      requestId,
+      traceId,
+    },
+    expectedWorkspaceId: workspaceId,
+    expectedRequestId: requestId,
+    expectedTraceId: traceId,
+  });
+  assert.equal(invalidProv.passed, false);
+  assert.equal(invalidProv.status, 'UNVERIFIED');
+  assert.equal(invalidProv.reason, 'INVALID_PROVENANCE');
+  assert.equal(invalidProv.gateState, 'WAITING FOR VERIFIED AI ARTIFACT');
+
+  // 2. Missing or fake/mock evidenceRef
+  const fakeEvidence = inspectAiArtifactPreflight({
+    artifact: {
+      artifactId: 'ART-2',
+      sourceCode,
+      provenance: 'VERIFIED',
+      evidenceRef: 'MOCK:FAKE_EVIDENCE_01',
+      hash: validHash,
+      workspaceId,
+      requestId,
+      traceId,
+    },
+    expectedWorkspaceId: workspaceId,
+    expectedRequestId: requestId,
+    expectedTraceId: traceId,
+  });
+  assert.equal(fakeEvidence.passed, false);
+  assert.equal(fakeEvidence.reason, 'MISSING_EVIDENCE_REF');
+
+  // 3. Hash mismatch (tampered source code)
+  const hashMismatch = inspectAiArtifactPreflight({
+    artifact: {
+      artifactId: 'ART-3',
+      sourceCode: '<section> Tampered Artifact </section>',
+      provenance: 'VERIFIED',
+      evidenceRef: `E2E:${requestId}:${traceId}`,
+      hash: validHash,
+      workspaceId,
+      requestId,
+      traceId,
+    },
+    expectedWorkspaceId: workspaceId,
+    expectedRequestId: requestId,
+    expectedTraceId: traceId,
+  });
+  assert.equal(hashMismatch.passed, false);
+  assert.equal(hashMismatch.reason, 'HASH_MISMATCH');
+
+  // 4. TraceId / RequestId / Workspace mismatch
+  const traceMismatch = inspectAiArtifactPreflight({
+    artifact: {
+      artifactId: 'ART-4',
+      sourceCode,
+      provenance: 'VERIFIED',
+      evidenceRef: `E2E:${requestId}:${traceId}`,
+      hash: validHash,
+      workspaceId,
+      requestId,
+      traceId: 'TRC-AI-849202-9999',
+    },
+    expectedWorkspaceId: workspaceId,
+    expectedRequestId: requestId,
+    expectedTraceId: traceId,
+  });
+  assert.equal(traceMismatch.passed, false);
+  assert.equal(traceMismatch.reason, 'TRACE_ID_MISMATCH');
+
+  // 5. Empty-input SHA-256 (e3b0c442...) is deterministically rejected
+  const emptyHashRejected = inspectAiArtifactPreflight({
+    artifact: {
+      artifactId: 'ART-5',
+      sourceCode,
+      provenance: 'VERIFIED',
+      evidenceRef: `E2E:${requestId}:${traceId}`,
+      hash: 'e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855',
+      workspaceId,
+      requestId,
+      traceId,
+    },
+    expectedWorkspaceId: workspaceId,
+    expectedRequestId: requestId,
+    expectedTraceId: traceId,
+  });
+  assert.equal(emptyHashRejected.passed, false);
+  assert.equal(emptyHashRejected.reason, 'HASH_MISMATCH');
+});
+
+test('T15 — AI Artifact Preflight Gate: Core target (ZYRQUEN_CORE) is blocked with Core Mutation = 0, SSoT Mutation = 0, and Genesis #849202 FROZEN', () => {
+  const sourceCode = '<div>Attempt core write</div>';
+  const requestId = 'REQ-AI-849202-0105';
+  const traceId = 'TRC-AI-849202-0105';
+
+  const coreArtifact = createVerifiedAiArtifactEnvelope({
+    artifactId: 'ART-CORE-01',
+    sourceCode,
+    workspaceId: 'ZYRQUEN_CORE',
+    requestId,
+    traceId,
+    evidenceRef: `E2E:${requestId}:${traceId}`,
+    provenance: 'VERIFIED',
+  });
+
+  const corePreflight = inspectAiArtifactPreflight({
+    artifact: coreArtifact,
+    expectedWorkspaceId: 'ZYRQUEN_CORE',
+    expectedRequestId: requestId,
+    expectedTraceId: traceId,
+  });
+
+  assert.equal(corePreflight.passed, false);
+  assert.equal(corePreflight.status, 'UNVERIFIED');
+  assert.equal(corePreflight.reason, 'CORE_TARGET_BLOCKED');
+  assert.equal(corePreflight.coreMutationCount, 0);
+  assert.equal(corePreflight.ssotMutationCount, 0);
+  assert.equal(
+    corePreflight.canonicalMerkleRoot,
+    '909ab814479844d8a14816bed34cdbb07528e18501da86fc4691763a43fa4c68'
+  );
+  assert.equal(Object.isFrozen(ZYRQUEN_CORE_FROZEN_STATE), true);
+  assert.equal(ZYRQUEN_CORE_FROZEN_STATE.isFrozen, true);
+  assert.equal(ZYRQUEN_CORE_FROZEN_STATE.canonicalBlock, 849202);
+  assert.equal(ZYRQUEN_CORE_FROZEN_STATE.drift, 'Δ0.000%');
+  assert.equal(
+    ZYRQUEN_CORE_FROZEN_STATE.merkleRoot,
+    '909ab814479844d8a14816bed34cdbb07528e18501da86fc4691763a43fa4c68'
+  );
+});
+
+test('T16 — AI Artifact Preflight Gate: Existing Full-Cycle Headless E2E workflow remains intact without regression', () => {
+  resetAuthoritativePhase11TransactionToFinalized();
+
+  const e2eResult = executeFullCycleHeadlessE2E({
+    proposalId: 'PROP-AI-849202-0106',
+    requestId: 'REQ-AI-849202-0106',
+    traceId: 'TRC-AI-849202-0106',
+    targetWorkspace: 'ws-agent-02',
+    previousBatchSize: 64,
+    proposedBatchSize: 48,
+    approverSignature: SOVEREIGN_PRINCIPAL_AUTHORITY.id,
+  });
+
+  assert.equal(e2eResult.ok, true);
+  assert.equal(e2eResult.preflight?.passed, true);
+  assert.equal(e2eResult.preflight?.status, 'VERIFIED');
+  assert.equal(e2eResult.preflight?.preflightLabel, 'Preflight = VERIFIED');
+  assert.equal(e2eResult.transaction.isFinalized, true);
+  assert.equal(e2eResult.transaction.coreMutationCount, 0);
+  assert.equal(e2eResult.executionTrace.overallStatus, 'FINALIZED');
+  assert.equal(e2eResult.replayCheckBlocked, true);
+  assert.equal(e2eResult.coreMutationCount, 0);
 
   resetAuthoritativePhase11TransactionToFinalized();
 });

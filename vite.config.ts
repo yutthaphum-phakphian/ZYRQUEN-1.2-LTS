@@ -8,9 +8,37 @@ export default defineConfig(({ mode }) => ({
   base: './',
 
   resolve: {
+    dedupe: ['react', 'react-dom', 'react-router-dom'],
     alias: {
       '@': fileURLToPath(new URL('./src', import.meta.url)),
     },
+  },
+
+  optimizeDeps: {
+    include: [
+      'react',
+      'react-dom',
+      'react-dom/client',
+      'react/jsx-runtime',
+      'react/jsx-dev-runtime',
+      'react-router-dom',
+      'lucide-react',
+      'motion',
+      'motion/react',
+      'recharts',
+      'd3',
+      'three',
+      'jspdf',
+      'jspdf-autotable',
+      'qrcode',
+      'qrcode.react',
+      'jsqr',
+      'jszip',
+      'html2canvas',
+      'clsx',
+      'tailwind-merge',
+      'socket.io-client',
+    ],
   },
 
   server: {

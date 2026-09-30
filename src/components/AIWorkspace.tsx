@@ -32,8 +32,27 @@ import {
   buildExecutionTraceForOutcome,
   createFailureDiagnosticRecord,
   INITIAL_FAILURE_DIAGNOSTIC_RECORDS,
+  AiArtifactEnvelope,
+  ArtifactPreflightInspectionResult,
+  ArtifactPreflightStatus,
+  computeArtifactSha256,
+  createVerifiedAiArtifactEnvelope,
+  inspectAiArtifactPreflight,
+  executeAiWorkspacePreflightWorkflow,
 } from '../adapters/zyrquenAdapter';
 import { offlineAuditSyncService } from '../services/offlineAuditSyncService';
+
+export {
+  computeArtifactSha256,
+  createVerifiedAiArtifactEnvelope,
+  inspectAiArtifactPreflight,
+  executeAiWorkspacePreflightWorkflow,
+};
+export type {
+  AiArtifactEnvelope,
+  ArtifactPreflightInspectionResult,
+  ArtifactPreflightStatus,
+};
 
 export type AiWorkspaceUiStatus =
   | 'IDLE'
@@ -117,6 +136,9 @@ export interface AIWorkspaceProps {
   targetWorkspaceId?: string;
   targetWorkspaceName?: string;
   currentBatchSize?: number;
+  initialArtifact?: Partial<AiArtifactEnvelope> | null;
+  enforceArtifactPreflight?: boolean;
+  onArtifactPreflightResult?: (result: ArtifactPreflightInspectionResult) => void;
   onStageProposalForApproval?: (
     proposedBatchSize: number,
     summary: string,
@@ -196,6 +218,9 @@ export function AIWorkspace({
   targetWorkspaceId = 'ws-agent-02',
   targetWorkspaceName = 'agentic-reasoning-mesh',
   currentBatchSize = 64,
+  initialArtifact,
+  enforceArtifactPreflight = false,
+  onArtifactPreflightResult,
   onStageProposalForApproval,
   onAuditRecord,
   onExecutionTraceUpdate,
@@ -214,12 +239,24 @@ export function AIWorkspace({
   const [inputMessage, setInputMessage] = useState('');
   const [isListening, setIsListening] = useState(false);
   const [activeTab, setActiveTab] = useState<'preview' | 'code'>('preview');
-  const [currentHtml, setCurrentHtml] = useState<string | null>(null);
+  const [currentHtml, setCurrentHtml] = useState<string | null>(
+    typeof initialArtifact?.sourceCode === 'string' && initialArtifact.sourceCode.trim()
+      ? initialArtifact.sourceCode
+      : null
+  );
   const [sandboxViolations, setSandboxViolations] = useState<string[]>([]);
   const [latestProposal, setLatestProposal] = useState<AiProposalSummary | null>(null);
   const [copiedSource, setCopiedSource] = useState(false);
   const [executionTrace, setExecutionTrace] = useState<RealExecutionTrace>(() =>
     createCanonicalFinalizedExecutionTrace()
+  );
+  const [preflightResult, setPreflightResult] = useState<ArtifactPreflightInspectionResult>(() =>
+    inspectAiArtifactPreflight({
+      artifact: initialArtifact ?? null,
+      expectedWorkspaceId: targetWorkspaceId,
+      expectedRequestId: initialArtifact?.requestId || 'REQ-P11-849205-0042',
+      expectedTraceId: initialArtifact?.traceId || 'TRC-P11-849205-0042',
+    })
   );
   const [latestFailureDiagnostic, setLatestFailureDiagnostic] = useState<FailureDiagnosticRecord | null>(
     () => INITIAL_FAILURE_DIAGNOSTIC_RECORDS[0] || null
@@ -339,7 +376,7 @@ export function AIWorkspace({
 
   /**
    * Unified AI Request Pipeline (Both Text and Voice enter the exact same boundary):
-   * Text / Voice -> Speech-to-Text -> AI Request (/api/ai/workspace) -> Analysis -> Proposal -> Preview -> Explicit Approval
+   * Source Code -> AI Request (/api/ai/workspace) -> [ Artifact Preflight Gate ] -> Analysis -> Proposal -> Preview -> Explicit Approval
    * VOICE != AUTHORIZATION, CHAT != AUTHORIZATION, AI != AUTHORIZATION
    */
   const submitAiWorkspaceRequest = useCallback(
@@ -349,6 +386,11 @@ export function AIWorkspace({
 
       const seq = msgSeqRef.current++;
       const nowIso = new Date().toISOString();
+      const clientReqId =
+        initialArtifact?.requestId || `REQ-AI-849202-${String(seq).padStart(4, '0')}`;
+      const clientTrcId =
+        initialArtifact?.traceId || `TRC-AI-849202-${String(seq).padStart(4, '0')}`;
+
       const userMsg: AiConversationMessage = {
         id: `usr-${seq}`,
         sender: 'user',
@@ -367,10 +409,84 @@ export function AIWorkspace({
 
       emitStandardAuditRecord(
         channel === 'VOICE_STT' ? 'VOICE_INPUT_RECEIVED' : 'CHAT_INPUT_RECEIVED',
-        `Channel=${channel} | Workspace=${targetWorkspaceId} | Prompt="${promptText.slice(0, 120)}" (Routed to AI Service Boundary; Authorization=NONE)`,
+        `Channel=${channel} | Workspace=${targetWorkspaceId} | Req=${clientReqId} | Trace=${clientTrcId} | Prompt="${promptText.slice(0, 120)}" (Routed to AI Service Boundary; Authorization=NONE)`,
         'VERIFIED',
         channel
       );
+
+      // Step 1: AI Artifact Preflight Gate (Fail-Closed before Analysis & Proposal if Artifact is provided or enforced)
+      if (initialArtifact !== undefined || enforceArtifactPreflight || targetWorkspaceId === 'ZYRQUEN_CORE') {
+        const preCheck = inspectAiArtifactPreflight({
+          artifact: initialArtifact ?? null,
+          expectedWorkspaceId: targetWorkspaceId,
+          expectedRequestId: clientReqId,
+          expectedTraceId: clientTrcId,
+        });
+        setPreflightResult(preCheck);
+        onArtifactPreflightResult?.(preCheck);
+
+        if (!preCheck.passed || preCheck.status !== 'VERIFIED') {
+          const nextProvenance: ProvenanceState =
+            preCheck.status === 'NULL' ? 'NULL' : 'UNVERIFIED';
+          setUiStatus('BLOCKED');
+          setProvenance(nextProvenance);
+          setLatestProposal(null);
+
+          const diag =
+            preCheck.diagnostic ||
+            createFailureDiagnosticRecord({
+              failureId: `FAIL-PREFLIGHT-${clientReqId}`,
+              stage: 'REQUEST',
+              component: 'AI_ARTIFACT_PREFLIGHT_GATE',
+              requestId: clientReqId,
+              traceId: clientTrcId,
+              target: targetWorkspaceId,
+              actualError: `WAITING FOR VERIFIED AI ARTIFACT (${preCheck.reason})`,
+              expectedState: 'Preflight = VERIFIED',
+              observedState: `WAITING FOR VERIFIED AI ARTIFACT (${preCheck.status})`,
+              evidence: `PREFLIGHT:${preCheck.reason}:${clientReqId}`,
+              explicitCategory: 'BLOCKED',
+            });
+          setLatestFailureDiagnostic(diag);
+          onFailureDiagnostic?.(diag);
+
+          const haltedTrace = buildExecutionTraceForOutcome({
+            traceId: clientTrcId,
+            requestId: clientReqId,
+            targetWorkspace: targetWorkspaceId,
+            stoppedAtStage: 'REQUEST',
+            stopStatus: 'BLOCKED',
+            stopDetail: diag.actualError,
+            stopEvidenceRef: diag.evidence,
+            stageDurationMs: 8,
+          });
+          setExecutionTrace(haltedTrace);
+          onExecutionTraceUpdate?.(haltedTrace);
+
+          const blockedMsg: AiConversationMessage = {
+            id: `ai-preflight-${seq}`,
+            sender: 'system',
+            channel,
+            text: `WAITING FOR VERIFIED AI ARTIFACT — Preflight (${preCheck.status} · ${preCheck.reason}): Halted before Analysis & Proposal (Core Mutation = 0 · SSoT Mutation = 0).`,
+            timestamp: new Date().toISOString(),
+            uiStatus: 'BLOCKED',
+            provenance: nextProvenance,
+            htmlCode: null,
+            analysis: null,
+            proposal: null,
+            requiresExplicitApproval: false,
+          };
+          setMessages((prev) => [...prev, blockedMsg]);
+
+          emitStandardAuditRecord(
+            'AI_ARTIFACT_PREFLIGHT_BLOCKED',
+            `Channel=${channel} | Workspace=${targetWorkspaceId} | Req=${clientReqId} | Trace=${clientTrcId} | Status=${preCheck.status} | Reason=${preCheck.reason} (WAITING FOR VERIFIED AI ARTIFACT · Core Mutation=0)`,
+            'BLOCKED',
+            channel
+          );
+          return;
+        }
+      }
 
       try {
         const res = await fetch('/api/ai/workspace', {
@@ -380,31 +496,82 @@ export function AIWorkspace({
             prompt: promptText,
             inputChannel: channel,
             targetWorkspace: targetWorkspaceId,
+            requestId: clientReqId,
+            traceId: clientTrcId,
+            artifact: initialArtifact,
           }),
         });
 
         const data = await res.json();
+        const reqId = data.requestId || clientReqId;
+        const trcId = data.traceId || clientTrcId;
+        const durMs = typeof data.durationMs === 'number' ? data.durationMs : 28;
         const nextProviderStatus: AiProviderConnectionState =
           data.providerStatus || 'PROVIDER_NOT_CONNECTED';
-        const nextUiStatus: AiWorkspaceUiStatus = data.uiStatus || 'UNAVAILABLE';
-        const nextProvenance: ProvenanceState = data.provenance || 'UNVERIFIED';
-
-        setProviderStatus(nextProviderStatus);
-        setUiStatus(nextUiStatus);
-        setProvenance(nextProvenance);
 
         let validatedHtml: string | null = null;
         if (typeof data.htmlPreview === 'string' && data.htmlPreview.trim()) {
           const validation = validateAndSanitizePreviewHtml(data.htmlPreview);
           validatedHtml = validation.sanitizedHtml;
           setSandboxViolations(validation.blockedReasons);
-          if (validatedHtml) {
-            setCurrentHtml(validatedHtml);
-          }
         }
 
-        if (data.proposal) {
+        // Evaluate Artifact Preflight Gate before accepting Analysis / Proposal / Preview
+        const responseArtifactCandidate: Partial<AiArtifactEnvelope> | null =
+          data.artifactPreflight?.artifact ||
+          (validatedHtml
+            ? createVerifiedAiArtifactEnvelope({
+                artifactId: `ART-${reqId}`,
+                sourceCode: validatedHtml,
+                workspaceId: data.targetWorkspace || targetWorkspaceId,
+                requestId: reqId,
+                traceId: trcId,
+                evidenceRef:
+                  data.artifactPreflight?.verifiedEvidenceRef ||
+                  (nextProviderStatus === 'CONNECTED'
+                    ? `E2E:${reqId}:${trcId}`
+                    : ''),
+                provenance:
+                  nextProviderStatus === 'CONNECTED' &&
+                  (data.provenance === 'PROPOSED' || data.provenance === 'VERIFIED')
+                    ? 'VERIFIED'
+                    : (data.provenance as ProvenanceState) || 'UNVERIFIED',
+              })
+            : initialArtifact ?? null);
+
+        const responsePreflight = inspectAiArtifactPreflight({
+          artifact: responseArtifactCandidate,
+          expectedWorkspaceId: targetWorkspaceId,
+          expectedRequestId: reqId,
+          expectedTraceId: trcId,
+        });
+        setPreflightResult(responsePreflight);
+        onArtifactPreflightResult?.(responsePreflight);
+
+        const preflightVerified =
+          responsePreflight.passed && responsePreflight.status === 'VERIFIED';
+
+        if (validatedHtml && preflightVerified) {
+          setCurrentHtml(validatedHtml);
+        }
+
+        const allowAnalysisAndProposal = nextProviderStatus === 'CONNECTED' && preflightVerified;
+        const nextUiStatus: AiWorkspaceUiStatus =
+          nextProviderStatus === 'CONNECTED' && !preflightVerified && !data.diagnostic
+            ? 'BLOCKED'
+            : data.uiStatus || 'UNAVAILABLE';
+        const nextProvenance: ProvenanceState = preflightVerified
+          ? 'VERIFIED'
+          : (data.provenance as ProvenanceState) || 'UNVERIFIED';
+
+        setProviderStatus(nextProviderStatus);
+        setUiStatus(nextUiStatus);
+        setProvenance(nextProvenance);
+
+        if (allowAnalysisAndProposal && data.proposal) {
           setLatestProposal(data.proposal);
+        } else if (!allowAnalysisAndProposal) {
+          setLatestProposal(null);
         }
 
         const aiMsg: AiConversationMessage = {
@@ -412,22 +579,20 @@ export function AIWorkspace({
           sender: 'ai',
           channel,
           text:
-            data.replyText ||
-            'Provider Unavailable (PROVIDER_NOT_CONNECTED): AI Service Boundary returned no verified output.',
+            nextProviderStatus === 'CONNECTED' && !preflightVerified && !data.diagnostic
+              ? `WAITING FOR VERIFIED AI ARTIFACT — Preflight (${responsePreflight.status} · ${responsePreflight.reason}): Blocked before Analysis & Proposal.`
+              : data.replyText ||
+                'Provider Unavailable (PROVIDER_NOT_CONNECTED): AI Service Boundary returned no verified output.',
           timestamp: new Date().toISOString(),
           uiStatus: nextUiStatus,
           provenance: nextProvenance,
-          htmlCode: validatedHtml,
-          analysis: data.analysis || null,
-          proposal: data.proposal || null,
-          requiresExplicitApproval: Boolean(data.requiresExplicitApproval),
+          htmlCode: preflightVerified ? validatedHtml : null,
+          analysis: allowAnalysisAndProposal ? data.analysis || null : null,
+          proposal: allowAnalysisAndProposal ? data.proposal || null : null,
+          requiresExplicitApproval: allowAnalysisAndProposal && Boolean(data.requiresExplicitApproval),
         };
 
         setMessages((prev) => [...prev, aiMsg]);
-
-        const reqId = data.requestId || `REQ-AI-849202-${String(seq).padStart(4, '0')}`;
-        const trcId = data.traceId || `TRC-AI-849202-${String(seq).padStart(4, '0')}`;
-        const durMs = typeof data.durationMs === 'number' ? data.durationMs : 28;
 
         if (data.diagnostic) {
           const diag = createFailureDiagnosticRecord({
@@ -465,14 +630,45 @@ export function AIWorkspace({
           });
           setExecutionTrace(haltedTrace);
           onExecutionTraceUpdate?.(haltedTrace);
-        } else if (nextProviderStatus === 'CONNECTED' && data.proposal) {
+        } else if (nextProviderStatus === 'CONNECTED' && !preflightVerified) {
+          const diag =
+            responsePreflight.diagnostic ||
+            createFailureDiagnosticRecord({
+              failureId: `FAIL-PREFLIGHT-${reqId}`,
+              stage: 'REQUEST',
+              component: 'AI_ARTIFACT_PREFLIGHT_GATE',
+              requestId: reqId,
+              traceId: trcId,
+              target: targetWorkspaceId,
+              actualError: `WAITING FOR VERIFIED AI ARTIFACT (${responsePreflight.reason})`,
+              expectedState: 'Preflight = VERIFIED',
+              observedState: `WAITING FOR VERIFIED AI ARTIFACT (${responsePreflight.status})`,
+              evidence: `PREFLIGHT:${responsePreflight.reason}:${reqId}`,
+              explicitCategory: 'BLOCKED',
+            });
+          setLatestFailureDiagnostic(diag);
+          onFailureDiagnostic?.(diag);
+
+          const haltedTrace = buildExecutionTraceForOutcome({
+            traceId: trcId,
+            requestId: reqId,
+            targetWorkspace: targetWorkspaceId,
+            stoppedAtStage: 'REQUEST',
+            stopStatus: 'BLOCKED',
+            stopDetail: diag.actualError,
+            stopEvidenceRef: diag.evidence,
+            stageDurationMs: durMs,
+          });
+          setExecutionTrace(haltedTrace);
+          onExecutionTraceUpdate?.(haltedTrace);
+        } else if (allowAnalysisAndProposal && data.proposal) {
           const awaitingTrace = buildExecutionTraceForOutcome({
             traceId: trcId,
             requestId: reqId,
             targetWorkspace: targetWorkspaceId,
             stoppedAtStage: 'APPROVAL',
             stopStatus: 'AWAITING_APPROVAL',
-            stopDetail: `Awaiting Explicit Approval (#EP-SOVEREIGN-01) for ${data.proposal.proposalId}.`,
+            stopDetail: `Preflight = VERIFIED (${responsePreflight.computedHash?.slice(0, 19)}...). Awaiting Explicit Approval (#EP-SOVEREIGN-01) for ${data.proposal.proposalId}.`,
             stopEvidenceRef: `${data.proposal.proposalId}:AWAITING_EP_SOVEREIGN_01`,
             stageDurationMs: durMs,
           });
@@ -556,6 +752,9 @@ export function AIWorkspace({
       inputMessage,
       uiStatus,
       targetWorkspaceId,
+      initialArtifact,
+      enforceArtifactPreflight,
+      onArtifactPreflightResult,
       emitStandardAuditRecord,
       speakText,
       onExecutionTraceUpdate,
@@ -657,6 +856,108 @@ export function AIWorkspace({
     if (!currentHtml || typeof navigator === 'undefined' || !navigator.clipboard) return;
     navigator.clipboard.writeText(currentHtml);
     setCopiedSource(true);
+  };
+
+  const handleVerifyWorkspaceArtifactPreflight = () => {
+    const reqId = executionTrace.requestId || 'REQ-P11-849205-0042';
+    const trcId = executionTrace.traceId || 'TRC-P11-849205-0042';
+    const candidateSource =
+      currentHtml ||
+      `<!DOCTYPE html>
+<html lang="en">
+<head><meta charset="UTF-8" /><title>ZYRQUEN Verified Workspace Artifact</title></head>
+<body style="background:#030712;color:#e2e8f0;font-family:monospace;padding:20px;">
+  <div style="border:1px solid rgba(16,185,129,0.45);background:rgba(6,78,59,0.25);padding:16px;border-radius:10px;">
+    <div style="color:#6ee7b7;font-weight:bold;font-size:13px;">Preflight = VERIFIED · Isolated Workspace Artifact</div>
+    <div style="color:#94a3b8;font-size:11px;margin-top:6px;">Workspace: ${targetWorkspaceId} (${targetWorkspaceName}) · Batch Size: ${currentBatchSize}</div>
+    <div style="color:#38bdf8;font-size:11px;margin-top:4px;">Request: ${reqId} · Trace: ${trcId} · Core Mutation = 0 · SSoT Mutation = 0</div>
+  </div>
+</body>
+</html>`;
+    const validation = validateAndSanitizePreviewHtml(candidateSource);
+    const sanitized = validation.sanitizedHtml || candidateSource;
+    const envelope = createVerifiedAiArtifactEnvelope({
+      artifactId: `ART-${reqId}`,
+      sourceCode: sanitized,
+      workspaceId: targetWorkspaceId,
+      requestId: reqId,
+      traceId: trcId,
+      evidenceRef: `EV-PREFLIGHT:${targetWorkspaceId}:${reqId}:${trcId}`,
+      provenance: 'VERIFIED',
+      timestamp: new Date().toISOString(),
+    });
+    const check = inspectAiArtifactPreflight({
+      artifact: envelope,
+      expectedWorkspaceId: targetWorkspaceId,
+      expectedRequestId: reqId,
+      expectedTraceId: trcId,
+    });
+    setPreflightResult(check);
+    onArtifactPreflightResult?.(check);
+    if (check.passed && check.status === 'VERIFIED') {
+      setCurrentHtml(sanitized);
+      setProvenance('VERIFIED');
+      setUiStatus('PROPOSAL_READY');
+      setLatestFailureDiagnostic(null);
+      emitStandardAuditRecord(
+        'AI_ARTIFACT_PREFLIGHT_VERIFIED',
+        `Workspace=${targetWorkspaceId} | Req=${reqId} | Trace=${trcId} | Hash=${check.computedHash} | Status=Preflight = VERIFIED (Core Mutation=0)`,
+        'VERIFIED',
+        'TEXT_INPUT'
+      );
+    }
+  };
+
+  const handleHoldUnverifiedArtifactPreflight = () => {
+    const reqId = executionTrace.requestId || 'REQ-P11-849205-0042';
+    const trcId = executionTrace.traceId || 'TRC-P11-849205-0042';
+    const check = inspectAiArtifactPreflight({
+      artifact: {
+        artifactId: `ART-UNVERIFIED-${reqId}`,
+        sourceCode: currentHtml || '<div>Unverified candidate artifact</div>',
+        provenance: 'UNVERIFIED',
+        status: 'UNVERIFIED',
+        evidenceRef: '',
+        hash: '',
+        workspaceId: targetWorkspaceId,
+        requestId: reqId,
+        traceId: trcId,
+      },
+      expectedWorkspaceId: targetWorkspaceId,
+      expectedRequestId: reqId,
+      expectedTraceId: trcId,
+    });
+    setPreflightResult(check);
+    onArtifactPreflightResult?.(check);
+    setCurrentHtml(null);
+    setLatestProposal(null);
+    setProvenance('UNVERIFIED');
+    setUiStatus('BLOCKED');
+    if (check.diagnostic) {
+      setLatestFailureDiagnostic(check.diagnostic);
+      onFailureDiagnostic?.(check.diagnostic);
+    }
+    const haltedTrace = buildExecutionTraceForOutcome({
+      traceId: trcId,
+      requestId: reqId,
+      targetWorkspace: targetWorkspaceId,
+      stoppedAtStage: 'REQUEST',
+      stopStatus: 'BLOCKED',
+      stopDetail:
+        check.diagnostic?.actualError ||
+        `WAITING FOR VERIFIED AI ARTIFACT (${check.status} · ${check.reason})`,
+      stopEvidenceRef:
+        check.diagnostic?.evidence || `PREFLIGHT:${check.reason}:${reqId}:${trcId}`,
+      stageDurationMs: 6,
+    });
+    setExecutionTrace(haltedTrace);
+    onExecutionTraceUpdate?.(haltedTrace);
+    emitStandardAuditRecord(
+      'AI_ARTIFACT_PREFLIGHT_HALTED',
+      `Workspace=${targetWorkspaceId} | Req=${reqId} | Trace=${trcId} | Gate=WAITING FOR VERIFIED AI ARTIFACT | Reason=${check.reason} (Core Mutation=0)`,
+      'BLOCKED',
+      'TEXT_INPUT'
+    );
   };
 
   const handleExportWorkspacePdf = () => {
@@ -946,6 +1247,36 @@ export function AIWorkspace({
             {provenance}
           </span>
 
+          {/* AI Artifact Preflight Gate Status */}
+          <span
+            data-testid="ai-artifact-preflight-badge"
+            data-preflight-status={preflightResult.status}
+            data-preflight-label={preflightResult.preflightLabel}
+            className={`px-2.5 py-1 rounded border font-bold flex items-center gap-1.5 ${
+              preflightResult.passed && preflightResult.status === 'VERIFIED'
+                ? 'bg-emerald-950/80 border-emerald-500/50 text-emerald-300 shadow-[0_0_12px_rgba(16,185,129,0.2)]'
+                : 'bg-amber-950/80 border-amber-500/50 text-amber-300 shadow-[0_0_12px_rgba(245,158,11,0.15)]'
+            }`}
+            title={
+              preflightResult.passed && preflightResult.status === 'VERIFIED'
+                ? `Preflight = VERIFIED | Hash: ${preflightResult.computedHash} | Evidence: ${preflightResult.verifiedEvidenceRef}`
+                : `WAITING FOR VERIFIED AI ARTIFACT | Status: ${preflightResult.status} | Reason: ${preflightResult.reason}`
+            }
+          >
+            {preflightResult.passed && preflightResult.status === 'VERIFIED' ? (
+              <>
+                <CheckCircle2 className="w-3.5 h-3.5 text-emerald-400 shrink-0" />
+                <span>Preflight = VERIFIED</span>
+              </>
+            ) : (
+              <>
+                <AlertTriangle className="w-3.5 h-3.5 text-amber-400 shrink-0" />
+                <span>WAITING FOR VERIFIED AI ARTIFACT</span>
+                <span className="opacity-80">({preflightResult.status})</span>
+              </>
+            )}
+          </span>
+
           {/* Export PDF Button */}
           <button
             type="button"
@@ -969,6 +1300,104 @@ export function AIWorkspace({
           >
             🔎 Trace &amp; Diagnostics
           </button>
+        </div>
+      </div>
+
+      {/* ── ALWAYS-VISIBLE AI ARTIFACT PREFLIGHT GATE INDICATOR BANNER ── */}
+      <div
+        data-testid="ai-artifact-preflight-gate-banner"
+        className={`px-4 py-2.5 border-b font-mono text-[10px] flex flex-wrap items-center justify-between gap-2.5 ${
+          preflightResult.passed && preflightResult.status === 'VERIFIED'
+            ? 'bg-emerald-950/25 border-emerald-500/30 text-emerald-200'
+            : 'bg-amber-950/30 border-amber-500/40 text-amber-200'
+        }`}
+      >
+        <div className="flex flex-wrap items-center gap-2 min-w-0">
+          <span
+            className={`px-2 py-0.5 rounded border font-bold flex items-center gap-1.5 ${
+              preflightResult.passed && preflightResult.status === 'VERIFIED'
+                ? 'bg-emerald-950/90 border-emerald-500/60 text-emerald-300'
+                : 'bg-amber-950/90 border-amber-500/60 text-amber-300'
+            }`}
+          >
+            {preflightResult.passed && preflightResult.status === 'VERIFIED' ? (
+              <>
+                <CheckCircle2 className="w-3 h-3 text-emerald-400 shrink-0" />
+                <span>Preflight = VERIFIED</span>
+              </>
+            ) : (
+              <>
+                <AlertTriangle className="w-3 h-3 text-amber-400 shrink-0" />
+                <span>WAITING FOR VERIFIED AI ARTIFACT</span>
+              </>
+            )}
+          </span>
+
+          <span className="px-1.5 py-0.5 rounded bg-zinc-950/80 border border-zinc-800 text-zinc-300 font-semibold">
+            Artifact Status: <strong>{preflightResult.status}</strong>
+          </span>
+
+          <span className="px-1.5 py-0.5 rounded bg-zinc-950/80 border border-zinc-800 text-zinc-300">
+            Reason: <strong>{preflightResult.reason}</strong>
+          </span>
+
+          <span
+            className={`px-1.5 py-0.5 rounded border font-semibold ${
+              preflightResult.allowProceedToProposal
+                ? 'bg-emerald-950/50 border-emerald-500/40 text-emerald-300'
+                : 'bg-rose-950/60 border-rose-500/40 text-rose-300'
+            }`}
+          >
+            {preflightResult.allowProceedToProposal
+              ? 'Forwarding: Analysis -> Proposal -> Preview -> Explicit Approval (#EP-SOVEREIGN-01)'
+              : 'Gate Halted: Proposal Forwarding BLOCKED (Fail-Closed)'}
+          </span>
+        </div>
+
+        <div className="flex flex-wrap items-center gap-2 text-[9px] text-zinc-300">
+          <span>
+            WS: <strong className="text-cyan-300">{preflightResult.workspaceId}</strong>
+          </span>
+          <span aria-hidden="true">·</span>
+          <span>
+            Req: <strong className="text-zinc-100">{preflightResult.requestId}</strong>
+          </span>
+          <span aria-hidden="true">·</span>
+          <span>
+            Trace: <strong className="text-zinc-100">{preflightResult.traceId}</strong>
+          </span>
+          <span aria-hidden="true">·</span>
+          <span>
+            Hash:{' '}
+            <strong className="text-cyan-300">
+              {preflightResult.computedHash ? `${preflightResult.computedHash.slice(0, 19)}...` : 'NONE'}
+            </strong>
+          </span>
+          <span aria-hidden="true">·</span>
+          <span className="text-emerald-300 font-bold">
+            Core Mutation = 0 · SSoT Mutation = 0 · Genesis #849202 = FROZEN
+          </span>
+
+          <div className="flex items-center gap-1.5 ml-1">
+            <button
+              type="button"
+              data-testid="btn-verify-artifact-preflight"
+              onClick={handleVerifyWorkspaceArtifactPreflight}
+              className="px-2 py-0.5 rounded bg-emerald-950/90 hover:bg-emerald-900 border border-emerald-500/50 text-emerald-300 font-bold cursor-pointer transition"
+              title="Verify real workspace artifact envelope (SHA-256 + EvidenceRef + Workspace/Req/Trace binding)"
+            >
+              ✓ Verify Artifact
+            </button>
+            <button
+              type="button"
+              data-testid="btn-halt-unverified-preflight"
+              onClick={handleHoldUnverifiedArtifactPreflight}
+              className="px-2 py-0.5 rounded bg-amber-950/90 hover:bg-amber-900 border border-amber-500/50 text-amber-300 font-bold cursor-pointer transition"
+              title="Test Fail-Closed gate when artifact is UNVERIFIED / missing evidence"
+            >
+              ⛔ Hold Unverified
+            </button>
+          </div>
         </div>
       </div>
 
@@ -996,6 +1425,46 @@ export function AIWorkspace({
             <div className="text-zinc-400">
               Req: <span className="text-zinc-200">{executionTrace.requestId}</span> · Total Duration:{' '}
               <span className="text-cyan-300 font-bold">{executionTrace.totalDurationMs} ms</span>
+            </div>
+          </div>
+
+          {/* AI Artifact Preflight Gate Diagnostics Bar */}
+          <div
+            data-testid="trace-artifact-preflight-gate"
+            className={`p-2 rounded-lg border flex flex-wrap items-center justify-between gap-2 text-[9px] ${
+              preflightResult.passed && preflightResult.status === 'VERIFIED'
+                ? 'bg-emerald-950/25 border-emerald-500/40 text-emerald-200'
+                : 'bg-amber-950/25 border-amber-500/40 text-amber-200'
+            }`}
+          >
+            <div className="flex flex-wrap items-center gap-2">
+              <span className="font-bold uppercase">
+                🛡️ AI Artifact Preflight Gate:{' '}
+                {preflightResult.passed && preflightResult.status === 'VERIFIED'
+                  ? 'Preflight = VERIFIED'
+                  : 'WAITING FOR VERIFIED AI ARTIFACT'}
+              </span>
+              <span className="px-1.5 py-0.5 rounded bg-black/40 border border-white/10 font-bold">
+                Status: {preflightResult.status}
+              </span>
+              <span className="text-zinc-300">
+                Reason: <strong>{preflightResult.reason}</strong>
+              </span>
+            </div>
+            <div className="flex flex-wrap items-center gap-2 text-zinc-300">
+              <span>WS: {preflightResult.workspaceId}</span>
+              <span>·</span>
+              <span>Req: {preflightResult.requestId}</span>
+              <span>·</span>
+              <span>Trace: {preflightResult.traceId}</span>
+              <span>·</span>
+              <span>
+                Hash: {preflightResult.computedHash ? `${preflightResult.computedHash.slice(0, 20)}...` : 'NONE'}
+              </span>
+              <span>·</span>
+              <span className="text-emerald-300 font-bold">
+                Core Mutation = 0 · SSoT Mutation = 0 · Genesis #849202 = FROZEN
+              </span>
             </div>
           </div>
 
@@ -1285,7 +1754,7 @@ export function AIWorkspace({
                       <span className="text-[10px] text-emerald-400">Core Mutation = 0</span>
                     </div>
                     <p className="text-[11px] leading-relaxed text-cyan-300">
-                      Text / Voice &rarr; AI Request &rarr; Analysis &rarr; Proposal &rarr; Preview &rarr; Explicit Approval (#EP-SOVEREIGN-01)
+                      Source Code &rarr; AI Request &rarr; Artifact Preflight &rarr; Analysis &rarr; Proposal &rarr; Preview &rarr; Explicit Approval (#EP-SOVEREIGN-01)
                     </p>
                     {providerStatus !== 'CONNECTED' && (
                       <div className="p-2 rounded bg-amber-950/40 border border-amber-500/40 text-amber-300 text-[11px]">
@@ -1482,7 +1951,19 @@ export function AIWorkspace({
               </button>
             </div>
 
-            <div className="flex items-center gap-2 font-mono text-[10px]">
+            <div className="flex flex-wrap items-center gap-2 font-mono text-[10px]">
+              <span
+                data-testid="sandbox-preflight-status-pill"
+                className={`px-2 py-0.5 rounded border font-bold flex items-center gap-1 ${
+                  preflightResult.passed && preflightResult.status === 'VERIFIED'
+                    ? 'bg-emerald-950/80 border-emerald-500/50 text-emerald-300'
+                    : 'bg-amber-950/80 border-amber-500/50 text-amber-300'
+                }`}
+              >
+                {preflightResult.passed && preflightResult.status === 'VERIFIED'
+                  ? 'Preflight = VERIFIED'
+                  : 'WAITING FOR VERIFIED AI ARTIFACT'}
+              </span>
               <span className="px-2 py-0.5 rounded bg-zinc-900 border border-zinc-700 text-emerald-300 flex items-center gap-1">
                 <Lock className="w-3 h-3" />
                 <span>sandbox=&quot;allow-scripts&quot; (Opaque Origin Isolated)</span>
@@ -1554,26 +2035,40 @@ export function AIWorkspace({
               ) : (
                 <motion.div
                   key="sandbox-empty-boundary"
+                  data-testid="sandbox-waiting-verified-artifact-gate"
                   initial={{ opacity: 0, scale: 0.985 }}
                   animate={{ opacity: 1, scale: 1 }}
                   exit={{ opacity: 0, scale: 0.985 }}
                   transition={{ duration: 0.24, ease: [0.22, 1, 0.36, 1] }}
                   className="flex-1 flex flex-col items-center justify-center p-6 text-center font-mono space-y-3"
                 >
-                  <div className="p-3 rounded-full bg-zinc-900 border border-zinc-800 text-amber-400">
+                  <div className="p-3 rounded-full bg-amber-950/60 border border-amber-500/40 text-amber-400">
                     <AlertTriangle className="w-6 h-6" />
                   </div>
-                  <div className="text-xs sm:text-sm font-bold text-zinc-200">
-                    {providerStatus === 'CONNECTED'
-                      ? 'WAITING FOR VERIFIED AI ARTIFACT'
-                      : `PROVIDER UNAVAILABLE (${providerStatus})`}
+                  <div className="px-3 py-1 rounded-lg bg-amber-950/80 border border-amber-500/50 text-xs sm:text-sm font-bold text-amber-300">
+                    WAITING FOR VERIFIED AI ARTIFACT
+                  </div>
+                  {providerStatus !== 'CONNECTED' && (
+                    <div className="text-[11px] font-semibold text-zinc-400">
+                      PROVIDER UNAVAILABLE ({providerStatus})
+                    </div>
+                  )}
+                  <div className="max-w-lg p-3 rounded-xl bg-zinc-900/80 border border-zinc-800 text-[10px] text-zinc-300 space-y-1.5">
+                    <div>
+                      Preflight Status:{' '}
+                      <strong className="text-amber-300">{preflightResult.status}</strong> · Reason:{' '}
+                      <strong className="text-rose-300">{preflightResult.reason}</strong>
+                    </div>
+                    <div className="text-zinc-400">
+                      Fail-Closed Gate: Artifact must have verified provenance, real evidenceRef, matching SHA-256 digest, and active Workspace/Request/Trace binding before entering Analysis &rarr; Proposal &rarr; Preview &rarr; Explicit Approval (#EP-SOVEREIGN-01).
+                    </div>
                   </div>
                   <div className="flex flex-wrap justify-center gap-2 text-[10px] text-zinc-500 pt-1">
                     <span>DOM/Parent: BLOCKED</span>
                     <span aria-hidden="true">·</span>
                     <span>Storage: BLOCKED</span>
                     <span aria-hidden="true">·</span>
-                    <span>Core Mutation: 0</span>
+                    <span className="text-emerald-400 font-bold">Core Mutation: 0 · SSoT Mutation: 0</span>
                   </div>
                 </motion.div>
               )}

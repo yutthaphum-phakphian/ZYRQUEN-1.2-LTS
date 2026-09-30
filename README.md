@@ -51,6 +51,7 @@
 - [Core Invariants (SSoT Δ0)](#core-invariants-ssot-δ0)
 - [CI/CD Pipelines](#cicd-pipelines)
 - [Security & Compliance](#security--compliance)
+- [System Update Log](#system-update-log)
 - [Contributing](#contributing)
 - [Troubleshooting](#troubleshooting)
 - [License](#license)
@@ -191,6 +192,40 @@ Implementation details: [`src/config/sovereign.config.ts`](src/config/sovereign.
 - **Thai Statutory Alignment**: Compliant with พ.ร.บ. ธุรกรรมทางอิเล็กทรอนิกส์ พ.ศ. ๒๕๔๔ (มาตรา ๙, ๒๖, ๒๘).
 - **PDPA Compliance**: Strict Data Protection Enforcement under Section 37.
 - **Post-Quantum Cryptography**: ML-DSA-87 / Dilithium-5 (FIPS 204) and ML-KEM-1024 (FIPS 203).
+
+---
+
+## System Update Log
+
+Track canonical incremental updates, security hardening gates, and runtime enhancements below. Full historical release documentation is available in the [Release Notes (`docs/RELEASE_NOTES_v1.2_LTS.md`)](docs/RELEASE_NOTES_v1.2_LTS.md), [v1.2.1 Specification Release Notes (`docs/spec/RELEASE_NOTES_v1.2.1.md`)](docs/spec/RELEASE_NOTES_v1.2.1.md), and on the [GitHub Releases Page](https://github.com/yutthaphum-phakphian/ZYRQUEN-1.2-LTS/releases).
+
+### Update Entry Template
+
+Copy and populate the template below when recording a new system update:
+
+```markdown
+### [YYYY-MM-DD] — vX.Y.Z-LTS (<Short Update Title>)
+- **Release / Commit Link**: [Release Tag / PR / Commit](https://github.com/yutthaphum-phakphian/ZYRQUEN-1.2-LTS/releases)
+- **Target Component / Layer**: `<Component / Adapter / Chamber>`
+- **Change Summary**:
+  - <Bullet 1 describing incremental capability or fix>
+  - <Bullet 2 describing verification or fail-closed behavior>
+- **Invariant Attestation**:
+  - `Core Mutation = 0` | `SSoT Mutation = 0 (Δ0.000%)` | `Genesis Block #849202 = FROZEN`
+  - **Verification Command**: `npm run lint && npm run build && npm run test:unit`
+```
+
+### Latest Recorded Updates
+
+#### [2026-09-30] — v1.2.0-LTS / v1.2.1 (+5% Incremental Gate: AI Artifact Preflight)
+- **Release / Commit Link**: [v1.2.1 LTS Release Notes](docs/spec/RELEASE_NOTES_v1.2.1.md) · [GitHub Releases](https://github.com/yutthaphum-phakphian/ZYRQUEN-1.2-LTS/releases/tag/v1.2.1)
+- **Target Component / Layer**: `AI Workspace` (`src/components/AIWorkspace.tsx`, `src/adapters/zyrquenAdapter.ts`, `server.ts`)
+- **Change Summary**:
+  - Added deterministic **AI Artifact Preflight Gate** (`Source Code → AI Request → Artifact Preflight → Analysis → Proposal → Preview → Explicit Approval`).
+  - Enforced physical artifact existence, provenance (`VERIFIED` | `UNVERIFIED` | `NULL`), `evidenceRef`, SHA-256 content hash parity, and strict `Workspace` / `RequestId` / `TraceId` binding before permitting `Analysis` or `Proposal`.
+  - Enforced fail-closed halt at `WAITING FOR VERIFIED AI ARTIFACT` when any preflight check fails, with zero mock fallback.
+- **Invariant Attestation**:
+  - `Core Mutation = 0` | `SSoT Mutation = 0 (Δ0.000%)` | `Genesis Block #849202 = FROZEN` | `VOICE ≠ AUTHORIZATION` | `CHAT ≠ AUTHORIZATION`
 
 ---
 

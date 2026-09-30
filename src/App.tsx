@@ -112,7 +112,7 @@ const AuditHistoryView = React.lazy(() => import('@/components/views/AuditHistor
 const SecurityPipelineView = React.lazy(() => import('@/components/views/SecurityPipelineView').then(m => ({ default: m.SecurityPipelineView })));
 const ExecutiveCourtBriefing = React.lazy(() => import('@/components/executive/ExecutiveCourtBriefing').then(m => ({ default: m.ExecutiveCourtBriefing })));
 const SovereignWalletView = React.lazy(() => import('@/components/views/SovereignWalletView').then(m => ({ default: m.SovereignWalletView })));
-const SovereignDashboard = React.lazy(() => import('@/pages/SovereignDashboard').then(m => ({ default: m.SovereignDashboard })));
+import { SovereignDashboard } from '@/pages/SovereignDashboard';
 const TreasuryVarianceDashboard = React.lazy(() => import('@/components/views/TreasuryVarianceDashboard').then(m => ({ default: m.TreasuryVarianceDashboard })));
 import AIWorkspace from '@/components/AIWorkspace';
 import { AuditCertificateModal } from '@/components/AuditCertificateModal';

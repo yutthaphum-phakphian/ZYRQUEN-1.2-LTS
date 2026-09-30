@@ -7,6 +7,11 @@ import crypto from 'crypto';
 import path from 'path';
 import fs from 'fs';
 import { createServer as createViteServer } from 'vite';
+import {
+  createVerifiedAiArtifactEnvelope,
+  inspectAiArtifactPreflight,
+  type AiArtifactEnvelope,
+} from './src/adapters/zyrquenAdapter.ts';
 
 // ============================================================================
 // TYPES & INTERFACES (DOC-SOV-HSM-1010-2026-V9)
@@ -1024,17 +1029,26 @@ async function startServer() {
     });
   });
 
-  // POST /api/ai/workspace (Unified Text & Voice AI Pipeline -> Analysis -> Proposal -> Preview -> Explicit Approval Gate)
+  // POST /api/ai/workspace (Unified Text & Voice AI Pipeline -> Artifact Preflight -> Analysis -> Proposal -> Preview -> Explicit Approval Gate)
   app.post('/api/ai/workspace', async (req: Request, res: Response) => {
     const startedAtMs = Date.now();
     const seq = String(aiRequestSequence++).padStart(4, '0');
-    const requestId = `REQ-AI-${GENESIS_BLOCK_NUM}-${seq}`;
-    const traceId = `TRC-AI-${GENESIS_BLOCK_NUM}-${seq}`;
     const {
       prompt = '',
       inputChannel = 'TEXT_INPUT',
       targetWorkspace = 'ws-agent-02',
+      requestId: incomingRequestId,
+      traceId: incomingTraceId,
+      artifact: incomingArtifact,
     } = req.body || {};
+    const requestId =
+      typeof incomingRequestId === 'string' && incomingRequestId.trim()
+        ? incomingRequestId.trim()
+        : `REQ-AI-${GENESIS_BLOCK_NUM}-${seq}`;
+    const traceId =
+      typeof incomingTraceId === 'string' && incomingTraceId.trim()
+        ? incomingTraceId.trim()
+        : `TRC-AI-${GENESIS_BLOCK_NUM}-${seq}`;
 
     const cleanPrompt = String(prompt).trim();
     if (!cleanPrompt) {
@@ -1082,7 +1096,7 @@ async function startServer() {
         lowerPrompt.includes('delete') ||
         lowerPrompt.includes('แก้'));
 
-    if (attemptsCoreMutation) {
+    if (attemptsCoreMutation || targetWorkspace === 'ZYRQUEN_CORE') {
       const nowIso = new Date().toISOString();
       return res.status(200).json({
         requestId,
@@ -1122,6 +1136,38 @@ async function startServer() {
         },
         timestamp: nowIso,
       });
+    }
+
+    // 1.5 AI Artifact Preflight Gate (when source code / artifact is supplied with request)
+    if (incomingArtifact !== undefined) {
+      const preCheck = inspectAiArtifactPreflight({
+        artifact: incomingArtifact as Partial<AiArtifactEnvelope> | null,
+        expectedWorkspaceId: String(targetWorkspace),
+        expectedRequestId: requestId,
+        expectedTraceId: traceId,
+      });
+      if (!preCheck.passed || preCheck.status !== 'VERIFIED') {
+        const nowIso = new Date().toISOString();
+        return res.status(200).json({
+          requestId,
+          traceId,
+          durationMs: Math.max(1, Date.now() - startedAtMs),
+          providerStatus: Boolean(process.env.GEMINI_API_KEY?.trim()) ? 'CONNECTED' : 'PROVIDER_NOT_CONNECTED',
+          uiStatus: 'BLOCKED',
+          provenance: preCheck.status === 'NULL' ? 'NULL' : 'UNVERIFIED',
+          inputChannel,
+          targetWorkspace,
+          replyText: `WAITING FOR VERIFIED AI ARTIFACT (${preCheck.status} · ${preCheck.reason}): Halted at AI Artifact Preflight Gate before Analysis & Proposal.`,
+          analysis: null,
+          proposal: null,
+          htmlPreview: null,
+          requiresExplicitApproval: false,
+          coreMutationCount: 0,
+          artifactPreflight: preCheck,
+          diagnostic: preCheck.diagnostic,
+          timestamp: nowIso,
+        });
+      }
     }
 
     // 2. Real Provider Check — NO MOCK LLM, NO SETTIMEOUT, NO FAKE SUCCESS
@@ -1281,6 +1327,26 @@ Rules:
         timestamp: nowIso,
       };
 
+      const htmlPreviewStr = typeof parsed.htmlPreview === 'string' ? parsed.htmlPreview : null;
+      const verifiedArtifact = htmlPreviewStr
+        ? createVerifiedAiArtifactEnvelope({
+            artifactId: `ART-${requestId}`,
+            sourceCode: htmlPreviewStr,
+            workspaceId: String(targetWorkspace),
+            requestId,
+            traceId,
+            evidenceRef: `E2E:${requestId}:${traceId}:${proposalId}`,
+            provenance: 'VERIFIED',
+            timestamp: nowIso,
+          })
+        : null;
+      const artifactPreflight = inspectAiArtifactPreflight({
+        artifact: verifiedArtifact,
+        expectedWorkspaceId: String(targetWorkspace),
+        expectedRequestId: requestId,
+        expectedTraceId: traceId,
+      });
+
       return res.status(200).json({
         requestId,
         traceId,
@@ -1305,7 +1371,8 @@ Rules:
           proposedBatchSize: proposedBatch,
           requiresApprover: '#EP-SOVEREIGN-01',
         },
-        htmlPreview: typeof parsed.htmlPreview === 'string' ? parsed.htmlPreview : null,
+        htmlPreview: htmlPreviewStr,
+        artifactPreflight,
         requiresExplicitApproval: requiresApproval,
         coreMutationCount: 0,
         diagnostic: null,
