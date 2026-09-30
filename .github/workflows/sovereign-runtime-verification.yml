@@ -30,4 +30,4 @@ jobs:
         run: npx tsc --noEmit --skipLibCheck
 
       - name: Run Sovereign Runtime Verification Test
-        run: npx vitest run tests/sovereign-runtime-verification.test.tsx --environment jsdom
+        run: npx vitest run tests/sovereign-runtime-verification.test.tsx --environment happy-dom
