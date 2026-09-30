@@ -155,6 +155,7 @@ import { INITIAL_HARDWARE_SNAPSHOTS, createTelemetrySnapshot } from '@/utils/tel
 import { announceSystemEventVerbal } from '@/utils/textToSpeechService';
 import { triggerVibration } from '@/utils/vibration';
 import { useNotificationWebSocket } from '@/hooks/useNotificationWebSocket';
+import { hsmClusterService } from '@/services/hsmClusterService';
 
 interface ViewPersona {
   name: string;
@@ -1142,21 +1143,39 @@ function SovereignAppContent() {
   const [isHsmHistoryExpanded, setIsHsmHistoryExpanded] = useState<boolean>(true);
 
   const [toasts, setToasts] = useState<ToastMessage[]>([]);
-  const showToast = useCallback((message: string, type: ToastMessage['type'] = 'info') => {
-    const id = Math.random().toString(36).substring(2, 9);
-    setToasts((prev) => {
-      if (prev.some((t) => t.message === message)) {
-        return prev;
-      }
-      return [...prev.slice(-1), { id, message, type }];
-    });
-    setTimeout(() => {
-      setToasts((prev) => prev.filter((t) => t.id !== id));
-    }, 3500);
-  }, []);
+  const showToast = useCallback(
+    (
+      message: string,
+      type: ToastMessage['type'] = 'info',
+      action?: ToastMessage['action'],
+      actionUrl?: string,
+      actionLabel?: string
+    ) => {
+      const id = Math.random().toString(36).substring(2, 9);
+      setToasts((prev) => {
+        if (prev.some((t) => t.message === message)) {
+          return prev;
+        }
+        return [...prev.slice(-2), { id, message, type, action, actionUrl, actionLabel }];
+      });
+      const duration = type === 'critical' ? 9000 : 4000;
+      setTimeout(() => {
+        setToasts((prev) => prev.filter((t) => t.id !== id));
+      }, duration);
+    },
+    []
+  );
 
   const removeToast = useCallback((id: string) => {
     setToasts((prev) => prev.filter((t) => t.id !== id));
+  }, []);
+
+  // Sync activeHsmNodes with hsmClusterService
+  useEffect(() => {
+    const unsub = hsmClusterService.subscribe((state) => {
+      setActiveHsmNodes(state.activeNodes);
+    });
+    return unsub;
   }, []);
 
   // Listen for global chamber threshold alerts (<0.90) and custom system events
@@ -1386,6 +1405,28 @@ function SovereignAppContent() {
     return counts;
   }, [offlineQueuedCount, isGateTooltipVisible]);
 
+  // Simulated Node-Restoral Service Remediation Handler
+  const handleRemediateHsmNodes = useCallback(async () => {
+    playTone(520, 0.08);
+    await hsmClusterService.remediateCluster();
+    setActiveHsmNodes(10);
+    playTone(880, 0.1);
+    showToast('🟢 HSM Cluster Remediated: 10/10 Deca-Key Real_HSM Quorum Restored (100% Ratified).', 'success');
+    dispatchAction({
+      type: 'EMIT_SYSTEM_EVENT',
+      payload: {
+        type: 'SECURITY',
+        title: 'HSM Quorum Restored (10/10)',
+        description: 'Automated remediation service executed node-restoral protocol. All 10 FIPS 140-3 L4 HSMs online.',
+        metaHash: 'hsm:quorum_remediated_10_10',
+        severity: 'success',
+        statuteRef: 'ETDA Sec 26 & FIPS 140-3 L4 Quorum Invariant',
+        targetView: 'council',
+        bindingStatus: 'VERIFIED',
+      },
+    });
+  }, [showToast]);
+
   // Threshold-based alert system for HSM node status transition (Online -> Offline)
   const prevActiveHsmNodesRef = useRef<number>(activeHsmNodes);
   useEffect(() => {
@@ -1406,10 +1447,26 @@ function SovereignAppContent() {
       const offlineNodeName = hsmNodeNames[nodeIndex] || `Node #${nodeIndex + 1}`;
       playTone(280, 0.08);
       triggerVibration('warning');
-      showToast(
-        `⚠️ Hardware Alert: HSM ${offlineNodeName} transitioned from ONLINE to OFFLINE! Active Quorum: ${activeHsmNodes}/10 (${activeHsmNodes < 8 ? 'CRITICAL: Sub-Quorum Breach (<8/10)' : 'Degraded'}).`,
-        activeHsmNodes < 8 ? 'error' : 'warning'
-      );
+
+      if (activeHsmNodes < 8) {
+        // Critical alert (<80% Quorum) with instant Remediate action button
+        showToast(
+          `🚨 CRITICAL: HSM Quorum Breach! Only ${activeHsmNodes}/10 nodes active (<80%). Immediate remediation required!`,
+          'critical',
+          {
+            label: 'Remediate',
+            onClick: () => {
+              void handleRemediateHsmNodes();
+            },
+          }
+        );
+      } else {
+        showToast(
+          `⚠️ Hardware Alert: HSM ${offlineNodeName} transitioned to OFFLINE. Active Quorum: ${activeHsmNodes}/10 (Degraded).`,
+          'warning'
+        );
+      }
+
       dispatchAction({
         type: 'EMIT_SYSTEM_EVENT',
         payload: {
@@ -1428,7 +1485,7 @@ function SovereignAppContent() {
       showToast(`🟢 HSM Node Restored: Active Quorum now at ${activeHsmNodes}/10 Nodes Online.`, 'success');
     }
     prevActiveHsmNodesRef.current = activeHsmNodes;
-  }, [activeHsmNodes, showToast]);
+  }, [activeHsmNodes, showToast, handleRemediateHsmNodes]);
 
   // Quick Export: Generates JSON export of the last 10 audit logs and triggers browser download
   const handleVerificationGateQuickExport = useCallback(() => {

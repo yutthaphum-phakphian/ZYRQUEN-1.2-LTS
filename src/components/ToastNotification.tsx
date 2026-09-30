@@ -1,8 +1,8 @@
 import React from 'react';
 import { AnimatePresence, motion } from 'motion/react';
-import { CheckCircle2, Info, AlertTriangle, X, ExternalLink, Eye } from 'lucide-react';
+import { CheckCircle2, Info, AlertTriangle, AlertOctagon, X, ExternalLink, Eye, RefreshCw } from 'lucide-react';
 
-export type ToastType = 'success' | 'info' | 'warning' | 'error';
+export type ToastType = 'success' | 'info' | 'warning' | 'error' | 'critical';
 
 export interface ToastAction {
   label: string;
@@ -35,6 +35,7 @@ export const ToastNotification: React.FC<ToastNotificationProps> = ({ toasts, re
             animate={{ opacity: 1, x: 0, scale: 1 }}
             exit={{ opacity: 0, scale: 0.95, transition: { duration: 0.2 } }}
             className={`pointer-events-auto flex items-start gap-3 p-4 rounded-xl border backdrop-blur-xl shadow-2xl min-w-[300px] max-w-md
+              ${toast.type === 'critical' ? 'bg-gradient-to-br from-red-950/95 via-red-900/90 to-red-950/95 border-red-500/80 text-red-100 shadow-[0_0_25px_rgba(239,68,68,0.5)] ring-1 ring-red-500/60 animate-pulse' : ''}
               ${toast.type === 'success' ? 'bg-emerald-950/90 border-emerald-500/40 text-emerald-100 shadow-[0_0_20px_rgba(16,185,129,0.25)]' : ''}
               ${toast.type === 'info' || !toast.type ? 'bg-[#0b0e1a]/95 border-cyan-500/40 text-cyan-100 shadow-[0_0_20px_rgba(6,182,212,0.2)]' : ''}
               ${toast.type === 'warning' ? 'bg-amber-950/90 border-amber-500/40 text-amber-100 shadow-[0_0_20px_rgba(245,158,11,0.25)]' : ''}
@@ -42,6 +43,7 @@ export const ToastNotification: React.FC<ToastNotificationProps> = ({ toasts, re
             `}
           >
             <div className="mt-0.5 shrink-0">
+              {toast.type === 'critical' && <AlertOctagon className="w-5 h-5 text-red-400 animate-bounce" />}
               {toast.type === 'success' && <CheckCircle2 className="w-5 h-5 text-emerald-400" />}
               {(toast.type === 'info' || !toast.type) && <Info className="w-5 h-5 text-cyan-400" />}
               {toast.type === 'warning' && <AlertTriangle className="w-5 h-5 text-amber-400" />}
@@ -53,7 +55,7 @@ export const ToastNotification: React.FC<ToastNotificationProps> = ({ toasts, re
                 {toast.message}
               </div>
 
-              {/* Action Button (e.g., 'View PDF' button for instant preview) */}
+              {/* Action Button (e.g., 'Remediate' button for instant node restoral) */}
               {(toast.action || (toast.actionUrl && toast.actionLabel)) && (
                 <div className="pt-1 flex items-center gap-2">
                   {toast.action ? (
@@ -62,9 +64,13 @@ export const ToastNotification: React.FC<ToastNotificationProps> = ({ toasts, re
                       onClick={() => {
                         toast.action?.onClick();
                       }}
-                      className="px-3 py-1 rounded-lg bg-cyan-500/20 hover:bg-cyan-500/30 text-cyan-300 hover:text-white border border-cyan-500/50 hover:border-cyan-400 text-xs font-bold flex items-center gap-1.5 transition-all shadow-sm active:scale-95 cursor-pointer"
+                      className={`px-3 py-1.5 rounded-lg font-bold text-xs flex items-center gap-1.5 transition-all shadow-md active:scale-95 cursor-pointer ${
+                        toast.type === 'critical'
+                          ? 'bg-gradient-to-r from-amber-400 to-amber-500 hover:from-amber-300 hover:to-amber-400 text-black border border-amber-300 shadow-[0_0_12px_rgba(245,158,11,0.5)]'
+                          : 'bg-cyan-500/20 hover:bg-cyan-500/30 text-cyan-300 hover:text-white border border-cyan-500/50 hover:border-cyan-400'
+                      }`}
                     >
-                      {toast.action.icon || <Eye className="w-3.5 h-3.5 text-cyan-300" />}
+                      {toast.action.icon || (toast.type === 'critical' ? <RefreshCw className="w-3.5 h-3.5" /> : <Eye className="w-3.5 h-3.5 text-cyan-300" />)}
                       <span>{toast.action.label}</span>
                     </button>
                   ) : toast.actionUrl ? (

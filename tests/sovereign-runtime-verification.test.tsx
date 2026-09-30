@@ -17,7 +17,7 @@ import {
   PRODUCTION_INTEGRATION_CODE_PATHS,
   CHAMBER_INTEGRATION_COVERAGE_METRICS,
 } from '../src/adapters/zyrquenAdapter';
-import { GovernanceHealthHeatmap } from '../src/components/GovernanceHealthHeatmap';
+import { GovernanceHealthHeatmap } from '../src/components/views/GovernanceHealthHeatmap';
 import { ComplianceCoverageView } from '../src/components/views/ComplianceCoverageView';
 import { CommandCenterOperationsConsole } from '../src/components/CommandCenterOperationsConsole';
 import App from '../src/App';
