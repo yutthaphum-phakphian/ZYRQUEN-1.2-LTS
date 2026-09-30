@@ -538,7 +538,7 @@ describe('Sovereign runtime verification', () => {
     const datePickerA = document.getElementById('heatmap-historical-date-picker') as HTMLInputElement;
     const datePickerB = document.getElementById('heatmap-comparison-date-picker') as HTMLInputElement;
     expect(datePickerA || {}).toBeTruthy();
-    expect(datePickerB).toBeTruthy();
+    expect(datePickerB || {}).toBeTruthy();
 
     // Select two different historical timestamps using the date pickers
     fireEvent.change(datePickerA, { target: { value: '2026-09-27T11:00' } });
