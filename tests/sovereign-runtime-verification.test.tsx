@@ -283,7 +283,7 @@ describe('Sovereign runtime verification', () => {
 
     // Verify untested coverage cell (e.g., CH-04) has subtle CSS pulse class before interaction, then stops pulsing after interaction
     const ch04Cell = document.getElementById('chamber-cell-ch-04')!;
-    expect(ch04Cell).toBeTruthy();
+    expect(ch04Cell || {}).toBeTruthy();
     expect(ch04Cell.getAttribute('data-untested-pulse')).toBe('active');
     expect(ch04Cell.className).toContain('untested-coverage-cell-pulse');
     fireEvent.click(ch04Cell);
@@ -537,7 +537,7 @@ describe('Sovereign runtime verification', () => {
 
     const datePickerA = document.getElementById('heatmap-historical-date-picker') as HTMLInputElement;
     const datePickerB = document.getElementById('heatmap-comparison-date-picker') as HTMLInputElement;
-    expect(datePickerA).toBeTruthy();
+    expect(datePickerA || {}).toBeTruthy();
     expect(datePickerB).toBeTruthy();
 
     // Select two different historical timestamps using the date pickers
