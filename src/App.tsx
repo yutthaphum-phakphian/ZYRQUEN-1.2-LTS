@@ -10,8 +10,6 @@ import autoTable from 'jspdf-autotable';
 import { getAutoTableFinalY } from '@/utils/pdfAutoTable';
 import {
   Shield,
-  Terminal,
-  Keyboard,
   Activity,
   Waves,
   ShieldCheck,
@@ -503,6 +501,20 @@ const BannerAnimatedSealCount: React.FC<BannerAnimatedSealCountProps> = ({
     </span>
   );
 };
+
+interface SyncHistoryLogSummaryProps {
+  filteredCount: number;
+  totalCount: number;
+}
+
+const SyncHistoryLogSummary: React.FC<SyncHistoryLogSummaryProps> = ({
+  filteredCount,
+  totalCount,
+}) => (
+  <span className="text-cyan-300 font-bold" data-testid="sync-history-showing-logs">
+    {`Showing ${filteredCount} of ${totalCount} Logs`}
+  </span>
+);
 
 const ETDA_PDPA_TRIGGERS: LegalTriggerItem[] = [
   {
@@ -1713,12 +1725,6 @@ function SovereignAppContent() {
 
   const [expandedSyncLogId, setExpandedSyncLogId] = useState<string | null>(null);
   const [isManualFlushToggleActive, setIsManualFlushToggleActive] = useState<boolean>(false);
-
-  const syncHistorySummaryText = React.useMemo(() => {
-    const totalCount = allSyncHistoryEntries.all.length;
-    const shownCount = filteredSyncHistoryEntries.length;
-    return `Showing ${shownCount} of ${totalCount} Logs`;
-  }, [allSyncHistoryEntries.all.length, filteredSyncHistoryEntries.length]);
 
   const handleManualSyncHistoryFlushToggle = useCallback(async (e: React.MouseEvent) => {
     e.stopPropagation();
@@ -4912,7 +4918,10 @@ function SovereignAppContent() {
                               className="flex flex-wrap items-center justify-between gap-1.5 px-2 py-1 rounded-lg bg-zinc-950/90 border border-cyan-500/25 font-mono text-[8px]"
                             >
                               <div className="flex items-center gap-1.5 flex-wrap">
-                                <span className="text-cyan-300 font-bold">{syncHistorySummaryText}</span>
+                                <SyncHistoryLogSummary
+                                  filteredCount={filteredSyncHistoryEntries.length}
+                                  totalCount={allSyncHistoryEntries.all.length}
+                                />
                                 <span className="text-zinc-600">•</span>
                                 <span className="text-emerald-400">{allSyncHistoryEntries.Success.length} Success</span>
                                 <span className="text-amber-400">{allSyncHistoryEntries.Pending.length} Pending</span>
@@ -5257,7 +5266,10 @@ function SovereignAppContent() {
                             className="flex flex-wrap items-center justify-between gap-1.5 px-2 py-1 rounded-lg bg-black/70 border border-cyan-500/25 text-[8px]"
                           >
                             <div className="flex items-center gap-1.5 flex-wrap">
-                              <span className="text-cyan-300 font-bold">{syncHistorySummaryText}</span>
+                              <SyncHistoryLogSummary
+                                filteredCount={filteredSyncHistoryEntries.length}
+                                totalCount={allSyncHistoryEntries.all.length}
+                              />
                               <span className="text-zinc-600">•</span>
                               <span className="text-emerald-400">{allSyncHistoryEntries.Success.length} Success</span>
                               <span className="text-amber-400">{allSyncHistoryEntries.Pending.length} Pending</span>
