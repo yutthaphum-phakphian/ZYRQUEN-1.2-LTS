@@ -3594,7 +3594,7 @@ function SovereignAppContent() {
                             animate={{ opacity: 1, y: 0, scale: 1 }}
                             exit={{ opacity: 0, y: 2, scale: 0.96 }}
                             transition={{ duration: 0.15, ease: 'easeOut' }}
-                            className="absolute left-0 bottom-full mb-2.5 z-50 w-76 p-2.5 rounded-xl bg-[#080d1a]/98 border border-cyan-500/50 shadow-[0_10px_30px_rgba(0,0,0,0.85),0_0_15px_rgba(6,182,212,0.3)] backdrop-blur-2xl text-[9px] text-zinc-300 space-y-1.5"
+                            className="fixed left-3 right-3 top-16 sm:absolute sm:left-0 sm:right-auto sm:top-auto sm:bottom-full sm:mb-2.5 z-50 w-auto sm:w-76 p-2.5 rounded-xl bg-[#080d1a]/98 border border-cyan-500/50 shadow-[0_10px_30px_rgba(0,0,0,0.85),0_0_15px_rgba(6,182,212,0.3)] backdrop-blur-2xl text-[9px] text-zinc-300 space-y-1.5"
                           >
                             <div className="flex items-center justify-between border-b border-cyan-500/20 pb-1 font-bold">
                               <span className="text-cyan-300 flex items-center gap-1 font-mono">
@@ -3711,7 +3711,7 @@ function SovereignAppContent() {
                               animate={{ opacity: 1, y: 0, scale: 1 }}
                               exit={{ opacity: 0, y: -4, scale: 0.96 }}
                               transition={{ duration: 0.2, ease: 'easeOut' }}
-                              className="absolute left-0 top-full mt-1.5 z-50 w-72 p-3 rounded-xl bg-[#090e1c]/98 border border-amber-500/50 shadow-2xl backdrop-blur-2xl text-[9px] text-zinc-300 space-y-2 pointer-events-none"
+                              className="fixed left-3 right-3 top-24 sm:absolute sm:left-0 sm:right-auto sm:top-full sm:mt-1.5 z-50 w-auto sm:w-72 p-3 rounded-xl bg-[#090e1c]/98 border border-amber-500/50 shadow-2xl backdrop-blur-2xl text-[9px] text-zinc-300 space-y-2 pointer-events-none"
                             >
                               <div className="flex items-center justify-between border-b border-amber-500/20 pb-1.5 font-bold">
                                 <span className="text-amber-300 flex items-center gap-1 font-mono">
@@ -3779,10 +3779,11 @@ function SovereignAppContent() {
                         if (!next) {
                           setIsGateTooltipVisible(false);
                           setIsGateTooltipMinimized(false);
+                        } else {
+                          setIsGateTooltipVisible(true);
                         }
                         return next;
                       });
-                      setIsGateTooltipVisible(true);
                     }}
                     className={`p-1 rounded transition-all cursor-pointer border ${
                       isGateTooltipPinned
@@ -3813,7 +3814,7 @@ function SovereignAppContent() {
                           opacity: { duration: 0.22, ease: 'easeOut' },
                           y: { duration: 0.3, ease: [0.16, 1, 0.3, 1] },
                         }}
-                        className={`absolute left-0 top-full mt-2.5 z-50 w-[calc(100vw-28px)] sm:w-[480px] max-w-[480px] p-4 rounded-2xl bg-[#070914]/98 border backdrop-blur-2xl transition-all duration-200 pointer-events-auto ${
+                        className={`fixed left-2.5 right-2.5 top-24 sm:absolute sm:left-0 sm:right-auto sm:top-full mt-0 sm:mt-2.5 z-[70] w-auto sm:w-[480px] max-w-[calc(100vw-20px)] sm:max-w-[480px] p-3.5 sm:p-4 rounded-2xl bg-[#070914]/98 border backdrop-blur-2xl transition-all duration-200 pointer-events-auto overflow-x-hidden ${
                           isGateTooltipMinimized
                             ? 'max-h-auto shadow-[0_10px_30px_rgba(0,0,0,0.85)]'
                             : 'max-h-[72vh] sm:max-h-[78vh] overflow-y-auto custom-scrollbar'
@@ -3824,21 +3825,21 @@ function SovereignAppContent() {
                         } text-[11px] font-sans text-zinc-300`}
                       >
                         {/* Header with Title, Badges, Pin & Close Controls */}
-                        <div className={`sticky -top-4 -mx-4 -mt-4 px-4 pt-3 pb-2.5 ${isGateTooltipMinimized ? 'mb-0 border-b-0' : 'mb-2.5 border-b border-white/10'} bg-[#070914]/98 backdrop-blur-xl z-20 flex items-center justify-between font-mono text-[11px] gap-2 rounded-t-2xl shadow-md`}>
+                        <div className={`sticky -top-4 -mx-3.5 sm:-mx-4 -mt-3.5 sm:-mt-4 px-3.5 sm:px-4 pt-3 pb-2.5 ${isGateTooltipMinimized ? 'mb-0 border-b-0' : 'mb-2.5 border-b border-white/10'} bg-[#070914]/98 backdrop-blur-xl z-20 flex items-center justify-between font-mono text-[11px] gap-2 rounded-t-2xl shadow-md`}>
                           <div className="flex items-center gap-2 min-w-0">
                             <div className="p-1.5 rounded-lg bg-emerald-500/10 border border-emerald-500/30 text-emerald-400 shrink-0">
                               <ShieldCheck className="w-4 h-4" />
                             </div>
                             <div className="min-w-0">
-                              <div className="font-bold text-white flex items-center gap-2 flex-wrap">
-                                <span>VERIFICATION GATE</span>
+                              <div className="font-bold text-white flex items-center gap-1.5 sm:gap-2 flex-wrap">
+                                <span className="text-[10px] sm:text-[11px]">VERIFICATION GATE</span>
                                 {/* SVG Circular Progress Ring Visualizer (10/10 HSM Node Health Percentage: 0% to 100% dynamic fill) */}
                                 <div
-                                  className="inline-flex items-center gap-1.5 px-2 py-0.5 rounded-full bg-zinc-950/90 border border-cyan-500/40 shadow-inner group/hsm-ring"
+                                  className="inline-flex items-center gap-1 px-1.5 sm:px-2 py-0.5 rounded-full bg-zinc-950/90 border border-cyan-500/40 shadow-inner group/hsm-ring"
                                   title={`10/10 HSM Health: ${activeHsmNodes}/10 Nodes Online (${((activeHsmNodes / 10) * 100).toFixed(0)}%)`}
                                 >
-                                  <div className="relative w-5 h-5 flex items-center justify-center shrink-0">
-                                    <svg className="w-5 h-5 -rotate-90" viewBox="0 0 24 24">
+                                  <div className="relative w-4 h-4 sm:w-5 sm:h-5 flex items-center justify-center shrink-0">
+                                    <svg className="w-4 h-4 sm:w-5 sm:h-5 -rotate-90" viewBox="0 0 24 24">
                                       <circle
                                         cx="12"
                                         cy="12"
@@ -3866,7 +3867,7 @@ function SovereignAppContent() {
                                       />
                                     </svg>
                                     <span
-                                      className={`absolute text-[7px] font-mono font-black ${
+                                      className={`absolute text-[6.5px] sm:text-[7px] font-mono font-black ${
                                         activeHsmNodes === 10
                                           ? 'text-emerald-300'
                                           : activeHsmNodes >= 8
@@ -3877,7 +3878,7 @@ function SovereignAppContent() {
                                       {((activeHsmNodes / 10) * 100).toFixed(0)}%
                                     </span>
                                   </div>
-                                  <span className="text-[9px] font-mono font-bold text-zinc-100 flex items-center gap-1">
+                                  <span className="text-[8.5px] sm:text-[9px] font-mono font-bold text-zinc-100 flex items-center gap-1">
                                     <span
                                       className={`w-1.5 h-1.5 rounded-full ${
                                         activeHsmNodes === 10
@@ -3891,42 +3892,40 @@ function SovereignAppContent() {
                                   </span>
                                 </div>
                                 {isGateTooltipPinned && (
-                                  <span className="px-1.5 py-0.5 rounded-full bg-cyan-500/20 text-cyan-300 text-[9px] border border-cyan-400/50 font-mono font-bold flex items-center gap-1 shadow-[0_0_8px_rgba(6,182,212,0.3)] animate-pulse">
+                                  <span className="px-1.5 py-0.5 rounded-full bg-cyan-500/20 text-cyan-300 text-[8.5px] sm:text-[9px] border border-cyan-400/50 font-mono font-bold flex items-center gap-1 shadow-[0_0_8px_rgba(6,182,212,0.3)] animate-pulse">
                                     <Pin className="w-2.5 h-2.5 text-cyan-300 rotate-45" />
                                     PINNED
                                   </span>
                                 )}
                               </div>
-                              <span className="text-[10px] text-zinc-400 block truncate">
+                              <span className="text-[9.5px] sm:text-[10px] text-zinc-400 block truncate">
                                 Block #849202 • ZQ-GREEN-DEP-849202-3908
                               </span>
                             </div>
                           </div>
 
-                          <div className="flex items-center gap-1.5 shrink-0">
+                          <div className="flex items-center gap-1 sm:gap-1.5 shrink-0">
                             <span className="text-emerald-400 font-bold font-mono text-[10px] px-2 py-0.5 rounded bg-emerald-950/60 border border-emerald-500/30 hidden sm:inline-block">
                               SSoT Δ0.00%
                             </span>
 
-                            {/* Minimize / Expand Toggle Button when Pinned */}
-                            {isGateTooltipPinned && (
-                              <button
-                                type="button"
-                                onClick={(e) => {
-                                  e.stopPropagation();
-                                  playTone(isGateTooltipMinimized ? 720 : 520, 0.04);
-                                  setIsGateTooltipMinimized((prev) => !prev);
-                                }}
-                                className="p-1 rounded-lg bg-white/5 hover:bg-cyan-500/20 text-zinc-400 hover:text-cyan-300 border border-white/10 hover:border-cyan-500/30 transition-colors cursor-pointer"
-                                title={isGateTooltipMinimized ? 'Expand full verification details' : 'Minimize pinned summary (prevents covering screen)'}
-                              >
-                                {isGateTooltipMinimized ? (
-                                  <Maximize2 className="w-3.5 h-3.5 text-cyan-300" />
-                                ) : (
-                                  <Minimize2 className="w-3.5 h-3.5 text-zinc-400" />
-                                )}
-                              </button>
-                            )}
+                            {/* Minimize / Expand Toggle Button */}
+                            <button
+                              type="button"
+                              onClick={(e) => {
+                                e.stopPropagation();
+                                playTone(isGateTooltipMinimized ? 720 : 520, 0.04);
+                                setIsGateTooltipMinimized((prev) => !prev);
+                              }}
+                              className="p-1 rounded-lg bg-white/5 hover:bg-cyan-500/20 text-zinc-400 hover:text-cyan-300 border border-white/10 hover:border-cyan-500/30 transition-colors cursor-pointer"
+                              title={isGateTooltipMinimized ? 'Expand full verification details' : 'Minimize summary (prevents covering screen)'}
+                            >
+                              {isGateTooltipMinimized ? (
+                                <Maximize2 className="w-3.5 h-3.5 text-cyan-300" />
+                              ) : (
+                                <Minimize2 className="w-3.5 h-3.5 text-zinc-400" />
+                              )}
+                            </button>
 
                             {/* Pin / Unpin Button */}
                             <button
@@ -3967,23 +3966,21 @@ function SovereignAppContent() {
                               )}
                             </button>
 
-                            {/* Close button if pinned */}
-                            {isGateTooltipPinned && (
-                              <button
-                                type="button"
-                                onClick={(e) => {
-                                  e.stopPropagation();
-                                  playTone(500, 0.04);
-                                  setIsGateTooltipPinned(false);
-                                  setIsGateTooltipVisible(false);
-                                  setIsGateTooltipMinimized(false);
-                                }}
-                                className="p-1 rounded-lg bg-white/5 hover:bg-rose-500/20 text-zinc-400 hover:text-rose-300 border border-white/10 hover:border-rose-500/30 transition-colors cursor-pointer"
-                                title="Close pinned tooltip"
-                              >
-                                <X className="w-3.5 h-3.5" />
-                              </button>
-                            )}
+                            {/* Always-visible Close button for mobile and desktop */}
+                            <button
+                              type="button"
+                              onClick={(e) => {
+                                e.stopPropagation();
+                                playTone(500, 0.04);
+                                setIsGateTooltipPinned(false);
+                                setIsGateTooltipVisible(false);
+                                setIsGateTooltipMinimized(false);
+                              }}
+                              className="p-1 rounded-lg bg-white/5 hover:bg-rose-500/20 text-zinc-400 hover:text-rose-300 border border-white/10 hover:border-rose-500/30 transition-colors cursor-pointer"
+                              title="Close Verification Gate summary"
+                            >
+                              <X className="w-3.5 h-3.5" />
+                            </button>
                           </div>
                         </div>
 
