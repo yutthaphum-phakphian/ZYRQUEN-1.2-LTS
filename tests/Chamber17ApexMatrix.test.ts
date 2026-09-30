@@ -69,8 +69,8 @@ describe('Chamber 17 Apex Matrix & Chamber 16 Visualizer Test Suite', () => {
     expect(row3Ids).toEqual(['CH-12', 'CH-13', 'CH-14', 'CH-15', 'CH-16', 'CH-17']);
   });
 
-  it('should verify Executive Slide Deck contains exactly 10 master slides with full metadata', () => {
-    expect(SLIDES_DATA).toHaveLength(10);
+  it('should verify Executive Slide Deck contains exactly 11 master slides with full metadata', () => {
+    expect(SLIDES_DATA).toHaveLength(11);
     SLIDES_DATA.forEach((slide, idx) => {
       expect(slide.id).toBe(idx + 1);
       expect(slide.title).toBeTruthy();

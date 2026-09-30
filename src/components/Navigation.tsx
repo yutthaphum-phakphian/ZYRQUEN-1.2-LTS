@@ -49,6 +49,8 @@ import {
 import { playTone, getHarmonicCarrierSnapshot } from './AudioSynthesizer';
 import { PWAInstallButton } from './PWAInstallButton';
 import { GitHubSyncWarningNav } from './navigation/GitHubSyncWarningNav';
+import { HsmQuorumAlertBanner } from './navigation/HsmQuorumAlertBanner';
+import { hsmClusterService, HsmClusterState } from '../services/hsmClusterService';
 import { CopilotAssistantDrawer } from './copilot/CopilotAssistantDrawer';
 import { ThemeSwitcher } from './ThemeSwitcher';
 import { ZyrquenIcon } from './ZyrquenIcon';
@@ -171,6 +173,18 @@ export const Navigation: React.FC<NavigationProps> = ({
   const effectiveIsCopilotOpen = externalIsCopilotOpen !== undefined ? externalIsCopilotOpen : internalIsCopilotOpen;
   const prevCountRef = useRef<number>(displaySealCount);
 
+  // Real-time HSM Cluster State Subscription for Telemetry Quorum Indicator & Simulator
+  const [hsmClusterState, setHsmClusterState] = useState<HsmClusterState>(() =>
+    hsmClusterService.getState()
+  );
+
+  useEffect(() => {
+    const unsubscribe = hsmClusterService.subscribe((state) => {
+      setHsmClusterState(state);
+    });
+    return () => unsubscribe();
+  }, []);
+
   // Tab Strip Refs for Auto-Centering and Horizontal Smooth Scrolling
   const tabsContainerRef = useRef<HTMLDivElement | null>(null);
   const activeTabRef = useRef<HTMLButtonElement | null>(null);
@@ -263,6 +277,9 @@ export const Navigation: React.FC<NavigationProps> = ({
   }, [isAudioActive]);
   return (
     <header className="sticky top-0 z-40 bg-gradient-to-r from-[#070914]/95 via-[#0b0e1e]/90 to-[#070914]/95 backdrop-blur-3xl border-b border-cyan-500/20 transition-all shadow-[0_8px_30px_-10px_rgba(6,182,212,0.15)] relative overflow-hidden">
+      {/* Real-time Header Notification Alert for HSM Quorum Degradation (<80% / <8/10) */}
+      <HsmQuorumAlertBanner />
+
       {/* Ambient Top Glow */}
       <div className="absolute top-0 left-0 w-full h-[1px] bg-gradient-to-r from-transparent via-cyan-400/40 to-transparent" />
       <div className="absolute top-0 left-1/4 w-1/2 h-16 bg-cyan-500/5 rounded-b-full blur-3xl pointer-events-none" />
@@ -358,6 +375,49 @@ export const Navigation: React.FC<NavigationProps> = ({
             <span className="text-[11px] font-mono text-amber-300 font-bold tracking-wide">{SYSTEM_METADATA.cryoTemp}</span>
           </div>
           <div className="w-[1px] h-3.5 bg-white/10" />
+          {/* HSM Quorum Telemetry with Drop Simulator */}
+          <button
+            type="button"
+            id="btn-hsm-quorum-telemetry"
+            onClick={() => {
+              playTone(420, 0.05);
+              if (hsmClusterState.isDegraded) {
+                hsmClusterService.remediateCluster();
+              } else {
+                hsmClusterService.simulateDegradation(7); // Simulate drop to 7/10 (<80%)
+              }
+            }}
+            className={`flex items-center gap-1.5 px-2.5 py-1 rounded-lg border text-xs font-mono cursor-pointer transition-all active:scale-95 ${
+              hsmClusterState.isDegraded
+                ? 'bg-red-950/80 border-red-500/80 text-red-200 animate-pulse shadow-[0_0_15px_rgba(239,68,68,0.5)]'
+                : 'bg-black/40 hover:bg-black/60 border-white/10 hover:border-cyan-500/40 text-zinc-300'
+            }`}
+            title={
+              hsmClusterState.isDegraded
+                ? `⚠️ Quorum compromised at ${hsmClusterState.activeNodes}/${hsmClusterState.totalNodes} (${hsmClusterState.quorumPercentage}%)! Click to restore 10/10`
+                : 'HSM Cluster Deca-Key Quorum: 10/10 (Click to simulate quorum degradation to 7/10)'
+            }
+          >
+            <ShieldCheck
+              className={`w-3.5 h-3.5 ${
+                hsmClusterState.isDegraded ? 'text-red-400 animate-bounce' : 'text-cyan-400'
+              }`}
+            />
+            <span className="text-[10px] text-zinc-400">HSM Quorum:</span>
+            <span
+              className={`text-[10px] font-bold ${
+                hsmClusterState.isDegraded ? 'text-red-400' : 'text-emerald-400'
+              }`}
+            >
+              {hsmClusterState.activeNodes}/{hsmClusterState.totalNodes}
+            </span>
+            {hsmClusterState.isDegraded && (
+              <span className="px-1 py-0.2 rounded bg-red-500 text-[8px] font-extrabold text-black uppercase">
+                &lt;80% ALERT
+              </span>
+            )}
+          </button>
+          <div className="w-[1px] h-3.5 bg-white/10" />
           
           {/* Verified Seals Counter with Framer Motion and Progressive Green Highlight */}
           <motion.div
@@ -423,6 +483,11 @@ export const Navigation: React.FC<NavigationProps> = ({
             onOpenEventsSidebar={onOpenEventsSidebar}
             onOpenLegalSearch={onOpenLegalSearch}
           />
+        </div>
+
+        {/* Real-time GitHub Sync Status Indicator (Commit hash, repository & deployment timestamp) */}
+        <div className="hidden md:flex shrink-0">
+          <GitHubSyncWarningNav />
         </div>
 
         {/* Right Actions */}

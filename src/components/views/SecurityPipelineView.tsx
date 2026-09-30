@@ -34,6 +34,9 @@ import { ZeroDriftD3Chart } from '../ZeroDriftD3Chart';
 import { SealShowcase } from '../SealShowcase';
 import { SecurityPipelineHeader } from '../SecurityPipelineHeader';
 import { ActiveEvidenceSealsPayload } from '../ActiveEvidenceSealsPayload';
+import { CiCdPipelineVisualizer } from '../security/CiCdPipelineVisualizer';
+import { DeploymentReadinessReport } from '../executive/DeploymentReadinessReport';
+import { playTone, playAuditChime } from '../AudioSynthesizer';
 import { ViewType } from '../../types';
 
 export interface SecurityPipelineViewProps {
@@ -65,7 +68,8 @@ export const SecurityPipelineView: React.FC<SecurityPipelineViewProps> = ({
   const [isCompareModalOpen, setIsCompareModalOpen] = useState(false);
   const [isBatchCompareMode, setIsBatchCompareMode] = useState(false);
   const [isSealShowcaseOpen, setIsSealShowcaseOpen] = useState(false);
-  const [evidenceTab, setEvidenceTab] = useState<'session' | 'payload'>('payload');
+  const [isBoardReportOpen, setIsBoardReportOpen] = useState(false);
+  const [evidenceTab, setEvidenceTab] = useState<'payload' | 'session' | 'cicd-visualizer'>('cicd-visualizer');
   
   // Audit Drawer State
   const [auditDrawerState, setAuditDrawerState] = useState<{
@@ -515,6 +519,20 @@ INSTRUCTIONS FOR INDEPENDENT VERIFICATION:
             <ZeroDriftD3Chart width={220} height={42} />
           </div>
 
+          {/* Deployment Readiness Board PDF Report Trigger */}
+          <button
+            id="btn-board-readiness-report"
+            onClick={() => {
+              playTone(720, 0.06);
+              setIsBoardReportOpen(true);
+            }}
+            className="px-3.5 py-2 rounded-xl bg-gradient-to-r from-purple-500/20 to-indigo-600/20 hover:from-purple-500/30 hover:to-indigo-600/30 text-purple-200 font-mono text-xs font-bold border border-purple-500/40 flex items-center gap-1.5 transition active:scale-95 cursor-pointer shadow-sm shadow-purple-950/40"
+            title="Open Executive Board Deployment Readiness Report & Download PDF"
+          >
+            <Award className="w-3.5 h-3.5 text-purple-400" />
+            <span>BOARD REPORT (PDF)</span>
+          </button>
+
           {/* Official Seals Showcase Trigger Button */}
           <button
             id="btn-official-seals"
@@ -677,8 +695,21 @@ INSTRUCTIONS FOR INDEPENDENT VERIFICATION:
           </div>
 
           {/* Tab Selector for Evidence View Modes */}
-          <div className="no-print flex items-center justify-between gap-2 p-1.5 bg-slate-900/90 border border-slate-800 rounded-2xl">
-            <div className="flex items-center gap-2">
+          <div className="no-print flex items-center justify-between gap-2 p-1.5 bg-slate-900/90 border border-slate-800 rounded-2xl flex-wrap">
+            <div className="flex items-center gap-2 flex-wrap">
+              <button
+                type="button"
+                onClick={() => setEvidenceTab('cicd-visualizer')}
+                className={`px-3 py-1.5 rounded-xl font-mono text-xs font-bold transition-all flex items-center gap-1.5 cursor-pointer ${
+                  evidenceTab === 'cicd-visualizer'
+                    ? 'bg-gradient-to-r from-cyan-500/25 to-blue-600/25 text-cyan-200 border border-cyan-400/50 shadow-[0_0_15px_rgba(6,182,212,0.3)]'
+                    : 'text-slate-400 hover:text-white border border-transparent'
+                }`}
+              >
+                <Zap className="w-3.5 h-3.5 text-cyan-400 animate-pulse" />
+                <span>CI/CD Pipeline Visualizer (D3.js)</span>
+              </button>
+
               <button
                 type="button"
                 onClick={() => setEvidenceTab('payload')}
@@ -689,7 +720,7 @@ INSTRUCTIONS FOR INDEPENDENT VERIFICATION:
                 }`}
               >
                 <Layers className="w-3.5 h-3.5 text-cyan-400" />
-                <span>Active Evidence Payload (Batch &amp; Print)</span>
+                <span>Active Evidence Payload</span>
               </button>
 
               <button
@@ -707,11 +738,15 @@ INSTRUCTIONS FOR INDEPENDENT VERIFICATION:
             </div>
             
             <span className="text-[10px] font-mono text-slate-500 pr-2 hidden sm:inline">
-              FIPS 140-3 L4 • ETDA Sec 9/26/28
+              4-Stage Invariant Flow • D3.js
             </span>
           </div>
 
-          {evidenceTab === 'payload' ? (
+          {evidenceTab === 'cicd-visualizer' ? (
+            <div className="rounded-2xl border border-cyan-500/30 bg-slate-950/70 p-4 shadow-xl shadow-cyan-950/30">
+              <CiCdPipelineVisualizer />
+            </div>
+          ) : evidenceTab === 'payload' ? (
             <div className="rounded-2xl border border-slate-800/80 bg-slate-950/40 p-2">
               <ActiveEvidenceSealsPayload />
             </div>
@@ -875,6 +910,12 @@ INSTRUCTIONS FOR INDEPENDENT VERIFICATION:
           </div>
         </div>
       )}
+
+      {/* Deployment Readiness Report Modal */}
+      <DeploymentReadinessReport
+        isOpen={isBoardReportOpen}
+        onClose={() => setIsBoardReportOpen(false)}
+      />
 
     </div>
   );

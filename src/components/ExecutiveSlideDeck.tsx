@@ -37,7 +37,7 @@ export interface SlideItem {
 export const SLIDES_DATA: SlideItem[] = [
   {
     id: 1,
-    badge: 'SLIDE 01 / 10 • EXECUTIVE BRIEF',
+    badge: 'SLIDE 01 / 11 • EXECUTIVE BRIEF',
     title: 'ZYRQUEN Ω v1.2 LTS — Sovereign Audit Report',
     subtitle: 'สรุปผลการตรวจสอบสถานะสัจธรรมแกนหลัก (Canonical SSoT Kernel) และอำนาจอธิปไตยเดี่ยว',
     bulletPoints: [
@@ -56,7 +56,7 @@ export const SLIDES_DATA: SlideItem[] = [
   },
   {
     id: 2,
-    badge: 'SLIDE 02 / 10 • CHAMBER 04',
+    badge: 'SLIDE 02 / 11 • CHAMBER 04',
     title: '10/10 Invariants Shield (Zero-Drift Architecture)',
     subtitle: 'ระบบเกราะพิทักษ์ 10 ชั้น สอดส่องแบบอัตโนมัติความถี่ 100 Hz',
     bulletPoints: [
@@ -75,7 +75,7 @@ export const SLIDES_DATA: SlideItem[] = [
   },
   {
     id: 3,
-    badge: 'SLIDE 03 / 10 • CHAMBER 05',
+    badge: 'SLIDE 03 / 11 • CHAMBER 05',
     title: '22/22 Master Verification Gates Matrix',
     subtitle: 'ด่านตรวจผ่าน 22 ประตู คลอบคลุม 4 ระดับชั้นความปลอดภัยขั้นสูงสุด',
     bulletPoints: [
@@ -93,7 +93,7 @@ export const SLIDES_DATA: SlideItem[] = [
   },
   {
     id: 4,
-    badge: 'SLIDE 04 / 10 • CHAMBER 08',
+    badge: 'SLIDE 04 / 11 • CHAMBER 08',
     title: 'Post-Quantum Cryptography (NIST Category 5)',
     subtitle: 'สถาปัตยกรรม Crypto-Agility ป้องกันการถอดรหัสด้วยควอนตัมคอมพิวเตอร์ 256-bit',
     bulletPoints: [
@@ -112,7 +112,7 @@ export const SLIDES_DATA: SlideItem[] = [
   },
   {
     id: 5,
-    badge: 'SLIDE 05 / 10 • CHAMBER 03',
+    badge: 'SLIDE 05 / 11 • CHAMBER 03',
     title: '10/10 Hardware HSM Quorum & Physical Defenses',
     subtitle: 'การลงนามร่วมทางฮาร์ดแวร์ FIPS 140-3 Level 4 ภายใต้สภาผู้พิทักษ์',
     bulletPoints: [
@@ -130,7 +130,7 @@ export const SLIDES_DATA: SlideItem[] = [
   },
   {
     id: 6,
-    badge: 'SLIDE 06 / 10 • CHAMBER 10 & 11',
+    badge: 'SLIDE 06 / 11 • CHAMBER 10 & 11',
     title: 'Judicial ETDA Tier (Thai Statutory Compliance)',
     subtitle: 'การผูกตรึงกรอบกฎหมายไทย พ.ร.บ. ธุรกรรมอิเล็กทรอนิกส์ และ พ.ร.บ. คุ้มครองข้อมูลส่วนบุคคล',
     bulletPoints: [
@@ -148,7 +148,7 @@ export const SLIDES_DATA: SlideItem[] = [
   },
   {
     id: 7,
-    badge: 'SLIDE 07 / 10 • CHAMBER 12 & 14',
+    badge: 'SLIDE 07 / 11 • CHAMBER 12 & 14',
     title: '12-Stage Trace Replay Pipeline & Forensic Benchmark',
     subtitle: 'ห่วงโซ่การสืบย้อนรอยพยานดิจิทัลบิตต่อบิต 12 ขั้นตอนภายใต้ SLA < 142 ms',
     bulletPoints: [
@@ -166,7 +166,7 @@ export const SLIDES_DATA: SlideItem[] = [
   },
   {
     id: 8,
-    badge: 'SLIDE 08 / 10 • CHAMBERS 16 & 17',
+    badge: 'SLIDE 08 / 11 • CHAMBERS 16 & 17',
     title: 'Peripheral Extensions: Chamber 16 & 17 Control Hub',
     subtitle: 'การเชื่อมโยงระบบรอบนอกโดยไม่กระทบความสมบูรณ์ของแกนหลัก SSoT Kernel',
     bulletPoints: [
@@ -184,7 +184,7 @@ export const SLIDES_DATA: SlideItem[] = [
   },
   {
     id: 9,
-    badge: 'SLIDE 09 / 10 • CHAMBER 07 & 13',
+    badge: 'SLIDE 09 / 11 • CHAMBER 07 & 13',
     title: 'Treasury Stability & Global 6-Node BFT Mesh',
     subtitle: 'เสถียรภาพคลังสินทรัพย์ FIOS และโครงข่ายฉันทามติกระจายศูนย์ข้ามทวีป',
     bulletPoints: [
@@ -202,7 +202,7 @@ export const SLIDES_DATA: SlideItem[] = [
   },
   {
     id: 10,
-    badge: 'SLIDE 10 / 10 • RATIFICATION & VERDICT',
+    badge: 'SLIDE 10 / 11 • RATIFICATION & VERDICT',
     title: 'Governance Certification & Court Readiness Verdict',
     subtitle: 'บทสรุปการรับรองความถูกต้องสมบูรณ์สูงสุดของ ZYRQUEN Ω v1.2 LTS',
     bulletPoints: [
@@ -217,6 +217,24 @@ export const SLIDES_DATA: SlideItem[] = [
       sublabel: 'WORM-14902 Ratified'
     },
     footerNote: 'Issued under Canonical Protocol ZYRQUEN-Ω-2026-FROZEN-LTS'
+  },
+  {
+    id: 11,
+    badge: 'SLIDE 11 / 11 • CI/CD & RWA AUDIT',
+    title: 'CI/CD Verification (0–13s Pure Green) & Complete RWA Treasury Audit',
+    subtitle: 'สรุปผังการตรวจสอบ CI/CD Gate Dependency (0–13s) และการสุ่มตรวจสัญญา RWA 1,200 รายการ (Ω601–Ω1800)',
+    bulletPoints: [
+      { label: 'Stage 1 & 2: Core Invariants & Fail-Closed (0–5s)', detail: 'Core Invariants Gate (Δ0.00% Zero Drift), PQC Security Benchmark (ML-DSA-87/Kyber-1024), Sovereign Gate ผ่าน 100%', highlight: '0–5s PASS' },
+      { label: 'Stage 3 & 4: Build, Edge Deploy & Runtime (5–13s)', detail: 'Sovereign Core compile, PWA GitHub Pages build, Live CDN Deploy & 10/10 HSM Quorum Match สมบูรณ์ใน 13.0s', highlight: '13.0s PURE GREEN' },
+      { label: '1,200 RWA Treasury (Ω601–Ω1800)', detail: 'คลังสัญญา RWA 3 กลุ่ม (Ω601–Ω1000, Ω1001–Ω1400, Ω1401–Ω1800) รวมมูลค่า ฿936,240,000.00 THB, Variance = ฿0.00 (0.00% Discrepancy)', highlight: '฿936.24M 100% SEALED' },
+      { label: 'Legal & PQC Ratification', detail: 'ลายมือชื่อ ML-DSA-87 และประทับเวลา RFC 3161 ตาม พ.ร.บ. ธุรกรรมอิเล็กทรอนิกส์ ม.๙, ๒๖, ๒๘ และ PDPA', highlight: 'Court-Admissible Ready' }
+    ],
+    statBox: {
+      value: '13.0s',
+      label: 'Pure Green CI/CD',
+      sublabel: '฿936.24M RWA Verified'
+    },
+    footerNote: 'CI/CD Pipeline: vutthaphum-phalakorn/ZYRQUEN-1.2-LTS • Court-Admissible Ready'
   }
 ];
 
@@ -252,7 +270,7 @@ Status: FROZEN v1.2 LTS (Delta=0, Drift=0.0000%)
 Invariants: 10/10 PASSED | Master Gates: 22/22 PASSED (Avg 1.82ms)
 PQC Suite: ML-DSA-87 (Dilithium-5) Active, SPHINCS+ Standby, Kyber-1024 KEM
 Court Admissibility: ETDA Sections 9, 26, 28 & ISO/IEC 27037 100% Ready
-Total Slides: 10/10
+Total Slides: 11/11
 Exported at: ${new Date().toISOString()}`;
 
     const blob = new Blob([summaryText], { type: 'text/plain;charset=utf-8' });
@@ -277,7 +295,7 @@ Exported at: ${new Date().toISOString()}`;
               <span className="text-[10px] font-mono font-bold px-2 py-0.5 rounded bg-cyan-950 text-cyan-300 border-cyan-800">
                 EXECUTIVE SLIDE DECK
               </span>
-              <span className="text-xs font-mono text-slate-400">10 Master Slides</span>
+              <span className="text-xs font-mono text-slate-400">{SLIDES_DATA.length} Master Slides</span>
             </div>
             <h3 className="text-base font-bold text-white mt-0.5">
               สรุปสถาปัตยกรรมและการตรวจสอบ Master Gates 22/22 สำหรับผู้บริหาร
@@ -401,7 +419,7 @@ Exported at: ${new Date().toISOString()}`;
       </div>
 
       {/* Slide Thumbnails Quick Navigation */}
-      <div className="grid grid-cols-5 sm:grid-cols-10 gap-2">
+      <div className="grid grid-cols-4 sm:grid-cols-11 gap-2">
         {SLIDES_DATA.map((slide, idx) => (
           <button
             key={slide.id}
