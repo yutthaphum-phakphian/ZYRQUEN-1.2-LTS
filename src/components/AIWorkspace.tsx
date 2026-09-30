@@ -201,8 +201,11 @@ export function validateAndSanitizePreviewHtml(rawHtml: string | null | undefine
 
   const cspMetaTag = `<meta http-equiv="Content-Security-Policy" content="default-src 'none'; style-src 'unsafe-inline' https://cdn.tailwindcss.com; script-src 'unsafe-inline' https://cdn.tailwindcss.com; img-src data: https:; font-src data: https:; connect-src 'none'; frame-src 'none';">`;
 
-  if (cleaned.includes('<head>')) {
-    cleaned = cleaned.replace('<head>', `<head>\n  ${cspMetaTag}`);
+  // Ensure idempotency: strip any pre-existing Content-Security-Policy meta tag so repeated sanitization never duplicates it
+  cleaned = cleaned.replace(/\s*<meta\s+http-equiv=["']Content-Security-Policy["'][^>]*>/gi, '');
+
+  if (/<head>/i.test(cleaned)) {
+    cleaned = cleaned.replace(/<head>/i, `<head>\n  ${cspMetaTag}`);
   } else {
     cleaned = `<!DOCTYPE html>\n<html>\n<head>\n  ${cspMetaTag}\n</head>\n<body>\n${cleaned}\n</body>\n</html>`;
   }
@@ -886,22 +889,47 @@ export function AIWorkspace({
       provenance: 'VERIFIED',
       timestamp: new Date().toISOString(),
     });
-    const check = inspectAiArtifactPreflight({
+    const workflow = executeAiWorkspacePreflightWorkflow({
+      requestId: reqId,
+      traceId: trcId,
+      targetWorkspace: targetWorkspaceId,
+      inputChannel: 'TEXT_INPUT',
       artifact: envelope,
-      expectedWorkspaceId: targetWorkspaceId,
-      expectedRequestId: reqId,
-      expectedTraceId: trcId,
+      currentBatchSize,
+      proposedBatchSize: Math.max(16, currentBatchSize - 16),
     });
+    const check = workflow.preflight;
     setPreflightResult(check);
     onArtifactPreflightResult?.(check);
-    if (check.passed && check.status === 'VERIFIED') {
+    if (workflow.ok && check.passed && check.status === 'VERIFIED') {
       setCurrentHtml(sanitized);
       setProvenance('VERIFIED');
       setUiStatus('PROPOSAL_READY');
       setLatestFailureDiagnostic(null);
+      if (workflow.proposal) {
+        setLatestProposal(workflow.proposal);
+      }
+      setExecutionTrace(workflow.executionTrace);
+      onExecutionTraceUpdate?.(workflow.executionTrace);
+      const seq = msgSeqRef.current + 1;
+      msgSeqRef.current = seq;
+      const verifiedMsg: AiConversationMessage = {
+        id: `ai-preflight-${seq}`,
+        sender: 'ai',
+        channel: 'TEXT_INPUT',
+        text: `Preflight = VERIFIED (${check.computedHash?.slice(0, 23)}...) — Artifact passed Preflight Gate and forwarded through Analysis -> Proposal (${workflow.proposal?.proposalId}) -> Preview. Awaiting Explicit Approval (#EP-SOVEREIGN-01).`,
+        timestamp: new Date().toISOString(),
+        uiStatus: 'PROPOSAL_READY',
+        provenance: 'VERIFIED',
+        htmlCode: sanitized,
+        analysis: workflow.analysis,
+        proposal: workflow.proposal,
+        requiresExplicitApproval: true,
+      };
+      setMessages((prev) => [...prev, verifiedMsg]);
       emitStandardAuditRecord(
         'AI_ARTIFACT_PREFLIGHT_VERIFIED',
-        `Workspace=${targetWorkspaceId} | Req=${reqId} | Trace=${trcId} | Hash=${check.computedHash} | Status=Preflight = VERIFIED (Core Mutation=0)`,
+        `Workspace=${targetWorkspaceId} | Req=${reqId} | Trace=${trcId} | Hash=${check.computedHash} | Proposal=${workflow.proposal?.proposalId || 'NONE'} | Status=Preflight = VERIFIED (Core Mutation=0)`,
         'VERIFIED',
         'TEXT_INPUT'
       );

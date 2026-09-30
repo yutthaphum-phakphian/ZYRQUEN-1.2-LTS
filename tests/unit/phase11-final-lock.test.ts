@@ -167,6 +167,13 @@ test('T6 — AI Workspace Preview Sandbox Isolation & Sanitization Test: Blocks 
   assert.ok(!result.sanitizedHtml.includes('ZYRQUEN_CORE'));
   assert.ok(result.sanitizedHtml.includes('Content-Security-Policy'));
   assert.ok(result.blockedReasons.length >= 5);
+
+  // Idempotency check: re-sanitizing already sanitized HTML must never duplicate <meta http-equiv="Content-Security-Policy" ...>
+  const secondPass = validateAndSanitizePreviewHtml(result.sanitizedHtml);
+  assert.equal(secondPass.valid, true);
+  assert.ok(secondPass.sanitizedHtml);
+  const cspMatches = secondPass.sanitizedHtml.match(/http-equiv=["']Content-Security-Policy["']/gi) || [];
+  assert.equal(cspMatches.length, 1);
 });
 
 test('T7 — Real Execution Trace Test: 8-stage timeline (REQUEST -> ANALYSIS -> PROPOSAL -> APPROVAL -> EXECUTE -> TARGET -> VERIFY -> AUDIT) halts deterministically and rejects PASSED without evidence', () => {
