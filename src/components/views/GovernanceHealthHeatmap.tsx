@@ -310,7 +310,8 @@ export const GovernanceHealthHeatmap: React.FC<GovernanceHealthHeatmapProps> = (
   const [isSweeping, setIsSweeping] = useState<boolean>(false);
   const [sweepProgress, setSweepProgress] = useState<number>(100);
   const [activeTab, setActiveTab] = useState<'chambers' | 'seals' | 'compliance_coverage'>(initialTab);
-  const [sealOverlayMode, setSealOverlayMode] = useState<'SEAL_STATUS' | 'INTEGRATION_COVERAGE'>('INTEGRATION_COVERAGE');
+  const [sealOverlayMode, setSealOverlayMode] = useState<'SEAL_STATUS' | 'INTEGRATION_COVERAGE'>('SEAL_STATUS');
+  const [lastPdfReceipt, setLastPdfReceipt] = useState<{ documentId: string; sha256Digest: string } | null>(null);
   const [viewMode, setViewMode] = useState<'QUORUM_NODES_SPARKLINE' | 'SEALS_MATRIX'>('QUORUM_NODES_SPARKLINE');
   const [currentPage, setCurrentPage] = useState<number>(1);
   const itemsPerPage = 800; // Efficient block rendering for high responsiveness
@@ -857,11 +858,11 @@ export const GovernanceHealthHeatmap: React.FC<GovernanceHealthHeatmapProps> = (
     if (onAddSystemEvent) {
       onAddSystemEvent(
         'EXPORT_CSV',
-        `Current Grid CSV Exported (${csvRows.length} Records)`,
-        `Exported current heatmap grid (${snapshotLabel}) for external spreadsheet analysis: ${filename}.`,
-        `csv:${Date.now()}`,
+        `Governance Heatmap CSV Exported (${csvRows.length} Records)`,
+        `Exported current grid raw data (${snapshotLabel}) for external spreadsheet analysis: ${filename}.`,
+        `csv-export:${Date.now()}`,
         'success',
-        'ETDA Sec 28'
+        'ETDA Sec 28 / ISO-42001 Spreadsheet Audit'
       );
     }
   }, [viewMode, displayedQuorumNodes, paginatedSeals, sealsHistoricalSnapshotMeta, onAddSystemEvent]);
@@ -903,11 +904,13 @@ export const GovernanceHealthHeatmap: React.FC<GovernanceHealthHeatmapProps> = (
       triggerDownload: true,
     });
 
+    setLastPdfReceipt(receipt);
+
     if (onAddSystemEvent) {
       onAddSystemEvent(
         'COMPLIANCE',
         `ETDA Sec 28 Heatmap Forensic PDF Sealed (${receipt.documentId})`,
-        `Court-admissible Heatmap Forensic PDF generated with ${stats.total.toLocaleString()} seals and ${PRODUCTION_INTEGRATION_COVERAGE_SUMMARY.adapterLinesPct}% integration coverage.`,
+        `Captured 18 Chambers Hardware Seal Status & Integration Coverage (${stats.total.toLocaleString()} seals, ${PRODUCTION_INTEGRATION_COVERAGE_SUMMARY.adapterLinesPct}% lines).`,
         receipt.sha256Digest,
         'success',
         'ETDA B.E. 2544 Section 28'
@@ -932,9 +935,10 @@ export const GovernanceHealthHeatmap: React.FC<GovernanceHealthHeatmapProps> = (
         >
           <span>⚠️ CRITICAL HEALTH ALERT: ACTIVE QUORUM: {storeCustodianProofs}/10 NODES (&lt;80% THRESHOLD BREACH)</span>
           <button
+            id="btn-restore-hsm-quorum-nodes"
             type="button"
             onClick={() => systemStateStore.setCustodianProofs(10)}
-            className="px-3 py-1 rounded bg-amber-400 text-black font-bold text-xs"
+            className="px-3 py-1 rounded bg-amber-400 text-black font-bold text-xs cursor-pointer"
           >
             ⚡ Restore 10/10
           </button>
@@ -1079,7 +1083,8 @@ export const GovernanceHealthHeatmap: React.FC<GovernanceHealthHeatmapProps> = (
             </button>
 
             <button
-              id="btn-seals-generate-heatmap-forensic-pdf"
+              id="btn-generate-heatmap-forensic-pdf"
+              data-testid="btn-seals-generate-heatmap-forensic-pdf"
               onClick={handleGenerateSealsForensicPdf}
               className="px-4 py-2.5 rounded-xl bg-amber-500/20 hover:bg-amber-500/30 border border-amber-500/40 text-amber-200 font-mono font-bold text-xs flex items-center gap-2 shadow-[0_0_15px_rgba(245,158,11,0.2)] transition cursor-pointer"
               title="Generate Court-Admissible Heatmap Forensic PDF per ETDA Sec 28"
@@ -1099,7 +1104,8 @@ export const GovernanceHealthHeatmap: React.FC<GovernanceHealthHeatmapProps> = (
             </button>
 
             <button
-              id="btn-seals-export-csv"
+              id="btn-export-heatmap-csv"
+              data-testid="btn-seals-export-csv"
               onClick={handleExportCurrentGridCsv}
               className="px-4 py-2.5 rounded-xl bg-emerald-500/20 hover:bg-emerald-500/30 border border-emerald-500/40 text-emerald-200 font-mono font-bold text-xs flex items-center gap-2 transition cursor-pointer"
               title="Download raw data of the current grid formatted for external spreadsheet analysis"
@@ -1608,7 +1614,8 @@ export const GovernanceHealthHeatmap: React.FC<GovernanceHealthHeatmapProps> = (
             {/* Seal Status vs Integration Coverage Overlay Toggle */}
             <div className="flex items-center bg-black/60 p-1 rounded-xl border border-cyan-500/30 text-xs font-mono">
               <button
-                id="btn-seals-mode-hardware"
+                id="btn-mode-hardware-seal-status"
+                data-testid="btn-seals-mode-hardware"
                 onClick={() => {
                   setSealOverlayMode('SEAL_STATUS');
                   playTone(580, 0.03);
@@ -1622,7 +1629,8 @@ export const GovernanceHealthHeatmap: React.FC<GovernanceHealthHeatmapProps> = (
                 Hardware Seal Status
               </button>
               <button
-                id="btn-seals-integration-coverage-toggle"
+                id="btn-toggle-integration-coverage-overlay"
+                data-testid="btn-seals-integration-coverage-toggle"
                 onClick={() => {
                   setSealOverlayMode((prev) =>
                     prev === 'INTEGRATION_COVERAGE' ? 'SEAL_STATUS' : 'INTEGRATION_COVERAGE'
@@ -1753,12 +1761,13 @@ export const GovernanceHealthHeatmap: React.FC<GovernanceHealthHeatmapProps> = (
         {/* Historical Snapshot Banner & d3-zoom Controls */}
         {sealsHistoricalSnapshotMeta && (
           <div
-            id="seals-historical-snapshot-banner"
+            id="heatmap-historical-snapshot-banner"
+            data-testid="seals-historical-snapshot-banner"
             className="p-3.5 rounded-xl bg-indigo-950/40 border border-indigo-400/50 flex flex-wrap items-center justify-between gap-2 text-xs font-mono"
           >
             <div>
               <span className="text-indigo-300 font-bold">
-                HISTORICAL SNAPSHOT ({sealsHistoricalSnapshotMeta.timestamp}) • BLOCK #{sealsHistoricalSnapshotMeta.historicalBlock}:
+                HISTORICAL SNAPSHOT ACTIVE ({sealsHistoricalSnapshotMeta.timestamp}) • BLOCK #{sealsHistoricalSnapshotMeta.historicalBlock}:
               </span>{' '}
               <span className="text-emerald-300">{sealsHistoricalSnapshotMeta.sealSummary}</span> ·{' '}
               <span className="text-cyan-300">
@@ -1776,9 +1785,12 @@ export const GovernanceHealthHeatmap: React.FC<GovernanceHealthHeatmapProps> = (
         )}
 
         {lastSealsCsvMeta && (
-          <div className="p-3 rounded-xl bg-emerald-950/60 border border-emerald-500/40 flex flex-wrap items-center justify-between gap-2 text-xs font-mono">
+          <div
+            id="heatmap-csv-export-banner"
+            className="p-3 rounded-xl bg-emerald-950/60 border border-emerald-500/40 flex flex-wrap items-center justify-between gap-2 text-xs font-mono"
+          >
             <div>
-              <span className="text-emerald-300 font-bold">CSV EXPORT READY:</span>{' '}
+              <span className="text-emerald-300 font-bold">Spreadsheet CSV Exported:</span>{' '}
               <span className="text-white">
                 {lastSealsCsvMeta.filename} ({lastSealsCsvMeta.rowCount} rows · {lastSealsCsvMeta.snapshotLabel})
               </span>
@@ -1789,6 +1801,49 @@ export const GovernanceHealthHeatmap: React.FC<GovernanceHealthHeatmapProps> = (
               className="px-2 py-0.5 rounded bg-white/10 text-zinc-300 cursor-pointer"
             >
               Dismiss
+            </button>
+          </div>
+        )}
+
+        {lastPdfReceipt && (
+          <div
+            id="heatmap-forensic-pdf-receipt-banner"
+            className="p-3 rounded-xl bg-cyan-950/70 border border-cyan-400/60 flex flex-wrap items-center justify-between gap-2 text-xs font-mono text-cyan-200"
+          >
+            <div>
+              <span className="font-bold text-white">Court-Admissible jsPDF Sealed:</span>{' '}
+              <span>{lastPdfReceipt.documentId} &bull; SHA-256 {lastPdfReceipt.sha256Digest}</span>
+            </div>
+            <button
+              type="button"
+              onClick={() => setLastPdfReceipt(null)}
+              className="px-2 py-0.5 rounded bg-white/10 text-zinc-300 cursor-pointer"
+            >
+              Dismiss
+            </button>
+          </div>
+        )}
+
+        {sealOverlayMode === 'INTEGRATION_COVERAGE' && (
+          <div
+            id="integration-coverage-overlay-banner"
+            className="p-3 rounded-xl bg-cyan-950/60 border border-cyan-500/40 flex flex-wrap items-center justify-between gap-2 text-xs font-mono text-cyan-200"
+          >
+            <div className="flex items-center gap-2">
+              <span className="w-2 h-2 rounded-full bg-cyan-400 animate-ping" />
+              <span className="font-bold text-cyan-100">INTEGRATION COVERAGE OVERLAY ACTIVE:</span>
+              <span className="text-zinc-300">
+                18 Chambers live code path verification ({PRODUCTION_INTEGRATION_COVERAGE_SUMMARY.adapterLinesPct}% lines / {PRODUCTION_INTEGRATION_COVERAGE_SUMMARY.adapterBranchesPct}% branches).
+              </span>
+            </div>
+            <button
+              id="btn-open-d3-compliance-coverage-view"
+              type="button"
+              onClick={() => onNavigateToView && onNavigateToView('compliance-coverage')}
+              className="px-3 py-1 rounded-lg bg-purple-500/25 hover:bg-purple-500/40 border border-purple-400/50 text-purple-200 font-bold flex items-center gap-1.5 cursor-pointer transition"
+            >
+              <BarChart3 className="w-3.5 h-3.5 text-purple-300" />
+              <span>Inspect D3 Compliance Map</span>
             </button>
           </div>
         )}
@@ -1808,6 +1863,7 @@ export const GovernanceHealthHeatmap: React.FC<GovernanceHealthHeatmapProps> = (
           <div className="flex items-center gap-1.5">
             <button
               type="button"
+              id="btn-heatmap-zoom-in"
               onClick={handleSealsZoomIn}
               className="px-2.5 py-1 rounded bg-cyan-500/20 hover:bg-cyan-500/30 border border-cyan-400/50 text-cyan-200 font-bold flex items-center gap-1 cursor-pointer"
             >
@@ -1816,6 +1872,7 @@ export const GovernanceHealthHeatmap: React.FC<GovernanceHealthHeatmapProps> = (
             </button>
             <button
               type="button"
+              id="btn-heatmap-zoom-out"
               onClick={handleSealsZoomOut}
               className="px-2.5 py-1 rounded bg-cyan-500/20 hover:bg-cyan-500/30 border border-cyan-400/50 text-cyan-200 font-bold flex items-center gap-1 cursor-pointer"
             >
@@ -1824,6 +1881,7 @@ export const GovernanceHealthHeatmap: React.FC<GovernanceHealthHeatmapProps> = (
             </button>
             <button
               type="button"
+              id="btn-heatmap-pan-left"
               onClick={() => handleSealsPan(-48, 0)}
               className="px-2 py-1 rounded bg-white/5 hover:bg-white/10 border border-white/10 text-zinc-200 cursor-pointer"
             >
@@ -1831,6 +1889,7 @@ export const GovernanceHealthHeatmap: React.FC<GovernanceHealthHeatmapProps> = (
             </button>
             <button
               type="button"
+              id="btn-heatmap-pan-right"
               onClick={() => handleSealsPan(48, 0)}
               className="px-2 py-1 rounded bg-white/5 hover:bg-white/10 border border-white/10 text-zinc-200 cursor-pointer"
             >
@@ -1838,6 +1897,7 @@ export const GovernanceHealthHeatmap: React.FC<GovernanceHealthHeatmapProps> = (
             </button>
             <button
               type="button"
+              id="btn-heatmap-zoom-reset"
               onClick={handleSealsResetZoom}
               className="px-2.5 py-1 rounded bg-emerald-500/20 hover:bg-emerald-500/30 border border-emerald-400/50 text-emerald-200 font-bold flex items-center gap-1 cursor-pointer"
             >
@@ -1855,8 +1915,10 @@ export const GovernanceHealthHeatmap: React.FC<GovernanceHealthHeatmapProps> = (
           className="xl:col-span-8 relative overflow-hidden rounded-2xl border border-cyan-500/20"
         >
           <div
-            id="seals-d3-zoom-canvas"
+            id="heatmap-d3-zoom-canvas"
             data-zoom-scale={sealsZoomTransform.k.toFixed(2)}
+            data-pan-x={String(sealsZoomTransform.x)}
+            data-pan-y={String(sealsZoomTransform.y)}
             style={{
               transform: `translate(${sealsZoomTransform.x}px, ${sealsZoomTransform.y}px) scale(${sealsZoomTransform.k})`,
               transformOrigin: 'center top',
@@ -1974,6 +2036,7 @@ export const GovernanceHealthHeatmap: React.FC<GovernanceHealthHeatmapProps> = (
           <div className="p-4 rounded-2xl bg-black/60 border border-white/5 max-h-[580px] overflow-y-auto custom-scrollbar">
             <motion.div
               layout
+              id="heatmap-animated-grid-container"
               data-overlay-mode={sealOverlayMode}
               transition={{ layout: { duration: 0.25, ease: 'easeInOut' } }}
               className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-8 gap-2.5"
@@ -1990,7 +2053,6 @@ export const GovernanceHealthHeatmap: React.FC<GovernanceHealthHeatmapProps> = (
                   chamberCov.completenessStatus === 'PARTIAL_BRANCH_GAP' ||
                   chamberCov.uncoveredLineRanges !== 'None (100% E2E Verified)';
                 const isNodeUntestedPulsing =
-                  sealOverlayMode === 'INTEGRATION_COVERAGE' &&
                   hasUntestedCoverageGap &&
                   !interactedNodeIds.includes(node.id);
                 const nodeDossier =
@@ -2216,6 +2278,8 @@ export const GovernanceHealthHeatmap: React.FC<GovernanceHealthHeatmapProps> = (
                   <div className="flex items-center justify-between gap-1.5">
                     <button
                       type="button"
+                      id={`btn-open-forensic-dossier-${d.nodeId.toLowerCase()}`}
+                      data-testid={`btn-seals-node-dossier-${d.nodeId.toLowerCase()}`}
                       onClick={() => setSelectedNodeDossier(d)}
                       className="flex-1 px-2 py-1 rounded bg-cyan-500/20 hover:bg-cyan-500/30 border border-cyan-400/40 text-cyan-200 text-[10px] font-bold cursor-pointer"
                     >
@@ -2511,6 +2575,10 @@ export const GovernanceHealthHeatmap: React.FC<GovernanceHealthHeatmapProps> = (
             </div>
 
             <div className="space-y-2 text-xs text-zinc-300">
+              <p className="p-2 rounded bg-black/50 border border-white/5">
+                <span className="font-bold text-cyan-400">Dossier ID: </span>
+                <span className="text-emerald-300 font-bold">{selectedNodeDossier.dossierId}</span>
+              </p>
               <p className="p-2 rounded bg-black/50 border border-white/5">
                 <span className="font-bold text-cyan-400">Data Store Audit Artifact: </span>
                 <span>{selectedNodeDossier.statutoryRef || 'FIPS 140-3 Level 4 Certified Hardware Enclave'}</span>
