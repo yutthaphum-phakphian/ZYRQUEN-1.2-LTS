@@ -1,5 +1,5 @@
 /**
- * ZYRQUEN Ω∞ FROZEN v1.2 LTS — AUDIT LEDGER HOOK
+ * ZYRQUEN Ω∞ FROZEN v1.2.1 LTS — AUDIT LEDGER HOOK
  * 
  * Automatically records every forensic analysis step into the SystemEvents system:
  * - FORENSIC_STARTED

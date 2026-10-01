@@ -189,7 +189,7 @@ export const SovereignLoginLoader: React.FC<SovereignLoginLoaderProps> = ({
                     ZYRQUEN Ω∞ SOVEREIGN RUNTIME
                   </h1>
                   <span className="px-2 py-0.5 rounded bg-cyan-950 border-cyan-500/50 text-cyan-300 text-[10px] font-bold">
-                    FROZEN v1.2 LTS
+                    FROZEN v1.2.1 LTS
                   </span>
                 </div>
                 <p className="text-xs text-zinc-400">

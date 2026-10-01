@@ -31,7 +31,7 @@ import { copyToClipboard } from '../utils/clipboard';
 export const CANONICAL_FROZEN_SEALS = 14902;
 export const CANONICAL_BLOCK = 849202;
 export const CANONICAL_MERKLE_ROOT = '909ab814479844d8a14816bed34cdbb07528e18501da86fc4691763a43fa4c68';
-export const CANONICAL_VERSION = 'ZYRQUEN Ω∞ v4.16 PDPA FINAL (Frozen v1.2 LTS)';
+export const CANONICAL_VERSION = 'ZYRQUEN Ω∞ v4.16 PDPA FINAL (v1.2.1 LTS)';
 export const CANONICAL_PRINCIPAL = '🇹🇭 นายยุทธภูมิ พากเพียร (#EP-SOVEREIGN-01)';
 
 export interface MasterGateItem {
@@ -69,7 +69,7 @@ export const MASTER_22_GATES: MasterGateItem[] = [
   { id: 'gate-19', gateNumber: 19, code: 'GATE-19-PDPA-PII-MASKING', titleTh: 'ด่านแปลงข้อมูลนิรนาม PDPA ม.๒๖, ๒๘', titleEn: 'PDPA Zero-Knowledge PII Masking Gate', tier: 'Judicial ETDA', status: 'PASSED', latencyMs: 1.9, hash: 'sha256-b4223c014f22', descTh: 'ปกป้องข้อมูลส่วนบุคคลด้วยการเข้ารหัสคณิตศาสตร์ ZK-Proofs' },
   { id: 'gate-20', gateNumber: 20, code: 'GATE-20-ISO-27037-CHAIN-OF-CUSTODY', titleTh: 'ด่านห่วงโซ่พยานหลักฐาน ISO/IEC 27037', titleEn: 'ISO/IEC 27037 Chain of Custody Gate', tier: 'Judicial ETDA', status: 'PASSED', latencyMs: 2.5, hash: 'sha256-c5334d125033', descTh: 'การคงความถูกต้องของพยานแบบ DELETE NOTHING (V24 Archive)' },
   { id: 'gate-21', gateNumber: 21, code: 'GATE-21-12-STAGE-TRACE-REPLAY', titleTh: 'ด่านตรวจสอบการรันย้อนหลัง 12-Stage Trace', titleEn: '12-Stage Deterministic Trace Gate', tier: 'Judicial ETDA', status: 'PASSED', latencyMs: 4.2, hash: 'sha256-d6445e236144', descTh: 'สืบย้อนรอยธุรกรรม 142 ms บิตต่อบิตพร้อมพิมพ์เอกสารหลักฐาน' },
-  { id: 'gate-22', gateNumber: 22, code: 'GATE-22-FROZEN-LTS-SEAL', titleTh: 'ด่านปิดผนึกระบบถาวร (FROZEN v1.2 LTS)', titleEn: 'Permanent Frozen LTS Seal Gate', tier: 'Judicial ETDA', status: 'PASSED', latencyMs: 1.0, hash: 'sha256-e7556f347255', descTh: 'แช่แข็งสถานะระบบและปิดการแก้ไขรหัสหลัก 100% GREEN' },
+  { id: 'gate-22', gateNumber: 22, code: 'GATE-22-FROZEN-LTS-SEAL', titleTh: 'ด่านปิดผนึกระบบถาวร (FROZEN v1.2.1 LTS)', titleEn: 'Permanent Frozen LTS Seal Gate', tier: 'Judicial ETDA', status: 'PASSED', latencyMs: 1.0, hash: 'sha256-e7556f347255', descTh: 'แช่แข็งสถานะระบบและปิดการแก้ไขรหัสหลัก 100% GREEN' },
 ];
 
 interface Room05MasterPanelProps {

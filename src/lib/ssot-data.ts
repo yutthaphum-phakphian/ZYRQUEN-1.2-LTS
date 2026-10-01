@@ -39,7 +39,7 @@ export const SSOT = {
   cryoTemp: '14.98 mK',
   quorum: '10/10 REAL_HSM Unanimous',
   zeroDrift: '0.00% SSoT Δ0',
-  productVersion: 'ZYRQUEN Ω∞ v4.16 PDPA FINAL (Frozen v1.2 LTS)',
+  productVersion: 'ZYRQUEN Ω∞ v4.16 PDPA FINAL (v1.2.1 LTS)',
 };
 
 export const CHAMBERS_DATA: ChamberData[] = [

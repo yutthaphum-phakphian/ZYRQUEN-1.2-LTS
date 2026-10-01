@@ -120,7 +120,7 @@ export function generateMasterForensicAuditPdf(options: MasterAuditPackageOption
   doc.setFont('helvetica', 'bold');
   doc.setFontSize(9.5);
   doc.setTextColor(255, 255, 255);
-  doc.text('SOVEREIGN KERNEL v1.2 LTS • CERTIFICATE OF CRYPTOGRAPHIC NON-REPUDIATION', margin, y);
+  doc.text('SOVEREIGN KERNEL v1.2.1 LTS • CERTIFICATE OF CRYPTOGRAPHIC NON-REPUDIATION', margin, y);
   y += 5.5;
 
   doc.setFont('helvetica', 'normal');
@@ -351,7 +351,7 @@ export function generateMasterForensicAuditPdf(options: MasterAuditPackageOption
   doc.setFontSize(6);
   doc.setTextColor(148, 163, 184);
   doc.text(
-    'ZYRQUEN Ω∞ SOVEREIGN FROZEN v1.2 LTS • Master Forensic Audit Certificate • Official Immutable Artifact',
+    'ZYRQUEN Ω∞ SOVEREIGN FROZEN v1.2.1 LTS • Master Forensic Audit Certificate • Official Immutable Artifact',
     pageWidth / 2,
     pageHeight - 4.5,
     { align: 'center' }

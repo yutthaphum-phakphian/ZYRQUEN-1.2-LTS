@@ -169,7 +169,7 @@ export const FullForensicCourtDossierView: React.FC = () => {
     playAuditChime();
     const content = `================================================================================
 รายงานสรุปสำนวนพยานหลักฐานทางอิเล็กทรอนิกส์ฉบับสมบูรณ์ (FULL COURT DOSSIER)
-ระบบ ZYRQUEN Ω∞ FROZEN v1.2 LTS (CANONICAL SSoT)
+ระบบ ZYRQUEN Ω∞ FROZEN v1.2.1 LTS (CANONICAL SSoT)
 ================================================================================
 รหัสอ้างอิงใบรับรอง: ZQ-GOLD-DEP-849202-3908 (PDF/A-3 Archival Grade)
 Sovereign Principal: นายยุทธภูมิ พากเพียร (#EP-SOVEREIGN-01)
@@ -243,7 +243,7 @@ Sovereign Principal Architect (#EP-SOVEREIGN-01)
   const handleExportMasterMarkdownDossier = () => {
     playAuditChime();
     const mdContent = `# รายงานสรุปสำนวนพยานหลักฐานทางอิเล็กทรอนิกส์ฉบับสมบูรณ์ (Master Forensic Dossier)
-**ระบบ ZYRQUEN Ω∞ FROZEN v1.2 LTS: Sovereign Operating System and Civilization Intelligence Control Plane**  
+**ระบบ ZYRQUEN Ω∞ FROZEN v1.2.1 LTS: Sovereign Operating System and Civilization Intelligence Control Plane**  
 **ชั้นความลับ:** CONFIDENTIAL // SOVEREIGN EVIDENTIAL CLEARANCE LEVEL 5  
 **เอกสารอ้างอิงชั้นศาล:** DOSSIER-ZQ-2026-FROZEN-v1.2-MASTER  
 
@@ -251,10 +251,10 @@ Sovereign Principal Architect (#EP-SOVEREIGN-01)
 
 ## ๑. ถ้อยแถลงรับรองนิติวิทยาศาสตร์และบทสรุปผู้บริหาร (Executive & Forensic Attestation Statement)
 
-ข้าพเจ้า นายยุทธภูมิ พากเพียร ในฐานะผู้เชี่ยวชาญด้านนิติวิทยาศาสตร์ดิจิทัลและ Sovereign Principal Architect (#EP-SOVEREIGN-01) ขอให้การและรับรองต่อศาลว่า พยานหลักฐานดิจิทัลซึ่งสกัดจากระบบ **ZYRQUEN Ω∞ FROZEN v1.2 LTS** ณ บล็อกหมายเลข **#849,202** ได้ถูกตรึงสถานะไว้ด้วยกลไก Hardware Memory Firewall (Chamber 12) ซึ่งบังคับใช้สิทธิ์การเปลี่ยนแปลงข้อมูลเป็นศูนย์ ($SSoT\\text{ Mutation} = 0$) ข้อมูลทั้งหมดปราศจากการบิดเบือนแบบบิตต่อบิต (Bit-for-bit Determinism) และสอดคล้องตามหลักเกณฑ์การรับฟังพยานหลักฐานอิเล็กทรอนิกส์ ตามพระราชบัญญัติว่าด้วยธุรกรรมทางอิเล็กทรอนิกส์ พ.ศ. ๒๕๔๔ มาตรา ๙, ๒๖ และ ๒๘ ทุกประการ
+ข้าพเจ้า นายยุทธภูมิ พากเพียร ในฐานะผู้เชี่ยวชาญด้านนิติวิทยาศาสตร์ดิจิทัลและ Sovereign Principal Architect (#EP-SOVEREIGN-01) ขอให้การและรับรองต่อศาลว่า พยานหลักฐานดิจิทัลซึ่งสกัดจากระบบ **ZYRQUEN Ω∞ FROZEN v1.2.1 LTS** ณ บล็อกหมายเลข **#849,202** ได้ถูกตรึงสถานะไว้ด้วยกลไก Hardware Memory Firewall (Chamber 12) ซึ่งบังคับใช้สิทธิ์การเปลี่ยนแปลงข้อมูลเป็นศูนย์ ($SSoT\\text{ Mutation} = 0$) ข้อมูลทั้งหมดปราศจากการบิดเบือนแบบบิตต่อบิต (Bit-for-bit Determinism) และสอดคล้องตามหลักเกณฑ์การรับฟังพยานหลักฐานอิเล็กทรอนิกส์ ตามพระราชบัญญัติว่าด้วยธุรกรรมทางอิเล็กทรอนิกส์ พ.ศ. ๒๕๔๔ มาตรา ๙, ๒๖ และ ๒๘ ทุกประการ
 
 ### พารามิเตอร์ตรึงสถานะสัจธรรม (Canonical Frozen Baseline)
-* **ชื่อและรุ่นระบบ:** ZYRQUEN Ω∞ FROZEN v1.2 LTS (Single Source of Truth)
+* **ชื่อและรุ่นระบบ:** ZYRQUEN Ω∞ FROZEN v1.2.1 LTS (Single Source of Truth)
 * **ผู้มีอำนาจสูงสุด (Sovereign Principal):** นายยุทธภูมิ พากเพียร (#EP-SOVEREIGN-01)
 * **รหัสบล็อกเจเนซิส (Block Height):** #849,202 (Frozen Epoch)
 * **ตราประทับสัจธรรม (Canonical Seals):** 14,902 Seals (Verified & Sealed)

@@ -9,7 +9,7 @@ pragma solidity ^0.8.20;
  *      and FIPS 140-3 Level 4 HSM Quorum verification standards.
  */
 contract ZyrquenSovereignCoreV2 {
-    string public constant SYSTEM_STATUS = "LOCKED_FROZEN_v1.2_LTS";
+    string public constant SYSTEM_STATUS = "LOCKED_FROZEN_v1.2.1_LTS";
     string public constant SOVEREIGN_ID = "#EP-SOVEREIGN-01";
     string public constant SOVEREIGN_NAME = "Yuttaphum Phakphian";
     bytes32 public constant MERKLE_ROOT_GENESIS = 0x909ab814479844d8a14816bed34cdbb07528e18501da86fc4691763a43fa4c68;

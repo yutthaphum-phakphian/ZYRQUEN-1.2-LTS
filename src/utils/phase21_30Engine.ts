@@ -3,7 +3,7 @@
  * ZERO-TRUST / EXTENSION HARDENING ENGINE
  * 
  * Invariant Rule:
- * Frozen Core = v1.2 LTS (14,902 Seals, Block #849202, Merkle Root 909ab814...fa4c68)
+ * Frozen Core = v1.2.1 LTS (14,902 Seals, Block #849202, Merkle Root 909ab814...fa4c68)
  * SSoT Mutation Delta = 0, Baseline Drift = 0.00%
  * Candidate values (#940120, 24,012 Seals, fed40ab9...) MUST remain Candidate / Non-Canonical.
  */
@@ -267,7 +267,7 @@ export const INITIAL_INTEGRITY_TARGETS: IntegrityWatchTarget[] = [
   {
     targetId: 'INT-01-FROZEN-CORE',
     targetType: 'ARTIFACT',
-    targetName: 'Frozen Core v1.2 LTS (Block #849202)',
+    targetName: 'Frozen Core v1.2.1 LTS (Block #849202)',
     expectedSha256: '0x909ab814479844d8a14816bed34cdbb07528e18501da86fc4691763a43fa4c68',
     currentSha256: '0x909ab814479844d8a14816bed34cdbb07528e18501da86fc4691763a43fa4c68',
     tamperStatus: 'INTACT_SEALED',
@@ -703,10 +703,10 @@ class Phase21_30Engine {
 
     return {
       decision: 'DENIED_FAIL_CLOSED',
-      reason: 'Canonical Firewall Intercept: Frozen Core v1.2 LTS (Block #849202, 14,902 Seals) is cryptographically sealed and immutable. Candidate mutations rejected with mutationDelta = 0.',
+      reason: 'Canonical Firewall Intercept: Frozen Core v1.2.1 LTS (Block #849202, 14,902 Seals) is cryptographically sealed and immutable. Candidate mutations rejected with mutationDelta = 0.',
       mutationDelta: 0,
       canonicalFrozenState: {
-        frozenBaseline: 'v1.2 LTS',
+        frozenBaseline: 'v1.2.1 LTS',
         canonicalSeals: SYSTEM_METADATA.totalVerifiedSeals, // 14,902
         canonicalBlock: SYSTEM_METADATA.sealedBlock, // #849202
         canonicalMerkleRoot: SYSTEM_METADATA.merkleRoot, // 909ab814...fa4c68
@@ -735,7 +735,7 @@ class Phase21_30Engine {
 
       // ABSOLUTE FROZEN CANONICAL INVARIANT ASSERTION
       frozenCanonicalContract: {
-        frozenBaseline: 'v1.2 LTS',
+        frozenBaseline: 'v1.2.1 LTS',
         canonicalSeals: '14,902 / 14,902',
         canonicalBlock: '#849202',
         canonicalMerkleRoot: '909ab814479844d8a14816bed34cdbb07528e18501da86fc4691763a43fa4c68',

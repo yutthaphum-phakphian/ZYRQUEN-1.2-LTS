@@ -1,7 +1,7 @@
 import React, { createContext, useContext, useState, ReactNode } from 'react';
 
 /**
- * ZYRQUEN Ω∞ Sovereign React SDK & Hooks (LOCKED_FROZEN_v1.2_LTS)
+ * ZYRQUEN Ω∞ Sovereign React SDK & Hooks (LOCKED_FROZEN_v1.2.1_LTS)
  * Fully compliant with the Thai Electronic Transactions Act B.E. 2544 (Sections 9, 26, 28)
  * Designed for Service Layer integration with post-quantum signature verification frameworks.
  */
@@ -59,7 +59,7 @@ export const ZyrquenAuthProvider: React.FC<{ children: ReactNode }> = ({ childre
     complianceTier: 'Section_9_General',
     riskScore: 0.02,
     isAuthenticated: false,
-    systemStatus: 'LOCKED_FROZEN_v1.2_LTS',
+    systemStatus: 'LOCKED_FROZEN_v1.2.1_LTS',
     merkleGenesis: '0x909ab814479844d8a14816bed34cdbb07528e18501da86fc4691763a43fa4c68'
   });
 
@@ -84,7 +84,7 @@ export const ZyrquenAuthProvider: React.FC<{ children: ReactNode }> = ({ childre
           complianceTier: tier,
           riskScore: risk,
           isAuthenticated: tier !== 'QUARANTINED' && tier !== 'BLOCKED',
-          systemStatus: 'LOCKED_FROZEN_v1.2_LTS',
+          systemStatus: 'LOCKED_FROZEN_v1.2.1_LTS',
           merkleGenesis: authState.merkleGenesis
         };
 
@@ -104,7 +104,7 @@ export const ZyrquenAuthProvider: React.FC<{ children: ReactNode }> = ({ childre
       complianceTier: 'Section_9_General',
       riskScore: 0.02,
       isAuthenticated: false,
-      systemStatus: 'LOCKED_FROZEN_v1.2_LTS',
+      systemStatus: 'LOCKED_FROZEN_v1.2.1_LTS',
       merkleGenesis: authState.merkleGenesis
     });
   };

@@ -28,7 +28,7 @@ export class Module17LedgerV24 {
     [
       'EVID-TC03-RESTORE-849202',
       {
-        sys: 'ZYRQUEN_OMEGA_INFINITY_FROZEN_v1.2_LTS',
+        sys: 'ZYRQUEN_OMEGA_INFINITY_FROZEN_v1.2.1_LTS',
         merkle_root: frozenCore.merkleRoot,
         pqc_sig: '0xSPHINCS_PLUS_SLH_DSA_192_SIG_TC03_EQUILIBRIUM_RESTORED',
         seal_idx: 14902,
@@ -48,7 +48,7 @@ export class Module17LedgerV24 {
     [
       'EVID-CANONICAL-MERKLE-ROOT',
       {
-        sys: 'ZYRQUEN_OMEGA_INFINITY_FROZEN_v1.2_LTS',
+        sys: 'ZYRQUEN_OMEGA_INFINITY_FROZEN_v1.2.1_LTS',
         merkle_root: frozenCore.merkleRoot,
         pqc_sig: '0xDILITHIUM5_ML_DSA_87_SIG_EP_SOVEREIGN_01_CANONICAL_ANCHOR',
         seal_idx: 14902,
@@ -79,7 +79,7 @@ export class Module17LedgerV24 {
 
     // Default canonical payload for unregistered/dynamic valid IDs
     return {
-      sys: 'ZYRQUEN_OMEGA_INFINITY_FROZEN_v1.2_LTS',
+      sys: 'ZYRQUEN_OMEGA_INFINITY_FROZEN_v1.2.1_LTS',
       merkle_root: frozenCore.merkleRoot,
       pqc_sig: `0xPQC_SIG_FOR_${evidenceId.replace(/[^a-zA-Z0-9]/g, '_').toUpperCase()}`,
       seal_idx: 14902,

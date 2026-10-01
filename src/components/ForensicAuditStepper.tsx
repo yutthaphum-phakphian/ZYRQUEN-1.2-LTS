@@ -431,7 +431,7 @@ export function exportFull16StepSummaryPDF(steps: AuditStep[]) {
   doc.setFontSize(8.5);
   doc.setFont('helvetica', 'normal');
   doc.setTextColor(6, 182, 212);
-  doc.text('FROZEN v1.2 LTS • COURT-ADMISSIBLE MASTER FORENSIC DOSSIER', 14, 26);
+  doc.text('FROZEN v1.2.1 LTS • COURT-ADMISSIBLE MASTER FORENSIC DOSSIER', 14, 26);
 
   doc.setTextColor(180, 180, 180);
   doc.setFontSize(7.5);
@@ -704,7 +704,7 @@ export const ForensicAuditStepper: React.FC<ForensicAuditStepperProps> = ({
                 16-STEP FORENSIC AUDIT PIPELINE
               </span>
               <span className="px-2 py-0.5 rounded-full bg-cyan-500/20 border border-cyan-400/50 text-cyan-300 font-mono text-[9px] font-bold tracking-wider">
-                FROZEN v1.2 LTS
+                FROZEN v1.2.1 LTS
               </span>
               <span className="px-2 py-0.5 rounded-full bg-emerald-500/15 border border-emerald-500/40 text-emerald-300 font-mono text-[10px] font-bold shadow-[0_0_10px_rgba(16,185,129,0.2)]">
                 {progressPercent}% PASSED ({passedCount}/16)

@@ -1,5 +1,5 @@
 /**
- * ZYRQUEN Ω∞ FROZEN v1.2 LTS — P0 FROZEN CORE GUARD
+ * ZYRQUEN Ω∞ FROZEN v1.2.1 LTS — P0 FROZEN CORE GUARD
  * 
  * Strict Immutable Read-Only Boundary between UI / Runtime / Evidence and Canonical Core.
  * 
@@ -15,7 +15,7 @@ import { logTrace } from './telemetry';
 import { alertEngine } from './alertEngine';
 
 export interface P0CanonicalCoreState {
-  readonly version: 'v1.2 LTS';
+  readonly version: 'v1.2.1 LTS';
   readonly canonicalRoot: '909ab814479844d8a14816bed34cdbb07528e18501da86fc4691763a43fa4c68';
   readonly blockHeight: 849202;
   readonly canonicalSeals: 14902;
@@ -68,9 +68,9 @@ export interface P0AcceptanceTestResult {
 
 export class P0FrozenCoreGuard {
   // ==========================================
-  // HARDCODED IMMUTABLE CANONICAL CORE (v1.2 LTS)
+  // HARDCODED IMMUTABLE CANONICAL CORE (v1.2.1 LTS)
   // ==========================================
-  public static readonly VERSION = 'v1.2 LTS' as const;
+  public static readonly VERSION = 'v1.2.1 LTS' as const;
   public static readonly CANONICAL_ROOT = '909ab814479844d8a14816bed34cdbb07528e18501da86fc4691763a43fa4c68' as const;
   public static readonly BLOCK_HEIGHT = 849202 as const;
   public static readonly CANONICAL_SEALS = 14902 as const;
@@ -282,7 +282,7 @@ export class P0FrozenCoreGuard {
         expected: '#849202',
         actual: `#${this.BLOCK_HEIGHT}`,
         status: 'PASS',
-        auditEvidence: 'Fixed immutable block anchor sealed in Frozen v1.2 LTS baseline',
+        auditEvidence: 'Fixed immutable block anchor sealed in v1.2.1 LTS baseline',
       },
       {
         id: 'P0-03',

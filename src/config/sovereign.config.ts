@@ -2,7 +2,7 @@
  * ZYRQUEN Ω∞ Sovereign System Configuration
  * Single Source of Truth (SSoT Δ0)
  *
- * Engine Version: FROZEN_v1.2_LTS | SSoT Δ0 Baseline Drift 0.00%
+ * Engine Version: FROZEN_v1.2.1_LTS | SSoT Δ0 Baseline Drift 0.00%
  * Sovereign Principal Architect: นายยุทธภูมิ พากเพียร (#EP-SOVEREIGN-01)
  */
 

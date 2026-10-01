@@ -171,7 +171,7 @@ export const MerkleRootQrCodeModal: React.FC<MerkleRootQrCodeModalProps> = ({
 
   const cryptographicManifestPayload = JSON.stringify({
     system: 'ZYRQUEN Ω∞ SOVEREIGN KERNEL & TRUTH MATRIX',
-    version: 'v4.16 PDPA FINAL FROZEN v1.2 LTS',
+    version: 'v4.16 PDPA FINAL FROZEN v1.2.1 LTS',
     canonicalBlockHeight: currentBlockHeight,
     genesisMerkleRootHash: merkleRootHash,
     canonicalSealsCount: CANONICAL_SEALS,

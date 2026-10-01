@@ -52,7 +52,7 @@ export const CANONICAL_FROZEN_SEALS = 14902;
 export const CANONICAL_BLOCK = 849202;
 export const CANONICAL_MERKLE_ROOT = '909ab814479844d8a14816bed34cdbb07528e18501da86fc4691763a43fa4c68';
 export const CANONICAL_CERT = 'ZQ-GOLD-DEP-849202-3908';
-export const CANONICAL_VERSION = 'ZYRQUEN Ω∞ v4.16 PDPA FINAL (Frozen v1.2 LTS)';
+export const CANONICAL_VERSION = 'ZYRQUEN Ω∞ v4.16 PDPA FINAL (v1.2.1 LTS)';
 export const CANONICAL_PRINCIPAL = '🇹🇭 นายยุทธภูมิ พากเพียร (#EP-SOVEREIGN-01)';
 
 // Legal Hub Authority Records (Official Regulatory Links)
@@ -793,7 +793,7 @@ export const Room00MasterPanel: React.FC<Room00Props> = ({
           <div className="p-3 rounded-xl bg-black/40 border-amber-500/20">
             <span className="text-[10px] text-emerald-400/80 block uppercase tracking-wider font-semibold">Canonical SSoT Status</span>
             <div className="text-emerald-300 text-xs font-mono font-bold mt-1">
-              FROZEN v1.2 LTS (14,902 SEALS)
+              FROZEN v1.2.1 LTS (14,902 SEALS)
             </div>
           </div>
 

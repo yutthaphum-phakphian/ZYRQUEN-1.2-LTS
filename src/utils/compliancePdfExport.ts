@@ -48,7 +48,7 @@ export function generateCompliancePdfReport({
   doc.setFontSize(7.5);
   doc.setTextColor(170, 185, 205);
   doc.text(
-    `ETDA Standard Level 3+ • Royal Gazette Jurisdiction • Frozen Baseline v1.2 LTS • Merkle Root: ${SYSTEM_METADATA.merkleRoot.slice(0, 24)}...`,
+    `ETDA Standard Level 3+ • Royal Gazette Jurisdiction • Frozen Baseline v1.2.1 LTS • Merkle Root: ${SYSTEM_METADATA.merkleRoot.slice(0, 24)}...`,
     margin,
     y
   );

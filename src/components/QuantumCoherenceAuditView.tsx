@@ -102,7 +102,7 @@ ZYRQUEN Ω∞ — QUANTUM COHERENCE INDEX AUDIT REPORT (768 QUBITS)
 ========================================================================
 Sovereign Authority: นายยุทธภูมิ พากเพียร (#EP-SOVEREIGN-01)
 Genesis Merkle Root: 909ab814479844d8a14816bed34cdbb07528e18501da86fc4691763a43fa4c68
-Baseline Status: FROZEN v1.2 LTS (Delta=0, Drift=0.0000%)
+Baseline Status: FROZEN v1.2.1 LTS (Delta=0, Drift=0.0000%)
 Physical Cryo State: Helium-4 Subzero Loop at 14.98 mK
 
 1. OVERALL QUANTUM COHERENCE METRICS:

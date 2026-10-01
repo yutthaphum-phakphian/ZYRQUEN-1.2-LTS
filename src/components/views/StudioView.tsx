@@ -172,7 +172,7 @@ export const StudioView: React.FC<StudioViewProps> = ({
                 18 CHAMBERS MESH
               </span>
               <span className="px-3 py-1 rounded-full bg-amber-500/15 border border-amber-500/40 text-xs font-mono font-bold text-amber-300">
-                FROZEN v1.2 LTS
+                FROZEN v1.2.1 LTS
               </span>
             </div>
 

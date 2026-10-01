@@ -173,7 +173,7 @@ export const INITIAL_QUANTUM_PHASES: QuantumPhaseState[] = [
     nameEn: 'Immutable Sovereign Seal Finalization ♾️',
     quantumLatticeState: 'Final Multiverse Harmonic Unity |Ω∞⟩ Sealed',
     legalStatus: 'Permanent Admissible Sovereign Finality (Block #849202)',
-    runtimeIntegrity: 'Frozen Baseline v1.2 LTS Immutable Seal',
+    runtimeIntegrity: 'Frozen Baseline v1.2.1 LTS Immutable Seal',
     coherenceScore: 100.0,
     driftVariance: 0.0,
     status: 'HARMONIZED',

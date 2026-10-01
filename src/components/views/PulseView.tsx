@@ -1469,7 +1469,7 @@ export const PulseView: React.FC<PulseViewProps> = ({
       {/* 2D Spatiotemporal Entropy Distribution Heatmap (Recharts) */}
       <EntropyGridHeatmap />
 
-      {/* Sovereign Quantum Pack v1.2 LTS: Quantum Entropy Drift Recharts Component */}
+      {/* Sovereign Quantum Pack v1.2.1 LTS: Quantum Entropy Drift Recharts Component */}
       <div className="my-6">
         <QuantumEntropyDriftChart />
       </div>

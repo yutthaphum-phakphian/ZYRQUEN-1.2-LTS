@@ -1,5 +1,5 @@
 /**
- * ZYRQUEN Ω∞ FROZEN v1.2 LTS — EVIDENCE STATE MANAGER
+ * ZYRQUEN Ω∞ FROZEN v1.2.1 LTS — EVIDENCE STATE MANAGER
  * 
  * Central Authority for Evidence Lifecycle State Transitions & Immutable Event Ledger.
  * Enforces Zero-Trust state progression and records every state update with mutation_delta === 0.

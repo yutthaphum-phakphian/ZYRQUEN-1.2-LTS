@@ -56,7 +56,7 @@ export const CANONICAL_FROZEN_SEALS = 14902;
 export const CANONICAL_BLOCK = 849202;
 export const CANONICAL_MERKLE_ROOT = '909ab814479844d8a14816bed34cdbb07528e18501da86fc4691763a43fa4c68';
 export const CANONICAL_CERT = 'ZQ-GOLD-DEP-849202-3908';
-export const CANONICAL_VERSION = 'ZYRQUEN Ω∞ v4.16 PDPA FINAL (Frozen v1.2 LTS)';
+export const CANONICAL_VERSION = 'ZYRQUEN Ω∞ v4.16 PDPA FINAL (v1.2.1 LTS)';
 export const CANONICAL_PRINCIPAL = '🇹🇭 นายยุทธภูมิ พากเพียร (#EP-SOVEREIGN-01)';
 
 export interface G11ExecutionPipelineStage {

@@ -318,7 +318,7 @@ export const ControlPlaneHardeningSummary: React.FC = () => {
           <div className="text-zinc-400">CONTROL-PLANE HARDENING</div>
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-x-6 gap-y-1 pt-2 border-t border-white/10 text-[11px]">
             <div>STATUS: <strong className="text-emerald-300">PASS</strong></div>
-            <div>CANONICAL: <strong className="text-cyan-300">FROZEN (v1.2 LTS)</strong></div>
+            <div>CANONICAL: <strong className="text-cyan-300">FROZEN (v1.2.1 LTS)</strong></div>
             <div>GOVERNANCE CONTROLS: <strong className="text-emerald-300">ENFORCED (10/10 Matrix)</strong></div>
             <div>CUSTODIAN QUORUM: <strong className="text-amber-300">LOCKED (Physical Evidence Bound)</strong></div>
             <div>PROVENANCE: <strong className="text-amber-300">LOCKED</strong></div>

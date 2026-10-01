@@ -1,5 +1,5 @@
 /**
- * ZYRQUEN Ω∞ FROZEN v1.2 LTS — CENTRAL ZERO-TRUST POLICY ENGINE
+ * ZYRQUEN Ω∞ FROZEN v1.2.1 LTS — CENTRAL ZERO-TRUST POLICY ENGINE
  * 
  * Centralized Policy Enforcement Point (PEP) and Policy Decision Point (PDP).
  * Enforces a strict DEFAULT-DENY security architecture across all system operations:
@@ -67,7 +67,7 @@ export class PolicyEngine {
       id: 'POL-01-CANONICAL-IMMUNITY',
       name: 'Absolute Canonical Core Write Lock',
       operation: 'CANONICAL_WRITE',
-      description: 'Frozen v1.2 LTS Canonical Core (#849202, 14,902 Seals) is read-only.',
+      description: 'v1.2.1 LTS Canonical Core (#849202, 14,902 Seals) is read-only.',
       defaultAction: 'DENY',
       conditions: ['All write attempts to SSoT are permanently blocked.'],
     },
@@ -118,7 +118,7 @@ export class PolicyEngine {
         allowed: false,
         policyVersion: this.POLICY_VERSION,
         policyDigest: this.POLICY_DIGEST,
-        reasons: ['CRITICAL: Canonical Core (v1.2 LTS) write authority is permanently disabled. Zero mutations allowed.'],
+        reasons: ['CRITICAL: Canonical Core (v1.2.1 LTS) write authority is permanently disabled. Zero mutations allowed.'],
         ssotMutationDelta: 0,
         evaluatedAt: timestamp,
         traceId,

@@ -196,7 +196,7 @@ class OpenTelemetryCollector {
       attributes: sanitizeTelemetryAttributes({
         ...attributes,
         'app.environment': 'SOVEREIGN_PRODUCTION_CONTAINER',
-        'app.frozen_contract': 'v1.2 LTS (Canonical Block #849202)',
+        'app.frozen_contract': 'v1.2.1 LTS (Canonical Block #849202)',
       }),
       events: [{ name: 'SPAN_STARTED', timestamp: startWallTime }],
     };
@@ -328,7 +328,7 @@ class OpenTelemetryCollector {
       globalErrorRatePercent: errorRate,
       unauthorizedMutationsIntercepted: this.blockedMutationCount,
       ssotMutationDelta: 0,
-      frozenCoreBaseline: 'v1.2 LTS (#849202 - 14,902 Seals)',
+      frozenCoreBaseline: 'v1.2.1 LTS (#849202 - 14,902 Seals)',
       planeMetrics,
       recentSpans: this.spans.slice(0, 30),
     };

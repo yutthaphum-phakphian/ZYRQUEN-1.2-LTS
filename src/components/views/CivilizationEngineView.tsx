@@ -258,7 +258,7 @@ export const CivilizationEngineView: React.FC<{
     const exportData = {
       exportMetadata: {
         system: "ZYRQUEN Ω∞ SOVEREIGN WORLD ENGINE",
-        edition: "APEX ULTIMATE MASTER EDITION FROZEN v1.2 LTS",
+        edition: "APEX ULTIMATE MASTER EDITION FROZEN v1.2.1 LTS",
         exportTimestamp: new Date().toISOString(),
         principal: "นายยุทธภูมิ พากเพียร (#EP-SOVEREIGN-01)",
         genesisRoot: "909ab814479844d8a14816bed34cdbb07528e18501da86fc4691763a43fa4c68",
@@ -325,7 +325,7 @@ export const CivilizationEngineView: React.FC<{
               CIVILIZATION ENGINE &amp; MULTI-AGENT GOVERNANCE Ω∞
             </h1>
             <span className="px-2 py-0.5 rounded text-[9px] sm:text-[10px] font-bold bg-emerald-950/60 border border-emerald-500 text-emerald-400">
-              FROZEN v1.2 LTS
+              FROZEN v1.2.1 LTS
             </span>
             <span className="px-2 py-0.5 rounded text-[9px] sm:text-[10px] font-bold bg-[#0a0f1e] border border-[#D4AF37] text-[#D4AF37]">
               Ω600_1000 (400 TENANTS)

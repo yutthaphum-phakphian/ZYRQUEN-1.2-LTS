@@ -110,7 +110,7 @@ export const SOVEREIGN_DECREE_METADATA = {
   presidentNameEn: 'Yuttaphum Phakphian',
   presidentId: '#EP-SOVEREIGN-01',
   effectiveDate: '27 สิงหาคม 2026',
-  systemStatus: 'FROZEN v1.2 LTS (Active & Fully Operational)',
+  systemStatus: 'FROZEN v1.2.1 LTS (Active & Fully Operational)',
   totalNodes: 10,
   requiredQuorum: 8,
   governanceControlQuorum: 10, // 10/10 Governance Pass
@@ -148,8 +148,8 @@ x5Y7HkZpP98vYt2mBfKz9W0nQeLx8mR3jX7vY5nQ2w8mZ9pLk1vX0c4yH8nQ==
     contributions: [
       {
         year: '2026',
-        titleTh: 'สถาปนาสัญญาสถาปัตยกรรมแช่แข็ง Frozen v1.2 LTS',
-        titleEn: 'Enactment of Frozen v1.2 LTS Architectural Invariant',
+        titleTh: 'สถาปนาสัญญาสถาปัตยกรรมแช่แข็ง v1.2.1 LTS',
+        titleEn: 'Enactment of v1.2.1 LTS Architectural Invariant',
         detailTh: 'ล็อกสถานะ 14,902 Canonical Seals และตั้งค่า Zero-Mutation SSoT Rule',
         verifiedHash: '0x5a13396c129c611f15232fdaf54bfad00c4147ab',
       },
@@ -704,8 +704,8 @@ export function getMemberVitality(memberOrSlotId: CouncilMember | number): Guard
 export const CONSENSUS_LEDGER_RECORDS: ConsensusOverrideProposal[] = [
   {
     id: 'PROP-SOV-2026-001',
-    titleTh: 'สถาปนาการแช่แข็งโครงสร้างความจริง Frozen v1.2 LTS (Genesis Seal Lock)',
-    titleEn: 'Enactment of Frozen v1.2 LTS Architectural Zero-Mutation Invariant',
+    titleTh: 'สถาปนาการแช่แข็งโครงสร้างความจริง v1.2.1 LTS (Genesis Seal Lock)',
+    titleEn: 'Enactment of v1.2.1 LTS Architectural Zero-Mutation Invariant',
     category: 'FROZEN_CORE',
     categoryTh: 'แกนกลางสถาปัตยกรรมแช่แข็ง',
     proposedBy: {
@@ -730,7 +730,7 @@ export const CONSENSUS_LEDGER_RECORDS: ConsensusOverrideProposal[] = [
     detailedDescriptionEn:
       'Locking 14,902 canonical seals under zero-mutation single-source-of-truth governance. No state deviation is permissible without an authenticated 8/10 HSM consensus quorum.',
     impactAnalysisTh: 'ความคงตัว 100.0% ขจัดปัญหา State Mutation และรับประกันความมั่นคงระดับชาติ',
-    executionOutcomeTh: 'สถาปัตยกรรม Frozen v1.2 LTS ถูกผนึกสำเร็จ 100% สมาชิก 10/10 โหนดลงนามครบถ้วน',
+    executionOutcomeTh: 'สถาปัตยกรรม v1.2.1 LTS ถูกผนึกสำเร็จ 100% สมาชิก 10/10 โหนดลงนามครบถ้วน',
     memberVotes: [
       { slotId: 1, councilCode: 'TC-01', passportId: 'EP-SOVEREIGN-01', nameTh: 'นายยุทธภูมิ พากเพียร', nameEn: 'Yuttaphum Phakphian', vote: 'YES', signedAt: '2026-08-27 05:03:08 ICT', hsmSignatureDigest: '0x94f2c9e782613dbe4f1074a3f9e9841029471abef19385923058471928475928', latencyMs: 0.18, weight: 1 },
       { slotId: 2, councilCode: 'TC-02', passportId: 'EP-001', nameTh: 'พล. สมชาย พากเพียร', nameEn: 'Somchai Phakphian', vote: 'YES', signedAt: '2026-08-27 05:08:12 ICT', hsmSignatureDigest: '0xa482910485910294819203948102938401928340192834019283401928340192', latencyMs: 0.42, weight: 1 },

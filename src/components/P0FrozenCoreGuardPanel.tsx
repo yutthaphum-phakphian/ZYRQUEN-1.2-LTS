@@ -66,7 +66,7 @@ export const P0FrozenCoreGuardPanel: React.FC = () => {
                 P0 — FROZEN CORE GUARD HARDENING
               </h2>
               <span className="px-2.5 py-0.5 rounded-full bg-cyan-500/20 text-cyan-300 border-cyan-500/40 text-[10px] font-bold">
-                ZYRQUEN Ω∞ FROZEN v1.2 LTS
+                ZYRQUEN Ω∞ FROZEN v1.2.1 LTS
               </span>
               <span className="px-2.5 py-0.5 rounded-full bg-emerald-500/20 text-emerald-300 border-emerald-500/40 text-[10px] font-bold">
                 BYTE-FOR-BYTE IMMUTABLE

@@ -135,7 +135,7 @@ export const INITIAL_GITHUB_COMMITS: GitHubCommitRecord[] = [
   {
     sha: '849203a11974ef9a0134cd981b23450912f02931',
     shortSha: '849203a',
-    message: 'freeze(lts): lock sovereign kernel frozen v1.2 LTS & boundary Ω600_1000 strict',
+    message: 'freeze(lts): lock sovereign kernel frozen v1.2.1 LTS & boundary Ω600_1000 strict',
     author: 'นายยุทธภูมิ พากเพียร (#EP-SOVEREIGN-01)',
     timestamp: '2026-09-11T17:15:22Z',
     blockHeight: 849203,

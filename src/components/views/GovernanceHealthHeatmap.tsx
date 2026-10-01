@@ -1012,7 +1012,7 @@ export const GovernanceHealthHeatmap: React.FC<GovernanceHealthHeatmapProps> = (
 
         <div className="text-[11px] font-mono text-zinc-400 flex items-center gap-2 px-3 py-1">
           <span className="w-2 h-2 rounded-full bg-emerald-400 animate-ping" />
-          <span>FROZEN v1.2 LTS &bull; BLOCK #849202 &bull; Δ0.00% SSoT</span>
+          <span>FROZEN v1.2.1 LTS &bull; BLOCK #849202 &bull; Δ0.00% SSoT</span>
         </div>
       </div>
 

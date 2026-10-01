@@ -16,7 +16,7 @@ export interface SovereignPackageFile {
 export const ZYRQUEN_APEX_ULTIMATE_MANIFEST = {
   document_reference: 'DOC-SOV-HSM-1010-2026',
   security_level: 'SOVEREIGN LEVEL-Omega',
-  system_engine_version: 'FROZEN v1.2 LTS Active & Fully Operational',
+  system_engine_version: 'FROZEN v1.2.1 LTS Active & Fully Operational',
   verification_gate_status: 'PASSED',
   sovereign_lead_principal: 'นายยุทธภูมิ พากเพียร #EP-SOVEREIGN-01',
   timestamp_anchor: '14:43:43 ICT',
@@ -209,7 +209,7 @@ export const ZYRQUEN_APEX_ULTIMATE_MANIFEST = {
       { stage: 1, name: 'Genesis Init', status: 'PASS', detail: 'Block #849202 Root Verified Merkle 909ab8144798...' },
       { stage: 2, name: 'Load Package', status: 'PASS', detail: 'Audit + Gas + SLA Validated Treasury ฿4.23B Gas ฿12.5M 18 Chambers' },
       { stage: 3, name: 'Verify Quorum', status: 'PASS', detail: '10/10 Dilithium-5 Attested Gov 10/10 Phy 10/10 SUPER-MAJORITY' },
-      { stage: 4, name: 'Execute Deploy', status: 'PASS', detail: 'LOCKED_FROZEN v1.2 Target FROZEN v1.2 LTS Active' },
+      { stage: 4, name: 'Execute Deploy', status: 'PASS', detail: 'LOCKED_FROZEN v1.2 Target FROZEN v1.2.1 LTS Active' },
       { stage: 5, name: 'Forensic Proof', status: 'PASS', detail: 'Court Admissible Certification ETDA Sec 9/26/28 + PDPA Sec 37' },
     ],
   },

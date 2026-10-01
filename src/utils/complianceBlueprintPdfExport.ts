@@ -43,7 +43,7 @@ export function generateComplianceBlueprintPdf({
   doc.setFont('helvetica', 'bold');
   doc.setFontSize(14);
   doc.setTextColor(255, 255, 255);
-  doc.text('ZYRQUEN Ω∞ SOVEREIGN FROZEN v1.2 LTS', margin, y + 2);
+  doc.text('ZYRQUEN Ω∞ SOVEREIGN FROZEN v1.2.1 LTS', margin, y + 2);
   y += 7;
 
   doc.setFontSize(11);
@@ -191,7 +191,7 @@ export function generateComplianceBlueprintPdf({
   doc.setFontSize(6.8);
   doc.setTextColor(220, 230, 245);
   doc.text(
-    'I hereby certify that ZYRQUEN Ω∞ FROZEN v1.2 LTS strictly enforces all statutory provisions of Thai law (ETDA & PDPA)',
+    'I hereby certify that ZYRQUEN Ω∞ FROZEN v1.2.1 LTS strictly enforces all statutory provisions of Thai law (ETDA & PDPA)',
     margin + 4,
     y + 10
   );

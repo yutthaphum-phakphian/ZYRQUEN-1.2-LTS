@@ -127,7 +127,7 @@ export const ConsoleView: React.FC<ConsoleViewProps> = ({
   const [history, setHistory] = useState<Array<{ type: 'input' | 'output' | 'error' | 'success'; text: string; timestamp?: string }>>([
     {
       type: 'output',
-      text: 'ZYRQUEN Ω∞ FROZEN v1.2 LTS Sovereign Operating System and Civilization Intelligence Control Plane — SOVEREIGN CLI CONSOLE',
+      text: 'ZYRQUEN Ω∞ FROZEN v1.2.1 LTS Sovereign Operating System and Civilization Intelligence Control Plane — SOVEREIGN CLI CONSOLE',
       timestamp: '05:00:01 ICT',
     },
     {
@@ -313,8 +313,8 @@ export const ConsoleView: React.FC<ConsoleViewProps> = ({
       const signedLogDump = {
         header: '# ======================================================================',
         title: 'ZYRQUEN Ω∞ SOVEREIGN TERMINAL AUDIT LOG STREAM',
-        version: 'v1.2 LTS (LOCKED_FROZEN_v1.2_LTS)',
-        product: 'ZYRQUEN Ω∞ v4.16 PDPA FINAL (Frozen v1.2 LTS) | Engine v4.16 | NPM v4.16.0',
+        version: 'v1.2.1 LTS (LOCKED_FROZEN_v1.2.1_LTS)',
+        product: 'ZYRQUEN Ω∞ v4.16 PDPA FINAL (v1.2.1 LTS) | Engine v4.16 | NPM v4.16.0',
         canonical_boundary: 'Ω600_1000',
         boundary_scope: 'Ω601-Ω1000 Strict (400 Tenants LOCKED)',
         sovereign_principal: 'นายยุทธภูมิ พากเพียร (#EP-SOVEREIGN-01)',
@@ -372,7 +372,7 @@ export const ConsoleView: React.FC<ConsoleViewProps> = ({
     ];
 
     const forensicDump = {
-      system: 'ZYRQUEN Ω∞ SOVEREIGN FROZEN v1.2 LTS',
+      system: 'ZYRQUEN Ω∞ SOVEREIGN FROZEN v1.2.1 LTS',
       codename: 'ZYRQUEN_OMEGA_SOVEREIGN',
       exportTimestampIct: new Date().toLocaleDateString('en-GB') + ' ' + new Date().toLocaleTimeString('th-TH') + ' ICT',
       exportTimestampUtc: new Date().toUTCString(),
@@ -917,8 +917,8 @@ export const ConsoleView: React.FC<ConsoleViewProps> = ({
         ...prev,
         {
           type: 'success',
-          text: `ZYRQUEN Ω∞ FROZEN v1.2 LTS GOLD MASTER CERTIFICATE:
-  Release Baseline: FROZEN v1.2 LTS (Canonical SSoT)
+          text: `ZYRQUEN Ω∞ FROZEN v1.2.1 LTS GOLD MASTER CERTIFICATE:
+  Release Baseline: FROZEN v1.2.1 LTS (Canonical SSoT)
   Merkle Root: ${SYSTEM_METADATA.merkleRoot}
   Sovereign Principal: ${SYSTEM_METADATA.sovereignPrincipal}
   Platform Boundary: Ω601–Ω1000 (Strict Enforcement, 0 Ω1001+)

@@ -404,7 +404,7 @@ export const CANONICAL_COMMANDS: CommandItem[] = [
     id: 'event-hsm-ratify',
     title: '10/10 REAL_HSM Council Unanimous Ratification',
     subtitle: 'Supreme Sovereign + 9 Global Enclaves Attested',
-    description: 'สภาผู้พิทักษ์ Deca-Key Council ทั้ง 10 โหนดลงนามสัตยาบันรับรอง Golden Image v1.2 LTS อย่างเป็นเอกฉันท์',
+    description: 'สภาผู้พิทักษ์ Deca-Key Council ทั้ง 10 โหนดลงนามสัตยาบันรับรอง Golden Image v1.2.1 LTS อย่างเป็นเอกฉันท์',
     category: 'events',
     icon: ShieldCheck,
     tags: ['quorum', '10/10', 'council', 'ratification', 'สภาผู้พิทักษ์'],

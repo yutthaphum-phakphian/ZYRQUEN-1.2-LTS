@@ -6,7 +6,7 @@
  */
 
 export const frozenCore = {
-  version: 'v1.2 LTS PDPA FINAL FROZEN Ω600_1000',
+  version: 'v1.2.1 LTS PDPA FINAL FROZEN Ω600_1000',
   engine: 'v4.16',
   genesisBlock: ['#849202', '#849203', '#40202'],
   merkleRoot: '909ab814479844d8a14816bed34cdbb07528e18501da86fc4691763a43fa4c68',

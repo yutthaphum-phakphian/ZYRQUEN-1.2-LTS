@@ -1,6 +1,6 @@
 /**
  * ======================================================================
- * ZYRQUEN Ω∞ FROZEN v1.2 LTS — AUTHORITATIVE STATE & PROVENANCE REGISTRY
+ * ZYRQUEN Ω∞ FROZEN v1.2.1 LTS — AUTHORITATIVE STATE & PROVENANCE REGISTRY
  * Document Reference: DOC-SOV-HSM-1010-2026 | Cert: ZQ-GREEN-DEP-849202-3908
  * SSoT Authority: นายยุทธภูมิ พากเพียร (#EP-SOVEREIGN-01) | OMEGA-1 SUPREME
  * Security Level: SOVEREIGN LEVEL-Omega | Verification Gate: PASSED
@@ -29,8 +29,8 @@ export type ProvenanceClassification =
   | 'DUAL_PLANE_ATTESTED';
 
 export interface AuthoritativeSystemState {
-  readonly system: 'ZYRQUEN Ω∞ FROZEN v1.2 LTS';
-  readonly version: 'FROZEN v1.2 LTS Active & Fully Operational';
+  readonly system: 'ZYRQUEN Ω∞ FROZEN v1.2.1 LTS';
+  readonly version: 'FROZEN v1.2.1 LTS Active & Fully Operational';
   readonly engine: 'v4.16';
   readonly documentReference: 'DOC-SOV-HSM-1010-2026';
   readonly securityLevel: 'SOVEREIGN LEVEL-Omega';
@@ -54,7 +54,7 @@ export interface AuthoritativeSystemState {
     readonly writeAuthority: 'NONE';
     readonly manualOverride: 'NONE';
     readonly provenance: 'CANONICAL_FROZEN';
-    readonly status: 'LOCKED_FROZEN_v1.2_LTS';
+    readonly status: 'LOCKED_FROZEN_v1.2.1_LTS';
     readonly mainnet: 'MAINNET LIVE 100% GREEN PURE GREEN ALL GREEN LOCKEDFROZENv1.2_LTS';
   };
 
@@ -150,8 +150,8 @@ export interface AuthoritativeSystemState {
 }
 
 export const AUTHORITATIVE_STATE: AuthoritativeSystemState = Object.freeze({
-  system: 'ZYRQUEN Ω∞ FROZEN v1.2 LTS',
-  version: 'FROZEN v1.2 LTS Active & Fully Operational',
+  system: 'ZYRQUEN Ω∞ FROZEN v1.2.1 LTS',
+  version: 'FROZEN v1.2.1 LTS Active & Fully Operational',
   engine: 'v4.16',
   documentReference: 'DOC-SOV-HSM-1010-2026',
   securityLevel: 'SOVEREIGN LEVEL-Omega',
@@ -174,7 +174,7 @@ export const AUTHORITATIVE_STATE: AuthoritativeSystemState = Object.freeze({
     writeAuthority: 'NONE',
     manualOverride: 'NONE',
     provenance: 'CANONICAL_FROZEN' as const,
-    status: 'LOCKED_FROZEN_v1.2_LTS',
+    status: 'LOCKED_FROZEN_v1.2.1_LTS',
     mainnet: 'MAINNET LIVE 100% GREEN PURE GREEN ALL GREEN LOCKEDFROZENv1.2_LTS',
   }),
 

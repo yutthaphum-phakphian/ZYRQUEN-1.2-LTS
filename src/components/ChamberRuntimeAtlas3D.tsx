@@ -970,7 +970,7 @@ export const ChamberRuntimeAtlas3D: React.FC<ChamberRuntimeAtlas3DProps> = ({
               <span className="text-zinc-600">•</span>
               <span className="text-emerald-400 font-medium">10/10 REAL_HSM QUORUM</span>
               <span className="text-zinc-600">•</span>
-              <span className="text-[#D4AF37] font-medium">FROZEN v1.2 LTS</span>
+              <span className="text-[#D4AF37] font-medium">FROZEN v1.2.1 LTS</span>
             </div>
           </div>
         </div>

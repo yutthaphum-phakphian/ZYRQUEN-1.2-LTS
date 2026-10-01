@@ -329,7 +329,7 @@ export const Navigation: React.FC<NavigationProps> = ({
                 className="hidden md:inline-flex items-center gap-1 px-2 py-0.5 text-[10px] font-mono rounded-full bg-cyan-950/60 hover:bg-cyan-900/80 text-cyan-300 hover:text-cyan-100 border border-cyan-500/40 hover:border-cyan-400 shadow-sm shrink-0 cursor-pointer transition-all active:scale-95"
                 title="Sovereign Consensus Upgrade Cycle (อัปเกรดระบบ)"
               >
-                <span>FROZEN v1.2 LTS</span>
+                <span>v1.2.1 LTS</span>
                 <span className="text-[9px] px-1 rounded bg-cyan-500/20 text-cyan-200">🚀 อัปเกรด</span>
               </button>
               <span className="hidden 2xl:inline-flex px-2 py-0.5 text-[10px] font-mono rounded-full bg-emerald-950/60 text-emerald-300 border-emerald-500/40 shadow-sm items-center gap-1.5 shrink-0">

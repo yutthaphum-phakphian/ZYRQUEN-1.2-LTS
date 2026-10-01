@@ -42,7 +42,7 @@ export const SmartContractCoreViewer: React.FC = () => {
     securityOracleAddress: '0x70997970C51812dc3A010C7d01b50e0d17dc79C8',
     totalSeals: 14902,
     failClosedLocked: false,
-    systemStatus: 'LOCKED_FROZEN_v1.2_LTS',
+    systemStatus: 'LOCKED_FROZEN_v1.2.1_LTS',
     merkleRootGenesis: '0x909ab814479844d8a14816bed34cdbb07528e18501da86fc4691763a43fa4c68',
     activeCaller: '0xAb8483F64d9C6d1EcF9b849Ae677dD3315835cb2', // Default Sovereign
   });

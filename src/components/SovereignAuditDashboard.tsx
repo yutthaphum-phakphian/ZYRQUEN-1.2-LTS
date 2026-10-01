@@ -22,7 +22,7 @@ import { playTone, playAuditChime } from './AudioSynthesizer';
 import { copyToClipboard } from '../utils/clipboard';
 
 // # ======================================================================
-// #  ZYRQUEN Ω∞ SOVEREIGN AUDIT DASHBOARD — FROZEN v1.2 LTS
+// #  ZYRQUEN Ω∞ SOVEREIGN AUDIT DASHBOARD — FROZEN v1.2.1 LTS
 // #  Block: #849202 | Merkle: 909ab814... | Seals: 14,902 | Ω600_1000 = 400T
 // #  Cert: ZQ-GOLD-DEP-849202-3908 | SSoT Δ0.00% | 10/10 REAL_HSM
 // # ======================================================================
@@ -444,7 +444,7 @@ export const SovereignAuditDashboard: React.FC<{
               🏛️ SOVEREIGN AUDIT DASHBOARD Ω∞
             </span>
             <span className="px-2 py-0.5 rounded text-[11px] font-mono font-bold bg-[#070a12] text-[#D4AF37] border-[#D4AF37]/50">
-              💎 FROZEN v1.2 LTS
+              💎 FROZEN v1.2.1 LTS
             </span>
             <span className="px-2 py-0.5 rounded text-[11px] font-mono font-bold bg-[#070a12] text-emerald-400 border-emerald-500/50">
               👑 10/10 REAL_HSM
@@ -821,7 +821,7 @@ export const SovereignAuditDashboard: React.FC<{
                 <div className="space-y-1.5 text-zinc-300">
                   <div className="flex justify-between py-1 border-b border-white/5">
                     <span className="text-zinc-400">Product:</span>
-                    <span className="text-white">ZYRQUEN Ω∞ v4.16 PDPA FINAL (Frozen v1.2 LTS)</span>
+                    <span className="text-white">ZYRQUEN Ω∞ v4.16 PDPA FINAL (v1.2.1 LTS)</span>
                   </div>
                   <div className="flex justify-between py-1 border-b border-white/5">
                     <span className="text-zinc-400">Genesis Blocks:</span>
@@ -1095,7 +1095,7 @@ export const SovereignAuditDashboard: React.FC<{
       <div className="p-3 sm:p-4 bg-[#0a0f1e] border-t border-[#06B6D4]/30 flex flex-col sm:flex-row items-center justify-between gap-2 text-[11px] font-mono text-zinc-400">
         <div>
           # ======================================================================
-          <span className="text-zinc-500 ml-2">ZYRQUEN Ω∞ APEX ULTIMATE MASTER EDITION FROZEN v1.2 LTS</span>
+          <span className="text-zinc-500 ml-2">ZYRQUEN Ω∞ APEX ULTIMATE MASTER EDITION FROZEN v1.2.1 LTS</span>
         </div>
         <div className="flex items-center gap-3">
           <span className="text-[#06B6D4]">Boundary: Ω600_1000</span>

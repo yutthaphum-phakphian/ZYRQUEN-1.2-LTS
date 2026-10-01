@@ -16,7 +16,7 @@ export interface CivilizationContinuumNode {
 export function deploySupremeWarpCivilizationEngine() {
   return {
     protocol: "Ω∞ Supreme Warp Civilization Engine",
-    version: "FROZEN v1.2 LTS",
+    version: "FROZEN v1.2.1 LTS",
     warpStream: ">12,450 qOps/s Across All Continua",
     continuaCount: 6,
     totalTenants: "400 Tenants (Ω600_1000 LOCKED)",

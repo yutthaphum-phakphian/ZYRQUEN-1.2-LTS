@@ -53,7 +53,7 @@ export const fetchLatestCommit = async (): Promise<GitHubCommitInfo> => {
       shortHash: '909ab81',
       author: 'นายยุทธภูมิ พากเพียร (#EP-SOVEREIGN-01)',
       date: '2026-09-16T19:00:00+07:00',
-      message: 'LOCKED_FROZEN_v1.2_LTS Canonical Baseline',
+      message: 'LOCKED_FROZEN_v1.2.1_LTS Canonical Baseline',
       commitUrl: REPO_URL,
       status: 'CACHED_FALLBACK',
     };

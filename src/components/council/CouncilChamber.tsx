@@ -230,7 +230,7 @@ export const CouncilChamber: React.FC<CouncilChamberProps> = ({ onSelectMember }
               <Shield className="w-4 h-4 text-teal-400" />
               Δ0.00% SSoT
             </div>
-            <div className="text-[9px] text-zinc-500">FROZEN v1.2 LTS (14,902)</div>
+            <div className="text-[9px] text-zinc-500">FROZEN v1.2.1 LTS (14,902)</div>
           </div>
         </div>
       </div>

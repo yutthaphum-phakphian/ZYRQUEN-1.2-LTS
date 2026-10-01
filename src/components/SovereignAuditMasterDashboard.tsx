@@ -116,7 +116,7 @@ export const SovereignAuditMasterDashboard: React.FC<{ className?: string }> = (
                 Sovereign Post-Patch Audit & Compliance Master Deck
               </h2>
               <span className="text-[10px] font-semibold text-emerald-300 bg-emerald-950/80 px-2.5 py-0.5 rounded-full border-emerald-500/40">
-                LOCKED_FROZEN v1.2 LTS
+                LOCKED_FROZEN v1.2.1 LTS
               </span>
             </div>
             <div className="text-xs text-zinc-400 mt-1 flex flex-wrap items-center gap-2">

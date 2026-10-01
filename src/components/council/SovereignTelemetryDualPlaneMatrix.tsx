@@ -93,7 +93,7 @@ export const SovereignTelemetryDualPlaneMatrix: React.FC = () => {
     const payload = {
       document_reference: "DOC-SOV-HSM-1010-2026",
       security_level: "SOVEREIGN LEVEL-Omega",
-      system_engine_version: "FROZEN v1.2 LTS Active & Fully Operational",
+      system_engine_version: "FROZEN v1.2.1 LTS Active & Fully Operational",
       verification_gate_status: "PASSED",
       sovereign_lead_principal: "นายยุทธภูมิ พากเพียร #EP-SOVEREIGN-01",
       timestamp_anchor: "14:43:43 ICT",
@@ -825,7 +825,7 @@ Issued At: ${new Date().toISOString()}
               step: '4',
               name: 'Execute Deploy',
               detail: 'LOCKED_FROZEN v1.2 Target',
-              sub: 'FROZEN v1.2 LTS Active & Fully Operational',
+              sub: 'FROZEN v1.2.1 LTS Active & Fully Operational',
             },
             {
               step: '5',
@@ -1065,7 +1065,7 @@ Issued At: ${new Date().toISOString()}
             <span>ZQ-GREEN-DEP-849202-3908</span>
           </div>
           <div className="leading-relaxed text-zinc-300">
-            DOC-SOV-HSM-1010-2026 | SOVEREIGN LEVEL-Omega | FROZEN v1.2 LTS Active | Genesis #849202 | 14,902 Frozen Seals | Δ0.00% | 10/10 Governance 10/10 Physical | T_cryo {jitterValues.tCryoMean} mK | t_bus {jitterValues.tBus}ms | ZQ-GREEN-DEP-849202-3908 | นายยุทธภูมิ พากเพียร #EP-SOVEREIGN-01 | PURE GREEN ALL GREEN | Attested Supreme Sovereign Principal Architect &amp; Genesis Custodian
+            DOC-SOV-HSM-1010-2026 | SOVEREIGN LEVEL-Omega | FROZEN v1.2.1 LTS Active | Genesis #849202 | 14,902 Frozen Seals | Δ0.00% | 10/10 Governance 10/10 Physical | T_cryo {jitterValues.tCryoMean} mK | t_bus {jitterValues.tBus}ms | ZQ-GREEN-DEP-849202-3908 | นายยุทธภูมิ พากเพียร #EP-SOVEREIGN-01 | PURE GREEN ALL GREEN | Attested Supreme Sovereign Principal Architect &amp; Genesis Custodian
           </div>
         </div>
       </section>

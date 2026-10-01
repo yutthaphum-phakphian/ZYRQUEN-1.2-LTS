@@ -2,7 +2,7 @@
  * ZYRQUEN Ω∞ — FIOS TREASURY BUDGET & AI THREAT FORENSIC AUDIT PACKAGE
  * Sovereign Architect: นายยุทธภูมิ พากเพียร (#EP-SOVEREIGN-01)
  * Compliance: Thai Electronic Transactions Act B.E. 2544 (Sections 9, 26, 28) & PDPA B.E. 2562
- * Specification Standard: LOCKED_FROZEN_v1.2_LTS (SSoT Δ0 - Zero Drift 0.00%)
+ * Specification Standard: LOCKED_FROZEN_v1.2.1_LTS (SSoT Δ0 - Zero Drift 0.00%)
  */
 
 import jsPDF from 'jspdf';
@@ -144,7 +144,7 @@ export function computeTreasuryBudget(
   const isZeroDriftCompliant = driftDeltaThb < 1e-6;
 
   return {
-    systemStatus: 'LOCKED_FROZEN_v1.2_LTS',
+    systemStatus: 'LOCKED_FROZEN_v1.2.1_LTS',
     canonicalBlock: CANONICAL_GENESIS_BLOCK,
     genesisMerkleRoot: CANONICAL_MERKLE_ROOT,
     sovereignPrincipal: 'นายยุทธภูมิ พากเพียร (#EP-SOVEREIGN-01)',

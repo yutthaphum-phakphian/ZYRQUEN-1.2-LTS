@@ -102,7 +102,7 @@ export const FrozenIntegrityReconciliationGate: React.FC = () => {
                 Frozen Integrity Guard & Baseline Reconciliation Gate
               </h3>
               <span className="text-[10px] px-2 py-0.5 rounded-full bg-cyan-500/20 text-cyan-300 border-cyan-500/40 font-bold">
-                FROZEN v1.2 LTS
+                FROZEN v1.2.1 LTS
               </span>
             </div>
             <p className="text-xs text-cyan-200/70 font-serif mt-0.5">
@@ -325,7 +325,7 @@ export const FrozenIntegrityReconciliationGate: React.FC = () => {
       <div className="p-4 rounded-2xl bg-white/[0.02] border-white/8 space-y-2 text-xs">
         <div className="font-bold text-zinc-300 text-[11px] uppercase tracking-wider flex items-center gap-2">
           <Eye className="w-3.5 h-3.5 text-cyan-400" />
-          <span>FROZEN v1.2 LTS INTEGRITY INVARIANTS</span>
+          <span>FROZEN v1.2.1 LTS INTEGRITY INVARIANTS</span>
         </div>
         <ul className="grid grid-cols-1 md:grid-cols-2 gap-2 text-zinc-400 text-[11px] font-sans">
           <li className="flex items-start gap-2">

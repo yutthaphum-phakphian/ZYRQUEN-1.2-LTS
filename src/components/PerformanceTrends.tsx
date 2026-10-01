@@ -52,7 +52,7 @@ export const PerformanceTrends: React.FC = () => {
       const timeStr = ts.toTimeString().split(' ')[0];
       const progress = (12 - i) / 12;
       
-      // Gradually improving metrics reflecting v1.2 LTS optimization
+      // Gradually improving metrics reflecting v1.2.1 LTS optimization
       const cpu = +(76 - progress * 28 + (Math.random() * 4 - 2)).toFixed(1);
       const latency = +(410 - progress * 125 + (Math.random() * 15 - 7)).toFixed(1);
       const throughput = Math.floor(980 + progress * 260 + (Math.random() * 30 - 15));

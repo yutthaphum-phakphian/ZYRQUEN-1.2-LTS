@@ -132,7 +132,7 @@ export function exportSignedAnomalyReportJson(
   const payload: SignedAnomalyAuditReport = {
     specification: 'ZYRQUEN_TELEMETRY_ANOMALY_AUDIT_REPORT_V1.2_LTS',
     reportId,
-    status: 'PDPA FINAL FROZEN v1.2 LTS | 10/10 PASSED | 100% GREEN | Δ0.00%',
+    status: 'PDPA FINAL FROZEN v1.2.1 LTS | 10/10 PASSED | 100% GREEN | Δ0.00%',
     generatedTimestampUtc: timeUtc,
     generatedTimestampIct: timeIct,
     sovereignPrincipal: {

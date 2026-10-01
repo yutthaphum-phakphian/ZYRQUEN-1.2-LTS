@@ -43,7 +43,7 @@ export interface SystemAuditReportProps {
 }
 
 /**
- * SYSTEM AUDIT REPORT — ZYRQUEN Ω∞ SOVEREIGN FROZEN v1.2 LTS
+ * SYSTEM AUDIT REPORT — ZYRQUEN Ω∞ SOVEREIGN FROZEN v1.2.1 LTS
  * 
  * STRICT INVARIANTS:
  * - Read-only snapshot of system health generated from INITIAL_HARDWARE_SNAPSHOTS & systemEvents.
@@ -89,7 +89,7 @@ export const SystemAuditReport: React.FC<SystemAuditReportProps> = ({
           <div>
             <div className="flex items-center gap-2 flex-wrap">
               <span className="text-white font-bold text-base sm:text-lg tracking-wider">
-                ZYRQUEN Ω∞ SOVEREIGN FROZEN v1.2 LTS
+                ZYRQUEN Ω∞ SOVEREIGN FROZEN v1.2.1 LTS
               </span>
               <span className="px-2.5 py-0.5 rounded-full text-[10px] font-bold bg-emerald-500/20 text-emerald-300 border-emerald-500/40">
                 AUDIT SNAPSHOT

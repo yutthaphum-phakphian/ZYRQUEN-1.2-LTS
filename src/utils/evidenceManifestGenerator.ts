@@ -108,7 +108,7 @@ export function generateEvidenceManifest(
         label: 'Frozen Core Genesis Anchor #849202',
         attestationSignature: 'SIG-PQC-GENESIS-01-DILITHIUM5',
         timestamp: '2026-08-27T05:00:00.000Z',
-        payloadDigest: 'SHA256(SSoT_FROZEN_v1.2_LTS_ROOT)',
+        payloadDigest: 'SHA256(SSoT_FROZEN_v1.2.1_LTS_ROOT)',
       },
       {
         leafIndex: 1,

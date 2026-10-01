@@ -483,7 +483,7 @@ export const Chamber11QuantumRadar: React.FC = () => {
     playAuditChime();
     const results = {
       radar_system: 'Chamber 11: 8K Quantum Radar Threat Detection Core',
-      target_system: 'ZYRQUEN Ω∞ (LOCKED_FROZEN_v1.2_LTS)',
+      target_system: 'ZYRQUEN Ω∞ (LOCKED_FROZEN_v1.2.1_LTS)',
       block_height: 849202,
       coherence_pct: 99.992,
       cryo_temp_mk: 14.98,

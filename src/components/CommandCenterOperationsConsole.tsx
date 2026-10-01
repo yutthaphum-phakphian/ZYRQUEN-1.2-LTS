@@ -838,7 +838,7 @@ export function CommandCenterOperationsConsole({
         'out',
         [
           `[READ STATUS — SOURCE: ZYRQUEN_LIVE | PROVENANCE: OBSERVED]`,
-          `  Engine:      ZYRQUEN Ω∞ Sovereign World Engine (Frozen v1.2 LTS)`,
+          `  Engine:      ZYRQUEN Ω∞ Sovereign World Engine (v1.2.1 LTS)`,
           `  Core Lock:   ${CORE_GUARD_INFO.status}`,
           `  Block:       #${CORE_GUARD_INFO.block} (Local #849205) | Drift: ${CORE_GUARD_INFO.drift}`,
           `  Principal:   นายยุทธภูมิ พากเพียร (${CORE_GUARD_INFO.principal})`,

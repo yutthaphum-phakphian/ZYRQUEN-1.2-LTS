@@ -48,7 +48,7 @@ interface FirmwareLifecycleManagerProps {
 const CANONICAL_GENESIS_ROOT = '909ab814479844d8a14816bed34cdbb07528e18501da86fc4691763a43fa4c68';
 const CANONICAL_SEALS_COUNT = 14902;
 const CANONICAL_BLOCK_HEIGHT = '#849202';
-const PRODUCT_VERSION = 'v4.16 PDPA FINAL (Frozen v1.2 LTS)';
+const PRODUCT_VERSION = 'v4.16 PDPA FINAL (v1.2.1 LTS)';
 
 const VERIFICATION_STAGES = [
   'Stage 1: Genesis Merkle Root & Bootloader Hash (909ab814...fa4c68)',

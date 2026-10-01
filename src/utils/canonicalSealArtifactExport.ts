@@ -204,7 +204,7 @@ export function buildCanonicalSealArtifact(): DigitallySignedSealArtifact {
       platformBoundary: 'Ω601–Ω1000 Strict Enforcement',
       boundaryAlias: 'Ω600_1000',
       tenantsLockedCount: 400,
-      ssotStatus: 'LOCKED_FROZEN_v1.2_LTS',
+      ssotStatus: 'LOCKED_FROZEN_v1.2.1_LTS',
       ssotMutationDelta: SSOT_MUTATION,
       baselineDriftPercentage: BASELINE_DRIFT,
       writeProtection: 'HARDWARE_WRITE_FIREWALL_READ_ONLY_LOCKED',

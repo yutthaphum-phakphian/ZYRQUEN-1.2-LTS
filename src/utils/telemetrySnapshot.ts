@@ -420,7 +420,7 @@ export function exportAllHardwareSnapshotsCsv(snapshots: HardwareSnapshot[]): vo
   URL.revokeObjectURL(url);
 }
 
-// ── SOVEREIGN QUANTUM PACK v1.2 LTS METRIC EXPORTS ──
+// ── SOVEREIGN QUANTUM PACK v1.2.1 LTS METRIC EXPORTS ──
 
 export interface TelemetrySnapshot {
   timestamp: number;

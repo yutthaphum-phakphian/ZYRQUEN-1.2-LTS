@@ -7,7 +7,7 @@ export const FULL_DECA_HSM_RESTORED_DATA = {
   omegaEngine: {
     name: "AuraEngine v4.2",
     kernel: "ZYRQUEN Ω∞ Sovereign World Engine",
-    profile: "Frozen v1.2 LTS (Quantaris)",
+    profile: "v1.2.1 LTS (Quantaris)",
     genesisBlock: 849202,
     sovereignPrincipal: "นายยุทธภูมิ พากเพียร (#EP-SOVEREIGN-01)",
     merkleCathedralRoot: "909ab814479844d8a14816bed34cdbb07528e18501da86fc4691763a43fa4c68",
@@ -390,7 +390,7 @@ export const FULL_DECA_HSM_RESTORED_DATA = {
       loadPct: 100,
       tempC: 21,
       status: "Nominal",
-      description: "Frozen v1.2 LTS Sovereign Baseline on Genesis Block #849202 (Δ0.00% Zero Drift)",
+      description: "v1.2.1 LTS Sovereign Baseline on Genesis Block #849202 (Δ0.00% Zero Drift)",
       descriptionTh: "แกนล็อกถาวร ห้ามแก้ไขหรือกลายพันธุ์เด็ดขาด (Zero Core Mutation)"
     }
   ]

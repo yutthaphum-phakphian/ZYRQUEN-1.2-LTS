@@ -126,12 +126,12 @@ export const JUDICIAL_GATES_15_22: JudicialGate[] = [
     id: 'GATE-22',
     gateNumber: 22,
     name: 'Permanent Frozen LTS Seal Gate',
-    thaiName: 'ด่านปิดผนึกตราประทับสัจธรรมถาวร FROZEN v1.2 LTS',
+    thaiName: 'ด่านปิดผนึกตราประทับสัจธรรมถาวร FROZEN v1.2.1 LTS',
     latency: '1.0 ms',
     statutoryBase: 'SSoT Kernel Frozen Specification v1.2',
     thaiLawSection: 'การปิดผนึกเอกสารพยานสัจธรรมสูงสุด (Final Conclusive Seal)',
     status: 'PASSED',
-    description: 'ปิดผนึกตราประทับทองคำถาวรสถานะ FROZEN v1.2 LTS บน Genesis Block #849,202 ห้ามมิให้มีการเปลี่ยนแปลงแก้ไขใดๆ อีกต่อไป (Mutation Authority = 0)',
+    description: 'ปิดผนึกตราประทับทองคำถาวรสถานะ FROZEN v1.2.1 LTS บน Genesis Block #849,202 ห้ามมิให้มีการเปลี่ยนแปลงแก้ไขใดๆ อีกต่อไป (Mutation Authority = 0)',
     forensicProof: 'SSoT Mutation Delta = 0, Baseline Drift = 0.0000%, Final Ratified Stamp',
     courtAdmissibility: 'เป็นพยานหลักฐานสมบูรณ์ยุติ (Conclusive Evidence) ของระบบอธิปไตย'
   }
@@ -166,7 +166,7 @@ export const JudicialEtdaDeepDive: React.FC = () => {
   const handleExportJudicialDossier = () => {
     playAuditChime();
     const content = `========================================================================
-ZYRQUEN Ω v1.2 LTS — JUDICIAL ETDA & EVIDENCE AUDIT CERTIFICATE
+ZYRQUEN Ω v1.2.1 LTS — JUDICIAL ETDA & EVIDENCE AUDIT CERTIFICATE
 ========================================================================
 Sovereign Authority: นายยุทธภูมิ พากเพียร (#EP-SOVEREIGN-01)
 Genesis Anchor: Block #849,202 | 14,902 Canonical Seals
@@ -174,7 +174,7 @@ Legal Framework: Thai Electronic Transactions Act B.E. 2544 (Sections 9, 26, 28)
 Privacy Standard: Thai Personal Data Protection Act B.E. 2562 (Section 37)
 Forensic Standard: ISO/IEC 27037:2012 Digital Evidence Chain of Custody
 Cryptographic Baseline: Post-Quantum NIST Category 5 (ML-DSA-87 / FIPS 204)
-Kernel Status: FROZEN v1.2 LTS (Delta=0, Drift=0.0000%)
+Kernel Status: FROZEN v1.2.1 LTS (Delta=0, Drift=0.0000%)
 
 EVALUATION SUMMARY OF JUDICIAL ETDA TIER (GATES 15–22):
 ${JUDICIAL_GATES_15_22.map(

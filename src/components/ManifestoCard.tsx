@@ -46,7 +46,7 @@ export const ManifestoCard: React.FC<ManifestoCardProps> = ({ onOpenCertificate 
   const METADATA = {
     name: systemMetadata.name || 'ZYRQUEN Ω∞ Sovereign Kernel & Truth Matrix',
     description: systemMetadata.description || 'Sovereign Operating System with 6-Stage DAG Automation Plane',
-    edition: SYSTEM_METADATA?.version || SSOT.productVersion || 'APEX ULTIMATE FULL EDITION — LOCKED_FROZEN_v1.2_LTS',
+    edition: SYSTEM_METADATA?.version || SSOT.productVersion || 'APEX ULTIMATE FULL EDITION — LOCKED_FROZEN_v1.2.1_LTS',
     principal: SSOT.sovereignPrincipal || SYSTEM_METADATA.sovereignPrincipal || 'นายยุทธภูมิ พากเพียร (ID: #EP-SOVEREIGN-01)',
     platformBoundary: SYSTEM_METADATA.platformBoundary || 'Ω601–Ω1000 | Strict Enforcement',
     classification: 'Sovereign Immutable Kernel — Single Source of Truth (SSoT)',
@@ -75,7 +75,7 @@ export const ManifestoCard: React.FC<ManifestoCardProps> = ({ onOpenCertificate 
     playTone(880, 0.05);
     const manifestoFullText = `================================================================================
 ZYRQUEN Ω∞ SOVEREIGN MANIFESTO & TRUTH MATRIX
-APEX ULTIMATE FULL EDITION — LOCKED_FROZEN_v1.2_LTS
+APEX ULTIMATE FULL EDITION — LOCKED_FROZEN_v1.2.1_LTS
 ================================================================================
 Sovereign Principal: ${METADATA.principal}
 Clearance Level: OMEGA-1 SUPREME CLEARANCE
@@ -134,7 +134,7 @@ Signed and Sealed by Dilithium-5 (ML-DSA-87) Key Ceremony #EP-SOVEREIGN-01
   const handleDownloadAscii = () => {
     playTone(720, 0.05);
     const content = `-----BEGIN ZYRQUEN OMEGA SOVEREIGN MANIFESTO-----
-Version: ZYRQUEN v4.16 LOCKED_FROZEN_v1.2_LTS
+Version: ZYRQUEN v4.16 LOCKED_FROZEN_v1.2.1_LTS
 Principal: Yuttaphum Phakphian (#EP-SOVEREIGN-01)
 Authority-Clearance: OMEGA-1 SUPREME CLEARANCE
 Block-Height: 849202

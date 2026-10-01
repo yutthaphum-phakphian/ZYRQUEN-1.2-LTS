@@ -10,7 +10,7 @@ export interface NexusIntegrationLayerProps {
 export function deployNexusIntegrationLayer() {
   return {
     protocol: "Ω∞ Nexus Integration Layer",
-    version: "FROZEN v1.2 LTS",
+    version: "FROZEN v1.2.1 LTS",
     archiveBinding: "Eternum Custody Archive Linked",
     portalBinding: "Infinity Nexus Portal Connected",
     ledgerSync: "Real-Time Bidirectional Anchor",

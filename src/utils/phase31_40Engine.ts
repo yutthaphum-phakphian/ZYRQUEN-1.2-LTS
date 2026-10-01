@@ -3,7 +3,7 @@
  * AUTONOMOUS EXTENSION HARDENING & OPERATIONAL ASSURANCE ENGINE
  * 
  * Invariant Rule:
- * Frozen Core = v1.2 LTS (14,902 Seals, Block #849202, Merkle Root 909ab814...fa4c68)
+ * Frozen Core = v1.2.1 LTS (14,902 Seals, Block #849202, Merkle Root 909ab814...fa4c68)
  * SSoT Mutation Delta = 0, Baseline Drift = 0.00%
  * Candidate values (#940120, 24,012 Seals, fed40ab9...) MUST remain Candidate / Non-Canonical.
  */
@@ -687,7 +687,7 @@ class Phase31_40Engine {
 
       // ABSOLUTE FROZEN CANONICAL INVARIANT ASSERTION
       frozenCanonicalContract: {
-        frozenBaseline: 'v1.2 LTS',
+        frozenBaseline: 'v1.2.1 LTS',
         canonicalSeals: '14,902 / 14,902',
         canonicalBlock: '#849202',
         canonicalMerkleRoot: '909ab814479844d8a14816bed34cdbb07528e18501da86fc4691763a43fa4c68',

@@ -35,7 +35,7 @@ export const COURT_CERTIFICATE_DATA = {
   issueDateTh: '๒๘ กันยายน ๒๕๖๙ เวลา ๒๓:๑๐:๕๓ น. (ICT / UTC+7)',
   issueDateIso: '2026-09-28T23:10:53+07:00',
   dataCenterLocation: 'ศูนย์ข้อมูล BKK-DC1 ตู้แร็กทางกายภาพ BKK-DC1-RACK04 (Chamber 11 Court Dossier Vault)',
-  systemName: 'ZYRQUEN Ω∞ Sovereign World Engine / เคอร์เนล AuraEngine v4.2 (Frozen v1.2 LTS)',
+  systemName: 'ZYRQUEN Ω∞ Sovereign World Engine / เคอร์เนล AuraEngine v4.2 (v1.2.1 LTS)',
   genesisBlockHash: '909ab814479844d8a14816bed34cdbb07528e18501da86fc4691763a43fa4c68',
   genesisBlockHeight: 849202,
   sovereignOwner: 'นายยุทธภูมิ พากเพียร (รหัสประจำตัว: #EP-SOVEREIGN-01 / OMEGA-1)',

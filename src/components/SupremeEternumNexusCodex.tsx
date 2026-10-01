@@ -48,7 +48,7 @@ export const SupremeEternumNexusCodex: React.FC<{
       hsmQuorum: '10/10 REAL_HSM FIPS 140-3 L4',
       pqcAlgorithm: 'FIPS 204 ML-DSA-87 / Dilithium-3',
       drift: 'Δ0.00% Zero Drift',
-      timestamp: '2026-09-10 00:00:00 ICT (FROZEN v1.2 LTS)',
+      timestamp: '2026-09-10 00:00:00 ICT (FROZEN v1.2.1 LTS)',
       principal: 'นายยุทธภูมิ พากเพียร (#EP-SOVEREIGN-01)',
       boundary: 'Ω600_1000 (400 Tenants LOCKED)',
       courtDossierId: 'ZQ-COURT-ETDA-PDPA-849202',
@@ -169,7 +169,7 @@ export const SupremeEternumNexusCodex: React.FC<{
               SUPREME ETERNUM NEXUS CODEX
             </h2>
             <span className="px-2.5 py-0.5 rounded text-[10px] font-bold bg-emerald-950/60 border-emerald-500 text-emerald-400">
-              FROZEN v1.2 LTS
+              FROZEN v1.2.1 LTS
             </span>
           </div>
           <p className="text-xs text-slate-400 mt-1">

@@ -347,7 +347,7 @@ export const LedgerView: React.FC<LedgerViewProps> = ({ snapshots = INITIAL_HARD
 
     const auditLogData = {
       format: 'ZYRQUEN_FORENSIC_AUDIT_LOG_SNAPSHOT',
-      version: 'v1.2 LTS PDPA FINAL FROZEN',
+      version: 'v1.2.1 LTS PDPA FINAL FROZEN',
       ssotBlock: SYSTEM_METADATA.sealedBlock,
       merkleRoot: SYSTEM_METADATA.merkleRoot,
       boundary: 'Ω600_1000',

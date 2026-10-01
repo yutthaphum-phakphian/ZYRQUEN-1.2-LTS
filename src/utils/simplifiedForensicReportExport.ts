@@ -23,7 +23,7 @@ export function generateSimplifiedForensicReportText(options: SimplifiedForensic
 
   const report = `# ======================================================================
 #  ZYRQUEN Ω∞ SOVEREIGN WORLD ENGINE - SIMPLIFIED FORENSIC AUDIT REPORT
-#  Status: FROZEN v1.2 LTS | SSoT Δ${ssotMutationDrift.toFixed(2)}% | 10/10 REAL_HSM
+#  Status: FROZEN v1.2.1 LTS | SSoT Δ${ssotMutationDrift.toFixed(2)}% | 10/10 REAL_HSM
 #  Block Height: #849202 | Seals: ${sealCount.toLocaleString()} Verified | Quorum: 10/10
 #  Canonical Merkle Root: 909ab814479844d8a14816bed34cdbb07528e18501da86fc4691763a43fa4c68
 #  Boundary: Ω600_1000 (400 Tenants LOCKED) | Certificate: ZQ-GOLD-DEP-849202-3908
@@ -34,7 +34,7 @@ export function generateSimplifiedForensicReportText(options: SimplifiedForensic
 ----------------------------------------------------------------------
 Operating System: ZYRQUEN Ω∞ Sovereign Civilization Intelligence Control Plane
 Engine Version: v4.16 | NPM Package: v4.16.0
-Canonical Baseline: Frozen v1.2 LTS (Zero-Drift Invariant Enforcement)
+Canonical Baseline: v1.2.1 LTS (Zero-Drift Invariant Enforcement)
 SSoT Mutation Drift: Δ${ssotMutationDrift.toFixed(2)}% ${ssotMutationDrift === 0 ? '(ZERO DRIFT - COMPLIANT)' : '(WARNING: MUTATION DRIFT DETECTED)'}
 Promotion Gate: ${promotionStatus}
 Timestamp (UTC): ${utcTime}

@@ -214,7 +214,7 @@ export class ZyrquenSelfAuditEngine {
 
     return {
       system: 'ZYRQUEN Ω∞ SELF-AUDIT ENGINE',
-      version: 'v1.2 LTS',
+      version: 'v1.2.1 LTS',
       timestamp: new Date().toISOString(),
       overall_status: overallPass ? 'PASS_WITH_UNVERIFIED' : 'FAIL',
       principle: 'Integrity ≠ Authenticity ≠ Truth ≠ Legal Admissibility',

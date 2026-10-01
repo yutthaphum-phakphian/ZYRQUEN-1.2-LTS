@@ -185,7 +185,7 @@ export const INITIAL_OMEGA_PHASES: OmegaPhase[] = [
     nameEn: 'Immutable Sovereign Seal Finalization ♾️',
     descriptionTh: 'ปิดลูปการตรวจสอบ และ ยืนยันสถานะ Sovereign Finalization ♾️',
     descriptionEn: 'Final closing of cryptographic audit circuit. Permanent non-repudiable state sealed.',
-    technicalEnforcement: 'Finalized block height #849202 sealed under ZYRQUEN Ω∞ FROZEN v1.2 LTS.',
+    technicalEnforcement: 'Finalized block height #849202 sealed under ZYRQUEN Ω∞ FROZEN v1.2.1 LTS.',
     statuteRef: 'Permanent Admissible Sovereign Finality ♾️',
     status: 'FINALIZED',
     accentColor: '#6366f1', // Indigo

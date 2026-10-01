@@ -78,7 +78,7 @@ export const EvidenceTruthMatrix: React.FC = () => {
       evidenceStatus: 'CANONICAL',
       telemetrySource: 'REFERENCE',
       evidenceBasis: 'Merkle Anchor Root 909ab814 Canonical Tree Comparison',
-      governanceNote: 'Immutable reference value strictly locked under Frozen v1.2 LTS.',
+      governanceNote: 'Immutable reference value strictly locked under v1.2.1 LTS.',
     },
     {
       id: 'claim-05',
@@ -123,7 +123,7 @@ export const EvidenceTruthMatrix: React.FC = () => {
       evidenceStatus: 'CANDIDATE',
       telemetrySource: 'SIMULATED',
       evidenceBasis: 'R&D Laboratory Prototype Branch (Isolated in Candidate Sandbox)',
-      governanceNote: 'Candidate state only; forbidden from modifying Frozen v1.2 LTS Canonical SSoT.',
+      governanceNote: 'Candidate state only; forbidden from modifying v1.2.1 LTS Canonical SSoT.',
     },
     {
       id: 'claim-10',

@@ -102,7 +102,7 @@ export function buildSignedBlockEvidencePayload(
   }));
 
   const payload: SignedBlockEvidencePayload = {
-    specification: 'ZYRQUEN Ω∞ SSoT Δ0 Canonical Specification v4.16 PDPA FINAL (Frozen v1.2 LTS)',
+    specification: 'ZYRQUEN Ω∞ SSoT Δ0 Canonical Specification v4.16 PDPA FINAL (v1.2.1 LTS)',
     documentType: 'SOVEREIGN_MERKLE_BLOCK_EVIDENCE_SIGNED_PAYLOAD',
     generatedTimestampUtc: timeUtc,
     generatedTimestampIct: timeIct,

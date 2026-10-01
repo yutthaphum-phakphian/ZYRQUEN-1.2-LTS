@@ -108,7 +108,7 @@ export const CANONICAL_COUNCIL_TEST_CASES: CouncilTestCase[] = [
 ];
 
 export const CANONICAL_DECREE_DOC_SOV_HSM_1010_2026 = {
-  system: "ZYRQUEN Ω∞ LOCKED_FROZEN_v1.2_LTS",
+  system: "ZYRQUEN Ω∞ LOCKED_FROZEN_v1.2.1_LTS",
   document_id: "DOC-SOV-HSM-1010-2026",
   block_height: 849202,
   genesis_merkle_root: "909ab814479844d8a14816bed34cdbb07528e18501da86fc4691763a43fa4c68",
@@ -304,7 +304,7 @@ export const CANONICAL_FORENSIC_CHECKLIST_V2_849202 = {
 };
 
 export const CANONICAL_IMMUTABLE_SUMMARY_14PAGES = {
-  system: "ZYRQUEN Ω∞ LOCKED_FROZEN_v1.2_LTS",
+  system: "ZYRQUEN Ω∞ LOCKED_FROZEN_v1.2.1_LTS",
   doc: "DOC-SOV-HSM-1010-2026 IMMUTABLE 14 pages",
   block: 849202,
   genesis: "909ab814479844d8a14816bed34cdbb07528e18501da86fc4691763a43fa4c68",

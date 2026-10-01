@@ -138,7 +138,7 @@ export class CourtEvidenceDossierGenerator {
 
     // Compute deterministic content payload hash
     const contentPayload = this.canonicalStringify({
-      systemState: 'LOCKED_FROZEN_v1.2_LTS',
+      systemState: 'LOCKED_FROZEN_v1.2.1_LTS',
       genesisBlock: '#849202',
       chambers: sortedChambers.map(c => ({
         id: c.id,
@@ -167,7 +167,7 @@ export class CourtEvidenceDossierGenerator {
 
     const packagePayload = this.canonicalStringify({
       dossierId,
-      systemState: 'LOCKED_FROZEN_v1.2_LTS',
+      systemState: 'LOCKED_FROZEN_v1.2.1_LTS',
       genesisBlock: '#849202',
       custodian: custodianName,
       generatedAt,
@@ -179,7 +179,7 @@ export class CourtEvidenceDossierGenerator {
 
     return {
       dossierId,
-      systemState: 'LOCKED_FROZEN_v1.2_LTS',
+      systemState: 'LOCKED_FROZEN_v1.2.1_LTS',
       genesisBlock: '#849202',
       principalCustodian: custodianName,
       generatedAt,

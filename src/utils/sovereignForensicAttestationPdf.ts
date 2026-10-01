@@ -292,7 +292,7 @@ export function generateSovereignForensicAttestationPdf(
   doc.setFontSize(6);
   doc.setTextColor(148, 163, 184);
   doc.text(
-    `Official Judicial Attestation Document • Generated: ${timestamp} • Page 1 of 1 • ZYRQUEN Ω∞ FROZEN v1.2 LTS`,
+    `Official Judicial Attestation Document • Generated: ${timestamp} • Page 1 of 1 • ZYRQUEN Ω∞ FROZEN v1.2.1 LTS`,
     margin,
     pageHeight - 6
   );

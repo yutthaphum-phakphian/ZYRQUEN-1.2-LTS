@@ -210,7 +210,7 @@ export const GitHubSyncStatusUtility: React.FC = () => {
               <div className="text-[10px] text-zinc-400 space-y-1">
                 <div>Canonical Seals: <span className="text-[#10B981] font-bold">14,905</span></div>
                 <div>Principal: <span className="text-white">นายยุทธภูมิ พากเพียร</span></div>
-                <div>Status: <span className="text-[#10B981]">LOCKED_FROZEN_v1.2_LTS</span></div>
+                <div>Status: <span className="text-[#10B981]">LOCKED_FROZEN_v1.2.1_LTS</span></div>
               </div>
               <div className="text-[10px] text-zinc-500 pt-1 border-t border-white/5 space-y-1">
                 <span className="text-zinc-400 font-semibold block text-[9px] uppercase tracking-wider">Local Merkle Digest:</span>

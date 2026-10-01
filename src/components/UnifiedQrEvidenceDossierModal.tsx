@@ -285,7 +285,7 @@ export const UnifiedQrEvidenceDossierModal: React.FC<UnifiedQrEvidenceDossierMod
                       สำนวนพยานหลักฐานอิเล็กทรอนิกส์นำสืบชั้นศาล (Official Court-Admissible Dossier)
                     </div>
                     <h3 className="text-base sm:text-lg font-bold text-white mt-0.5">
-                      ZYRQUEN Ω∞ FROZEN v1.2 LTS Sovereign Evidence Package
+                      ZYRQUEN Ω∞ FROZEN v1.2.1 LTS Sovereign Evidence Package
                     </h3>
                   </div>
 

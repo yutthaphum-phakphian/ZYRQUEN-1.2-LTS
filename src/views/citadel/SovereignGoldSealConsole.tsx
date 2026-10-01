@@ -51,7 +51,7 @@ export const SovereignGoldSealConsole: React.FC = () => {
       <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 font-mono text-xs text-amber-200/90">
         <div className="p-3.5 rounded-xl bg-black/60 border border-amber-500/20">
           <span className="text-amber-500/70 text-[10px] block">CANONICAL BLOCK</span>
-          <span className="font-bold text-amber-300 text-sm">#{SYSTEM_METADATA.genesisBlock} • ZYRQUEN Ω∞ FROZEN v1.2 LTS</span>
+          <span className="font-bold text-amber-300 text-sm">#{SYSTEM_METADATA.genesisBlock} • ZYRQUEN Ω∞ FROZEN v1.2.1 LTS</span>
         </div>
         <div className="p-3.5 rounded-xl bg-black/60 border border-amber-500/20">
           <span className="text-amber-500/70 text-[10px] block">SOVEREIGN ARCHITECT</span>

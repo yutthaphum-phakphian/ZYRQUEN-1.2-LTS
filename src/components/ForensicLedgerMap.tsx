@@ -34,8 +34,8 @@ interface EvidenceItem {
 const CANONICAL_EVIDENCE: EvidenceItem[] = [
   {
     id: 'EVID-01-FROZEN-SSOT',
-    claimTh: 'แกนกลาง SSoT ถูกแช่แข็งถาวรที่ v1.2 LTS (Delta === 0) ไม่อนุญาตให้มีการแก้ไขใดๆ',
-    claimEn: 'SSoT Core is permanently frozen at v1.2 LTS (Delta === 0) with zero mutation allowed.',
+    claimTh: 'แกนกลาง SSoT ถูกแช่แข็งถาวรที่ v1.2.1 LTS (Delta === 0) ไม่อนุญาตให้มีการแก้ไขใดๆ',
+    claimEn: 'SSoT Core is permanently frozen at v1.2.1 LTS (Delta === 0) with zero mutation allowed.',
     sourceType: 'HARDWARE_HSM (NitroKey FIPS 140-3 L4)',
     designation: 'CANONICAL',
     verificationStatus: 'VERIFIED',

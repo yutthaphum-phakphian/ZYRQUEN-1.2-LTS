@@ -371,7 +371,7 @@
       "name": "metadata.json",
       "role": "AI Studio applet metadata and server-side capability bindings",
       "category": "PLATFORM_METADATA",
-      "verification_standard": "Frozen v1.2 LTS Canonical Binding",
+      "verification_standard": "v1.2.1 LTS Canonical Binding",
       "status": "VERIFIED_PASS_100_PERCENT_GREEN",
       "sha256": "43ae5319c0510a35b5a70ccdfeaac4a912e652e558e17b5eaf16563aa9c01fb8",
       "size": 314,

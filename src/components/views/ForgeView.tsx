@@ -495,7 +495,7 @@ export const ForgeView: React.FC = () => {
           <h2 className="text-xl sm:text-2xl font-mono font-bold text-white tracking-tight flex items-center gap-3">
             <span>Visual Automation &amp; DAG Workflow Forge</span>
             <span className="text-xs px-2.5 py-0.5 rounded-lg bg-zinc-800 text-zinc-300 font-mono font-normal">
-              v1.2 LTS Orchestration Plane
+              v1.2.1 LTS Orchestration Plane
             </span>
           </h2>
 
@@ -1289,7 +1289,7 @@ export const ForgeView: React.FC = () => {
             <div className="p-4 rounded-2xl bg-black/90 border border-white/10 overflow-x-auto text-[11px] text-zinc-300 leading-relaxed font-mono">
               <pre className="text-amber-300 font-bold">
 {`┌───────────────────────────────────────────────────────────┐
-│              FROZEN CANONICAL CORE v1.2 LTS               │
+│              FROZEN CANONICAL CORE v1.2.1 LTS               │
 │        14,902 Seals • Block #849202 • SSoT = 0            │
 └─────────────────────────────┬─────────────────────────────┘
                               │ READ ONLY
@@ -1369,7 +1369,7 @@ export const ForgeView: React.FC = () => {
 
             {/* Baseline Matrix */}
             <div className="p-4 rounded-2xl bg-black/80 border border-white/5 space-y-3">
-              <div className="text-white font-bold text-xs">Frozen Baseline Parameters (v1.2 LTS)</div>
+              <div className="text-white font-bold text-xs">Frozen Baseline Parameters (v1.2.1 LTS)</div>
               <div className="grid grid-cols-2 sm:grid-cols-4 gap-3 text-[11px]">
                 <div className="p-2.5 rounded-xl bg-white/[0.02] border border-white/5">
                   <span className="text-zinc-500 block text-[10px]">CANONICAL SEALS</span>

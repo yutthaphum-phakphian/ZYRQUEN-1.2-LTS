@@ -78,7 +78,7 @@ export function buildSignedLedgerSnapshotPayload(
   const evidenceId = `EVD-SNAP-${targetSnapshot.snapshotNumber}-${now.getTime()}`;
 
   return {
-    specification: 'ZYRQUEN Ω∞ SSoT Δ0 Canonical Specification v1.2 LTS (Frozen)',
+    specification: 'ZYRQUEN Ω∞ SSoT Δ0 Canonical Specification v1.2.1 LTS (Frozen)',
     documentType: 'SIGNED_IMMUTABLE_LEDGER_STATE_SNAPSHOT_EVIDENCE',
     evidenceId,
     generatedTimestampUtc: timeUtc,

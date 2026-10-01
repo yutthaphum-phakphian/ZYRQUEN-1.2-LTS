@@ -68,7 +68,7 @@ export function serializeCourtReadyJsonAuditTrail(options: CourtReadyDossierOpti
       standard: 'ISO/IEC 18014-4 & NIST FIPS 204 (ML-DSA-87 / Dilithium-5)',
       courtReference: courtRef,
       generatedAt: timestampIso,
-      version: 'v1.2 LTS (PDPA FINAL FROZEN)',
+      version: 'v1.2.1 LTS (PDPA FINAL FROZEN)',
       canonicalGenesisBlock: CANONICAL_GENESIS_BLOCK,
       canonicalBlockRange: '849198-849202',
       canonicalMerkleRoot: CANONICAL_MERKLE_ROOT,

@@ -157,7 +157,7 @@ export const AuditCertificateModal: React.FC<AuditCertificateModalProps> = ({ is
                 </span>
               </div>
               <p className="text-[11px] text-zinc-400 font-mono truncate">
-                ZYRQUEN Ω∞ FROZEN v1.2 LTS • Merkle Root Attestation • SSoT Δ0.00%
+                ZYRQUEN Ω∞ FROZEN v1.2.1 LTS • Merkle Root Attestation • SSoT Δ0.00%
               </p>
             </div>
           </div>
@@ -551,7 +551,7 @@ export const AuditCertificateModal: React.FC<AuditCertificateModalProps> = ({ is
                 <p className="text-xs text-zinc-400 leading-relaxed font-sans">
                   "TEST COVERAGE ↑ ≠ CANONICAL TRUTH ↑" — All verification, telemetry, analytics, visualization,
                   governance, recovery, and export operations are non-authoritative with respect to the Canonical
-                  Truth Plane (v1.2 LTS). Extension plane expansions occur without mutating the locked core state.
+                  Truth Plane (v1.2.1 LTS). Extension plane expansions occur without mutating the locked core state.
                 </p>
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-2 pt-2 text-xs">
                   <div className="p-2.5 rounded-lg bg-black/40 border-white/5 flex items-center justify-between">

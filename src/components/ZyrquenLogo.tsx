@@ -329,7 +329,7 @@ export function ZyrquenLogo({
                 fill="#67E8F9"
                 letterSpacing="1.2"
               >
-                FROZEN CORE v1.2 LTS • Δ0.00% • 14,902 SEALS
+                FROZEN CORE v1.2.1 LTS • Δ0.00% • 14,902 SEALS
               </text>
             </g>
           )}

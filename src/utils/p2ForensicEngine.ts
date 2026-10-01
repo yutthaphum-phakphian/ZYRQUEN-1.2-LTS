@@ -1,8 +1,8 @@
 /**
- * ZYRQUEN Ω∞ FROZEN v1.2 LTS — P2 FORENSIC RECONCILIATION & PROVENANCE ENGINE
+ * ZYRQUEN Ω∞ FROZEN v1.2.1 LTS — P2 FORENSIC RECONCILIATION & PROVENANCE ENGINE
  * 
  * STRICT INVARIANTS:
- * - CANONICAL VERSION = v1.2 LTS
+ * - CANONICAL VERSION = v1.2.1 LTS
  * - CANONICAL ROOT    = 909ab814479844d8a14816bed34cdbb07528e18501da86fc4691763a43fa4c68
  * - CANONICAL BLOCK   = #849202
  * - CANONICAL SEALS   = 14,902
@@ -96,7 +96,7 @@ export interface P2AcceptanceTestResult {
 }
 
 export class P2ForensicEngine {
-  public static readonly CANONICAL_VERSION = 'v1.2 LTS' as const;
+  public static readonly CANONICAL_VERSION = 'v1.2.1 LTS' as const;
   public static readonly CANONICAL_ROOT = '909ab814479844d8a14816bed34cdbb07528e18501da86fc4691763a43fa4c68' as const;
   public static readonly CANONICAL_BLOCK = '#849202' as const;
   public static readonly CANONICAL_SEALS = 14902 as const;

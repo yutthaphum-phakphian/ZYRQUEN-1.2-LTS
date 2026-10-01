@@ -342,7 +342,7 @@ export const CANONICAL_FORENSIC_IDENTITY_METADATA: ForensicIdentityMetadataItem[
   {
     labelTh: 'ชื่อระบบและรุ่นการติดตั้ง',
     labelEn: 'System Name & Version',
-    verifiedValue: 'ZYRQUEN Ω∞ Sovereign World Engine (รุ่น FROZEN v1.2 LTS / v4.16 PDPA FINAL / APEX ULTIMATE FULL EDITION)',
+    verifiedValue: 'ZYRQUEN Ω∞ Sovereign World Engine (รุ่น FROZEN v1.2.1 LTS / v4.16 PDPA FINAL / APEX ULTIMATE FULL EDITION)',
     highlight: 'cyan',
   },
   {

@@ -2,7 +2,7 @@
  * ZYRQUEN Ω∞ Sovereign Governance Configuration
  * Centralized Single Source of Truth (SSoT Δ0) Constants & System Invariants
  * 
- * Engine Version: LOCKED_FROZEN_v1.2_LTS (v4.16 GOLD MASTER ULTIMATE FINAL MERGED)
+ * Engine Version: LOCKED_FROZEN_v1.2.1_LTS (v4.16 GOLD MASTER ULTIMATE FINAL MERGED)
  * Sovereign Principal Architect: นายยุทธภูมิ พากเพียร (#EP-SOVEREIGN-01)
  * Compliance Standards: ETDA B.E. 2544 (Sec 9, 26, 28) | PDPA B.E. 2562 (Sec 37) | NIST FIPS 203/204/205
  */
@@ -69,7 +69,7 @@ export interface SovereignConfig {
 
 export const SOVEREIGN_CONFIG: Readonly<SovereignConfig> = Object.freeze({
   systemName: "ZYRQUEN Ω∞ Sovereign Kernel & Truth Matrix",
-  codename: "LOCKED_FROZEN_v1.2_LTS",
+  codename: "LOCKED_FROZEN_v1.2.1_LTS",
   version: "v4.16 GOLD MASTER ULTIMATE FINAL MERGED",
 
   sovereignPrincipal: Object.freeze({

@@ -730,7 +730,7 @@ export const SovereignChamberConsole: React.FC = () => {
             <div className="flex flex-wrap items-center gap-2 font-mono text-[11px]">
               <span className="px-2.5 py-1 rounded bg-emerald-950/90 border-emerald-700/80 text-emerald-400 font-semibold flex items-center gap-1.5">
                 <CheckCircle2 className="w-3.5 h-3.5" />
-                LOCKED_FROZEN_v1.2_LTS
+                LOCKED_FROZEN_v1.2.1_LTS
               </span>
               <span className="px-2.5 py-1 rounded bg-cyan-950/90 border-cyan-700/80 text-cyan-400 font-semibold flex items-center gap-1.5">
                 <Lock className="w-3.5 h-3.5" />
@@ -794,7 +794,7 @@ export const SovereignChamberConsole: React.FC = () => {
               <div className="grid grid-cols-1 md:grid-cols-12 gap-5 pr-1">
                 <div className="md:col-span-5 flex flex-col items-center justify-center bg-slate-950/80 p-4 rounded-xl border-slate-800 text-center">
                   <ForensicDossierQRCode
-                    payloadUrl={`https://zyrquen.internal/verify?block=849202&merkle=0x909ab814479844d8a14816bed34cdbb07528e18501da86fc4691763a43fa4c68&status=LOCKED_FROZEN_v1.2_LTS&seals=14902`}
+                    payloadUrl={`https://zyrquen.internal/verify?block=849202&merkle=0x909ab814479844d8a14816bed34cdbb07528e18501da86fc4691763a43fa4c68&status=LOCKED_FROZEN_v1.2.1_LTS&seals=14902`}
                     size={190}
                   />
                   <div className="mt-3 flex flex-col gap-1.5 w-full max-w-xs font-mono text-xs">

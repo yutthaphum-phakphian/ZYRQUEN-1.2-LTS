@@ -494,7 +494,7 @@ export const ProductionReadinessView: React.FC<ProductionReadinessViewProps> = (
             <h1 className="text-2xl sm:text-3xl font-black text-white tracking-tight flex items-center gap-3">
               <span>Production Readiness &amp; Operational Assurance</span>
               <span className="text-sm px-2.5 py-0.5 rounded-lg bg-zinc-800 text-zinc-300 font-mono font-normal">
-                v1.2 LTS
+                v1.2.1 LTS
               </span>
             </h1>
 
@@ -539,7 +539,7 @@ export const ProductionReadinessView: React.FC<ProductionReadinessViewProps> = (
         <div className="mt-6 pt-4 border-t border-white/10 grid grid-cols-2 sm:grid-cols-4 lg:grid-cols-6 gap-3 text-xs font-mono">
           <div className="p-2.5 rounded-xl bg-black/50 border border-white/5 space-y-0.5">
             <span className="text-[10px] text-zinc-500">FROZEN CORE</span>
-            <div className="text-white font-bold">#{SYSTEM_METADATA.sealedBlock} (v1.2 LTS)</div>
+            <div className="text-white font-bold">#{SYSTEM_METADATA.sealedBlock} (v1.2.1 LTS)</div>
           </div>
           <div className="p-2.5 rounded-xl bg-black/50 border border-white/5 space-y-0.5">
             <span className="text-[10px] text-zinc-500">CANONICAL SEALS</span>
@@ -1740,7 +1740,7 @@ export const ProductionReadinessView: React.FC<ProductionReadinessViewProps> = (
                   <span className="px-2 py-0.5 rounded bg-emerald-500/20 text-emerald-300 text-[10px]">PASS</span>
                 </div>
                 <div className="space-y-1 text-zinc-300">
-                  <div>Baseline: <strong className="text-white">v1.2 LTS</strong></div>
+                  <div>Baseline: <strong className="text-white">v1.2.1 LTS</strong></div>
                   <div>Canonical Block: <strong className="text-cyan-300">#849202</strong></div>
                   <div>Canonical Seals: <strong className="text-emerald-400">14,902 / 14,902</strong></div>
                   <div className="truncate text-[10px] text-zinc-500">Root: 909ab814479844d8a14816bed34cdbb07528e18501da86fc4691763a43fa4c68</div>

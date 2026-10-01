@@ -542,7 +542,7 @@ class SystemStateStore {
     sealCount: SYSTEM_METADATA.canonicalSeals,
     sealedBlock: SYSTEM_METADATA.sealedBlock,
     blockHeight: SYSTEM_METADATA.sealedBlock,
-    systemStatus: 'LOCKED_FROZEN_v1.2_LTS',
+    systemStatus: 'LOCKED_FROZEN_v1.2.1_LTS',
     merkleRoot: SYSTEM_METADATA.merkleRoot,
     custodianProofs: 10, // 10/10 Verified Super-Majority Attained (Super-Majority Invariant ≥8/10)
     custodianRegistry: this.custodianRegistry.getSnapshot(),
@@ -823,7 +823,7 @@ class SystemStateStore {
       sealCount: SYSTEM_METADATA.canonicalSeals,
       sealedBlock: SYSTEM_METADATA.sealedBlock,
       blockHeight: SYSTEM_METADATA.sealedBlock,
-      systemStatus: 'LOCKED_FROZEN_v1.2_LTS',
+      systemStatus: 'LOCKED_FROZEN_v1.2.1_LTS',
       merkleRoot: SYSTEM_METADATA.merkleRoot,
       custodianProofs: 10,
     };

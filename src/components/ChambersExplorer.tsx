@@ -256,7 +256,7 @@ export const ChambersExplorer: React.FC<ChambersExplorerProps> = ({
             Block <strong className="text-zinc-200">#849202</strong> • Merkle <span className="text-[#06B6D4]">909ab814...43fa4c68</span> • 14,902 Seals SSoT • Immutable Read-Only • Boundary: <span className="text-[#D4AF37]">Ω600_1000</span>
           </div>
           <div className="text-[11px] text-zinc-500">
-            FROZEN v1.2 LTS • 10/10 REAL_HSM FIPS 140-3 L4
+            FROZEN v1.2.1 LTS • 10/10 REAL_HSM FIPS 140-3 L4
           </div>
         </div>
 
@@ -689,7 +689,7 @@ export const ChambersExplorer: React.FC<ChambersExplorerProps> = ({
               {[
                 { label: 'PRODUCT', val: 'ZYRQUEN Ω∞' },
                 { label: 'RELEASE', val: 'Prime v1.0 (LTS)' },
-                { label: 'BASELINE', val: 'Frozen v1.2 LTS' },
+                { label: 'BASELINE', val: 'v1.2.1 LTS' },
                 { label: 'PHASE REGISTRY', val: 'Phase 01-40' },
                 { label: 'CANONICAL SEALS', val: '14,902 Seals', highlight: 'text-emerald-400' },
                 { label: 'CHAMBERS/MODULES', val: '18 Chambers' },
@@ -724,7 +724,7 @@ export const ChambersExplorer: React.FC<ChambersExplorerProps> = ({
                     {CHAMBER_GROUPS.find((g) => g.chamberNums.includes(selectedChamberNum))?.nameEn}
                   </span>
                   <span className="text-zinc-400">•</span>
-                  <span className="text-[#D4AF37] font-semibold text-[10px]">LOCKED_FROZEN_v1.2_LTS</span>
+                  <span className="text-[#D4AF37] font-semibold text-[10px]">LOCKED_FROZEN_v1.2.1_LTS</span>
                 </div>
 
                 <h3 className="text-base sm:text-lg font-bold text-zinc-100 flex items-center gap-2">

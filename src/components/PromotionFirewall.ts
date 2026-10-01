@@ -1,5 +1,5 @@
 /**
- * ZYRQUEN Ω∞ FROZEN v1.2 LTS — PROMOTION FIREWALL
+ * ZYRQUEN Ω∞ FROZEN v1.2.1 LTS — PROMOTION FIREWALL
  * 
  * Strict Zero-Trust Gatekeeper for Canonical State Transitions.
  * Independently evaluates artifact verification status, provenance, tenant namespace,
@@ -81,7 +81,7 @@ export class PromotionFirewall {
 
     // Rule 6: Absolute Canonical Write Immunity — No extension may write to Frozen Core
     policyViolations.push(
-      'FROZEN CORE IMMUNITY: Canonical SSoT is locked (v1.2 LTS, 14,902 Seals, Block #849202). All Canonical writes are strictly BLOCKED.'
+      'FROZEN CORE IMMUNITY: Canonical SSoT is locked (v1.2.1 LTS, 14,902 Seals, Block #849202). All Canonical writes are strictly BLOCKED.'
     );
 
     // Final Decision is always BLOCKED for Canonical writes
@@ -98,7 +98,7 @@ export class PromotionFirewall {
 
   public static getCanonicalInvariants() {
     return {
-      frozenBaseline: 'v1.2 LTS',
+      frozenBaseline: 'v1.2.1 LTS',
       canonicalSeals: this.CANONICAL_SEALS,
       canonicalMerkleRoot: this.CANONICAL_FROZEN_ROOT,
       canonicalBlock: this.CANONICAL_BLOCK,

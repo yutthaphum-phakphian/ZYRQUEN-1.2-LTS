@@ -28,8 +28,8 @@ export const Phase3UpgradeManifestModal: React.FC<{
   const manifestData = {
     manifest_id: 'ZYRQUEN_OMEGA_PHASE3_UPGRADE_MANIFEST',
     generated_at: new Date().toISOString(),
-    parent_version: 'v1.2 LTS (FROZEN)',
-    upgrade_version: 'ZYRQUEN Ω∞ FROZEN v1.2 LTS — PHASE 3 OPERATIONAL HARDENING',
+    parent_version: 'v1.2.1 LTS (FROZEN)',
+    upgrade_version: 'ZYRQUEN Ω∞ FROZEN v1.2.1 LTS — PHASE 3 OPERATIONAL HARDENING',
     planes_upgraded: [
       'PLANE 01: Deterministic Cryptographic Verification Gate (WebCrypto SHA-256 / HSM Slots)',
       'PLANE 02: Evidence Quarantine & Fail-Closed Firewall (Rule 7 Mismatch Isolation)',
@@ -38,7 +38,7 @@ export const Phase3UpgradeManifestModal: React.FC<{
       'HARDENING PHASE 3: Adversarial Failure Injection Lab (8 Negative Security Vectors)',
     ],
     canonical_invariants_before: {
-      frozen_baseline: 'v1.2 LTS',
+      frozen_baseline: 'v1.2.1 LTS',
       canonical_seals: 14902,
       canonical_merkle_root: '909ab814479844d8a14816bed34cdbb07528e18501da86fc4691763a43fa4c68',
       canonical_block: 849202,
@@ -47,7 +47,7 @@ export const Phase3UpgradeManifestModal: React.FC<{
       omega_gates: 'Ω601-Ω1000 LOCKED',
     },
     canonical_invariants_after: {
-      frozen_baseline: 'v1.2 LTS',
+      frozen_baseline: 'v1.2.1 LTS',
       canonical_seals: 14902,
       canonical_merkle_root: '909ab814479844d8a14816bed34cdbb07528e18501da86fc4691763a43fa4c68',
       canonical_block: 849202,

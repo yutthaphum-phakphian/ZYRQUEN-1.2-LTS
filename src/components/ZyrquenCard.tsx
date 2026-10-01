@@ -1,6 +1,6 @@
 import { useState } from 'react';
 
-// ZYRQUEN Ω∞ APEX ULTIMATE MASTER EDITION FROZEN v1.2 LTS
+// ZYRQUEN Ω∞ APEX ULTIMATE MASTER EDITION FROZEN v1.2.1 LTS
 // Principal: นายยุทธภูมิ พากเพียร (#EP-SOVEREIGN-01) | Corrected Name
 // Boundary: Ω600_1000 (400 Tenants LOCKED)
 export default function ZyrquenCard({ standalone = true }: { standalone?: boolean }) {
@@ -28,7 +28,7 @@ export default function ZyrquenCard({ standalone = true }: { standalone?: boolea
             ZYRQUEN Ω∞
           </h1>
           <p className="text-[11px] text-cyan-200/80 mt-1 tracking-[0.2em] font-bold">
-            APEX ULTIMATE MASTER EDITION FROZEN v1.2 LTS
+            APEX ULTIMATE MASTER EDITION FROZEN v1.2.1 LTS
           </p>
           <p className="text-[10px] text-white/50 mt-1">
             Sovereign Operating System & Civilization Intelligence Control Plane
@@ -38,7 +38,7 @@ export default function ZyrquenCard({ standalone = true }: { standalone?: boolea
         {/* Status */}
         <div className="flex gap-2 justify-center mb-5 flex-wrap">
           <span className="px-2.5 py-1 rounded-full bg-purple-500/20 border-purple-400/30 text-[10px] text-purple-200">
-            Status: LOCKED_FROZEN_v1.2_LTS
+            Status: LOCKED_FROZEN_v1.2.1_LTS
           </span>
           <span className="px-2.5 py-1 rounded-full bg-amber-500/20 border-amber-400/30 text-[10px] text-amber-200">
             Δ 0.00% ZERO DRIFT

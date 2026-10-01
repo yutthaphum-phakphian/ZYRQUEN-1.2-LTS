@@ -1,5 +1,5 @@
 /**
- * ZYRQUEN Ω∞ FROZEN v1.2 LTS — FORENSIC READ-ONLY SNAPSHOT ENGINE
+ * ZYRQUEN Ω∞ FROZEN v1.2.1 LTS — FORENSIC READ-ONLY SNAPSHOT ENGINE
  * 
  * Captures a strict READ-ONLY point-in-time forensic state of the application
  * at the exact millisecond a HIGH or CRITICAL incident occurs.

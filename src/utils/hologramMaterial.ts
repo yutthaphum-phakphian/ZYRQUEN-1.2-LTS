@@ -445,7 +445,7 @@ export const CONNECTED_WORKSPACES: ConnectedWorkspaceItem[] = [
   {
     id: 'ws-01',
     name: 'sovereign-core-engine',
-    engineTarget: 'ZYRQUEN Ω∞ Frozen Kernel v1.2 LTS',
+    engineTarget: 'ZYRQUEN Ω∞ Frozen Kernel v1.2.1 LTS',
     branch: 'main@849202',
     merkleBinding: '909ab8144798...fa4c68',
     sealsBound: 14902,
@@ -642,7 +642,7 @@ export const INITIAL_PHASE11_STAGES: Phase11StageResult[] = [
     summary: 'Deterministic bundle compiled & hermetically sealed with reproducible SHA-256 digest.',
     artifactHash: '0x909ab814...build07',
     details: [
-      'Build Target: LOCKED_FROZEN_v1.2_LTS + Multiverse Mk-III',
+      'Build Target: LOCKED_FROZEN_v1.2.1_LTS + Multiverse Mk-III',
       'Reproducible Digest: sha256:909ab814479844d8a14816bed34cdbb07528e18501da86fc4691763a43fa4c68',
       'Zero-Any TypeScript Policy: VERIFIED',
     ],
@@ -701,7 +701,7 @@ export function executeZyrquenCliCommand(rawCmd: string): {
       type: 'success',
       responseText: `[ZYRQUEN INTEGRATION PATH: Cloud Command Center → sovereign-core-engine → ZYRQUEN CLI]
 # ======================================================================
-• Engine Target:    sovereign-core-engine (ZYRQUEN Ω∞ FROZEN v1.2 LTS)
+• Engine Target:    sovereign-core-engine (ZYRQUEN Ω∞ FROZEN v1.2.1 LTS)
 • SSoT Drift:       Δ0 = 0.000% (Strict Zero-Drift Baseline)
 • Genesis Block:    #849202
 • Merkle Root:      909ab814479844d8a14816bed34cdbb07528e18501da86fc4691763a43fa4c68
@@ -970,7 +970,7 @@ ${allStagesText}
       type: 'success',
       responseText: `[ZYRQUEN ADAPTER / INTEGRATION BOUNDARY — SOVEREIGN SEPARATION OF CONCERNS]
 # ======================================================================
-• ZYRQUEN Ω∞ (ระบบหลัก 🔒)      : คงเดิม / ไม่รื้อ / ไม่ปรับ Core (Immutable Frozen Kernel v1.2 LTS)
+• ZYRQUEN Ω∞ (ระบบหลัก 🔒)      : คงเดิม / ไม่รื้อ / ไม่ปรับ Core (Immutable Frozen Kernel v1.2.1 LTS)
 • Cloud & AI Command (เครื่องมือ 🛠️) : พัฒนาต่อเพื่อเป็นเครื่องมือช่วยจัดการและปรับระบบผ่าน Adapter Boundary
 # ======================================================================
 Command Center

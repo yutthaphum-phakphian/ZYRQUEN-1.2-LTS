@@ -135,7 +135,7 @@ export const P2ForensicReconciliationPanel: React.FC = () => {
         <div className="p-3 rounded-xl bg-black/50 border-white/10 space-y-0.5">
           <span className="text-[10px] text-zinc-500 font-bold uppercase">Canonical Root</span>
           <div className="text-[11px] font-bold text-cyan-300 truncate">909ab814...fa4c68</div>
-          <div className="text-[9px] text-zinc-500">v1.2 LTS Core Immutable</div>
+          <div className="text-[9px] text-zinc-500">v1.2.1 LTS Core Immutable</div>
         </div>
 
         <div className="p-3 rounded-xl bg-black/50 border-white/10 space-y-0.5">

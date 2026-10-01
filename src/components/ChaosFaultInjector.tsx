@@ -9,7 +9,7 @@ export interface ChaosFaultInjectorProps {
 }
 
 /**
- * ZYRQUEN Ω∞ Sovereign Kernel v4.16 (v1.2 LTS)
+ * ZYRQUEN Ω∞ Sovereign Kernel v4.16 (v1.2.1 LTS)
  * Chaos Engineering & Fault Injector Engine Component.
  * Enables interactive simulation of high-stress security attacks and auto-healing hooks.
  */

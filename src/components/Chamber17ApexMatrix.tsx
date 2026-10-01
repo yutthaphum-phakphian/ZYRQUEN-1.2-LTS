@@ -233,10 +233,10 @@ export const Chamber17ApexMatrix: React.FC<Chamber17ApexMatrixProps> = ({
           <div>
             <div className="flex flex-wrap items-center gap-2">
               <span className="font-mono text-xs font-bold text-cyan-400 tracking-wider">
-                ZYRQUEN Ω v1.2 LTS
+                ZYRQUEN Ω v1.2.1 LTS
               </span>
               <span className="text-[10px] font-mono font-bold px-2 py-0.5 rounded bg-amber-950/80 text-amber-300 border-amber-800/60">
-                FROZEN v1.2 LTS
+                FROZEN v1.2.1 LTS
               </span>
               <span className="text-[10px] font-mono px-2 py-0.5 rounded bg-emerald-950/80 text-emerald-300 border-emerald-800/60">
                 SSoT Mutation Delta = 0
@@ -583,7 +583,7 @@ export const Chamber17ApexMatrix: React.FC<Chamber17ApexMatrixProps> = ({
             </div>
 
             <div className="bg-slate-950 rounded-xl p-3 font-mono text-xs text-emerald-400 space-y-1.5 h-28 overflow-y-auto border-slate-800">
-              <div>[03:20:07 UTC] SYSTEM INIT: SSoT Kernel FROZEN v1.2 LTS successfully verified (Mutation Delta = 0, Baseline Drift = 0.00%).</div>
+              <div>[03:20:07 UTC] SYSTEM INIT: SSoT Kernel FROZEN v1.2.1 LTS successfully verified (Mutation Delta = 0, Baseline Drift = 0.00%).</div>
               <div>[03:20:10 UTC] CH-16 QUANTUM SYNC: GPU Accelerated canvas pipeline online (14,902 canonical seals loaded).</div>
               <div>[03:20:15 UTC] CH-17 APEX CONTROL: 6x3 Matrix Grid synchronized under Supreme Sovereign #EP-SOVEREIGN-01.</div>
               <div>[03:20:20 UTC] HARDWARE QUORUM: 10/10 Deca-Key Council verified on FIPS 140-3 Level 4 HSM.</div>

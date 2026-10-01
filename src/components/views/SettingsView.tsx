@@ -120,7 +120,7 @@ export const GitHubDeploymentWidget: React.FC = () => {
       <div className="flex items-center justify-between border-b border-slate-800 pb-4">
         <div>
           <h2 className="text-xl font-bold tracking-tight text-emerald-400">System Deployment State</h2>
-          <p className="text-xs text-slate-400 font-mono">ZYRQUEN Ω∞ LOCKED_FROZEN_v1.2_LTS</p>
+          <p className="text-xs text-slate-400 font-mono">ZYRQUEN Ω∞ LOCKED_FROZEN_v1.2.1_LTS</p>
         </div>
         <button
           onClick={loadCommitData}

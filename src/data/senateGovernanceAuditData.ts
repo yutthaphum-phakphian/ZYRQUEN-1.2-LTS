@@ -171,7 +171,7 @@ export const SOVEREIGN_TELEMETRY_ATTESTATION = {
  */
 export function generateSenateAuditCsv(): string {
   const lines: string[] = [];
-  lines.push('"ZYRQUEN Ω∞ FROZEN v1.2 LTS - SENATE GOVERNANCE AUDIT REPORT"');
+  lines.push('"ZYRQUEN Ω∞ FROZEN v1.2.1 LTS - SENATE GOVERNANCE AUDIT REPORT"');
   lines.push('"Generated At (UTC): 2026-09-14T22:03:35.950Z"');
   lines.push('"Jurisdiction: Kingdom of Thailand (ETDA B.E. 2544 Sections 9, 26, 28 & PDPA B.E. 2562)"');
   lines.push('"Cryptographic Invariant: Merkle Root #849,208 | Sub-Kelvin Cryo 14.98 mK | Zero Drift Δ=0.00%"');

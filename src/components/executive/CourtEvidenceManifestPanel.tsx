@@ -42,7 +42,7 @@ export interface CourtExhibitItem {
   statute: string;
   standard: string;
   hash: string;
-  status: 'VERIFIED_CANONICAL' | 'VERIFIED_TIMESTAMPED' | 'RATIFIED_100%' | 'PRESERVED_ZERO_DELETION' | 'PASSED_SLA_COMPLIANT' | 'FROZEN_v1.2_LTS' | 'VERIFIED_ZERO_LEAKAGE';
+  status: 'VERIFIED_CANONICAL' | 'VERIFIED_TIMESTAMPED' | 'RATIFIED_100%' | 'PRESERVED_ZERO_DELETION' | 'PASSED_SLA_COMPLIANT' | 'FROZEN_v1.2.1_LTS' | 'VERIFIED_ZERO_LEAKAGE';
   summaryTh: string;
   legalWeightTh: string;
   verificationMethodTh: string;
@@ -128,7 +128,7 @@ const COURT_EXHIBITS: CourtExhibitItem[] = [
     statute: 'พ.ร.บ. ธุรกรรมทางอิเล็กทรอนิกส์ พ.ศ. 2544 ม. 28 / SSoT Δ0 Invariant',
     standard: 'SQLite WORM Enclave + SHA256 Chained Blocks #849202–#864104',
     hash: '16bed34cdbb07528e18501da86fc4691763a43fa4c68909ab814479844d8a148',
-    status: 'FROZEN_v1.2_LTS',
+    status: 'FROZEN_v1.2.1_LTS',
     summaryTh: 'บัญชีซีล 14,902 รายการที่ถูกแช่แข็งในสถานะ LOCKEDFROZENv1.2_LTS พร้อมโครงข่าย 400 องค์กร (Ω601–Ω1000)',
     legalWeightTh: 'มีน้ำหนักพยานหลักฐานเทียบเท่าสารบบทางราชการที่ปิดรับรองโดยสมบูรณ์',
     verificationMethodTh: 'ตรวจสอบความต่อเนื่องของแฮชลูกโซ่ (Hash-Chaining) จากซีล #00001 ถึง #14902',

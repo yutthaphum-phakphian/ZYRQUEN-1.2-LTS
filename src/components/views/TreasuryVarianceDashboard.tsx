@@ -307,7 +307,7 @@ export const TreasuryVarianceDashboard: React.FC<TreasuryVarianceDashboardProps>
       sub: 'ยกระดับระบบการประมวลผลองค์กรสู่ Sovereign Evidence Engine & Bridging the 2026 AI ROI Gap',
       points: [
         'ผู้นำเสนอ: นายยุทธภูมิ พากเพียร (#EP-SOVEREIGN-01) Lead Sovereign Architect',
-        'สถานะสถาปัตยกรรม: FROZEN v1.2 LTS | Genesis Block #849202 | SSoT Δ0.00% Zero Drift',
+        'สถานะสถาปัตยกรรม: FROZEN v1.2.1 LTS | Genesis Block #849202 | SSoT Δ0.00% Zero Drift',
         'วิสัยทัศน์: เปลี่ยนผ่านจาก ERP บัญชีทั่วไป สู่การเป็นเครื่องมือสร้างพยานหลักฐานชั้นศาล (Court-Admissible Evidence) 100%',
       ],
       badge: 'STRATEGIC MANDATE',

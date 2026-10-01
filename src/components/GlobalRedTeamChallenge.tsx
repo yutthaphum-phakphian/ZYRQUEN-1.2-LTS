@@ -44,7 +44,7 @@ export const GlobalRedTeamChallenge: React.FC = () => {
           <div>
             <div className="flex items-center gap-2 flex-wrap">
               <span className="font-bold text-base text-white tracking-wide">
-                ZYRQUEN Ω∞ FROZEN v1.2 LTS GLOBAL RED TEAM CHALLENGE
+                ZYRQUEN Ω∞ FROZEN v1.2.1 LTS GLOBAL RED TEAM CHALLENGE
               </span>
               <span className="px-2.5 py-0.5 rounded-full text-[10px] font-bold bg-[#D4AF37]/20 text-[#D4AF37] border-[#D4AF37]/40">
                 ACTIVE GLOBAL BOUNTY
@@ -213,7 +213,7 @@ export const GlobalRedTeamChallenge: React.FC = () => {
                 <div>
                   <div className="font-bold text-white text-sm">CHALLENGE OBJECTIVE — WIN CONDITIONS</div>
                   <p className="text-zinc-400 text-xs mt-0.5">
-                    The challenger must demonstrate a verifiable breach of the FROZEN v1.2 LTS integrity. Any ONE of the following 5 objectives constitutes a WIN:
+                    The challenger must demonstrate a verifiable breach of the FROZEN v1.2.1 LTS integrity. Any ONE of the following 5 objectives constitutes a WIN:
                   </p>
                 </div>
                 <span className="px-3 py-1 rounded-xl bg-rose-500/10 text-rose-300 border-rose-500/30 text-xs font-bold shrink-0">

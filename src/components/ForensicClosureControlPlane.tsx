@@ -103,7 +103,7 @@ export const ForensicClosureControlPlane: React.FC = () => {
       status: 'PASS',
       evidenceProof: 'Canonical counter immutable at 14,902 / 14,902 seals',
       invariantCondition: 'CanonicalCount === 14902 && WriteAuthority === NONE',
-      testedValue: '14,902 / 14,902 (FROZEN v1.2 LTS)',
+      testedValue: '14,902 / 14,902 (FROZEN v1.2.1 LTS)',
       auditTrail: 'Hardening Firewall prevents re-indexing or auto-increment',
     },
     {
@@ -330,7 +330,7 @@ export const ForensicClosureControlPlane: React.FC = () => {
           rule5_noUnprovenVerifiedLabels: true,
         },
         canonicalCoreState: {
-          version: 'v1.2 LTS',
+          version: 'v1.2.1 LTS',
           merkleRoot: SYSTEM_METADATA.merkleRoot,
           blockHeight: `#${SYSTEM_METADATA.sealedBlock}`,
           canonicalSeals: 14902,
@@ -395,7 +395,7 @@ export const ForensicClosureControlPlane: React.FC = () => {
               CANONICAL: <span className="text-cyan-400">FROZEN 🔒</span> &bull; EVIDENCE: <span className="text-amber-400">QUARANTINED 🟡</span> &bull; PROMOTION: <span className="text-rose-400">FAIL-CLOSED 🚫</span> &bull; MUTATION: <span className="text-emerald-400">0</span>
             </div>
             <p className="text-[11px] text-zinc-400">
-              สถานะ Mismatch (+5) ถือเป็น Evidence ใน Quarantine โดยคง Canonical v1.2 LTS (14,902 Seals) ไว้ 100%
+              สถานะ Mismatch (+5) ถือเป็น Evidence ใน Quarantine โดยคง Canonical v1.2.1 LTS (14,902 Seals) ไว้ 100%
             </p>
           </div>
 
@@ -440,7 +440,7 @@ export const ForensicClosureControlPlane: React.FC = () => {
               <span className="text-emerald-400 text-[10px] font-bold">LOCKED</span>
             </div>
             <div className="space-y-1 text-[11px] text-zinc-300 font-mono">
-              <div className="flex justify-between"><span className="text-zinc-500">Version:</span><strong className="text-white">v1.2 LTS</strong></div>
+              <div className="flex justify-between"><span className="text-zinc-500">Version:</span><strong className="text-white">v1.2.1 LTS</strong></div>
               <div className="flex justify-between"><span className="text-zinc-500">Merkle Root:</span><strong className="text-cyan-300">909ab814...fa4c68</strong></div>
               <div className="flex justify-between"><span className="text-zinc-500">Block Height:</span><strong className="text-purple-300">#849,202</strong></div>
               <div className="flex justify-between"><span className="text-zinc-500">Canonical Seals:</span><strong className="text-emerald-300 font-bold">14,902</strong></div>
@@ -711,12 +711,12 @@ export const ForensicClosureControlPlane: React.FC = () => {
       {/* ASCII Summary Box: Clean & Sovereign */}
       <div className="p-6 rounded-[28px] bg-black/90 border-amber-500/30 space-y-3">
         <div className="flex items-center justify-between text-xs text-amber-300 font-bold border-b border-white/10 pb-2">
-          <span>ZYRQUEN Ω∞ FROZEN v1.2 LTS — SOVEREIGN CONTROL CONTRACT</span>
+          <span>ZYRQUEN Ω∞ FROZEN v1.2.1 LTS — SOVEREIGN CONTROL CONTRACT</span>
           <span className="text-zinc-400 text-[11px] font-normal">SSoT Mutation = 0 &bull; Non-Bypassable</span>
         </div>
         <pre className="text-amber-200 text-xs font-mono leading-relaxed overflow-x-auto p-4 rounded-2xl bg-[#070a12] border-amber-500/20">
 {`╔════════════════════════════════════╗
-║ ZYRQUEN Ω∞ FROZEN v1.2 LTS        ║
+║ ZYRQUEN Ω∞ FROZEN v1.2.1 LTS        ║
 ║                                    ║
 ║ CANONICAL          🔒 FROZEN       ║
 ║ SEALS              14,902          ║

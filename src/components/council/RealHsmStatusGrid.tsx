@@ -259,7 +259,7 @@ export const RealHsmStatusGrid: React.FC<RealHsmStatusGridProps> = ({ onSelectMe
               <ShieldCheck className="w-3.5 h-3.5 text-teal-400" />
               Δ0.00% SSoT
             </div>
-            <div className="text-[9px] text-zinc-500">FROZEN v1.2 LTS (14,902)</div>
+            <div className="text-[9px] text-zinc-500">FROZEN v1.2.1 LTS (14,902)</div>
           </div>
         </div>
       </div>
@@ -469,7 +469,7 @@ export const RealHsmStatusGrid: React.FC<RealHsmStatusGridProps> = ({ onSelectMe
                       </div>
                       <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 text-xs">
                         <div><strong className="text-white">Target Contract:</strong> <span className="font-mono text-cyan-300">zyrquen-sovereign-contract-v2.sol</span></div>
-                        <div><strong className="text-white">System Status:</strong> <span className="text-emerald-400 font-bold">LOCKED_FROZEN_v1.2_LTS</span></div>
+                        <div><strong className="text-white">System Status:</strong> <span className="text-emerald-400 font-bold">LOCKED_FROZEN_v1.2.1_LTS</span></div>
                         <div><strong className="text-white">Sovereign Principal:</strong> <span className="text-amber-300 font-bold">Yuttaphum Phakphian (#EP-SOVEREIGN-01)</span></div>
                         <div><strong className="text-white">Legal Framework:</strong> <span className="text-purple-300">Thai ETDA B.E. 2544 (Sec 9, 26, 28)</span></div>
                         <div><strong className="text-white">Audit Standard:</strong> <span className="text-zinc-300">FIPS 140-3 L4 &amp; Zero-Defect Invariant</span></div>

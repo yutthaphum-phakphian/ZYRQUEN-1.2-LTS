@@ -38,10 +38,10 @@ export const SLIDES_DATA: SlideItem[] = [
   {
     id: 1,
     badge: 'SLIDE 01 / 11 • EXECUTIVE BRIEF',
-    title: 'ZYRQUEN Ω v1.2 LTS — Sovereign Audit Report',
+    title: 'ZYRQUEN Ω v1.2.1 LTS — Sovereign Audit Report',
     subtitle: 'สรุปผลการตรวจสอบสถานะสัจธรรมแกนหลัก (Canonical SSoT Kernel) และอำนาจอธิปไตยเดี่ยว',
     bulletPoints: [
-      { label: 'Canonical Status', detail: 'FROZEN v1.2 LTS สลักสิทธิ์ถาวร ห้ามเปลี่ยนแปลงแก้ไข', highlight: 'FROZEN v1.2 LTS' },
+      { label: 'Canonical Status', detail: 'FROZEN v1.2.1 LTS สลักสิทธิ์ถาวร ห้ามเปลี่ยนแปลงแก้ไข', highlight: 'FROZEN v1.2.1 LTS' },
       { label: 'SSoT Mutation Delta', detail: '0 (ไม่มีการกลายพันธุ์หรือแทรกแซงโค้ดแกนหลัก)', highlight: 'Delta = 0' },
       { label: 'Baseline Drift', detail: '0.0000% คงสภาพสัจธรรมสมบูรณ์แบบข้ามเครือข่าย', highlight: '0.0000%' },
       { label: 'Sovereign Authority', detail: 'นายยุทธภูมิ พากเพียร (#EP-SOVEREIGN-01)', highlight: '#EP-SOVEREIGN-01' },
@@ -204,9 +204,9 @@ export const SLIDES_DATA: SlideItem[] = [
     id: 10,
     badge: 'SLIDE 10 / 11 • RATIFICATION & VERDICT',
     title: 'Governance Certification & Court Readiness Verdict',
-    subtitle: 'บทสรุปการรับรองความถูกต้องสมบูรณ์สูงสุดของ ZYRQUEN Ω v1.2 LTS',
+    subtitle: 'บทสรุปการรับรองความถูกต้องสมบูรณ์สูงสุดของ ZYRQUEN Ω v1.2.1 LTS',
     bulletPoints: [
-      { label: 'Kernel Immutability', detail: 'FROZEN v1.2 LTS ปิดผนึกถาวร SSoT Mutation Delta = 0, Baseline Drift = 0.00%', highlight: '100% FROZEN' },
+      { label: 'Kernel Immutability', detail: 'FROZEN v1.2.1 LTS ปิดผนึกถาวร SSoT Mutation Delta = 0, Baseline Drift = 0.00%', highlight: '100% FROZEN' },
       { label: 'Master Gates Verdict', detail: '22/22 ด่านทดสอบผ่านฉันทามติเอกฉันท์ (Unanimous Pass) เวลาเฉลี่ย 1.82 ms', highlight: '22/22 PASSED' },
       { label: 'Judicial Admissibility', detail: 'รองรับการนำสืบพยานหลักฐานในชั้นศาลตามประมวลกฎหมายวิธีพิจารณาความแพ่ง', highlight: 'Court Admissible' },
       { label: 'Sole Authority', detail: 'สิทธิ์บริหารสูงสุดผูกขาดแก่นายยุทธภูมิ พากเพียร (#EP-SOVEREIGN-01) แต่เพียงผู้เดียว', highlight: '#EP-SOVEREIGN-01' }
@@ -263,10 +263,10 @@ export const ExecutiveSlideDeck: React.FC = () => {
 
   const handleExportSummary = () => {
     playAuditChime();
-    const summaryText = `ZYRQUEN Ω v1.2 LTS — Executive Slide Deck Summary
+    const summaryText = `ZYRQUEN Ω v1.2.1 LTS — Executive Slide Deck Summary
 Sovereign Authority: นายยุทธภูมิ พากเพียร (#EP-SOVEREIGN-01)
 Genesis Block: #849,202 | Canonical Seals: 14,902
-Status: FROZEN v1.2 LTS (Delta=0, Drift=0.0000%)
+Status: FROZEN v1.2.1 LTS (Delta=0, Drift=0.0000%)
 Invariants: 10/10 PASSED | Master Gates: 22/22 PASSED (Avg 1.82ms)
 PQC Suite: ML-DSA-87 (Dilithium-5) Active, SPHINCS+ Standby, Kyber-1024 KEM
 Court Admissibility: ETDA Sections 9, 26, 28 & ISO/IEC 27037 100% Ready
@@ -414,7 +414,7 @@ Exported at: ${new Date().toISOString()}`;
         {/* Footer Note */}
         <div className="mt-8 pt-4 border-t border-slate-800/80 flex flex-wrap items-center justify-between text-[11px] font-mono text-slate-500">
           <span>{currentSlide.footerNote}</span>
-          <span className="text-cyan-400 font-bold">ZYRQUEN Ω v1.2 LTS FROZEN</span>
+          <span className="text-cyan-400 font-bold">ZYRQUEN Ω v1.2.1 LTS FROZEN</span>
         </div>
       </div>
 

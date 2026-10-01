@@ -48,7 +48,7 @@ export function generateForensicPdfReport({
   doc.setFontSize(8);
   doc.setTextColor(180, 190, 205);
   doc.text(
-    `Frozen Baseline v1.2 LTS | Transaction ID: ${AUDIT_TRACE_TX.txId} | Sealed Block #${AUDIT_TRACE_TX.sealedLedgerBlock}`,
+    `Frozen Baseline v1.2.1 LTS | Transaction ID: ${AUDIT_TRACE_TX.txId} | Sealed Block #${AUDIT_TRACE_TX.sealedLedgerBlock}`,
     margin,
     y
   );
@@ -288,7 +288,7 @@ export function generateForensicPdfReport({
     286
   );
   doc.text(
-    `Zero-Jitter Merkle Bus • Port 3000 • Verified by Zyrquen Sovereign Kernel v1.2 LTS • Generated on ${reportDate}`,
+    `Zero-Jitter Merkle Bus • Port 3000 • Verified by Zyrquen Sovereign Kernel v1.2.1 LTS • Generated on ${reportDate}`,
     margin,
     290
   );

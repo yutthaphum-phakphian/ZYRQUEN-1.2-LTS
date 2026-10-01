@@ -119,7 +119,7 @@ export const MerkleTreeInteractiveGraph: React.FC<MerkleTreeInteractiveGraphProp
       metadata: {
         sealIndex: '14,902 Seals',
         statute: 'PDPA B.E. 2562 & SSoT Δ0 Invariants',
-        description: 'Frozen v1.2 LTS Canonical Invariant Seals (#0001 through #14,902).',
+        description: 'v1.2.1 LTS Canonical Invariant Seals (#0001 through #14,902).',
       },
       childrenIds: ['leaf-seal-0001', 'leaf-seal-7451', 'leaf-seal-14902'],
     };
@@ -277,7 +277,7 @@ export const MerkleTreeInteractiveGraph: React.FC<MerkleTreeInteractiveGraphProp
       metadata: {
         sealIndex: '#14,902',
         statute: 'PDPA B.E. 2562 & ETDA Sec 28',
-        description: 'Final canonical seal establishing the 14,902 invariant boundary for Frozen v1.2 LTS.',
+        description: 'Final canonical seal establishing the 14,902 invariant boundary for v1.2.1 LTS.',
       },
     };
 

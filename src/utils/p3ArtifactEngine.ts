@@ -1,8 +1,8 @@
 /**
- * ZYRQUEN Ω∞ FROZEN v1.2 LTS — P3 ARTIFACT INTEGRITY + RUNTIME PROVENANCE ENGINE
+ * ZYRQUEN Ω∞ FROZEN v1.2.1 LTS — P3 ARTIFACT INTEGRITY + RUNTIME PROVENANCE ENGINE
  * 
  * STRICT INVARIANTS:
- * - CANONICAL VERSION = 'v1.2 LTS'
+ * - CANONICAL VERSION = 'v1.2.1 LTS'
  * - CANONICAL ROOT    = '909ab814479844d8a14816bed34cdbb07528e18501da86fc4691763a43fa4c68'
  * - CANONICAL BLOCK   = 849202
  * - CANONICAL SEALS   = 14902
@@ -107,7 +107,7 @@ export interface P3FailureCondition {
 }
 
 export class P3ArtifactEngine {
-  public static readonly CANONICAL_VERSION = 'v1.2 LTS' as const;
+  public static readonly CANONICAL_VERSION = 'v1.2.1 LTS' as const;
   public static readonly CANONICAL_ROOT = '909ab814479844d8a14816bed34cdbb07528e18501da86fc4691763a43fa4c68' as const;
   public static readonly CANONICAL_BLOCK = 849202 as const;
   public static readonly CANONICAL_SEALS = 14902 as const;
@@ -436,7 +436,7 @@ export class P3ArtifactEngine {
         expected: 'MUTATION DELTA = 0',
         actual: '0 (Zero Canonical Mutation)',
         status: 'PASS',
-        auditEvidence: 'Absolute mathematical baseline v1.2 LTS preserved inviolate.',
+        auditEvidence: 'Absolute mathematical baseline v1.2.1 LTS preserved inviolate.',
       },
     ];
   }

@@ -315,7 +315,7 @@ export default function ForensicDossierSuite() {
                   รายงานการตรวจสอบทางนิติวิทยาศาสตร์ดิจิทัลแบบสมบูรณ์ 16 ขั้นตอน
                 </h2>
                 <p className="text-xs font-mono text-zinc-400 mt-0.5">
-                  ZYRQUEN Ω∞ Sovereign World Engine (v1.2 LTS / Phase 12)
+                  ZYRQUEN Ω∞ Sovereign World Engine (v1.2.1 LTS / Phase 12)
                 </p>
               </div>
               <button

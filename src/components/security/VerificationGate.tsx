@@ -134,7 +134,7 @@ export const VerificationGate: React.FC<VerificationGateProps> = ({
       ctx.fillText('ZYRQUEN Ω∞ FORENSIC VERIFICATION GATE', 120, 180);
       ctx.fillStyle = '#94a3b8';
       ctx.font = '38px monospace';
-      ctx.fillText(`Genesis Block #${blockHeight} | SSoT Δ0.00% Zero Drift | Frozen v1.2 LTS`, 120, 260);
+      ctx.fillText(`Genesis Block #${blockHeight} | SSoT Δ0.00% Zero Drift | v1.2.1 LTS`, 120, 260);
 
       // High-DPI QR Pattern Frame
       const qrBoxSize = 900;

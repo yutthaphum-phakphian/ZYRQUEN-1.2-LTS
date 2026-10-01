@@ -69,7 +69,7 @@ export const GenesisDeploymentConsole: React.FC<{ className?: string }> = ({ cla
       setCurrentStep('STEP_4_DEPLOY');
       playTone(880, 0.12, 'sawtooth');
       addLog('STEP 3 OK: Unanimous Quorum 10/10 Attestation verified (FIPS 204 ML-DSA-87).');
-      addLog('STEP 4 EXECUTING: Atomic state transition into LOCKED_FROZEN v1.2 LTS...');
+      addLog('STEP 4 EXECUTING: Atomic state transition into LOCKED_FROZEN v1.2.1 LTS...');
     }, 4200);
 
     // Step 4: Final Closure
@@ -119,7 +119,7 @@ export const GenesisDeploymentConsole: React.FC<{ className?: string }> = ({ cla
       - Section_28: "Certification Authority Integrity"
     PDPA_BE2562: "Zero-Knowledge Personal Data Enclave"
     FIPS_Standard: "140-3 Level 4"
-  runtimestatus: "LOCKED_FROZEN_v1.2_LTS"
+  runtimestatus: "LOCKED_FROZEN_v1.2.1_LTS"
   deployment_target: "Canonical Core G11"
   forensic_readiness: "COURT_ADMISSIBLE_MAXIMUM_ASSURANCE"`;
   }, []);

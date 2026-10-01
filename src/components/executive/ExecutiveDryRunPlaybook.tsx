@@ -886,7 +886,7 @@ export const ExecutiveDryRunPlaybook: React.FC<ExecutiveDryRunPlaybookProps> = (
                   ZYRQUEN Ω∞ Master Dossier Completion Certificate
                 </h3>
                 <p className="text-xs text-zinc-400">
-                  Sovereign Control Plane FROZEN v1.2 LTS • Genesis Block #849202
+                  Sovereign Control Plane FROZEN v1.2.1 LTS • Genesis Block #849202
                 </p>
               </div>
 

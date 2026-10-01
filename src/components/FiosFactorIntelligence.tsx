@@ -340,7 +340,7 @@ export const FiosFactorIntelligence: React.FC = () => {
           </div>
 
           <div className="p-3 rounded-xl bg-emerald-500/10 border-emerald-500/30 text-[10px] text-emerald-200 leading-relaxed font-mono">
-            <strong>Immutable Fiduciary Guarantee:</strong> Ingested as read-only sovereign quantitative dataset. Preserves Frozen Baseline v1.2 LTS and SSoT Mutation = 0.
+            <strong>Immutable Fiduciary Guarantee:</strong> Ingested as read-only sovereign quantitative dataset. Preserves Frozen Baseline v1.2.1 LTS and SSoT Mutation = 0.
           </div>
         </div>
       </div>

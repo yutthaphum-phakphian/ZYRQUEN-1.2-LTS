@@ -55,7 +55,7 @@ export interface GoldMasterForensicReport {
 export const GOLD_MASTER_FORENSIC_REPORT: GoldMasterForensicReport = {
   credentialId: 'urn:zyrquen:audit:849202:1789169498750',
   reportType: 'ZYRQUEN Ω∞ Sovereign Master Forensic Audit Report',
-  engineVersion: 'v1.2 LTS (LOCKED_FROZEN_v1.2_LTS)',
+  engineVersion: 'v1.2.1 LTS (LOCKED_FROZEN_v1.2.1_LTS)',
   auditStandard: 'FIOS Treasury & SSoT Δ0 System Invariants 12-Stage Forensics',
   auditStatus: '🏆 GOLD MASTER FULL QUORUM ACHIEVED (10/10 Passports Verified)',
   promotionGateStatus: '🔓 UNLOCKED (Promotion Gate Stack G11-G13 Released)',

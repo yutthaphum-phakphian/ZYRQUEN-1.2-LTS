@@ -218,7 +218,7 @@ export const Phase7ProductionReadinessDashboard: React.FC = () => {
     return {
       manifestType: 'ZYRQUEN_OMEGA_PHASE7_PRODUCTION_READINESS_MANIFEST',
       generatedAt: new Date().toISOString(),
-      frozenBaseline: 'v1.2 LTS (FROZEN TRUST ANCHOR)',
+      frozenBaseline: 'v1.2.1 LTS (FROZEN TRUST ANCHOR)',
       canonicalSeals: 14902,
       canonicalMerkleRoot: '909ab814479844d8a14816bed34cdbb07528e18501da86fc4691763a43fa4c68',
       canonicalBlock: 849202,

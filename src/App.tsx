@@ -6354,7 +6354,7 @@ function SovereignAppContent() {
       {/* Global Executive Command Palette (Cmd+K / Ctrl+K) */}
       <ExecutiveCommandPalette onSelectAction={handleCommandPaletteAction} />
 
-      {/* Global Animated Film-Grain & CRT Scanline Overlay for FROZEN v1.2 LTS */}
+      {/* Global Animated Film-Grain & CRT Scanline Overlay for FROZEN v1.2.1 LTS */}
       <div className="sovereign-film-grain-overlay" aria-hidden="true" />
       <div className="sovereign-crt-scanline-overlay" aria-hidden="true" />
 

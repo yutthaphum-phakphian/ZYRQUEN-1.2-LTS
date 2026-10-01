@@ -61,7 +61,7 @@ export const QuantumTelemetryBridge: React.FC = () => {
 export function deployOmegaAscensionClosure() {
   return {
     protocol: "Ω∞ Omega Ascension Closure",
-    version: "FROZEN v1.2 LTS",
+    version: "FROZEN v1.2.1 LTS",
     phases: [
       "Genesis Seal",
       "Custodian Binding",

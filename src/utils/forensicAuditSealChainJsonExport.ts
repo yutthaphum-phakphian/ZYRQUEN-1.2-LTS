@@ -470,7 +470,7 @@ export async function buildSignedForensicAuditChainPayload(
 
   const payload: SignedForensicAuditChainPayload = {
     schemaVersion: '2.5.0-LTS-FROZEN',
-    specification: 'ZYRQUEN Ω∞ SOVEREIGN AUDIT SEAL CHAIN & FORENSIC EVIDENCE LOG SPECIFICATION (v1.2 LTS)',
+    specification: 'ZYRQUEN Ω∞ SOVEREIGN AUDIT SEAL CHAIN & FORENSIC EVIDENCE LOG SPECIFICATION (v1.2.1 LTS)',
     protocol: 'OFFCHAIN_FORENSIC_COLD_STORAGE_CHAIN_v25',
     documentType: 'SOVEREIGN_FORENSIC_SEAL_CHAIN_AND_EVIDENCE_LOG_EXPORT',
     exportTimestampUtc: timeUtc,

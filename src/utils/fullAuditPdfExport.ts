@@ -74,7 +74,7 @@ export function generateAndDownloadFullAuditPdfReport({
   doc.setTextColor(180, 195, 215);
   const reportId = `SOV-AUDIT-${Date.now()}-${Math.floor(Math.random() * 9000 + 1000)}`;
   const dateStr = new Date().toISOString().replace('T', ' ').substring(0, 19) + ' UTC';
-  doc.text(`Document ID: ${reportId} | Generated: ${dateStr} | Baseline: Frozen v1.2 LTS`, margin, y);
+  doc.text(`Document ID: ${reportId} | Generated: ${dateStr} | Baseline: v1.2.1 LTS`, margin, y);
   y += 4.5;
   doc.text(`Merkle Root: ${SYSTEM_METADATA.merkleRoot.substring(0, 48)}... (14,902 Canonical Seals)`, margin, y);
   y += 18;
@@ -529,7 +529,7 @@ export function generateAndDownloadFullAuditPdfReport({
     doc.setFontSize(6.5);
     doc.setTextColor(148, 163, 184);
     doc.text(
-      `ZYRQUEN Ω∞ SOVEREIGN FROZEN v1.2 LTS • OFFICIAL FORENSIC AUDIT LEDGER • Page ${p} of ${totalPages}`,
+      `ZYRQUEN Ω∞ SOVEREIGN FROZEN v1.2.1 LTS • OFFICIAL FORENSIC AUDIT LEDGER • Page ${p} of ${totalPages}`,
       margin,
       pageHeight - 6
     );

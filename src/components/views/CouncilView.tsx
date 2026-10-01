@@ -418,7 +418,7 @@ export const CouncilView: React.FC<CouncilViewProps> = ({ onAddSystemEvent }) =>
               </h1>
               <p className="text-sm text-zinc-300 max-w-3xl leading-relaxed">
                 โครงสร้างอำนาจและความชอบธรรมภายใต้ระบบควบคุมหลัก <strong className="text-white">ZYRQUEN Ω∞ SOVEREIGN RUNTIME CONTROL DECK</strong>{' '}
-                ตามสัญญาสถาปัตยกรรมแช่แข็ง <strong className="text-amber-300">Frozen v1.2 LTS</strong> เพื่อรักษาความปลอดภัย ความถูกต้องแม่นยำ และความเป็นอมตะของชุดข้อมูล (Immutable Data)
+                ตามสัญญาสถาปัตยกรรมแช่แข็ง <strong className="text-amber-300">v1.2.1 LTS</strong> เพื่อรักษาความปลอดภัย ความถูกต้องแม่นยำ และความเป็นอมตะของชุดข้อมูล (Immutable Data)
               </p>
             </div>
 

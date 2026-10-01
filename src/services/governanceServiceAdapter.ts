@@ -1,5 +1,5 @@
 /**
- * ZYRQUEN Ω∞ Sovereign Kernel v1.2 LTS
+ * ZYRQUEN Ω∞ Sovereign Kernel v1.2.1 LTS
  * Governance Service Adapter & Court Evidence Dossier Generator
  * Principal: นายยุทธภูมิ พากเพียร #EP-SOVEREIGN-01
  * Genesis: #849202 | Merkle Root: 909ab814479844d8a14816bed34cdbb07528e18501da86fc4691763a43fa4c68
