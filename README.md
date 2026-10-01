@@ -1,20 +1,26 @@
 <div align="center">
 
-<img src="banner.svg" alt="ZYRQUEN Ω™ Banner" width="100%" />
+<img src="banner.svg" alt="ZYRQUEN Ω™ banner" width="100%" />
 
-# ZYRQUEN Ω™ Sovereign World Engine
+<br />
 
-**Production-grade TypeScript application with automated verification, CI/CD, and GitHub Pages deployment**
+# `Ω` &nbsp; ZYRQUEN &nbsp; `Ω™`
 
-[![Live PWA](https://img.shields.io/badge/PWA-Live-00e5ff?style=for-the-badge&logo=googlechrome&logoColor=black)](https://yutthaphum-phakphian.github.io/ZYRQUEN-1.2-LTS/)
-[![Release](https://img.shields.io/badge/Release-v1.2.1%20LTS-blue?style=for-the-badge)](https://github.com/yutthaphum-phakphian/ZYRQUEN-1.2-LTS/releases/tag/v1.2.1)
-[![TypeScript](https://img.shields.io/badge/TypeScript-5.x-3178C6?style=for-the-badge&logo=typescript&logoColor=white)](https://www.typescriptlang.org/)
-[![React](https://img.shields.io/badge/React-19-61DAFB?style=for-the-badge&logo=react&logoColor=black)](https://react.dev/)
-[![Vite](https://img.shields.io/badge/Vite-6-646CFF?style=for-the-badge&logo=vite&logoColor=white)](https://vitejs.dev/)
-[![Node](https://img.shields.io/badge/Node-%E2%89%A522-339933?style=for-the-badge&logo=nodedotjs&logoColor=white)](https://nodejs.org/)
-[![CI](https://img.shields.io/badge/CI-GitHub%20Actions-2088FF?style=for-the-badge&logo=githubactions&logoColor=white)](https://github.com/yutthaphum-phakphian/ZYRQUEN-1.2-LTS/actions)
+### ▛ &nbsp; S O V E R E I G N &nbsp; W O R L D &nbsp; E N G I N E &nbsp; ▟
 
-[Live App](https://yutthaphum-phakphian.github.io/ZYRQUEN-1.2-LTS/) · [Releases](https://github.com/yutthaphum-phakphian/ZYRQUEN-1.2-LTS/releases) · [Security](SECURITY.md) · [Contributing](CONTRIBUTING.md)
+`TypeScript` &nbsp;◆&nbsp; `React 19` &nbsp;◆&nbsp; `Vite 6` &nbsp;◆&nbsp; `Vitest` &nbsp;◆&nbsp; `GitHub Actions`
+
+<br />
+
+[![PWA](https://img.shields.io/badge/PWA-LIVE-00e5ff?style=flat-square&labelColor=0d1117&logo=googlechrome&logoColor=00e5ff)](https://yutthaphum-phakphian.github.io/ZYRQUEN-1.2-LTS/)
+[![Release](https://img.shields.io/badge/RELEASE-v1.2.1%20LTS-a855f7?style=flat-square&labelColor=0d1117)](https://github.com/yutthaphum-phakphian/ZYRQUEN-1.2-LTS/releases/tag/v1.2.1)
+[![CI](https://img.shields.io/github/actions/workflow/status/yutthaphum-phakphian/ZYRQUEN-1.2-LTS/ci.yml?style=flat-square&labelColor=0d1117&label=CI&logo=githubactions&logoColor=ffd700)](https://github.com/yutthaphum-phakphian/ZYRQUEN-1.2-LTS/actions)
+[![TypeScript](https://img.shields.io/badge/TYPESCRIPT-~5.8-ffd700?style=flat-square&labelColor=0d1117&logo=typescript&logoColor=ffd700)](https://www.typescriptlang.org/)
+[![Node](https://img.shields.io/badge/NODE-%E2%89%A522-00e5ff?style=flat-square&labelColor=0d1117&logo=nodedotjs&logoColor=00e5ff)](https://nodejs.org/)
+
+<br />
+
+**[▶ LIVE APP](https://yutthaphum-phakphian.github.io/ZYRQUEN-1.2-LTS/)** &nbsp;◆&nbsp; [RELEASES](https://github.com/yutthaphum-phakphian/ZYRQUEN-1.2-LTS/releases) &nbsp;◆&nbsp; [SECURITY](SECURITY.md) &nbsp;◆&nbsp; [CONTRIBUTING](CONTRIBUTING.md)
 
 </div>
 
