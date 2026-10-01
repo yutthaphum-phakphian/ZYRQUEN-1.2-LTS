@@ -4,14 +4,6 @@
 
 <br />
 
-# Ω &nbsp; ZYRQUEN &nbsp; Ω™
-
-### ▛ &nbsp; S O V E R E I G N &nbsp; W O R L D &nbsp; E N G I N E &nbsp; ▟
-
-`TypeScript` &nbsp;◆&nbsp; `React 19` &nbsp;◆&nbsp; `Vite 6` &nbsp;◆&nbsp; `Vitest` &nbsp;◆&nbsp; `GitHub Actions`
-
-<br />
-
 [![PWA](https://img.shields.io/badge/PWA-LIVE-00e5ff?style=flat-square&labelColor=0d1117&logo=googlechrome&logoColor=00e5ff)](https://yutthaphum-phakphian.github.io/ZYRQUEN-1.2-LTS/)
 [![Release](https://img.shields.io/badge/RELEASE-v1.2.1%20LTS-a855f7?style=flat-square&labelColor=0d1117)](https://github.com/yutthaphum-phakphian/ZYRQUEN-1.2-LTS/releases/tag/v1.2.1)
 [![CI](https://img.shields.io/github/actions/workflow/status/yutthaphum-phakphian/ZYRQUEN-1.2-LTS/ci.yml?style=flat-square&labelColor=0d1117&label=CI&logo=githubactions&logoColor=ffd700)](https://github.com/yutthaphum-phakphian/ZYRQUEN-1.2-LTS/actions)
