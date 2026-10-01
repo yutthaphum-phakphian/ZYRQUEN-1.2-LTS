@@ -73,7 +73,7 @@ Last checked in GitHub Codespaces on 2026-10-01:
 | Build | Vite ^6.2, Tailwind CSS 4 |
 | Backend | Express 4, Socket.IO, WebSockets |
 | Testing | Vitest ^5, Testing Library, `@vitest/coverage-v8` |
-| Package manager | npm with `package-lock.json` |
+| Package manager | npm with `npm-shrinkwrap.json` |
 
 ## Prerequisites
 
