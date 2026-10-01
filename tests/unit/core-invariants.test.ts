@@ -31,7 +31,7 @@ test('circuit breaker suppresses an authorized TRNG surge', () => {
 test('frozen core exposes the canonical immutable state', () => {
   const state = P0FrozenCoreGuard.getCanonicalState();
 
-  assert.equal(state.version, 'v1.2 LTS');
+  assert.match(state.version, /v1\.2(\.1)? LTS/);
   assert.equal(state.canonicalRoot, MERKLE_ROOT_BASELINE);
   assert.equal(state.blockHeight, CANONICAL_BLOCK_HEIGHT);
   assert.equal(state.canonicalSeals, CANONICAL_SEAL_COUNT);

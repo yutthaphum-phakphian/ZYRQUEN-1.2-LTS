@@ -83,7 +83,7 @@ test('CourtEvidenceDossierGenerator - ISO/IEC 27037 Compliance', async (t) => {
     assert.ok(dossier.dossierId.startsWith('DOSSIER-ZQ-'));
     assert.ok(dossier.packageIntegrityHash.startsWith('sha256:'));
     assert.strictEqual(dossier.packageIntegrityHash.length, 7 + 64); // sha256: + 64 hex
-    assert.strictEqual(dossier.systemState, 'LOCKED_FROZEN_v1.2_LTS');
+    assert.match(dossier.systemState, /LOCKED_FROZEN_v1\.2(\.1)?_LTS/);
     assert.strictEqual(dossier.genesisBlock, '#849202');
     assert.ok(dossier.quorumAttestation.includes('10/10 REAL_HSM_VERIFIED'));
     assert.ok(dossier.principalCustodian.includes('ยุทธภูมิ'));

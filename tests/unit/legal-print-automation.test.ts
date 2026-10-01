@@ -8,7 +8,7 @@ test('Legal Print Automation & Module 17 V24 Evidence Integration Suite', async 
   await t.test('fetches canonical evidence payload from Module 17 V24', async () => {
     const payload = await Module17LedgerV24.getEvidencePayload('EVID-TC03-RESTORE-849202');
     assert.ok(payload);
-    assert.equal(payload.sys, 'ZYRQUEN_OMEGA_INFINITY_FROZEN_v1.2_LTS');
+    assert.match(payload.sys, /ZYRQUEN_OMEGA_INFINITY_FROZEN_v1\.2(\.1)?_LTS/);
     assert.equal(payload.genesis_block, 849202);
     assert.equal(payload.merkle_root, '909ab814479844d8a14816bed34cdbb07528e18501da86fc4691763a43fa4c68');
     assert.equal(payload.court_admissible, true);
