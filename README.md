@@ -61,7 +61,8 @@ Last checked in GitHub Codespaces on 2026-10-01:
 
 | Check | Result |
 |:--|:--|
-| Unit tests (Vitest) | 125 passed, 2 failed (127 total); 20 of 21 test files passing |
+| Unit tests (Vitest) | 128 of 128 passed; 21 of 21 test files passing |
+| Production build (`npm run build`) | Succeeds |
 | GitHub Actions | 13 workflow files in `.github/workflows/` |
 | Genesis anchor | Block `849202`, recorded in `evidence/real-gates-verification.json` |
 
