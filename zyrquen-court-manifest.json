@@ -5,7 +5,7 @@
     "documentRef": "DOC-SOV-HSM-1010-2026",
     "certificateId": "ZQ-GREEN-DEP-849202-3908",
     "securityLevel": "SOVEREIGN LEVEL-Omega",
-    "engineVersion": "LOCKED_FROZEN_v1.2_LTS (v4.16 GOLD MASTER)",
+    "engineVersion": "LOCKED_FROZEN_v1.2.1_LTS (v4.16 GOLD MASTER)",
     "mainnetStatus": "MAINNET LIVE 100% PURE GREEN",
     "verificationGate": "PASSED 100% GREEN",
     "sovereignLeadPrincipal": "นายยุทธภูมิ พากเพียร (#EP-SOVEREIGN-01)",
@@ -273,7 +273,7 @@
       "title": "WORM Audit Trail Ledger (14,902 Canonical Frozen Seals)",
       "type": "Ledger Fabric",
       "legalStatute": "พ.ร.บ. ธุรกรรมฯ มาตรา ๒๘ / SSoT Δ0 Invariant",
-      "status": "FROZEN_v1.2_LTS"
+      "status": "FROZEN_v1.2.1_LTS"
     },
     {
       "exhibitId": "จพ.07",
