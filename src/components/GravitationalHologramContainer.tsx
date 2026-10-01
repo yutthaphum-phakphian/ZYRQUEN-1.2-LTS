@@ -1,5 +1,6 @@
 import React, { useState, useRef, useCallback } from 'react';
-import { Crosshair, Orbit, Sparkles } from 'lucide-react';
+import { Crosshair, Orbit, Sparkles, Cpu } from 'lucide-react';
+import { useSovereignAtlasWorker } from '../hooks/useSovereignAtlasWorker';
 
 export interface VectorDisplacement {
   dx: number;
@@ -38,6 +39,7 @@ export const GravitationalHologramContainer: React.FC<GravitationalHologramConta
   const containerRef = useRef<HTMLDivElement | null>(null);
   const [isHovering, setIsHovering] = useState<boolean>(false);
   const [gravityEnabled, setGravityEnabled] = useState<boolean>(true);
+  const { computeGravityField } = useSovereignAtlasWorker();
   const [vectorField, setVectorField] = useState<VectorDisplacement>({
     dx: 0,
     dy: 0,
@@ -53,36 +55,34 @@ export const GravitationalHologramContainer: React.FC<GravitationalHologramConta
     (e: React.MouseEvent<HTMLDivElement>) => {
       if (!gravityEnabled || !containerRef.current) return;
       const rect = containerRef.current.getBoundingClientRect();
-      const relX = (e.clientX - rect.left) / Math.max(1, rect.width); // 0..1
-      const relY = (e.clientY - rect.top) / Math.max(1, rect.height); // 0..1
+      const clientX = e.clientX;
+      const clientY = e.clientY;
 
-      // Normalized centered coordinates (-1 to +1)
-      const cx = relX * 2 - 1;
-      const cy = relY * 2 - 1;
-      const rSq = cx * cx + cy * cy;
-      const r = Math.min(1.414, Math.sqrt(rSq));
-
-      // Gravitational potential well depth (Gaussian Lorentzian curve)
-      const wellDepth = Math.exp(-rSq * 1.65);
-      const dx = +(cx * 4.8 * wellDepth).toFixed(2);
-      const dy = +(-cy * 4.8 * wellDepth).toFixed(2);
-      const dz = +(-wellDepth * 3.4).toFixed(2);
-      const magnitude = +Math.sqrt(dx * dx + dy * dy + dz * dz).toFixed(2);
-      const angleDeg = Math.round((Math.atan2(dy, dx) * 180) / Math.PI);
-      const fieldTesla = +(1.42 + wellDepth * 1.18).toFixed(2);
-
-      setVectorField({
-        dx,
-        dy,
-        dz,
-        magnitude,
-        angleDeg,
-        fieldTesla,
-        normX: +(relX * 100).toFixed(1),
-        normY: +(relY * 100).toFixed(1),
+      computeGravityField(
+        clientX,
+        clientY,
+        {
+          left: rect.left,
+          top: rect.top,
+          width: rect.width,
+          height: rect.height,
+        },
+        4.8,
+        1.65
+      ).then((res) => {
+        setVectorField({
+          dx: res.dx,
+          dy: res.dy,
+          dz: res.dz,
+          magnitude: res.magnitude,
+          angleDeg: res.angleDeg,
+          fieldTesla: res.fieldTesla,
+          normX: res.normX,
+          normY: res.normY,
+        });
       });
     },
-    [gravityEnabled]
+    [gravityEnabled, computeGravityField]
   );
 
   const handlePointerEnter = () => {
@@ -157,6 +157,11 @@ export const GravitationalHologramContainer: React.FC<GravitationalHologramConta
         </div>
 
         <div className="flex flex-wrap items-center gap-2">
+          <span className="px-2 py-0.5 rounded bg-cyan-950/80 border border-cyan-500/40 text-cyan-300 text-[10px] font-semibold flex items-center gap-1">
+            <Cpu className="w-3 h-3 text-cyan-400 animate-pulse" />
+            <span className="hidden sm:inline">Atlas Worker: Active</span>
+          </span>
+
           <div className="px-2.5 py-0.5 rounded bg-black/60 border border-white/10 text-[11px] text-zinc-300 flex items-center gap-1.5">
             <Crosshair className="w-3 h-3 text-cyan-400" />
             <span>

@@ -26,6 +26,7 @@ import {
 } from 'lucide-react';
 import { SYSTEM_METADATA, CANONICAL_MODULES, THAI_CUSTODIANS } from '../data/canonicalData';
 import { playTone, playAuditChime } from './AudioSynthesizer';
+import { useSovereignAtlasWorker } from '../hooks/useSovereignAtlasWorker';
 
 export interface ChamberRuntimeAtlas3DProps {
   className?: string;
@@ -761,11 +762,20 @@ export const ChamberRuntimeAtlas3D: React.FC<ChamberRuntimeAtlas3DProps> = ({
     mount.addEventListener('touchmove', handlePointerMove, { passive: true });
     window.addEventListener('touchend', handlePointerUp);
 
-    // 11. Animation Loop with Three.js Clock
+    // 11. Animation Loop with Three.js Clock & 30FPS rAF Throttling Strategy
     const clock = new THREE.Clock();
+    let lastRenderTimestamp = 0;
+    const targetFpsInterval = 1000 / 30; // 30fps frame throttling for GPU stability
 
-    const animate = () => {
+    const animate = (timestamp: number) => {
       animIdRef.current = requestAnimationFrame(animate);
+
+      // Throttle visual render passes to 30fps to reduce GPU memory & draw calls
+      const elapsedSinceLastRender = timestamp - lastRenderTimestamp;
+      if (elapsedSinceLastRender < targetFpsInterval) {
+        return;
+      }
+      lastRenderTimestamp = timestamp - (elapsedSinceLastRender % targetFpsInterval);
 
       const delta = clock.getDelta();
       const elapsed = clock.getElapsedTime();
@@ -822,7 +832,7 @@ export const ChamberRuntimeAtlas3D: React.FC<ChamberRuntimeAtlas3DProps> = ({
       renderer.render(scene, camera);
     };
 
-    animate();
+    animIdRef.current = requestAnimationFrame(animate);
 
     // 12. Resize Observer for dynamic responsive resizing with rAF guard
     let resizeRafId: number | null = null;

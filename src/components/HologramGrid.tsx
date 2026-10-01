@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, useState } from 'react';
+import React, { useEffect, useRef, useState, useMemo } from 'react';
 import * as THREE from 'three';
 import {
   Compass,
@@ -10,6 +10,7 @@ import {
   Crosshair,
   Flame,
   Sparkles,
+  Cpu,
 } from 'lucide-react';
 import { MultiverseDimensionNode, PanControlState } from '../hooks/useQuantumState';
 import {
@@ -18,6 +19,7 @@ import {
   createDimensionalHeatmapShaderMaterial,
 } from '../utils/hologramMaterial';
 import { playTone } from './AudioSynthesizer';
+import { useSovereignAtlasWorker } from '../hooks/useSovereignAtlasWorker';
 
 export interface HologramGridProps {
   dimensions: MultiverseDimensionNode[];
@@ -30,7 +32,7 @@ export interface HologramGridProps {
   glitchIntensity?: number;
 }
 
-export const HologramGrid: React.FC<HologramGridProps> = ({
+export const HologramGridComponent: React.FC<HologramGridProps> = ({
   dimensions,
   zoomLevel,
   panControl,
@@ -51,6 +53,7 @@ export const HologramGrid: React.FC<HologramGridProps> = ({
   });
 
   const [showSurfaceHeatmap, setShowSurfaceHeatmap] = useState<boolean>(true);
+  const { computeGravityField, computeTransformCoordinates } = useSovereignAtlasWorker();
   const [gravityHud, setGravityHud] = useState<{
     active: boolean;
     px: number;
@@ -68,6 +71,35 @@ export const HologramGrid: React.FC<HologramGridProps> = ({
     dy: 0,
     fieldTesla: 0,
   });
+
+  // Memoize and sanitize coordinate telemetry data, filtering minor noise fluctuations
+  const memoizedDimensions = useMemo(() => {
+    return dimensions.map((dim) => ({
+      ...dim,
+      coordinates: [
+        +dim.coordinates[0].toFixed(2),
+        +dim.coordinates[1].toFixed(2),
+        +dim.coordinates[2].toFixed(2),
+      ] as [number, number, number],
+      qOps: Math.round(dim.qOps),
+    }));
+  }, [dimensions]);
+
+  // Offload coordinate transforms to Web Worker for high-load telemetry streams
+  useEffect(() => {
+    computeTransformCoordinates(
+      memoizedDimensions.map((d) => ({
+        id: d.id,
+        coordinates: d.coordinates,
+        qOps: d.qOps,
+        accentHex: d.accentHex,
+      })),
+      zoomLevel,
+      panControl
+    ).catch((err) => {
+      console.warn('[HologramGrid] Coordinate transformation worker error:', err);
+    });
+  }, [memoizedDimensions, zoomLevel, panControl, computeTransformCoordinates]);
 
   useEffect(() => {
     const container = mountRef.current;
@@ -131,7 +163,7 @@ export const HologramGrid: React.FC<HologramGridProps> = ({
     heatmapGroupRef.current = heatmapGroup;
     group.add(heatmapGroup);
 
-    const hotspotUniforms = dimensions.slice(0, 6).map((d) => ({
+    const hotspotUniforms = memoizedDimensions.slice(0, 6).map((d) => ({
       x: d.coordinates[0],
       z: d.coordinates[2],
       intensity: Math.min(1.0, d.qOps / 1050),
@@ -151,7 +183,7 @@ export const HologramGrid: React.FC<HologramGridProps> = ({
       opacity: 0.4,
     });
 
-    dimensions.forEach((dim) => {
+    memoizedDimensions.forEach((dim) => {
       const [x, y, z] = dim.coordinates;
       const nodeGeo = new THREE.OctahedronGeometry(dim.id === 'dim-00' ? 0.45 : 0.35, 0);
       const nodeMat = new THREE.MeshBasicMaterial({
@@ -170,8 +202,20 @@ export const HologramGrid: React.FC<HologramGridProps> = ({
     let frameId = 0;
     const clock = new THREE.Clock();
 
-    const animate = () => {
+    // rAF Throttling Strategy: Limit visual buffer updates to 30fps to reduce GPU memory & draw calls
+    let lastRenderTime = 0;
+    const fpsInterval = 1000 / 30; // 33.33ms target threshold
+
+    const animate = (timestamp: number) => {
       frameId = requestAnimationFrame(animate);
+
+      // Throttle render loop to 30fps
+      const elapsedSinceLastRender = timestamp - lastRenderTime;
+      if (elapsedSinceLastRender < fpsInterval) {
+        return;
+      }
+      lastRenderTime = timestamp - (elapsedSinceLastRender % fpsInterval);
+
       const elapsed = clock.getElapsedTime();
       latticeMat.uniforms.uTime.value = elapsed;
       goldMat.uniforms.uTime.value = elapsed;
@@ -198,7 +242,7 @@ export const HologramGrid: React.FC<HologramGridProps> = ({
 
       renderer.render(scene, camera);
     };
-    animate();
+    frameId = requestAnimationFrame(animate);
 
     const handleResize = () => {
       if (!container) return;
@@ -215,7 +259,7 @@ export const HologramGrid: React.FC<HologramGridProps> = ({
       cancelAnimationFrame(frameId);
       renderer.dispose();
     };
-  }, [dimensions]);
+  }, [memoizedDimensions]);
 
   useEffect(() => {
     if (cameraRef.current) {
@@ -233,28 +277,31 @@ export const HologramGrid: React.FC<HologramGridProps> = ({
 
   const handleMouseMove = (e: React.MouseEvent<HTMLDivElement>) => {
     const rect = e.currentTarget.getBoundingClientRect();
-    const nx = ((e.clientX - rect.left) / rect.width) * 2 - 1; // -1 to 1
-    const ny = ((e.clientY - rect.top) / rect.height) * 2 - 1; // -1 to 1
-    const gx = +(nx * 6.5).toFixed(2);
-    const gz = +(ny * 6.5).toFixed(2);
-    const radial = Math.min(1, Math.sqrt(nx * nx + ny * ny));
-    const dy = +(-Math.exp(-radial * radial * 1.4) * 2.06).toFixed(2);
-    const fieldTesla = +(1.42 + (1 - radial * 0.5) * 0.88).toFixed(2);
+    const clientX = e.clientX;
+    const clientY = e.clientY;
 
-    targetGravityRef.current = {
-      x: gx,
-      z: gz,
-      strength: 1.25,
-    };
-
-    setGravityHud({
-      active: true,
-      px: ((e.clientX - rect.left) / rect.width) * 100,
-      py: ((e.clientY - rect.top) / rect.height) * 100,
-      gx,
-      gz,
-      dy,
-      fieldTesla,
+    computeGravityField(
+      clientX,
+      clientY,
+      {
+        left: rect.left,
+        top: rect.top,
+        width: rect.width,
+        height: rect.height,
+      },
+      6.5,
+      1.65
+    ).then((result) => {
+      targetGravityRef.current = result.targetGravity;
+      setGravityHud({
+        active: true,
+        px: result.normX,
+        py: result.normY,
+        gx: result.gx,
+        gz: result.gz,
+        dy: result.dy,
+        fieldTesla: result.fieldTesla,
+      });
     });
   };
 
@@ -276,6 +323,11 @@ export const HologramGrid: React.FC<HologramGridProps> = ({
           </h3>
         </div>
         <div className="flex flex-wrap items-center gap-2 text-xs text-zinc-400 font-mono tabular-nums">
+          <span className="px-2 py-0.5 rounded bg-cyan-950/80 border border-cyan-500/40 text-cyan-300 text-[10px] font-semibold flex items-center gap-1">
+            <Cpu className="w-3 h-3 text-cyan-400 animate-pulse" />
+            <span>Atlas Spatial Worker: Active</span>
+          </span>
+
           <button
             type="button"
             onClick={() => {
@@ -438,4 +490,34 @@ export const HologramGrid: React.FC<HologramGridProps> = ({
   );
 };
 
+const areHologramGridPropsEqual = (
+  prevProps: HologramGridProps,
+  nextProps: HologramGridProps
+): boolean => {
+  if (prevProps.activeDimensionId !== nextProps.activeDimensionId) return false;
+  if (Math.abs(prevProps.zoomLevel - nextProps.zoomLevel) > 0.01) return false;
+  if (Math.abs(prevProps.panControl.x - nextProps.panControl.x) > 0.01) return false;
+  if (Math.abs(prevProps.panControl.y - nextProps.panControl.y) > 0.01) return false;
+  if (Math.abs((prevProps.glitchIntensity || 0) - (nextProps.glitchIntensity || 0)) > 0.01) return false;
+  if (prevProps.dimensions.length !== nextProps.dimensions.length) return false;
+
+  for (let i = 0; i < prevProps.dimensions.length; i++) {
+    const p = prevProps.dimensions[i];
+    const n = nextProps.dimensions[i];
+    if (p.id !== n.id) return false;
+    // Suppress minor telemetry noise: only update on significant shifts
+    if (Math.abs(p.qOps - n.qOps) > 10) return false;
+    if (
+      Math.abs(p.coordinates[0] - n.coordinates[0]) > 0.05 ||
+      Math.abs(p.coordinates[1] - n.coordinates[1]) > 0.05 ||
+      Math.abs(p.coordinates[2] - n.coordinates[2]) > 0.05
+    ) {
+      return false;
+    }
+  }
+
+  return true;
+};
+
+export const HologramGrid = React.memo(HologramGridComponent, areHologramGridPropsEqual);
 export default HologramGrid;
