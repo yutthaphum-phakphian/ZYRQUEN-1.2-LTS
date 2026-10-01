@@ -4,7 +4,7 @@
 
 <br />
 
-# `Ω` &nbsp; ZYRQUEN &nbsp; `Ω™`
+# Ω &nbsp; ZYRQUEN &nbsp; Ω™
 
 ### ▛ &nbsp; S O V E R E I G N &nbsp; W O R L D &nbsp; E N G I N E &nbsp; ▟
 
