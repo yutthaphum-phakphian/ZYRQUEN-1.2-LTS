@@ -1,4 +1,3 @@
-
 <div align="center">
 
 <img src="banner.svg" alt="ZYRQUEN Ω™ Banner" width="100%" />
@@ -34,6 +33,7 @@ The application includes:
 
 ## Table of Contents
 
+- [Verification Status](#verification-status)
 - [Technology Stack](#technology-stack)
 - [Prerequisites](#prerequisites)
 - [Quick Start](#quick-start)
@@ -49,22 +49,37 @@ The application includes:
 
 ---
 
+## Verification Status
+
+Last checked in GitHub Codespaces on 2026-10-01:
+
+| Check | Result |
+|:--|:--|
+| Unit tests (Vitest) | 125 passed, 2 failed (127 total); 20 of 21 test files passing |
+| GitHub Actions | 13 workflow files in `.github/workflows/` |
+| Genesis anchor | Block `849202`, recorded in `evidence/real-gates-verification.json` |
+
+> [!NOTE]
+> Files under `evidence/` are project-recorded data describing the verification model. They are not independent certification, and this README makes no claim of hardware HSM attestation or FIPS validation.
+
+---
+
 ## Technology Stack
 
 | Area | Technology |
 |:--|:--|
 | Frontend | React 19, React Router, Tailwind CSS |
 | UI | Lucide React |
-| Language | TypeScript 5.x |
-| Build | Vite 6, Tailwind CSS 4 |
+| Language | TypeScript ~5.8 |
+| Build | Vite ^6.2, Tailwind CSS 4 |
 | Backend | Express 4, Socket.IO, WebSockets |
-| Testing | Vitest, Testing Library, `@vitest/coverage-v8` |
+| Testing | Vitest ^5, Testing Library, `@vitest/coverage-v8` |
 | Package manager | npm with `package-lock.json` |
 
 ## Prerequisites
 
-- **Node.js** `>= 22`
-- **npm** `>= 10`
+- **Node.js** `>= 22` (last verified on 24.21)
+- **npm** `>= 10` (last verified on 11.19)
 - **Git**
 - **Python** `3.12+` (only for Python-based operational scripts)
 
