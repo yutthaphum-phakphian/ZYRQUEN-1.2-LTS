@@ -36,9 +36,9 @@ jobs:
           node-version: 20
 
 
-      # 2. Install Packages with legacy peer deps for React 19 compatibility
+      # 2. Install project dependencies using the repository's strict package rules
       - name: Install Dependencies
-        run: npm ci --legacy-peer-deps || npm install --legacy-peer-deps
+        run: npm ci || npm install
 
       # 3. Build Project with Vite (Relative Base Path for GitHub Pages)
       - name: Build Project

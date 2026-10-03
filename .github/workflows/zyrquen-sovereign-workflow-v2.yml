@@ -34,7 +34,7 @@ jobs:
 
       - name: 📦 Install Clean Dependencies
         run: |
-          npm ci --legacy-peer-deps || npm install --legacy-peer-deps
+          npm ci || npm install
 
       - name: 🔑 Verify Nong Zyrquen GPG & Ed25519 SSH Identity Clearance
         run: |
