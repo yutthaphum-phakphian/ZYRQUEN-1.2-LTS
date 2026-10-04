@@ -1,0 +1,2 @@
+export interface ApprovalLease { approvalId:string; patchHash:string; approvedAt:string; expiresAt:string; }
+export function evaluateApprovalLease(lease:ApprovalLease, now=new Date()):{valid:boolean;reason?:string} { if(!/^[a-f0-9]{64}$/.test(lease.patchHash)) return {valid:false,reason:'INVALID_PATCH_HASH'}; const a=Date.parse(lease.approvedAt), e=Date.parse(lease.expiresAt), n=now.getTime(); if(!Number.isFinite(a)||!Number.isFinite(e)||e<=a)return {valid:false,reason:'INVALID_LEASE'}; if(n>=e)return {valid:false,reason:'APPROVAL_EXPIRED'}; return {valid:true}; }

@@ -1,0 +1,18 @@
+import assert from 'node:assert/strict';
+import fs from 'node:fs/promises';
+import os from 'node:os';
+import path from 'node:path';
+process.env.CODEVOICE_DURABLE_ROOT = await fs.mkdtemp(path.join(os.tmpdir(),'codevoice-governance-'));
+const { createCoordination, claimCoordinationTask, heartbeatCoordinationTask, releaseCoordinationTask, completeCoordinationTask, loadCoordination } = await import('../server/agentCoordination.ts');
+const { simulateAgentExecution } = await import('../server/agentSimulationEngine.ts');
+const c=await createCoordination({projectId:'p1',agentIds:['a','b'],tasks:[{taskId:'t1',capability:'workspace.inspect'},{taskId:'t2',capability:'repair.apply',dependsOn:['t1']}]});
+await assert.rejects(()=>claimCoordinationTask(c.coordinationId,'t1','x'),/AGENT_NOT_AUTHORIZED/);
+const claimed=await claimCoordinationTask(c.coordinationId,'t1','a',5000); assert.equal(claimed.tasks[0].status,'CLAIMED'); assert.ok(claimed.tasks[0].leaseUntil);
+const beat=await heartbeatCoordinationTask(c.coordinationId,'t1','a',5000); assert.equal(beat.tasks[0].status,'CLAIMED');
+await assert.rejects(()=>claimCoordinationTask(c.coordinationId,'t2','b'),/TASK_DEPENDENCY_BLOCKED/);
+const released=await releaseCoordinationTask(c.coordinationId,'t1','a'); assert.equal(released.tasks[0].status,'PENDING');
+const again=await claimCoordinationTask(c.coordinationId,'t1','b'); await completeCoordinationTask(c.coordinationId,'t1','b');
+const t2=await claimCoordinationTask(c.coordinationId,'t2','a'); assert.equal(t2.tasks.find(t=>t.taskId==='t2')?.agentId,'a');
+await completeCoordinationTask(c.coordinationId,'t2','a'); assert.equal((await loadCoordination(c.coordinationId))?.status,'COMPLETED');
+const sim=await simulateAgentExecution({projectId:'p1',goal:'durable simulation'}); assert.ok(sim.simulationId.startsWith('simulation-'));
+console.log('Agent governance pack: PASS');

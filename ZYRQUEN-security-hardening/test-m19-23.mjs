@@ -1,0 +1,16 @@
+import assert from 'node:assert/strict';
+import { evaluatePRGovernance } from './server/prAutomationGovernance.ts';
+import { coordinateRecovery } from './server/recoveryCoordinator.ts';
+import { observeWebhook, summarizeWebhookObservations } from './server/webhookObservability.ts';
+import { evaluateReleaseChange } from './server/releaseChangeGate.ts';
+import { evaluateEndToEndExecution } from './server/endToEndExecutionGate.ts';
+const hash='a'.repeat(64), now='2026-10-05T01:00:00.000Z';
+let x=evaluatePRGovernance({patchHash:hash,approved:true,dryRun:false,branchName:'autoheal/x',baseBranch:'main',healthDecision:'ADMITTED'},now); assert.equal(x.decision,'ADMITTED');
+x=evaluatePRGovernance({patchHash:'bad',approved:false,dryRun:true,branchName:'main',baseBranch:'main',healthDecision:'BLOCKED'},now); assert.equal(x.decision,'BLOCKED'); assert.equal(x.reasons.length,5);
+const healthy={status:'HEALTHY',reasons:[],receipts:{valid:true,checked:1,invalid:[]},webhookLedger:{valid:true,checked:1,invalid:[]},generatedAt:now};
+const r=coordinateRecovery(healthy,now); assert.equal(r.state,'NO_RECOVERY_REQUIRED');
+const bad={...healthy,status:'BLOCKED',reasons:['WEBHOOK_DELIVERY_LEDGER_INVALID']}; const rr=coordinateRecovery(bad,now); assert.equal(rr.state,'RECOVERY_REQUIRED'); assert.equal(rr.attempts[0].status,'PLANNED');
+const obs=[observeWebhook({deliveryId:'d1',ok:true,attempts:1,status:200,latencyMs:10,observedAt:now}),observeWebhook({deliveryId:'d2',ok:false,attempts:2,status:503,latencyMs:30,observedAt:now})]; const m=summarizeWebhookObservations(obs); assert.deepEqual(m,{total:2,succeeded:1,failed:1,retrying:1,averageLatencyMs:20});
+assert.equal(evaluateReleaseChange({admission:'ADMITTED',dirtyFiles:0,pendingRecovery:false,unresolvedFailures:0}).decision,'ALLOW'); assert.equal(evaluateReleaseChange({admission:'ADMITTED',dirtyFiles:1,pendingRecovery:false,unresolvedFailures:0}).decision,'BLOCK');
+const gate={decision:'ALLOW',reasons:[],checkedAt:now,sourceStatus:'HEALTHY'}; const rec={required:false,actions:[],reasons:[],generatedAt:now}; const e=evaluateEndToEndExecution(gate,rec,{patchHash:hash,approved:true,dryRun:false,branchName:'autoheal/x',baseBranch:'main',healthDecision:'ADMITTED'},{admission:'ADMITTED',dirtyFiles:0,pendingRecovery:false,unresolvedFailures:0}); assert.equal(e.decision,'ADMITTED'); assert.match(e.evidenceHash,/^[a-f0-9]{64}$/);
+console.log('M19-23: 8/8 PASS');

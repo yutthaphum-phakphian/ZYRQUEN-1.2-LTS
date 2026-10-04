@@ -1177,247 +1177,332 @@ export const AuditLogTrendsView: React.FC<{
             </div>
           </div>
 
-          {/* Recharts Area / Bar / Composed Canvas */}
-          <div className="w-full h-[320px] sm:h-[380px] font-mono text-xs">
-            <ResponsiveContainer width="100%" height="100%">
-              {chartMode === 'stacked-area' ? (
-                <AreaChart
-                  data={windowedData}
-                  onClick={(data: any) => {
-                    if (data && data.activePayload && data.activePayload[0]) {
-                      const clicked = data.activePayload[0].payload as DailyAuditLogTrend;
-                      playTone(720, 0.03);
-                      setSelectedDayIndex(clicked.dayIndex);
-                    }
-                  }}
-                  margin={{ top: 10, right: 10, left: -10, bottom: 0 }}
-                >
-                  <defs>
-                    <linearGradient id="colorSuccess" x1="0" y1="0" x2="0" y2="1">
-                      <stop offset="5%" stopColor="#10B981" stopOpacity={0.85} />
-                      <stop offset="95%" stopColor="#10B981" stopOpacity={0.1} />
-                    </linearGradient>
-                    <linearGradient id="colorWarning" x1="0" y1="0" x2="0" y2="1">
-                      <stop offset="5%" stopColor="#F59E0B" stopOpacity={0.85} />
-                      <stop offset="95%" stopColor="#F59E0B" stopOpacity={0.15} />
-                    </linearGradient>
-                    <linearGradient id="colorCritical" x1="0" y1="0" x2="0" y2="1">
-                      <stop offset="5%" stopColor="#EF4444" stopOpacity={0.95} />
-                      <stop offset="95%" stopColor="#EF4444" stopOpacity={0.2} />
-                    </linearGradient>
-                  </defs>
-                  <CartesianGrid strokeDasharray="3 3" stroke="rgba(255,255,255,0.06)" />
-                  <XAxis
-                    dataKey="displayDate"
-                    stroke="#71717A"
-                    fontSize={10}
-                    tickLine={false}
-                    axisLine={{ stroke: 'rgba(255,255,255,0.1)' }}
-                  />
-                  <YAxis
-                    stroke="#71717A"
-                    fontSize={10}
-                    tickLine={false}
-                    axisLine={{ stroke: 'rgba(255,255,255,0.1)' }}
-                    tickFormatter={(v) => `${(v / 1000).toFixed(0)}k`}
-                  />
-                  <Tooltip content={renderCustomTooltip} />
-                  {showSuccess && (
-                    <Area
-                      type="monotone"
-                      dataKey="chartSuccessEvents"
-                      name="Success (Pass)"
-                      stackId="1"
-                      stroke="#10B981"
-                      strokeWidth={2}
-                      fillOpacity={1}
-                      fill="url(#colorSuccess)"
-                    />
+          {/* Recharts Area / Bar / Composed Canvas with Dynamic Entry Animation on Filter/Date Change */}
+          <div className="w-full h-[320px] sm:h-[380px] font-mono text-xs relative overflow-hidden">
+            <AnimatePresence mode="wait">
+              <motion.div
+                key={`recharts-view-${chartMode}-${eventTypeFilter}-${customStartDate}-${customEndDate}-${subsystemFilter}`}
+                initial={{ opacity: 0, scale: 0.975, y: 8, filter: 'blur(4px)' }}
+                animate={{ opacity: 1, scale: 1, y: 0, filter: 'blur(0px)' }}
+                exit={{ opacity: 0, scale: 0.98, y: -6, filter: 'blur(3px)' }}
+                transition={{ duration: 0.42, ease: [0.16, 1, 0.3, 1] }}
+                className="w-full h-full"
+              >
+                <ResponsiveContainer width="100%" height="100%">
+                  {chartMode === 'stacked-area' ? (
+                    <AreaChart
+                      key={`area-stacked-${eventTypeFilter}-${customStartDate}-${customEndDate}`}
+                      data={windowedData}
+                      onClick={(data: any) => {
+                        if (data && data.activePayload && data.activePayload[0]) {
+                          const clicked = data.activePayload[0].payload as DailyAuditLogTrend;
+                          playTone(720, 0.03);
+                          setSelectedDayIndex(clicked.dayIndex);
+                        }
+                      }}
+                      margin={{ top: 10, right: 10, left: -10, bottom: 0 }}
+                    >
+                      <defs>
+                        <linearGradient id="colorSuccess" x1="0" y1="0" x2="0" y2="1">
+                          <stop offset="5%" stopColor="#10B981" stopOpacity={0.85} />
+                          <stop offset="95%" stopColor="#10B981" stopOpacity={0.1} />
+                        </linearGradient>
+                        <linearGradient id="colorWarning" x1="0" y1="0" x2="0" y2="1">
+                          <stop offset="5%" stopColor="#F59E0B" stopOpacity={0.85} />
+                          <stop offset="95%" stopColor="#F59E0B" stopOpacity={0.15} />
+                        </linearGradient>
+                        <linearGradient id="colorCritical" x1="0" y1="0" x2="0" y2="1">
+                          <stop offset="5%" stopColor="#EF4444" stopOpacity={0.95} />
+                          <stop offset="95%" stopColor="#EF4444" stopOpacity={0.2} />
+                        </linearGradient>
+                      </defs>
+                      <CartesianGrid strokeDasharray="3 3" stroke="rgba(255,255,255,0.06)" />
+                      <XAxis
+                        dataKey="displayDate"
+                        stroke="#71717A"
+                        fontSize={10}
+                        tickLine={false}
+                        axisLine={{ stroke: 'rgba(255,255,255,0.1)' }}
+                      />
+                      <YAxis
+                        stroke="#71717A"
+                        fontSize={10}
+                        tickLine={false}
+                        axisLine={{ stroke: 'rgba(255,255,255,0.1)' }}
+                        tickFormatter={(v) => `${(v / 1000).toFixed(0)}k`}
+                      />
+                      <Tooltip content={renderCustomTooltip} />
+                      {showSuccess && (
+                        <Area
+                          type="monotone"
+                          dataKey="chartSuccessEvents"
+                          name="Success (Pass)"
+                          stackId="1"
+                          stroke="#10B981"
+                          strokeWidth={2}
+                          fillOpacity={1}
+                          fill="url(#colorSuccess)"
+                          isAnimationActive={true}
+                          animationDuration={950}
+                          animationBegin={0}
+                          animationEasing="ease-out"
+                        />
+                      )}
+                      {showWarning && (
+                        <Area
+                          type="monotone"
+                          dataKey="chartWarningEvents"
+                          name="Warning (Jitter)"
+                          stackId="1"
+                          stroke="#F59E0B"
+                          strokeWidth={2}
+                          fillOpacity={1}
+                          fill="url(#colorWarning)"
+                          isAnimationActive={true}
+                          animationDuration={950}
+                          animationBegin={140}
+                          animationEasing="ease-out"
+                        />
+                      )}
+                      {showCritical && (
+                        <Area
+                          type="monotone"
+                          dataKey="chartCriticalEvents"
+                          name="Critical (Quarantine)"
+                          stackId="1"
+                          stroke="#EF4444"
+                          strokeWidth={2.5}
+                          fillOpacity={1}
+                          fill="url(#colorCritical)"
+                          isAnimationActive={true}
+                          animationDuration={950}
+                          animationBegin={260}
+                          animationEasing="ease-out"
+                        />
+                      )}
+                    </AreaChart>
+                  ) : chartMode === 'normalized-area' ? (
+                    <AreaChart
+                      key={`area-norm-${eventTypeFilter}-${customStartDate}-${customEndDate}`}
+                      data={windowedData}
+                      onClick={(data: any) => {
+                        if (data && data.activePayload && data.activePayload[0]) {
+                          const clicked = data.activePayload[0].payload as DailyAuditLogTrend;
+                          playTone(720, 0.03);
+                          setSelectedDayIndex(clicked.dayIndex);
+                        }
+                      }}
+                      margin={{ top: 10, right: 10, left: -10, bottom: 0 }}
+                    >
+                      <defs>
+                        <linearGradient id="normSuccess" x1="0" y1="0" x2="0" y2="1">
+                          <stop offset="5%" stopColor="#10B981" stopOpacity={0.85} />
+                          <stop offset="95%" stopColor="#10B981" stopOpacity={0.4} />
+                        </linearGradient>
+                        <linearGradient id="normWarning" x1="0" y1="0" x2="0" y2="1">
+                          <stop offset="5%" stopColor="#F59E0B" stopOpacity={0.85} />
+                          <stop offset="95%" stopColor="#F59E0B" stopOpacity={0.4} />
+                        </linearGradient>
+                        <linearGradient id="normCritical" x1="0" y1="0" x2="0" y2="1">
+                          <stop offset="5%" stopColor="#EF4444" stopOpacity={0.9} />
+                          <stop offset="95%" stopColor="#EF4444" stopOpacity={0.5} />
+                        </linearGradient>
+                      </defs>
+                      <CartesianGrid strokeDasharray="3 3" stroke="rgba(255,255,255,0.06)" />
+                      <XAxis
+                        dataKey="displayDate"
+                        stroke="#71717A"
+                        fontSize={10}
+                        tickLine={false}
+                        axisLine={{ stroke: 'rgba(255,255,255,0.1)' }}
+                      />
+                      <YAxis
+                        stroke="#71717A"
+                        fontSize={10}
+                        domain={[0, 100]}
+                        tickLine={false}
+                        axisLine={{ stroke: 'rgba(255,255,255,0.1)' }}
+                        tickFormatter={(v) => `${v}%`}
+                      />
+                      <Tooltip content={renderCustomTooltip} />
+                      {showSuccess && (
+                        <Area
+                          type="monotone"
+                          dataKey="chartSuccessRate"
+                          name="Success %"
+                          stackId="pct"
+                          stroke="#10B981"
+                          fill="url(#normSuccess)"
+                          isAnimationActive={true}
+                          animationDuration={900}
+                          animationBegin={0}
+                          animationEasing="ease-out"
+                        />
+                      )}
+                      {showWarning && (
+                        <Area
+                          type="monotone"
+                          dataKey="chartWarningRate"
+                          name="Warning %"
+                          stackId="pct"
+                          stroke="#F59E0B"
+                          fill="url(#normWarning)"
+                          isAnimationActive={true}
+                          animationDuration={900}
+                          animationBegin={120}
+                          animationEasing="ease-out"
+                        />
+                      )}
+                      {showCritical && (
+                        <Area
+                          type="monotone"
+                          dataKey="chartCriticalRate"
+                          name="Critical %"
+                          stackId="pct"
+                          stroke="#EF4444"
+                          fill="url(#normCritical)"
+                          isAnimationActive={true}
+                          animationDuration={900}
+                          animationBegin={240}
+                          animationEasing="ease-out"
+                        />
+                      )}
+                    </AreaChart>
+                  ) : chartMode === 'grouped-bar' ? (
+                    <BarChart
+                      key={`bar-group-${eventTypeFilter}-${customStartDate}-${customEndDate}`}
+                      data={windowedData}
+                      onClick={(data: any) => {
+                        if (data && data.activePayload && data.activePayload[0]) {
+                          const clicked = data.activePayload[0].payload as DailyAuditLogTrend;
+                          playTone(720, 0.03);
+                          setSelectedDayIndex(clicked.dayIndex);
+                        }
+                      }}
+                      margin={{ top: 10, right: 10, left: -10, bottom: 0 }}
+                    >
+                      <CartesianGrid strokeDasharray="3 3" stroke="rgba(255,255,255,0.06)" />
+                      <XAxis
+                        dataKey="displayDate"
+                        stroke="#71717A"
+                        fontSize={10}
+                        tickLine={false}
+                        axisLine={{ stroke: 'rgba(255,255,255,0.1)' }}
+                      />
+                      <YAxis
+                        stroke="#71717A"
+                        fontSize={10}
+                        tickLine={false}
+                        axisLine={{ stroke: 'rgba(255,255,255,0.1)' }}
+                        tickFormatter={(v) => `${(v / 1000).toFixed(0)}k`}
+                      />
+                      <Tooltip content={renderCustomTooltip} />
+                      {showSuccess && (
+                        <Bar
+                          dataKey="chartSuccessEvents"
+                          name="Success"
+                          stackId="a"
+                          fill="#10B981"
+                          radius={[0, 0, 0, 0]}
+                          isAnimationActive={true}
+                          animationDuration={850}
+                          animationBegin={0}
+                        />
+                      )}
+                      {showWarning && (
+                        <Bar
+                          dataKey="chartWarningEvents"
+                          name="Warning"
+                          stackId="a"
+                          fill="#F59E0B"
+                          radius={[0, 0, 0, 0]}
+                          isAnimationActive={true}
+                          animationDuration={850}
+                          animationBegin={100}
+                        />
+                      )}
+                      {showCritical && (
+                        <Bar
+                          dataKey="chartCriticalEvents"
+                          name="Critical"
+                          stackId="a"
+                          fill="#EF4444"
+                          radius={[4, 4, 0, 0]}
+                          isAnimationActive={true}
+                          animationDuration={850}
+                          animationBegin={200}
+                        />
+                      )}
+                    </BarChart>
+                  ) : (
+                    /* Composed Chart: Total Volume Bar + Critical Rate Line */
+                    <ComposedChart
+                      key={`composed-trend-${eventTypeFilter}-${customStartDate}-${customEndDate}`}
+                      data={windowedData}
+                      onClick={(data: any) => {
+                        if (data && data.activePayload && data.activePayload[0]) {
+                          const clicked = data.activePayload[0].payload as DailyAuditLogTrend;
+                          playTone(720, 0.03);
+                          setSelectedDayIndex(clicked.dayIndex);
+                        }
+                      }}
+                      margin={{ top: 10, right: 20, left: -10, bottom: 0 }}
+                    >
+                      <CartesianGrid strokeDasharray="3 3" stroke="rgba(255,255,255,0.06)" />
+                      <XAxis
+                        dataKey="displayDate"
+                        stroke="#71717A"
+                        fontSize={10}
+                        tickLine={false}
+                        axisLine={{ stroke: 'rgba(255,255,255,0.1)' }}
+                      />
+                      <YAxis
+                        yAxisId="left"
+                        stroke="#71717A"
+                        fontSize={10}
+                        tickLine={false}
+                        axisLine={{ stroke: 'rgba(255,255,255,0.1)' }}
+                        tickFormatter={(v) => `${(v / 1000).toFixed(0)}k`}
+                      />
+                      <YAxis
+                        yAxisId="right"
+                        orientation="right"
+                        stroke="#EF4444"
+                        fontSize={10}
+                        domain={[0, 2]}
+                        tickLine={false}
+                        axisLine={{ stroke: '#EF4444' }}
+                        tickFormatter={(v) => `${v}%`}
+                      />
+                      <Tooltip content={renderCustomTooltip} />
+                      <Bar
+                        yAxisId="left"
+                        dataKey="chartTotalEvents"
+                        name="Filtered Volume"
+                        fill="#06B6D4"
+                        opacity={0.4}
+                        radius={[4, 4, 0, 0]}
+                        isAnimationActive={true}
+                        animationDuration={850}
+                        animationBegin={0}
+                      />
+                      <Line
+                        yAxisId="right"
+                        type="monotone"
+                        dataKey="chartCriticalRate"
+                        name="Critical Rate %"
+                        stroke="#EF4444"
+                        strokeWidth={2.5}
+                        dot={{ r: 3, fill: '#EF4444' }}
+                        isAnimationActive={true}
+                        animationDuration={1000}
+                        animationBegin={200}
+                      />
+                    </ComposedChart>
                   )}
-                  {showWarning && (
-                    <Area
-                      type="monotone"
-                      dataKey="chartWarningEvents"
-                      name="Warning (Jitter)"
-                      stackId="1"
-                      stroke="#F59E0B"
-                      strokeWidth={2}
-                      fillOpacity={1}
-                      fill="url(#colorWarning)"
-                    />
-                  )}
-                  {showCritical && (
-                    <Area
-                      type="monotone"
-                      dataKey="chartCriticalEvents"
-                      name="Critical (Quarantine)"
-                      stackId="1"
-                      stroke="#EF4444"
-                      strokeWidth={2.5}
-                      fillOpacity={1}
-                      fill="url(#colorCritical)"
-                    />
-                  )}
-                </AreaChart>
-              ) : chartMode === 'normalized-area' ? (
-                <AreaChart
-                  data={windowedData}
-                  onClick={(data: any) => {
-                    if (data && data.activePayload && data.activePayload[0]) {
-                      const clicked = data.activePayload[0].payload as DailyAuditLogTrend;
-                      playTone(720, 0.03);
-                      setSelectedDayIndex(clicked.dayIndex);
-                    }
-                  }}
-                  margin={{ top: 10, right: 10, left: -10, bottom: 0 }}
-                >
-                  <defs>
-                    <linearGradient id="normSuccess" x1="0" y1="0" x2="0" y2="1">
-                      <stop offset="5%" stopColor="#10B981" stopOpacity={0.85} />
-                      <stop offset="95%" stopColor="#10B981" stopOpacity={0.4} />
-                    </linearGradient>
-                    <linearGradient id="normWarning" x1="0" y1="0" x2="0" y2="1">
-                      <stop offset="5%" stopColor="#F59E0B" stopOpacity={0.85} />
-                      <stop offset="95%" stopColor="#F59E0B" stopOpacity={0.4} />
-                    </linearGradient>
-                    <linearGradient id="normCritical" x1="0" y1="0" x2="0" y2="1">
-                      <stop offset="5%" stopColor="#EF4444" stopOpacity={0.9} />
-                      <stop offset="95%" stopColor="#EF4444" stopOpacity={0.5} />
-                    </linearGradient>
-                  </defs>
-                  <CartesianGrid strokeDasharray="3 3" stroke="rgba(255,255,255,0.06)" />
-                  <XAxis
-                    dataKey="displayDate"
-                    stroke="#71717A"
-                    fontSize={10}
-                    tickLine={false}
-                    axisLine={{ stroke: 'rgba(255,255,255,0.1)' }}
-                  />
-                  <YAxis
-                    stroke="#71717A"
-                    fontSize={10}
-                    domain={[0, 100]}
-                    tickLine={false}
-                    axisLine={{ stroke: 'rgba(255,255,255,0.1)' }}
-                    tickFormatter={(v) => `${v}%`}
-                  />
-                  <Tooltip content={renderCustomTooltip} />
-                  {showSuccess && (
-                    <Area
-                      type="monotone"
-                      dataKey="chartSuccessRate"
-                      name="Success %"
-                      stackId="pct"
-                      stroke="#10B981"
-                      fill="url(#normSuccess)"
-                    />
-                  )}
-                  {showWarning && (
-                    <Area
-                      type="monotone"
-                      dataKey="chartWarningRate"
-                      name="Warning %"
-                      stackId="pct"
-                      stroke="#F59E0B"
-                      fill="url(#normWarning)"
-                    />
-                  )}
-                  {showCritical && (
-                    <Area
-                      type="monotone"
-                      dataKey="chartCriticalRate"
-                      name="Critical %"
-                      stackId="pct"
-                      stroke="#EF4444"
-                      fill="url(#normCritical)"
-                    />
-                  )}
-                </AreaChart>
-              ) : chartMode === 'grouped-bar' ? (
-                <BarChart
-                  data={windowedData}
-                  onClick={(data: any) => {
-                    if (data && data.activePayload && data.activePayload[0]) {
-                      const clicked = data.activePayload[0].payload as DailyAuditLogTrend;
-                      playTone(720, 0.03);
-                      setSelectedDayIndex(clicked.dayIndex);
-                    }
-                  }}
-                  margin={{ top: 10, right: 10, left: -10, bottom: 0 }}
-                >
-                  <CartesianGrid strokeDasharray="3 3" stroke="rgba(255,255,255,0.06)" />
-                  <XAxis
-                    dataKey="displayDate"
-                    stroke="#71717A"
-                    fontSize={10}
-                    tickLine={false}
-                    axisLine={{ stroke: 'rgba(255,255,255,0.1)' }}
-                  />
-                  <YAxis
-                    stroke="#71717A"
-                    fontSize={10}
-                    tickLine={false}
-                    axisLine={{ stroke: 'rgba(255,255,255,0.1)' }}
-                    tickFormatter={(v) => `${(v / 1000).toFixed(0)}k`}
-                  />
-                  <Tooltip content={renderCustomTooltip} />
-                  {showSuccess && <Bar dataKey="chartSuccessEvents" name="Success" stackId="a" fill="#10B981" radius={[0, 0, 0, 0]} />}
-                  {showWarning && <Bar dataKey="chartWarningEvents" name="Warning" stackId="a" fill="#F59E0B" radius={[0, 0, 0, 0]} />}
-                  {showCritical && <Bar dataKey="chartCriticalEvents" name="Critical" stackId="a" fill="#EF4444" radius={[4, 4, 0, 0]} />}
-                </BarChart>
-              ) : (
-                /* Composed Chart: Total Volume Bar + Critical Rate Line */
-                <ComposedChart
-                  data={windowedData}
-                  onClick={(data: any) => {
-                    if (data && data.activePayload && data.activePayload[0]) {
-                      const clicked = data.activePayload[0].payload as DailyAuditLogTrend;
-                      playTone(720, 0.03);
-                      setSelectedDayIndex(clicked.dayIndex);
-                    }
-                  }}
-                  margin={{ top: 10, right: 20, left: -10, bottom: 0 }}
-                >
-                  <CartesianGrid strokeDasharray="3 3" stroke="rgba(255,255,255,0.06)" />
-                  <XAxis
-                    dataKey="displayDate"
-                    stroke="#71717A"
-                    fontSize={10}
-                    tickLine={false}
-                    axisLine={{ stroke: 'rgba(255,255,255,0.1)' }}
-                  />
-                  <YAxis
-                    yAxisId="left"
-                    stroke="#71717A"
-                    fontSize={10}
-                    tickLine={false}
-                    axisLine={{ stroke: 'rgba(255,255,255,0.1)' }}
-                    tickFormatter={(v) => `${(v / 1000).toFixed(0)}k`}
-                  />
-                  <YAxis
-                    yAxisId="right"
-                    orientation="right"
-                    stroke="#EF4444"
-                    fontSize={10}
-                    domain={[0, 2]}
-                    tickLine={false}
-                    axisLine={{ stroke: '#EF4444' }}
-                    tickFormatter={(v) => `${v}%`}
-                  />
-                  <Tooltip content={renderCustomTooltip} />
-                  <Bar yAxisId="left" dataKey="chartTotalEvents" name="Filtered Volume" fill="#06B6D4" opacity={0.4} radius={[4, 4, 0, 0]} />
-                  <Line
-                    yAxisId="right"
-                    type="monotone"
-                    dataKey="chartCriticalRate"
-                    name="Critical Rate %"
-                    stroke="#EF4444"
-                    strokeWidth={2.5}
-                    dot={{ r: 3, fill: '#EF4444' }}
-                  />
-                </ComposedChart>
-              )}
-            </ResponsiveContainer>
+                </ResponsiveContainer>
+              </motion.div>
+            </AnimatePresence>
           </div>
 
           {/* Chart Legend Strip */}
