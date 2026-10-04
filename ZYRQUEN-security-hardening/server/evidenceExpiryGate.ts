@@ -1,0 +1,2 @@
+export interface EvidenceExpiry { evidenceId:string; createdAt:string; expiresAt:string; }
+export function evaluateEvidenceExpiry(e:EvidenceExpiry, now=new Date()){const c=Date.parse(e.createdAt),x=Date.parse(e.expiresAt),n=now.getTime();if(!e.evidenceId)return{valid:false,reason:'MISSING_EVIDENCE_ID'};if(!Number.isFinite(c)||!Number.isFinite(x)||x<=c)return{valid:false,reason:'INVALID_EVIDENCE_WINDOW'};if(n>=x)return{valid:false,reason:'EVIDENCE_EXPIRED'};return{valid:true};}

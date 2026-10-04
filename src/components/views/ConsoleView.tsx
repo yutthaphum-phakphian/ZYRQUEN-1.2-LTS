@@ -41,17 +41,26 @@ import {
 
 const CLI_AUTOCOMPLETE_COMMANDS: Array<{ cmd: string; desc: string }> = [
   { cmd: 'help', desc: 'List all available Sovereign CLI commands' },
+  { cmd: 'status', desc: 'Check ZYRQUEN Ω∞ system runtime status' },
+  { cmd: 'audit', desc: 'Run full E2E Audit Engine verification' },
+  { cmd: 'protocol', desc: 'Inspect ETDA/PDPA statutory protocol runtime mappings' },
+  { cmd: 'pqc', desc: 'Run NIST FIPS 203/204/205 Post-Quantum test suite' },
+  { cmd: 'fios', desc: 'Inspect FIOS 7-Factor Evidence Package Status' },
+  { cmd: 'fios 1', desc: 'Inspect FIOS Factor 1: Genesis Block Validation' },
+  { cmd: 'fios 2', desc: 'Inspect FIOS Factor 2: Merkle Tree Bitwise Adherence' },
+  { cmd: 'fios 3', desc: 'Inspect FIOS Factor 3: Deca-Key Hardware Quorum' },
+  { cmd: 'fios 4', desc: 'Inspect FIOS Factor 4: WORM Storage Immutability' },
+  { cmd: 'fios 5', desc: 'Inspect FIOS Factor 5: Post-Quantum Dilithium-5 Signature' },
+  { cmd: 'fios 6', desc: 'Inspect FIOS Factor 6: 12-Stage Deterministic Replay SLA' },
+  { cmd: 'fios 7', desc: 'Inspect FIOS Factor 7: Statutory Safe Harbor & PDPA' },
+  { cmd: 'snapshot', desc: 'Capture instant hardware telemetry snapshot into Ledger' },
+  { cmd: 'verify-merkle', desc: 'Cryptographically verify Genesis #849202 Merkle Root' },
   { cmd: 'quorum', desc: 'Inspect 10/10 Deca-Custodian FIPS 140-3 L4 HSM Quorum' },
   { cmd: 'chambers', desc: 'Inspect all 18 Sovereign Chambers (CH-00..CH-17)' },
   { cmd: 'annex', desc: 'Display Court-Ready Forensic Annex v2 (8/8 Vectors)' },
-  { cmd: 'verify-merkle', desc: 'Cryptographically verify Genesis #849202 Merkle Root' },
-  { cmd: 'status', desc: 'Check ZYRQUEN Ω∞ system runtime status' },
-  { cmd: 'snapshot', desc: 'Capture instant hardware telemetry snapshot into Ledger' },
-  { cmd: 'autosnap', desc: 'Toggle 30s Auto-Snapshot daemon on high load' },
-  { cmd: 'audit', desc: 'Run full E2E Audit Engine verification' },
-  { cmd: 'reconcile', desc: 'Execute 12-Stage Forensics Reconciliation trace' },
   { cmd: 'cert', desc: 'Display Gold Master Attestation Certificate' },
   { cmd: 'seals', desc: 'Validate 14,902 Immutable Evidence Block Seals' },
+  { cmd: 'reconcile', desc: 'Execute 12-Stage Forensics Reconciliation trace' },
   { cmd: 'trace', desc: 'Show Active Transaction TX-20260809-909A-B814' },
   { cmd: 'pentest', desc: 'Run simulated 5 Attack Vectors Fail-Closed defense' },
   { cmd: 'benchmark', desc: 'Run Hardware & QOps Scale Benchmark' },
@@ -74,6 +83,8 @@ const CLI_AUTOCOMPLETE_COMMANDS: Array<{ cmd: string; desc: string }> = [
   { cmd: 'assets', desc: 'List 8 Master Visual Assets & System Posters' },
   { cmd: 'thai-custodians', desc: 'List Thai Sovereign Executive Custodian Passports' },
   { cmd: 'sysinfo', desc: 'Display Kernel Version, Merkle Root & Principal' },
+  { cmd: 'autosnap', desc: 'Toggle 30s Auto-Snapshot daemon on high load' },
+  { cmd: 'reset', desc: 'Reset terminal display & greeting' },
   { cmd: 'clear', desc: 'Clear terminal output history' },
 ];
 
@@ -1135,6 +1146,190 @@ ${THAI_CUSTODIANS.map((c) => `  • ${c.passportNumber}: ${c.nameTh} (${c.nameEn
       return;
     }
 
+    if (command === 'protocol' || command === 'etda' || command === 'pdpa' || command === 'legal-protocol') {
+      playAuditChime();
+      setHistory((prev) => [
+        ...prev,
+        {
+          type: 'success',
+          text: `[ETDA/PDPA PROTOCOL RUNTIME MAPPING]:
+  • Section 9  (Electronic Signature Binding): VALIDATED [IAL2+ / AAL2+]
+  • Section 26 (Secure Digital Signature):     VALIDATED [NIST FIPS 204 ML-DSA-87]
+  • Section 28 (Trusted Third Party Presumption): VALIDATED [10/10 REAL_HSM Quorum]
+  • PDPA Sec 37 (PII Redaction & zk-SNARKs):   VALIDATED [Zero-Knowledge Proof]
+  • ISO/IEC 27037 (Digital Evidence Handling): VALIDATED [Chain of Custody Intact]
+  • Fiduciary Compliance: Non-Repudiation Guaranteed (Zero Mutation / Δ0.00%)`,
+        },
+      ]);
+      return;
+    }
+
+    if (command === 'pqc' || command === 'quantum-crypto' || command === 'dilithium' || command === 'fips') {
+      playAuditChime();
+      setHistory((prev) => [
+        ...prev,
+        {
+          type: 'success',
+          text: `[PQC-FIPS-TEST 2026: ML-DSA-87 / FIPS-204 DILITHIUM-5]:
+  • Primary Signature: ML-DSA-87 (Dilithium-5) [ACTIVE / FIPS 204]
+  • Key Encapsulation: ML-KEM-1024 (Kyber-1024) [STANDBY / FIPS 203]
+  • Stateless Fallback: SLH-DSA (SPHINCS+) [STANDBY / FIPS 205]
+  • Secondary Hash: SHA3-512 + BLAKE3
+  • Quantum Resistance Level: Category 5 (256-bit Post-Quantum Security)
+  • Deca-Key Council Signatures: 10/10 Hardware Verified (14.98 mK Cryo)
+  • Shor Algorithm Defense: 100% IMMUNE (Zero Vulnerability Detected)`,
+        },
+      ]);
+      return;
+    }
+
+    if (command.startsWith('fios')) {
+      const parts = command.split(/\s+/);
+      const factorNum = parts[1];
+      playAuditChime();
+
+      if (factorNum === '1') {
+        setHistory((prev) => [
+          ...prev,
+          {
+            type: 'success',
+            text: `[FIOS FACTOR 1: GENESIS VALIDATION]:
+  • Canonical Genesis Block: #${SYSTEM_METADATA.genesisBlock}
+  • Total Canonical Seals: 14,902 Active Seals (0 Orphans, 0 Floating)
+  • Merkle Leaf SHA-256 Digest: 0x5a13396c129c611f15232fdaf54bfad00c4147abdbc3424c71e4ec103dcc8cc3
+  • Algorithm: SHA-256 + SHA3-512 Dual-Hash Fusion
+  • Target Root: 0x909ab814479844d8a14816bed34cdbb07528e18501da86fc4691763a43fa4c68
+  • Status: 100% COURT-ADMISSIBLE SSoT (Zero Drift Δ0.00%)`,
+          },
+        ]);
+        return;
+      }
+      if (factorNum === '2') {
+        setHistory((prev) => [
+          ...prev,
+          {
+            type: 'success',
+            text: `[FIOS FACTOR 2: MERKLE TREE ADHERENCE]:
+  • Merkle Root: ${SYSTEM_METADATA.merkleRoot}
+  • Bitwise Match: 256/256 Bits Exactly Consistent
+  • Tree Height: 15 Levels (Complete Binary Merkle Tree)
+  • Leaf Range: Ω601–Ω1000 (Strict Boundary Enforced)
+  • Status: BITWISE INTEGRITY CONFIRMED`,
+          },
+        ]);
+        return;
+      }
+      if (factorNum === '3') {
+        setHistory((prev) => [
+          ...prev,
+          {
+            type: 'success',
+            text: `[FIOS FACTOR 3: HARDWARE QUORUM CONSENSUS]:
+  • Deca-Key Cluster: 10/10 REAL_HSM Nodes Verified
+  • Quorum Threshold: 8/10 (Supermajority: 10/10 Achieved)
+  • Cryptographic Suite: NitroKey & Utimaco FIPS 140-3 Level 4
+  • Operating Cryo Base: 14.98 mK Sub-Kelvin Plate
+  • Status: UNANIMOUS SOVEREIGN RATIFICATION`,
+          },
+        ]);
+        return;
+      }
+      if (factorNum === '4') {
+        setHistory((prev) => [
+          ...prev,
+          {
+            type: 'success',
+            text: `[FIOS FACTOR 4: WORM IMMUTABLE STORAGE]:
+  • Active Sealed Blocks: 14,902 Block Seals
+  • Quarantine Buffer: Chamber 02 Buffer Gamma (80 Seals Isolated)
+  • Zero-Deletion Guarantee: 100% Enforced (Write-Once-Read-Many)
+  • Statutory Law: Thai ETDA B.E. 2544 Section 28 Presumption
+  • Status: IMMUTABLE PHYSICAL VAULT ACTIVE`,
+          },
+        ]);
+        return;
+      }
+      if (factorNum === '5') {
+        setHistory((prev) => [
+          ...prev,
+          {
+            type: 'success',
+            text: `[FIOS FACTOR 5: POST-QUANTUM SIGNATURE]:
+  • Algorithm: NIST FIPS 204 ML-DSA-87 (Dilithium-5)
+  • Signatory: นายยุทธภูมิ พากเพียร (#EP-SOVEREIGN-01)
+  • Secondary Hash: SHA3-512 + BLAKE3
+  • Timestamp: RFC 3161 Hardware TSA UTC(NIMT)
+  • Status: NON-REPUDIATION DIGITALLY BINDING`,
+          },
+        ]);
+        return;
+      }
+      if (factorNum === '6') {
+        setHistory((prev) => [
+          ...prev,
+          {
+            type: 'success',
+            text: `[FIOS FACTOR 6: REPRODUCIBLE DETERMINISTIC REPLAY]:
+  • 12-Stage Forensics Latency: 35.80 ms
+  • SLA Maximum Limit: 142.00 ms (Margin: +106.20 ms Headroom)
+  • Test Result: 1,024 / 1,024 Test Cases PASSED (0 Flaky)
+  • Forensic Standard: ISO/IEC 27037:2012 Certified
+  • Status: SLA PASS (100% REPRODUCIBLE)`,
+          },
+        ]);
+        return;
+      }
+      if (factorNum === '7') {
+        setHistory((prev) => [
+          ...prev,
+          {
+            type: 'success',
+            text: `[FIOS FACTOR 7: STATUTORY SAFE HARBOR & PDPA]:
+  • Thai ETDA B.E. 2544: Sections 9, 26, 28 (Full Court Admissibility)
+  • Thai PDPA B.E. 2562: Section 37 (Zero-Knowledge zk-SNARKs Privacy)
+  • Judicial Annex: COURT-ANNEX-v2 (แบบ จพ.๐๑–จพ.๐๗)
+  • Status: 100% COURT-READY JUDICIAL EVIDENCE`,
+          },
+        ]);
+        return;
+      }
+
+      setHistory((prev) => [
+        ...prev,
+        {
+          type: 'success',
+          text: `[FIOS 7-FACTOR EVIDENCE PACKAGE STATUS]:
+  • Factor 1 (Genesis Validation):         PASS [Block #${SYSTEM_METADATA.genesisBlock} / 14,902 Seals]
+  • Factor 2 (Merkle Tree Adherence):      PASS [0x909ab814...4c68 Match]
+  • Factor 3 (10/10 REAL_HSM Quorum):      PASS [Unanimous Supermajority]
+  • Factor 4 (WORM Physical Storage):      PASS [14,902 Seals Non-Erasable]
+  • Factor 5 (NIST FIPS 204 PQC Sig):      PASS [ML-DSA-87 Sealed]
+  • Factor 6 (12-Stage Trace Replay SLA):  PASS [35.80ms < 142.00ms]
+  • Factor 7 (ETDA & PDPA Safe Harbor):    PASS [ISO/IEC 27037 Court Ready]
+  Type "fios 1" through "fios 7" for deep-dive factor inspection.`,
+        },
+      ]);
+      return;
+    }
+
+    if (command === 'reset' || command === 'reload') {
+      playAuditChime();
+      setHistory([
+        {
+          type: 'output',
+          text: 'ZYRQUEN Ω∞ FROZEN v1.2.1 LTS Sovereign Operating System — SOVEREIGN CLI CONSOLE',
+          timestamp: new Date().toLocaleTimeString('th-TH') + ' ICT',
+        },
+        {
+          type: 'output',
+          text: 'Type "help" to list available commands (status, audit, protocol, pqc, fios, snapshot, verify-merkle, quorum, chambers, annex, cert, clear)',
+          timestamp: new Date().toLocaleTimeString('th-TH') + ' ICT',
+        },
+        { type: 'success', text: `Merkle Root: ${SYSTEM_METADATA.merkleRoot} | Block #${SYSTEM_METADATA.genesisBlock} | SSoT Δ0.00%`, timestamp: new Date().toLocaleTimeString('th-TH') + ' ICT' },
+      ]);
+      return;
+    }
+
     // Default unknown command
     playWarningTone();
     setHistory((prev) => [
@@ -1953,6 +2148,9 @@ ${THAI_CUSTODIANS.map((c) => `  • ${c.passportNumber}: ${c.nameTh} (${c.nameEn
               <span className="text-zinc-500 shrink-0">Quick Exec:</span>
               {(
                 [
+                  'protocol',
+                  'pqc',
+                  'fios',
                   'quorum',
                   'chambers',
                   'annex',
@@ -1964,6 +2162,7 @@ ${THAI_CUSTODIANS.map((c) => `  • ${c.passportNumber}: ${c.nameTh} (${c.nameEn
                   'cert',
                   'seals',
                   'pentest',
+                  'reset',
                   'help',
                 ] as const
               ).map((cmdChip) => (

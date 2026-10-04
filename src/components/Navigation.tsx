@@ -129,6 +129,7 @@ export const NAVIGATION_ITEMS: NavItem[] = [
   { id: 'canonical', labelEn: 'Canonical Integrity', labelTh: 'ความสมบูรณ์แคนอนิคัล', icon: ShieldCheck, dotColor: '#10B981', badge: 'STABLE LOCK', shortcut: 'I' },
   { id: 'admin', labelEn: 'Admin RBAC', labelTh: 'จัดการสิทธิ์ผู้ใช้', icon: Users, dotColor: '#06B6D4', badge: 'RBAC', shortcut: 'A' },
   { id: 'analytics', labelEn: 'Audit Analytics', labelTh: 'วิเคราะห์การตรวจสอบ', icon: TrendingUp, dotColor: '#10B981', badge: 'TRENDS', shortcut: 'Y' },
+  { id: 'audit-trends', labelEn: '30D Log Trends', labelTh: 'แนวโน้มบันทึก 30 วัน', icon: Activity, dotColor: '#06B6D4', badge: 'RECHARTS', shortcut: 'B' },
   { id: 'settings', labelEn: 'Settings', labelTh: 'ผู้ดูแลชาวไทย', icon: Settings, dotColor: '#71717A', shortcut: '=' },
 ];
 

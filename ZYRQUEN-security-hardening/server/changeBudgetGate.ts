@@ -1,0 +1,2 @@
+export interface ChangeBudget { files:number; additions:number; deletions:number; maxFiles:number; maxAdditions:number; maxDeletions:number; }
+export function evaluateChangeBudget(b:ChangeBudget){const reasons:string[]=[];if(b.files>b.maxFiles)reasons.push('MAX_FILES_EXCEEDED');if(b.additions>b.maxAdditions)reasons.push('MAX_ADDITIONS_EXCEEDED');if(b.deletions>b.maxDeletions)reasons.push('MAX_DELETIONS_EXCEEDED');return{decision:reasons.length?'BLOCKED':'ADMITTED',reasons};}

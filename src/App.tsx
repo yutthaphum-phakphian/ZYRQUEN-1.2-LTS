@@ -122,6 +122,7 @@ const ExecutiveCourtBriefing = lazyWithRetry(() => import('@/components/executiv
 const SovereignWalletView = lazyWithRetry(() => import('@/components/views/SovereignWalletView').then(m => ({ default: m.SovereignWalletView })));
 import { SovereignDashboard } from '@/pages/SovereignDashboard';
 const TreasuryVarianceDashboard = lazyWithRetry(() => import('@/components/views/TreasuryVarianceDashboard').then(m => ({ default: m.TreasuryVarianceDashboard })));
+const AuditLogTrendsView = lazyWithRetry(() => import('@/components/views/AuditLogTrendsView').then(m => ({ default: m.AuditLogTrendsView })));
 import AIWorkspace from '@/components/AIWorkspace';
 import { AuditCertificateModal } from '@/components/AuditCertificateModal';
 import { GitHubPwaModal } from '@/components/GitHubPwaModal';
@@ -403,6 +404,13 @@ const VIEW_PERSONAS: Record<ViewType, ViewPersona> = {
     orb2: 'bg-cyan-600/15',
     orb3: 'bg-amber-600/12',
     accentGlow: 'rgba(16,185,129,0.12)',
+  },
+  'audit-trends': {
+    name: '30-Day Audit Log Distribution Trends',
+    orb1: 'bg-cyan-600/18',
+    orb2: 'bg-emerald-600/14',
+    orb3: 'bg-amber-500/10',
+    accentGlow: 'rgba(6,182,212,0.12)',
   },
 };
 
@@ -2994,6 +3002,13 @@ function SovereignAppContent() {
             currentBatchSize={64}
             onStageProposalForApproval={handleStageAiProposalForApproval}
             onAuditRecord={handleAiAuditRecord}
+          />
+        );
+      case 'audit-trends':
+        return (
+          <AuditLogTrendsView
+            onNavigate={setCurrentView}
+            onAddSystemEvent={addSystemEvent as any}
           />
         );
       default:

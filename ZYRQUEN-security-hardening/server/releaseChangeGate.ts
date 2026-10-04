@@ -1,0 +1,4 @@
+import crypto from 'node:crypto';
+export interface ReleaseChangeInput { admission:'ADMITTED'|'BLOCKED'; dirtyFiles:number; pendingRecovery:boolean; unresolvedFailures:number; }
+export interface ReleaseChangeResult { decision:'ALLOW'|'BLOCK'; reasons:string[]; changeHash:string; }
+export function evaluateReleaseChange(input:ReleaseChangeInput):ReleaseChangeResult { const reasons:string[]=[]; if(input.admission!=='ADMITTED') reasons.push('OPERATIONAL_ADMISSION_BLOCKED'); if(input.dirtyFiles>0) reasons.push('DIRTY_WORKTREE'); if(input.pendingRecovery) reasons.push('RECOVERY_PENDING'); if(input.unresolvedFailures>0) reasons.push('UNRESOLVED_FAILURES'); const changeHash=crypto.createHash('sha256').update(JSON.stringify(input)).digest('hex'); return {decision:reasons.length?'BLOCK':'ALLOW',reasons,changeHash}; }
