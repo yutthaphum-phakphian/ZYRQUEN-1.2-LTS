@@ -1,18 +1,38 @@
-FROM node:18-alpine
+name: Docker Image CI
 
-WORKDIR /app
+on:
+  push:
+    branches:
+      - main
+      - master
+    paths:
+      - 'Dockerfile'
+      - '.github/workflows/docker-image.yml'
+      - 'package*.json'
+      - 'server.ts'
+      - 'vite.config.ts'
+      - 'src/**'
+  workflow_dispatch:
 
-# Copy package files
-COPY package*.json ./
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
 
-# Install dependencies
-RUN npm ci --only=production
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
 
-# Copy application source
-COPY src/ ./src/
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v3
 
-# Expose port (adjust as needed for your application)
-EXPOSE 3000
-
-# Start application
-CMD ["npm", "start"]
+      - name: Build Docker image
+        uses: docker/build-push-action@v6
+        with:
+          context: .
+          file: ./Dockerfile
+          push: false
+          tags: zyrquen:${{ github.sha }}
+          cache-from: type=gha
+          cache-to: type=gha,mode=max
