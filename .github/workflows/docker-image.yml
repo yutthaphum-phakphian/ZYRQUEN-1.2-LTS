@@ -1,38 +1,16 @@
-name: Docker Image CI
+# syntax=docker/dockerfile:1
+FROM node:20-alpine
 
-on:
-  push:
-    branches:
-      - main
-      - master
-    paths:
-      - 'Dockerfile'
-      - '.github/workflows/docker-image.yml'
-      - 'package*.json'
-      - 'server.ts'
-      - 'vite.config.ts'
-      - 'src/**'
-  workflow_dispatch:
+WORKDIR /app
 
-jobs:
-  build:
-    runs-on: ubuntu-latest
-    permissions:
-      contents: read
+COPY package.json ./
+COPY npm-shrinkwrap.json ./
+RUN npm ci
 
-    steps:
-      - name: Checkout repository
-        uses: actions/checkout@v4
+COPY . .
+RUN npm run build
 
-      - name: Set up Docker Buildx
-        uses: docker/setup-buildx-action@v3
+ENV NODE_ENV=production
+EXPOSE 3000
 
-      - name: Build Docker image
-        uses: docker/build-push-action@v6
-        with:
-          context: .
-          file: ./Dockerfile
-          push: false
-          tags: zyrquen:${{ github.sha }}
-          cache-from: type=gha
-          cache-to: type=gha,mode=max￼Enter
+CMD ["npx", "tsx", "server.ts"]
