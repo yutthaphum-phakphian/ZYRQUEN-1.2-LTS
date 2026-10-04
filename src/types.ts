@@ -31,7 +31,8 @@ export type ViewType =
   | 'sovereign'
   | 'ai-workspace'
   | 'compliance-coverage'
-  | 'treasury-variance';
+  | 'treasury-variance'
+  | 'audit-trends';
 
 export interface AuditStage {
   id: string;

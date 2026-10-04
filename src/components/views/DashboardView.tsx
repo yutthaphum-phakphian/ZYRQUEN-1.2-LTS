@@ -316,6 +316,18 @@ export const DashboardView: React.FC<DashboardViewProps> = ({
 
             <button
               onClick={() => {
+                playTone(680, 0.04);
+                onNavigate('audit-trends');
+              }}
+              className="px-3 py-2 rounded-xl bg-cyan-950/60 hover:bg-cyan-900/60 border border-cyan-500/40 hover:border-cyan-400 text-cyan-200 text-xs font-mono font-semibold flex items-center gap-1.5 transition-all shadow-sm cursor-pointer"
+              title="View 30-Day Audit Log Distribution Trends (Success, Warning, Critical)"
+            >
+              <Activity className="w-3.5 h-3.5 text-cyan-400" />
+              <span>30D Trends</span>
+            </button>
+
+            <button
+              onClick={() => {
                 playTone(700, 0.04);
                 onOpenCertificate();
               }}
