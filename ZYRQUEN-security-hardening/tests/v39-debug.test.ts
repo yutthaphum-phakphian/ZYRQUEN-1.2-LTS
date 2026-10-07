@@ -1,0 +1,24 @@
+import fs from 'node:fs/promises';
+import path from 'node:path';
+import crypto from 'node:crypto';
+const root = path.resolve(process.cwd(), `.v39-test-${process.pid}-${Date.now()}`);
+process.env.CODEVOICE_DURABLE_ROOT = root;
+const { saveDurableRecord, appendMissionEvent, loadDurableRecord } = await import('../server/durableStore.ts');
+const { enqueueMission, listMissionQueue } = await import('../server/missionQueueScheduler.ts');
+const { MissionWorkerPool } = await import('../server/missionWorkerPool.ts');
+await fs.rm(root,{recursive:true,force:true});
+const mission:any={missionId:'v39-mission',executionId:crypto.randomUUID(),goal:'run worker pool',status:'READY',progress:0,tasks:[{taskId:'t1',type:'ANALYZE',title:'Analyze',description:'analyze',dependencies:[],priority:'HIGH',status:'READY',inputs:{},retryCount:0,maxRetries:1,affectedFiles:[],validationCriteria:[],parallelSafe:false}],context:{objective:'run worker pool',relevantFiles:[],budget:100,used:0,summaries:[]},checkpoints:[],snapshots:[],errors:[],recoveryAttempts:0,maxRecoveryAttempts:3,events:[],createdAt:new Date().toISOString(),updatedAt:new Date().toISOString()};
+await saveDurableRecord('mission',mission.missionId,mission,1);
+await appendMissionEvent({eventId:crypto.randomUUID(),missionId:mission.missionId,type:'MISSION_CREATED',timestamp:new Date().toISOString(),status:'READY',summary:'V39 test'});
+await enqueueMission(mission.missionId,'CRITICAL',2);
+const pool=new MissionWorkerPool(undefined,{capacity:1,intervalMs:250,ttlMs:5000,maxSteps:10});
+await pool.tick();
+for(let i=0;i<20;i++){ await new Promise(r=>setTimeout(r,50)); if(pool.snapshot().inFlight===0) break; }
+const final=await loadDurableRecord<any>('mission',mission.missionId); console.log('FINAL', JSON.stringify(final?.payload), pool.snapshot(), await listMissionQueue());
+if(!['COMPLETED','WAITING_USER','FAILED','WAITING_APPROVAL'].includes(final?.payload.status)) throw new Error('worker pool did not execute mission');
+const q=(await listMissionQueue()).find(x=>x.missionId===mission.missionId);
+if(!q || !['COMPLETED','DISPATCHED','QUEUED'].includes(q.status)) throw new Error('queue acknowledgement missing');
+if(pool.snapshot().dispatched<1) throw new Error('no dispatch');
+await pool.shutdown();
+await fs.rm(root,{recursive:true,force:true});
+console.log('V39 worker pool tests: PASS');

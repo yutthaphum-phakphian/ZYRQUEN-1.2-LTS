@@ -27,6 +27,7 @@ import {
   Sparkles,
   ChevronRight,
   AlertCircle,
+  AlertTriangle,
   Thermometer,
   Gauge,
   Zap,
@@ -36,7 +37,30 @@ import {
   X,
   Maximize2,
   Eye,
+  BarChart2,
+  PieChart as PieChartIcon,
+  Calendar,
+  CalendarRange,
+  CheckSquare,
+  Square,
+  TrendingUp,
+  Info,
 } from 'lucide-react';
+import {
+  ResponsiveContainer,
+  BarChart,
+  Bar,
+  AreaChart,
+  Area,
+  PieChart,
+  Pie,
+  Cell,
+  XAxis,
+  YAxis,
+  CartesianGrid,
+  Tooltip as RechartsTooltip,
+  Legend,
+} from 'recharts';
 import { HardwareSnapshot, ViewType } from '../../types';
 import {
   SYSTEM_METADATA,
@@ -54,9 +78,11 @@ import { MutationDeltaD3Chart } from '../MutationDeltaD3Chart';
 import { copyToClipboard } from '../../utils/clipboard';
 import { generateAndDownloadFullAuditPdfReport } from '../../utils/fullAuditPdfExport';
 import { HARDWARE_SEALS_LEDGER } from '../../data/hardwareSealsData';
+import { SystemEvent } from '../SystemEventsSidebar';
 
 export interface AuditHistoryViewProps {
   snapshots?: HardwareSnapshot[];
+  systemEvents?: SystemEvent[];
   onNavigate?: (view: ViewType) => void;
   onCaptureSnapshot?: (newSnap: HardwareSnapshot) => void;
   onOpenCertificate?: () => void;
@@ -69,8 +95,133 @@ export interface AuditHistoryViewProps {
   ) => void;
 }
 
+export const DEFAULT_AUDIT_SYSTEM_EVENTS: SystemEvent[] = [
+  {
+    id: 'evt-comp-01',
+    type: 'COMPLIANCE',
+    title: 'Thai Electronic Transactions Act (Sec 9, 26, 28) Ratified',
+    description: 'Sovereign Seal Chain runtime anchored to ETDA Level 3+ standards and Passport #EP-SOVEREIGN-01.',
+    timestamp: '05:01:22 ICT',
+    statuteRef: 'มาตรา 9, 26, 28 (ETDA Level 3+)',
+    severity: 'success',
+    bindingStatus: 'ANCHORED',
+  },
+  {
+    id: 'evt-hw-01',
+    type: 'HARDWARE',
+    title: 'Dilution Refrigerator Coherence Baseline Locked',
+    description: 'Mixing chamber cryogenic stabilization verified at 14.98 mK with Δ0.00% zero thermal drift.',
+    timestamp: '05:02:15 ICT',
+    statuteRef: 'NIST SP 800-90B Quantum Entropy Assurance',
+    severity: 'info',
+    bindingStatus: 'ANCHORED',
+  },
+  {
+    id: 'evt-sec-01',
+    type: 'SECURITY',
+    title: 'Deca-Key HSM Quorum Health Attestation',
+    description: 'All 10/10 REAL_HSM cryptographic coprocessors confirmed in sync. FIPS 140-3 Level 4 tamper tripwires armed.',
+    timestamp: '05:03:08 ICT',
+    statuteRef: 'FIPS 140-3 Level 4 / CC EAL6+',
+    severity: 'success',
+    bindingStatus: 'ANCHORED',
+  },
+  {
+    id: 'evt-crypto-01',
+    type: 'CRYPTO',
+    title: 'Post-Quantum Dual Signature Committed',
+    description: 'ML-DSA-87 (Dilithium-5) post-quantum attestation paired with Kyber-1024 encapsulation key exchange.',
+    timestamp: '05:03:45 ICT',
+    statuteRef: 'FIPS 204 ML-DSA-87 Primary Key',
+    severity: 'info',
+    bindingStatus: 'ANCHORED',
+  },
+  {
+    id: 'evt-anom-01',
+    type: 'ANOMALY',
+    title: 'Entropy Sampling Micro-Jitter Spike Mitigated',
+    description: 'Quantum entropy burst shifted +12.4% above baseline; self-calibrating feedback loop restored within 14.2ms.',
+    timestamp: '05:04:12 ICT',
+    statuteRef: 'PDPA B.E. 2562 Sec 37(1) Proactive Defense',
+    severity: 'warning',
+    bindingStatus: 'ANCHORED',
+  },
+  {
+    id: 'evt-sec-02',
+    type: 'SECURITY',
+    title: 'Boundary Barrier Tripwire Validation (Ω600_1000)',
+    description: 'Multi-tenant isolation barrier checked across all 400 tenants. Zero cross-boundary leakage verified.',
+    timestamp: '05:04:50 ICT',
+    statuteRef: 'Zero-Trust Tenant Boundary Invariant',
+    severity: 'info',
+    bindingStatus: 'ANCHORED',
+  },
+  {
+    id: 'evt-comp-02',
+    type: 'COMPLIANCE',
+    title: 'PDPA Sec 37 Continuous Security Assessment Ratified',
+    description: 'Automated data protection audit executed without policy violation. Statutory safe harbor maintained.',
+    timestamp: '05:05:30 ICT',
+    statuteRef: 'PDPA B.E. 2562 มาตรา 37(1)',
+    severity: 'success',
+    bindingStatus: 'ANCHORED',
+  },
+  {
+    id: 'evt-crit-01',
+    type: 'SECURITY',
+    title: 'Adversarial Firmware Mutation Probe Neutralized',
+    description: 'Simulated unsigned microcode injection rejected at hardware root-of-trust gatekeeper within 0.08ms.',
+    timestamp: '05:06:00 ICT',
+    statuteRef: 'ETDA มาตรา 28 Statutory Safe Harbor Protection',
+    severity: 'critical',
+    bindingStatus: 'ANCHORED',
+  },
+  {
+    id: 'evt-backup-01',
+    type: 'BACKUP',
+    title: 'Continuous WORM Vault Snapshot Archived',
+    description: 'Incremental encrypted block commit persisted to immutable write-once optical physical backup array.',
+    timestamp: '05:06:45 ICT',
+    statuteRef: 'ISO/IEC 27001 Annex A.12.3',
+    severity: 'success',
+    bindingStatus: 'ANCHORED',
+  },
+  {
+    id: 'evt-hw-02',
+    type: 'HARDWARE',
+    title: 'Cryo-Thermal Sensor Array Recalibration Complete',
+    description: 'Cryogenic sensor array thermal variance balanced across chambers 01 through 18.',
+    timestamp: '05:07:10 ICT',
+    statuteRef: 'Hardware Integrity Baseline',
+    severity: 'info',
+    bindingStatus: 'ANCHORED',
+  },
+  {
+    id: 'evt-crit-02',
+    type: 'COMPLIANCE',
+    title: 'Critical Synthetic Compliance Drift Invariant Tripped',
+    description: 'Synthetic invariant discrepancy flagged in chamber 11; automated fail-closed isolation invoked.',
+    timestamp: '05:07:55 ICT',
+    statuteRef: 'ETDA B.E. 2544 มาตรา 26',
+    severity: 'critical',
+    isComplianceDrift: true,
+    bindingStatus: 'PENDING',
+  },
+  {
+    id: 'evt-anom-02',
+    type: 'ANOMALY',
+    title: 'High Network Latency on Gateway Peer-04',
+    description: 'Transit latency exceeded 45ms SLA threshold during high-throughput stress simulation.',
+    timestamp: '05:08:20 ICT',
+    statuteRef: 'SLA Boundary Monitoring Protocol',
+    severity: 'warning',
+    bindingStatus: 'ANCHORED',
+  },
+];
+
 export const AuditHistoryView: React.FC<AuditHistoryViewProps> = ({
   snapshots = [],
+  systemEvents = [],
   onNavigate,
   onCaptureSnapshot,
   onOpenCertificate,
@@ -113,6 +264,213 @@ export const AuditHistoryView: React.FC<AuditHistoryViewProps> = ({
   const [isChainValidating, setIsChainValidating] = useState(false);
   const [chainAuditNotice, setChainAuditNotice] = useState<string | null>(null);
   const [viewDensity, setViewDensity] = useState<'standard' | 'compact'>('standard');
+
+  // Sub-Tab Navigation State: 'records' (Snapshot Ledger) vs 'charts' (Recharts Analytics)
+  const [auditSubTab, setAuditSubTab] = useState<'records' | 'charts'>('records');
+
+  // Charts & System Events Filtering State
+  const [eventSearchQuery, setEventSearchQuery] = useState('');
+  const [eventSelectedTypes, setEventSelectedTypes] = useState<Set<string>>(() => new Set<string>());
+  const [eventSeverityFilter, setEventSeverityFilter] = useState<'ALL' | 'critical' | 'warning' | 'success' | 'info'>('ALL');
+  const [eventDateStart, setEventDateStart] = useState('');
+  const [eventDateEnd, setEventDateEnd] = useState('');
+  const [frequencyChartMode, setFrequencyChartMode] = useState<'category' | 'timeline'>('category');
+
+  // Resolved system events pool (prop or default canonical records)
+  const resolvedSystemEvents = useMemo(() => {
+    if (systemEvents && systemEvents.length > 0) {
+      return systemEvents;
+    }
+    return DEFAULT_AUDIT_SYSTEM_EVENTS;
+  }, [systemEvents]);
+
+  // Timestamp parsing helper
+  const parseEventTimeMs = (timestamp: string): number => {
+    if (!timestamp) return Date.now();
+    const direct = Date.parse(timestamp);
+    if (!isNaN(direct)) return direct;
+    const match = timestamp.match(/(\d{1,2}):(\d{2}):(\d{2})/);
+    if (match) {
+      const d = new Date();
+      d.setHours(parseInt(match[1], 10), parseInt(match[2], 10), parseInt(match[3], 10), 0);
+      return d.getTime();
+    }
+    return Date.now();
+  };
+
+  // Filtered system events list
+  const filteredSystemEvents = useMemo(() => {
+    const startMs = eventDateStart ? new Date(eventDateStart).getTime() : null;
+    const endMs = eventDateEnd ? new Date(eventDateEnd).getTime() : null;
+
+    return resolvedSystemEvents.filter((ev) => {
+      // 1. Multi-Select Type Filter
+      if (eventSelectedTypes.size > 0) {
+        let typeMatches = eventSelectedTypes.has(ev.type);
+        if (!typeMatches && eventSelectedTypes.has('COMPLIANCE')) {
+          typeMatches = Boolean(ev.isComplianceDrift) || ev.type === 'LEGAL_SEARCH';
+        }
+        if (!typeMatches && eventSelectedTypes.has('ANOMALY')) {
+          typeMatches = Boolean(ev.isAnomaly) || ev.severity === 'critical';
+        }
+        if (!typeMatches && eventSelectedTypes.has('PENDING')) {
+          typeMatches = ev.bindingStatus === 'PENDING';
+        }
+        if (!typeMatches) return false;
+      }
+
+      // 2. Severity Filter
+      if (eventSeverityFilter !== 'ALL') {
+        if (ev.severity !== eventSeverityFilter) return false;
+      }
+
+      // 3. Date Range Filter
+      if (startMs !== null || endMs !== null) {
+        const evTime = parseEventTimeMs(ev.timestamp);
+        if (startMs !== null && !isNaN(startMs) && evTime < startMs) return false;
+        if (endMs !== null && !isNaN(endMs) && evTime > endMs) return false;
+      }
+
+      // 4. Text Search
+      if (eventSearchQuery.trim()) {
+        const q = eventSearchQuery.trim().toLowerCase();
+        const titleMatch = ev.title ? ev.title.toLowerCase().includes(q) : false;
+        const descMatch = ev.description ? ev.description.toLowerCase().includes(q) : false;
+        const statuteMatch = ev.statuteRef ? ev.statuteRef.toLowerCase().includes(q) : false;
+        const metaMatch = ev.metaHash ? ev.metaHash.toLowerCase().includes(q) : false;
+        const typeMatch = ev.type ? ev.type.toLowerCase().includes(q) : false;
+        const idMatch = ev.id ? ev.id.toLowerCase().includes(q) : false;
+        return titleMatch || descMatch || statuteMatch || metaMatch || typeMatch || idMatch;
+      }
+
+      return true;
+    });
+  }, [resolvedSystemEvents, eventSelectedTypes, eventSeverityFilter, eventDateStart, eventDateEnd, eventSearchQuery]);
+
+  // Severity Distribution Data for Recharts PieChart & BarChart with exact counts and percentages
+  const severityDistributionData = useMemo(() => {
+    let critical = 0;
+    let warning = 0;
+    let success = 0;
+    let info = 0;
+
+    filteredSystemEvents.forEach((ev) => {
+      if (ev.severity === 'critical') critical++;
+      else if (ev.severity === 'warning') warning++;
+      else if (ev.severity === 'success') success++;
+      else info++;
+    });
+
+    const total = Math.max(1, filteredSystemEvents.length);
+
+    return [
+      {
+        name: 'Critical',
+        value: critical,
+        percentage: Number(((critical / total) * 100).toFixed(1)),
+        color: '#f43f5e',
+        fill: '#f43f5e',
+        desc: 'High-severity alerts, invariant drift & unauthorized access attempts',
+      },
+      {
+        name: 'Warning',
+        value: warning,
+        percentage: Number(((warning / total) * 100).toFixed(1)),
+        color: '#f59e0b',
+        fill: '#f59e0b',
+        desc: 'Micro-jitter anomalies, buffer sync delays & non-critical variances',
+      },
+      {
+        name: 'Success',
+        value: success,
+        percentage: Number(((success / total) * 100).toFixed(1)),
+        color: '#10b981',
+        fill: '#10b981',
+        desc: 'Ratified statutory attestations, sealed hashes & zero-drift proofs',
+      },
+      {
+        name: 'Info',
+        value: info,
+        percentage: Number(((info / total) * 100).toFixed(1)),
+        color: '#06b6d4',
+        fill: '#06b6d4',
+        desc: 'Routine telemetry logging, boundary heartbeats & ingest records',
+      },
+    ];
+  }, [filteredSystemEvents]);
+
+  // Event Frequency Data by Category / Type for Recharts
+  const frequencyDataByCategory = useMemo(() => {
+    const map = new Map<string, { name: string; count: number; critical: number; warning: number; success: number; info: number; color: string }>();
+    const COLOR_MAP: Record<string, string> = {
+      COMPLIANCE: '#10b981',
+      HARDWARE: '#06b6d4',
+      SECURITY: '#f43f5e',
+      CRYPTO: '#a855f7',
+      ANOMALY: '#f59e0b',
+      BACKUP: '#3b82f6',
+      LEGAL_SEARCH: '#ec4899',
+      EVIDENCE_IMPORTED: '#14b8a6',
+      EVIDENCE_INGESTED: '#8b5cf6',
+    };
+
+    filteredSystemEvents.forEach((ev) => {
+      const type = ev.type || 'OTHER';
+      if (!map.has(type)) {
+        map.set(type, {
+          name: type,
+          count: 0,
+          critical: 0,
+          warning: 0,
+          success: 0,
+          info: 0,
+          color: COLOR_MAP[type] || '#06b6d4',
+        });
+      }
+      const item = map.get(type)!;
+      item.count++;
+      if (ev.severity === 'critical') item.critical++;
+      else if (ev.severity === 'warning') item.warning++;
+      else if (ev.severity === 'success') item.success++;
+      else item.info++;
+    });
+
+    return Array.from(map.values()).sort((a, b) => b.count - a.count);
+  }, [filteredSystemEvents]);
+
+  // Event Frequency Timeline Data for Recharts AreaChart
+  const frequencyDataTimeline = useMemo(() => {
+    const bucketsCount = Math.min(8, Math.max(4, filteredSystemEvents.length));
+    const chunkSize = Math.max(1, Math.ceil(filteredSystemEvents.length / bucketsCount));
+    const result = [];
+
+    for (let i = 0; i < filteredSystemEvents.length; i += chunkSize) {
+      const slice = filteredSystemEvents.slice(i, i + chunkSize);
+      const label = slice[0]?.timestamp?.replace(' ICT', '') || `T-${i}`;
+      let critical = 0;
+      let warning = 0;
+      let success = 0;
+      let info = 0;
+
+      slice.forEach((e) => {
+        if (e.severity === 'critical') critical++;
+        else if (e.severity === 'warning') warning++;
+        else if (e.severity === 'success') success++;
+        else info++;
+      });
+
+      result.push({
+        time: label,
+        total: slice.length,
+        critical,
+        warning,
+        success,
+        info,
+      });
+    }
+
+    return result.length > 0 ? result : [{ time: 'Current', total: 0, critical: 0, warning: 0, success: 0, info: 0 }];
+  }, [filteredSystemEvents]);
 
   // Filter and sort snapshot entries
   const filteredSnapshots = useMemo(() => {
@@ -379,6 +737,79 @@ export const AuditHistoryView: React.FC<AuditHistoryViewProps> = ({
     }
   }, [activeSnapshots, onAddSystemEvent]);
 
+  // Export currently filtered system events list into a structured CSV file for external analysis
+  const handleDownloadFilteredSystemEventsCsv = useCallback(() => {
+    playTone(680, 0.04);
+    playAuditChime();
+
+    const headers = [
+      'Record_Index',
+      'Event_ID',
+      'Event_Type',
+      'Severity',
+      'Title',
+      'Description',
+      'Timestamp',
+      'Statute_Reference',
+      'Meta_Hash',
+      'Binding_Status',
+      'Is_Compliance_Drift',
+      'Is_Anomaly',
+      'Latency_MS',
+    ];
+
+    const rows = filteredSystemEvents.map((ev, index) => [
+      index + 1,
+      `"${ev.id}"`,
+      `"${ev.type}"`,
+      `"${ev.severity}"`,
+      `"${(ev.title || '').replace(/"/g, '""')}"`,
+      `"${(ev.description || '').replace(/"/g, '""')}"`,
+      `"${ev.timestamp}"`,
+      `"${(ev.statuteRef || 'N/A').replace(/"/g, '""')}"`,
+      `"${ev.metaHash || 'N/A'}"`,
+      `"${ev.bindingStatus || 'ANCHORED'}"`,
+      ev.isComplianceDrift ? 'TRUE' : 'FALSE',
+      ev.isAnomaly ? 'TRUE' : 'FALSE',
+      ev.latencyMs || 0.12,
+    ]);
+
+    const csvContent =
+      '# ZYRQUEN Ω∞ SOVEREIGN AUDIT SYSTEM EVENTS CSV EXPORT\n' +
+      `# Genesis Block: ${CANONICAL_GENESIS_BLOCK} | Merkle Root: ${CANONICAL_MERKLE_ROOT}\n` +
+      `# Total Filtered Records: ${filteredSystemEvents.length} | Exported UTC: ${new Date().toISOString()}\n` +
+      `# Legal Mandate: ISO/IEC 27037 Forensic Evidence Standard | ETDA B.E. 2544 Sec 9/26/28 | PDPA B.E. 2562 Sec 37\n` +
+      headers.join(',') +
+      '\n' +
+      rows.map((r) => r.join(',')).join('\n');
+
+    const blob = new Blob([csvContent], { type: 'text/csv;charset=utf-8;' });
+    const url = URL.createObjectURL(blob);
+    const link = document.createElement('a');
+    link.setAttribute('href', url);
+    link.setAttribute(
+      'download',
+      `ZYRQUEN_SYSTEM_EVENTS_AUDIT_${CANONICAL_GENESIS_BLOCK}_${Date.now()}.csv`
+    );
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+    URL.revokeObjectURL(url);
+
+    setChainAuditNotice(`System Events CSV exported successfully (${filteredSystemEvents.length} records).`);
+    setTimeout(() => setChainAuditNotice(null), 5000);
+
+    if (onAddSystemEvent) {
+      onAddSystemEvent(
+        'AUDIT',
+        'System Events CSV Exported',
+        `Exported ${filteredSystemEvents.length} filtered system event records complying with ISO/IEC 27037 & ETDA Sec 9.`,
+        'audithistory:system_events_csv',
+        'success'
+      );
+    }
+  }, [filteredSystemEvents, onAddSystemEvent]);
+
   // Generate and Download Full Audit Report PDF
   const handleDownloadFullAuditPdfReport = useCallback(() => {
     setIsGeneratingPdf(true);
@@ -484,10 +915,19 @@ export const AuditHistoryView: React.FC<AuditHistoryViewProps> = ({
               id="export-audit-csv-btn"
               onClick={handleExportAuditCsv}
               className="px-3.5 py-2.5 rounded-xl bg-emerald-950/70 hover:bg-emerald-900/80 text-emerald-300 font-bold text-xs border border-emerald-500/40 flex items-center gap-2 transition-all active:scale-95 shadow-sm"
-              title="Export current system events and audit logs as a structured CSV file for external forensic analysis"
+              title="Export current snapshots as a structured CSV file"
             >
               <FileSpreadsheet className="w-4 h-4 text-emerald-400" />
-              Export Audit CSV
+              Export Snapshots CSV
+            </button>
+            <button
+              id="download-csv-btn"
+              onClick={handleDownloadFilteredSystemEventsCsv}
+              className="px-3.5 py-2.5 rounded-xl bg-cyan-950/80 hover:bg-cyan-900/80 text-cyan-300 font-bold text-xs border border-cyan-500/50 flex items-center gap-2 transition-all active:scale-95 shadow-sm"
+              title="Download currently filtered system events list into a structured CSV file for external analysis"
+            >
+              <Download className="w-4 h-4 text-cyan-400" />
+              Download CSV
             </button>
             <button
               onClick={handleExportJson}
@@ -623,8 +1063,69 @@ export const AuditHistoryView: React.FC<AuditHistoryViewProps> = ({
         </div>
       </div>
 
-      {/* 1.5. Real-Time D3 Mutation Delta & SSoT Zero-Drift Visualizer */}
-      <MutationDeltaD3Chart />
+      {/* Sub-Tab Navigation: Snapshot Records vs Recharts Charts */}
+      <div className="flex flex-wrap items-center justify-between gap-3 border-b border-white/10 pb-3">
+        <div className="flex items-center gap-2">
+          <button
+            type="button"
+            id="subtab-records-btn"
+            onClick={() => {
+              playTone(520, 0.03);
+              setAuditSubTab('records');
+            }}
+            className={`px-4 py-2.5 rounded-xl text-xs font-bold font-mono flex items-center gap-2 transition-all cursor-pointer ${
+              auditSubTab === 'records'
+                ? 'bg-emerald-500/20 text-emerald-300 border border-emerald-500/50 shadow-[0_0_15px_rgba(16,185,129,0.25)]'
+                : 'bg-white/5 text-zinc-400 hover:text-zinc-200 border border-transparent'
+            }`}
+          >
+            <Layers className="w-4 h-4 text-emerald-400" />
+            <span>Records &amp; Snapshots</span>
+            <span className="text-[10px] px-1.5 py-0.2 rounded-full bg-black/40 text-emerald-400 font-normal">
+              {activeSnapshots.length}
+            </span>
+          </button>
+
+          <button
+            type="button"
+            id="subtab-charts-btn"
+            onClick={() => {
+              playTone(620, 0.03);
+              setAuditSubTab('charts');
+            }}
+            className={`px-4 py-2.5 rounded-xl text-xs font-bold font-mono flex items-center gap-2 transition-all cursor-pointer ${
+              auditSubTab === 'charts'
+                ? 'bg-cyan-500/20 text-cyan-300 border border-cyan-500/50 shadow-[0_0_15px_rgba(6,182,212,0.25)]'
+                : 'bg-white/5 text-zinc-400 hover:text-zinc-200 border border-transparent'
+            }`}
+          >
+            <BarChart2 className="w-4 h-4 text-cyan-400" />
+            <span>Charts</span>
+            <span className="text-[9px] px-1.5 py-0.2 rounded-full bg-cyan-500/30 text-cyan-200 border border-cyan-400/40 font-bold uppercase tracking-wider">
+              RECHARTS
+            </span>
+          </button>
+        </div>
+
+        <div className="text-[11px] font-mono text-zinc-400 flex items-center gap-2">
+          {auditSubTab === 'charts' ? (
+            <span className="flex items-center gap-1.5 text-cyan-300">
+              <Activity className="w-3.5 h-3.5 text-cyan-400" />
+              <span>System Event Frequency &amp; Severity Distribution Analytics</span>
+            </span>
+          ) : (
+            <span className="flex items-center gap-1.5 text-emerald-300">
+              <ShieldCheck className="w-3.5 h-3.5 text-emerald-400" />
+              <span>Continuous Cryptographic Telemetry Ledger (Δ0.00% Zero Drift)</span>
+            </span>
+          )}
+        </div>
+      </div>
+
+      {auditSubTab === 'records' ? (
+        <>
+          {/* 1.5. Real-Time D3 Mutation Delta & SSoT Zero-Drift Visualizer */}
+          <MutationDeltaD3Chart />
 
       {/* 2. Search, Filter, Density and Sorting Controls */}
       <div className="p-4 rounded-2xl bg-[#0a0f1e] border border-white/10 shadow-lg flex flex-col md:flex-row items-center justify-between gap-4">
@@ -957,6 +1458,639 @@ export const AuditHistoryView: React.FC<AuditHistoryViewProps> = ({
           </div>
         )}
       </div>
+        </>
+      ) : (
+        /* Charts Sub-Tab Content: System Event Frequency & Severity Distribution Visualizer */
+        <div className="space-y-6 animate-in fade-in duration-300">
+          {/* 1. Quick KPI Cards Ribbon for System Events */}
+          <div className="grid grid-cols-2 sm:grid-cols-5 gap-3">
+            <div className="p-3.5 rounded-2xl bg-[#0a0f1e] border border-white/10 shadow-lg flex flex-col justify-between">
+              <span className="text-[10px] uppercase text-zinc-400 tracking-wider">Filtered Events</span>
+              <span className="text-xl font-black text-white mt-1 flex items-center gap-1.5">
+                <Layers className="w-4 h-4 text-cyan-400" />
+                {filteredSystemEvents.length}
+              </span>
+              <span className="text-[10px] text-zinc-500 font-sans mt-0.5">
+                Total in Buffer: {resolvedSystemEvents.length}
+              </span>
+            </div>
+
+            <div className="p-3.5 rounded-2xl bg-rose-950/20 border border-rose-500/30 shadow-lg flex flex-col justify-between">
+              <span className="text-[10px] uppercase text-rose-300 tracking-wider">Critical Severity</span>
+              <span className="text-xl font-black text-rose-400 mt-1 flex items-center gap-1.5">
+                <AlertTriangle className="w-4 h-4 text-rose-400" />
+                {severityDistributionData[0].value}
+                <span className="text-xs font-normal text-rose-300/80">({severityDistributionData[0].percentage}%)</span>
+              </span>
+              <span className="text-[10px] text-rose-300/60 font-sans mt-0.5">
+                Drift &amp; Tripwires
+              </span>
+            </div>
+
+            <div className="p-3.5 rounded-2xl bg-amber-950/20 border border-amber-500/30 shadow-lg flex flex-col justify-between">
+              <span className="text-[10px] uppercase text-amber-300 tracking-wider">Warning Severity</span>
+              <span className="text-xl font-black text-amber-400 mt-1 flex items-center gap-1.5">
+                <Clock className="w-4 h-4 text-amber-400" />
+                {severityDistributionData[1].value}
+                <span className="text-xs font-normal text-amber-300/80">({severityDistributionData[1].percentage}%)</span>
+              </span>
+              <span className="text-[10px] text-amber-300/60 font-sans mt-0.5">
+                Jitter &amp; Pending
+              </span>
+            </div>
+
+            <div className="p-3.5 rounded-2xl bg-emerald-950/20 border border-emerald-500/30 shadow-lg flex flex-col justify-between">
+              <span className="text-[10px] uppercase text-emerald-300 tracking-wider">Success Seals</span>
+              <span className="text-xl font-black text-emerald-400 mt-1 flex items-center gap-1.5">
+                <CheckCircle2 className="w-4 h-4 text-emerald-400" />
+                {severityDistributionData[2].value}
+                <span className="text-xs font-normal text-emerald-300/80">({severityDistributionData[2].percentage}%)</span>
+              </span>
+              <span className="text-[10px] text-emerald-300/60 font-sans mt-0.5">
+                Ratified Attestations
+              </span>
+            </div>
+
+            <div className="p-3.5 rounded-2xl bg-cyan-950/20 border border-cyan-500/30 shadow-lg flex flex-col justify-between col-span-2 sm:col-span-1">
+              <span className="text-[10px] uppercase text-cyan-300 tracking-wider">Info Telemetry</span>
+              <span className="text-xl font-black text-cyan-400 mt-1 flex items-center gap-1.5">
+                <Activity className="w-4 h-4 text-cyan-400" />
+                {severityDistributionData[3].value}
+                <span className="text-xs font-normal text-cyan-300/80">({severityDistributionData[3].percentage}%)</span>
+              </span>
+              <span className="text-[10px] text-cyan-300/60 font-sans mt-0.5">
+                Routine Heartbeats
+              </span>
+            </div>
+          </div>
+
+          {/* 2. System Events Filter Controls & CSV Export Bar */}
+          <div className="p-4 rounded-2xl bg-[#0a0f1e] border border-white/10 shadow-lg space-y-3">
+            <div className="flex flex-col lg:flex-row items-stretch lg:items-center justify-between gap-3">
+              {/* Search input */}
+              <div className="relative flex-1">
+                <Search className="w-4 h-4 text-zinc-400 absolute left-3.5 top-1/2 -translate-y-1/2 pointer-events-none" />
+                <input
+                  type="text"
+                  placeholder="Search system events by title, description, statute, hash, or ID..."
+                  value={eventSearchQuery}
+                  onChange={(e) => setEventSearchQuery(e.target.value)}
+                  className="w-full pl-10 pr-8 py-2 bg-[#060913] border border-white/10 focus:border-cyan-500/50 rounded-xl text-xs text-white placeholder-zinc-500 focus:outline-none transition-colors"
+                />
+                {eventSearchQuery && (
+                  <button
+                    type="button"
+                    onClick={() => setEventSearchQuery('')}
+                    className="absolute right-3 top-1/2 -translate-y-1/2 text-zinc-400 hover:text-white"
+                  >
+                    <X className="w-3.5 h-3.5" />
+                  </button>
+                )}
+              </div>
+
+              {/* Severity Pill Filter */}
+              <div className="flex items-center gap-1 bg-[#060913] p-1 rounded-xl border border-white/10 shrink-0 overflow-x-auto">
+                <span className="text-[10px] uppercase text-zinc-500 px-2 font-mono">Severity:</span>
+                {(
+                  [
+                    { id: 'ALL', label: 'All' },
+                    { id: 'critical', label: 'Critical' },
+                    { id: 'warning', label: 'Warning' },
+                    { id: 'success', label: 'Success' },
+                    { id: 'info', label: 'Info' },
+                  ] as const
+                ).map((s) => (
+                  <button
+                    key={s.id}
+                    type="button"
+                    onClick={() => {
+                      playTone(550, 0.03);
+                      setEventSeverityFilter(s.id);
+                    }}
+                    className={`px-2.5 py-1 rounded-lg text-xs font-bold transition-all cursor-pointer ${
+                      eventSeverityFilter === s.id
+                        ? s.id === 'critical'
+                          ? 'bg-rose-600 text-white shadow'
+                          : s.id === 'warning'
+                          ? 'bg-amber-600 text-white shadow'
+                          : s.id === 'success'
+                          ? 'bg-emerald-600 text-white shadow'
+                          : 'bg-cyan-600 text-white shadow'
+                        : 'text-zinc-400 hover:text-white'
+                    }`}
+                  >
+                    {s.label}
+                  </button>
+                ))}
+              </div>
+
+              {/* Download CSV Action Button (Filtered System Events) */}
+              <button
+                type="button"
+                id="download-system-events-csv-btn"
+                onClick={handleDownloadFilteredSystemEventsCsv}
+                className="px-4 py-2.5 rounded-xl bg-gradient-to-r from-cyan-600 to-teal-600 hover:from-cyan-500 hover:to-teal-500 text-white font-bold text-xs shadow-lg shadow-cyan-950/40 border border-cyan-400/50 flex items-center justify-center gap-2 transition-all active:scale-95 shrink-0 cursor-pointer"
+                title="Export currently filtered system events list into a structured CSV file for external analysis"
+              >
+                <Download className="w-4 h-4 text-cyan-200" />
+                <span>Download CSV ({filteredSystemEvents.length})</span>
+              </button>
+            </div>
+
+            {/* Row 2: Multi-Select Log Types Filter & Date-Range Picker */}
+            <div className="flex flex-wrap items-center justify-between gap-3 pt-2 border-t border-white/5">
+              {/* Multi-Select Log Types Filter Pills */}
+              <div className="flex items-center gap-1.5 overflow-x-auto no-scrollbar py-0.5">
+                <span className="text-[10px] uppercase text-zinc-500 shrink-0 font-mono">Log Types:</span>
+                <button
+                  type="button"
+                  onClick={() => {
+                    playTone(520, 0.03);
+                    setEventSelectedTypes(new Set());
+                  }}
+                  className={`px-2.5 py-0.5 rounded-lg text-[10px] font-mono transition-all border cursor-pointer ${
+                    eventSelectedTypes.size === 0
+                      ? 'bg-cyan-500/25 text-cyan-200 border-cyan-400 font-bold'
+                      : 'bg-white/5 text-zinc-400 hover:text-white border-white/10'
+                  }`}
+                >
+                  All Types
+                </button>
+                {(
+                  [
+                    'COMPLIANCE',
+                    'HARDWARE',
+                    'SECURITY',
+                    'CRYPTO',
+                    'ANOMALY',
+                    'BACKUP',
+                    'LEGAL_SEARCH',
+                  ] as const
+                ).map((type) => {
+                  const isChecked = eventSelectedTypes.has(type);
+                  return (
+                    <button
+                      key={type}
+                      type="button"
+                      onClick={() => {
+                        playTone(560, 0.03);
+                        setEventSelectedTypes((prev) => {
+                          const next = new Set(prev);
+                          if (next.has(type)) next.delete(type);
+                          else next.add(type);
+                          return next;
+                        });
+                      }}
+                      className={`px-2.5 py-0.5 rounded-lg text-[10px] font-mono flex items-center gap-1.5 transition-all border cursor-pointer ${
+                        isChecked
+                          ? 'bg-cyan-500/25 text-cyan-200 border-cyan-400 font-bold shadow-[0_0_8px_rgba(6,182,212,0.3)]'
+                          : 'bg-white/5 text-zinc-400 hover:text-zinc-200 border-white/10'
+                      }`}
+                    >
+                      {isChecked ? (
+                        <CheckSquare className="w-3 h-3 text-cyan-400" />
+                      ) : (
+                        <Square className="w-3 h-3 text-zinc-500" />
+                      )}
+                      <span>{type}</span>
+                    </button>
+                  );
+                })}
+              </div>
+
+              {/* Date-Range Filter Controls */}
+              <div className="flex items-center gap-2 shrink-0">
+                <CalendarRange className="w-3.5 h-3.5 text-amber-400" />
+                <span className="text-[10px] text-zinc-400 font-mono">Date Range:</span>
+                <input
+                  type="datetime-local"
+                  value={eventDateStart}
+                  onChange={(e) => setEventDateStart(e.target.value)}
+                  className="px-2 py-0.5 rounded bg-[#060913] border border-white/10 text-zinc-300 text-[10px] font-mono focus:outline-none focus:border-amber-400"
+                  title="From timestamp"
+                />
+                <span className="text-zinc-500 text-[10px]">–</span>
+                <input
+                  type="datetime-local"
+                  value={eventDateEnd}
+                  onChange={(e) => setEventDateEnd(e.target.value)}
+                  className="px-2 py-0.5 rounded bg-[#060913] border border-white/10 text-zinc-300 text-[10px] font-mono focus:outline-none focus:border-amber-400"
+                  title="To timestamp"
+                />
+                {(eventDateStart || eventDateEnd) && (
+                  <button
+                    type="button"
+                    onClick={() => {
+                      playTone(480, 0.03);
+                      setEventDateStart('');
+                      setEventDateEnd('');
+                    }}
+                    className="p-1 rounded text-zinc-400 hover:text-rose-300 transition-colors"
+                    title="Clear date range filter"
+                  >
+                    <X className="w-3.5 h-3.5" />
+                  </button>
+                )}
+              </div>
+            </div>
+          </div>
+
+          {/* 3. Recharts Visualizations Grid */}
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+            {/* Chart 1: System Event Frequency Chart using Recharts */}
+            <div className="p-5 rounded-2xl bg-[#0a0f1e] border border-white/10 shadow-xl space-y-4">
+              <div className="flex flex-wrap items-center justify-between gap-2 border-b border-white/10 pb-3">
+                <div>
+                  <h3 className="text-sm font-black text-white flex items-center gap-2">
+                    <Activity className="w-4 h-4 text-cyan-400" />
+                    System Event Frequency Visualizer
+                  </h3>
+                  <p className="text-[11px] text-zinc-400 font-sans mt-0.5">
+                    Distribution of events across subsystems and log categories
+                  </p>
+                </div>
+
+                {/* View Mode Toggle: Category vs Timeline */}
+                <div className="flex items-center gap-1 bg-black/40 p-1 rounded-xl border border-white/10 text-[10px] font-mono">
+                  <button
+                    type="button"
+                    onClick={() => {
+                      playTone(550, 0.03);
+                      setFrequencyChartMode('category');
+                    }}
+                    className={`px-2.5 py-1 rounded-lg font-bold transition-all cursor-pointer ${
+                      frequencyChartMode === 'category'
+                        ? 'bg-cyan-500/25 text-cyan-200 border border-cyan-400/50 shadow'
+                        : 'text-zinc-400 hover:text-white'
+                    }`}
+                  >
+                    By Log Type
+                  </button>
+                  <button
+                    type="button"
+                    onClick={() => {
+                      playTone(550, 0.03);
+                      setFrequencyChartMode('timeline');
+                    }}
+                    className={`px-2.5 py-1 rounded-lg font-bold transition-all cursor-pointer ${
+                      frequencyChartMode === 'timeline'
+                        ? 'bg-cyan-500/25 text-cyan-200 border border-cyan-400/50 shadow'
+                        : 'text-zinc-400 hover:text-white'
+                    }`}
+                  >
+                    Timeline Trend
+                  </button>
+                </div>
+              </div>
+
+              {/* Recharts Frequency Chart */}
+              <div className="h-72 w-full">
+                <ResponsiveContainer width="100%" height="100%">
+                  {frequencyChartMode === 'category' ? (
+                    <BarChart
+                      data={frequencyDataByCategory}
+                      margin={{ top: 10, right: 10, left: -15, bottom: 25 }}
+                    >
+                      <CartesianGrid strokeDasharray="3 3" stroke="#ffffff10" />
+                      <XAxis
+                        dataKey="name"
+                        stroke="#71717a"
+                        tick={{ fontSize: 10, fill: '#a1a1aa' }}
+                        interval={0}
+                        angle={-25}
+                        textAnchor="end"
+                      />
+                      <YAxis stroke="#71717a" tick={{ fontSize: 10, fill: '#a1a1aa' }} allowDecimals={false} />
+                      <RechartsTooltip
+                        content={({ active, payload }) => {
+                          if (active && payload && payload.length) {
+                            const item = payload[0].payload;
+                            return (
+                              <div className="p-3 rounded-xl bg-[#090d1a]/95 border border-cyan-500/40 shadow-2xl backdrop-blur-md text-xs font-mono space-y-1.5 min-w-[200px]">
+                                <div className="font-bold text-white flex items-center justify-between border-b border-white/10 pb-1">
+                                  <span>{item.name}</span>
+                                  <span className="text-cyan-300">{item.count} total</span>
+                                </div>
+                                <div className="grid grid-cols-2 gap-1 text-[10px] pt-1">
+                                  <span className="text-rose-400">Critical: {item.critical}</span>
+                                  <span className="text-amber-400">Warning: {item.warning}</span>
+                                  <span className="text-emerald-400">Success: {item.success}</span>
+                                  <span className="text-cyan-400">Info: {item.info}</span>
+                                </div>
+                              </div>
+                            );
+                          }
+                          return null;
+                        }}
+                      />
+                      <Bar dataKey="count" radius={[6, 6, 0, 0]}>
+                        {frequencyDataByCategory.map((entry, index) => (
+                          <Cell key={index} fill={entry.color} />
+                        ))}
+                      </Bar>
+                    </BarChart>
+                  ) : (
+                    <AreaChart
+                      data={frequencyDataTimeline}
+                      margin={{ top: 10, right: 10, left: -15, bottom: 10 }}
+                    >
+                      <defs>
+                        <linearGradient id="eventFreqAreaGrad" x1="0" y1="0" x2="0" y2="1">
+                          <stop offset="5%" stopColor="#06b6d4" stopOpacity={0.4} />
+                          <stop offset="95%" stopColor="#06b6d4" stopOpacity={0.0} />
+                        </linearGradient>
+                      </defs>
+                      <CartesianGrid strokeDasharray="3 3" stroke="#ffffff10" />
+                      <XAxis dataKey="time" stroke="#71717a" tick={{ fontSize: 10, fill: '#a1a1aa' }} />
+                      <YAxis stroke="#71717a" tick={{ fontSize: 10, fill: '#a1a1aa' }} allowDecimals={false} />
+                      <RechartsTooltip
+                        content={({ active, payload }) => {
+                          if (active && payload && payload.length) {
+                            const d = payload[0].payload;
+                            return (
+                              <div className="p-3 rounded-xl bg-[#090d1a]/95 border border-cyan-500/40 shadow-2xl backdrop-blur-md text-xs font-mono space-y-1 min-w-[190px]">
+                                <div className="font-bold text-white border-b border-white/10 pb-1">
+                                  Time: {d.time}
+                                </div>
+                                <div className="text-cyan-300 font-bold">Total: {d.total} events</div>
+                                <div className="grid grid-cols-2 gap-1 text-[10px] text-zinc-400 pt-0.5">
+                                  <span>Crit: {d.critical}</span>
+                                  <span>Warn: {d.warning}</span>
+                                  <span>Succ: {d.success}</span>
+                                  <span>Info: {d.info}</span>
+                                </div>
+                              </div>
+                            );
+                          }
+                          return null;
+                        }}
+                      />
+                      <Area
+                        type="monotone"
+                        dataKey="total"
+                        stroke="#06b6d4"
+                        strokeWidth={2.5}
+                        fill="url(#eventFreqAreaGrad)"
+                      />
+                    </AreaChart>
+                  )}
+                </ResponsiveContainer>
+              </div>
+
+              {/* Bottom Breakdown Pills */}
+              <div className="flex flex-wrap items-center gap-1.5 pt-2 border-t border-white/5 text-[10px] font-mono">
+                <span className="text-zinc-500">Categories:</span>
+                {frequencyDataByCategory.slice(0, 5).map((cat) => (
+                  <span
+                    key={cat.name}
+                    className="px-2 py-0.5 rounded-lg bg-black/40 border border-white/5 text-zinc-300 flex items-center gap-1"
+                  >
+                    <span className="w-1.5 h-1.5 rounded-full" style={{ backgroundColor: cat.color }} />
+                    <span>{cat.name}:</span>
+                    <strong className="text-white">{cat.count}</strong>
+                  </span>
+                ))}
+              </div>
+            </div>
+
+            {/* Chart 2: Severity Distribution Chart using Recharts with Interactive Tooltips */}
+            <div className="p-5 rounded-2xl bg-[#0a0f1e] border border-white/10 shadow-xl space-y-4">
+              <div className="flex flex-wrap items-center justify-between gap-2 border-b border-white/10 pb-3">
+                <div>
+                  <h3 className="text-sm font-black text-white flex items-center gap-2">
+                    <PieChartIcon className="w-4 h-4 text-purple-400" />
+                    Severity Distribution Visualizer
+                  </h3>
+                  <p className="text-[11px] text-zinc-400 font-sans mt-0.5">
+                    Proportional share of system security severity levels
+                  </p>
+                </div>
+
+                <span className="px-2.5 py-0.5 rounded-full bg-purple-950/70 text-purple-300 border border-purple-500/30 text-[10px] font-mono font-bold">
+                  {filteredSystemEvents.length} TOTAL
+                </span>
+              </div>
+
+              {/* Recharts Pie Donut Chart */}
+              <div className="relative h-72 w-full flex items-center justify-center">
+                <ResponsiveContainer width="100%" height="100%">
+                  <PieChart>
+                    <Pie
+                      data={severityDistributionData}
+                      cx="50%"
+                      cy="50%"
+                      innerRadius={65}
+                      outerRadius={105}
+                      paddingAngle={4}
+                      dataKey="value"
+                      animationDuration={500}
+                    >
+                      {severityDistributionData.map((entry, index) => (
+                        <Cell
+                          key={`cell-${index}`}
+                          fill={entry.color}
+                          stroke="#0a0f1e"
+                          strokeWidth={2}
+                          className="hover:opacity-80 transition-opacity cursor-pointer"
+                        />
+                      ))}
+                    </Pie>
+                    {/* Interactive tooltips to the severity distribution chart that display the exact count and percentage for each severity level when hovered */}
+                    <RechartsTooltip
+                      content={({ active, payload }) => {
+                        if (active && payload && payload.length) {
+                          const data = payload[0].payload;
+                          return (
+                            <div className="p-3.5 rounded-xl bg-[#090d1a]/95 border border-cyan-500/50 shadow-2xl backdrop-blur-md text-xs font-mono space-y-1.5 min-w-[210px] pointer-events-none z-50">
+                              <div className="flex items-center justify-between gap-2 border-b border-white/10 pb-1.5">
+                                <span className="flex items-center gap-1.5 font-bold text-white">
+                                  <span className="w-2.5 h-2.5 rounded-full" style={{ backgroundColor: data.color }} />
+                                  <span>{data.name} Severity</span>
+                                </span>
+                                <span
+                                  className="px-2 py-0.5 rounded text-[10px] font-bold"
+                                  style={{
+                                    backgroundColor: `${data.color}25`,
+                                    color: data.color,
+                                    border: `1px solid ${data.color}50`,
+                                  }}
+                                >
+                                  {data.percentage}%
+                                </span>
+                              </div>
+                              <div className="flex items-center justify-between text-zinc-300">
+                                <span className="text-zinc-400">Exact Count:</span>
+                                <span className="font-black text-white">{data.value} {data.value === 1 ? 'event' : 'events'}</span>
+                              </div>
+                              <div className="flex items-center justify-between text-zinc-300">
+                                <span className="text-zinc-400">Percentage:</span>
+                                <span className="font-black" style={{ color: data.color }}>{data.percentage}%</span>
+                              </div>
+                              {data.desc && (
+                                <div className="text-[10px] text-zinc-400 font-sans pt-1 border-t border-white/5 leading-relaxed">
+                                  {data.desc}
+                                </div>
+                              )}
+                            </div>
+                          );
+                        }
+                        return null;
+                      }}
+                    />
+                  </PieChart>
+                </ResponsiveContainer>
+
+                {/* Donut Center Display */}
+                <div className="absolute inset-0 flex flex-col items-center justify-center pointer-events-none">
+                  <span className="text-2xl font-black text-white tracking-tight">
+                    {filteredSystemEvents.length}
+                  </span>
+                  <span className="text-[9px] font-mono text-zinc-400 uppercase tracking-widest">
+                    EVENTS
+                  </span>
+                </div>
+              </div>
+
+              {/* Interactive Legend with Exact Count and Percentage */}
+              <div className="grid grid-cols-2 sm:grid-cols-4 gap-2 pt-2 border-t border-white/5 text-[10px] font-mono">
+                {severityDistributionData.map((item) => (
+                  <div
+                    key={item.name}
+                    className="p-2 rounded-xl bg-black/40 border border-white/5 flex flex-col justify-between"
+                  >
+                    <span className="flex items-center gap-1.5 text-zinc-300 font-bold">
+                      <span className="w-2 h-2 rounded-full shrink-0" style={{ backgroundColor: item.color }} />
+                      <span>{item.name}</span>
+                    </span>
+                    <div className="flex items-baseline justify-between mt-1">
+                      <span className="text-sm font-black text-white">{item.value}</span>
+                      <span className="font-bold" style={{ color: item.color }}>{item.percentage}%</span>
+                    </div>
+                  </div>
+                ))}
+              </div>
+            </div>
+          </div>
+
+          {/* 4. Filtered System Events Activity Stream Table */}
+          <div className="p-5 rounded-2xl bg-[#0a0f1e] border border-white/10 shadow-xl space-y-4">
+            <div className="flex flex-wrap items-center justify-between gap-3 border-b border-white/10 pb-3">
+              <div>
+                <h3 className="text-sm font-black text-white flex items-center gap-2">
+                  <FileText className="w-4 h-4 text-emerald-400" />
+                  Filtered System Events Ledger (ISO/IEC 27037 Electronic Evidence)
+                </h3>
+                <p className="text-[11px] text-zinc-400 font-sans mt-0.5">
+                  Chronological audit records filtered by active criteria • Ready for structured export
+                </p>
+              </div>
+
+              <div className="flex items-center gap-2">
+                <span className="text-xs font-mono text-zinc-400">
+                  Showing <strong>{filteredSystemEvents.length}</strong> events
+                </span>
+                <button
+                  type="button"
+                  onClick={handleDownloadFilteredSystemEventsCsv}
+                  className="px-3 py-1.5 rounded-xl bg-emerald-950/70 hover:bg-emerald-900 border border-emerald-500/40 text-emerald-300 text-xs font-bold font-mono flex items-center gap-1.5 transition-all active:scale-95 cursor-pointer"
+                  title="Download CSV"
+                >
+                  <Download className="w-3.5 h-3.5 text-emerald-400" />
+                  <span>Download CSV</span>
+                </button>
+              </div>
+            </div>
+
+            {/* Event List Table */}
+            {filteredSystemEvents.length === 0 ? (
+              <div className="p-10 rounded-xl bg-black/30 border border-white/5 text-center space-y-2">
+                <AlertCircle className="w-6 h-6 text-zinc-500 mx-auto" />
+                <h4 className="text-sm font-bold text-white">No Matching System Events</h4>
+                <p className="text-xs text-zinc-400 max-w-sm mx-auto font-sans">
+                  No system events matched the active filters. Try clearing your search query or selecting additional log types.
+                </p>
+                <button
+                  type="button"
+                  onClick={() => {
+                    setEventSearchQuery('');
+                    setEventSelectedTypes(new Set());
+                    setEventSeverityFilter('ALL');
+                    setEventDateStart('');
+                    setEventDateEnd('');
+                  }}
+                  className="px-3 py-1 rounded-lg bg-cyan-600 text-white text-xs font-mono font-bold cursor-pointer"
+                >
+                  Reset Filters
+                </button>
+              </div>
+            ) : (
+              <div className="overflow-x-auto max-h-96 scrollbar-thin">
+                <table className="w-full text-left text-xs font-mono border-collapse">
+                  <thead>
+                    <tr className="border-b border-white/10 text-zinc-400 text-[10px] uppercase tracking-wider bg-black/30">
+                      <th className="py-2.5 px-3">Timestamp</th>
+                      <th className="py-2.5 px-3">Type</th>
+                      <th className="py-2.5 px-3">Severity</th>
+                      <th className="py-2.5 px-3">Title &amp; Description</th>
+                      <th className="py-2.5 px-3">Statute / Proof</th>
+                      <th className="py-2.5 px-3 text-right">Actions</th>
+                    </tr>
+                  </thead>
+                  <tbody className="divide-y divide-white/5">
+                    {filteredSystemEvents.map((ev) => (
+                      <tr key={ev.id} className="hover:bg-white/5 transition-colors">
+                        <td className="py-2.5 px-3 text-zinc-400 whitespace-nowrap text-[11px]">
+                          {ev.timestamp}
+                        </td>
+                        <td className="py-2.5 px-3 whitespace-nowrap">
+                          <span className="px-2 py-0.5 rounded-md text-[10px] font-bold bg-white/5 border border-white/10 text-cyan-300">
+                            {ev.type}
+                          </span>
+                        </td>
+                        <td className="py-2.5 px-3 whitespace-nowrap">
+                          <span
+                            className={`px-2 py-0.5 rounded-md text-[10px] font-bold border ${
+                              ev.severity === 'critical'
+                                ? 'bg-rose-950/70 text-rose-300 border-rose-500/40'
+                                : ev.severity === 'warning'
+                                ? 'bg-amber-950/70 text-amber-300 border-amber-500/40'
+                                : ev.severity === 'success'
+                                ? 'bg-emerald-950/70 text-emerald-300 border-emerald-500/40'
+                                : 'bg-cyan-950/70 text-cyan-300 border-cyan-500/40'
+                            }`}
+                          >
+                            {ev.severity.toUpperCase()}
+                          </span>
+                        </td>
+                        <td className="py-2.5 px-3 max-w-md">
+                          <div className="font-bold text-white text-xs">{ev.title}</div>
+                          <div className="text-[11px] text-zinc-400 font-sans truncate">{ev.description}</div>
+                        </td>
+                        <td className="py-2.5 px-3 text-[10px] text-zinc-400 max-w-xs truncate">
+                          {ev.statuteRef || ev.metaHash || 'Anchor: Genesis Block #849202'}
+                        </td>
+                        <td className="py-2.5 px-3 text-right whitespace-nowrap">
+                          <button
+                            type="button"
+                            onClick={() => {
+                              playTone(800, 0.03);
+                              copyToClipboard(ev.id);
+                            }}
+                            className="p-1 rounded hover:bg-white/10 text-zinc-400 hover:text-white transition-colors"
+                            title="Copy event ID"
+                          >
+                            <Copy className="w-3.5 h-3.5" />
+                          </button>
+                        </td>
+                      </tr>
+                    ))}
+                  </tbody>
+                </table>
+              </div>
+            )}
+          </div>
+        </div>
+      )}
 
       {/* 4. Detailed Forensic Inspector Modal */}
       <AnimatePresence>

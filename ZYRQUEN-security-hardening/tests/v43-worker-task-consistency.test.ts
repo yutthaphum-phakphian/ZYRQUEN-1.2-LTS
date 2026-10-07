@@ -1,0 +1,16 @@
+import fs from 'node:fs/promises';
+import path from 'node:path';
+const root=path.resolve(process.cwd(),`.v43-test-${process.pid}-${Date.now()}`); process.env.CODEVOICE_DURABLE_ROOT=root;
+const {saveDurableRecord,loadDurableRecord}=await import('../server/durableStore.ts');
+const {auditWorkerTaskConsistency}=await import('../server/workerTaskConsistency.ts');
+await fs.rm(root,{recursive:true,force:true});
+const base:any={missionId:'v43',executionId:'e43',goal:'consistency',status:'RUNNING',progress:0,tasks:[],context:{objective:'',relevantFiles:[],budget:10,used:0,summaries:[]},checkpoints:[],snapshots:[],errors:[],recoveryAttempts:0,maxRecoveryAttempts:3,events:[],createdAt:new Date().toISOString(),updatedAt:new Date().toISOString()};
+const task:any={taskId:'t1',type:'ANALYZE',title:'a',description:'a',dependencies:[],priority:'HIGH',status:'COMPLETED',inputs:{},retryCount:0,maxRetries:2,affectedFiles:[],validationCriteria:[],parallelSafe:false,outputs:{ok:true},completedAt:new Date().toISOString()};
+await saveDurableRecord('mission','v43',{...base,tasks:[task]},1);
+await saveDurableRecord('worker-task-run','task-run-v43-t1',{runId:'task-run-v43-t1',missionId:'v43',taskId:'t1',workerId:'w',leaseId:'l',fencingToken:'f',attempt:1,state:'RUNNING',executionKey:'worker-task:v43:t1',startedAt:new Date().toISOString(),updatedAt:new Date().toISOString()},1);
+const r1=await auditWorkerTaskConsistency(); if(r1.repaired!==1) throw new Error('terminal mission was not repaired');
+const led=await loadDurableRecord<any>('worker-task-run','task-run-v43-t1'); if(led?.payload.state!=='COMPLETED') throw new Error('ledger not finalized');
+const unsafeTask={...task,taskId:'t2',status:'RUNNING',outputs:undefined}; await saveDurableRecord('mission','v43b',{...base,missionId:'v43b',tasks:[unsafeTask]},1);
+await saveDurableRecord('worker-task-run','task-run-v43b-t2',{runId:'task-run-v43b-t2',missionId:'v43b',taskId:'t2',workerId:'w',leaseId:'l2',fencingToken:'f2',attempt:1,state:'COMPLETED',executionKey:'worker-task:v43b:t2',startedAt:new Date().toISOString(),updatedAt:new Date().toISOString(),result:{success:true,output:{ok:true}},resultHash:'bad'},1);
+const r2=await auditWorkerTaskConsistency(); if(r2.blocked<1) throw new Error('terminal mismatch not blocked');
+await fs.rm(root,{recursive:true,force:true}); console.log('V43 worker task consistency tests: PASS');

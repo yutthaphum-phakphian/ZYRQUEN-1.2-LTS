@@ -28,6 +28,7 @@ import {
   Eye,
   Code2,
   QrCode,
+  ChevronDown,
 } from 'lucide-react';
 import { CustodianQRValidator } from '../system/CustodianQRValidator';
 import { HardwareSealQRScanner } from '../security/HardwareSealQRScanner';
@@ -93,6 +94,31 @@ export interface HsmQuorumHighSeverityToast {
   message: string;
   timestamp: string;
 }
+
+export interface HsmRosterNodeSpec {
+  id: number;
+  label: string;
+  code: string;
+  name: string;
+  algo: string;
+  role: string;
+  slot: string;
+  temp: string;
+  latency: string;
+}
+
+export const HSM_DETAILED_ROSTER_NODES: HsmRosterNodeSpec[] = [
+  { id: 1, label: 'HSM-NODE-01', code: 'TC-01', name: 'Alpha', algo: 'FIPS 203 ML-KEM-1024', role: 'Key Encapsulation Mechanism', slot: 'Enclave 01 (L4)', temp: '14.98 mK', latency: '0.28 ms' },
+  { id: 2, label: 'HSM-NODE-02', code: 'TC-02', name: 'Beta', algo: 'FIPS 204 ML-DSA-87', role: 'Dilithium-5 Master Signature', slot: 'Enclave 02 (L4)', temp: '14.97 mK', latency: '0.30 ms' },
+  { id: 3, label: 'HSM-NODE-03', code: 'TC-03', name: 'Gamma', algo: 'FIPS 205 SLH-DSA', role: 'SPHINCS+ Stateless Hash Root', slot: 'Enclave 03 (L4)', temp: '14.99 mK', latency: '0.31 ms' },
+  { id: 4, label: 'HSM-NODE-04', code: 'TC-04', name: 'Delta', algo: 'FIPS 203 ML-KEM-1024', role: 'Key Encapsulation Mechanism', slot: 'Enclave 04 (L4)', temp: '14.98 mK', latency: '0.29 ms' },
+  { id: 5, label: 'HSM-NODE-05', code: 'TC-05', name: 'Epsilon', algo: 'FIPS 204 ML-DSA-87', role: 'Dilithium-5 Master Signature', slot: 'Enclave 05 (L4)', temp: '14.96 mK', latency: '0.32 ms' },
+  { id: 6, label: 'HSM-NODE-06', code: 'TC-06', name: 'Zeta', algo: 'FIPS 205 SLH-DSA', role: 'SPHINCS+ Stateless Hash Root', slot: 'Enclave 06 (L4)', temp: '14.98 mK', latency: '0.30 ms' },
+  { id: 7, label: 'HSM-NODE-07', code: 'TC-07', name: 'Eta', algo: 'FIPS 203 ML-KEM-1024', role: 'Key Encapsulation Mechanism', slot: 'Enclave 07 (L4)', temp: '15.01 mK', latency: '0.33 ms' },
+  { id: 8, label: 'HSM-NODE-08', code: 'TC-08', name: 'Theta', algo: 'FIPS 204 ML-DSA-87', role: 'Dilithium-5 Master Signature', slot: 'Enclave 08 (L4)', temp: '14.98 mK', latency: '0.29 ms' },
+  { id: 9, label: 'HSM-NODE-09', code: 'TC-09', name: 'Iota', algo: 'FIPS 205 SLH-DSA', role: 'SPHINCS+ Stateless Hash Root', slot: 'Enclave 09 (L4)', temp: '14.97 mK', latency: '0.31 ms' },
+  { id: 10, label: 'HSM-NODE-10', code: 'TC-10', name: 'Kappa', algo: 'FIPS 203 ML-KEM-1024', role: 'Key Encapsulation Mechanism', slot: 'Enclave 10 (L4)', temp: '14.99 mK', latency: '0.30 ms' },
+];
 
 export type SecuritySubTab =
   | 'security-analytics'
@@ -163,6 +189,7 @@ export const SecurityView: React.FC<SecurityViewProps> = ({
   const [handshakingNodeId, setHandshakingNodeId] = useState<number | null>(null);
   const [hsmQuorumToast, setHsmQuorumToast] = useState<HsmQuorumHighSeverityToast | null>(null);
   const [autoHealStatus, setAutoHealStatus] = useState<string | null>(null);
+  const [isHsmRosterExpanded, setIsHsmRosterExpanded] = useState<boolean>(false);
   const prevActiveHsmNodesRef = useRef<number>(10);
 
   const activeHsmNodes = 10 - disabledHsmNodeIds.length;
@@ -751,22 +778,32 @@ export const SecurityView: React.FC<SecurityViewProps> = ({
                 key={nodeId}
                 type="button"
                 onClick={() => toggleHsmNode(nodeId)}
+                data-testid={`hsm-node-quick-btn-${nodeId}`}
+                data-status={isOffline ? 'OFFLINE' : 'ONLINE'}
                 className={`p-2.5 rounded-xl border text-left transition-all cursor-pointer flex flex-col justify-between gap-1.5 ${
                   isOffline
-                    ? 'bg-rose-950/40 border-rose-500/40 text-rose-300 hover:bg-rose-900/40'
+                    ? 'hsm-node-offline-pulse border-rose-500/70 text-rose-200 shadow-[0_0_12px_rgba(244,63,94,0.3)]'
                     : 'bg-white/[0.03] border-white/10 text-zinc-200 hover:border-cyan-400/40 hover:bg-cyan-500/10'
                 }`}
+                title={`Click to toggle ${nodeLabel}. Currently ${isOffline ? 'OFFLINE (ISOLATED)' : 'ONLINE (OPERATIONAL)'}`}
               >
                 <div className="flex items-center justify-between gap-1">
                   <span className="text-[10px] font-bold tracking-tight">{nodeLabel}</span>
-                  <span
-                    className={`w-2 h-2 rounded-full ${
-                      isOffline ? 'bg-rose-500' : 'bg-emerald-400'
-                    }`}
-                  />
+                  <span className="relative flex h-2 w-2">
+                    {isOffline ? (
+                      <>
+                        <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-rose-400 opacity-75" />
+                        <span className="relative inline-flex rounded-full h-2 w-2 bg-rose-500 shadow-[0_0_6px_rgba(244,63,94,0.8)]" />
+                      </>
+                    ) : (
+                      <span className="inline-flex rounded-full h-2 w-2 bg-emerald-400 shadow-[0_0_4px_rgba(52,211,153,0.8)]" />
+                    )}
+                  </span>
                 </div>
-                <div className="text-[9px] text-zinc-400 flex items-center justify-between">
-                  <span>{isOffline ? 'ISOLATED' : 'ONLINE'}</span>
+                <div className="text-[9px] flex items-center justify-between">
+                  <span className={isOffline ? 'text-rose-300 font-bold' : 'text-zinc-400'}>
+                    {isOffline ? 'OFFLINE' : 'ONLINE'}
+                  </span>
                   {isHandshaking && (
                     <span className="text-amber-300 font-bold animate-pulse">SYN...</span>
                   )}
@@ -774,6 +811,109 @@ export const SecurityView: React.FC<SecurityViewProps> = ({
               </button>
             );
           })}
+        </div>
+
+        {/* Detailed HSM Nodes Roster & PQC Specification */}
+        <div className="mt-4 pt-3.5 border-t border-white/10 space-y-2.5" data-testid="hsm-detailed-roster">
+          <div className="flex items-center justify-between text-[11px] font-mono">
+            <div className="flex items-center gap-2">
+              <Layers className="w-3.5 h-3.5 text-cyan-400" />
+              <span className="font-bold text-white uppercase tracking-wider">
+                Detailed HSM Nodes Roster &amp; PQC Specification
+              </span>
+              <span className="text-[10px] px-2 py-0.5 rounded-full bg-white/5 border border-white/10 text-zinc-400">
+                10-Node Enclave Roster
+              </span>
+            </div>
+
+            <button
+              type="button"
+              onClick={() => {
+                playTone(isHsmRosterExpanded ? 500 : 640, 0.02);
+                setIsHsmRosterExpanded((prev) => !prev);
+              }}
+              className="text-[10px] text-cyan-300 hover:text-cyan-200 flex items-center gap-1 cursor-pointer bg-cyan-950/40 hover:bg-cyan-900/50 px-2.5 py-1 rounded-lg border border-cyan-500/30 transition-all"
+            >
+              <span>{isHsmRosterExpanded ? 'Collapse Roster' : 'Expand Roster (10 Nodes)'}</span>
+              <ChevronDown className={`w-3.5 h-3.5 transition-transform duration-200 ${isHsmRosterExpanded ? 'rotate-180' : ''}`} />
+            </button>
+          </div>
+
+          {isHsmRosterExpanded && (
+            <div className="space-y-1.5 animate-in fade-in duration-200">
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-2">
+                {HSM_DETAILED_ROSTER_NODES.map((node) => {
+                  const isOffline = disabledHsmNodeIds.includes(node.id);
+                  const isHandshaking = handshakingNodeId === node.id;
+
+                  return (
+                    <div
+                      key={node.id}
+                      onClick={() => toggleHsmNode(node.id)}
+                      data-testid={`hsm-detailed-roster-node-${node.id}`}
+                      data-node-status={isOffline ? 'OFFLINE' : 'ONLINE'}
+                      className={`p-3 rounded-xl border text-xs transition-all cursor-pointer flex items-center justify-between gap-3 ${
+                        isOffline
+                          ? 'hsm-node-offline-pulse border-rose-500/70 text-rose-200 shadow-[0_0_16px_rgba(244,63,94,0.35)]'
+                          : 'bg-black/50 border-white/10 hover:border-cyan-500/40 hover:bg-cyan-950/20 text-zinc-300'
+                      }`}
+                      title={`Click to toggle ${node.label} (${node.name}). Status: ${isOffline ? 'OFFLINE (ISOLATED)' : 'ONLINE (OPERATIONAL)'}`}
+                    >
+                      <div className="flex items-center gap-3 min-w-0">
+                        {/* Status Beacon with Subtle Pulse */}
+                        <span className="relative flex h-3 w-3 shrink-0">
+                          {isOffline ? (
+                            <>
+                              <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-rose-400 opacity-80" />
+                              <span className="relative inline-flex rounded-full h-3 w-3 bg-rose-500 shadow-[0_0_8px_rgba(244,63,94,0.9)]" />
+                            </>
+                          ) : (
+                            <span className="inline-flex rounded-full h-3 w-3 bg-emerald-400 shadow-[0_0_6px_rgba(52,211,153,0.85)]" />
+                          )}
+                        </span>
+
+                        <div className="min-w-0">
+                          <div className="flex items-center gap-2 flex-wrap">
+                            <span className="font-bold text-white tracking-tight">{node.label}</span>
+                            <span className="text-[10px] text-cyan-300 font-mono">({node.code} • {node.name})</span>
+                            <span className="text-[9px] px-1.5 py-0.2 rounded bg-white/5 text-zinc-400 border border-white/5 font-mono">
+                              {node.slot}
+                            </span>
+                          </div>
+                          <div className="text-[10px] text-zinc-400 truncate font-mono mt-0.5">
+                            <strong className="text-zinc-300 font-normal">{node.algo}</strong> · <span className="text-zinc-500">{node.role}</span>
+                          </div>
+                        </div>
+                      </div>
+
+                      {/* State & Telemetry with Subtle Pulse */}
+                      <div className="text-right shrink-0 space-y-1">
+                        <span
+                          data-testid={`hsm-detailed-roster-status-badge-${node.id}`}
+                          className={`inline-flex items-center gap-1 px-2.5 py-0.5 rounded-md font-bold text-[9.5px] tabular-nums border ${
+                            isOffline
+                              ? 'hsm-badge-offline-pulse bg-rose-500/30 text-rose-100 border-rose-400 shadow-[0_0_10px_rgba(244,63,94,0.5)]'
+                              : 'bg-emerald-500/15 text-emerald-300 border-emerald-500/30'
+                          }`}
+                        >
+                          {isOffline && <span className="w-1.5 h-1.5 rounded-full bg-rose-400 animate-ping shrink-0" />}
+                          {isHandshaking ? 'SYN...' : isOffline ? 'OFFLINE' : 'ONLINE'}
+                        </span>
+                        <div className={`text-[9px] tabular-nums font-mono ${isOffline ? 'text-rose-400 font-bold animate-pulse' : 'text-zinc-500'}`}>
+                          {isOffline ? 'ISOLATED' : `${node.temp} • ${node.latency}`}
+                        </div>
+                      </div>
+                    </div>
+                  );
+                })}
+              </div>
+
+              <div className="flex items-center justify-between text-[10px] text-zinc-500 pt-1 font-mono">
+                <span>Total Nodes in Roster: 10/10 ({activeHsmNodes} ONLINE • {disabledHsmNodeIds.length} OFFLINE)</span>
+                <span>FIPS 140-3 Level 4 Super-Majority Rule: &ge; 8/10</span>
+              </div>
+            </div>
+          )}
         </div>
       </div>
 

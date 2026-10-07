@@ -1,0 +1,24 @@
+import { strict as assert } from 'node:assert';
+import { promises as fs } from 'node:fs';
+import * as os from 'node:os';
+import * as path from 'node:path';
+import { acquireMissionWorker, releaseMissionWorker } from '../server/missionWorkerSupervisor.ts';
+import { executeCrashConsistentRepair, loadRepairCoordinator, recoverCrashConsistentRepair } from '../server/crashConsistentRepairCoordinator.ts';
+import { previewDeveloperPatch } from '../server/developerPatchEngine.ts';
+
+const root = await fs.mkdtemp(path.join(process.cwd(), '.crash-repair-test-'));
+await fs.writeFile(path.join(root, 'app.js'), 'bad\n', 'utf8');
+const missionId = `crash-repair-${Date.now()}`;
+const worker = await acquireMissionWorker(missionId, `repair-worker-${Date.now()}`, 30000);
+const preview = await previewDeveloperPatch({ workspaceRoot: root, operations: [{ type: 'UPDATE', target: 'app.js', content: 'good\n' }], sourceVerificationId: 'verify-crash' });
+const input = { repairId: `repair-${Date.now()}`, missionId, projectId: missionId, workspaceRoot: root, workerId: worker.workerId, leaseId: worker.leaseId, operations: [{ id: 'op-1', type: 'UPDATE' as const, target: 'app.js', content: 'good\n' }], patchHash: preview.patchHash };
+await assert.rejects(() => executeCrashConsistentRepair({ ...input, faultInjection: 'AFTER_APPLIED' }), /SIMULATED_CRASH_AFTER_REPAIR_APPLIED/);
+assert.equal(await fs.readFile(path.join(root, 'app.js'), 'utf8'), 'good\n');
+const rec = await loadRepairCoordinator(input.repairId);
+assert.equal(rec?.payload.status, 'APPLIED');
+const recovered = await recoverCrashConsistentRepair(input.repairId);
+assert.equal(recovered.action, 'FINALIZED');
+assert.equal((await loadRepairCoordinator(input.repairId))?.payload.status, 'COMMITTED');
+await releaseMissionWorker(missionId, worker.workerId).catch(() => undefined);
+await fs.rm(root, { recursive: true, force: true });
+console.log('Crash-consistent repair coordinator milestone: PASS');

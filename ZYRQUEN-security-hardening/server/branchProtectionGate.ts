@@ -1,0 +1,2 @@
+export interface BranchProtectionInput { baseBranch:string; targetBranch:string; protectedBase:boolean; requiredChecks:string[]; passedChecks:string[]; }
+export function evaluateBranchProtection(x:BranchProtectionInput){const reasons:string[]=[]; if(x.baseBranch===x.targetBranch)reasons.push('TARGET_EQUALS_BASE'); if(!x.protectedBase)reasons.push('BASE_BRANCH_UNPROTECTED'); for(const c of x.requiredChecks)if(!x.passedChecks.includes(c))reasons.push(`CHECK_FAILED:${c}`); return {decision:reasons.length?'BLOCKED':'ADMITTED',reasons};}

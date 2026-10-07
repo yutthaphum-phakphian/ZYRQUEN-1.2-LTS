@@ -643,6 +643,34 @@ describe('Sovereign runtime verification', () => {
     expect(summaryCounter).toBeTruthy();
     expect(summaryCounter.textContent).toMatch(/Showing \d+ of \d+ Logs/);
 
+    // Verify pending queue distribution bar inside #verification-gate-bottom-sync-history
+    const bottomSyncHistory = document.getElementById('verification-gate-bottom-sync-history')!;
+    expect(bottomSyncHistory).toBeTruthy();
+    const distributionBar = bottomSyncHistory.querySelector('#sync-history-queue-type-breakdown-bar')!;
+    expect(distributionBar).toBeTruthy();
+    expect(distributionBar.querySelector('[role="progressbar"]')).toBeTruthy();
+
+    // Verify 'Refresh Data' button
+    const refreshDataBtn = document.getElementById('btn-refresh-queue-breakdown-data')!;
+    expect(refreshDataBtn).toBeTruthy();
+    expect(refreshDataBtn.textContent).toContain('Refresh Data');
+    fireEvent.click(refreshDataBtn);
+
+    // Verify 'Toggle Legend' button and hover tooltip if categories exist
+    const toggleLegendBtn = document.getElementById('btn-toggle-queue-breakdown-legend');
+    if (toggleLegendBtn) {
+      expect(toggleLegendBtn.textContent).toContain('Toggle Legend');
+      fireEvent.click(toggleLegendBtn);
+      fireEvent.click(toggleLegendBtn);
+    }
+
+    const firstSegment = distributionBar.querySelector('[data-testid^="queue-bar-segment-"]');
+    if (firstSegment) {
+      fireEvent.mouseEnter(firstSegment);
+      expect(document.querySelector('[data-testid="queue-breakdown-hover-tooltip"]')).toBeTruthy();
+      fireEvent.mouseLeave(firstSegment);
+    }
+
     const simulateFailureBtn = document.getElementById('btn-simulate-qr-failure')!;
     expect(simulateFailureBtn).toBeTruthy();
     fireEvent.click(simulateFailureBtn);

@@ -1,0 +1,15 @@
+node_modules
+dist
+out
+.data
+.git
+*.md
+!README.md
+.env
+.env.*
+!.env.example
+*.zip
+*.tmp
+tests
+coverage
+.DS_Store
