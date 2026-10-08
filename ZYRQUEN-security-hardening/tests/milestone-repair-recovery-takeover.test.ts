@@ -1,0 +1,22 @@
+import { strict as assert } from 'node:assert';
+import { promises as fs } from 'node:fs';
+import * as os from 'node:os';
+import * as path from 'node:path';
+import { acquireMissionWorker, releaseMissionWorker } from '../server/missionWorkerSupervisor.ts';
+import { executeCrashConsistentRepair, loadRepairCoordinator, recoverCrashConsistentRepair } from '../server/crashConsistentRepairCoordinator.ts';
+import { previewDeveloperPatch } from '../server/developerPatchEngine.ts';
+
+const root = await fs.mkdtemp(path.join(process.cwd(), '.repair-takeover-test-'));
+await fs.writeFile(path.join(root, 'app.js'), 'bad\n', 'utf8');
+const missionId = `repair-takeover-${Date.now()}`;
+const original = await acquireMissionWorker(missionId, `original-${Date.now()}`, 1000);
+const preview = await previewDeveloperPatch({ workspaceRoot: root, operations: [{ type: 'UPDATE', target: 'app.js', content: 'good\n' }], sourceVerificationId: 'takeover-test' });
+const input = { repairId: `takeover-${Date.now()}`, missionId, projectId: missionId, workspaceRoot: root, workerId: original.workerId, leaseId: original.leaseId, operations: [{ id: 'op-1', type: 'UPDATE' as const, target: 'app.js', content: 'good\n' }], patchHash: preview.patchHash };
+await assert.rejects(() => executeCrashConsistentRepair({ ...input, faultInjection: 'AFTER_PREPARED' }), /SIMULATED_CRASH_AFTER_REPAIR_PREPARED/);
+await new Promise(r => setTimeout(r, 1200));
+const recovered = await recoverCrashConsistentRepair(input.repairId, `recovery-${Date.now()}`);
+assert.equal(recovered.action, 'ABORTED');
+assert.equal((await loadRepairCoordinator(input.repairId))?.payload.status, 'ABORTED');
+await releaseMissionWorker(missionId, original.workerId).catch(() => undefined);
+await fs.rm(root, { recursive: true, force: true });
+console.log('Repair recovery takeover milestone: PASS');

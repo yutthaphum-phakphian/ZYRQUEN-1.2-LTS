@@ -1,0 +1,6 @@
+{
+  "name": "CodeVoice AI",
+  "description": "แพลตฟอร์ม Self-Contained Universal AI Agent พร้อม V10–V17 และ V18 Autonomous Multi-Step Mission Engine",
+  "requestFramePermissions": ["microphone"],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API", "V10_PRODUCTION_RELEASE_AGENT", "V11_MULTI_AGENT_TEAM_RUNTIME", "V12_UNIVERSAL_AGENT_OS", "V13_UNIVERSAL_INTEGRATION_HUB", "V14_UNIVERSAL_RESEARCH_ENGINE", "V15_PRODUCTION_EXECUTION", "V16_INFRASTRUCTURE_COMPLETION", "V17_SELF_CONTAINED_RUNTIME", "V18_AUTONOMOUS_MULTI_STEP_ENGINE"]
+}

@@ -1,0 +1,20 @@
+import { strict as assert } from 'node:assert';
+import { promises as fs } from 'node:fs';
+import * as os from 'node:os';
+import * as path from 'node:path';
+import { previewDeveloperPatch, assertPatchApproval } from '../server/developerPatchEngine.ts';
+
+const root = await fs.mkdtemp(path.join(process.cwd(), '.developer-patch-test-'));
+await fs.writeFile(path.join(root, 'app.js'), 'console.log("bad")\n', 'utf8');
+const preview = await previewDeveloperPatch({ workspaceRoot: root, operations: [{ type: 'UPDATE', target: 'app.js', content: 'console.log("good")\n' }] , sourceVerificationId: 'verify-1' });
+assert.equal(preview.status, 'READY_FOR_APPROVAL');
+assert.equal(preview.files.length, 1);
+assert.equal(preview.files[0].changed, true);
+assert.match(preview.files[0].diff, /-console\.log\("bad"\)/);
+assert.match(preview.files[0].diff, /\+console\.log\("good"\)/);
+assert.match(preview.patchHash, /^[a-f0-9]{64}$/);
+assert.throws(() => assertPatchApproval(preview, { approved: true, patchHash: '0'.repeat(64) }), /PATCH_HASH_MISMATCH/);
+assert.doesNotThrow(() => assertPatchApproval(preview, { approved: true, patchHash: preview.patchHash }));
+assert.equal(await fs.readFile(path.join(root, 'app.js'), 'utf8'), 'console.log("bad")\n');
+await fs.rm(root, { recursive: true, force: true });
+console.log('Developer patch engine milestone: PASS');

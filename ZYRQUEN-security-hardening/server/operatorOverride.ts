@@ -1,0 +1,2 @@
+export interface OperatorOverride { overrideId:string; operatorId:string; reason:string; expiresAt:string; }
+export function evaluateOperatorOverride(o:OperatorOverride,now=new Date()){const e=Date.parse(o.expiresAt);if(!o.overrideId||!o.operatorId||!o.reason)return{valid:false,reason:'INVALID_OVERRIDE'};if(!Number.isFinite(e)||now.getTime()>=e)return{valid:false,reason:'OVERRIDE_EXPIRED'};return{valid:true};}

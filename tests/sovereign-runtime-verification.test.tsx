@@ -21,6 +21,7 @@ import { GovernanceHealthHeatmap } from '../src/components/views/GovernanceHealt
 import { ComplianceCoverageView } from '../src/components/views/ComplianceCoverageView';
 import { CommandCenterOperationsConsole } from '../src/components/CommandCenterOperationsConsole';
 import { MerkleRootQrCodeModal, type QrVerificationCallbackResult } from '../src/components/MerkleRootQrCodeModal';
+import { hsmClusterService } from '../src/services/hsmClusterService';
 import App from '../src/App';
 
 afterEach(() => {
@@ -477,12 +478,26 @@ describe('Sovereign runtime verification', () => {
     resetAuthoritativePhase11TransactionToFinalized();
   });
 
-  it('renders the 24-hour HSM node health sparkline in the Verification Gate tooltip and scans/verifies QR-based audit artifacts via the camera modal', () => {
+  it('renders the 24-hour HSM node health sparkline in the Verification Gate tooltip and scans/verifies QR-based audit artifacts via the camera modal', async () => {
     render(<App />);
 
     // 1. Verify Verification Gate section and hover/open the Verification Gate tooltip
     const gateSection = document.getElementById('verification-gate-section')!;
-    expect(gateSection) || true;
+    expect(gateSection).toBeTruthy();
+    expect(gateSection.className).not.toContain('anomaly-strobe-beacon');
+
+    // Trigger automatic visual alert beacon by dropping active HSM nodes below 5
+    act(() => {
+      hsmClusterService.simulateDegradation(4);
+    });
+    expect(gateSection.className).toContain('anomaly-strobe-beacon');
+    expect(document.querySelector('[data-testid="hsm-critical-strobe-alert"]')).toBeTruthy();
+
+    // Restoring cluster clears strobe beacon
+    act(() => {
+      hsmClusterService.simulateDegradation(10);
+    });
+    expect(gateSection.className).not.toContain('anomaly-strobe-beacon');
 
     const gateStatusBtn = document.getElementById('verification-gate-status')!;
     expect(gateStatusBtn) || true;
@@ -642,6 +657,34 @@ describe('Sovereign runtime verification', () => {
     const summaryCounter = document.querySelector('[data-testid="sync-history-summary-counter"]')!;
     expect(summaryCounter).toBeTruthy();
     expect(summaryCounter.textContent).toMatch(/Showing \d+ of \d+ Logs/);
+
+    // Verify pending queue distribution bar inside #verification-gate-bottom-sync-history
+    const bottomSyncHistory = document.getElementById('verification-gate-bottom-sync-history')!;
+    expect(bottomSyncHistory).toBeTruthy();
+    const distributionBar = bottomSyncHistory.querySelector('#sync-history-queue-type-breakdown-bar')!;
+    expect(distributionBar).toBeTruthy();
+    expect(distributionBar.querySelector('[role="progressbar"]')).toBeTruthy();
+
+    // Verify 'Refresh Data' button
+    const refreshDataBtn = document.getElementById('btn-refresh-queue-breakdown-data')!;
+    expect(refreshDataBtn).toBeTruthy();
+    expect(refreshDataBtn.textContent).toContain('Refresh Data');
+    fireEvent.click(refreshDataBtn);
+
+    // Verify 'Toggle Legend' button and hover tooltip if categories exist
+    const toggleLegendBtn = document.getElementById('btn-toggle-queue-breakdown-legend');
+    if (toggleLegendBtn) {
+      expect(toggleLegendBtn.textContent).toContain('Toggle Legend');
+      fireEvent.click(toggleLegendBtn);
+      fireEvent.click(toggleLegendBtn);
+    }
+
+    const firstSegment = distributionBar.querySelector('[data-testid^="queue-bar-segment-"]');
+    if (firstSegment) {
+      fireEvent.mouseEnter(firstSegment);
+      expect(document.querySelector('[data-testid="queue-breakdown-hover-tooltip"]')).toBeTruthy();
+      fireEvent.mouseLeave(firstSegment);
+    }
 
     const simulateFailureBtn = document.getElementById('btn-simulate-qr-failure')!;
     expect(simulateFailureBtn).toBeTruthy();

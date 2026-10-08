@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import { motion, AnimatePresence } from 'motion/react';
 import {
   Bell,
   X,
@@ -40,6 +41,10 @@ import {
   RadioTower,
   Search,
   QrCode,
+  Calendar,
+  CalendarRange,
+  CheckSquare,
+  Square,
 } from 'lucide-react';
 import { playTone, playAuditChime } from './AudioSynthesizer';
 import { SecuritySubTab } from './views/SecurityView';
@@ -286,10 +291,33 @@ export const SystemEventsSidebar: React.FC<SystemEventsSidebarProps> = ({
   const [auditDownloadedToast, setAuditDownloadedToast] = useState<boolean>(false);
   const [auditPdfPreviewUrl, setAuditPdfPreviewUrl] = useState<string | null>(null);
 
-  // Reset page when filter or search changes
+  // Multi-Select Log Types Filter State (e.g., 'COMPLIANCE', 'HARDWARE', 'SECURITY')
+  const [selectedLogTypes, setSelectedLogTypes] = useState<Set<string>>(() => new Set<string>());
+  const [isMultiSelectMode, setIsMultiSelectMode] = useState<boolean>(false);
+
+  // Date-Range Picker Filter State
+  const [dateRangeStart, setDateRangeStart] = useState<string>('');
+  const [dateRangeEnd, setDateRangeEnd] = useState<string>('');
+  const [isDateRangePickerOpen, setIsDateRangePickerOpen] = useState<boolean>(false);
+
+  // Helper to parse event timestamp into milliseconds for date-range comparison
+  const parseEventTimeMs = (timestamp: string): number => {
+    if (!timestamp) return Date.now();
+    const direct = Date.parse(timestamp);
+    if (!isNaN(direct)) return direct;
+    const match = timestamp.match(/(\d{1,2}):(\d{2}):(\d{2})/);
+    if (match) {
+      const d = new Date();
+      d.setHours(parseInt(match[1], 10), parseInt(match[2], 10), parseInt(match[3], 10), 0);
+      return d.getTime();
+    }
+    return Date.now();
+  };
+
+  // Reset page when filter, multi-select, date range, or search changes
   useEffect(() => {
     setCurrentPage(1);
-  }, [filter, severityFilter, searchQuery, pageSize]);
+  }, [filter, severityFilter, searchQuery, pageSize, selectedLogTypes, dateRangeStart, dateRangeEnd]);
 
   // Effect to apply initialFilter and temporary highlight for PENDING logs
   useEffect(() => {
@@ -361,28 +389,53 @@ export const SystemEventsSidebar: React.FC<SystemEventsSidebarProps> = ({
     return counts;
   }, [mergedEvents]);
 
-  // Filtered events based on selected filter dropdown, severity filter & real-time text search query
+  // Filtered events based on selected filter dropdown, multi-select log types, severity filter, date range & real-time text search query
   const filteredEvents = React.useMemo(() => {
+    const startMs = dateRangeStart ? new Date(dateRangeStart).getTime() : null;
+    const endMs = dateRangeEnd ? new Date(dateRangeEnd).getTime() : null;
+
     return mergedEvents.filter((ev) => {
-      // 1. Category Filter Match
-      let categoryMatch = true;
-      if (filter === 'PENDING') {
-        categoryMatch = ev.bindingStatus === 'PENDING';
-      } else if (filter === 'COMPLIANCE') {
-        categoryMatch = ev.type === 'COMPLIANCE' || ev.type === 'LEGAL_SEARCH' || Boolean(ev.isComplianceDrift);
-      } else if (filter === 'ANOMALY') {
-        categoryMatch = ev.type === 'ANOMALY' || ev.severity === 'critical' || ev.severity === 'warning';
-      } else if (filter !== 'ALL') {
-        categoryMatch = ev.type === filter;
+      // 1. Multi-Select / Category Filter Match
+      if (selectedLogTypes.size > 0) {
+        let typeMatches = selectedLogTypes.has(ev.type);
+        if (!typeMatches && selectedLogTypes.has('COMPLIANCE')) {
+          typeMatches = Boolean(ev.isComplianceDrift) || ev.type === 'LEGAL_SEARCH';
+        }
+        if (!typeMatches && selectedLogTypes.has('ANOMALY')) {
+          typeMatches = Boolean(ev.isAnomaly) || ev.severity === 'critical';
+        }
+        if (!typeMatches && selectedLogTypes.has('PENDING')) {
+          typeMatches = ev.bindingStatus === 'PENDING';
+        }
+        if (!typeMatches) return false;
+      } else {
+        // Fallback to single category filter
+        let categoryMatch = true;
+        if (filter === 'PENDING') {
+          categoryMatch = ev.bindingStatus === 'PENDING';
+        } else if (filter === 'COMPLIANCE') {
+          categoryMatch = ev.type === 'COMPLIANCE' || ev.type === 'LEGAL_SEARCH' || Boolean(ev.isComplianceDrift);
+        } else if (filter === 'ANOMALY') {
+          categoryMatch = ev.type === 'ANOMALY' || ev.severity === 'critical' || ev.severity === 'warning';
+        } else if (filter !== 'ALL') {
+          categoryMatch = ev.type === filter;
+        }
+        if (!categoryMatch) return false;
       }
-      if (!categoryMatch) return false;
 
       // 2. Severity Level Filter Match
       if (severityFilter !== 'ALL') {
         if (ev.severity !== severityFilter) return false;
       }
 
-      // 3. Text Search Query Match (Title, Statute Reference, Description, MetaHash, Severity, or Type)
+      // 3. Date-Range Filter Match
+      if (startMs !== null || endMs !== null) {
+        const evTime = parseEventTimeMs(ev.timestamp);
+        if (startMs !== null && !isNaN(startMs) && evTime < startMs) return false;
+        if (endMs !== null && !isNaN(endMs) && evTime > endMs) return false;
+      }
+
+      // 4. Text Search Query Match (Title, Statute Reference, Description, MetaHash, Severity, or Type)
       if (searchQuery.trim()) {
         const q = searchQuery.trim().toLowerCase();
         const titleMatches = ev.title ? ev.title.toLowerCase().includes(q) : false;
@@ -396,7 +449,7 @@ export const SystemEventsSidebar: React.FC<SystemEventsSidebarProps> = ({
 
       return true;
     });
-  }, [mergedEvents, filter, severityFilter, searchQuery]);
+  }, [mergedEvents, filter, selectedLogTypes, severityFilter, searchQuery, dateRangeStart, dateRangeEnd]);
 
   // Pagination Slice Calculation
   const totalPages = Math.max(1, Math.ceil(filteredEvents.length / pageSize));
@@ -1420,45 +1473,298 @@ export const SystemEventsSidebar: React.FC<SystemEventsSidebarProps> = ({
           </div>
         </div>
 
-        {/* Quick Filter Pill Buttons */}
-        <div className="flex items-center gap-1.5 overflow-x-auto text-[11px] no-scrollbar pt-0.5">
-          {(['ALL', 'PENDING', 'COMPLIANCE', 'HARDWARE', 'ANOMALY', 'CRYPTO', 'SECURITY'] as const).map((f) => (
-            <button
-              key={f}
-              onClick={() => {
-                playTone(550, 0.03);
-                setFilter(f);
-              }}
-              className={`px-2.5 py-1 rounded-lg transition-all whitespace-nowrap text-[10px] font-mono flex items-center gap-1 ${
-                filter === f
-                  ? 'bg-cyan-500/20 text-cyan-200 font-bold border-cyan-500/40 shadow-[0_0_8px_rgba(6,182,212,0.2)]'
-                  : 'text-zinc-400 hover:text-zinc-200 bg-white/5 border-transparent'
-              }`}
+        {/* Multi-Select Log Types & Date Range Filter Toolbar */}
+        <div className="space-y-2 pt-1 border-t border-white/5">
+          <div className="flex items-center justify-between gap-2">
+            <div className="flex items-center gap-1.5">
+              {/* Multi-Select Toggle Button */}
+              <button
+                type="button"
+                id="toggle-multi-select-filter-btn"
+                onClick={() => {
+                  playTone(580, 0.03);
+                  setIsMultiSelectMode((prev) => !prev);
+                }}
+                className={`px-2 py-0.5 rounded-lg text-[10px] font-mono font-bold flex items-center gap-1 border transition-all cursor-pointer ${
+                  isMultiSelectMode || selectedLogTypes.size > 0
+                    ? 'bg-cyan-500/20 text-cyan-200 border-cyan-400 shadow-[0_0_8px_rgba(6,182,212,0.3)]'
+                    : 'bg-white/5 text-zinc-400 hover:text-zinc-200 border-white/10'
+                }`}
+                title="Toggle Multi-Select filter mode for log types"
+              >
+                {isMultiSelectMode || selectedLogTypes.size > 0 ? (
+                  <CheckSquare className="w-3 h-3 text-cyan-400" />
+                ) : (
+                  <Square className="w-3 h-3 text-zinc-400" />
+                )}
+                <span>Multi-Select Filter</span>
+                {selectedLogTypes.size > 0 && (
+                  <span className="px-1.5 py-0.1 text-[9px] rounded-full bg-cyan-400 text-black font-black">
+                    {selectedLogTypes.size}
+                  </span>
+                )}
+              </button>
+
+              {/* Date-Range Picker Toggle Button */}
+              <button
+                type="button"
+                id="toggle-date-range-filter-btn"
+                onClick={() => {
+                  playTone(560, 0.03);
+                  setIsDateRangePickerOpen((prev) => !prev);
+                }}
+                className={`px-2 py-0.5 rounded-lg text-[10px] font-mono font-bold flex items-center gap-1 border transition-all cursor-pointer ${
+                  isDateRangePickerOpen || dateRangeStart || dateRangeEnd
+                    ? 'bg-amber-500/20 text-amber-200 border-amber-400/70 shadow-[0_0_8px_rgba(245,158,11,0.25)]'
+                    : 'bg-white/5 text-zinc-400 hover:text-zinc-200 border-white/10'
+                }`}
+                title="Toggle Date-Range timestamp filter"
+              >
+                <CalendarRange className="w-3 h-3 text-amber-400" />
+                <span>Date Range</span>
+                {(dateRangeStart || dateRangeEnd) && (
+                  <span className="w-1.5 h-1.5 rounded-full bg-amber-400 animate-ping" />
+                )}
+              </button>
+            </div>
+
+            {/* Quick Actions for Active Filters */}
+            {(selectedLogTypes.size > 0 || dateRangeStart || dateRangeEnd) && (
+              <button
+                type="button"
+                onClick={() => {
+                  playTone(480, 0.03);
+                  setSelectedLogTypes(new Set());
+                  setDateRangeStart('');
+                  setDateRangeEnd('');
+                }}
+                className="text-[10px] text-zinc-400 hover:text-rose-300 font-mono underline transition-colors cursor-pointer"
+              >
+                Reset All Filters
+              </button>
+            )}
+          </div>
+
+          {/* Date-Range Picker Sub-Panel */}
+          {isDateRangePickerOpen && (
+            <motion.div
+              initial={{ opacity: 0, height: 0 }}
+              animate={{ opacity: 1, height: 'auto' }}
+              exit={{ opacity: 0, height: 0 }}
+              className="p-2.5 rounded-xl bg-black/40 border border-amber-500/30 text-[10px] font-mono space-y-2 shadow-inner"
             >
-              <span>
-                {f === 'ALL'
-                  ? 'All'
-                  : f === 'PENDING'
-                  ? '⏳ Pending'
-                  : f === 'COMPLIANCE'
-                  ? '⚖️ Compliance'
-                  : f === 'HARDWARE'
-                  ? '💻 Hardware'
-                  : f === 'ANOMALY'
-                  ? '⚠️ Anomaly'
-                  : f === 'CRYPTO'
-                  ? '🔐 Crypto'
-                  : '🛡️ Security'}
-              </span>
-              <span className={`text-[9px] px-1 rounded font-normal ${
-                f === 'PENDING' && filterCounts.PENDING > 0
-                  ? 'bg-amber-500/30 text-amber-200 font-bold'
-                  : 'bg-black/40 text-zinc-400'
-              }`}>
-                {filterCounts[f]}
-              </span>
-            </button>
-          ))}
+              <div className="flex items-center justify-between text-amber-300 font-bold">
+                <span className="flex items-center gap-1">
+                  <Calendar className="w-3 h-3 text-amber-400" />
+                  <span>Isolate Events by Timestamp Window:</span>
+                </span>
+                {(dateRangeStart || dateRangeEnd) && (
+                  <span className="text-[9px] px-1.5 py-0.2 rounded bg-amber-500/20 text-amber-200 border border-amber-500/40">
+                    Filter Active
+                  </span>
+                )}
+              </div>
+
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-2">
+                <div className="space-y-0.5">
+                  <label htmlFor="date-range-start-input" className="text-zinc-400 text-[9px] block">
+                    From Timestamp:
+                  </label>
+                  <input
+                    id="date-range-start-input"
+                    type="datetime-local"
+                    value={dateRangeStart}
+                    onChange={(e) => setDateRangeStart(e.target.value)}
+                    className="w-full px-2 py-1 rounded bg-[#0a0f1e] border border-amber-500/30 text-zinc-200 text-[10px] focus:outline-none focus:border-amber-400"
+                  />
+                </div>
+                <div className="space-y-0.5">
+                  <label htmlFor="date-range-end-input" className="text-zinc-400 text-[9px] block">
+                    To Timestamp:
+                  </label>
+                  <input
+                    id="date-range-end-input"
+                    type="datetime-local"
+                    value={dateRangeEnd}
+                    onChange={(e) => setDateRangeEnd(e.target.value)}
+                    className="w-full px-2 py-1 rounded bg-[#0a0f1e] border border-amber-500/30 text-zinc-200 text-[10px] focus:outline-none focus:border-amber-400"
+                  />
+                </div>
+              </div>
+
+              {/* Quick Presets for Date Range */}
+              <div className="flex flex-wrap items-center gap-1 pt-1">
+                <span className="text-zinc-500 text-[9px]">Presets:</span>
+                <button
+                  type="button"
+                  onClick={() => {
+                    playTone(600, 0.03);
+                    const now = new Date();
+                    const past = new Date(now.getTime() - 15 * 60 * 1000);
+                    setDateRangeStart(past.toISOString().slice(0, 16));
+                    setDateRangeEnd(now.toISOString().slice(0, 16));
+                  }}
+                  className="px-1.5 py-0.5 rounded bg-white/5 hover:bg-amber-500/20 text-zinc-300 hover:text-amber-200 border border-white/10 text-[9px] transition-colors cursor-pointer"
+                >
+                  Last 15m
+                </button>
+                <button
+                  type="button"
+                  onClick={() => {
+                    playTone(600, 0.03);
+                    const now = new Date();
+                    const past = new Date(now.getTime() - 60 * 60 * 1000);
+                    setDateRangeStart(past.toISOString().slice(0, 16));
+                    setDateRangeEnd(now.toISOString().slice(0, 16));
+                  }}
+                  className="px-1.5 py-0.5 rounded bg-white/5 hover:bg-amber-500/20 text-zinc-300 hover:text-amber-200 border border-white/10 text-[9px] transition-colors cursor-pointer"
+                >
+                  Last 1h
+                </button>
+                <button
+                  type="button"
+                  onClick={() => {
+                    playTone(600, 0.03);
+                    const now = new Date();
+                    const past = new Date(now.getTime() - 24 * 60 * 60 * 1000);
+                    setDateRangeStart(past.toISOString().slice(0, 16));
+                    setDateRangeEnd(now.toISOString().slice(0, 16));
+                  }}
+                  className="px-1.5 py-0.5 rounded bg-white/5 hover:bg-amber-500/20 text-zinc-300 hover:text-amber-200 border border-white/10 text-[9px] transition-colors cursor-pointer"
+                >
+                  Last 24h
+                </button>
+                {(dateRangeStart || dateRangeEnd) && (
+                  <button
+                    type="button"
+                    onClick={() => {
+                      playTone(480, 0.03);
+                      setDateRangeStart('');
+                      setDateRangeEnd('');
+                    }}
+                    className="px-1.5 py-0.5 rounded bg-rose-950/40 text-rose-300 hover:bg-rose-900/60 border border-rose-500/30 text-[9px] ml-auto transition-colors cursor-pointer"
+                  >
+                    Clear Range
+                  </button>
+                )}
+              </div>
+            </motion.div>
+          )}
+
+          {/* Multi-Select Pills Toolbar (allows toggling visibility of log types like COMPLIANCE, HARDWARE, SECURITY) */}
+          <div className="flex items-center gap-1.5 overflow-x-auto text-[11px] no-scrollbar pt-0.5">
+            {/* If in multi-select mode or has active selections, clicking toggles inclusion */}
+            {isMultiSelectMode || selectedLogTypes.size > 0 ? (
+              <>
+                <button
+                  type="button"
+                  onClick={() => {
+                    playTone(520, 0.03);
+                    setSelectedLogTypes(new Set());
+                  }}
+                  className={`px-2 py-1 rounded-lg transition-all whitespace-nowrap text-[10px] font-mono flex items-center gap-1 ${
+                    selectedLogTypes.size === 0
+                      ? 'bg-cyan-500/20 text-cyan-200 font-bold border-cyan-500/40 shadow-[0_0_8px_rgba(6,182,212,0.2)]'
+                      : 'text-zinc-400 hover:text-zinc-200 bg-white/5 border-transparent'
+                  }`}
+                >
+                  <span>All Types</span>
+                  <span className="text-[9px] px-1 rounded bg-black/40 text-zinc-400 font-normal">
+                    {filterCounts.ALL}
+                  </span>
+                </button>
+                {(
+                  [
+                    { id: 'COMPLIANCE', label: '⚖️ Compliance', count: filterCounts.COMPLIANCE },
+                    { id: 'HARDWARE', label: '💻 Hardware', count: filterCounts.HARDWARE },
+                    { id: 'SECURITY', label: '🛡️ Security', count: filterCounts.SECURITY },
+                    { id: 'CRYPTO', label: '🔐 Crypto', count: filterCounts.CRYPTO },
+                    { id: 'ANOMALY', label: '⚠️ Anomaly', count: filterCounts.ANOMALY },
+                    { id: 'BACKUP', label: '📦 Backup', count: filterCounts.BACKUP },
+                    { id: 'PENDING', label: '⏳ Pending', count: filterCounts.PENDING },
+                  ] as const
+                ).map((item) => {
+                  const isChecked = selectedLogTypes.has(item.id);
+                  return (
+                    <button
+                      key={item.id}
+                      type="button"
+                      id={`multi-select-chip-${item.id.toLowerCase()}`}
+                      onClick={() => {
+                        playTone(550, 0.03);
+                        setSelectedLogTypes((prev) => {
+                          const next = new Set(prev);
+                          if (next.has(item.id)) {
+                            next.delete(item.id);
+                          } else {
+                            next.add(item.id);
+                          }
+                          return next;
+                        });
+                      }}
+                      className={`px-2.5 py-1 rounded-lg transition-all whitespace-nowrap text-[10px] font-mono flex items-center gap-1.5 cursor-pointer border ${
+                        isChecked
+                          ? 'bg-cyan-500/25 text-cyan-200 font-bold border-cyan-400 shadow-[0_0_10px_rgba(6,182,212,0.3)]'
+                          : 'text-zinc-400 hover:text-zinc-200 bg-white/5 border-white/10 hover:border-cyan-500/30'
+                      }`}
+                      title={`Toggle visibility of ${item.id} logs`}
+                    >
+                      {isChecked ? (
+                        <CheckSquare className="w-3 h-3 text-cyan-400 shrink-0" />
+                      ) : (
+                        <Square className="w-3 h-3 text-zinc-500 shrink-0" />
+                      )}
+                      <span>{item.label}</span>
+                      <span className="text-[9px] px-1 rounded bg-black/40 text-zinc-400 font-normal">
+                        {item.count}
+                      </span>
+                    </button>
+                  );
+                })}
+              </>
+            ) : (
+              // Standard single-select quick pills
+              (['ALL', 'PENDING', 'COMPLIANCE', 'HARDWARE', 'ANOMALY', 'CRYPTO', 'SECURITY'] as const).map((f) => (
+                <button
+                  key={f}
+                  onClick={() => {
+                    playTone(550, 0.03);
+                    setFilter(f);
+                  }}
+                  className={`px-2.5 py-1 rounded-lg transition-all whitespace-nowrap text-[10px] font-mono flex items-center gap-1 ${
+                    filter === f
+                      ? 'bg-cyan-500/20 text-cyan-200 font-bold border-cyan-500/40 shadow-[0_0_8px_rgba(6,182,212,0.2)]'
+                      : 'text-zinc-400 hover:text-zinc-200 bg-white/5 border-transparent'
+                  }`}
+                >
+                  <span>
+                    {f === 'ALL'
+                      ? 'All'
+                      : f === 'PENDING'
+                      ? '⏳ Pending'
+                      : f === 'COMPLIANCE'
+                      ? '⚖️ Compliance'
+                      : f === 'HARDWARE'
+                      ? '💻 Hardware'
+                      : f === 'ANOMALY'
+                      ? '⚠️ Anomaly'
+                      : f === 'CRYPTO'
+                      ? '🔐 Crypto'
+                      : '🛡️ Security'}
+                  </span>
+                  <span
+                    className={`text-[9px] px-1 rounded font-normal ${
+                      f === 'PENDING' && filterCounts.PENDING > 0
+                        ? 'bg-amber-500/30 text-amber-200 font-bold'
+                        : 'bg-black/40 text-zinc-400'
+                    }`}
+                  >
+                    {filterCounts[f]}
+                  </span>
+                </button>
+              ))
+            )}
+          </div>
         </div>
       </div>
 
@@ -1699,22 +2005,28 @@ export const SystemEventsSidebar: React.FC<SystemEventsSidebarProps> = ({
             )}
           </div>
         ) : (
-          paginatedEvents.map((ev) => {
-            const badge = getEventBadge(ev.type, ev.isComplianceDrift, ev.severity);
-            const isCompliance = ev.type === 'COMPLIANCE' || !!ev.statuteRef || !!ev.isComplianceDrift;
-            const isSuccess = ev.severity === 'success' || ev.type === 'BACKUP';
-            const isCritical = ev.isComplianceDrift || ev.severity === 'critical';
-            const isWarning = ev.severity === 'warning' || ev.type === 'ANOMALY';
-            const isPending = ev.bindingStatus === 'PENDING';
-            const isPendingHighlighted = isHighlightedPending && isPending;
-            const isCriticalOrDrift = isCritical || isWarning;
-            const isSelected = selectedIds.has(ev.id);
+          <AnimatePresence initial={false}>
+            {paginatedEvents.map((ev) => {
+              const badge = getEventBadge(ev.type, ev.isComplianceDrift, ev.severity);
+              const isCompliance = ev.type === 'COMPLIANCE' || !!ev.statuteRef || !!ev.isComplianceDrift;
+              const isSuccess = ev.severity === 'success' || ev.type === 'BACKUP';
+              const isCritical = ev.isComplianceDrift || ev.severity === 'critical';
+              const isWarning = ev.severity === 'warning' || ev.type === 'ANOMALY';
+              const isPending = ev.bindingStatus === 'PENDING';
+              const isPendingHighlighted = isHighlightedPending && isPending;
+              const isCriticalOrDrift = isCritical || isWarning;
+              const isSelected = selectedIds.has(ev.id);
 
-            return (
-              <div
-                key={ev.id}
-                onClick={(e) => toggleSelectOne(ev.id, e)}
-                className={`p-3.5 rounded-2xl border transition-all duration-150 space-y-2 text-xs shadow-md group hover:scale-[1.01] cursor-pointer ${
+              return (
+                <motion.div
+                  key={ev.id}
+                  layout
+                  initial={{ opacity: 0, y: -24, scale: 0.98 }}
+                  animate={{ opacity: 1, y: 0, scale: 1 }}
+                  exit={{ opacity: 0, y: -12, scale: 0.96 }}
+                  transition={{ duration: 0.35, ease: 'easeOut' }}
+                  onClick={(e) => toggleSelectOne(ev.id, e)}
+                  className={`p-3.5 rounded-2xl border transition-all duration-150 space-y-2 text-xs shadow-md group hover:scale-[1.01] cursor-pointer ${
                   isSelected
                     ? 'ring-2 ring-cyan-400/80 bg-[#0f1b33] border-cyan-400 shadow-[0_0_20px_rgba(6,182,212,0.35)]'
                     : isPendingHighlighted
@@ -1825,9 +2137,10 @@ export const SystemEventsSidebar: React.FC<SystemEventsSidebarProps> = ({
                     <span className="truncate">{ev.metaHash}</span>
                   </div>
                 )}
-              </div>
-            );
-          })
+                </motion.div>
+              );
+            })}
+          </AnimatePresence>
         )}
 
         {/* Pagination & Load More Footer Bar */}

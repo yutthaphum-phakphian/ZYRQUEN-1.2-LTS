@@ -1,0 +1,15 @@
+import fs from 'node:fs/promises';
+import path from 'node:path';
+const root=path.resolve(process.cwd(),`.v45-test-${process.pid}-${Date.now()}`); process.env.CODEVOICE_DURABLE_ROOT=root;
+const {saveDurableRecord,loadDurableRecord,inspectDurableLock}=await import('../server/durableStore.ts');
+const {WorkerTaskConsistencySupervisor}=await import('../server/workerTaskConsistencySupervisor.ts');
+await fs.rm(root,{recursive:true,force:true});
+const stale={runId:'stale-cycle',owner:'dead-owner',startedAt:new Date(Date.now()-60000).toISOString(),status:'RUNNING'};
+await saveDurableRecord('worker-consistency-run',stale.runId,stale,1);
+const supervisor=new WorkerTaskConsistencySupervisor({intervalMs:1000,staleMs:1000,batchLimit:100,lockTtlMs:3000,heartbeatMs:1000,orphanAfterMs:5000});
+const cycle=await supervisor.runCycle();
+if(cycle.status!=='COMPLETED') throw new Error('cycle did not complete');
+const orphaned=await loadDurableRecord<any>('worker-consistency-run','stale-cycle');
+if(orphaned?.payload.status!=='ORPHANED') throw new Error('stale cycle was not orphaned');
+if(await inspectDurableLock('worker-task-consistency-supervisor')) throw new Error('lock was not released');
+await supervisor.shutdown(); await fs.rm(root,{recursive:true,force:true}); console.log('V45 worker task consistency supervisor recovery tests: PASS');

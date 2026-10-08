@@ -122,6 +122,7 @@ const ExecutiveCourtBriefing = lazyWithRetry(() => import('@/components/executiv
 const SovereignWalletView = lazyWithRetry(() => import('@/components/views/SovereignWalletView').then(m => ({ default: m.SovereignWalletView })));
 import { SovereignDashboard } from '@/pages/SovereignDashboard';
 const TreasuryVarianceDashboard = lazyWithRetry(() => import('@/components/views/TreasuryVarianceDashboard').then(m => ({ default: m.TreasuryVarianceDashboard })));
+const AuditLogTrendsView = lazyWithRetry(() => import('@/components/views/AuditLogTrendsView').then(m => ({ default: m.AuditLogTrendsView })));
 import AIWorkspace from '@/components/AIWorkspace';
 import { AuditCertificateModal } from '@/components/AuditCertificateModal';
 import { GitHubPwaModal } from '@/components/GitHubPwaModal';
@@ -403,6 +404,13 @@ const VIEW_PERSONAS: Record<ViewType, ViewPersona> = {
     orb2: 'bg-cyan-600/15',
     orb3: 'bg-amber-600/12',
     accentGlow: 'rgba(16,185,129,0.12)',
+  },
+  'audit-trends': {
+    name: '30-Day Audit Log Distribution Trends',
+    orb1: 'bg-cyan-600/18',
+    orb2: 'bg-emerald-600/14',
+    orb3: 'bg-amber-500/10',
+    accentGlow: 'rgba(6,182,212,0.12)',
   },
 };
 
@@ -1302,6 +1310,20 @@ function SovereignAppContent() {
   const [isBroadcastHeartbeating, setIsBroadcastHeartbeating] = useState<boolean>(false);
   const [pendingLogsThreshold, setPendingLogsThreshold] = useState<number>(() => offlineAuditSyncService.getPendingThreshold());
   const [draggedTransitionIdx, setDraggedTransitionIdx] = useState<number | null>(null);
+  const [queueBreakdownRefreshKey, setQueueBreakdownRefreshKey] = useState<number>(0);
+  const [isQueueBreakdownRefreshing, setIsQueueBreakdownRefreshing] = useState<boolean>(false);
+  const [isQueueLegendExpanded, setIsQueueLegendExpanded] = useState<boolean>(true);
+  const [hoveredQueueSegment, setHoveredQueueSegment] = useState<{ type: string; count: number; percent: number } | null>(null);
+
+  const handleRefreshQueueBreakdown = useCallback((e?: React.MouseEvent) => {
+    e?.stopPropagation();
+    playTone(640, 0.03);
+    setIsQueueBreakdownRefreshing(true);
+    setOfflineQueuedCount(offlineAuditSyncService.getQueueCount());
+    setQueueBreakdownRefreshKey((k) => k + 1);
+    setTimeout(() => setIsQueueBreakdownRefreshing(false), 450);
+    showToast(`Queue distribution data refreshed (${offlineAuditSyncService.getQueueCount()} logs).`, 'info');
+  }, []);
 
   // Subscribe to background sync status, progress, and cross-tab broadcast heartbeat
   useEffect(() => {
@@ -1415,17 +1437,15 @@ function SovereignAppContent() {
     const counts: Record<string, number> = {};
     const queue = offlineAuditSyncService.getQueue();
     queue.forEach((item) => {
-      const typeKey = item.type || 'EVIDENCE_IMPORTED';
+      const typeKey = (item.type || 'EVIDENCE_IMPORTED').trim();
       counts[typeKey] = (counts[typeKey] || 0) + 1;
     });
-    // If queue is empty in fallback, provide representative categories based on system events
+    // Truthful fallback: if queued items exist but lack specific categorization, reflect as unclassified pending
     if (Object.keys(counts).length === 0 && offlineQueuedCount > 0) {
-      counts['EVIDENCE_INGESTION'] = Math.ceil(offlineQueuedCount * 0.4);
-      counts['COMPLIANCE_BINDING'] = Math.ceil(offlineQueuedCount * 0.3);
-      counts['GENESIS_ANCHOR_VERIFY'] = Math.max(1, offlineQueuedCount - counts['EVIDENCE_INGESTION'] - counts['COMPLIANCE_BINDING']);
+      counts['PENDING_QUEUE'] = offlineQueuedCount;
     }
     return counts;
-  }, [offlineQueuedCount, isGateTooltipVisible]);
+  }, [offlineQueuedCount, isGateTooltipVisible, queueBreakdownRefreshKey]);
 
   // Simulated Node-Restoral Service Remediation Handler
   const handleRemediateHsmNodes = useCallback(async () => {
@@ -2949,6 +2969,7 @@ function SovereignAppContent() {
         return (
           <AuditHistoryView
             snapshots={snapshots}
+            systemEvents={systemEvents}
             onNavigate={setCurrentView}
             onCaptureSnapshot={handleAddSnapshot}
             onOpenCertificate={() => setIsCertificateOpen(true)}
@@ -2994,6 +3015,13 @@ function SovereignAppContent() {
             currentBatchSize={64}
             onStageProposalForApproval={handleStageAiProposalForApproval}
             onAuditRecord={handleAiAuditRecord}
+          />
+        );
+      case 'audit-trends':
+        return (
+          <AuditLogTrendsView
+            onNavigate={setCurrentView}
+            onAddSystemEvent={addSystemEvent as any}
           />
         );
       default:
@@ -3392,8 +3420,27 @@ function SovereignAppContent() {
           {/* Verification Gate Active Invariant Banner with Progress Bar & Expandable ETDA/PDPA Triggers */}
           <div
             id="verification-gate-section"
-            className="rounded-2xl bg-[#0b0e1a]/90 border border-cyan-500/25 backdrop-blur-xl shadow-lg transition-all duration-300 overflow-hidden"
+            data-testid="verification-gate-section"
+            data-anomaly-beacon={activeHsmNodes < 5 ? 'active' : 'idle'}
+            className={`rounded-2xl bg-[#0b0e1a]/90 border border-cyan-500/25 backdrop-blur-xl shadow-lg transition-all duration-300 overflow-hidden ${
+              activeHsmNodes < 5 ? 'anomaly-strobe-beacon' : ''
+            }`}
           >
+            {/* Automatic visual alert beacon banner if HSM health status drops below 5 active nodes */}
+            {activeHsmNodes < 5 && (
+              <div
+                data-testid="hsm-critical-strobe-alert"
+                className="px-4 py-1.5 bg-rose-600/30 border-b border-rose-500/60 text-rose-200 text-[10px] font-mono font-bold flex items-center justify-between animate-pulse"
+              >
+                <span className="flex items-center gap-1.5">
+                  <AlertTriangle className="w-3.5 h-3.5 text-rose-400 shrink-0 animate-ping" />
+                  <span>CRITICAL HSM SUB-QUORUM ANOMALY: Only {activeHsmNodes}/10 active nodes (&lt;50%). Strobe beacon activated.</span>
+                </span>
+                <span className="text-[9px] px-2 py-0.5 rounded bg-rose-950/90 border border-rose-500 text-rose-100 font-mono">
+                  ANOMALY-STROBE-BEACON
+                </span>
+              </div>
+            )}
             <div className="px-4 py-2.5 flex flex-wrap items-center justify-between gap-3 text-xs font-mono">
               {/* Left: Gate Status & Info with Tooltip Trigger */}
               <div className="flex items-center gap-2.5 relative">
@@ -4487,8 +4534,10 @@ function SovereignAppContent() {
                                     return (
                                       <div
                                         key={node.id}
-                                        className={`flex items-center justify-between py-0.5 px-1.5 rounded transition-colors ${
-                                          isOnline ? 'bg-emerald-950/20 text-zinc-300' : 'bg-rose-950/20 text-zinc-500'
+                                        className={`flex items-center justify-between py-1 px-1.5 rounded transition-all ${
+                                          isOnline
+                                            ? 'bg-emerald-950/20 text-zinc-300 border border-emerald-500/20'
+                                            : 'hsm-node-offline-pulse border border-rose-500/60 text-rose-200 shadow-[0_0_10px_rgba(244,63,94,0.3)]'
                                         }`}
                                       >
                                         <div className="flex items-center gap-1.5 min-w-0">
@@ -4502,10 +4551,10 @@ function SovereignAppContent() {
                                         </div>
                                         <div className="flex items-center gap-1.5 shrink-0">
                                           <span
-                                            className={`px-1.5 py-0.2 rounded font-bold text-[8px] ${
+                                            className={`px-1.5 py-0.5 rounded font-bold text-[8px] flex items-center gap-1 border ${
                                               isOnline
                                                 ? 'bg-emerald-500/20 text-emerald-300 border border-emerald-500/40'
-                                                : 'bg-rose-500/20 text-rose-300 border border-rose-500/40'
+                                                : 'hsm-badge-offline-pulse bg-rose-500/30 text-rose-200 border-rose-400 shadow-[0_0_8px_rgba(244,63,94,0.4)]'
                                             }`}
                                           >
                                             {isOnline ? 'ONLINE 🟢' : 'OFFLINE 🔴'}
@@ -5382,6 +5431,212 @@ function SovereignAppContent() {
                                 />
                               </button>
                             </div>
+                          </div>
+
+                          {/* Visual Bar Chart / Progress Indicator: Distribution of Pending Sync Event Types */}
+                          <div
+                            id="sync-history-queue-type-breakdown-bar"
+                            data-testid="sync-history-queue-type-breakdown-bar"
+                            className="p-1.5 rounded-lg bg-black/60 border border-cyan-500/20 space-y-1.5 font-mono"
+                          >
+                            <div className="flex flex-wrap items-center justify-between text-[7.5px] gap-1">
+                              <span className="text-zinc-300 font-bold flex items-center gap-1">
+                                <span
+                                  className={`w-1.5 h-1.5 rounded-full ${
+                                    offlineQueuedCount > 0
+                                      ? offlineQueuedCount > pendingLogsThreshold
+                                        ? 'bg-rose-400 animate-ping'
+                                        : 'bg-amber-400 animate-pulse'
+                                      : 'bg-emerald-400'
+                                  }`}
+                                />
+                                <span>PENDING QUEUE DISTRIBUTION</span>
+                              </span>
+                              <div className="flex items-center gap-1.5 text-[7px] flex-wrap ml-auto">
+                                {offlineQueuedCount > 0 ? (
+                                  <>
+                                    <span className="text-amber-300 font-semibold">
+                                      {offlineQueuedCount} {offlineQueuedCount === 1 ? 'Log' : 'Logs'} Queued
+                                    </span>
+                                    <span className="text-zinc-600">•</span>
+                                    <span className="text-cyan-300 font-semibold">
+                                      {Object.keys(offlineTypeBreakdown).length} {Object.keys(offlineTypeBreakdown).length === 1 ? 'Category' : 'Categories'}
+                                    </span>
+                                  </>
+                                ) : (
+                                  <span className="text-emerald-400 font-semibold">
+                                    0 Pending • Ledger Synchronized
+                                  </span>
+                                )}
+
+                                {/* Explicit 'Refresh Data' button that triggers re-calculation of offlineTypeBreakdown */}
+                                <button
+                                  type="button"
+                                  id="btn-refresh-queue-breakdown-data"
+                                  data-testid="btn-refresh-queue-breakdown-data"
+                                  onClick={handleRefreshQueueBreakdown}
+                                  className="px-1.5 py-0.5 rounded bg-zinc-900/90 hover:bg-zinc-800 border border-zinc-700/80 hover:border-cyan-500/50 text-zinc-300 hover:text-white font-bold text-[7px] flex items-center gap-0.5 transition-all active:scale-95 cursor-pointer"
+                                  title="Explicitly refresh queue data and recalculate event type distribution"
+                                >
+                                  <RefreshCw className={`w-2 h-2 text-cyan-400 ${isQueueBreakdownRefreshing ? 'animate-spin' : ''}`} />
+                                  <span>Refresh Data</span>
+                                </button>
+
+                                {/* 'Toggle Legend' button that expands or collapses the list of event types */}
+                                {Object.keys(offlineTypeBreakdown).length > 0 && (
+                                  <button
+                                    type="button"
+                                    id="btn-toggle-queue-breakdown-legend"
+                                    data-testid="btn-toggle-queue-breakdown-legend"
+                                    onClick={(e) => {
+                                      e.stopPropagation();
+                                      playTone(600, 0.03);
+                                      setIsQueueLegendExpanded((prev) => !prev);
+                                    }}
+                                    className="px-1.5 py-0.5 rounded bg-zinc-900/90 hover:bg-zinc-800 border border-zinc-700/80 hover:border-cyan-500/50 text-zinc-300 hover:text-white font-bold text-[7px] flex items-center gap-0.5 transition-all active:scale-95 cursor-pointer"
+                                    title="Toggle Legend: expand or collapse the list of event type categories"
+                                  >
+                                    <ChevronDown className={`w-2 h-2 text-cyan-400 transition-transform duration-200 ${isQueueLegendExpanded ? 'rotate-180' : ''}`} />
+                                    <span>Toggle Legend</span>
+                                  </button>
+                                )}
+                              </div>
+                            </div>
+
+                            {/* Multi-segment distribution progress bar */}
+                            {offlineQueuedCount > 0 && Object.keys(offlineTypeBreakdown).length > 0 ? (
+                              <div className="space-y-1">
+                                <div
+                                  role="progressbar"
+                                  aria-label="Pending sync event types distribution"
+                                  aria-valuenow={offlineQueuedCount}
+                                  className="h-2.5 w-full rounded-full bg-zinc-900 border border-white/10 overflow-hidden flex shadow-inner relative"
+                                >
+                                  {Object.entries(offlineTypeBreakdown).map(([type, count], idx) => {
+                                    const totalInBreakdown = Object.values(offlineTypeBreakdown).reduce((a, b) => a + b, 0) || 1;
+                                    const percent = Math.round((count / totalInBreakdown) * 100);
+                                    const segmentColors = [
+                                      'bg-cyan-400 hover:brightness-125 border-r border-black/40 shadow-[0_0_8px_rgba(6,182,212,0.5)]',
+                                      'bg-emerald-400 hover:brightness-125 border-r border-black/40 shadow-[0_0_8px_rgba(52,211,153,0.5)]',
+                                      'bg-amber-400 hover:brightness-125 border-r border-black/40 shadow-[0_0_8px_rgba(251,191,36,0.5)]',
+                                      'bg-purple-400 hover:brightness-125 border-r border-black/40 shadow-[0_0_8px_rgba(192,132,252,0.5)]',
+                                      'bg-blue-400 hover:brightness-125 border-r border-black/40 shadow-[0_0_8px_rgba(96,165,250,0.5)]',
+                                      'bg-rose-400 hover:brightness-125 border-r border-black/40 shadow-[0_0_8px_rgba(251,113,133,0.5)]',
+                                      'bg-teal-400 hover:brightness-125 border-r border-black/40 shadow-[0_0_8px_rgba(45,212,191,0.5)]',
+                                    ];
+                                    const colorStyle = segmentColors[idx % segmentColors.length];
+                                    const isHovered = hoveredQueueSegment?.type === type;
+                                    return (
+                                      <div
+                                        key={type}
+                                        data-testid={`queue-bar-segment-${type}`}
+                                        data-segment-type={type}
+                                        data-segment-count={count}
+                                        data-segment-percent={percent}
+                                        tabIndex={0}
+                                        onMouseEnter={() => setHoveredQueueSegment({ type, count, percent })}
+                                        onMouseLeave={() => setHoveredQueueSegment(null)}
+                                        onFocus={() => setHoveredQueueSegment({ type, count, percent })}
+                                        onBlur={() => setHoveredQueueSegment(null)}
+                                        style={{ width: `${Math.max(4, (count / totalInBreakdown) * 100)}%` }}
+                                        className={`h-full ${colorStyle} transition-all duration-200 relative cursor-pointer outline-none ${
+                                          isHovered ? 'brightness-125 ring-2 ring-white z-10' : ''
+                                        }`}
+                                        title={`${type}: ${count} event${count > 1 ? 's' : ''} (${percent}%)`}
+                                      />
+                                    );
+                                  })}
+                                </div>
+
+                                {/* Dynamic Hover Tooltip Callout */}
+                                {hoveredQueueSegment ? (
+                                  <div
+                                    data-testid="queue-breakdown-hover-tooltip"
+                                    className="px-2 py-0.5 rounded bg-black/90 border border-cyan-400/80 text-[7.5px] font-mono text-cyan-200 shadow-[0_0_12px_rgba(6,182,212,0.3)] flex items-center justify-between gap-2 animate-in fade-in duration-150"
+                                  >
+                                    <div className="flex items-center gap-1.5 truncate">
+                                      <span className="w-1.5 h-1.5 rounded-full bg-cyan-400 animate-ping shrink-0" />
+                                      <span className="text-zinc-200 font-bold truncate">
+                                        {hoveredQueueSegment.type.replace(/_/g, ' ')}:
+                                      </span>
+                                    </div>
+                                    <div className="flex items-center gap-1 font-bold shrink-0">
+                                      <span className="text-white">{hoveredQueueSegment.count}</span>
+                                      <span className="text-zinc-400 font-normal">({hoveredQueueSegment.count === 1 ? 'event' : 'events'})</span>
+                                      <span className="text-cyan-300 ml-1">[{hoveredQueueSegment.percent}%]</span>
+                                    </div>
+                                  </div>
+                                ) : (
+                                  <div className="text-[6.5px] text-zinc-500 italic px-1 flex items-center justify-between">
+                                    <span>Hover segments to inspect exact count & percentage</span>
+                                    <span>{Object.keys(offlineTypeBreakdown).length} Categories</span>
+                                  </div>
+                                )}
+
+                                {/* Compact Legend of Event Types (Collapsible via 'Toggle Legend' button) */}
+                                {isQueueLegendExpanded && (
+                                  <div
+                                    data-testid="queue-breakdown-legend-container"
+                                    className="grid grid-cols-2 sm:grid-cols-3 gap-1 pt-0.5 animate-in fade-in duration-150"
+                                  >
+                                    {Object.entries(offlineTypeBreakdown).map(([type, count], idx) => {
+                                      const totalInBreakdown = Object.values(offlineTypeBreakdown).reduce((a, b) => a + b, 0) || 1;
+                                      const percent = Math.round((count / totalInBreakdown) * 100);
+                                      const dotColors = [
+                                        'bg-cyan-400',
+                                        'bg-emerald-400',
+                                        'bg-amber-400',
+                                        'bg-purple-400',
+                                        'bg-blue-400',
+                                        'bg-rose-400',
+                                        'bg-teal-400',
+                                      ];
+                                      const dotColor = dotColors[idx % dotColors.length];
+                                      const isHovered = hoveredQueueSegment?.type === type;
+                                      return (
+                                        <div
+                                          key={type}
+                                          data-testid={`queue-legend-item-${type}`}
+                                          onMouseEnter={() => setHoveredQueueSegment({ type, count, percent })}
+                                          onMouseLeave={() => setHoveredQueueSegment(null)}
+                                          className={`flex items-center justify-between px-1.5 py-0.5 rounded border text-[7px] cursor-pointer transition-all ${
+                                            isHovered
+                                              ? 'bg-cyan-950/80 border-cyan-400/80 shadow-[0_0_8px_rgba(6,182,212,0.3)]'
+                                              : 'bg-zinc-900/80 border-white/5 hover:border-white/20'
+                                          }`}
+                                          title={`${type}: ${count} (${percent}%)`}
+                                        >
+                                          <div className="flex items-center gap-1 min-w-0">
+                                            <span className={`w-1.5 h-1.5 rounded-full ${dotColor} shrink-0`} />
+                                            <span className="text-zinc-300 truncate max-w-[70px]">
+                                              {type.replace(/_/g, ' ')}
+                                            </span>
+                                          </div>
+                                          <span className="text-cyan-200 font-bold shrink-0 ml-1">
+                                            {count} <span className="text-zinc-500 text-[6.5px]">({percent}%)</span>
+                                          </span>
+                                        </div>
+                                      );
+                                    })}
+                                  </div>
+                                )}
+                              </div>
+                            ) : (
+                              <div className="space-y-1">
+                                <div
+                                  role="progressbar"
+                                  aria-label="Queue synchronized"
+                                  aria-valuenow={100}
+                                  className="h-1.5 w-full rounded-full bg-zinc-900 border border-emerald-500/20 overflow-hidden flex"
+                                >
+                                  <div className="h-full w-full bg-gradient-to-r from-emerald-500/30 to-cyan-500/30" />
+                                </div>
+                                <div className="text-[7px] text-zinc-500 italic flex items-center justify-between">
+                                  <span>Queue buffer idle & synchronized with primary ledger</span>
+                                  <span className="text-emerald-400 font-bold">100% Synced</span>
+                                </div>
+                              </div>
+                            )}
                           </div>
 
                           <div className="flex flex-wrap items-center justify-between text-[9px] pb-1 border-b border-cyan-500/20 gap-1.5">
