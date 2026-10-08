@@ -3420,8 +3420,27 @@ function SovereignAppContent() {
           {/* Verification Gate Active Invariant Banner with Progress Bar & Expandable ETDA/PDPA Triggers */}
           <div
             id="verification-gate-section"
-            className="rounded-2xl bg-[#0b0e1a]/90 border border-cyan-500/25 backdrop-blur-xl shadow-lg transition-all duration-300 overflow-hidden"
+            data-testid="verification-gate-section"
+            data-anomaly-beacon={activeHsmNodes < 5 ? 'active' : 'idle'}
+            className={`rounded-2xl bg-[#0b0e1a]/90 border border-cyan-500/25 backdrop-blur-xl shadow-lg transition-all duration-300 overflow-hidden ${
+              activeHsmNodes < 5 ? 'anomaly-strobe-beacon' : ''
+            }`}
           >
+            {/* Automatic visual alert beacon banner if HSM health status drops below 5 active nodes */}
+            {activeHsmNodes < 5 && (
+              <div
+                data-testid="hsm-critical-strobe-alert"
+                className="px-4 py-1.5 bg-rose-600/30 border-b border-rose-500/60 text-rose-200 text-[10px] font-mono font-bold flex items-center justify-between animate-pulse"
+              >
+                <span className="flex items-center gap-1.5">
+                  <AlertTriangle className="w-3.5 h-3.5 text-rose-400 shrink-0 animate-ping" />
+                  <span>CRITICAL HSM SUB-QUORUM ANOMALY: Only {activeHsmNodes}/10 active nodes (&lt;50%). Strobe beacon activated.</span>
+                </span>
+                <span className="text-[9px] px-2 py-0.5 rounded bg-rose-950/90 border border-rose-500 text-rose-100 font-mono">
+                  ANOMALY-STROBE-BEACON
+                </span>
+              </div>
+            )}
             <div className="px-4 py-2.5 flex flex-wrap items-center justify-between gap-3 text-xs font-mono">
               {/* Left: Gate Status & Info with Tooltip Trigger */}
               <div className="flex items-center gap-2.5 relative">

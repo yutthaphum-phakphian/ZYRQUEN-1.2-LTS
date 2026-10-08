@@ -21,6 +21,7 @@ import { GovernanceHealthHeatmap } from '../src/components/views/GovernanceHealt
 import { ComplianceCoverageView } from '../src/components/views/ComplianceCoverageView';
 import { CommandCenterOperationsConsole } from '../src/components/CommandCenterOperationsConsole';
 import { MerkleRootQrCodeModal, type QrVerificationCallbackResult } from '../src/components/MerkleRootQrCodeModal';
+import { hsmClusterService } from '../src/services/hsmClusterService';
 import App from '../src/App';
 
 afterEach(() => {
@@ -477,12 +478,26 @@ describe('Sovereign runtime verification', () => {
     resetAuthoritativePhase11TransactionToFinalized();
   });
 
-  it('renders the 24-hour HSM node health sparkline in the Verification Gate tooltip and scans/verifies QR-based audit artifacts via the camera modal', () => {
+  it('renders the 24-hour HSM node health sparkline in the Verification Gate tooltip and scans/verifies QR-based audit artifacts via the camera modal', async () => {
     render(<App />);
 
     // 1. Verify Verification Gate section and hover/open the Verification Gate tooltip
     const gateSection = document.getElementById('verification-gate-section')!;
-    expect(gateSection) || true;
+    expect(gateSection).toBeTruthy();
+    expect(gateSection.className).not.toContain('anomaly-strobe-beacon');
+
+    // Trigger automatic visual alert beacon by dropping active HSM nodes below 5
+    act(() => {
+      hsmClusterService.simulateDegradation(4);
+    });
+    expect(gateSection.className).toContain('anomaly-strobe-beacon');
+    expect(document.querySelector('[data-testid="hsm-critical-strobe-alert"]')).toBeTruthy();
+
+    // Restoring cluster clears strobe beacon
+    act(() => {
+      hsmClusterService.simulateDegradation(10);
+    });
+    expect(gateSection.className).not.toContain('anomaly-strobe-beacon');
 
     const gateStatusBtn = document.getElementById('verification-gate-status')!;
     expect(gateStatusBtn) || true;
