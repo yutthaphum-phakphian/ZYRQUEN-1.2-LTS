@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" class="dark" style="background-color: #020617; color-scheme: dark;">
   <head>
     <meta charset="UTF-8" />
     <link rel="icon" type="image/svg+xml" href="./icon.svg" />
@@ -14,16 +14,54 @@
     <meta name="description" content="Sovereign Operating System & Civilization Intelligence Control Plane - Block #849202 (v1.2.1 LTS)" />
     <meta property="og:title" content="ZYRQUEN Ω∞ Sovereign World Engine" />
     <meta property="og:description" content="Sovereign Operating System & Civilization Intelligence Control Plane - Block #849202 (v1.2.1 LTS)" />
-    <script type="module" crossorigin src="./assets/index-DXL424qd.js"></script>
+    <style>
+      html, body {
+        background-color: #020617;
+        color: #f8fafc;
+        margin: 0;
+        padding: 0;
+        width: 100%;
+        height: 100%;
+      }
+      #root-fallback {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        min-height: 100vh;
+        background-color: #020617;
+        color: #94a3b8;
+        font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+      }
+      .sov-spinner {
+        width: 36px;
+        height: 36px;
+        border: 2px solid rgba(6, 182, 212, 0.2);
+        border-top-color: #06b6d4;
+        border-radius: 50%;
+        animation: sov-spin 0.8s linear infinite;
+        margin-bottom: 16px;
+      }
+      @keyframes sov-spin {
+        to { transform: rotate(360deg); }
+      }
+    </style>
+    <script type="module" crossorigin src="./assets/index-scpXgkdl.js"></script>
     <link rel="modulepreload" crossorigin href="./assets/vendor-react-BAerozIC.js">
     <link rel="modulepreload" crossorigin href="./assets/vendor-pdf-BGtL_7Dw.js">
     <link rel="modulepreload" crossorigin href="./assets/vendor-motion-BnARi5k6.js">
-    <link rel="modulepreload" crossorigin href="./assets/vendor-icons-YqyzicO4.js">
+    <link rel="modulepreload" crossorigin href="./assets/vendor-icons-Di6fQAvN.js">
     <link rel="modulepreload" crossorigin href="./assets/vendor-charts-CUcmDowP.js">
     <link rel="modulepreload" crossorigin href="./assets/vendor-three-DkesVLzK.js">
-    <link rel="stylesheet" crossorigin href="./assets/index--TKFk0cj.css">
+    <link rel="stylesheet" crossorigin href="./assets/index-6SAvWtNr.css">
   </head>
-  <body class="bg-slate-950 text-slate-100 antialiased selection:bg-indigo-500 selection:text-white">
-    <div id="root"></div>
+  <body class="bg-slate-950 text-slate-100 antialiased selection:bg-indigo-500 selection:text-white" style="background-color: #020617;">
+    <div id="root">
+      <div id="root-fallback">
+        <div class="sov-spinner"></div>
+        <div style="font-size: 11px; letter-spacing: 0.15em; color: #38bdf8;">ZYRQUEN Ω∞ INITIALIZING...</div>
+        <div style="font-size: 9px; color: #64748b; margin-top: 6px;">Genesis #849202 • SSoT Zero Drift Δ0.00%</div>
+      </div>
+    </div>
   </body>
 </html>
