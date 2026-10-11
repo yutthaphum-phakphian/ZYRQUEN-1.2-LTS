@@ -128,7 +128,7 @@ export const SovereignAtlasView: React.FC = () => {
   const handleCopy = (text: string, label: string) => {
     safeCopyToClipboard(text);
     setCopiedText(label);
-    playTone(880, 'sine', 0.08);
+    playTone(880, 0.08, 'sine');
     setTimeout(() => setCopiedText(null), 2000);
   };
 
@@ -300,10 +300,10 @@ export const SovereignAtlasView: React.FC = () => {
   // Execute Phase 3 Explicit Approval (#EP-SOVEREIGN-01)
   const handleExecuteApproval = () => {
     setIsApproving(true);
-    playTone(520, 'sine', 0.1);
+    playTone(520, 0.1, 'sine');
 
     setTimeout(() => {
-      playTone(680, 'sine', 0.15);
+      playTone(680, 0.15, 'sine');
       setExecutionLog((prev) => [
         `[${new Date().toISOString()}] [PHASE 1] Artifact Hash SHA256:${selectedAgent.hash.slice(0, 16)}... VERIFIED.`,
         ...prev
@@ -311,7 +311,7 @@ export const SovereignAtlasView: React.FC = () => {
     }, 400);
 
     setTimeout(() => {
-      playTone(840, 'sine', 0.15);
+      playTone(840, 0.15, 'sine');
       setExecutionLog((prev) => [
         `[${new Date().toISOString()}] [PHASE 2] Proposal Routed to #EP-SOVEREIGN-01 via HOLO-FLOW.`,
         ...prev
@@ -397,7 +397,7 @@ export const SovereignAtlasView: React.FC = () => {
               key={layer}
               onClick={() => {
                 setActiveLayer(layer);
-                playTone(440, 'sine', 0.05);
+                playTone(440, 0.05, 'sine');
               }}
               className={`px-3 py-1.5 rounded-lg text-xs font-mono font-medium transition-all capitalize cursor-pointer ${
                 activeLayer === layer
@@ -520,7 +520,7 @@ export const SovereignAtlasView: React.FC = () => {
                   key={agent.id}
                   onClick={() => {
                     setSelectedAgentId(agent.id);
-                    playTone(550, 'sine', 0.05);
+                    playTone(550, 0.05, 'sine');
                   }}
                   className={`p-3.5 rounded-xl border transition-all cursor-pointer ${
                     selectedAgentId === agent.id
