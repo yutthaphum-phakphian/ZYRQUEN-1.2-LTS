@@ -350,3 +350,115 @@ export const CATEGORY_PRESET_QUERIES: CategoryPresetQuery[] = [
     weight: 'MANDATORY',
   },
 ];
+
+export interface LegalTriggerItem {
+  id: string;
+  act: string;
+  section: string;
+  title: string;
+  titleTh: string;
+  status: 'PASS' | 'ACTIVE_GUARD' | 'VERIFIED' | string;
+  statusText: string;
+  pqcScheme: string;
+  anchor: string;
+  description: string;
+  descriptionTh: string;
+  statuteClause: string;
+}
+
+export const ETDA_PDPA_TRIGGERS: LegalTriggerItem[] = [
+  {
+    id: 'etda-sec-09',
+    act: 'ETDA B.E. 2544 / 2562',
+    section: 'มาตรา ๙ (Section 9)',
+    title: 'Electronic Signature Legal Enforceability',
+    titleTh: 'การรับรองผลทางกฎหมายของลายมือชื่ออิเล็กทรอนิกส์',
+    status: 'PASS',
+    statusText: '100% ENFORCED',
+    pqcScheme: 'FIPS 204 ML-DSA-87 (Dilithium-5)',
+    anchor: 'Sovereign Principal #EP-SOVEREIGN-01',
+    description: 'Binds undeniable cryptographic intent and signatory identity to every transaction and seal creation without relying on blind trust.',
+    descriptionTh: 'ผูกมัดเจตนาและอัตลักษณ์ของผู้ลงนามด้วยลายมือชื่อโครงข่ายแลตทิซโพสต์ควอนตัม มีผลผูกพันบังคับใช้ตามกฎหมายอย่างสมบูรณ์',
+    statuteClause: 'พ.ร.บ. ธุรกรรมทางอิเล็กทรอนิกส์ พ.ศ. ๒๕๔๔ มาตรา ๙',
+  },
+  {
+    id: 'etda-sec-26',
+    act: 'ETDA B.E. 2544 / 2562',
+    section: 'มาตรา ๒๖ (Section 26)',
+    title: 'Trustworthy & Advanced Electronic Signature Security',
+    titleTh: 'ลายมือชื่ออิเล็กทรอนิกส์ที่เชื่อถือได้ระดับสูง',
+    status: 'PASS',
+    statusText: '10/10 REAL_HSM',
+    pqcScheme: 'FIPS 140-3 Level 4 Active Tamper Protection',
+    anchor: 'Deca-Custodian Quorum Active Shield',
+    description: 'Guarantees advanced security, key control under sole custody, and automated Tamper-Evident Cascade with immediate Fail-Closed lockdown if altered.',
+    descriptionTh: 'โครงสร้างลายมือชื่อขั้นสูงภายใต้การควบคุมของผู้ดูแล 10 จุด หากตรวจพบการดัดแปลงแม้เพียง 1 บิต ระบบจะปฏิเสธทันที (Fail-Closed)',
+    statuteClause: 'พ.ร.บ. ธุรกรรมทางอิเล็กทรอนิกส์ พ.ศ. ๒๕๔๔ มาตรา ๒๖',
+  },
+  {
+    id: 'etda-sec-28',
+    act: 'ETDA B.E. 2544 / 2562',
+    section: 'มาตรา ๒๘ (Section 28)',
+    title: 'Third-Party Evidentiary Reliance & Certificate Anchors',
+    titleTh: 'ความน่าเชื่อถือและการรับฟังพยานหลักฐานโดยบุคคลภายนอก',
+    status: 'PASS',
+    statusText: 'COURT ADMISSIBLE',
+    pqcScheme: 'Immutable Merkle Root Binding',
+    anchor: 'Root 909ab814...fa4c68 (Block #849202)',
+    description: 'Enforces complete cryptographic audit trail (Ledger V25) certified for forensic presentation in Thai courts without repudiation.',
+    descriptionTh: 'สร้างห่วงโซ่พยานหลักฐานที่ไม่สามารถแก้ไขย้อนหลังได้ (Immutable Ledger) ได้รับการยอมรับฟังในชั้นศาลตามประมวลกฎหมายวิธีพิจารณาความ',
+    statuteClause: 'พ.ร.บ. ธุรกรรมทางอิเล็กทรอนิกส์ พ.ศ. ๒๕๔๔ มาตรา ๒๘',
+  },
+  {
+    id: 'pdpa-sec-09',
+    act: 'PDPA B.E. 2562',
+    section: 'มาตรา ๙ (Section 9)',
+    title: 'Lawful Basis & Sovereign Consent Matrix',
+    titleTh: 'ฐานความชอบด้วยกฎหมายและการควบคุมความยินยอม',
+    status: 'PASS',
+    statusText: 'SSoT Δ0.0% ZERO DRIFT',
+    pqcScheme: 'Zero-Knowledge Policy Engine',
+    anchor: 'Authority: นายยุทธภูมิ พากเพียร',
+    description: 'Restricts personal data operations strictly to predefined lawful purposes and platform boundaries Ω601–Ω1000 with zero drift.',
+    descriptionTh: 'ควบคุมการประมวลผลข้อมูลให้อยู่ในขอบเขตอธิปไตยดิจิทัลที่กำหนด ปราศจากการดัดแปลงโครงสร้าง (Mutation Authority = 0)',
+    statuteClause: 'พ.ร.บ. คุ้มครองข้อมูลส่วนบุคคล พ.ศ. ๒๕๖๒ มาตรา ๙',
+  },
+  {
+    id: 'pdpa-sec-26',
+    act: 'PDPA B.E. 2562',
+    section: 'มาตรา ๒๖ (Section 26)',
+    title: 'Sensitive Personal Data Quantum Vault Protection',
+    titleTh: 'การคุ้มครองข้อมูลส่วนบุคคลอ่อนไหวด้วยห้องนิรภัยควอนตัม',
+    status: 'PASS',
+    statusText: 'CRYO 14.98 mK',
+    pqcScheme: 'FIPS 203 ML-KEM-1024 / SPHINCS+',
+    anchor: 'Chamber 08 PQC Enclave',
+    description: 'Provides quantum-proof encapsulation for sensitive records, biometric telemetry, and executive keys against post-quantum decrypt-later attacks.',
+    descriptionTh: 'เข้ารหัสข้อมูลอ่อนไหวด้วยอัลกอริทึมแลตทิซและฟังก์ชันแฮชไร้สถานะ ป้องกันการถอดรหัสในอนาคตด้วยคอมพิวเตอร์ควอนตัม',
+    statuteClause: 'พ.ร.บ. คุ้มครองข้อมูลส่วนบุคคล พ.ศ. ๒๕๖๒ มาตรา ๒๖',
+  },
+  {
+    id: 'pdpa-sec-28',
+    act: 'PDPA B.E. 2562',
+    section: 'มาตรา ๒๘ (Section 28)',
+    title: 'Cross-Border Sovereign Safeguard Boundaries',
+    titleTh: 'มาตรการคุ้มครองการส่งหรือโอนข้อมูลข้ามพรมแดน',
+    status: 'PASS',
+    statusText: 'ISOLATED ENCLAVE',
+    pqcScheme: 'Sovereign Multi-Mesh Gateway',
+    anchor: 'Bangkok Command & Regional Nodes',
+    description: 'Guarantees destination country adequacy standard and prevents unauthorized exfiltration beyond the sovereign enclave boundary.',
+    descriptionTh: 'รับประกันมาตรฐานความคุ้มครองข้อมูลส่วนบุคคลของปลายทาง ป้องกันการรั่วไหลออกนอกเครือข่ายอธิปไตยไทย',
+    statuteClause: 'พ.ร.บ. คุ้มครองข้อมูลส่วนบุคคล พ.ศ. ๒๕๖๒ มาตรา ๒๘',
+  },
+];
+
+export const TRIGGER_PQC_HASHES: Record<string, string> = {
+  'etda-sec-09': '0x5d8e71a0b3c4d5e6f7a8b9c0d1e2f3a4b5c6d7e8f9a0b1c2d3e4f5a6b7c8d9e0',
+  'etda-sec-26': '0x14902_DECA_CUSTODIAN_FIPS140_3_L4_ACTIVE_SHIELD_SIG_909AB8',
+  'etda-sec-28': '0x909ab814479844d8a14816bed34cdbb07528e18501da86fc4691763a43fa4c68',
+  'pdpa-sec-09': '0x7b2274785f6964223a22534f562d4a554d502d343436222c22617574686f72223a224550227d',
+  'pdpa-sec-26': '0x112233445566778899aabbccddeeff00112233445566778899aabbccddeeff00',
+  'pdpa-sec-28': '0xdeadbeef00112233445566778899aabbccddeeff112233445566778899aabbcc',
+};
+

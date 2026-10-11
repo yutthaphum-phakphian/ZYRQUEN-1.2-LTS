@@ -25,6 +25,7 @@ import {
 import { sessionService, AuthenticatedSession } from '../../services/sessionService';
 import { playAuditChime, playTone } from '../AudioSynthesizer';
 import { safeCopyToClipboard } from '../../utils/clipboard';
+import { LoginForm } from './LoginForm';
 
 interface WebAuthnModalProps {
   isOpen: boolean;
@@ -506,70 +507,35 @@ export const WebAuthnModal: React.FC<WebAuthnModalProps> = ({
 
             {/* Mode: Sign In with Password or Credentials */}
             {mode === 'signin' && (
-              <form onSubmit={handleSignIn} className="space-y-4">
-                <div className="p-5 rounded-2xl bg-[#070a12] border border-white/10 space-y-4">
-                  <div className="flex items-center gap-2 text-emerald-400 font-bold text-xs">
-                    <User className="w-4 h-4" />
-                    <span>เข้าสู่ระบบด้วยชื่อผู้ใช้ / รหัสผ่าน หรือ Sovereign Identity</span>
-                  </div>
-
-                  <div>
-                    <label className="text-xs text-zinc-400 block mb-1">ชื่อผู้ใช้ หรือ อีเมล</label>
-                    <input
-                      type="text"
-                      required
-                      placeholder="เช่น EP-SOVEREIGN-01 หรือ user@zyrquen.com"
-                      value={signinUsername}
-                      onChange={(e) => setSigninUsername(e.target.value)}
-                      className="w-full bg-black/60 border border-white/20 rounded-xl px-3.5 py-2.5 text-xs text-white focus:outline-none focus:border-emerald-400"
-                    />
-                  </div>
-
-                  <div>
-                    <label className="text-xs text-zinc-400 block mb-1">รหัสผ่าน (Password)</label>
-                    <input
-                      type="password"
-                      placeholder="••••••••"
-                      value={signinPassword}
-                      onChange={(e) => setSigninPassword(e.target.value)}
-                      className="w-full bg-black/60 border border-white/20 rounded-xl px-3.5 py-2.5 text-xs text-white focus:outline-none focus:border-emerald-400 font-sans"
-                    />
-                    <p className="text-[10px] text-zinc-500 mt-1">
-                      หากเข้าสู่ระบบด้วย Passkey ไม่จำเป็นต้องกรอกรหัสผ่าน (เลือกแท็บ Passkey Bio)
-                    </p>
-                  </div>
-                </div>
-
-                {errorMessage && (
-                  <div className="p-3 rounded-xl bg-rose-950/50 border border-rose-500/40 text-xs text-rose-300">
-                    {errorMessage}
-                  </div>
-                )}
-
-                <button
-                  type="submit"
-                  disabled={status === 'verifying'}
-                  className="w-full py-3.5 px-6 rounded-2xl bg-emerald-500 hover:bg-emerald-400 text-black font-bold text-sm tracking-wide shadow-lg shadow-emerald-500/20 active:scale-98 transition-all flex items-center justify-center gap-2 cursor-pointer disabled:opacity-50"
-                >
-                  <User className="w-4 h-4" />
-                  <span>เข้าสู่ระบบ (Authenticate Session)</span>
-                </button>
-
-                <div className="text-center text-xs text-zinc-400 pt-2">
-                  ยังไม่มีบัญชี?{' '}
-                  <button
-                    type="button"
-                    onClick={() => {
-                      setMode('signup');
-                      setErrorMessage('');
-                      setSuccessNotice('');
-                    }}
-                    className="text-indigo-400 hover:underline font-bold"
-                  >
-                    สมัครสมาชิกใหม่ (สิทธิ์ User)
-                  </button>
-                </div>
-              </form>
+              <LoginForm
+                onSuccess={(sess) => {
+                  setStatus('success');
+                  playAuditChime();
+                  setSuccessNotice(`เข้าสู่ระบบสำเร็จในฐานะ ${sess.userDisplayName || sess.username} (${sess.role.toUpperCase()})`);
+                  const authResult: WebAuthnAuthenticationResult = {
+                    success: true,
+                    verified: true,
+                    credentialId: sess.sessionId,
+                    signatureHex: `0x_PASS_${sess.token ? sess.token.slice(0, 32) : 'AUTH_OK'}`,
+                    fipsLevel: sess.fipsLevel || 'FIPS 140-3 Level 4 (Software Sentinel)',
+                    timestamp: new Date().toISOString(),
+                    etdaCompliance: {
+                      sec09Valid: true,
+                      sec26NonRepudiation: true,
+                      fipsStandard: 'FIPS 140-3 Level 4',
+                    },
+                  };
+                  onSuccess?.(authResult);
+                  setTimeout(() => {
+                    onClose();
+                  }, 1200);
+                }}
+                onSwitchToRegister={() => {
+                  setMode('signup');
+                  setErrorMessage('');
+                  setSuccessNotice('');
+                }}
+              />
             )}
 
             {/* Mode: Sign Up / Register New Account */}

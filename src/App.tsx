@@ -6480,6 +6480,9 @@ function SovereignAppContent() {
       <SovereignLoginLoader
         isOpen={showLoginLoader}
         mode={loginLoaderMode}
+        onModeChange={(newMode) => {
+          setLoginLoaderMode(newMode);
+        }}
         onComplete={() => {
           setShowLoginLoader(false);
           setCurrentView('dashboard');

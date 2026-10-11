@@ -11,6 +11,99 @@
  * - PDPA B.E. 2562 Sec 37 Non-repudiation
  */
 
+export interface RegistrationInputPayload {
+  username?: string;
+  email?: string;
+  password?: string;
+  userDisplayName?: string;
+}
+
+export interface ExistingUserRecord {
+  username: string;
+  email: string;
+}
+
+export interface RegistrationValidationOutcome {
+  valid: boolean;
+  errors: string[];
+}
+
+/**
+ * Validates registration input parameters:
+ * 1. Checks username/email presence, format, and uniqueness against existing users.
+ * 2. Enforces password complexity rules (min 8 chars, 1 uppercase, 1 lowercase, 1 number, 1 special char).
+ */
+export function validateRegistrationInput(
+  input: RegistrationInputPayload,
+  existingUsers: ExistingUserRecord[] = []
+): RegistrationValidationOutcome {
+  const errors: string[] = [];
+
+  // Username validation
+  if (!input.username || typeof input.username !== 'string' || input.username.trim().length === 0) {
+    errors.push('ชื่อผู้ใช้จำเป็นต้องระบุ (Username is required)');
+  } else {
+    const cleanUsername = input.username.trim();
+    if (cleanUsername.length < 3) {
+      errors.push('ชื่อผู้ใช้ต้องมีความยาวอย่างน้อย 3 ตัวอักษร (Username must be at least 3 characters)');
+    }
+    if (cleanUsername.length > 32) {
+      errors.push('ชื่อผู้ใช้ต้องมีความยาวไม่เกิน 32 ตัวอักษร (Username must not exceed 32 characters)');
+    }
+    if (!/^[a-zA-Z0-9_\-]+$/.test(cleanUsername)) {
+      errors.push('ชื่อผู้ใช้ต้องเป็นตัวอักษรภาษาอังกฤษ ตัวเลข ขีดล่าง หรือขีดกลางเท่านั้น');
+    }
+    const isDupUser = existingUsers.some(
+      (u) => u.username && u.username.toLowerCase() === cleanUsername.toLowerCase()
+    );
+    if (isDupUser) {
+      errors.push('ชื่อผู้ใช้นี้มีอยู่ในระบบแล้ว (Username is already taken)');
+    }
+  }
+
+  // Email validation
+  if (!input.email || typeof input.email !== 'string' || input.email.trim().length === 0) {
+    errors.push('อีเมลจำเป็นต้องระบุ (Email is required)');
+  } else {
+    const cleanEmail = input.email.trim().toLowerCase();
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    if (!emailRegex.test(cleanEmail)) {
+      errors.push('รูปแบบอีเมลไม่ถูกต้อง (Invalid email address format)');
+    }
+    const isDupEmail = existingUsers.some(
+      (u) => u.email && u.email.toLowerCase() === cleanEmail
+    );
+    if (isDupEmail) {
+      errors.push('อีเมลนี้ถูกใช้งานแล้วในระบบ (Email is already registered)');
+    }
+  }
+
+  // Password complexity rules
+  if (input.password !== undefined && input.password !== null && input.password !== '') {
+    const pwd = String(input.password);
+    if (pwd.length < 8) {
+      errors.push('รหัสผ่านต้องมีความยาวอย่างน้อย 8 ตัวอักษร (Password must be at least 8 characters)');
+    }
+    if (!/[A-Z]/.test(pwd)) {
+      errors.push('รหัสผ่านต้องมีตัวอักษรพิมพ์ใหญ่อย่างน้อย 1 ตัว (At least 1 uppercase letter required)');
+    }
+    if (!/[a-z]/.test(pwd)) {
+      errors.push('รหัสผ่านต้องมีตัวอักษรพิมพ์เล็กอย่างน้อย 1 ตัว (At least 1 lowercase letter required)');
+    }
+    if (!/[0-9]/.test(pwd)) {
+      errors.push('รหัสผ่านต้องมีตัวเลขอย่างน้อย 1 ตัว (At least 1 number required)');
+    }
+    if (!/[!@#$%^&*()_+\-=\[\]{};':"\\|,.<>\/?~`]/.test(pwd)) {
+      errors.push('รหัสผ่านต้องมีอักขระพิเศษอย่างน้อย 1 ตัว (At least 1 special character required)');
+    }
+  }
+
+  return {
+    valid: errors.length === 0,
+    errors,
+  };
+}
+
 export interface AuthenticatedSession {
   sessionId: string;
   token: string;
@@ -195,6 +288,10 @@ class SovereignSessionService {
     password?: string;
     userDisplayName?: string;
   }): Promise<{ success: boolean; session?: AuthenticatedSession; user?: any; error?: string }> {
+    const preValidation = validateRegistrationInput(payload);
+    if (!preValidation.valid) {
+      return { success: false, error: preValidation.errors.join('; ') };
+    }
     try {
       const res = await fetch('/api/auth/register', {
         method: 'POST',
@@ -303,6 +400,12 @@ class SovereignSessionService {
     return newSession;
   }
 
+  public setManualSession(session: AuthenticatedSession): void {
+    this.currentSession = session;
+    this.saveSession();
+    this.notifyListeners();
+  }
+
   public async logout(): Promise<void> {
     if (this.currentSession) {
       const token = this.currentSession.token;
@@ -353,3 +456,60 @@ class SovereignSessionService {
 }
 
 export const sessionService = new SovereignSessionService();
+
+/**
+ * Middleware or helper function that checks the authenticated user's role from the server-side session.
+ * Restricts administrative actions to 'owner' or 'admin' roles, explicitly blocking 'user' access (403 Forbidden).
+ */
+export function requireRole(allowedRoles: Array<'owner' | 'admin' | 'user'> = ['owner', 'admin']) {
+  return (req: any, res: any, next?: () => void) => {
+    let session = req?.session;
+    if (!session && req?.user) {
+      session = {
+        userId: req.user.id || req.user.userId,
+        username: req.user.username,
+        role: req.user.role,
+        permissions: req.user.permissions || [],
+        status: 'ACTIVE',
+      };
+    }
+    if (!session && typeof (globalThis as any).__zyrquenGetSession === 'function') {
+      session = (globalThis as any).__zyrquenGetSession(req);
+    }
+
+    if (!session) {
+      if (res && typeof res.status === 'function') {
+        return res.status(401).json({
+          error: 'AUTHENTICATION_REQUIRED',
+          message: 'Unauthenticated: An active authenticated session is required.',
+        });
+      }
+      return { status: 401, error: 'AUTHENTICATION_REQUIRED' };
+    }
+
+    if (!allowedRoles.includes(session.role)) {
+      if (res && typeof res.status === 'function') {
+        return res.status(403).json({
+          error: 'FORBIDDEN_ROLE',
+          message: `Forbidden: Action restricted to roles [${allowedRoles.join(', ')}]. Caller role '${session.role}' is explicitly blocked.`,
+        });
+      }
+      return { status: 403, error: 'FORBIDDEN_ROLE' };
+    }
+
+    if (req) {
+      req.session = session;
+      req.user = {
+        id: session.userId,
+        username: session.username,
+        role: session.role,
+        permissions: session.permissions,
+      };
+    }
+
+    if (typeof next === 'function') {
+      next();
+    }
+    return { status: 200, session };
+  };
+}

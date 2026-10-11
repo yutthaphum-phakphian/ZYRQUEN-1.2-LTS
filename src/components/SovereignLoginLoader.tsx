@@ -9,6 +9,7 @@ interface SovereignLoginLoaderProps {
   onComplete: () => void;
   onCancel?: () => void;
   mode?: 'login' | 'register' | 'switch_tenant';
+  onModeChange?: (newMode: 'login' | 'register' | 'switch_tenant') => void;
 }
 
 const HSM_SLOTS = [
@@ -38,9 +39,24 @@ export const SovereignLoginLoader: React.FC<SovereignLoginLoaderProps> = ({
   isOpen,
   onComplete,
   onCancel,
-  mode = 'login',
+  mode: initialMode = 'login',
+  onModeChange,
 }) => {
+  const [activeMode, setActiveMode] = useState<'login' | 'register' | 'switch_tenant'>(initialMode);
   const [progress, setProgress] = useState<number>(0);
+
+  useEffect(() => {
+    setActiveMode(initialMode);
+  }, [initialMode]);
+
+  const toggleLoginRegister = () => {
+    const nextMode = activeMode === 'login' ? 'register' : 'login';
+    playTone(550, 0.05);
+    setActiveMode(nextMode);
+    if (onModeChange) {
+      onModeChange(nextMode);
+    }
+  };
   const [phaseText, setPhaseText] = useState<string>('Initializing Sovereign Warp Runtime...');
   const [signedHsmCount, setSignedHsmCount] = useState<number>(0);
   const [currentEntropy, setCurrentEntropy] = useState<number>(0.0);
@@ -282,18 +298,29 @@ export const SovereignLoginLoader: React.FC<SovereignLoginLoaderProps> = ({
                   </span>
                 </div>
                 <p className="text-xs text-zinc-400">
-                  {mode === 'login'
+                  {activeMode === 'login'
                     ? 'Sovereign Multi-Pass Quantum Login & Warp Ingress'
-                    : mode === 'register'
+                    : activeMode === 'register'
                     ? 'Registering Cryptographic Identity (#EP-SOVEREIGN-01)'
                     : 'Switching Sovereign Tenant Partition (Ω600_1000)'}
                 </p>
               </div>
             </div>
 
-            <div className="text-right">
-              <span className="text-xs text-zinc-400">AUTHORITY</span>
-              <div className="text-xs font-bold text-emerald-400">OMEGA-1 SUPREME</div>
+            <div className="flex items-center gap-3">
+              {/* Switch to Register / Switch to Login toggle button */}
+              <button
+                type="button"
+                onClick={toggleLoginRegister}
+                className="px-3 py-1.5 rounded-xl border border-cyan-500/40 bg-cyan-950/60 hover:bg-cyan-900/80 text-cyan-300 hover:text-white text-xs font-semibold transition-all cursor-pointer shadow-[0_0_15px_rgba(6,182,212,0.2)]"
+              >
+                {activeMode === 'login' ? 'Switch to Register' : 'Switch to Login'}
+              </button>
+
+              <div className="text-right">
+                <span className="text-xs text-zinc-400">AUTHORITY</span>
+                <div className="text-xs font-bold text-emerald-400">OMEGA-1 SUPREME</div>
+              </div>
             </div>
           </div>
 

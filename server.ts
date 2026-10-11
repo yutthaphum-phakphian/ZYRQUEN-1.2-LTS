@@ -59,6 +59,54 @@ export interface CourtDossierExportRequest {
   includeForensicsBundle?: boolean;
 }
 
+export function checkRole(session: any, allowedRoles: Array<'owner' | 'admin' | 'user'>): boolean {
+  if (!session) return false;
+  if (session.status !== 'ACTIVE') return false;
+  if (session.expiresAt && new Date(session.expiresAt).getTime() < Date.now()) return false;
+  return allowedRoles.includes(session.role);
+}
+
+export function requireRole(allowedRoles: Array<'owner' | 'admin' | 'user'>) {
+  return (req: Request, res: Response, next: NextFunction) => {
+    let session = (req as any).session;
+    if (!session && (req as any).user) {
+      session = {
+        userId: (req as any).user.id,
+        username: (req as any).user.username,
+        role: (req as any).user.role,
+        permissions: (req as any).user.permissions || [],
+        status: 'ACTIVE',
+      };
+    }
+    if (!session && typeof (globalThis as any).__zyrquenGetSession === 'function') {
+      session = (globalThis as any).__zyrquenGetSession(req);
+    }
+
+    if (!session) {
+      return res.status(401).json({
+        error: 'AUTHENTICATION_REQUIRED',
+        message: 'Unauthenticated: An active authenticated session is required to perform administrative actions.',
+      });
+    }
+
+    if (!allowedRoles.includes(session.role)) {
+      return res.status(403).json({
+        error: 'FORBIDDEN_ROLE',
+        message: `Forbidden: Action restricted to roles [${allowedRoles.join(', ')}]. Caller role '${session.role}' is explicitly blocked.`,
+      });
+    }
+
+    (req as any).session = session;
+    (req as any).user = {
+      id: session.userId,
+      username: session.username,
+      role: session.role,
+      permissions: session.permissions,
+    };
+    next();
+  };
+}
+
 // ============================================================================
 // CONSTANTS & SOVEREIGN WORLD ENGINE CONFIG
 // ============================================================================
@@ -882,74 +930,6 @@ async function startServer() {
     return crypto.pbkdf2Sync(password, salt, 10000, 32, 'sha256').toString('hex');
   }
 
-  app.get('/api/admin/users', (_req: Request, res: Response) => {
-    const sanitized = adminUsersDirectory.map(({ passwordHash, passwordSalt, ...u }) => u);
-    res.status(200).json({
-      status: 'SUCCESS',
-      users: sanitized,
-      totalUsers: sanitized.length,
-      ownerProtected: true,
-      genesisBlock: GENESIS_BLOCK_NUM,
-      merkleRoot: MERKLE_ROOT_GENESIS,
-      timestamp: new Date().toISOString(),
-    });
-  });
-
-  app.patch('/api/admin/users/:id/role', (req: Request, res: Response) => {
-    const { id } = req.params;
-    const { role } = req.body || {};
-
-    const targetUser = adminUsersDirectory.find((u) => u.id === id);
-    if (!targetUser) {
-      return res.status(404).json({ error: 'USER_NOT_FOUND', message: 'Target user not found in directory.' });
-    }
-
-    if (targetUser.role === 'owner' || id === 'usr_owner_ep01') {
-      return res.status(403).json({
-        error: 'OWNER_PROTECTION_VIOLATION',
-        message: 'Security Invariant Violation: Project Owner permissions cannot be demoted or modified.',
-      });
-    }
-
-    if (role !== 'admin' && role !== 'user') {
-      return res.status(400).json({ error: 'INVALID_ROLE', message: 'Role must be either admin or user.' });
-    }
-
-    targetUser.role = role;
-    saveUsers(adminUsersDirectory);
-    res.status(200).json({
-      status: 'SUCCESS',
-      message: `User role successfully updated to ${role.toUpperCase()}.`,
-      user: targetUser,
-    });
-  });
-
-  app.post('/api/admin/users', (req: Request, res: Response) => {
-    const { username, email, role } = req.body || {};
-    if (!username || !email) {
-      return res.status(400).json({ error: 'MISSING_FIELDS', message: 'Username and email are required.' });
-    }
-    if (role === 'owner') {
-      return res.status(403).json({ error: 'OWNER_IMMUTABLE', message: 'Only a single sovereign project owner is permitted by cryptographic invariant.' });
-    }
-    const newUser = {
-      id: `usr_sec_${Date.now().toString(36)}`,
-      username: String(username).trim(),
-      email: String(email).trim().toLowerCase(),
-      role: role === 'admin' ? 'admin' : 'user',
-      createdAt: new Date().toISOString(),
-      lastActiveUtc: new Date().toISOString(),
-      status: 'active' as const,
-    };
-    adminUsersDirectory.push(newUser);
-    saveUsers(adminUsersDirectory);
-    res.status(201).json({
-      status: 'SUCCESS',
-      message: `New principal ${newUser.username} registered with role ${newUser.role.toUpperCase()}.`,
-      user: newUser,
-    });
-  });
-
   // ============================================================================
   // SOVEREIGN AUTH & SESSION MANAGEMENT (ETDA Sec 9/26 + WebAuthn FIPS 140-3 L4)
   // ============================================================================
@@ -1014,6 +994,9 @@ async function startServer() {
   }
 
   function getSessionFromRequest(req: Request): any | null {
+    if (!req || !req.headers) {
+      return null;
+    }
     const authHeader = req.headers['authorization'];
     const tokenHeader = req.headers['x-zyrquen-session-token'] as string;
     let token = tokenHeader;
@@ -1036,7 +1019,125 @@ async function startServer() {
     return session;
   }
 
-  // POST /api/auth/register (Registration with duplicate prevention, role: 'user' default)
+  (globalThis as any).__zyrquenGetSession = getSessionFromRequest;
+
+  // Active Challenge Registry for Server-Side WebAuthn Attestation
+  const activeChallenges = new Map<string, { challenge: string; expiresAt: number }>();
+
+  // GET /api/auth/challenge (Server-side WebAuthn Challenge Issuance)
+  app.get('/api/auth/challenge', (_req: Request, res: Response) => {
+    const challenge = crypto.randomBytes(32).toString('hex');
+    const challengeId = `CHAL-${Date.now().toString(36)}-${crypto.randomBytes(6).toString('hex')}`;
+    activeChallenges.set(challengeId, {
+      challenge,
+      expiresAt: Date.now() + 5 * 60 * 1000,
+    });
+    res.status(200).json({
+      challengeId,
+      challenge,
+      rpId: 'zyrquen.court.local',
+      rpName: 'ZYRQUEN Ω∞ Sovereign System',
+      timeout: 60000,
+      userVerification: 'preferred',
+      timestamp: new Date().toISOString(),
+    });
+  });
+
+  // POST /api/auth/recovery (Secure Account Recovery Ticket Issuance)
+  app.post('/api/auth/recovery', (req: Request, res: Response) => {
+    const { email } = req.body || {};
+    if (!email) {
+      return res.status(400).json({ error: 'MISSING_EMAIL', message: 'กรุณาระบุอีเมลสำหรับกู้คืนบัญชี' });
+    }
+    const cleanEmail = String(email).trim().toLowerCase();
+    const user = adminUsersDirectory.find((u) => u.email.toLowerCase() === cleanEmail);
+    if (!user) {
+      return res.status(200).json({
+        status: 'SUCCESS',
+        message: 'หากมีอีเมลนี้อยู่ในระบบ คำแนะนำและรหัสกู้คืนฉุกเฉินจะถูกส่งไปยังช่องทางที่กำหนด',
+      });
+    }
+    const recoveryTicket = `RCV-${Date.now().toString(36).toUpperCase()}-${crypto.randomBytes(4).toString('hex').toUpperCase()}`;
+    res.status(200).json({
+      status: 'SUCCESS',
+      recoveryTicket,
+      message: `สร้าง Recovery Ticket สำหรับ ${user.username} เรียบร้อยแล้ว (FIPS 140-3 Hardware Verification)`,
+    });
+  });
+
+  // ============================================================================
+  // RBAC ADMIN MANAGEMENT (Protected by requireRole: owner | admin)
+  // ============================================================================
+
+  app.get('/api/admin/users', requireRole(['owner', 'admin']), (_req: Request, res: Response) => {
+    const sanitized = adminUsersDirectory.map(({ passwordHash, passwordSalt, ...u }) => u);
+    res.status(200).json({
+      status: 'SUCCESS',
+      users: sanitized,
+      totalUsers: sanitized.length,
+      ownerProtected: true,
+      genesisBlock: GENESIS_BLOCK_NUM,
+      merkleRoot: MERKLE_ROOT_GENESIS,
+      timestamp: new Date().toISOString(),
+    });
+  });
+
+  app.patch('/api/admin/users/:id/role', requireRole(['owner', 'admin']), (req: Request, res: Response) => {
+    const { id } = req.params;
+    const { role } = req.body || {};
+
+    const targetUser = adminUsersDirectory.find((u) => u.id === id);
+    if (!targetUser) {
+      return res.status(404).json({ error: 'USER_NOT_FOUND', message: 'Target user not found in directory.' });
+    }
+
+    if (targetUser.role === 'owner' || id === 'usr_owner_ep01') {
+      return res.status(403).json({
+        error: 'OWNER_PROTECTION_VIOLATION',
+        message: 'Security Invariant Violation: Project Owner permissions cannot be demoted or modified.',
+      });
+    }
+
+    if (role !== 'admin' && role !== 'user') {
+      return res.status(400).json({ error: 'INVALID_ROLE', message: 'Role must be either admin or user.' });
+    }
+
+    targetUser.role = role;
+    saveUsers(adminUsersDirectory);
+    res.status(200).json({
+      status: 'SUCCESS',
+      message: `User role successfully updated to ${role.toUpperCase()}.`,
+      user: targetUser,
+    });
+  });
+
+  app.post('/api/admin/users', requireRole(['owner', 'admin']), (req: Request, res: Response) => {
+    const { username, email, role } = req.body || {};
+    if (!username || !email) {
+      return res.status(400).json({ error: 'MISSING_FIELDS', message: 'Username and email are required.' });
+    }
+    if (role === 'owner') {
+      return res.status(403).json({ error: 'OWNER_IMMUTABLE', message: 'Only a single sovereign project owner is permitted by cryptographic invariant.' });
+    }
+    const newUser = {
+      id: `usr_sec_${Date.now().toString(36)}`,
+      username: String(username).trim(),
+      email: String(email).trim().toLowerCase(),
+      role: role === 'admin' ? 'admin' : 'user',
+      createdAt: new Date().toISOString(),
+      lastActiveUtc: new Date().toISOString(),
+      status: 'active' as const,
+    };
+    adminUsersDirectory.push(newUser);
+    saveUsers(adminUsersDirectory);
+    res.status(201).json({
+      status: 'SUCCESS',
+      message: `New principal ${newUser.username} registered with role ${newUser.role.toUpperCase()}.`,
+      user: newUser,
+    });
+  });
+
+  // POST /api/auth/register (Registration with duplicate prevention, role: 'user' default, password complexity)
   app.post('/api/auth/register', (req: Request, res: Response) => {
     const { username, email, password, userDisplayName } = req.body || {};
     if (!username || !email) {
@@ -1057,6 +1158,25 @@ async function startServer() {
       });
     }
 
+    // Enforce Password Complexity Rules
+    if (password !== undefined && password !== null && password !== '') {
+      const pwd = String(password);
+      const errors: string[] = [];
+      if (pwd.length < 8) errors.push('รหัสผ่านต้องมีความยาวอย่างน้อย 8 ตัวอักษร (min 8 characters)');
+      if (!/[A-Z]/.test(pwd)) errors.push('รหัสผ่านต้องมีตัวพิมพ์ใหญ่อย่างน้อย 1 ตัว (min 1 uppercase)');
+      if (!/[a-z]/.test(pwd)) errors.push('รหัสผ่านต้องมีตัวพิมพ์เล็กอย่างน้อย 1 ตัว (min 1 lowercase)');
+      if (!/[0-9]/.test(pwd)) errors.push('รหัสผ่านต้องมีตัวเลขอย่างน้อย 1 ตัว (min 1 number)');
+      if (!/[!@#$%^&*()_+\-=\[\]{};':"\\|,.<>\/?~`]/.test(pwd)) errors.push('รหัสผ่านต้องมีอักขระพิเศษอย่างน้อย 1 ตัว (min 1 special character)');
+
+      if (errors.length > 0) {
+        return res.status(400).json({
+          error: 'PASSWORD_COMPLEXITY_FAILED',
+          message: `รหัสผ่านไม่ผ่านเกณฑ์ความปลอดภัย: ${errors.join(', ')}`,
+          errors,
+        });
+      }
+    }
+
     const salt = crypto.randomBytes(16).toString('hex');
     const pwdHash = password ? hashPassword(String(password), salt) : undefined;
 
@@ -1065,7 +1185,7 @@ async function startServer() {
       username: cleanUsername,
       email: cleanEmail,
       userDisplayName: userDisplayName ? String(userDisplayName).trim() : cleanUsername,
-      role: 'user' as const, // Strict user role assignment
+      role: 'user' as const, // Strict user role assignment. Self-registration can never grant owner or admin privilege.
       createdAt: new Date().toISOString(),
       lastActiveUtc: new Date().toISOString(),
       status: 'active' as const,
@@ -1111,7 +1231,8 @@ async function startServer() {
 
   // POST /api/auth/login (Login via credentials or password fallback)
   app.post('/api/auth/login', (req: Request, res: Response) => {
-    const { username, password } = req.body || {};
+    const username = req.body?.username || req.body?.email;
+    const { password, rememberMe } = req.body || {};
     if (!username) {
       return res.status(400).json({ error: 'MISSING_FIELDS', message: 'กรุณาระบุชื่อผู้ใช้หรืออีเมล' });
     }
@@ -2260,7 +2381,14 @@ Rules:
   });
 }
 
-startServer().catch((err) => {
-  console.error('Failed to start server:', err);
-  process.exit(1);
-});
+const isTestEnv =
+  process.env.NODE_ENV === 'test' ||
+  Boolean(process.env.VITEST) ||
+  process.argv.some((arg) => arg.includes('test'));
+
+if (!isTestEnv) {
+  startServer().catch((err) => {
+    console.error('Failed to start server:', err);
+    process.exit(1);
+  });
+}
