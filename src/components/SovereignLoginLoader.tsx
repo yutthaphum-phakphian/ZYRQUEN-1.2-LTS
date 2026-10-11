@@ -9,6 +9,7 @@ interface SovereignLoginLoaderProps {
   onComplete: () => void;
   onCancel?: () => void;
   mode?: 'login' | 'register' | 'switch_tenant';
+  onModeChange?: (newMode: 'login' | 'register' | 'switch_tenant') => void;
 }
 
 const HSM_SLOTS = [
@@ -38,9 +39,24 @@ export const SovereignLoginLoader: React.FC<SovereignLoginLoaderProps> = ({
   isOpen,
   onComplete,
   onCancel,
-  mode = 'login',
+  mode: initialMode = 'login',
+  onModeChange,
 }) => {
+  const [activeMode, setActiveMode] = useState<'login' | 'register' | 'switch_tenant'>(initialMode);
   const [progress, setProgress] = useState<number>(0);
+
+  useEffect(() => {
+    setActiveMode(initialMode);
+  }, [initialMode]);
+
+  const toggleLoginRegister = () => {
+    const nextMode = activeMode === 'login' ? 'register' : 'login';
+    playTone(550, 0.05);
+    setActiveMode(nextMode);
+    if (onModeChange) {
+      onModeChange(nextMode);
+    }
+  };
   const [phaseText, setPhaseText] = useState<string>('Initializing Sovereign Warp Runtime...');
   const [signedHsmCount, setSignedHsmCount] = useState<number>(0);
   const [currentEntropy, setCurrentEntropy] = useState<number>(0.0);
@@ -161,24 +177,113 @@ export const SovereignLoginLoader: React.FC<SovereignLoginLoaderProps> = ({
       <motion.div
         initial={{ opacity: 0 }}
         animate={{ opacity: 1 }}
-        exit={{ opacity: 0 }}
-        className="fixed inset-0 z-50 flex items-center justify-center bg-[#070a12] p-4 font-mono select-none"
+        exit={{ opacity: 0, transition: { duration: 0.75, ease: [0.16, 1, 0.3, 1] } }}
+        className="fixed inset-0 z-50 flex items-center justify-center bg-[#070a12] p-4 font-mono select-none overflow-hidden"
       >
-        {/* Holographic Warp Stream Particle Field */}
+        {/* Holographic Warp Stream Particle & Ingress Field */}
         <div className="absolute inset-0 overflow-hidden pointer-events-none">
           <div className="absolute inset-0 bg-[#070a12] opacity-95" />
-          <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[800px] h-[800px] rounded-full border-cyan-500/20 opacity-30 animate-pulse pointer-events-none" />
-          <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[600px] rounded-full border-[#D4AF37]/25 opacity-40 pointer-events-none" />
-          <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[400px] h-[400px] rounded-full border-emerald-500/20 opacity-40 pointer-events-none" />
+
+          {/* Relativistic Warp Stream Light Streaks (Warp Ingress Corridor) */}
+          <div className="absolute inset-0 flex items-center justify-center pointer-events-none">
+            {[0, 30, 60, 90, 120, 150, 180, 210, 240, 270, 300, 330].map((deg) => (
+              <motion.div
+                key={deg}
+                initial={{ opacity: 0, scaleY: 0.2 }}
+                animate={{
+                  opacity: isWarpFlash ? [0.4, 0.9, 0] : [0.15, 0.45, 0.2],
+                  scaleY: isWarpFlash ? [1, 2.5, 4] : [0.8, 1.25, 0.9],
+                }}
+                transition={{
+                  duration: isWarpFlash ? 0.8 : 2.4,
+                  repeat: isWarpFlash ? 0 : Infinity,
+                  repeatType: 'reverse',
+                  delay: (deg / 360) * 0.4,
+                  ease: 'easeInOut',
+                }}
+                style={{ transform: `rotate(${deg}deg)` }}
+                className="absolute w-[2px] h-[1200px] bg-gradient-to-t from-transparent via-cyan-400/30 to-transparent pointer-events-none"
+              />
+            ))}
+          </div>
+          
+          {/* Subtle Radial Warp Tunnel Rings with Ingress Acceleration */}
+          <motion.div
+            initial={{ scale: 0.25, opacity: 0, rotate: -20 }}
+            animate={{
+              scale: isWarpFlash ? [1, 2.2, 3.2] : [0.4, 1.1, 1],
+              opacity: isWarpFlash ? [0.4, 0.8, 0] : [0, 0.45, 0.25],
+              rotate: 0,
+            }}
+            transition={{ duration: isWarpFlash ? 0.85 : 1.2, ease: [0.16, 1, 0.3, 1] }}
+            className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[900px] h-[900px] rounded-full border border-cyan-500/25 pointer-events-none"
+          />
+          <motion.div
+            initial={{ scale: 0.15, opacity: 0, rotate: 20 }}
+            animate={{
+              scale: isWarpFlash ? [1, 2.4, 3.6] : [0.2, 1.2, 1],
+              opacity: isWarpFlash ? [0.5, 0.9, 0] : [0, 0.5, 0.3],
+              rotate: 0,
+            }}
+            transition={{ duration: isWarpFlash ? 0.85 : 1.4, delay: 0.08, ease: [0.16, 1, 0.3, 1] }}
+            className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[650px] h-[650px] rounded-full border border-[#D4AF37]/30 pointer-events-none"
+          />
+          <motion.div
+            initial={{ scale: 0.08, opacity: 0 }}
+            animate={{
+              scale: isWarpFlash ? [1, 2.8, 4.2] : [0.1, 1.3, 1],
+              opacity: isWarpFlash ? [0.6, 1, 0] : [0, 0.6, 0.35],
+            }}
+            transition={{ duration: isWarpFlash ? 0.85 : 1.6, delay: 0.16, ease: [0.16, 1, 0.3, 1] }}
+            className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[420px] h-[420px] rounded-full border border-emerald-500/25 pointer-events-none"
+          />
+
+          {/* Warp Ingress Radial Stream Gradient */}
+          <div className="absolute inset-0 bg-[radial-gradient(circle_at_center,_transparent_15%,_rgba(6,182,212,0.08)_55%,_rgba(7,10,18,0.96)_88%)] pointer-events-none" />
+
+          {/* Hyper-Warp Flash Burst (When transitioning to dashboard) */}
+          {isWarpFlash && (
+            <motion.div
+              initial={{ opacity: 0, scale: 0.6 }}
+              animate={{ opacity: [0, 1, 0], scale: [0.6, 2.4, 4.2] }}
+              transition={{ duration: 0.9, ease: [0.16, 1, 0.3, 1] }}
+              className="absolute inset-0 z-30 flex items-center justify-center pointer-events-none"
+            >
+              <div className="w-[600px] h-[600px] rounded-full bg-gradient-to-r from-cyan-400/50 via-white/80 to-[#D4AF37]/50 blur-3xl" />
+            </motion.div>
+          )}
         </div>
 
-        {/* Central Quantum Warp Login Enclave */}
+        {/* Central Quantum Warp Login Enclave with Subtle Warp Ingress Entrance */}
         <motion.div
-          initial={{ scale: 0.92, y: 20 }}
-          animate={{ scale: isWarpFlash ? 1.05 : 1, y: 0 }}
-          transition={{ duration: 0.35 }}
-          className="relative z-10 w-full max-w-2xl p-8 rounded-3xl bg-[#0a0f1e] border-2 border-[#D4AF37] shadow-2xl space-y-6 text-zinc-100"
+          initial={{ opacity: 0, scale: 0.74, y: 36, rotateX: 6, filter: 'blur(12px) brightness(1.6)' }}
+          animate={{
+            opacity: 1,
+            scale: isWarpFlash ? 1.08 : 1,
+            y: 0,
+            rotateX: 0,
+            filter: isWarpFlash ? 'brightness(1.4) blur(0.5px)' : 'blur(0px) brightness(1)',
+          }}
+          exit={{
+            opacity: 0,
+            scale: 1.28,
+            y: -24,
+            filter: 'blur(16px) brightness(2.2)',
+            transition: { duration: 0.75, ease: [0.16, 1, 0.3, 1] },
+          }}
+          transition={{ duration: 0.6, ease: [0.16, 1, 0.3, 1] }}
+          className="relative z-10 w-full max-w-2xl p-8 rounded-3xl bg-[#0a0f1e]/95 backdrop-blur-xl border-2 border-[#D4AF37] shadow-[0_0_50px_rgba(212,175,55,0.25)] space-y-6 text-zinc-100"
         >
+          {/* Subtle Warp Ingress Indicator Kicker */}
+          <div className="flex items-center justify-between text-[10px] text-cyan-400/90 font-mono tracking-wider border-b border-cyan-500/20 pb-2">
+            <span className="flex items-center gap-1.5">
+              <span className="w-1.5 h-1.5 rounded-full bg-cyan-400 animate-ping" />
+              <span>WARP INGRESS VECTOR // STABLE ORBIT ENTRY</span>
+            </span>
+            <span className="text-zinc-400">
+              SPEED: <span className="text-cyan-300 font-bold">{warpSpeedQops.toLocaleString()}</span> QOPS/S · LATENCY: &lt;1.2MS
+            </span>
+          </div>
           {/* Sovereign Warp Header */}
           <div className="flex items-center justify-between border-b border-zinc-800 pb-4">
             <div className="flex items-center gap-3">
@@ -193,18 +298,29 @@ export const SovereignLoginLoader: React.FC<SovereignLoginLoaderProps> = ({
                   </span>
                 </div>
                 <p className="text-xs text-zinc-400">
-                  {mode === 'login'
+                  {activeMode === 'login'
                     ? 'Sovereign Multi-Pass Quantum Login & Warp Ingress'
-                    : mode === 'register'
+                    : activeMode === 'register'
                     ? 'Registering Cryptographic Identity (#EP-SOVEREIGN-01)'
                     : 'Switching Sovereign Tenant Partition (Ω600_1000)'}
                 </p>
               </div>
             </div>
 
-            <div className="text-right">
-              <span className="text-xs text-zinc-400">AUTHORITY</span>
-              <div className="text-xs font-bold text-emerald-400">OMEGA-1 SUPREME</div>
+            <div className="flex items-center gap-3">
+              {/* Switch to Register / Switch to Login toggle button */}
+              <button
+                type="button"
+                onClick={toggleLoginRegister}
+                className="px-3 py-1.5 rounded-xl border border-cyan-500/40 bg-cyan-950/60 hover:bg-cyan-900/80 text-cyan-300 hover:text-white text-xs font-semibold transition-all cursor-pointer shadow-[0_0_15px_rgba(6,182,212,0.2)]"
+              >
+                {activeMode === 'login' ? 'Switch to Register' : 'Switch to Login'}
+              </button>
+
+              <div className="text-right">
+                <span className="text-xs text-zinc-400">AUTHORITY</span>
+                <div className="text-xs font-bold text-emerald-400">OMEGA-1 SUPREME</div>
+              </div>
             </div>
           </div>
 

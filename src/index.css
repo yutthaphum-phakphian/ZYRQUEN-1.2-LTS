@@ -1110,6 +1110,54 @@ html, body, #root {
   .CourtEvidenceQR svg { fill: #000 !important; }
 
   .CourtEvidenceQR span, .CourtEvidenceQR div { color: #000 !important; }
+
+  /* ZYRQUEN Print Evidence Matrix High-Contrast Monochrome Rules */
+  .zyrquen-print-evidence-matrix {
+    display: block !important;
+    position: static !important;
+    background-color: #ffffff !important;
+    color: #000000 !important;
+    width: 100% !important;
+    max-width: 100% !important;
+    margin: 0 !important;
+    padding: 12pt !important;
+    box-shadow: none !important;
+    text-shadow: none !important;
+    visibility: visible !important;
+  }
+
+  .zyrquen-print-evidence-matrix * {
+    background-color: #ffffff !important;
+    color: #000000 !important;
+    box-shadow: none !important;
+    text-shadow: none !important;
+    visibility: visible !important;
+  }
+
+  .zyrquen-print-evidence-matrix .evidence-matrix-card,
+  .zyrquen-print-evidence-matrix article,
+  .zyrquen-print-evidence-matrix section,
+  .zyrquen-print-evidence-matrix aside,
+  .zyrquen-print-evidence-matrix > div,
+  .zyrquen-print-evidence-matrix .grid > div {
+    break-inside: avoid !important;
+    page-break-inside: avoid !important;
+    border: 1.5px solid #000000 !important;
+  }
+
+  .zyrquen-print-evidence-matrix table {
+    width: 100% !important;
+    border-collapse: collapse !important;
+    border: 1.5px solid #000000 !important;
+  }
+
+  .zyrquen-print-evidence-matrix table th,
+  .zyrquen-print-evidence-matrix table td {
+    border: 1px solid #000000 !important;
+    padding: 4px 8px !important;
+    color: #000000 !important;
+    background-color: #ffffff !important;
+  }
 }
 
 /* Explicit Legal Document Print Landscape Rules */

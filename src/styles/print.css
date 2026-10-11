@@ -10,12 +10,60 @@
     text-shadow: none !important;
   }
 
-  /* 2. แสดงเฉพาะคอนเทนเนอร์การ์ดตาราง QR หรือการ์ด CourtEvidenceQR เดี่ยว */
+  /* 2. แสดงเฉพาะคอนเทนเนอร์การ์ดตาราง QR หรือการ์ด CourtEvidenceQR เดี่ยว หรือ Matrix */
   .evidence-qr-grid, 
   .evidence-qr-grid *,
   .CourtEvidenceQR,
-  .CourtEvidenceQR * {
-    visibility: visible;
+  .CourtEvidenceQR *,
+  .zyrquen-print-evidence-matrix,
+  .zyrquen-print-evidence-matrix * {
+    visibility: visible !important;
+  }
+
+  /* ZYRQUEN Print Evidence Matrix High-Contrast Monochrome Rules */
+  .zyrquen-print-evidence-matrix {
+    display: block !important;
+    position: static !important;
+    background-color: #ffffff !important;
+    color: #000000 !important;
+    width: 100% !important;
+    max-width: 100% !important;
+    margin: 0 !important;
+    padding: 12pt !important;
+    box-shadow: none !important;
+    text-shadow: none !important;
+  }
+
+  .zyrquen-print-evidence-matrix * {
+    background-color: #ffffff !important;
+    color: #000000 !important;
+    box-shadow: none !important;
+    text-shadow: none !important;
+  }
+
+  .zyrquen-print-evidence-matrix .evidence-matrix-card,
+  .zyrquen-print-evidence-matrix article,
+  .zyrquen-print-evidence-matrix section,
+  .zyrquen-print-evidence-matrix aside,
+  .zyrquen-print-evidence-matrix > div,
+  .zyrquen-print-evidence-matrix .grid > div {
+    break-inside: avoid !important;
+    page-break-inside: avoid !important;
+    border: 1.5px solid #000000 !important;
+  }
+
+  .zyrquen-print-evidence-matrix table {
+    width: 100% !important;
+    border-collapse: collapse !important;
+    border: 1.5px solid #000000 !important;
+  }
+
+  .zyrquen-print-evidence-matrix table th,
+  .zyrquen-print-evidence-matrix table td {
+    border: 1px solid #000000 !important;
+    padding: 4px 8px !important;
+    color: #000000 !important;
+    background-color: #ffffff !important;
   }
 
   /* 3. จัดการ Layout ให้พิมพ์พอดีหน้ากระดาษ A4 */
@@ -116,11 +164,23 @@
   .no-print {
     display: none !important;
   }
+
+  /* 7. ป้องกันการเกิดหน้าเปล่า (Prevent blank page trailing overflow) */
+  html, body {
+    height: auto !important;
+    overflow: visible !important;
+    margin: 0 !important;
+    padding: 0 !important;
+  }
 }
 
 @page landscape-legal {
   size: A4 landscape;
-  margin: 8mm;
+  margin: 6mm;
+}
+
+@page {
+  margin: 6mm;
 }
 
 body.court-landscape-print,

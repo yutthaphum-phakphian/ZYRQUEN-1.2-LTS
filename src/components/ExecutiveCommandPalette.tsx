@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { Search, Shield, Bot, Terminal, Download, Lock, RefreshCw, X, FileText, Database, ShieldCheck } from 'lucide-react';
+import { Search, Shield, Bot, Terminal, Download, Lock, RefreshCw, X, FileText, Database, ShieldCheck, Scale, Activity, Fingerprint } from 'lucide-react';
 
 interface CommandPaletteProps {
   onSelectAction?: (actionId: string) => void;
@@ -24,6 +24,11 @@ export const ExecutiveCommandPalette: React.FC<CommandPaletteProps> = ({ onSelec
   }, [isOpen]);
 
   const commands = [
+    { id: 'auth-login', label: 'เข้าสู่ระบบด้วย WebAuthn Biometric Passkey (FIPS 140-3)', icon: Fingerprint, category: 'Identity & Access' },
+    { id: 'replay-verify', label: 'รัน 12-Stage Forensic Trace Replay (SLA 35.80ms)', icon: RefreshCw, category: 'Verification Pipeline' },
+    { id: 'hsm-heal', label: 'กู้คืนฉันทามติ Deca-Key Quorum (10/10 REAL_HSM)', icon: ShieldCheck, category: 'Hardware Quorum' },
+    { id: 'court-exhibits', label: 'ตรวจพยานหลักฐานดิจิทัล จพ.๐๑–๐๗ (พ.ร.บ. ธุรกรรมฯ ม.๙, ๒๖, ๒๘)', icon: Scale, category: 'Legal Corpus' },
+    { id: 'quantum-radar', label: 'ตรวจเรดาร์คลื่นควอนตัม Chamber 11 Quantum Radar', icon: Activity, category: 'Telemetry' },
     { id: 'forensic-dossier', label: 'เปิดสำนวนพยานหลักฐานดิจิทัล DOC-SOV-HSM-1010-2026-V9 (Court Master)', icon: ShieldCheck, category: 'Audit & Legal' },
     { id: 'snapshot', label: 'ดาวน์โหลด Signed Snapshot (FIPS 204)', icon: Download, category: 'Audit & Legal' },
     { id: 'pqc-verify', label: 'ตรวจสอบ PQC Dilithium-5 / Kyber Key Spec', icon: Shield, category: 'Security' },

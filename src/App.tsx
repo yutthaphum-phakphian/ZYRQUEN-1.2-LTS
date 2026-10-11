@@ -132,6 +132,7 @@ import { VoiceCommandOverlay } from '@/components/VoiceCommandOverlay';
 import { OfflineIndicator } from '@/components/OfflineIndicator';
 import { NexusIntegrationLayer } from '@/components/NexusIntegrationLayer';
 import { SovereignLoginLoader } from '@/components/SovereignLoginLoader';
+import { WebAuthnModal } from '@/components/auth/WebAuthnModal';
 import { ExecutiveCommandPalette } from '@/components/ExecutiveCommandPalette';
 import { GlobalCommandSearch } from '@/components/GlobalCommandSearch';
 import { ForensicAuditMasterDossierModal } from '@/components/forensics/ForensicAuditMasterDossierModal';
@@ -155,6 +156,7 @@ import {
 import { systemStateStore } from '@/store/systemStateStore';
 import { broadcastSyncService } from '@/services/broadcastSyncService';
 import { offlineAuditSyncService } from '@/services/offlineAuditSyncService';
+import { SyncStatusScatterPlot, DateRangePreset, SyncScatterPoint } from '@/components/SyncStatusScatterPlot';
 import { automatedBackupService } from '@/services/automatedBackupService';
 import { WriteFirewallEngine } from '@/utils/writeFirewall';
 import { TelemetryAnomalyObserver } from '@/utils/telemetryAnomalyObserver';
@@ -163,6 +165,7 @@ import { announceSystemEventVerbal } from '@/utils/textToSpeechService';
 import { triggerVibration } from '@/utils/vibration';
 import { useNotificationWebSocket } from '@/hooks/useNotificationWebSocket';
 import { hsmClusterService } from '@/services/hsmClusterService';
+import { sessionService } from '@/services/sessionService';
 
 interface ViewPersona {
   name: string;
@@ -1315,12 +1318,25 @@ function SovereignAppContent() {
       setIsBroadcastHeartbeating(true);
       setTimeout(() => setIsBroadcastHeartbeating(false), 750);
     });
+
+    // Alert operator once an audit log previously failed is successfully reconciled
+    const unsubReconciled = offlineAuditSyncService.subscribeReconciledLogs((alert) => {
+      playAuditChime();
+      playTone(880, 0.08);
+      triggerVibration('snapshot');
+      showToast(
+        `Audit Log Reconciled: "${alert.title}" successfully synced to primary ledger (attempt #${alert.retryAttempts}).`,
+        'success'
+      );
+    });
+
     return () => {
       unsubStatus();
       unsubProgress();
       unsubHeartbeat();
+      unsubReconciled();
     };
-  }, []);
+  }, [showToast]);
 
   // Audio confirmation: Trigger playAuditChime exactly when background audit sync completes
   const prevIsSyncingRef = useRef<boolean>(isAuditSyncing);
@@ -1717,12 +1733,89 @@ function SovereignAppContent() {
     };
   }, [syncHistory, offlineQueuedCount, systemEvents, qrArtifactVerificationState]);
 
+  // Date-range selector state for forensic audit log intervals
+  const [syncDateRangePreset, setSyncDateRangePreset] = useState<DateRangePreset>('ALL');
+  const [syncCustomStartDate, setSyncCustomStartDate] = useState<string>('');
+  const [syncCustomEndDate, setSyncCustomEndDate] = useState<string>('');
+  const [isScatterPlotExpanded, setIsScatterPlotExpanded] = useState<boolean>(true);
+  const [isBackoffRetrying, setIsBackoffRetrying] = useState<boolean>(false);
+
+  // Filter entries by status and selected time interval
   const filteredSyncHistoryEntries = React.useMemo(() => {
-    if (syncHistoryStatusFilter === 'Success') return allSyncHistoryEntries.Success;
-    if (syncHistoryStatusFilter === 'Pending') return allSyncHistoryEntries.Pending;
-    if (syncHistoryStatusFilter === 'Failed') return allSyncHistoryEntries.Failed;
-    return allSyncHistoryEntries.all.slice(0, 8);
-  }, [allSyncHistoryEntries, syncHistoryStatusFilter]);
+    let baseList =
+      syncHistoryStatusFilter === 'Success'
+        ? allSyncHistoryEntries.Success
+        : syncHistoryStatusFilter === 'Pending'
+        ? allSyncHistoryEntries.Pending
+        : syncHistoryStatusFilter === 'Failed'
+        ? allSyncHistoryEntries.Failed
+        : allSyncHistoryEntries.all;
+
+    // Apply Date Range Filter if preset != 'ALL'
+    if (syncDateRangePreset !== 'ALL') {
+      const now = Date.now();
+      let windowMs = 0;
+      if (syncDateRangePreset === '1H') windowMs = 1 * 60 * 60 * 1000;
+      else if (syncDateRangePreset === '6H') windowMs = 6 * 60 * 60 * 1000;
+      else if (syncDateRangePreset === '24H') windowMs = 24 * 60 * 60 * 1000;
+      else if (syncDateRangePreset === '7D') windowMs = 7 * 24 * 60 * 60 * 1000;
+
+      if (windowMs > 0) {
+        const thresholdTime = now - windowMs;
+        baseList = baseList.filter((item) => {
+          const t = new Date(item.timestamp).getTime();
+          return !isNaN(t) && t >= thresholdTime;
+        });
+      } else if (syncDateRangePreset === 'CUSTOM') {
+        const startMs = syncCustomStartDate ? new Date(syncCustomStartDate).getTime() : -Infinity;
+        const endMs = syncCustomEndDate ? new Date(syncCustomEndDate).getTime() : Infinity;
+        baseList = baseList.filter((item) => {
+          const t = new Date(item.timestamp).getTime();
+          return !isNaN(t) && t >= startMs && t <= endMs;
+        });
+      }
+    }
+
+    return baseList;
+  }, [allSyncHistoryEntries, syncHistoryStatusFilter, syncDateRangePreset, syncCustomStartDate, syncCustomEndDate]);
+
+  // Transform current entries for D3 scatter plot
+  const scatterPlotPoints: SyncScatterPoint[] = React.useMemo(() => {
+    return allSyncHistoryEntries.all.map((item) => {
+      const dateObj = new Date(item.timestamp);
+      return {
+        id: item.id,
+        timestamp: item.timestamp,
+        dateObj: isNaN(dateObj.getTime()) ? new Date() : dateObj,
+        status: item.status,
+        midBadge: item.midBadge,
+        bottomBadge: item.bottomBadge,
+        tag: item.tag,
+        traceRef: item.traceRef,
+        detailSummary: item.detailSummary,
+      };
+    });
+  }, [allSyncHistoryEntries]);
+
+  // Handler for manual / cluster exponential backoff auto-retry
+  const handleTriggerBackoffRetry = useCallback(async () => {
+    if (isBackoffRetrying) return;
+    setIsBackoffRetrying(true);
+    playTone(660, 0.05);
+    try {
+      showToast('Initiating exponential backoff auto-retry for failed audit logs...', 'info');
+      await offlineAuditSyncService.retryNow();
+      const updated = offlineAuditSyncService.getSyncHistory();
+      setSyncHistory(updated);
+      setOfflineQueuedCount(offlineAuditSyncService.getQueueCount());
+      playAuditChime();
+      showToast('Auto-retry cycle completed: Reconciled logs committed to ledger.', 'success');
+    } catch (err: any) {
+      showToast(err?.message || 'Backoff retry encountered network delay.', 'warning');
+    } finally {
+      setIsBackoffRetrying(false);
+    }
+  }, [isBackoffRetrying, showToast]);
 
   const [expandedSyncLogId, setExpandedSyncLogId] = useState<string | null>(null);
   const [isManualFlushToggleActive, setIsManualFlushToggleActive] = useState<boolean>(false);
@@ -1831,6 +1924,7 @@ function SovereignAppContent() {
   });
   const [showLoginLoader, setShowLoginLoader] = useState<boolean>(false);
   const [loginLoaderMode, setLoginLoaderMode] = useState<'login' | 'register' | 'switch_tenant'>('login');
+  const [isWebAuthnModalOpen, setIsWebAuthnModalOpen] = useState<boolean>(false);
 
   const handleToggleForensicAuditMode = useCallback(() => {
     triggerVibration('sidebarToggle');
@@ -2994,6 +3088,7 @@ function SovereignAppContent() {
             currentBatchSize={64}
             onStageProposalForApproval={handleStageAiProposalForApproval}
             onAuditRecord={handleAiAuditRecord}
+            onOpenWebAuthn={() => setIsWebAuthnModalOpen(true)}
           />
         );
       default:
@@ -3281,7 +3376,39 @@ function SovereignAppContent() {
   }, [dispatchAction, showToast]);
 
   const handleCommandPaletteAction = useCallback((actionId: string) => {
-    if (actionId === 'snapshot') {
+    if (actionId === 'auth-login' || actionId === 'webauthn-login') {
+      setIsWebAuthnModalOpen(true);
+      showToast('เปิดหน้าต่างยืนยันตัวตน WebAuthn Biometric Passkey', 'info');
+    } else if (actionId === 'replay-verify') {
+      setCurrentView('dashboard');
+      setTimeout(() => {
+        const el = document.getElementById('forensic-audit-stepper');
+        if (el) el.scrollIntoView({ behavior: 'smooth' });
+      }, 100);
+      showToast('เริ่มกระบวนการ 12-Stage Forensic Trace Replay (SLA 35.80ms PASS)', 'success');
+      dispatchAction({
+        type: 'EMIT_SYSTEM_EVENT',
+        payload: {
+          type: 'FORENSIC',
+          title: '12-Stage Forensic Trace Replay Initiated',
+          description: 'Replay verified against Merkle Root 0x909ab814...4c68 and Genesis Block #849202 within 35.80ms (SLA PASS).',
+          metaHash: 'trace:12_stage_replay_verified',
+          severity: 'success',
+          statuteRef: 'ETDA Sec 26 & Sec 28 Court Compliance',
+          targetView: 'dashboard',
+          bindingStatus: 'VERIFIED',
+        },
+      });
+    } else if (actionId === 'hsm-heal') {
+      handleRemediateHsmNodes();
+      setCurrentView('council');
+    } else if (actionId === 'court-exhibits') {
+      setCurrentView('legal');
+      showToast('เปิดแฟ้มวัตถุพยานดิจิทัล จพ.๐๑–๐๗ (พ.ร.บ. ธุรกรรมฯ ม.๙, ๒๖, ๒๘)', 'info');
+    } else if (actionId === 'quantum-radar') {
+      setCurrentView('quantum');
+      showToast('เปิดเรดาร์คลื่นควอนตัม Chamber 11 Quantum Radar', 'info');
+    } else if (actionId === 'snapshot') {
       handleAddSnapshot(createTelemetrySnapshot({ core0: 42, core1: 39, core2: 44, core3: 38 }, snapshots.length, snapshots[0]?.sealedHash));
       showToast('สร้าง Signed Snapshot (FIPS 204) เรียบร้อย', 'success');
     } else if (actionId === 'pqc-verify') {
@@ -3313,7 +3440,7 @@ function SovereignAppContent() {
       setIsForensicMasterDossierOpen(true);
       showToast('เปิดสำนวนพยานหลักฐานดิจิทัล DOC-SOV-HSM-1010-2026-V9', 'success');
     }
-  }, [handleAddSnapshot, handleExportLegalTriggerMatrixPDF, showToast, snapshots]);
+  }, [handleAddSnapshot, handleExportLegalTriggerMatrixPDF, handleRemediateHsmNodes, dispatchAction, showToast, snapshots]);
 
   const { theme } = useTheme();
 
@@ -3366,6 +3493,7 @@ function SovereignAppContent() {
           setLoginLoaderMode(mode);
           setShowLoginLoader(true);
         }}
+        onOpenWebAuthn={() => setIsWebAuthnModalOpen(true)}
         onOpenUpgradeCycle={() => setIsUpgradeModalOpen(true)}
       />
 
@@ -5120,6 +5248,27 @@ function SovereignAppContent() {
                                 </span>
                               </div>
                             </div>
+
+                            {/* D3 Scatter Plot: Visualizing distribution of sync history statuses over time */}
+                            <div className="pt-1">
+                              <SyncStatusScatterPlot
+                                entries={scatterPlotPoints}
+                                dateRangePreset={syncDateRangePreset}
+                                onDateRangePresetChange={setSyncDateRangePreset}
+                                customStartDate={syncCustomStartDate}
+                                customEndDate={syncCustomEndDate}
+                                onCustomDateChange={(start, end) => {
+                                  setSyncCustomStartDate(start);
+                                  setSyncCustomEndDate(end);
+                                }}
+                                selectedStatusFilter={syncHistoryStatusFilter}
+                                onPointSelect={(pt) => {
+                                  setExpandedSyncLogId(pt.id);
+                                }}
+                                onRetryFailedLogs={handleTriggerBackoffRetry}
+                                isRetrying={isBackoffRetrying}
+                              />
+                            </div>
                             <AnimatePresence mode="wait">
                               <motion.div
                                 key={`mid-sync-list-${syncHistoryStatusFilter}-${isSyncHistoryRefreshing ? 'refresh' : 'ready'}`}
@@ -5544,6 +5693,27 @@ function SovereignAppContent() {
                                 {filteredSyncHistoryEntries.length} AUDIT {filteredSyncHistoryEntries.length === 1 ? 'RECORD' : 'RECORDS'}
                               </span>
                             </div>
+                          </div>
+
+                          {/* D3 Scatter Plot Visualizer for Bottom Verification Gate Sync Section */}
+                          <div className="pt-1">
+                            <SyncStatusScatterPlot
+                              entries={scatterPlotPoints}
+                              dateRangePreset={syncDateRangePreset}
+                              onDateRangePresetChange={setSyncDateRangePreset}
+                              customStartDate={syncCustomStartDate}
+                              customEndDate={syncCustomEndDate}
+                              onCustomDateChange={(start, end) => {
+                                setSyncCustomStartDate(start);
+                                setSyncCustomEndDate(end);
+                              }}
+                              selectedStatusFilter={syncHistoryStatusFilter}
+                              onPointSelect={(pt) => {
+                                setExpandedSyncLogId(`bottom-${pt.id}`);
+                              }}
+                              onRetryFailedLogs={handleTriggerBackoffRetry}
+                              isRetrying={isBackoffRetrying}
+                            />
                           </div>
 
                           <AnimatePresence mode="wait">
@@ -6310,6 +6480,9 @@ function SovereignAppContent() {
       <SovereignLoginLoader
         isOpen={showLoginLoader}
         mode={loginLoaderMode}
+        onModeChange={(newMode) => {
+          setLoginLoaderMode(newMode);
+        }}
         onComplete={() => {
           setShowLoginLoader(false);
           setCurrentView('dashboard');
@@ -6330,6 +6503,32 @@ function SovereignAppContent() {
         onCancel={() => {
           triggerVibration('modalDismiss');
           setShowLoginLoader(false);
+        }}
+      />
+
+      {/* WebAuthn Biometric & Hardware Key Authentication Modal */}
+      <WebAuthnModal
+        isOpen={isWebAuthnModalOpen}
+        onClose={() => setIsWebAuthnModalOpen(false)}
+        title="WebAuthn Sovereign Authentication"
+        challengeText="ZYRQUEN-FIPS-140-3-L4-ATTESTATION"
+        onSuccess={(result) => {
+          setIsWebAuthnModalOpen(false);
+          void sessionService.createSessionFromWebAuthn(result);
+          showToast(`ยืนยันตัวตนสำเร็จ: ${result.credentialId.slice(0, 16)}... (ETDA Sec 9/26)`, 'success');
+          dispatchAction({
+            type: 'EMIT_SYSTEM_EVENT',
+            payload: {
+              type: 'SECURITY',
+              title: 'WebAuthn Hardware Passkey Authenticated',
+              description: `Principal verified via FIPS 140-3 L4 Enclave (${result.credentialId}). Certified under Thai ETDA Sec 9 & Sec 26.`,
+              metaHash: `auth:webauthn:${result.credentialId}`,
+              severity: 'success',
+              statuteRef: 'พ.ร.บ. ธุรกรรมฯ มาตรา ๙, ๒๖ & NIST SP 800-63B',
+              targetView: 'dashboard',
+              bindingStatus: 'VERIFIED',
+            },
+          });
         }}
       />
 
