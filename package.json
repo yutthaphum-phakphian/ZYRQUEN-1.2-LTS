@@ -1,8 +1,11 @@
 {
-  "name": "zyrquen-sovereign-world-engine",
-  "private": true,
+  "name": "@zxsvzv00-cmyk/zyrquen-1.2-lts",
   "version": "1.2.1",
   "type": "module",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/zxsvzv00-cmyk/ZYRQUEN-1.2-LTS.git"
+  },
   "scripts": {
     "dev": "tsx server.ts",
     "build": "vite build",

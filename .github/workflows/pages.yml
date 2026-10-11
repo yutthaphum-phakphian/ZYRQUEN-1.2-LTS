@@ -36,9 +36,9 @@ jobs:
           node-version: 20
 
 
-      # 2. Install Packages with legacy peer deps for React 19 compatibility
+      # 2. Install locked dependencies
       - name: Install Dependencies
-        run: npm ci --legacy-peer-deps || npm install --legacy-peer-deps
+        run: npm ci
 
       # 3. Build Project with Vite (Relative Base Path for GitHub Pages)
       - name: Build Project
@@ -64,7 +64,6 @@ jobs:
         uses: actions/configure-pages@v5
         with:
           enablement: true
-        continue-on-error: true
 
       # 6. Upload Artifact
       - name: Upload Artifact
@@ -75,6 +74,4 @@ jobs:
       # 7. Deploy to GitHub Pages
       - name: Deploy to GitHub Pages
         id: deployment
-        continue-on-error: true
         uses: actions/deploy-pages@v4
-
