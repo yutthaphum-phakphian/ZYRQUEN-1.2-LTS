@@ -80,6 +80,7 @@ interface NavigationProps {
   isSidebarOpen?: boolean;
   onToggleSidebar?: () => void;
   onTriggerLoginLoader?: (mode?: 'login' | 'register' | 'switch_tenant') => void;
+  onOpenWebAuthn?: () => void;
   isCopilotOpen?: boolean;
   onToggleCopilot?: () => void;
   onOpenUpgradeCycle?: () => void;
@@ -156,6 +157,7 @@ export const Navigation: React.FC<NavigationProps> = ({
   isSidebarOpen = false,
   onToggleSidebar,
   onTriggerLoginLoader,
+  onOpenWebAuthn,
   isCopilotOpen: externalIsCopilotOpen,
   onToggleCopilot,
   onOpenUpgradeCycle,
@@ -535,6 +537,23 @@ export const Navigation: React.FC<NavigationProps> = ({
               effectiveIsCopilotOpen ? 'bg-black/20 text-black border-black/30 font-bold' : 'bg-purple-500/20 text-purple-300 border-purple-500/30'
             }`}>Ω1</span>
           </button>
+
+          {/* Sovereign WebAuthn Biometric & Login Trigger Button */}
+          {onOpenWebAuthn && (
+            <button
+              id="btn-nav-webauthn-login"
+              onClick={() => {
+                playTone(720, 0.08);
+                onOpenWebAuthn();
+              }}
+              className="group flex items-center gap-1 sm:gap-1.5 px-2 sm:px-3 py-1.5 rounded-xl bg-gradient-to-r from-emerald-500/20 to-teal-500/15 hover:from-emerald-500/30 hover:to-teal-500/25 border border-emerald-500/40 hover:border-emerald-400 text-emerald-300 hover:text-emerald-100 font-mono text-xs transition-all cursor-pointer active:scale-95 shadow-sm shrink-0"
+              title="เข้าสู่ระบบด้วย WebAuthn Passkey (พ.ร.บ. ธุรกรรมฯ ม.๙ / ม.๒๖)"
+            >
+              <Fingerprint className="w-3.5 h-3.5 text-emerald-400 group-hover:scale-110 transition-transform" />
+              <span className="hidden sm:inline font-bold tracking-wide">Login</span>
+              <span className="hidden md:inline px-1 py-0.2 rounded font-mono text-[9px] bg-emerald-500/20 text-emerald-300 border border-emerald-500/30 font-bold">FIPS</span>
+            </button>
+          )}
 
           {/* Global Theme Switcher (Terminal Green / Deep Space Violet / Sovereign Cyan) */}
           <div id="theme-switcher-nav" className="shrink-0">
