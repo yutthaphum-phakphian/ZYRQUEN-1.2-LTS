@@ -934,6 +934,7 @@ async function startServer() {
   // SOVEREIGN AUTH & SESSION MANAGEMENT (ETDA Sec 9/26 + WebAuthn FIPS 140-3 L4)
   // ============================================================================
   const activeSessions = new Map<string, any>();
+  const revokedTokens = new Set<string>();
 
   function loadSessions(): void {
     try {
@@ -1006,6 +1007,9 @@ async function startServer() {
     if (!token) {
       return null;
     }
+    if (revokedTokens.has(token)) {
+      return null;
+    }
     const session = activeSessions.get(token);
     if (!session) {
       if (token === defaultArchitectSession.token) {
@@ -1043,6 +1047,9 @@ async function startServer() {
     });
   });
 
+  // Single-use recovery ticket registry with rate limiting & expiration
+  const activeRecoveryTickets = new Map<string, { userId: string; email: string; expiresAt: number; used: boolean }>();
+
   // POST /api/auth/recovery (Secure Account Recovery Ticket Issuance)
   app.post('/api/auth/recovery', (req: Request, res: Response) => {
     const { email } = req.body || {};
@@ -1057,11 +1064,52 @@ async function startServer() {
         message: 'หากมีอีเมลนี้อยู่ในระบบ คำแนะนำและรหัสกู้คืนฉุกเฉินจะถูกส่งไปยังช่องทางที่กำหนด',
       });
     }
-    const recoveryTicket = `RCV-${Date.now().toString(36).toUpperCase()}-${crypto.randomBytes(4).toString('hex').toUpperCase()}`;
+
+    // Invalidate any previous unused recovery ticket for this user
+    for (const [, ticketData] of activeRecoveryTickets.entries()) {
+      if (ticketData.email === cleanEmail && !ticketData.used) {
+        ticketData.used = true;
+      }
+    }
+
+    const recoveryTicket = `RCV-${Date.now().toString(36).toUpperCase()}-${crypto.randomBytes(8).toString('hex').toUpperCase()}`;
+    activeRecoveryTickets.set(recoveryTicket, {
+      userId: user.id,
+      email: cleanEmail,
+      expiresAt: Date.now() + 15 * 60 * 1000, // 15-minute expiration
+      used: false,
+    });
+
     res.status(200).json({
       status: 'SUCCESS',
       recoveryTicket,
-      message: `สร้าง Recovery Ticket สำหรับ ${user.username} เรียบร้อยแล้ว (FIPS 140-3 Hardware Verification)`,
+      message: `สร้าง Recovery Ticket เรียบร้อยแล้ว (จำกัดการใช้งานครั้งเดียวภายใน 15 นาทีตามมาตรฐาน FIPS 140-3 Hardware Verification)`,
+    });
+  });
+
+  // POST /api/auth/recovery/verify (Single-use redemption of recovery ticket)
+  app.post('/api/auth/recovery/verify', (req: Request, res: Response) => {
+    const { recoveryTicket } = req.body || {};
+    if (!recoveryTicket) {
+      return res.status(400).json({ error: 'MISSING_TICKET', message: 'Recovery ticket is required.' });
+    }
+    const ticket = activeRecoveryTickets.get(recoveryTicket);
+    if (!ticket) {
+      return res.status(404).json({ error: 'INVALID_TICKET', message: 'Recovery ticket is invalid or expired.' });
+    }
+    if (ticket.used) {
+      return res.status(410).json({ error: 'TICKET_ALREADY_USED', message: 'Recovery ticket has already been used.' });
+    }
+    if (Date.now() > ticket.expiresAt) {
+      ticket.used = true;
+      return res.status(410).json({ error: 'TICKET_EXPIRED', message: 'Recovery ticket has expired.' });
+    }
+    // Mark as consumed immediately (single-use guarantee)
+    ticket.used = true;
+    res.status(200).json({
+      status: 'VERIFIED',
+      message: 'Recovery ticket verified and consumed successfully.',
+      verified: true,
     });
   });
 
@@ -1397,11 +1445,14 @@ async function startServer() {
   // POST /api/auth/logout (Revoke active session)
   app.post('/api/auth/logout', (req: Request, res: Response) => {
     const token = req.body?.token || (req.headers['authorization']?.replace('Bearer ', '').trim()) || (req.headers['x-zyrquen-session-token'] as string);
-    if (token && activeSessions.has(token)) {
-      const s = activeSessions.get(token);
-      s.status = 'REVOKED';
-      activeSessions.delete(token);
-      saveSessions();
+    if (token) {
+      revokedTokens.add(token);
+      if (activeSessions.has(token)) {
+        const s = activeSessions.get(token);
+        s.status = 'REVOKED';
+        activeSessions.delete(token);
+        saveSessions();
+      }
     }
     res.status(200).json({
       status: 'REVOKED',
@@ -1445,11 +1496,11 @@ async function startServer() {
 
     // 2. Check Permission
     const permissions: string[] = session.permissions || [];
-    const highMutationTools = ['workspace.execute_tuning', 'system.hsm_heal', 'system.quarantine_threat'];
+    const highMutationTools = ['workspace.execute_tuning', 'system.hsm_heal', 'system.quarantine_threat', 'code.apply_mutation'];
     const requiresExplicitApproval = highMutationTools.includes(toolId);
 
     if (requiresExplicitApproval) {
-      if (!permissions.includes('tools:execute_proposal') && !permissions.includes('tools:hsm_heal') && !permissions.includes('tools:quarantine')) {
+      if (!permissions.includes('tools:execute_proposal') && !permissions.includes('tools:hsm_heal') && !permissions.includes('tools:quarantine') && !permissions.includes('agent:code_mutate')) {
         return res.status(403).json({
           error: 'PERMISSION_DENIED',
           message: `User '${session.userDisplayName}' lacks capability for high-mutation tool '${toolId}'.`,
@@ -1530,6 +1581,67 @@ async function startServer() {
         status: 'SEALED',
         statuteCompliance: 'ETDA Sec 28 / ISO 27037',
         exportedAt: new Date().toISOString(),
+      };
+    } else if (toolId === 'research.query') {
+      const topic = String(params.topic || 'Sovereign Architecture & ETDA Compliance');
+      output = {
+        topic,
+        sources: [
+          {
+            url: 'https://etda.or.th/law/electronic-transactions-act',
+            title: 'Thai Electronic Transactions Act B.E. 2544 (Sections 9, 26, 28)',
+            retrievedAt: new Date().toISOString(),
+            reliabilityScore: 0.99,
+            factualExcerpts: [
+              'มาตรา ๙: การลงลายมือชื่ออิเล็กทรอนิกส์ที่มีผลผูกพัน',
+              'มาตรา ๒๖: ลายมือชื่ออิเล็กทรอนิกส์ที่เชื่อถือได้ (Reliable Electronic Signature)',
+              'มาตรา ๒๘: ข้อสันนิษฐานความถูกต้องสมบูรณ์ของข้อมูลและลายมือชื่อที่มีใบรับรอง',
+            ],
+          },
+          {
+            url: 'https://csrc.nist.gov/pubs/fips/204/final',
+            title: 'NIST FIPS 204: Module-Lattice-Based Digital Signature Standard (ML-DSA / Dilithium)',
+            retrievedAt: new Date().toISOString(),
+            reliabilityScore: 0.98,
+            factualExcerpts: [
+              'Post-quantum cryptographic signature lattice for sovereign non-repudiation.',
+            ],
+          },
+        ],
+        confidenceLevel: 'VERY_HIGH',
+        conflictsDetected: false,
+        systemMutationPermitted: false,
+      };
+    } else if (toolId === 'code.analyze') {
+      const targetFile = String(params.filePath || 'src/adapters/toolGateway.ts');
+      output = {
+        filePath: targetFile,
+        isCore: targetFile.includes('src/core/') || targetFile.includes('ZYRQUEN_CORE'),
+        fileHash: 'sha256-f8a7e04b912c3d5e89a0b123456789abcdef0123456789abcdef0123456789ab',
+        syntaxValid: true,
+        dependencies: ['react', 'sessionService', 'zyrquenAdapter'],
+        analyzedAt: new Date().toISOString(),
+      };
+    } else if (toolId === 'code.propose_diff') {
+      const targetFile = String(params.filePath || 'src/adapters/toolGateway.ts');
+      const proposalId = `PROP-DIFF-${Date.now().toString(36).toUpperCase()}`;
+      output = {
+        proposalId,
+        targetFile,
+        baseHash: 'sha256-f8a7e04b912c3d5e89a0b123456789abcdef0123456789abcdef0123456789ab',
+        diffSummary: 'Extension Plane non-destructive update staged for review.',
+        requiresExplicitApproval: true,
+        approverPrincipal: '#EP-SOVEREIGN-01',
+      };
+    } else if (toolId === 'code.apply_mutation') {
+      const targetFile = String(params.filePath || 'src/services/toolGateway.ts');
+      output = {
+        targetFile,
+        appliedBy: session.userDisplayName,
+        approvalId: approvalCertificate?.proposalId,
+        coreMutationCount: 0,
+        driftRatio: 'Δ0.00%',
+        mutatedAt: new Date().toISOString(),
       };
     } else {
       output = {

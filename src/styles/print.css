@@ -164,11 +164,23 @@
   .no-print {
     display: none !important;
   }
+
+  /* 7. ป้องกันการเกิดหน้าเปล่า (Prevent blank page trailing overflow) */
+  html, body {
+    height: auto !important;
+    overflow: visible !important;
+    margin: 0 !important;
+    padding: 0 !important;
+  }
 }
 
 @page landscape-legal {
   size: A4 landscape;
-  margin: 8mm;
+  margin: 6mm;
+}
+
+@page {
+  margin: 6mm;
 }
 
 body.court-landscape-print,

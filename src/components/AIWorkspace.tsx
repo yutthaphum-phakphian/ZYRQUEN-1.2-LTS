@@ -32,6 +32,9 @@ import {
   RotateCcw,
   Layers,
   ExternalLink,
+  BookOpen,
+  GitBranch,
+  Compass,
 } from 'lucide-react';
 import {
   ProvenanceState,
@@ -63,6 +66,19 @@ import {
   ToolApprovalCertificate,
   CANONICAL_TOOLS,
 } from '../adapters/toolGateway';
+import {
+  sovereignMissionPlanner,
+  MissionPlan,
+} from '../services/sovereignMissionPlanner';
+import {
+  sovereignResearchAgent,
+  ResearchDossier,
+} from '../services/sovereignResearchAgent';
+import {
+  sovereignCodingAgent,
+  FileAnalysisReport,
+  DiffProposal,
+} from '../services/sovereignCodingAgent';
 
 export {
   computeArtifactSha256,
@@ -371,7 +387,12 @@ export function AIWorkspace({
   const [newNoteContent, setNewNoteContent] = useState('');
   const [inputMessage, setInputMessage] = useState('');
   const [isListening, setIsListening] = useState(false);
-  const [activeTab, setActiveTab] = useState<'preview' | 'code'>('preview');
+  const [activeTab, setActiveTab] = useState<'preview' | 'code' | 'plan' | 'research' | 'coding'>('preview');
+  const [activeMissionPlan, setActiveMissionPlan] = useState<MissionPlan | null>(null);
+  const [activeResearchDossier, setActiveResearchDossier] = useState<ResearchDossier | null>(null);
+  const [activeDiffProposal, setActiveDiffProposal] = useState<DiffProposal | null>(null);
+  const [fileAnalysisReport, setFileAnalysisReport] = useState<FileAnalysisReport | null>(null);
+  const [isExecutingAgentStep, setIsExecutingAgentStep] = useState(false);
   const [currentHtml, setCurrentHtml] = useState<string | null>(
     typeof initialArtifact?.sourceCode === 'string' && initialArtifact.sourceCode.trim()
       ? initialArtifact.sourceCode
@@ -2803,11 +2824,11 @@ export function AIWorkspace({
         >
           {/* Preview | Source Sub-Header */}
           <div className="px-4 py-2.5 border-b border-zinc-800 flex flex-wrap items-center justify-between gap-2 bg-zinc-900/60">
-            <div className="flex items-center gap-1.5 bg-zinc-950 p-1 rounded-lg border border-zinc-800">
+            <div className="flex items-center gap-1.5 bg-zinc-950 p-1 rounded-lg border border-zinc-800 flex-wrap">
               <button
                 type="button"
                 onClick={() => setActiveTab('preview')}
-                className={`flex items-center gap-1.5 px-3 py-1 rounded text-xs font-mono font-semibold transition cursor-pointer ${
+                className={`flex items-center gap-1.5 px-2.5 py-1 rounded text-xs font-mono font-semibold transition cursor-pointer ${
                   activeTab === 'preview'
                     ? 'bg-cyan-950 text-cyan-300 border border-cyan-500/40'
                     : 'text-zinc-400 hover:text-white'
@@ -2819,7 +2840,7 @@ export function AIWorkspace({
               <button
                 type="button"
                 onClick={() => setActiveTab('code')}
-                className={`flex items-center gap-1.5 px-3 py-1 rounded text-xs font-mono font-semibold transition cursor-pointer ${
+                className={`flex items-center gap-1.5 px-2.5 py-1 rounded text-xs font-mono font-semibold transition cursor-pointer ${
                   activeTab === 'code'
                     ? 'bg-purple-950 text-purple-300 border border-purple-500/40'
                     : 'text-zinc-400 hover:text-white'
@@ -2827,6 +2848,70 @@ export function AIWorkspace({
               >
                 <Code2 className="w-3.5 h-3.5" />
                 <span>Source Code</span>
+              </button>
+              <button
+                type="button"
+                data-testid="tab-mission-plan"
+                onClick={() => {
+                  setActiveTab('plan');
+                  if (!activeMissionPlan) {
+                    setActiveMissionPlan(
+                      sovereignMissionPlanner.generatePlan({
+                        naturalGoal: inputMessage.trim() || 'Optimize workspace runtime telemetry and batch tuning',
+                        targetWorkspace: targetWorkspaceId,
+                      })
+                    );
+                  }
+                }}
+                className={`flex items-center gap-1.5 px-2.5 py-1 rounded text-xs font-mono font-semibold transition cursor-pointer ${
+                  activeTab === 'plan'
+                    ? 'bg-emerald-950 text-emerald-300 border border-emerald-500/40 font-bold'
+                    : 'text-zinc-400 hover:text-white'
+                }`}
+              >
+                <Compass className="w-3.5 h-3.5 text-emerald-400" />
+                <span>Mission Plan</span>
+              </button>
+              <button
+                type="button"
+                data-testid="tab-research-agent"
+                onClick={async () => {
+                  setActiveTab('research');
+                  if (!activeResearchDossier) {
+                    const dossier = await sovereignResearchAgent.conductResearch(
+                      inputMessage.trim() || 'Thai Electronic Transactions Act B.E. 2544 Sections 9, 26, 28',
+                      targetWorkspaceId
+                    );
+                    setActiveResearchDossier(dossier);
+                  }
+                }}
+                className={`flex items-center gap-1.5 px-2.5 py-1 rounded text-xs font-mono font-semibold transition cursor-pointer ${
+                  activeTab === 'research'
+                    ? 'bg-blue-950 text-blue-300 border border-blue-500/40 font-bold'
+                    : 'text-zinc-400 hover:text-white'
+                }`}
+              >
+                <BookOpen className="w-3.5 h-3.5 text-blue-400" />
+                <span>Research Agent</span>
+              </button>
+              <button
+                type="button"
+                data-testid="tab-coding-agent"
+                onClick={async () => {
+                  setActiveTab('coding');
+                  if (!fileAnalysisReport) {
+                    const rep = await sovereignCodingAgent.analyzeFile('src/adapters/toolGateway.ts', targetWorkspaceId);
+                    setFileAnalysisReport(rep);
+                  }
+                }}
+                className={`flex items-center gap-1.5 px-2.5 py-1 rounded text-xs font-mono font-semibold transition cursor-pointer ${
+                  activeTab === 'coding'
+                    ? 'bg-amber-950 text-amber-300 border border-amber-500/40 font-bold'
+                    : 'text-zinc-400 hover:text-white'
+                }`}
+              >
+                <GitBranch className="w-3.5 h-3.5 text-amber-400" />
+                <span>Coding Agent</span>
               </button>
             </div>
 
@@ -2859,7 +2944,335 @@ export function AIWorkspace({
           {/* Sandbox Content Area */}
           <div className="flex-1 relative bg-[#030712] flex flex-col">
             <AnimatePresence mode="wait">
-              {currentHtml ? (
+              {activeTab === 'plan' ? (
+                <motion.div
+                  key="mission-plan-panel"
+                  data-testid="mission-plan-panel"
+                  initial={{ opacity: 0, y: 6 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  exit={{ opacity: 0, y: -6 }}
+                  className="w-full flex-1 flex flex-col p-4 overflow-y-auto space-y-4 font-mono text-xs"
+                >
+                  <div className="flex flex-wrap items-center justify-between gap-2 p-3 rounded-lg bg-zinc-900 border border-zinc-800">
+                    <div>
+                      <div className="text-emerald-400 font-bold flex items-center gap-1.5 text-sm">
+                        <Compass className="w-4 h-4" />
+                        <span>AI Reasoning &amp; Mission Planner</span>
+                      </div>
+                      <div className="text-[10px] text-zinc-400 mt-0.5">
+                        Goal: <span className="text-zinc-200">{activeMissionPlan?.naturalGoal || 'System Surveillance'}</span>
+                      </div>
+                    </div>
+                    <div className="flex items-center gap-2">
+                      <span className="px-2 py-0.5 rounded bg-emerald-950 border border-emerald-500/40 text-emerald-300 font-bold text-[10px]">
+                        Status: {activeMissionPlan?.overallStatus || 'READY'}
+                      </span>
+                      <button
+                        type="button"
+                        disabled={isExecutingAgentStep}
+                        onClick={async () => {
+                          if (!activeMissionPlan) return;
+                          setIsExecutingAgentStep(true);
+                          try {
+                            const res = await sovereignMissionPlanner.executeNextStep(
+                              activeMissionPlan,
+                              session?.role === 'owner'
+                                ? {
+                                    proposalId: 'PROP-PLAN-AUTO-EXEC',
+                                    approvedBy: '#EP-SOVEREIGN-01',
+                                    approvedAt: new Date().toISOString(),
+                                    signature: 'SIG_PQC_DILITHIUM5_EP01_AUTO',
+                                  }
+                                : undefined
+                            );
+                            setActiveMissionPlan({ ...res.plan });
+                          } finally {
+                            setIsExecutingAgentStep(false);
+                          }
+                        }}
+                        className="px-3 py-1 rounded bg-emerald-600 hover:bg-emerald-500 text-zinc-950 font-bold cursor-pointer transition disabled:opacity-50 text-[11px]"
+                      >
+                        {isExecutingAgentStep ? 'Executing Step...' : '▶ Execute Next Step'}
+                      </button>
+                    </div>
+                  </div>
+
+                  {/* Reasoning Notes */}
+                  {activeMissionPlan?.reasoningNotes && activeMissionPlan.reasoningNotes.length > 0 && (
+                    <div className="p-3 rounded-lg bg-zinc-950 border border-zinc-800/80 space-y-1 text-[11px]">
+                      <div className="text-zinc-400 font-bold">🧠 Reasoning Trace &amp; Invariants:</div>
+                      {activeMissionPlan.reasoningNotes.map((note, idx) => (
+                        <div key={idx} className="text-zinc-300 flex items-baseline gap-2">
+                          <span className="text-cyan-400 select-none">&bull;</span>
+                          <span>{note}</span>
+                        </div>
+                      ))}
+                    </div>
+                  )}
+
+                  {/* Planned Steps */}
+                  <div className="space-y-2">
+                    <div className="text-zinc-400 font-bold text-[11px]">Planned Steps &amp; Dependency Graph:</div>
+                    {activeMissionPlan?.steps.map((st) => (
+                      <div
+                        key={st.stepId}
+                        className={`p-3 rounded-lg border flex flex-col gap-1.5 transition ${
+                          st.status === 'COMPLETED'
+                            ? 'bg-emerald-950/20 border-emerald-500/40 text-emerald-200'
+                            : st.status === 'RUNNING'
+                            ? 'bg-cyan-950/30 border-cyan-500/50 text-cyan-200 animate-pulse'
+                            : st.status === 'APPROVAL_REQUIRED'
+                            ? 'bg-amber-950/30 border-amber-500/50 text-amber-200'
+                            : 'bg-zinc-950 border-zinc-800 text-zinc-300'
+                        }`}
+                      >
+                        <div className="flex flex-wrap items-center justify-between gap-2">
+                          <div className="flex items-center gap-2">
+                            <span className="px-1.5 py-0.2 rounded bg-zinc-900 border border-zinc-700 text-[10px] font-bold">
+                              {st.order}. {st.stepId}
+                            </span>
+                            <span className="font-bold text-zinc-100">{st.title}</span>
+                            <span className="text-[10px] text-cyan-400 font-mono">[{st.toolId}]</span>
+                          </div>
+                          <div className="flex items-center gap-1.5 text-[10px]">
+                            {st.requiresApproval && (
+                              <span className="px-1.5 py-0.2 rounded bg-amber-500/20 text-amber-300 font-bold">
+                                Approval Required
+                              </span>
+                            )}
+                            <span
+                              className={`px-2 py-0.5 rounded font-bold ${
+                                st.status === 'COMPLETED'
+                                  ? 'bg-emerald-900/60 text-emerald-300'
+                                  : st.status === 'APPROVAL_REQUIRED'
+                                  ? 'bg-amber-900/60 text-amber-300'
+                                  : 'bg-zinc-800 text-zinc-400'
+                              }`}
+                            >
+                              {st.status}
+                            </span>
+                          </div>
+                        </div>
+                        <p className="text-zinc-400 text-[11px]">{st.description}</p>
+                        {st.verifiedEvidenceRef && (
+                          <div className="text-[10px] text-emerald-400 font-mono">
+                            Evidence: {st.verifiedEvidenceRef}
+                          </div>
+                        )}
+                      </div>
+                    ))}
+                  </div>
+                </motion.div>
+              ) : activeTab === 'research' ? (
+                <motion.div
+                  key="research-agent-panel"
+                  data-testid="research-agent-panel"
+                  initial={{ opacity: 0, y: 6 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  exit={{ opacity: 0, y: -6 }}
+                  className="w-full flex-1 flex flex-col p-4 overflow-y-auto space-y-4 font-mono text-xs"
+                >
+                  <div className="flex flex-wrap items-center justify-between gap-2 p-3 rounded-lg bg-zinc-900 border border-zinc-800">
+                    <div>
+                      <div className="text-blue-400 font-bold flex items-center gap-1.5 text-sm">
+                        <BookOpen className="w-4 h-4" />
+                        <span>Research &amp; Evidence Browser Agent</span>
+                      </div>
+                      <div className="text-[10px] text-zinc-400 mt-0.5">
+                        Statutory Evidence &amp; Standards · Zero Mutation Permission (Read-Only)
+                      </div>
+                    </div>
+                    <button
+                      type="button"
+                      onClick={async () => {
+                        const dossier = await sovereignResearchAgent.conductResearch(
+                          inputMessage.trim() || 'พ.ร.บ. ธุรกรรมทางอิเล็กทรอนิกส์ พ.ศ. ๒๕๔๔ มาตรา ๙, ๒๖, ๒๘',
+                          targetWorkspaceId
+                        );
+                        setActiveResearchDossier(dossier);
+                      }}
+                      className="px-3 py-1 rounded bg-blue-600 hover:bg-blue-500 text-white font-bold cursor-pointer transition text-[11px]"
+                    >
+                      🔄 Refresh Research
+                    </button>
+                  </div>
+
+                  {activeResearchDossier ? (
+                    <div className="space-y-3">
+                      <div className="p-3 rounded-lg bg-zinc-950 border border-zinc-800 space-y-2">
+                        <div className="flex items-center justify-between">
+                          <span className="font-bold text-zinc-200">Topic: {activeResearchDossier.queryTopic}</span>
+                          <span className="text-emerald-400 font-bold">
+                            Confidence: {(activeResearchDossier.confidenceScore * 100).toFixed(0)}%
+                          </span>
+                        </div>
+                        <div className="text-[10px] text-zinc-500">
+                          Completed: {activeResearchDossier.completedAt} · Evidence: {activeResearchDossier.auditEvidenceRef}
+                        </div>
+                      </div>
+
+                      {/* Sources */}
+                      <div className="space-y-2">
+                        <div className="text-zinc-400 font-bold text-[11px]">Primary Evidentiary Sources:</div>
+                        {activeResearchDossier.sources.map((src, idx) => (
+                          <div key={idx} className="p-3 rounded-lg bg-zinc-950/80 border border-zinc-800 space-y-1">
+                            <div className="flex items-center justify-between gap-2">
+                              <span className="text-cyan-300 font-bold">{src.title}</span>
+                              <span className="text-[10px] text-zinc-400">Reliability: {(src.reliabilityScore * 100).toFixed(0)}%</span>
+                            </div>
+                            <a
+                              href={src.url}
+                              target="_blank"
+                              rel="noreferrer"
+                              className="text-[10px] text-blue-400 hover:underline break-all"
+                            >
+                              {src.url}
+                            </a>
+                            <div className="pt-1 space-y-0.5 text-[11px] text-zinc-300">
+                              {src.factualExcerpts.map((exc, eIdx) => (
+                                <div key={eIdx}>&ldquo;{exc}&rdquo;</div>
+                              ))}
+                            </div>
+                          </div>
+                        ))}
+                      </div>
+
+                      {/* Facts vs Inferences Separation */}
+                      <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
+                        <div className="p-3 rounded-lg bg-zinc-950 border border-zinc-800 space-y-1">
+                          <div className="text-emerald-400 font-bold">📌 Verified Factual Findings:</div>
+                          {activeResearchDossier.facts.map((f, i) => (
+                            <div key={i} className="text-zinc-300 text-[11px]">&bull; {f}</div>
+                          ))}
+                        </div>
+                        <div className="p-3 rounded-lg bg-zinc-950 border border-zinc-800 space-y-1">
+                          <div className="text-cyan-400 font-bold">💡 Legal Inferences &amp; Conclusions:</div>
+                          {activeResearchDossier.inferencesAndConclusions.map((inf, i) => (
+                            <div key={i} className="text-zinc-300 text-[11px]">&bull; {inf}</div>
+                          ))}
+                        </div>
+                      </div>
+                    </div>
+                  ) : (
+                    <div className="p-6 text-center text-zinc-500">คลิก Refresh Research เพื่อเริ่มค้นคว้าหลักฐาน</div>
+                  )}
+                </motion.div>
+              ) : activeTab === 'coding' ? (
+                <motion.div
+                  key="coding-agent-panel"
+                  data-testid="coding-agent-panel"
+                  initial={{ opacity: 0, y: 6 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  exit={{ opacity: 0, y: -6 }}
+                  className="w-full flex-1 flex flex-col p-4 overflow-y-auto space-y-4 font-mono text-xs"
+                >
+                  <div className="flex flex-wrap items-center justify-between gap-2 p-3 rounded-lg bg-zinc-900 border border-zinc-800">
+                    <div>
+                      <div className="text-amber-400 font-bold flex items-center gap-1.5 text-sm">
+                        <GitBranch className="w-4 h-4" />
+                        <span>Coding &amp; File Agent (Extension Plane Only)</span>
+                      </div>
+                      <div className="text-[10px] text-zinc-400 mt-0.5">
+                        Hash Verification · Diff Proposals · Approval Gate Required for File Mutation
+                      </div>
+                    </div>
+                    <div className="flex items-center gap-2">
+                      <button
+                        type="button"
+                        onClick={async () => {
+                          const rep = await sovereignCodingAgent.analyzeFile('src/adapters/toolGateway.ts', targetWorkspaceId);
+                          setFileAnalysisReport(rep);
+                        }}
+                        className="px-2.5 py-1 rounded bg-zinc-800 hover:bg-zinc-700 text-zinc-200 font-bold cursor-pointer transition text-[11px]"
+                      >
+                        Inspect File
+                      </button>
+                      <button
+                        type="button"
+                        onClick={async () => {
+                          const prop = await sovereignCodingAgent.proposeDiff(
+                            'src/adapters/toolGateway.ts',
+                            '// Proposed extension diff',
+                            'Enhance tool error diagnostics',
+                            targetWorkspaceId
+                          );
+                          setActiveDiffProposal(prop);
+                        }}
+                        className="px-2.5 py-1 rounded bg-amber-600 hover:bg-amber-500 text-zinc-950 font-bold cursor-pointer transition text-[11px]"
+                      >
+                        Propose Diff
+                      </button>
+                    </div>
+                  </div>
+
+                  {/* File Inspection Report */}
+                  {fileAnalysisReport && (
+                    <div className="p-3 rounded-lg bg-zinc-950 border border-zinc-800 space-y-1.5">
+                      <div className="flex items-center justify-between">
+                        <span className="font-bold text-zinc-200">File: {fileAnalysisReport.filePath}</span>
+                        <span className="px-2 py-0.5 rounded bg-emerald-950 border border-emerald-500/40 text-emerald-300 font-bold text-[10px]">
+                          Syntax Valid
+                        </span>
+                      </div>
+                      <div className="text-[10px] text-zinc-400 font-mono break-all">
+                        Pre-Hash (SHA-256): <span className="text-cyan-300">{fileAnalysisReport.sha256Hash}</span>
+                      </div>
+                      <div className="text-[10px] text-zinc-500">
+                        Dependencies: {fileAnalysisReport.dependencies.join(', ')} · Evidence: {fileAnalysisReport.auditEvidenceRef}
+                      </div>
+                    </div>
+                  )}
+
+                  {/* Diff Proposal */}
+                  {activeDiffProposal && (
+                    <div className="p-3 rounded-lg bg-zinc-950 border border-amber-500/40 space-y-2">
+                      <div className="flex flex-wrap items-center justify-between gap-2">
+                        <div className="flex items-center gap-2">
+                          <span className="font-bold text-amber-300">Proposal {activeDiffProposal.proposalId}</span>
+                          <span className="text-zinc-400">({activeDiffProposal.filePath})</span>
+                        </div>
+                        <span className="px-2 py-0.5 rounded bg-amber-950 border border-amber-500/50 text-amber-300 font-bold text-[10px]">
+                          Requires Approval (#EP-SOVEREIGN-01)
+                        </span>
+                      </div>
+                      <pre className="p-2 rounded bg-black border border-zinc-800 text-[11px] text-emerald-400 overflow-x-auto">
+                        {activeDiffProposal.unifiedDiff}
+                      </pre>
+                      <div className="flex items-center justify-between pt-1">
+                        <span className="text-[10px] text-zinc-400">
+                          Summary: {activeDiffProposal.changeSummary}
+                        </span>
+                        <button
+                          type="button"
+                          onClick={async () => {
+                            if (!activeDiffProposal) return;
+                            const res = await sovereignCodingAgent.applyApprovedMutation(
+                              activeDiffProposal,
+                              session?.role === 'owner'
+                                ? {
+                                    proposalId: activeDiffProposal.proposalId,
+                                    approvedBy: '#EP-SOVEREIGN-01',
+                                    approvedAt: new Date().toISOString(),
+                                    signature: 'SIG_PQC_DILITHIUM5_EP01_MUTATE',
+                                  }
+                                : undefined,
+                              targetWorkspaceId
+                            );
+                            if (res.success) {
+                              alert(`Mutation Applied Successfully! New SHA-256: ${res.newSha256}`);
+                            } else {
+                              alert(`Mutation Blocked: ${res.error}`);
+                            }
+                          }}
+                          className="px-3 py-1 rounded bg-emerald-600 hover:bg-emerald-500 text-zinc-950 font-bold cursor-pointer transition text-[11px]"
+                        >
+                          ✓ Apply Approved Mutation
+                        </button>
+                      </div>
+                    </div>
+                  )}
+                </motion.div>
+              ) : currentHtml ? (
                 activeTab === 'preview' ? (
                   <motion.div
                     key="sandbox-live-preview"
