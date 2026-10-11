@@ -12,18 +12,17 @@ import {
   Trash2,
   Lock,
   Cpu,
-  Smartphone,
+  User,
+  LogOut,
+  Mail,
   Laptop,
-  Check,
-  Copy,
-  Terminal,
-  FileCheck,
 } from 'lucide-react';
 import {
   webAuthnService,
   EnrolledWebAuthnCredential,
   WebAuthnAuthenticationResult,
 } from '../../services/webAuthnService';
+import { sessionService, AuthenticatedSession } from '../../services/sessionService';
 import { playAuditChime, playTone } from '../AudioSynthesizer';
 import { safeCopyToClipboard } from '../../utils/clipboard';
 
@@ -31,7 +30,7 @@ interface WebAuthnModalProps {
   isOpen: boolean;
   onClose: () => void;
   onSuccess?: (result: WebAuthnAuthenticationResult) => void;
-  mode?: 'authenticate' | 'register' | 'manage';
+  mode?: 'authenticate' | 'register' | 'signup' | 'signin' | 'manage';
   challengeText?: string;
   title?: string;
 }
@@ -44,19 +43,27 @@ export const WebAuthnModal: React.FC<WebAuthnModalProps> = ({
   challengeText,
   title,
 }) => {
-  const [mode, setMode] = useState<'authenticate' | 'register' | 'manage'>(initialMode);
+  const [mode, setMode] = useState<'authenticate' | 'register' | 'signup' | 'signin' | 'manage'>(initialMode);
   const [credentials, setCredentials] = useState<EnrolledWebAuthnCredential[]>([]);
   const [selectedCredId, setSelectedCredId] = useState<string>('');
   const [status, setStatus] = useState<'idle' | 'prompting' | 'verifying' | 'success' | 'error'>('idle');
   const [errorMessage, setErrorMessage] = useState<string>('');
+  const [successNotice, setSuccessNotice] = useState<string>('');
   const [lastAuthResult, setLastAuthResult] = useState<WebAuthnAuthenticationResult | null>(null);
   const [isPlatformAvailable, setIsPlatformAvailable] = useState<boolean>(false);
   const [copiedKey, setCopiedKey] = useState<string>('');
-  
-  // Registration form state
+  const [currentSession, setCurrentSession] = useState<AuthenticatedSession | null>(() => sessionService.getCurrentSession());
+
+  // Form states for account registration and sign-in
   const [regName, setRegName] = useState('EP-SOVEREIGN-01');
   const [regDisplayName, setRegDisplayName] = useState('นายยุทธภูมิ พากเพียร (#EP-SOVEREIGN-01)');
   const [regType, setRegType] = useState<'platform' | 'cross-platform'>('platform');
+  const [signupEmail, setSignupEmail] = useState('');
+  const [signupUsername, setSignupUsername] = useState('');
+  const [signupPassword, setSignupPassword] = useState('');
+  const [signupDisplayName, setSignupDisplayName] = useState('');
+  const [signinUsername, setSigninUsername] = useState('');
+  const [signinPassword, setSigninPassword] = useState('');
 
   useEffect(() => {
     if (!isOpen) {
@@ -77,11 +84,17 @@ export const WebAuthnModal: React.FC<WebAuthnModalProps> = ({
     });
 
     setMode(initialMode);
+
+    const unsub = sessionService.subscribe((s) => {
+      setCurrentSession(s);
+    });
+    return () => unsub();
   }, [isOpen, initialMode]);
 
   const handleAuthenticate = async () => {
     setStatus('prompting');
     setErrorMessage('');
+    setSuccessNotice('');
     playTone(580, 0.05);
 
     try {
@@ -95,6 +108,13 @@ export const WebAuthnModal: React.FC<WebAuthnModalProps> = ({
         setStatus('success');
         setLastAuthResult(result);
         playAuditChime();
+        const activeCred = credentials.find((c) => c.id === selectedCredId);
+        await sessionService.createSessionFromWebAuthn({
+          ...result,
+          userName: activeCred?.userName,
+          userDisplayName: activeCred?.userDisplayName,
+        });
+        setSuccessNotice('ยืนยันตัวตนด้วย WebAuthn Passkey สำเร็จ (ETDA Sec 9/26)');
         if (onSuccess) {
           onSuccess(result);
         }
@@ -113,6 +133,7 @@ export const WebAuthnModal: React.FC<WebAuthnModalProps> = ({
   const handleRegister = async () => {
     setStatus('prompting');
     setErrorMessage('');
+    setSuccessNotice('');
     playTone(640, 0.05);
 
     try {
@@ -128,6 +149,7 @@ export const WebAuthnModal: React.FC<WebAuthnModalProps> = ({
         setSelectedCredId(res.credential.id);
         setStatus('success');
         playAuditChime();
+        setSuccessNotice(`ลงทะเบียน Passkey ใหม่ (${res.credential.hardwareModel}) เรียบร้อยแล้ว`);
         setMode('manage');
       } else {
         setStatus('error');
@@ -139,6 +161,76 @@ export const WebAuthnModal: React.FC<WebAuthnModalProps> = ({
       setErrorMessage(err?.message || 'Biometric enrollment failed.');
       playTone(320, 0.1);
     }
+  };
+
+  const handleSignUp = async (e: React.FormEvent) => {
+    e.preventDefault();
+    if (!signupUsername || !signupEmail) {
+      setErrorMessage('กรุณาระบุชื่อผู้ใช้และอีเมล');
+      return;
+    }
+    setStatus('verifying');
+    setErrorMessage('');
+    setSuccessNotice('');
+    playTone(600, 0.05);
+
+    const res = await sessionService.registerUser({
+      username: signupUsername,
+      email: signupEmail,
+      password: signupPassword,
+      userDisplayName: signupDisplayName || signupUsername,
+    });
+
+    if (res.success) {
+      setStatus('success');
+      playAuditChime();
+      setSuccessNotice(`สร้างบัญชีสำเร็จ! กำหนดสิทธิ์เริ่มต้นเป็น USER เรียบร้อยแล้ว`);
+      setSignupPassword('');
+      setTimeout(() => {
+        setMode('authenticate');
+      }, 1500);
+    } else {
+      setStatus('error');
+      setErrorMessage(res.error || 'การสมัครสมาชิกล้มเหลว');
+      playTone(320, 0.1);
+    }
+  };
+
+  const handleSignIn = async (e: React.FormEvent) => {
+    e.preventDefault();
+    if (!signinUsername) {
+      setErrorMessage('กรุณาระบุชื่อผู้ใช้หรืออีเมล');
+      return;
+    }
+    setStatus('verifying');
+    setErrorMessage('');
+    setSuccessNotice('');
+    playTone(640, 0.05);
+
+    const res = await sessionService.loginWithCredentials({
+      username: signinUsername,
+      password: signinPassword,
+    });
+
+    if (res.success && res.session) {
+      setStatus('success');
+      playAuditChime();
+      setSuccessNotice(`เข้าสู่ระบบสำเร็จในฐานะ ${res.session.userDisplayName} (${res.session.role.toUpperCase()})`);
+      setSigninPassword('');
+      setTimeout(() => {
+        onClose();
+      }, 1200);
+    } else {
+      setStatus('error');
+      setErrorMessage(res.error || 'ชื่อผู้ใช้หรือรหัสผ่านไม่ถูกต้อง');
+      playTone(320, 0.1);
+    }
+  };
+
+  const handleLogout = async () => {
+    playTone(400, 0.1);
+    await sessionService.logout();
+    setSuccessNotice('ออกจากระบบเรียบร้อยแล้ว เซสชันเดิมถูกเพิกถอน (REVOKED)');
   };
 
   const handleDelete = (id: string) => {
@@ -196,50 +288,115 @@ export const WebAuthnModal: React.FC<WebAuthnModalProps> = ({
           </div>
 
           {/* Sub Navigation Tabs */}
-          <div className="flex items-center gap-2 px-6 pt-4 border-b border-white/5 bg-[#070a12]/50 text-xs">
+          <div className="flex items-center gap-1.5 px-6 pt-4 border-b border-white/5 bg-[#070a12]/50 text-xs overflow-x-auto">
             <button
               onClick={() => {
                 setMode('authenticate');
                 setStatus('idle');
+                setErrorMessage('');
+                setSuccessNotice('');
               }}
-              className={`pb-3 px-3 font-semibold transition-all border-b-2 flex items-center gap-2 ${
+              className={`pb-3 px-2.5 font-semibold transition-all border-b-2 flex items-center gap-1.5 shrink-0 ${
                 mode === 'authenticate'
                   ? 'border-cyan-400 text-cyan-300'
                   : 'border-transparent text-zinc-400 hover:text-zinc-200'
               }`}
             >
               <Fingerprint className="w-4 h-4" />
-              <span>Authenticate Ceremony</span>
+              <span>Passkey Bio</span>
+            </button>
+            <button
+              onClick={() => {
+                setMode('signin');
+                setStatus('idle');
+                setErrorMessage('');
+                setSuccessNotice('');
+              }}
+              className={`pb-3 px-2.5 font-semibold transition-all border-b-2 flex items-center gap-1.5 shrink-0 ${
+                mode === 'signin'
+                  ? 'border-emerald-400 text-emerald-300'
+                  : 'border-transparent text-zinc-400 hover:text-zinc-200'
+              }`}
+            >
+              <User className="w-4 h-4" />
+              <span>เข้าสู่ระบบ (Sign In)</span>
+            </button>
+            <button
+              onClick={() => {
+                setMode('signup');
+                setStatus('idle');
+                setErrorMessage('');
+                setSuccessNotice('');
+              }}
+              className={`pb-3 px-2.5 font-semibold transition-all border-b-2 flex items-center gap-1.5 shrink-0 ${
+                mode === 'signup'
+                  ? 'border-indigo-400 text-indigo-300'
+                  : 'border-transparent text-zinc-400 hover:text-zinc-200'
+              }`}
+            >
+              <Mail className="w-4 h-4" />
+              <span>สมัครสมาชิก (Sign Up)</span>
             </button>
             <button
               onClick={() => {
                 setMode('register');
                 setStatus('idle');
+                setErrorMessage('');
+                setSuccessNotice('');
               }}
-              className={`pb-3 px-3 font-semibold transition-all border-b-2 flex items-center gap-2 ${
+              className={`pb-3 px-2.5 font-semibold transition-all border-b-2 flex items-center gap-1.5 shrink-0 ${
                 mode === 'register'
                   ? 'border-[#D4AF37] text-[#D4AF37]'
                   : 'border-transparent text-zinc-400 hover:text-zinc-200'
               }`}
             >
               <Key className="w-4 h-4" />
-              <span>Enroll Hardware Key</span>
+              <span>ผูก Hardware Key</span>
             </button>
             <button
               onClick={() => {
                 setMode('manage');
                 setStatus('idle');
+                setErrorMessage('');
+                setSuccessNotice('');
               }}
-              className={`pb-3 px-3 font-semibold transition-all border-b-2 flex items-center gap-2 ${
+              className={`pb-3 px-2.5 font-semibold transition-all border-b-2 flex items-center gap-1.5 shrink-0 ${
                 mode === 'manage'
-                  ? 'border-emerald-400 text-emerald-300'
+                  ? 'border-purple-400 text-purple-300'
                   : 'border-transparent text-zinc-400 hover:text-zinc-200'
               }`}
             >
               <ShieldCheck className="w-4 h-4" />
-              <span>Enrolled Keys ({credentials.length})</span>
+              <span>กุญแจในระบบ ({credentials.length})</span>
             </button>
           </div>
+
+          {/* Active Session & Notification Banner */}
+          {currentSession && currentSession.status === 'ACTIVE' && (
+            <div className="mx-6 mt-4 p-3 rounded-2xl bg-emerald-950/40 border border-emerald-500/40 flex items-center justify-between text-xs text-emerald-300">
+              <div className="flex items-center gap-2">
+                <span className="w-2 h-2 rounded-full bg-emerald-400 animate-pulse" />
+                <span>กำลังใช้งานในฐานะ: <strong>{currentSession.userDisplayName}</strong></span>
+                <span className="px-1.5 py-0.2 rounded bg-emerald-500/20 text-[9px] font-bold uppercase">{currentSession.role}</span>
+                <span className="text-zinc-400 text-[10px]">({currentSession.fipsLevel})</span>
+              </div>
+              <button
+                type="button"
+                onClick={handleLogout}
+                className="px-2.5 py-1 rounded-lg bg-rose-950/60 hover:bg-rose-900/60 border border-rose-500/40 text-rose-300 text-[11px] font-bold flex items-center gap-1 cursor-pointer transition"
+              >
+                <LogOut className="w-3.5 h-3.5" />
+                <span>ออกจากระบบ</span>
+              </button>
+            </div>
+          )}
+
+          {successNotice && (
+            <div className="mx-6 mt-3 p-3 rounded-xl bg-teal-950/60 border border-teal-500/50 text-xs text-teal-200 flex items-center gap-2">
+              <CheckCircle2 className="w-4 h-4 text-teal-400 shrink-0" />
+              <span>{successNotice}</span>
+            </div>
+          )}
 
           {/* Body Content */}
           <div className="p-6 space-y-5 max-h-[70vh] overflow-y-auto">
@@ -335,7 +492,7 @@ export const WebAuthnModal: React.FC<WebAuthnModalProps> = ({
                     </div>
                   )}
 
-                  <button
+                    <button
                     onClick={handleAuthenticate}
                     disabled={status === 'verifying' || status === 'prompting'}
                     className="w-full py-3.5 px-6 rounded-2xl bg-gradient-to-r from-cyan-500 via-teal-500 to-emerald-500 hover:from-cyan-400 hover:to-emerald-400 text-black font-bold text-sm tracking-wide shadow-lg shadow-cyan-500/20 active:scale-98 transition-all flex items-center justify-center gap-2 cursor-pointer disabled:opacity-50"
@@ -345,6 +502,170 @@ export const WebAuthnModal: React.FC<WebAuthnModalProps> = ({
                   </button>
                 </div>
               </div>
+            )}
+
+            {/* Mode: Sign In with Password or Credentials */}
+            {mode === 'signin' && (
+              <form onSubmit={handleSignIn} className="space-y-4">
+                <div className="p-5 rounded-2xl bg-[#070a12] border border-white/10 space-y-4">
+                  <div className="flex items-center gap-2 text-emerald-400 font-bold text-xs">
+                    <User className="w-4 h-4" />
+                    <span>เข้าสู่ระบบด้วยชื่อผู้ใช้ / รหัสผ่าน หรือ Sovereign Identity</span>
+                  </div>
+
+                  <div>
+                    <label className="text-xs text-zinc-400 block mb-1">ชื่อผู้ใช้ หรือ อีเมล</label>
+                    <input
+                      type="text"
+                      required
+                      placeholder="เช่น EP-SOVEREIGN-01 หรือ user@zyrquen.com"
+                      value={signinUsername}
+                      onChange={(e) => setSigninUsername(e.target.value)}
+                      className="w-full bg-black/60 border border-white/20 rounded-xl px-3.5 py-2.5 text-xs text-white focus:outline-none focus:border-emerald-400"
+                    />
+                  </div>
+
+                  <div>
+                    <label className="text-xs text-zinc-400 block mb-1">รหัสผ่าน (Password)</label>
+                    <input
+                      type="password"
+                      placeholder="••••••••"
+                      value={signinPassword}
+                      onChange={(e) => setSigninPassword(e.target.value)}
+                      className="w-full bg-black/60 border border-white/20 rounded-xl px-3.5 py-2.5 text-xs text-white focus:outline-none focus:border-emerald-400 font-sans"
+                    />
+                    <p className="text-[10px] text-zinc-500 mt-1">
+                      หากเข้าสู่ระบบด้วย Passkey ไม่จำเป็นต้องกรอกรหัสผ่าน (เลือกแท็บ Passkey Bio)
+                    </p>
+                  </div>
+                </div>
+
+                {errorMessage && (
+                  <div className="p-3 rounded-xl bg-rose-950/50 border border-rose-500/40 text-xs text-rose-300">
+                    {errorMessage}
+                  </div>
+                )}
+
+                <button
+                  type="submit"
+                  disabled={status === 'verifying'}
+                  className="w-full py-3.5 px-6 rounded-2xl bg-emerald-500 hover:bg-emerald-400 text-black font-bold text-sm tracking-wide shadow-lg shadow-emerald-500/20 active:scale-98 transition-all flex items-center justify-center gap-2 cursor-pointer disabled:opacity-50"
+                >
+                  <User className="w-4 h-4" />
+                  <span>เข้าสู่ระบบ (Authenticate Session)</span>
+                </button>
+
+                <div className="text-center text-xs text-zinc-400 pt-2">
+                  ยังไม่มีบัญชี?{' '}
+                  <button
+                    type="button"
+                    onClick={() => {
+                      setMode('signup');
+                      setErrorMessage('');
+                      setSuccessNotice('');
+                    }}
+                    className="text-indigo-400 hover:underline font-bold"
+                  >
+                    สมัครสมาชิกใหม่ (สิทธิ์ User)
+                  </button>
+                </div>
+              </form>
+            )}
+
+            {/* Mode: Sign Up / Register New Account */}
+            {mode === 'signup' && (
+              <form onSubmit={handleSignUp} className="space-y-4">
+                <div className="p-5 rounded-2xl bg-[#070a12] border border-white/10 space-y-4">
+                  <div className="flex items-center gap-2 text-indigo-400 font-bold text-xs">
+                    <Mail className="w-4 h-4" />
+                    <span>สมัครสมาชิกใหม่ — กำหนดบทบาทเริ่มต้นเป็น USER (Role Isolation)</span>
+                  </div>
+
+                  <div>
+                    <label className="text-xs text-zinc-400 block mb-1">ชื่อผู้ใช้ (Username) *</label>
+                    <input
+                      type="text"
+                      required
+                      placeholder="เช่น new_custodian_01"
+                      value={signupUsername}
+                      onChange={(e) => setSignupUsername(e.target.value)}
+                      className="w-full bg-black/60 border border-white/20 rounded-xl px-3.5 py-2.5 text-xs text-white focus:outline-none focus:border-indigo-400"
+                    />
+                  </div>
+
+                  <div>
+                    <label className="text-xs text-zinc-400 block mb-1">อีเมล (Email) *</label>
+                    <input
+                      type="email"
+                      required
+                      placeholder="custodian@example.com"
+                      value={signupEmail}
+                      onChange={(e) => setSignupEmail(e.target.value)}
+                      className="w-full bg-black/60 border border-white/20 rounded-xl px-3.5 py-2.5 text-xs text-white focus:outline-none focus:border-indigo-400"
+                    />
+                  </div>
+
+                  <div>
+                    <label className="text-xs text-zinc-400 block mb-1">ชื่อที่แสดง (Display Name)</label>
+                    <input
+                      type="text"
+                      placeholder="เช่น กฤติน สถิตธรรม"
+                      value={signupDisplayName}
+                      onChange={(e) => setSignupDisplayName(e.target.value)}
+                      className="w-full bg-black/60 border border-white/20 rounded-xl px-3.5 py-2.5 text-xs text-white focus:outline-none focus:border-indigo-400"
+                    />
+                  </div>
+
+                  <div>
+                    <label className="text-xs text-zinc-400 block mb-1">รหัสผ่าน (Password) *</label>
+                    <input
+                      type="password"
+                      required
+                      placeholder="ขั้นต่ำ 6 ตัวอักษร"
+                      value={signupPassword}
+                      onChange={(e) => setSignupPassword(e.target.value)}
+                      className="w-full bg-black/60 border border-white/20 rounded-xl px-3.5 py-2.5 text-xs text-white focus:outline-none focus:border-indigo-400 font-sans"
+                    />
+                  </div>
+
+                  <div className="p-3 rounded-xl bg-indigo-950/30 border border-indigo-500/20 text-[10px] text-zinc-400 space-y-1">
+                    <p className="text-indigo-300 font-bold">🔒 ความปลอดภัยตามสถาปัตยกรรม ZYRQUEN Ω∞</p>
+                    <p>• สิทธิ์เริ่มต้นคือ <strong>USER</strong> เท่านั้น (ไม่สามารถเคลมสิทธิ์ OWNER ได้โดยอัตโนมัติ)</p>
+                    <p>• การเปลี่ยนแปลงระบบหรือตั้งค่าระดับสูงต้องได้รับการอนุมัติจาก #EP-SOVEREIGN-01</p>
+                    <p>• ข้อมูลบัญชีและเซสชันถูกบันทึกอย่างถาวรใน Repository</p>
+                  </div>
+                </div>
+
+                {errorMessage && (
+                  <div className="p-3 rounded-xl bg-rose-950/50 border border-rose-500/40 text-xs text-rose-300">
+                    {errorMessage}
+                  </div>
+                )}
+
+                <button
+                  type="submit"
+                  disabled={status === 'verifying'}
+                  className="w-full py-3.5 px-6 rounded-2xl bg-indigo-500 hover:bg-indigo-400 text-white font-bold text-sm tracking-wide shadow-lg shadow-indigo-500/20 active:scale-98 transition-all flex items-center justify-center gap-2 cursor-pointer disabled:opacity-50"
+                >
+                  <Mail className="w-4 h-4" />
+                  <span>สร้างบัญชีผู้ใช้ใหม่ (Create Account)</span>
+                </button>
+
+                <div className="text-center text-xs text-zinc-400 pt-2">
+                  มีบัญชีอยู่แล้ว?{' '}
+                  <button
+                    type="button"
+                    onClick={() => {
+                      setMode('signin');
+                      setErrorMessage('');
+                      setSuccessNotice('');
+                    }}
+                    className="text-emerald-400 hover:underline font-bold"
+                  >
+                    เข้าสู่ระบบ
+                  </button>
+                </div>
+              </form>
             )}
 
             {/* Mode 2: Enroll New Hardware Key */}

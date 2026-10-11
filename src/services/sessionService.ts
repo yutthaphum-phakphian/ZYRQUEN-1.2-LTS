@@ -189,22 +189,82 @@ class SovereignSessionService {
     }
   }
 
+  public async registerUser(payload: {
+    username: string;
+    email: string;
+    password?: string;
+    userDisplayName?: string;
+  }): Promise<{ success: boolean; session?: AuthenticatedSession; user?: any; error?: string }> {
+    try {
+      const res = await fetch('/api/auth/register', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(payload),
+      });
+      const data = await res.json();
+      if (!res.ok) {
+        return { success: false, error: data.message || data.error || 'Registration failed' };
+      }
+      if (data.session) {
+        this.currentSession = data.session;
+        this.saveSession();
+        this.notifyListeners();
+        return { success: true, session: data.session, user: data.user };
+      }
+      return { success: true, user: data.user };
+    } catch (err: any) {
+      return { success: false, error: err.message || 'Network connection failed' };
+    }
+  }
+
+  public async loginWithCredentials(payload: {
+    username: string;
+    password?: string;
+  }): Promise<{ success: boolean; session?: AuthenticatedSession; user?: any; error?: string }> {
+    try {
+      const res = await fetch('/api/auth/login', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(payload),
+      });
+      const data = await res.json();
+      if (!res.ok) {
+        return { success: false, error: data.message || data.error || 'Login failed' };
+      }
+      if (data.session) {
+        this.currentSession = data.session;
+        this.saveSession();
+        this.notifyListeners();
+        return { success: true, session: data.session, user: data.user };
+      }
+      return { success: false, error: 'No session returned from login' };
+    } catch (err: any) {
+      return { success: false, error: err.message || 'Network connection failed' };
+    }
+  }
+
   public async createSessionFromWebAuthn(authResult: {
     credentialId: string;
     userHandle?: string;
     signatureHex?: string;
+    userName?: string;
+    userDisplayName?: string;
   }): Promise<AuthenticatedSession> {
     const now = new Date();
     const expires = new Date(now.getTime() + 24 * 60 * 60 * 1000);
 
+    const userName = authResult.userName || 'EP-SOVEREIGN-01';
+    const userDisplayName = authResult.userDisplayName || 'นายยุทธภูมิ พากเพียร (#EP-SOVEREIGN-01)';
+    const isOwner = userName === 'EP-SOVEREIGN-01' || userDisplayName.includes('#EP-SOVEREIGN-01');
+
     const newSession: AuthenticatedSession = {
       sessionId: `SES-WA-${Date.now().toString(36).toUpperCase()}`,
       token: `SOV_WA_TOKEN_${Math.random().toString(36).substring(2)}${Date.now().toString(36)}`,
-      userId: 'usr_owner_ep01',
-      username: 'EP-SOVEREIGN-01',
-      userDisplayName: 'นายยุทธภูมิ พากเพียร (#EP-SOVEREIGN-01)',
-      role: 'owner',
-      permissions: [...DEFAULT_ROLE_PERMISSIONS.owner],
+      userId: isOwner ? 'usr_owner_ep01' : `usr_wa_${Date.now().toString(36)}`,
+      username: userName,
+      userDisplayName: userDisplayName,
+      role: isOwner ? 'owner' : 'user',
+      permissions: isOwner ? [...DEFAULT_ROLE_PERMISSIONS.owner] : [...DEFAULT_ROLE_PERMISSIONS.user],
       fipsLevel: 'FIPS 140-3 LEVEL 4',
       authMethod: 'WEBAUTHN_PASSKEY',
       createdAt: now.toISOString(),
@@ -213,9 +273,9 @@ class SovereignSessionService {
       credentialId: authResult.credentialId,
     };
 
-    // Register session with server
+    // Register and attest session with server
     try {
-      await fetch('/api/auth/session', {
+      const res = await fetch('/api/auth/session', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
@@ -224,6 +284,15 @@ class SovereignSessionService {
           signatureHex: authResult.signatureHex,
         }),
       });
+      if (res.ok) {
+        const data = await res.json();
+        if (data.session) {
+          this.currentSession = data.session;
+          this.saveSession();
+          this.notifyListeners();
+          return data.session;
+        }
+      }
     } catch {
       // Non-blocking in offline scenarios
     }
@@ -243,6 +312,7 @@ class SovereignSessionService {
           headers: {
             'Content-Type': 'application/json',
             'Authorization': `Bearer ${token}`,
+            'x-zyrquen-session-token': token,
           },
           body: JSON.stringify({ token }),
         });
