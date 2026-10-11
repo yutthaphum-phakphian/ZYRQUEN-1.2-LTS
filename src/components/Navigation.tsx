@@ -55,6 +55,7 @@ import { CopilotAssistantDrawer } from './copilot/CopilotAssistantDrawer';
 import { ThemeSwitcher } from './ThemeSwitcher';
 import { ZyrquenIcon } from './ZyrquenIcon';
 import { TopNavGlobalSearchBar } from './navigation/TopNavGlobalSearchBar';
+import { sessionService, AuthenticatedSession } from '../services/sessionService';
 
 interface NavigationProps {
   currentView: ViewType;
@@ -179,12 +180,21 @@ export const Navigation: React.FC<NavigationProps> = ({
   const [hsmClusterState, setHsmClusterState] = useState<HsmClusterState>(() =>
     hsmClusterService.getState()
   );
+  const [session, setSession] = useState<AuthenticatedSession | null>(() =>
+    sessionService.getCurrentSession()
+  );
 
   useEffect(() => {
-    const unsubscribe = hsmClusterService.subscribe((state) => {
+    const unsubHsm = hsmClusterService.subscribe((state) => {
       setHsmClusterState(state);
     });
-    return () => unsubscribe();
+    const unsubSession = sessionService.subscribe((s) => {
+      setSession(s);
+    });
+    return () => {
+      unsubHsm();
+      unsubSession();
+    };
   }, []);
 
   // Tab Strip Refs for Auto-Centering and Horizontal Smooth Scrolling
@@ -546,12 +556,28 @@ export const Navigation: React.FC<NavigationProps> = ({
                 playTone(720, 0.08);
                 onOpenWebAuthn();
               }}
-              className="group flex items-center gap-1 sm:gap-1.5 px-2 sm:px-3 py-1.5 rounded-xl bg-gradient-to-r from-emerald-500/20 to-teal-500/15 hover:from-emerald-500/30 hover:to-teal-500/25 border border-emerald-500/40 hover:border-emerald-400 text-emerald-300 hover:text-emerald-100 font-mono text-xs transition-all cursor-pointer active:scale-95 shadow-sm shrink-0"
-              title="เข้าสู่ระบบด้วย WebAuthn Passkey (พ.ร.บ. ธุรกรรมฯ ม.๙ / ม.๒๖)"
+              className={`group flex items-center gap-1 sm:gap-1.5 px-2 sm:px-3 py-1.5 rounded-xl border font-mono text-xs transition-all cursor-pointer active:scale-95 shadow-sm shrink-0 ${
+                session && session.status === 'ACTIVE'
+                  ? 'bg-gradient-to-r from-emerald-500/25 to-teal-500/20 border-emerald-500/50 hover:border-emerald-400 text-emerald-200 shadow-[0_0_12px_rgba(16,185,129,0.15)]'
+                  : 'bg-gradient-to-r from-zinc-900 to-zinc-950 border-zinc-700 hover:border-zinc-500 text-zinc-300'
+              }`}
+              title={
+                session && session.status === 'ACTIVE'
+                  ? `เซสชันที่ได้รับการรับรอง: ${session.userDisplayName} (${session.fipsLevel}) — คลิกเพื่อจัดการหรือยืนยันตัวตนซ้ำ`
+                  : 'เข้าสู่ระบบด้วย WebAuthn Passkey (พ.ร.บ. ธุรกรรมฯ ม.๙ / ม.๒๖)'
+              }
             >
-              <Fingerprint className="w-3.5 h-3.5 text-emerald-400 group-hover:scale-110 transition-transform" />
-              <span className="hidden sm:inline font-bold tracking-wide">Login</span>
-              <span className="hidden md:inline px-1 py-0.2 rounded font-mono text-[9px] bg-emerald-500/20 text-emerald-300 border border-emerald-500/30 font-bold">FIPS</span>
+              <Fingerprint className={`w-3.5 h-3.5 ${session && session.status === 'ACTIVE' ? 'text-emerald-400' : 'text-zinc-400'} group-hover:scale-110 transition-transform`} />
+              <span className="hidden sm:inline font-bold tracking-wide">
+                {session && session.status === 'ACTIVE' ? 'EP-01' : 'Login'}
+              </span>
+              <span className={`hidden md:inline px-1 py-0.2 rounded font-mono text-[9px] border font-bold ${
+                session && session.status === 'ACTIVE'
+                  ? 'bg-emerald-500/20 text-emerald-300 border-emerald-500/30'
+                  : 'bg-zinc-800 text-zinc-400 border-zinc-700'
+              }`}>
+                {session && session.status === 'ACTIVE' ? 'AUTH' : 'FIPS'}
+              </span>
             </button>
           )}
 

@@ -165,6 +165,7 @@ import { announceSystemEventVerbal } from '@/utils/textToSpeechService';
 import { triggerVibration } from '@/utils/vibration';
 import { useNotificationWebSocket } from '@/hooks/useNotificationWebSocket';
 import { hsmClusterService } from '@/services/hsmClusterService';
+import { sessionService } from '@/services/sessionService';
 
 interface ViewPersona {
   name: string;
@@ -3087,6 +3088,7 @@ function SovereignAppContent() {
             currentBatchSize={64}
             onStageProposalForApproval={handleStageAiProposalForApproval}
             onAuditRecord={handleAiAuditRecord}
+            onOpenWebAuthn={() => setIsWebAuthnModalOpen(true)}
           />
         );
       default:
@@ -6509,6 +6511,7 @@ function SovereignAppContent() {
         challengeText="ZYRQUEN-FIPS-140-3-L4-ATTESTATION"
         onSuccess={(result) => {
           setIsWebAuthnModalOpen(false);
+          void sessionService.createSessionFromWebAuthn(result);
           showToast(`ยืนยันตัวตนสำเร็จ: ${result.credentialId.slice(0, 16)}... (ETDA Sec 9/26)`, 'success');
           dispatchAction({
             type: 'EMIT_SYSTEM_EVENT',
