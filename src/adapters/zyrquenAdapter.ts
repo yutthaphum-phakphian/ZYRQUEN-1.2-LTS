@@ -2667,16 +2667,4 @@ export function executeFullCycleHeadlessE2E(params: {
   };
 }
 
-export {
-  toolGateway,
-  SovereignToolGateway,
-  CANONICAL_TOOLS,
-} from './toolGateway';
-export type {
-  ToolDefinition,
-  ToolExecutionRequest,
-  ToolExecutionResult,
-  ToolApprovalCertificate,
-} from './toolGateway';
-
 
