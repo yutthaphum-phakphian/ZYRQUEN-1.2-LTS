@@ -21,6 +21,37 @@ groups:
           summary: "CRITICAL: 10/10 REAL_HSM Quorum Compromised"
           description: "Active HSM nodes dropped to {{ $value }}/10. Deca-Key consensus threshold lost."
 
+      - alert: HSMAvailabilityBelow80Percent
+        expr: (zyrquen_hsm_quorum_active_nodes / 10) * 100 < 80
+        for: 0m
+        labels:
+          severity: critical
+          tier: hsm_enclave
+        annotations:
+          summary: "CRITICAL: HSM availability below 80%"
+          description: "HSM availability is {{ $value }}%. Restore the quorum immediately."
+          remediation: "/api/v1/hsm/heal-all"
+
+      - alert: CpuUsageSustainedHigh
+        expr: zyrquen_cpu_usage_percent > 90
+        for: 5m
+        labels:
+          severity: critical
+          tier: system_resources
+        annotations:
+          summary: "CRITICAL: CPU usage above 90% for 5 minutes"
+          description: "CPU usage is {{ $value }}% and has remained above 90% for more than 5 minutes. Investigate the workload and scale or remediate."
+
+      - alert: MemoryUsageSustainedHigh
+        expr: zyrquen_memory_usage_percent > 90
+        for: 5m
+        labels:
+          severity: critical
+          tier: system_resources
+        annotations:
+          summary: "CRITICAL: Memory usage above 90% for 5 minutes"
+          description: "Memory usage is {{ $value }}% and has remained above 90% for more than 5 minutes. Investigate memory growth and remediate."
+
       - alert: SubKelvinCryoTempSpike
         expr: zyrquen_subkelvin_temperature_mkelvin > 20.0
         for: 30s

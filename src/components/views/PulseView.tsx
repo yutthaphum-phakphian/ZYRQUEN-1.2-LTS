@@ -240,7 +240,7 @@ interface PulseViewProps {
   isSystemActivityFrozen?: boolean;
 }
 
-import { SystemHealthPulse } from '../SystemHealthPulse';
+import { HealthDashboard } from '../HealthDashboard';
 
 export const PulseView: React.FC<PulseViewProps> = ({
   snapshots = INITIAL_HARDWARE_SNAPSHOTS,
@@ -1323,7 +1323,7 @@ export const PulseView: React.FC<PulseViewProps> = ({
       </div>
 
       <div className="mb-6">
-        <SystemHealthPulse snapshots={snapshots} />
+        <HealthDashboard snapshots={snapshots} />
       </div>
 
       {/* Live Waveform Oscilloscope & Log Stream */}

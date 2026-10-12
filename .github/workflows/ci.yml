@@ -1,20 +1,27 @@
-name: 🛡️ ZYRQUEN Ω∞ CI — Core Invariants, Tests & Build Gate
+name: ZYRQUEN CI — Validation & CodeQL
 
 on:
   push:
-    branches: [main]
+    branches: [main, master, 'release/**']
   pull_request:
-    branches: [main]
+    branches: [main, master]
+  schedule:
+    - cron: '30 1 * * 1'
   workflow_dispatch:
 
 permissions:
   contents: read
 
+concurrency:
+  group: ${{ github.workflow }}-${{ github.event.pull_request.number || github.ref }}
+  cancel-in-progress: true
+
 jobs:
   validate-and-test:
     name: Lint, Test & Sovereign Build Gate v1.2 LTS
+    if: github.event_name != 'schedule'
     runs-on: ubuntu-latest
-    timeout-minutes: 15
+    timeout-minutes: 30
 
     steps:
       - name: Checkout Codebase
@@ -24,6 +31,8 @@ jobs:
         uses: actions/setup-node@v4
         with:
           node-version: 20
+          cache: npm
+          cache-dependency-path: npm-shrinkwrap.json
 
       - name: Setup Python Runtime
         uses: actions/setup-python@v5
@@ -31,7 +40,7 @@ jobs:
           python-version: '3.12'
 
       - name: Install Dependencies
-        run: npm ci --legacy-peer-deps || npm install --legacy-peer-deps
+        run: npm ci --no-audit --no-fund
 
       - name: Compile Python Scripts & Tests
         run: find scripts tests -type f -name '*.py' -print0 | xargs -0 -r python -m py_compile
@@ -39,8 +48,41 @@ jobs:
       - name: TypeScript & Static Lint Verification
         run: npm run lint
 
-      - name: Execute Sovereign Unit Tests & Invariants Suite
+      - name: Execute Complete Test Suite
         run: npm test
 
       - name: Build Sovereign Client & Server Bundles
         run: npm run build
+
+  codeql:
+    name: CodeQL Security Analysis (${{ matrix.language }})
+    runs-on: ubuntu-latest
+    timeout-minutes: 120
+    permissions:
+      contents: read
+      security-events: write
+      actions: read
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - language: javascript-typescript
+            build-mode: none
+          - language: python
+            build-mode: none
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Initialize CodeQL
+        uses: github/codeql-action/init@v3
+        with:
+          languages: ${{ matrix.language }}
+          build-mode: ${{ matrix.build-mode }}
+
+      - name: Perform CodeQL Analysis
+        uses: github/codeql-action/analyze@v3
+        with:
+          category: '/language:${{ matrix.language }}'

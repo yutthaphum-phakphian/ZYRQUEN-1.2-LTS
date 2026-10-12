@@ -1173,7 +1173,8 @@ function SovereignAppContent() {
       type: ToastMessage['type'] = 'info',
       action?: ToastMessage['action'],
       actionUrl?: string,
-      actionLabel?: string
+      actionLabel?: string,
+      durationMs?: number
     ) => {
       const id = Math.random().toString(36).substring(2, 9);
       setToasts((prev) => {
@@ -1182,7 +1183,7 @@ function SovereignAppContent() {
         }
         return [...prev.slice(-2), { id, message, type, action, actionUrl, actionLabel }];
       });
-      const duration = type === 'critical' ? 9000 : 4000;
+      const duration = durationMs ?? (type === 'critical' ? 9000 : 4000);
       setTimeout(() => {
         setToasts((prev) => prev.filter((t) => t.id !== id));
       }, duration);
@@ -1205,9 +1206,23 @@ function SovereignAppContent() {
   // Listen for global chamber threshold alerts (<0.90) and custom system events
   useEffect(() => {
     const handleGlobalToast = (e: Event) => {
-      const customEvent = e as CustomEvent<{ message: string; type?: ToastMessage['type'] }>;
+      const customEvent = e as CustomEvent<{
+        message: string;
+        type?: ToastMessage['type'];
+        action?: ToastMessage['action'];
+        actionUrl?: string;
+        actionLabel?: string;
+        durationMs?: number;
+      }>;
       if (customEvent.detail?.message) {
-        showToast(customEvent.detail.message, customEvent.detail.type || 'info');
+        showToast(
+          customEvent.detail.message,
+          customEvent.detail.type || 'info',
+          customEvent.detail.action,
+          customEvent.detail.actionUrl,
+          customEvent.detail.actionLabel,
+          customEvent.detail.durationMs
+        );
       }
     };
 
@@ -6592,4 +6607,3 @@ export default function App() {
     </ErrorBoundary>
   );
 }
-

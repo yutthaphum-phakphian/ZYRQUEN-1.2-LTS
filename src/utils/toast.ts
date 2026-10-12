@@ -1,9 +1,10 @@
 // src/utils/toast.ts
-import { ToastType } from '../components/ToastNotification';
+import { ToastAction, ToastType } from '../components/ToastNotification';
 
 export interface ToastOptions {
   toastId?: string;
   durationMs?: number;
+  action?: ToastAction;
 }
 
 const activeToastIds = new Set<string>();
@@ -28,6 +29,8 @@ export const toast = {
             message,
             type,
             id: toastId,
+            action: options?.action,
+            durationMs: options?.durationMs,
           },
         })
       );
