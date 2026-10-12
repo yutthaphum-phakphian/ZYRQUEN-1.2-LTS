@@ -122,6 +122,53 @@ const ExecutiveCourtBriefing = lazyWithRetry(() => import('@/components/executiv
 const SovereignWalletView = lazyWithRetry(() => import('@/components/views/SovereignWalletView').then(m => ({ default: m.SovereignWalletView })));
 import { SovereignDashboard } from '@/pages/SovereignDashboard';
 const TreasuryVarianceDashboard = lazyWithRetry(() => import('@/components/views/TreasuryVarianceDashboard').then(m => ({ default: m.TreasuryVarianceDashboard })));
+
+// Preload high-priority secondary views during browser idle time to eliminate lazy chunk fetch latency
+export function preloadSecondaryViews(): void {
+  if (typeof window === 'undefined') return;
+  const idleCallback = (window as any).requestIdleCallback || ((cb: () => void) => setTimeout(cb, 800));
+  idleCallback(() => {
+    const preloads = [
+      () => import('@/components/views/TreasuryVarianceDashboard'),
+      () => import('@/components/views/PulseView'),
+      () => import('@/components/views/LedgerView'),
+      () => import('@/components/views/CouncilView'),
+      () => import('@/components/views/QuantumView'),
+      () => import('@/components/views/NexusView'),
+      () => import('@/components/views/SecurityView'),
+      () => import('@/components/views/GovernanceHealthHeatmap'),
+      () => import('@/components/views/ProductionReadinessView'),
+      () => import('@/components/views/LegalView'),
+      () => import('@/components/views/CivilizationEngineView'),
+      () => import('@/components/views/UnifiedAuditPlaybackConsole'),
+      () => import('@/components/views/UnifiedMultiverseControlPanel'),
+      () => import('@/components/views/StudioView'),
+      () => import('@/components/views/VaultView'),
+      () => import('@/components/views/ConsoleView'),
+      () => import('@/components/views/SettingsView'),
+      () => import('@/components/views/ComplianceCoverageView'),
+      () => import('@/components/views/ArchiveView'),
+      () => import('@/components/views/ForgeView'),
+      () => import('@/components/views/MatrixView'),
+      () => import('@/components/views/SovereignWalletView'),
+      () => import('@/components/views/Chamber11QuantumRadar'),
+      () => import('@/components/views/G11CanonicalCore'),
+      () => import('@/components/AdminConsole'),
+      () => import('@/components/AuditAnalyticsDashboard'),
+      () => import('@/components/SovereignChambersControlPlane'),
+      () => import('@/components/views/AuditHistoryView'),
+      () => import('@/components/views/SecurityPipelineView'),
+      () => import('@/components/executive/ExecutiveCourtBriefing'),
+    ];
+
+    preloads.forEach((fn, idx) => {
+      setTimeout(() => {
+        fn().catch(() => {});
+      }, idx * 40);
+    });
+  });
+}
+
 import AIWorkspace from '@/components/AIWorkspace';
 import { AuditCertificateModal } from '@/components/AuditCertificateModal';
 import { GitHubPwaModal } from '@/components/GitHubPwaModal';
@@ -1116,9 +1163,16 @@ function SovereignAppContent() {
   const setCurrentView = useCallback((view: ViewType) => {
     const targetPath = view === 'dashboard' ? '/' : `/${view}`;
     if (location.pathname !== targetPath) {
-      navigate(targetPath);
+      React.startTransition(() => {
+        navigate(targetPath);
+      });
     }
   }, [navigate, location.pathname]);
+
+  // Idle preload secondary view chunks so screen transitions feel instant
+  useEffect(() => {
+    preloadSecondaryViews();
+  }, []);
   const [isLeftSidebarOpen, setIsLeftSidebarOpen] = useState<boolean>(() => {
     try {
       return localStorage.getItem('zyrquen_sidebar_open') === 'true';
@@ -6196,23 +6250,15 @@ function SovereignAppContent() {
           />
         )}
 
-        <AnimatePresence mode="wait">
+        <AnimatePresence mode="popLayout" initial={false}>
           <motion.div
             key={currentView}
-            className="relative w-full min-w-0 max-w-full overflow-hidden"
-            initial={{ opacity: 0, x: 24, filter: 'blur(5px)' }}
-            animate={{ opacity: 1, x: 0, filter: 'blur(0px)' }}
-            exit={{ opacity: 0, x: -24, filter: 'blur(5px)' }}
-            transition={{ duration: 0.28, ease: [0.16, 1, 0.3, 1] }}
+            className="relative w-full min-w-0 max-w-full"
+            initial={{ opacity: 0, y: 6 }}
+            animate={{ opacity: 1, y: 0 }}
+            exit={{ opacity: 0 }}
+            transition={{ duration: 0.12, ease: 'easeOut' }}
           >
-            {/* Subtle Sliding Curtain Wipe & Shimmer Effect */}
-            <motion.div
-              initial={{ scaleX: 1, opacity: 0.5 }}
-              animate={{ scaleX: 0, opacity: 0 }}
-              exit={{ scaleX: 1, opacity: 0.5 }}
-              transition={{ duration: 0.3, ease: [0.16, 1, 0.3, 1] }}
-              className="absolute inset-0 z-20 pointer-events-none bg-gradient-to-r from-transparent via-cyan-400/10 to-transparent origin-left"
-            />
 
             <ErrorBoundary
               key={currentView}
