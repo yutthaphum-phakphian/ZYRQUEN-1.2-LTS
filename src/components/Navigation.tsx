@@ -201,17 +201,14 @@ export const Navigation: React.FC<NavigationProps> = ({
   const tabsContainerRef = useRef<HTMLDivElement | null>(null);
   const activeTabRef = useRef<HTMLButtonElement | null>(null);
 
-  // Auto-scroll active tab into center view without document-level reflow
+  // Auto-scroll active tab into center view
   useEffect(() => {
-    if (tabsContainerRef.current && activeTabRef.current) {
-      const container = tabsContainerRef.current;
-      const tab = activeTabRef.current;
-      const containerRect = container.getBoundingClientRect();
-      const tabRect = tab.getBoundingClientRect();
-      if (tabRect.left < containerRect.left || tabRect.right > containerRect.right) {
-        const targetScroll = tab.offsetLeft - container.clientWidth / 2 + tab.clientWidth / 2;
-        container.scrollTo({ left: targetScroll, behavior: 'smooth' });
-      }
+    if (activeTabRef.current) {
+      activeTabRef.current.scrollIntoView({
+        behavior: 'smooth',
+        inline: 'center',
+        block: 'nearest',
+      });
     }
   }, [currentView]);
 

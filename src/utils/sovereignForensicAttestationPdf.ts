@@ -224,11 +224,9 @@ export function generateSovereignForensicAttestationPdf(
   y += 4;
 
   const halfWidth = (pageWidth - margin * 2 - 4) / 2;
-  const modules: any[] = Array.isArray(CANONICAL_FORENSIC_CHECKLIST_V2_849202)
-    ? CANONICAL_FORENSIC_CHECKLIST_V2_849202
-    : (CANONICAL_FORENSIC_CHECKLIST_V2_849202 as any).modules || [];
+  const modules = CANONICAL_FORENSIC_CHECKLIST_V2_849202.modules;
 
-  modules.forEach((mod: any, idx: number) => {
+  modules.forEach((mod, idx) => {
     const isRight = idx >= 8;
     const colX = isRight ? margin + halfWidth + 4 : margin;
     const rowIdx = isRight ? idx - 8 : idx;

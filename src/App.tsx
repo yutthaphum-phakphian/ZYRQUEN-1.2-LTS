@@ -122,56 +122,6 @@ const ExecutiveCourtBriefing = lazyWithRetry(() => import('@/components/executiv
 const SovereignWalletView = lazyWithRetry(() => import('@/components/views/SovereignWalletView').then(m => ({ default: m.SovereignWalletView })));
 import { SovereignDashboard } from '@/pages/SovereignDashboard';
 const TreasuryVarianceDashboard = lazyWithRetry(() => import('@/components/views/TreasuryVarianceDashboard').then(m => ({ default: m.TreasuryVarianceDashboard })));
-
-// Preload high-priority secondary views immediately to eliminate lazy chunk fetch latency
-export function preloadSecondaryViews(): void {
-  if (typeof window === 'undefined') return;
-  const preloads = [
-    () => import('@/components/views/PulseView'),
-    () => import('@/components/views/LedgerView'),
-    () => import('@/components/views/CouncilView'),
-    () => import('@/components/views/QuantumView'),
-    () => import('@/components/views/NexusView'),
-    () => import('@/components/views/SecurityView'),
-    () => import('@/components/views/GovernanceHealthHeatmap'),
-    () => import('@/components/views/LegalView'),
-    () => import('@/components/views/TreasuryVarianceDashboard'),
-    () => import('@/components/views/ProductionReadinessView'),
-    () => import('@/components/views/CivilizationEngineView'),
-    () => import('@/components/views/UnifiedAuditPlaybackConsole'),
-    () => import('@/components/views/UnifiedMultiverseControlPanel'),
-    () => import('@/components/views/StudioView'),
-    () => import('@/components/views/VaultView'),
-    () => import('@/components/views/ConsoleView'),
-    () => import('@/components/views/SettingsView'),
-    () => import('@/components/views/ComplianceCoverageView'),
-    () => import('@/components/views/ArchiveView'),
-    () => import('@/components/views/ForgeView'),
-    () => import('@/components/views/MatrixView'),
-    () => import('@/components/views/SovereignWalletView'),
-    () => import('@/components/views/Chamber11QuantumRadar'),
-    () => import('@/components/views/G11CanonicalCore'),
-    () => import('@/components/AdminConsole'),
-    () => import('@/components/AuditAnalyticsDashboard'),
-    () => import('@/components/SovereignChambersControlPlane'),
-    () => import('@/components/views/AuditHistoryView'),
-    () => import('@/components/views/SecurityPipelineView'),
-    () => import('@/components/executive/ExecutiveCourtBriefing'),
-  ];
-
-  // Immediately warm up top views on initial idle tick so tabs respond with 0ms delay
-  preloads.slice(0, 8).forEach((fn) => fn().catch(() => {}));
-
-  const idleCallback = (window as any).requestIdleCallback || ((cb: () => void) => setTimeout(cb, 100));
-  idleCallback(() => {
-    preloads.slice(8).forEach((fn, idx) => {
-      setTimeout(() => {
-        fn().catch(() => {});
-      }, idx * 25);
-    });
-  });
-}
-
 import AIWorkspace from '@/components/AIWorkspace';
 import { AuditCertificateModal } from '@/components/AuditCertificateModal';
 import { GitHubPwaModal } from '@/components/GitHubPwaModal';
@@ -188,7 +138,6 @@ import { GlobalCommandSearch } from '@/components/GlobalCommandSearch';
 import { ForensicAuditMasterDossierModal } from '@/components/forensics/ForensicAuditMasterDossierModal';
 import { useTheme } from '@/components/ThemeSwitcher';
 import { EmergencySovereignLockdown } from '@/components/EmergencySovereignLockdown';
-import { DashboardFeatureScrollSpy } from '@/components/navigation/DashboardFeatureScrollSpy';
 import { SovereignWatermarkOverlay } from '@/components/SovereignWatermark';
 import { SovereignUpgradeCycleModal } from '@/components/SovereignUpgradeCycleModal';
 import { ToastNotification, ToastMessage } from '@/components/ToastNotification';
@@ -666,7 +615,7 @@ const TRIGGER_PQC_HASHES: Record<string, string> = {
   'pdpa-sec-28': '0xdeadbeef00112233445566778899aabbccddeeff112233445566778899aabbcc',
 };
 
-export const INITIAL_SYSTEM_EVENTS: SystemEvent[] = [
+const INITIAL_SYSTEM_EVENTS: SystemEvent[] = [
   {
     id: 'evt-evidence-tnt',
     type: 'EVIDENCE_IMPORTED',
@@ -1170,11 +1119,6 @@ function SovereignAppContent() {
       navigate(targetPath);
     }
   }, [navigate, location.pathname]);
-
-  // Idle preload secondary view chunks so screen transitions feel instant
-  useEffect(() => {
-    preloadSecondaryViews();
-  }, []);
   const [isLeftSidebarOpen, setIsLeftSidebarOpen] = useState<boolean>(() => {
     try {
       return localStorage.getItem('zyrquen_sidebar_open') === 'true';
@@ -1221,29 +1165,6 @@ function SovereignAppContent() {
   const [activeHsmNodes, setActiveHsmNodes] = useState<number>(10);
   const [disabledHsmNodeIds, setDisabledHsmNodeIds] = useState<Record<string, boolean>>({});
   const [isHsmHistoryExpanded, setIsHsmHistoryExpanded] = useState<boolean>(true);
-
-  // Responsive UI Scaling ("ปรับขนาด") State
-  const [uiScale, setUiScale] = useState<number>(() => {
-    try {
-      const saved = localStorage.getItem('zyrquen_ui_scale');
-      if (saved) {
-        const val = parseFloat(saved);
-        if (!isNaN(val) && val >= 0.7 && val <= 1.3) return val;
-      }
-    } catch {
-      // ignore storage error
-    }
-    return 1.0;
-  });
-
-  const handleScaleChange = useCallback((nextScale: number) => {
-    setUiScale(nextScale);
-    try {
-      localStorage.setItem('zyrquen_ui_scale', nextScale.toString());
-    } catch {
-      // ignore
-    }
-  }, []);
 
   const [toasts, setToasts] = useState<ToastMessage[]>([]);
   const showToast = useCallback(
@@ -2981,12 +2902,10 @@ function SovereignAppContent() {
       case 'dashboard':
         return (
           <div className="space-y-4">
-            <div id="forensic-pipeline-section" className="scroll-mt-36">
-              <ForensicAuditStepper
-                onAddSystemEvent={addSystemEvent}
-                onNavigateView={setCurrentView}
-              />
-            </div>
+            <ForensicAuditStepper
+              onAddSystemEvent={addSystemEvent}
+              onNavigateView={setCurrentView}
+            />
             <DashboardView
               snapshots={snapshots}
               verificationGateStatus={verificationGateStatus}
@@ -3063,7 +2982,7 @@ function SovereignAppContent() {
       case 'vault':
         return <VaultView />;
       case 'ledger':
-        return <LedgerView snapshots={snapshots} events={systemEvents} />;
+        return <LedgerView snapshots={snapshots} />;
       case 'pulse':
         return (
           <PulseView
@@ -3593,13 +3512,6 @@ function SovereignAppContent() {
         onOpenUpgradeCycle={() => setIsUpgradeModalOpen(true)}
       />
 
-      {/* Dynamic Synchronized Feature Scroll-Spy & Mobile Scaling Controller */}
-      <DashboardFeatureScrollSpy
-        currentView={currentView}
-        uiScale={uiScale}
-        onScaleChange={handleScaleChange}
-      />
-
       {/* App Body Layout with Collapsible Left Sidebar */}
       <div className="relative z-10 max-w-[1780px] w-full max-w-full mx-auto px-2 sm:px-4 flex items-start overflow-hidden">
         {/* Left Sidebar (Open / Close Collapsible) */}
@@ -3615,18 +3527,15 @@ function SovereignAppContent() {
           onOpenUpgradeCycle={() => setIsUpgradeModalOpen(true)}
         />
 
-        {/* Main Content Area with Fluid Spring Reflow Layout & Responsive Zoom Scaling */}
-        <main
-          style={uiScale !== 1.0 ? ({ zoom: uiScale } as React.CSSProperties) : undefined}
-          className="flex-1 min-w-0 w-full max-w-full overflow-hidden px-2 sm:px-4 py-4 pb-28 sm:pb-32 space-y-4 transition-all duration-200"
-        >
+        {/* Main Content Area with Sliding Curtain OS Entrance Transitions */}
+        <main className="flex-1 min-w-0 w-full max-w-full overflow-hidden px-2 sm:px-4 py-4 pb-28 sm:pb-32 space-y-4 transition-all duration-300">
           {/* Visual Notification System: SSoT Mutation Drift Warning (Triggered if deviation >= 0.01%) */}
           <SsotDriftWarning />
 
           {/* Verification Gate Active Invariant Banner with Progress Bar & Expandable ETDA/PDPA Triggers */}
           <div
             id="verification-gate-section"
-            className="rounded-2xl bg-[#0b0e1a]/90 border border-cyan-500/25 backdrop-blur-xl shadow-lg transition-all duration-300 overflow-hidden scroll-mt-36"
+            className="rounded-2xl bg-[#0b0e1a]/90 border border-cyan-500/25 backdrop-blur-xl shadow-lg transition-all duration-300 overflow-hidden"
           >
             <div className="px-4 py-2.5 flex flex-wrap items-center justify-between gap-3 text-xs font-mono">
               {/* Left: Gate Status & Info with Tooltip Trigger */}
@@ -6276,9 +6185,7 @@ function SovereignAppContent() {
 
         {/* Emergency Sovereign Isolation Protocol Control (Shown on Security/Dashboard views) */}
         {(currentView === 'dashboard' || currentView === 'security') && (
-          <div id="sovereign-isolation-section" className="scroll-mt-36">
-            <EmergencySovereignLockdown />
-          </div>
+          <EmergencySovereignLockdown />
         )}
 
         {/* Real-time Nexus Integration Layer Bridge (Shown on Nexus/Archive/Ledger views) */}
@@ -6289,28 +6196,43 @@ function SovereignAppContent() {
           />
         )}
 
-        <div
-          key={currentView}
-          className="relative w-full min-w-0 max-w-full animate-in fade-in duration-75 ease-out"
-        >
-          <ErrorBoundary
+        <AnimatePresence mode="wait">
+          <motion.div
             key={currentView}
-            fallbackViewName={VIEW_PERSONAS[currentView]?.name || currentView}
-            onResetToHome={() => setCurrentView('dashboard')}
+            className="relative w-full min-w-0 max-w-full overflow-hidden"
+            initial={{ opacity: 0, x: 24, filter: 'blur(5px)' }}
+            animate={{ opacity: 1, x: 0, filter: 'blur(0px)' }}
+            exit={{ opacity: 0, x: -24, filter: 'blur(5px)' }}
+            transition={{ duration: 0.28, ease: [0.16, 1, 0.3, 1] }}
           >
-            <React.Suspense
-              fallback={
-                <div className="flex flex-col items-center justify-center min-h-[360px] w-full p-8 font-mono text-cyan-400 space-y-3">
-                  <div className="w-10 h-10 border-2 border-cyan-500/20 border-t-cyan-400 rounded-full animate-spin shadow-[0_0_15px_rgba(6,182,212,0.4)]" />
-                  <span className="text-xs tracking-wider text-slate-300">INITIALIZING SOVEREIGN MODULE...</span>
-                  <span className="text-[10px] text-slate-500">Zero-Drift Execution Pipeline · Δ0.00%</span>
-                </div>
-              }
+            {/* Subtle Sliding Curtain Wipe & Shimmer Effect */}
+            <motion.div
+              initial={{ scaleX: 1, opacity: 0.5 }}
+              animate={{ scaleX: 0, opacity: 0 }}
+              exit={{ scaleX: 1, opacity: 0.5 }}
+              transition={{ duration: 0.3, ease: [0.16, 1, 0.3, 1] }}
+              className="absolute inset-0 z-20 pointer-events-none bg-gradient-to-r from-transparent via-cyan-400/10 to-transparent origin-left"
+            />
+
+            <ErrorBoundary
+              key={currentView}
+              fallbackViewName={VIEW_PERSONAS[currentView]?.name || currentView}
+              onResetToHome={() => setCurrentView('dashboard')}
             >
-              {renderCurrentView()}
-            </React.Suspense>
-          </ErrorBoundary>
-        </div>
+              <React.Suspense
+                fallback={
+                  <div className="flex flex-col items-center justify-center min-h-[360px] w-full p-8 font-mono text-cyan-400 space-y-3 animate-in fade-in duration-150">
+                    <div className="w-10 h-10 border-2 border-cyan-500/20 border-t-cyan-400 rounded-full animate-spin shadow-[0_0_15px_rgba(6,182,212,0.4)]" />
+                    <span className="text-xs tracking-wider text-slate-300">INITIALIZING SOVEREIGN MODULE...</span>
+                    <span className="text-[10px] text-slate-500">Zero-Drift Execution Pipeline · Δ0.00%</span>
+                  </div>
+                }
+              >
+                {renderCurrentView()}
+              </React.Suspense>
+            </ErrorBoundary>
+          </motion.div>
+        </AnimatePresence>
       </main>
     </div>
 

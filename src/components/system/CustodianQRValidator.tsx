@@ -28,7 +28,6 @@ import { systemStateStore, CustodianRegistrySnapshot } from '../../store/systemS
 import { COUNCIL_MEMBERS } from '../../data/councilData';
 import { playAuditChime, playTone } from '../AudioSynthesizer';
 import { safeCopyToClipboard } from '../../utils/clipboard';
-import { triggerQrHapticFeedback } from '../../utils/vibration';
 
 export interface QrScanRecord {
   id: string;
@@ -209,7 +208,6 @@ export const CustodianQRValidator: React.FC<CustodianQRValidatorProps> = ({
     if (result) {
       const text = typeof result === 'string' ? result : result?.getText?.() || result?.text;
       if (text && text !== scannedData) {
-        triggerQrHapticFeedback();
         playTone(840, 0.08);
         setScannedData(text);
         setCameraScannerActive(false);
@@ -246,7 +244,6 @@ export const CustodianQRValidator: React.FC<CustodianQRValidatorProps> = ({
           inversionAttempts: 'attemptBoth',
         });
         if (code && code.data) {
-          triggerQrHapticFeedback();
           playAuditChime();
           setScannedData(code.data);
           processScannedPayload(code.data);

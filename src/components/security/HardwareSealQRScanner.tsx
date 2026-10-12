@@ -36,7 +36,6 @@ import {
 } from '../../data/hardwareSealsData';
 import { playAuditChime, playTone } from '../AudioSynthesizer';
 import { safeCopyToClipboard } from '../../utils/clipboard';
-import { triggerQrHapticFeedback } from '../../utils/vibration';
 import { SystemEvent } from '../SystemEventsSidebar';
 
 export interface HardwareSealQRScannerProps {
@@ -163,7 +162,6 @@ export const HardwareSealQRScanner: React.FC<HardwareSealQRScannerProps> = ({
     if (result) {
       const text = typeof result === 'string' ? result : result?.getText?.() || result?.text;
       if (text && text !== scannedPayload) {
-        triggerQrHapticFeedback();
         playTone(880, 0.06);
         setCameraActive(false);
         handleProcessPayload(text);
@@ -211,7 +209,6 @@ export const HardwareSealQRScanner: React.FC<HardwareSealQRScannerProps> = ({
           });
 
           if (code && code.data) {
-            triggerQrHapticFeedback();
             playTone(880, 0.08);
             handleProcessPayload(code.data);
           } else {

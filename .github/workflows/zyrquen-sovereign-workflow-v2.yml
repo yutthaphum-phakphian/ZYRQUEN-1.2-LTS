@@ -3,12 +3,26 @@ name: ZYRQUEN Ω∞ Sovereign SSoT Pre-Commit & CI/CD Pipeline v2.1 (FROZEN v1.2
 on:
   push:
     branches: [ main, release/* ]
+    paths-ignore:
+      - '**.md'
+      - 'docs/**'
+      - 'architecture_docs/**'
+      - 'reports/**'
   pull_request:
     branches: [ main ]
+    paths-ignore:
+      - '**.md'
+      - 'docs/**'
+      - 'architecture_docs/**'
+      - 'reports/**'
   workflow_dispatch:
 
 permissions:
   contents: read
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.event.pull_request.number || github.ref }}
+  cancel-in-progress: true
 
 jobs:
   sovereign-security-gate:
@@ -26,6 +40,8 @@ jobs:
         uses: actions/setup-node@v4
         with:
           node-version: 20
+          cache: npm
+          cache-dependency-path: npm-shrinkwrap.json
 
       - name: 🐍 Setup Python 3.12 Runtime
         uses: actions/setup-python@v5
@@ -33,8 +49,7 @@ jobs:
           python-version: '3.12'
 
       - name: 📦 Install Clean Dependencies
-        run: |
-          npm ci --legacy-peer-deps || npm install --legacy-peer-deps
+        run: npm ci --no-audit --no-fund
 
       - name: 🔑 Verify Nong Zyrquen GPG & Ed25519 SSH Identity Clearance
         run: |

@@ -70,44 +70,23 @@ export const HsmQuorumAlertBanner: React.FC = () => {
                 <div className="space-y-0.5 min-w-0">
                   <div className="flex items-center gap-2 flex-wrap">
                     <span className="font-extrabold text-red-100 tracking-wide text-xs sm:text-sm flex items-center gap-1.5">
-                      <span>{clusterState.isSustainedAlert ? '🚨 CRITICAL SUSTAINED BREACH (>5 MIN):' : '⚠️ CLUSTER QUORUM ALERT:'}</span>
-                      <span className="text-red-300">
-                        {clusterState.isSustainedAlert
-                          ? 'HSM Nodes Dropped Below 80% For More Than 5 Minutes!'
-                          : 'HSM Quorum Degraded Below 80% Threshold!'}
-                      </span>
+                      <span>⚠️ CRITICAL CLUSTER ALERT:</span>
+                      <span className="text-red-300">HSM Quorum Degraded Below 80% Threshold!</span>
                     </span>
                     <span className="px-2 py-0.2 rounded-full bg-red-500 text-black font-extrabold text-[10px] animate-pulse">
                       {clusterState.activeNodes}/10 NODES ({clusterState.quorumPercentage}%)
                     </span>
-                    {clusterState.isSustainedAlert && (
-                      <span className="px-2 py-0.2 rounded-full bg-rose-600 text-white font-mono text-[10px] border border-rose-300">
-                        {Math.floor(clusterState.degradedSeconds / 60)}m {clusterState.degradedSeconds % 60}s SUSTAINED
-                      </span>
-                    )}
                   </div>
 
                   <p className="text-[11px] text-red-200/90 truncate max-w-2xl">
                     FIPS 140-3 Level 4 hardware quorum is compromised ({10 - clusterState.activeNodes} nodes offline).
-                    {clusterState.isSustainedAlert
-                      ? ' Sustained below 80% quorum threshold for over 5 minutes. Critical security perimeter violation!'
-                      : ' Immediate remediation required to prevent state transaction freeze.'}
+                    Immediate remediation required to prevent state transaction freeze.
                   </p>
                 </div>
               </div>
 
               {/* Immediate Action Buttons */}
               <div className="flex items-center gap-2 shrink-0 self-end md:self-center">
-                <button
-                  type="button"
-                  onClick={() => hsmClusterService.simulateDegradation(7, 5.5)}
-                  className="px-2.5 py-1.5 rounded-xl bg-red-950/80 hover:bg-red-900 border border-red-500/50 text-red-200 text-[11px] font-bold transition flex items-center gap-1 cursor-pointer"
-                  title="Simulate active HSM nodes dropping below 80% for > 5 minutes"
-                >
-                  <AlertTriangle className="w-3.5 h-3.5 text-red-400" />
-                  <span>Simulate &gt;5m Breach</span>
-                </button>
-
                 <button
                   id="btn-remediate-hsm-cluster"
                   type="button"

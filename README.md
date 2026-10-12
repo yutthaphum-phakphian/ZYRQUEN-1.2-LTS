@@ -20,47 +20,18 @@
 
 ## Overview
 
-ZYRQUEN Ω™ Sovereign World Engine provides a deterministic, zero-trust verifiable runtime platform integrating:
+The application includes:
 
-- **Sovereign Login & WebAuthn Passkeys**: Authenticated sessions with server-side identity, permission, and session validation.
-- **ONE CHAT — AI Workspace / Copilot**: Unified conversational interface maintaining context, persistent command history, and continuous task execution.
-- **Sovereign Tool Gateway & Permission Check**: Strict centralized tool gateway enforcing role-based access control (RBAC), capability boundaries, and signature validation before tool invocation.
-- **Approval Gate → Execution → Verification**: Write firewall protecting state mutation; high-impact actions require explicit affirmative approval certificates before execution.
-- **Production UI**: Responsive interface built with React 19, TypeScript ~5.8, and Tailwind CSS.
-- **Automated Verification Suite**: 213 unit and deterministic invariant tests verifying zero drift, cryptographic invariants, and session lifecycle.
-
-## Architecture
-
-```text
-[ Sovereign Login ] ──► [ WebAuthn / Session Authority ]
-                               │
-                               ▼
-                    [ Authenticated Session ]
-                               │
-                               ▼
-                [ ONE CHAT — AI Workspace ]
-                               │
-                               ▼
-               [ Centralized Tool Gateway ]
-                               │
-            ┌──────────────────┴──────────────────┐
-            ▼                                     ▼
-   [ Read-Only Query ]                 [ Mutation Action ]
-            │                                     │
-            ▼                                     ▼
-    [ Immediate Run ]                   [ Approval Gate ]
-            │                                     │
-            ▼                                     ▼
-   [ Verified Result ]                  [ Explicit Quorum / User Confirm ]
-                                                  │
-                                                  ▼
-                                        [ Execution & Audit Receipt ]
-```
+- Production UI written in TypeScript
+- File-based development and production builds
+- Comprehensive automated verification suite
+- Continuous Integration via GitHub Actions
+- GitHub Pages deployment support
+- Security gates, invariant verification checks, telemetry, and test suites
 
 ## Table of Contents
 
 - [Verification Status](#verification-status)
-- [Architecture](#architecture)
 - [Technology Stack](#technology-stack)
 - [Prerequisites](#prerequisites)
 - [Quick Start](#quick-start)
@@ -78,14 +49,13 @@ ZYRQUEN Ω™ Sovereign World Engine provides a deterministic, zero-trust verifi
 
 ## Verification Status
 
-Verified in Node.js 22 LTS / Containerized Runtime:
+Last checked in GitHub Codespaces on 2026-10-01:
 
 | Check | Result |
 |:--|:--|
-| Unit tests (`npm run test:unit`) | **213 of 213 passed** across all test suites (0 failed) |
-| TypeScript check (`npm run lint` / `tsc --noEmit`) | **0 errors** (Strict mode) |
-| Production bundle (`npm run build`) | **Succeeds** (Vite v6.4 production output) |
-| Server runtime (`node server.ts`) | **Operational** on Node.js 22 ESM Native |
+| Unit tests (Vitest) | 128 of 128 passed; 21 of 21 test files passing |
+| Production build (`npm run build`) | Succeeds |
+| GitHub Actions | 13 workflow files in `.github/workflows/` |
 | Genesis anchor | Block `849202`, recorded in `evidence/real-gates-verification.json` |
 
 > [!NOTE]
@@ -158,18 +128,14 @@ ZYRQUEN-1.2-LTS/
 ├── public/           # Static assets
 ├── scripts/          # Operational scripts
 ├── src/              # Application source code
-│   ├── adapters/     # Sovereign Tool Gateway & Identity Adapters
-│   ├── components/   # React components & AI Workspace Copilot
+│   ├── components/   # React components
 │   ├── config/       # System and invariant configuration
-│   ├── data/         # Canonical SSoT, statutes, and consensus datasets
-│   ├── services/     # Session, verification, and agent services
 │   ├── types/        # TypeScript declarations
-│   └── main.tsx      # Client entry point
-├── tests/            # Vitest unit and integration test suites
+│   └── main.tsx      # Entry point
+├── tests/            # Vitest unit and integration tests
 ├── .env.example      # Environment variables template
 ├── package.json      # Dependencies and npm scripts
 ├── README.md         # Primary documentation
-├── server.ts         # Full-stack backend server entry point
 └── vite.config.ts    # Vite build configuration
 ```
 

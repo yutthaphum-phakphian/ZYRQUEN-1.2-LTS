@@ -31,7 +31,6 @@ import {
 } from '../data/hardwareSealsData';
 import { playAuditChime, playTone, playWarningTone } from './AudioSynthesizer';
 import { safeCopyToClipboard } from '../utils/clipboard';
-import { triggerQrHapticFeedback } from '../utils/vibration';
 
 export interface EvidentiaryManifestPayload {
   manifestId: string;
@@ -273,7 +272,6 @@ export const EvidentiaryManifestQRScanner: React.FC<EvidentiaryManifestQRScanner
     if (result) {
       const text = typeof result === 'string' ? result : result?.getText?.() || result?.text;
       if (text) {
-        triggerQrHapticFeedback();
         setCameraActive(false);
         handleIngestPayload(text);
       }
@@ -317,7 +315,6 @@ export const EvidentiaryManifestQRScanner: React.FC<EvidentiaryManifestQRScanner
           const qrCode = jsQR(imageData.data, imageData.width, imageData.height);
 
           if (qrCode && qrCode.data) {
-            triggerQrHapticFeedback();
             handleIngestPayload(qrCode.data);
           } else {
             setCameraError('No evidentiary QR code detected in uploaded image. Please ensure code is clear.');
