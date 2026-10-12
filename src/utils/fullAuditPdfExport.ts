@@ -205,12 +205,12 @@ export function generateAndDownloadFullAuditPdfReport({
     doc.setFont('helvetica', 'normal');
     doc.setFontSize(5.8);
     doc.setTextColor(100, 116, 139);
-    doc.text(seal.tagSerialNumber || seal.serialNumber, margin + 2, y + 7.2);
+    doc.text(seal.tagSerialNumber || (seal as any).serialNumber || '', margin + 2, y + 7.2);
 
     doc.setFont('helvetica', 'bold');
     doc.setFontSize(6.2);
     doc.setTextColor(30, 41, 59);
-    const unitStr = seal.hardwareUnit || seal.custodianUnit;
+    const unitStr = seal.hardwareUnit || (seal as any).custodianUnit || '';
     const shortUnit = unitStr.length > 36 ? unitStr.substring(0, 33) + '...' : unitStr;
     doc.text(shortUnit, margin + 48, y + 4);
 

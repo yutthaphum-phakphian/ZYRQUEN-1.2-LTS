@@ -383,7 +383,7 @@ export const DashboardView: React.FC<DashboardViewProps> = ({
           }`}
         >
           <Activity className="w-3.5 h-3.5 text-cyan-400" />
-          <span>System Health Dashboard</span>
+          <span>System Health Dashboard (แดชบอร์ดสถานะระบบ)</span>
         </button>
       </div>
 

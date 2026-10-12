@@ -1690,7 +1690,7 @@ export const CouncilView: React.FC<CouncilViewProps> = ({ onAddSystemEvent }) =>
                         PQC Digital Signature (Hex Digest)
                       </span>
                       <button
-                        onClick={() => handleCopy(selectedMember.cryptoSignature || selectedMember.hsmSignatureDigest, 'modal-sig')}
+                        onClick={() => handleCopy(selectedMember.cryptoSignature || (selectedMember as any).hsmSignatureDigest || '', 'modal-sig')}
                         className="inline-flex items-center gap-1 text-xs text-cyan-400 hover:text-cyan-300 font-mono"
                       >
                         {copiedKey === 'modal-sig' ? (

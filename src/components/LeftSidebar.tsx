@@ -144,12 +144,18 @@ export const LeftSidebar: React.FC<LeftSidebarProps> = ({
 
           {/* Sidebar Panel */}
           <motion.aside
-            initial={{ x: -340, opacity: 0 }}
-            animate={{ x: 0, opacity: 1 }}
-            exit={{ x: -340, opacity: 0 }}
-            transition={{ duration: 0.25, ease: [0.16, 1, 0.3, 1] }}
-            className="fixed lg:sticky top-0 lg:top-[112px] left-0 z-50 lg:z-30 w-80 max-w-[calc(100vw-2rem)] bg-[#060a14]/98 border-r border-cyan-500/20 flex flex-col h-screen lg:h-[calc(100vh-7.5rem)] shrink-0 select-none overflow-y-auto overflow-x-hidden break-words backdrop-blur-2xl shadow-[8px_0_30px_-10px_rgba(0,0,0,0.8)]"
+            initial={{ x: -320, width: 0, opacity: 0 }}
+            animate={{ x: 0, width: 320, opacity: 1 }}
+            exit={{ x: -320, width: 0, opacity: 0 }}
+            transition={{
+              type: 'spring',
+              stiffness: 280,
+              damping: 28,
+              mass: 0.85,
+            }}
+            className="fixed lg:sticky top-0 lg:top-[112px] left-0 z-50 lg:z-30 h-screen lg:h-[calc(100vh-7.5rem)] shrink-0 select-none overflow-hidden max-w-[calc(100vw-2rem)]"
           >
+            <div className="w-80 max-w-full h-full bg-[#060a14]/98 border-r border-cyan-500/20 flex flex-col overflow-y-auto overflow-x-hidden break-words backdrop-blur-2xl shadow-[8px_0_30px_-10px_rgba(0,0,0,0.8)]">
             {/* Sidebar Top Header & Close Button */}
             <div className="p-3.5 border-b border-cyan-500/20 bg-gradient-to-r from-slate-950 via-[#070c1a] to-slate-950 flex items-center justify-between">
               <div className="flex items-center space-x-2.5">
@@ -495,6 +501,7 @@ export const LeftSidebar: React.FC<LeftSidebarProps> = ({
                 <span>Stabilized: 14.98 mK</span>
                 <span className="text-amber-400/80">Quarantine Cap: 85.0 °C</span>
               </div>
+            </div>
             </div>
           </motion.aside>
         </>

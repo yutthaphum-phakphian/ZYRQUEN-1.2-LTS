@@ -1,7 +1,7 @@
 /**
  * ZYRQUEN Ω∞ HSM Cluster Telemetry & Quorum Health Engine
  * Manages 10/10 Deca-Key Real_HSM cluster nodes, cryo-thermal metrics,
- * and quorum threshold alerting (<80% / <8/10 nodes).
+ * and quorum threshold alerting (<80% / <8/10 nodes sustained for >5 minutes).
  */
 
 export interface HsmNodeInfo {
@@ -26,6 +26,11 @@ export interface HsmClusterState {
   lastRemediationAt: string;
   isRemediating: boolean;
   nodes: HsmNodeInfo[];
+  // Sustained tracking (alert if active HSM nodes drop below 80% for > 5 minutes)
+  degradedStartTime: number | null;
+  degradedSeconds: number;
+  isSustainedAlert: boolean;
+  sustainedThresholdSeconds: number; // 300s (5 minutes)
 }
 
 const INITIAL_NODES: HsmNodeInfo[] = Array.from({ length: 10 }, (_, i) => ({
@@ -50,13 +55,17 @@ let clusterState: HsmClusterState = {
   lastRemediationAt: new Date().toISOString(),
   isRemediating: false,
   nodes: INITIAL_NODES,
+  degradedStartTime: null,
+  degradedSeconds: 0,
+  isSustainedAlert: false,
+  sustainedThresholdSeconds: 300,
 };
 
 type HsmListener = (state: HsmClusterState) => void;
 const listeners = new Set<HsmListener>();
 
 function notify() {
-  const snapshot = { ...clusterState, nodes: [...clusterState.nodes] };
+  const snapshot: HsmClusterState = { ...clusterState, nodes: [...clusterState.nodes] };
   listeners.forEach((fn) => {
     try {
       fn(snapshot);
@@ -65,6 +74,46 @@ function notify() {
     }
   });
 }
+
+function dispatchHsmAlert(message?: string) {
+  if (typeof window !== 'undefined' && typeof window.dispatchEvent === 'function') {
+    try {
+      window.dispatchEvent(
+        new CustomEvent('zyrquen:toast', {
+          detail: {
+            message:
+              message ||
+              `CRITICAL HSM ALERT: Active HSM nodes have dropped below 80% (${clusterState.activeNodes}/10 nodes) for more than 5 minutes!`,
+            type: 'critical',
+          },
+        })
+      );
+    } catch {
+      // safe fallback
+    }
+  }
+}
+
+// Sustained monitoring interval
+let sustainedIntervalTimer: ReturnType<typeof setInterval> | null = null;
+
+function ensureMonitoringInterval() {
+  if (sustainedIntervalTimer || typeof setInterval === 'undefined') return;
+  sustainedIntervalTimer = setInterval(() => {
+    if (clusterState.isDegraded && clusterState.degradedStartTime) {
+      const elapsed = Math.floor((Date.now() - clusterState.degradedStartTime) / 1000);
+      clusterState.degradedSeconds = elapsed;
+      if (elapsed > clusterState.sustainedThresholdSeconds && !clusterState.isSustainedAlert) {
+        clusterState.isSustainedAlert = true;
+        dispatchHsmAlert();
+      }
+      notify();
+    }
+  }, 1000);
+}
+
+// Start interval on load
+ensureMonitoringInterval();
 
 export const hsmClusterService = {
   getState(): HsmClusterState {
@@ -80,24 +129,68 @@ export const hsmClusterService = {
   },
 
   /**
-   * Simulate a degradation in the HSM cluster (e.g. drop to 7/10 or 6/10 nodes < 80%)
+   * Check if HSM nodes have been below 80% threshold for more than 5 minutes
    */
-  simulateDegradation(activeNodesCount: number = 7) {
+  checkSustainedAlert(currentTime?: number): boolean {
+    if (!clusterState.isDegraded || !clusterState.degradedStartTime) {
+      return false;
+    }
+    const effectiveNow = currentTime ?? Date.now();
+    const elapsedSeconds = Math.floor((effectiveNow - clusterState.degradedStartTime) / 1000);
+    return elapsedSeconds > clusterState.sustainedThresholdSeconds;
+  },
+
+  /**
+   * Simulate a degradation in the HSM cluster (e.g. drop to 7/10 nodes < 80%)
+   * @param activeNodesCount Number of active nodes (default 7, which is 70% < 80%)
+   * @param simulatedMinutes Optional simulated minutes below threshold (e.g. 5.5 min to trigger immediate sustained alert)
+   */
+  simulateDegradation(activeNodesCount: number = 7, simulatedMinutes: number = 0) {
     const clampedActive = Math.max(1, Math.min(10, activeNodesCount));
     const quorumPct = (clampedActive / 10) * 100;
     const isDegraded = quorumPct < 80;
+
+    let degradedStartTime = clusterState.degradedStartTime;
+    let degradedSeconds = clusterState.degradedSeconds;
+    let isSustainedAlert = false;
+
+    if (isDegraded) {
+      if (simulatedMinutes > 0) {
+        degradedStartTime = Date.now() - Math.round(simulatedMinutes * 60 * 1000);
+        degradedSeconds = Math.round(simulatedMinutes * 60);
+        isSustainedAlert = degradedSeconds > clusterState.sustainedThresholdSeconds;
+      } else if (!degradedStartTime) {
+        degradedStartTime = Date.now();
+        degradedSeconds = 0;
+        isSustainedAlert = false;
+      } else {
+        degradedSeconds = Math.floor((Date.now() - degradedStartTime) / 1000);
+        isSustainedAlert = degradedSeconds > clusterState.sustainedThresholdSeconds;
+      }
+    } else {
+      degradedStartTime = null;
+      degradedSeconds = 0;
+      isSustainedAlert = false;
+    }
 
     clusterState = {
       ...clusterState,
       activeNodes: clampedActive,
       quorumPercentage: quorumPct,
       isDegraded,
+      degradedStartTime,
+      degradedSeconds,
+      isSustainedAlert,
       nodes: clusterState.nodes.map((node, idx) => ({
         ...node,
         status: idx < clampedActive ? 'ONLINE' : 'OFFLINE',
         temperatureMk: idx < clampedActive ? node.temperatureMk : 28.5,
       })),
     };
+
+    if (isSustainedAlert) {
+      dispatchHsmAlert();
+    }
 
     notify();
   },
@@ -121,6 +214,9 @@ export const hsmClusterService = {
       quorumPercentage: 100,
       isDegraded: false,
       isRemediating: false,
+      degradedStartTime: null,
+      degradedSeconds: 0,
+      isSustainedAlert: false,
       lastRemediationAt: new Date().toISOString(),
       nodes: INITIAL_NODES.map((node) => ({ ...node, status: 'ONLINE' })),
     };

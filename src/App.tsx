@@ -3527,8 +3527,8 @@ function SovereignAppContent() {
           onOpenUpgradeCycle={() => setIsUpgradeModalOpen(true)}
         />
 
-        {/* Main Content Area with Sliding Curtain OS Entrance Transitions */}
-        <main className="flex-1 min-w-0 w-full max-w-full overflow-hidden px-2 sm:px-4 py-4 pb-28 sm:pb-32 space-y-4 transition-all duration-300">
+        {/* Main Content Area with Fluid Spring Reflow Layout */}
+        <main className="flex-1 min-w-0 w-full max-w-full overflow-hidden px-2 sm:px-4 py-4 pb-28 sm:pb-32 space-y-4">
           {/* Visual Notification System: SSoT Mutation Drift Warning (Triggered if deviation >= 0.01%) */}
           <SsotDriftWarning />
 
