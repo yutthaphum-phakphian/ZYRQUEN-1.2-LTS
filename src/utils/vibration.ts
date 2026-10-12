@@ -11,7 +11,8 @@ export type VibrationPatternType =
   | 'auditReport'
   | 'warning'
   | 'click'
-  | 'sealSelect';
+  | 'sealSelect'
+  | 'qrScanSuccess';
 
 const PATTERNS: Record<VibrationPatternType, number | number[]> = {
   // Double crisp pulse confirming immutable hardware snapshot capture
@@ -28,6 +29,8 @@ const PATTERNS: Record<VibrationPatternType, number | number[]> = {
   click: 12,
   // Crisp selection pulse for 14,902 seal inspector
   sealSelect: [25, 20, 30],
+  // Brief crisp haptic feedback pulse when QR code is successfully identified by the scanner
+  qrScanSuccess: 45,
 };
 
 /**
@@ -50,4 +53,11 @@ export function triggerVibration(pattern: VibrationPatternType | number | number
     // Graceful silent fallback if device denies vibration
     return false;
   }
+}
+
+/**
+ * Triggers a brief vibration haptic pulse (45ms) when a QR code is successfully identified by the scanner.
+ */
+export function triggerQrHapticFeedback(): boolean {
+  return triggerVibration('qrScanSuccess');
 }

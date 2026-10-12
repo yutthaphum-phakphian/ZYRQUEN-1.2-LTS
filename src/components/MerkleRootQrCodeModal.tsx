@@ -34,6 +34,8 @@ import {
 } from '../data/canonicalData';
 import { playAuditChime, playTone } from './AudioSynthesizer';
 import { copyToClipboard } from '../utils/clipboard';
+import { triggerQrHapticFeedback } from '../utils/vibration';
+import { DynamicFrameSkipController } from '../utils/dynamicFrameSkip';
 import { SystemEvent } from './SystemEventsSidebar';
 import { systemStateStore } from '../store/systemStateStore';
 import { broadcastSyncService } from '../services/broadcastSyncService';
@@ -157,6 +159,10 @@ export const MerkleRootQrCodeModal: React.FC<MerkleRootQrCodeModalProps> = ({
   const canvasRef = useRef<HTMLCanvasElement | null>(null);
   const animFrameIdRef = useRef<number | null>(null);
   const mediaStreamRef = useRef<MediaStream | null>(null);
+  const frameCountRef = useRef<number>(0);
+  const frameSkipControllerRef = useRef<DynamicFrameSkipController>(
+    new DynamicFrameSkipController({ targetScanRate: 16, isDynamic: true })
+  );
 
   // Sync recent scans from local storage when modal opens
   useEffect(() => {
@@ -241,6 +247,7 @@ export const MerkleRootQrCodeModal: React.FC<MerkleRootQrCodeModalProps> = ({
 
   // Optical Camera Stop Helper
   const stopCamera = useCallback(() => {
+    frameSkipControllerRef.current.reset();
     if (animFrameIdRef.current) {
       cancelAnimationFrame(animFrameIdRef.current);
       animFrameIdRef.current = null;
@@ -416,6 +423,14 @@ export const MerkleRootQrCodeModal: React.FC<MerkleRootQrCodeModalProps> = ({
   // Optical Camera Frame Decoding Loop
   const scanCameraFrame = useCallback(() => {
     if (!videoRef.current || !canvasRef.current) return;
+
+    // Dynamic frame-skip: adaptively adjust skip frequency based on current detected FPS
+    // Ensures responsiveness on slower devices (skip=1) while conserving resources on faster hardware (skip=4-8)
+    if (!frameSkipControllerRef.current.shouldProcessFrame()) {
+      animFrameIdRef.current = requestAnimationFrame(scanCameraFrame);
+      return;
+    }
+
     const video = videoRef.current;
     const canvas = canvasRef.current;
     const ctx = canvas.getContext('2d', { willReadFrequently: true });
@@ -434,6 +449,8 @@ export const MerkleRootQrCodeModal: React.FC<MerkleRootQrCodeModalProps> = ({
       });
 
       if (code && code.data) {
+        // Trigger brief vibration haptic feedback upon successful QR code identification
+        triggerQrHapticFeedback();
         handleIngestScannedEvidence(code.data, 'CAMERA');
         return;
       }
@@ -446,6 +463,7 @@ export const MerkleRootQrCodeModal: React.FC<MerkleRootQrCodeModalProps> = ({
   const startCamera = useCallback(async () => {
     setCameraError(null);
     setIsCameraActive(true);
+    frameSkipControllerRef.current.reset();
     try {
       if (typeof navigator !== 'undefined' && navigator.mediaDevices && navigator.mediaDevices.getUserMedia) {
         const stream = await navigator.mediaDevices.getUserMedia({

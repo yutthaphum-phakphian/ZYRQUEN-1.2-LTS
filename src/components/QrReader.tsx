@@ -1,6 +1,8 @@
 import React, { useEffect, useRef, useState, useCallback } from 'react';
 import jsQR from 'jsqr';
-import { Camera, CameraOff, Loader2, Trash2, Copy, Check, ScanLine, Clock, ShieldCheck } from 'lucide-react';
+import { Camera, CameraOff, Loader2, Trash2, Copy, Check, ScanLine, Clock, ShieldCheck, Zap, Gauge } from 'lucide-react';
+import { triggerQrHapticFeedback } from '../utils/vibration';
+import { DynamicFrameSkipController, FrameSkipTelemetry } from '../utils/dynamicFrameSkip';
 
 export interface ScannedRecord {
   id: string;
@@ -19,6 +21,10 @@ export interface QrReaderProps {
   showHistory?: boolean;
   showStatusIndicator?: boolean;
   maxHistoryItems?: number;
+  frameSkip?: number; // Optional manual override. If dynamicFrameSkip is true, frameSkip is used as fallback
+  enableHaptics?: boolean; // Trigger brief vibration haptic feedback upon successful identification (default: true)
+  dynamicFrameSkip?: boolean; // Dynamically adjust skip frequency based on current detected FPS (default: true)
+  targetScanRate?: number; // Target QR scan frequency in scans/sec (default: 16)
 }
 
 export const QrReader: React.FC<QrReaderProps> = ({
@@ -31,6 +37,10 @@ export const QrReader: React.FC<QrReaderProps> = ({
   showHistory = true,
   showStatusIndicator = true,
   maxHistoryItems = 5,
+  frameSkip = 3,
+  enableHaptics = true,
+  dynamicFrameSkip = true,
+  targetScanRate = 16,
 }) => {
   const videoRef = useRef<HTMLVideoElement | null>(null);
   const canvasRef = useRef<HTMLCanvasElement | null>(null);
@@ -38,11 +48,26 @@ export const QrReader: React.FC<QrReaderProps> = ({
   const animFrameIdRef = useRef<number | null>(null);
   const lastScanTimestampRef = useRef<number>(0);
   const lastScannedTextRef = useRef<string>('');
+  const lastTelemetryUpdateRef = useRef<number>(0);
+
+  const controllerRef = useRef<DynamicFrameSkipController>(
+    new DynamicFrameSkipController({
+      targetScanRate,
+      isDynamic: dynamicFrameSkip,
+      manualSkip: dynamicFrameSkip ? null : frameSkip,
+    })
+  );
 
   const [cameraStatus, setCameraStatus] = useState<'initializing' | 'active' | 'denied' | 'error'>('initializing');
   const [errorMessage, setErrorMessage] = useState<string | null>(null);
   const [scanHistory, setScanHistory] = useState<ScannedRecord[]>([]);
   const [copiedId, setCopiedId] = useState<string | null>(null);
+  const [telemetry, setTelemetry] = useState<FrameSkipTelemetry>({
+    fps: 60,
+    skipFactor: 3,
+    effectiveScanRate: 20,
+    tier: 'standard',
+  });
 
   const handleClearHistory = useCallback(() => {
     setScanHistory([]);
@@ -103,42 +128,66 @@ export const QrReader: React.FC<QrReaderProps> = ({
       }
     }
 
+    controllerRef.current.setOptions({
+      targetScanRate,
+      isDynamic: dynamicFrameSkip,
+      manualSkip: dynamicFrameSkip ? null : frameSkip,
+    });
+
     startCamera();
 
     const scanFrame = () => {
       if (!active) return;
-      const video = videoRef.current;
-      const canvas = canvasRef.current;
-      if (video && canvas && video.readyState >= 2 && video.videoWidth > 0 && video.videoHeight > 0) {
-        canvas.width = video.videoWidth;
-        canvas.height = video.videoHeight;
-        const ctx = canvas.getContext('2d', { willReadFrequently: true });
-        if (ctx) {
-          ctx.drawImage(video, 0, 0, canvas.width, canvas.height);
-          const imageData = ctx.getImageData(0, 0, canvas.width, canvas.height);
-          const code = jsQR(imageData.data, imageData.width, imageData.height, {
-            inversionAttempts: 'dontInvert',
-          });
-          if (code && code.data) {
-            const now = Date.now();
-            const rawText = code.data.trim();
 
-            // Notify parent
-            onResult?.({ getText: () => rawText }, null);
+      const shouldProcess = controllerRef.current.shouldProcessFrame();
 
-            // De-duplicate rapid consecutive reads within 1.5 seconds
-            if (rawText !== lastScannedTextRef.current || now - lastScanTimestampRef.current > 1500) {
-              lastScannedTextRef.current = rawText;
-              lastScanTimestampRef.current = now;
+      // Periodically update telemetry for UI overlay without impacting 60fps loop performance
+      const nowTime = typeof performance !== 'undefined' ? performance.now() : Date.now();
+      if (nowTime - lastTelemetryUpdateRef.current > 400) {
+        lastTelemetryUpdateRef.current = nowTime;
+        setTelemetry(controllerRef.current.getTelemetry());
+      }
 
-              const newRecord: ScannedRecord = {
-                id: `qr-${now}-${Math.random().toString(36).substring(2, 6)}`,
-                text: rawText,
-                timestamp: new Date(now).toLocaleTimeString('th-TH', { hour12: false }),
-                scannedAt: now,
-              };
+      // Dynamic Frame-Skip: Process frame when controller confirms optimal scan budget
+      if (shouldProcess) {
+        const video = videoRef.current;
+        const canvas = canvasRef.current;
+        if (video && canvas && video.readyState >= 2 && video.videoWidth > 0 && video.videoHeight > 0) {
+          canvas.width = video.videoWidth;
+          canvas.height = video.videoHeight;
+          const ctx = canvas.getContext('2d', { willReadFrequently: true });
+          if (ctx) {
+            ctx.drawImage(video, 0, 0, canvas.width, canvas.height);
+            const imageData = ctx.getImageData(0, 0, canvas.width, canvas.height);
+            const code = jsQR(imageData.data, imageData.width, imageData.height, {
+              inversionAttempts: 'dontInvert',
+            });
+            if (code && code.data) {
+              const now = Date.now();
+              const rawText = code.data.trim();
 
-              setScanHistory((prev) => [newRecord, ...prev.filter((p) => p.text !== rawText)].slice(0, maxHistoryItems));
+              // Trigger a brief vibration haptic feedback when a QR code is successfully identified by the scanner
+              if (enableHaptics && (rawText !== lastScannedTextRef.current || now - lastScanTimestampRef.current > 1200)) {
+                triggerQrHapticFeedback();
+              }
+
+              // Notify parent
+              onResult?.({ getText: () => rawText }, null);
+
+              // De-duplicate rapid consecutive reads within 1.5 seconds
+              if (rawText !== lastScannedTextRef.current || now - lastScanTimestampRef.current > 1500) {
+                lastScannedTextRef.current = rawText;
+                lastScanTimestampRef.current = now;
+
+                const newRecord: ScannedRecord = {
+                  id: `qr-${now}-${Math.random().toString(36).substring(2, 6)}`,
+                  text: rawText,
+                  timestamp: new Date(now).toLocaleTimeString('th-TH', { hour12: false }),
+                  scannedAt: now,
+                };
+
+                setScanHistory((prev) => [newRecord, ...prev.filter((p) => p.text !== rawText)].slice(0, maxHistoryItems));
+              }
             }
           }
         }
@@ -158,7 +207,7 @@ export const QrReader: React.FC<QrReaderProps> = ({
         streamRef.current = null;
       }
     };
-  }, [constraints, onResult, maxHistoryItems]);
+  }, [constraints, onResult, maxHistoryItems, frameSkip, enableHaptics, dynamicFrameSkip, targetScanRate]);
 
   return (
     <div
@@ -190,6 +239,19 @@ export const QrReader: React.FC<QrReaderProps> = ({
                 </span>
                 <Camera className="w-3.5 h-3.5 text-emerald-400 animate-pulse" />
                 <span className="text-[11px] tracking-wide">Scanner Active</span>
+                <span
+                  title={`Detected ${telemetry.fps} FPS. Scanning every ${telemetry.skipFactor === 1 ? 'frame' : `${telemetry.skipFactor} frames`} (~${telemetry.effectiveScanRate} scans/s).`}
+                  className="text-[9px] px-1.5 py-0.5 rounded bg-cyan-950/80 text-cyan-300 font-mono border border-cyan-500/40 flex items-center gap-1 shadow-sm"
+                >
+                  <Gauge className="w-2.5 h-2.5 text-cyan-400" />
+                  <span>{telemetry.fps} FPS</span>
+                  <span className="text-cyan-500">·</span>
+                  <span className={telemetry.tier === 'slow' ? 'text-amber-300 font-semibold' : telemetry.tier === 'high-refresh' ? 'text-emerald-300 font-semibold' : 'text-cyan-300'}>
+                    Skip 1/{telemetry.skipFactor}
+                  </span>
+                  <span className="text-cyan-500">·</span>
+                  <span>{telemetry.effectiveScanRate}/s</span>
+                </span>
               </div>
             )}
 

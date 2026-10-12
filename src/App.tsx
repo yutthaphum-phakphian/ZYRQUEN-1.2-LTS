@@ -188,6 +188,7 @@ import { GlobalCommandSearch } from '@/components/GlobalCommandSearch';
 import { ForensicAuditMasterDossierModal } from '@/components/forensics/ForensicAuditMasterDossierModal';
 import { useTheme } from '@/components/ThemeSwitcher';
 import { EmergencySovereignLockdown } from '@/components/EmergencySovereignLockdown';
+import { DashboardFeatureScrollSpy } from '@/components/navigation/DashboardFeatureScrollSpy';
 import { SovereignWatermarkOverlay } from '@/components/SovereignWatermark';
 import { SovereignUpgradeCycleModal } from '@/components/SovereignUpgradeCycleModal';
 import { ToastNotification, ToastMessage } from '@/components/ToastNotification';
@@ -1220,6 +1221,29 @@ function SovereignAppContent() {
   const [activeHsmNodes, setActiveHsmNodes] = useState<number>(10);
   const [disabledHsmNodeIds, setDisabledHsmNodeIds] = useState<Record<string, boolean>>({});
   const [isHsmHistoryExpanded, setIsHsmHistoryExpanded] = useState<boolean>(true);
+
+  // Responsive UI Scaling ("ปรับขนาด") State
+  const [uiScale, setUiScale] = useState<number>(() => {
+    try {
+      const saved = localStorage.getItem('zyrquen_ui_scale');
+      if (saved) {
+        const val = parseFloat(saved);
+        if (!isNaN(val) && val >= 0.7 && val <= 1.3) return val;
+      }
+    } catch {
+      // ignore storage error
+    }
+    return 1.0;
+  });
+
+  const handleScaleChange = useCallback((nextScale: number) => {
+    setUiScale(nextScale);
+    try {
+      localStorage.setItem('zyrquen_ui_scale', nextScale.toString());
+    } catch {
+      // ignore
+    }
+  }, []);
 
   const [toasts, setToasts] = useState<ToastMessage[]>([]);
   const showToast = useCallback(
@@ -2957,10 +2981,12 @@ function SovereignAppContent() {
       case 'dashboard':
         return (
           <div className="space-y-4">
-            <ForensicAuditStepper
-              onAddSystemEvent={addSystemEvent}
-              onNavigateView={setCurrentView}
-            />
+            <div id="forensic-pipeline-section" className="scroll-mt-36">
+              <ForensicAuditStepper
+                onAddSystemEvent={addSystemEvent}
+                onNavigateView={setCurrentView}
+              />
+            </div>
             <DashboardView
               snapshots={snapshots}
               verificationGateStatus={verificationGateStatus}
@@ -3567,6 +3593,13 @@ function SovereignAppContent() {
         onOpenUpgradeCycle={() => setIsUpgradeModalOpen(true)}
       />
 
+      {/* Dynamic Synchronized Feature Scroll-Spy & Mobile Scaling Controller */}
+      <DashboardFeatureScrollSpy
+        currentView={currentView}
+        uiScale={uiScale}
+        onScaleChange={handleScaleChange}
+      />
+
       {/* App Body Layout with Collapsible Left Sidebar */}
       <div className="relative z-10 max-w-[1780px] w-full max-w-full mx-auto px-2 sm:px-4 flex items-start overflow-hidden">
         {/* Left Sidebar (Open / Close Collapsible) */}
@@ -3582,15 +3615,18 @@ function SovereignAppContent() {
           onOpenUpgradeCycle={() => setIsUpgradeModalOpen(true)}
         />
 
-        {/* Main Content Area with Fluid Spring Reflow Layout */}
-        <main className="flex-1 min-w-0 w-full max-w-full overflow-hidden px-2 sm:px-4 py-4 pb-28 sm:pb-32 space-y-4">
+        {/* Main Content Area with Fluid Spring Reflow Layout & Responsive Zoom Scaling */}
+        <main
+          style={uiScale !== 1.0 ? ({ zoom: uiScale } as React.CSSProperties) : undefined}
+          className="flex-1 min-w-0 w-full max-w-full overflow-hidden px-2 sm:px-4 py-4 pb-28 sm:pb-32 space-y-4 transition-all duration-200"
+        >
           {/* Visual Notification System: SSoT Mutation Drift Warning (Triggered if deviation >= 0.01%) */}
           <SsotDriftWarning />
 
           {/* Verification Gate Active Invariant Banner with Progress Bar & Expandable ETDA/PDPA Triggers */}
           <div
             id="verification-gate-section"
-            className="rounded-2xl bg-[#0b0e1a]/90 border border-cyan-500/25 backdrop-blur-xl shadow-lg transition-all duration-300 overflow-hidden"
+            className="rounded-2xl bg-[#0b0e1a]/90 border border-cyan-500/25 backdrop-blur-xl shadow-lg transition-all duration-300 overflow-hidden scroll-mt-36"
           >
             <div className="px-4 py-2.5 flex flex-wrap items-center justify-between gap-3 text-xs font-mono">
               {/* Left: Gate Status & Info with Tooltip Trigger */}
@@ -6240,7 +6276,9 @@ function SovereignAppContent() {
 
         {/* Emergency Sovereign Isolation Protocol Control (Shown on Security/Dashboard views) */}
         {(currentView === 'dashboard' || currentView === 'security') && (
-          <EmergencySovereignLockdown />
+          <div id="sovereign-isolation-section" className="scroll-mt-36">
+            <EmergencySovereignLockdown />
+          </div>
         )}
 
         {/* Real-time Nexus Integration Layer Bridge (Shown on Nexus/Archive/Ledger views) */}

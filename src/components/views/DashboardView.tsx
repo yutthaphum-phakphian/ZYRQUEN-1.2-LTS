@@ -392,7 +392,7 @@ export const DashboardView: React.FC<DashboardViewProps> = ({
       ) : (
         <>
           {/* 2. TOP 3 KEY EXECUTIVE METRICS CARDS (3-Column Grid) */}
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-4 sm:gap-6">
+          <div id="seal-clock-metrics-section" className="grid grid-cols-1 md:grid-cols-3 gap-4 sm:gap-6 scroll-mt-36">
         {/* Metric 1: Core Status & Cryptography */}
         <div className="p-4 sm:p-5 rounded-2xl bg-[#090e1c] border border-cyan-500/20 space-y-3 relative overflow-hidden">
           <div className="flex items-center justify-between text-xs font-mono">
@@ -470,7 +470,7 @@ export const DashboardView: React.FC<DashboardViewProps> = ({
       </div>
 
       {/* 2.5. CENTRALIZED HSM CLUSTER HEALTH & TELEMETRY GAUGE */}
-      <div className="space-y-2">
+      <div id="hsm-cluster-section" className="space-y-2 scroll-mt-36">
         <div className="flex items-center justify-between px-1">
           <div className="flex items-center gap-2 font-mono text-xs text-zinc-400">
             <Server className="w-3.5 h-3.5 text-cyan-400" />
@@ -484,7 +484,7 @@ export const DashboardView: React.FC<DashboardViewProps> = ({
       </div>
 
       {/* 2.6. REAL-TIME FORENSIC AUDIT & MUTATION DELTA D3 TRACKER */}
-      <div className="space-y-2">
+      <div id="mutation-delta-section" className="space-y-2 scroll-mt-36">
         <div className="flex items-center justify-between px-1">
           <div className="flex items-center gap-2 font-mono text-xs text-zinc-400">
             <Activity className="w-3.5 h-3.5 text-cyan-400" />
@@ -498,7 +498,7 @@ export const DashboardView: React.FC<DashboardViewProps> = ({
       </div>
 
       {/* 3. PRIMARY SYSTEM SUMMARY & OPERATIONS ROUTER (2-Column Grid) */}
-      <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 items-start">
+      <div id="enclaves-router-section" className="grid grid-cols-1 lg:grid-cols-12 gap-6 items-start scroll-mt-36">
         
         {/* Left 6 Columns: Key Runtime Status */}
         <div className="lg:col-span-6 space-y-4">
