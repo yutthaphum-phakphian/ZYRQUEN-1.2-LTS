@@ -486,7 +486,7 @@ export async function buildSignedForensicAuditChainPayload(
       passportId: '#EP-SOVEREIGN-01',
       mutationAuthority: 0,
       ssotMutationDelta: SSOT_MUTATION,
-      baselineDriftPercentage: BASELINE_DRIFT,
+      baselineDriftPercentage: parseFloat(String(BASELINE_DRIFT)) || 0.0,
       failClosedThermalLimitCelsius: 85.0,
       cryoOperatingTempMk: parseFloat(String(SYSTEM_METADATA.cryoTemp)) || 14.98,
       coherencePercentage: 99.98,

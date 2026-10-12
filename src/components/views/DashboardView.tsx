@@ -5,6 +5,7 @@ import { useOfflineWarning } from '../../hooks/useOfflineWarning';
 import { HsmClusterHealthGauge } from '../HsmClusterHealthGauge';
 import { MutationDeltaChart } from '../charts/MutationDeltaChart';
 import { ChartAnimationToggle } from '../dashboard/ChartAnimationToggle';
+import { HealthDashboard } from '../HealthDashboard';
 import {
   Activity,
   Cpu,
@@ -65,6 +66,7 @@ export const DashboardView: React.FC<DashboardViewProps> = ({
 
   const [isVerifyingSeals, setIsVerifyingSeals] = useState<boolean>(false);
   const [verifyFeedback, setVerifyFeedback] = useState<string | null>(null);
+  const [dashboardTab, setDashboardTab] = useState<'overview' | 'health'>('overview');
 
   // Real-time Treasury Variance Telemetry State
   const [treasurySummary, setTreasurySummary] = useState<TreasuryVarianceSummary>(() =>
@@ -352,8 +354,45 @@ export const DashboardView: React.FC<DashboardViewProps> = ({
         )}
       </div>
 
-      {/* 2. TOP 3 KEY EXECUTIVE METRICS CARDS (3-Column Grid) */}
-      <div className="grid grid-cols-1 md:grid-cols-3 gap-4 sm:gap-6">
+      {/* DEDICATED TAB SWITCHER: MAINNET OVERVIEW vs SYSTEM HEALTH DASHBOARD */}
+      <div className="flex items-center gap-2 border-b border-slate-800 pb-2">
+        <button
+          onClick={() => {
+            playTone(520, 0.03);
+            setDashboardTab('overview');
+          }}
+          className={`px-4 py-2 rounded-xl text-xs font-mono font-bold transition-all flex items-center gap-2 cursor-pointer ${
+            dashboardTab === 'overview'
+              ? 'bg-cyan-950 text-cyan-300 border border-cyan-500/50 shadow-[0_0_12px_rgba(6,182,212,0.2)]'
+              : 'text-slate-400 hover:text-white bg-slate-900/50 border border-slate-800'
+          }`}
+        >
+          <Layers className="w-3.5 h-3.5" />
+          <span>Mainnet Overview</span>
+        </button>
+
+        <button
+          onClick={() => {
+            playTone(560, 0.03);
+            setDashboardTab('health');
+          }}
+          className={`px-4 py-2 rounded-xl text-xs font-mono font-bold transition-all flex items-center gap-2 cursor-pointer ${
+            dashboardTab === 'health'
+              ? 'bg-cyan-950 text-cyan-300 border border-cyan-500/50 shadow-[0_0_12px_rgba(6,182,212,0.2)]'
+              : 'text-slate-400 hover:text-white bg-slate-900/50 border border-slate-800'
+          }`}
+        >
+          <Activity className="w-3.5 h-3.5 text-cyan-400" />
+          <span>System Health Dashboard</span>
+        </button>
+      </div>
+
+      {dashboardTab === 'health' ? (
+        <HealthDashboard snapshots={snapshots} />
+      ) : (
+        <>
+          {/* 2. TOP 3 KEY EXECUTIVE METRICS CARDS (3-Column Grid) */}
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-4 sm:gap-6">
         {/* Metric 1: Core Status & Cryptography */}
         <div className="p-4 sm:p-5 rounded-2xl bg-[#090e1c] border border-cyan-500/20 space-y-3 relative overflow-hidden">
           <div className="flex items-center justify-between text-xs font-mono">
@@ -592,6 +631,8 @@ export const DashboardView: React.FC<DashboardViewProps> = ({
           </div>
         </div>
       </div>
+      </>
+      )}
 
       {/* Feature 3: Export Settings Modal (Signed CSV / JSON Artifact) */}
       {isExportModalOpen && (

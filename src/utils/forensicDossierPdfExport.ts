@@ -147,10 +147,10 @@ export function generateMasterForensicDossierV9Pdf(dossier: ForensicDossierMaste
   doc.roundedRect(14, 108, 182, 8, 1, 1, 'F');
   doc.text('2. CORE TECHNICAL PILLARS (PILLARS I - IV)', 18, 114);
 
-  const pillarRows = dossier.pillars.map((p) => [
+  const pillarRows = dossier.pillars.map((p: any) => [
     p.pillarNumber,
     p.title,
-    p.specification,
+    p.specification || p.description,
     p.status,
   ]);
 
@@ -179,11 +179,11 @@ export function generateMasterForensicDossierV9Pdf(dossier: ForensicDossierMaste
   doc.roundedRect(14, finalPillarY + 6, 182, 8, 1, 1, 'F');
   doc.text('3. STATUTORY LEGAL ALIGNMENT (THAI ETDA & PDPA)', 18, finalPillarY + 12);
 
-  const legalRows = dossier.legalAlignments.map((l) => [
+  const legalRows = dossier.legalAlignments.map((l: any) => [
     l.section,
     l.title,
-    l.mechanism,
-    l.complianceLevel,
+    l.mechanism || l.title,
+    l.complianceLevel || l.status,
   ]);
 
   autoTable(doc, {
@@ -227,11 +227,11 @@ export function generateMasterForensicDossierV9Pdf(dossier: ForensicDossierMaste
     22
   );
 
-  const stepRows = dossier.steps.map((s) => [
+  const stepRows = dossier.steps.map((s: any) => [
     s.step.toString(),
-    s.title,
+    s.title || s.name,
     s.statutoryStandard,
-    s.cryptographicScheme,
+    s.cryptographicScheme || s.merkleHash,
     `${s.executionTimeMs.toFixed(1)} ms`,
     s.result,
   ]);

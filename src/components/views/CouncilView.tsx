@@ -1596,7 +1596,7 @@ export const CouncilView: React.FC<CouncilViewProps> = ({ onAddSystemEvent }) =>
               {modalActiveTab === 'contributions' && (
                 <div className="space-y-4 text-sm">
                   <div className="space-y-3">
-                    {selectedMember.contributions.map((item, idx) => (
+                    {(selectedMember.contributions || []).map((item, idx) => (
                       <div
                         key={idx}
                         className="p-4 rounded-2xl bg-zinc-900/80 border border-white/10 space-y-2 hover:border-amber-500/30 transition-colors"
@@ -1661,7 +1661,7 @@ export const CouncilView: React.FC<CouncilViewProps> = ({ onAddSystemEvent }) =>
                         Cryptographic Public Key (PQC Lattice Armor)
                       </span>
                       <button
-                        onClick={() => handleCopy(selectedMember.publicKeyArmor, 'modal-pubkey')}
+                        onClick={() => handleCopy(selectedMember.publicKeyArmor || selectedMember.keyFingerprint, 'modal-pubkey')}
                         className="inline-flex items-center gap-1 text-xs text-amber-400 hover:text-amber-300 font-mono"
                       >
                         {copiedKey === 'modal-pubkey' ? (
@@ -1678,7 +1678,7 @@ export const CouncilView: React.FC<CouncilViewProps> = ({ onAddSystemEvent }) =>
                       </button>
                     </div>
                     <pre className="p-3 rounded-xl bg-zinc-950 font-mono text-xs text-amber-300/90 break-all select-all border border-amber-500/20 overflow-x-auto leading-relaxed">
-                      {selectedMember.publicKeyArmor}
+                      {selectedMember.publicKeyArmor || selectedMember.keyFingerprint}
                     </pre>
                   </div>
 
@@ -1690,7 +1690,7 @@ export const CouncilView: React.FC<CouncilViewProps> = ({ onAddSystemEvent }) =>
                         PQC Digital Signature (Hex Digest)
                       </span>
                       <button
-                        onClick={() => handleCopy(selectedMember.cryptoSignature, 'modal-sig')}
+                        onClick={() => handleCopy(selectedMember.cryptoSignature || selectedMember.hsmSignatureDigest, 'modal-sig')}
                         className="inline-flex items-center gap-1 text-xs text-cyan-400 hover:text-cyan-300 font-mono"
                       >
                         {copiedKey === 'modal-sig' ? (
