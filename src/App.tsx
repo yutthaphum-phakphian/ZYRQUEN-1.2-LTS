@@ -615,7 +615,7 @@ const TRIGGER_PQC_HASHES: Record<string, string> = {
   'pdpa-sec-28': '0xdeadbeef00112233445566778899aabbccddeeff112233445566778899aabbcc',
 };
 
-const INITIAL_SYSTEM_EVENTS: SystemEvent[] = [
+export const INITIAL_SYSTEM_EVENTS: SystemEvent[] = [
   {
     id: 'evt-evidence-tnt',
     type: 'EVIDENCE_IMPORTED',
@@ -1116,7 +1116,9 @@ function SovereignAppContent() {
   const setCurrentView = useCallback((view: ViewType) => {
     const targetPath = view === 'dashboard' ? '/' : `/${view}`;
     if (location.pathname !== targetPath) {
-      navigate(targetPath);
+      React.startTransition(() => {
+        navigate(targetPath);
+      });
     }
   }, [navigate, location.pathname]);
   const [isLeftSidebarOpen, setIsLeftSidebarOpen] = useState<boolean>(() => {
@@ -2982,7 +2984,7 @@ function SovereignAppContent() {
       case 'vault':
         return <VaultView />;
       case 'ledger':
-        return <LedgerView snapshots={snapshots} />;
+        return <LedgerView snapshots={snapshots} events={systemEvents} />;
       case 'pulse':
         return (
           <PulseView

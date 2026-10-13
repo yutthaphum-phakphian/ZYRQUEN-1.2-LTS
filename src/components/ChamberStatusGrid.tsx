@@ -443,12 +443,13 @@ export const ChamberStatusGrid: React.FC<ChamberStatusGridProps> = ({ onNavigate
 
   // Filter logic
   const filteredChambers = chambers.filter((ch) => {
+    const q = (searchQuery || '').toLowerCase();
     const matchesSearch =
-      ch.num.includes(searchQuery) ||
-      ch.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
-      ch.titleEn.toLowerCase().includes(searchQuery.toLowerCase()) ||
-      ch.titleTh.toLowerCase().includes(searchQuery.toLowerCase()) ||
-      ch.category.toLowerCase().includes(searchQuery.toLowerCase());
+      (ch.num || '').includes(searchQuery) ||
+      (ch.name || '').toLowerCase().includes(q) ||
+      (ch.titleEn || '').toLowerCase().includes(q) ||
+      (ch.titleTh || '').toLowerCase().includes(q) ||
+      (ch.category || '').toLowerCase().includes(q);
 
     const matchesTruth = truthFilter === 'ALL' || ch.truthLevel === truthFilter;
     return matchesSearch && matchesTruth;
