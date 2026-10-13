@@ -205,22 +205,25 @@ export function generateAndDownloadFullAuditPdfReport({
     doc.setFont('helvetica', 'normal');
     doc.setFontSize(5.8);
     doc.setTextColor(100, 116, 139);
-    doc.text(seal.tagSerialNumber, margin + 2, y + 7.2);
+    doc.text(seal.tagSerialNumber || seal.hardwareFoilTag || '', margin + 2, y + 7.2);
 
     doc.setFont('helvetica', 'bold');
     doc.setFontSize(6.2);
     doc.setTextColor(30, 41, 59);
-    const shortUnit = seal.hardwareUnit.length > 36 ? seal.hardwareUnit.substring(0, 33) + '...' : seal.hardwareUnit;
+    const unitStr = seal.hardwareUnit || seal.hsmNodeUnit || '';
+    const shortUnit = unitStr.length > 36 ? unitStr.substring(0, 33) + '...' : unitStr;
     doc.text(shortUnit, margin + 48, y + 4);
 
     doc.setFont('helvetica', 'normal');
     doc.setFontSize(5.5);
     doc.setTextColor(100, 116, 139);
-    doc.text(seal.keyType, margin + 48, y + 7.2);
+    doc.text(seal.keyType || seal.hsmNodeUnit || '', margin + 48, y + 7.2);
 
-    const shortLoc = seal.physicalLocation.length > 28 ? seal.physicalLocation.substring(0, 26) + '...' : seal.physicalLocation;
+    const locStr = seal.physicalLocation || 'Bangkok Main Vault';
+    const shortLoc = locStr.length > 28 ? locStr.substring(0, 26) + '...' : locStr;
     doc.text(shortLoc, margin + 104, y + 4);
-    doc.text(seal.fipsLevel.substring(0, 26), margin + 104, y + 7.2);
+    const fipsStr = seal.fipsLevel || seal.fipsCertification || '';
+    doc.text(fipsStr.substring(0, 26), margin + 104, y + 7.2);
 
     doc.setFont('courier', 'normal');
     doc.setFontSize(5.8);

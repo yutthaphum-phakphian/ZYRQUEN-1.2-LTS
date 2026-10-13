@@ -29,11 +29,11 @@ jobs:
             !cloud-workspace-command-center/
           sparse-checkout-cone-mode: false
 
-      # 1. Setup Node.js v20 LTS
+      # 1. Setup Node.js v22
       - name: Setup Node.js
         uses: actions/setup-node@v4
         with:
-          node-version: 20
+          node-version: 22
 
 
       # 2. Install Packages with legacy peer deps for React 19 compatibility
@@ -64,7 +64,6 @@ jobs:
         uses: actions/configure-pages@v5
         with:
           enablement: true
-        continue-on-error: true
 
       # 6. Upload Artifact
       - name: Upload Artifact
@@ -75,6 +74,5 @@ jobs:
       # 7. Deploy to GitHub Pages
       - name: Deploy to GitHub Pages
         id: deployment
-        continue-on-error: true
         uses: actions/deploy-pages@v4
 

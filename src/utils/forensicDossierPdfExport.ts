@@ -150,7 +150,7 @@ export function generateMasterForensicDossierV9Pdf(dossier: ForensicDossierMaste
   const pillarRows = dossier.pillars.map((p) => [
     p.pillarNumber,
     p.title,
-    p.specification,
+    p.specification || p.description || '',
     p.status,
   ]);
 
@@ -181,9 +181,9 @@ export function generateMasterForensicDossierV9Pdf(dossier: ForensicDossierMaste
 
   const legalRows = dossier.legalAlignments.map((l) => [
     l.section,
-    l.title,
-    l.mechanism,
-    l.complianceLevel,
+    l.title || l.actTitle,
+    l.mechanism || l.statutoryMandate,
+    l.complianceLevel || l.enforcementStatus,
   ]);
 
   autoTable(doc, {

@@ -21,9 +21,11 @@ __pycache__/
 *.pyc
 cloud-workspace-command-center/
 .aistudio/
-data/
+/data/
 bun.lock
 # generated forensic heatmaps - runtime only
 ZYRQUEN_Heatmap*.pdf
 archive/heatmap/
 ZYRQUEN-1.2-LTS.wiki/
+!src/data/
+
