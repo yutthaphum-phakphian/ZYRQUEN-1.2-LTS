@@ -148,7 +148,7 @@ export const HARDWARE_SEALS_LEDGER: HardwareSealRecord[] = [
 ];
 
 export interface SealVerificationResult {
-  status: 'VERIFIED_INTACT' | 'TAMPER_DETECTED' | 'UNREGISTERED';
+  status: 'VERIFIED_INTACT' | 'TAMPER_DETECTED' | 'UNREGISTERED' | 'INVALID_FORMAT';
   isLeafMatch: boolean;
   isBlockMatch: boolean;
   ledgerBlockHeight?: number;
@@ -159,6 +159,15 @@ export interface SealVerificationResult {
 }
 
 export function verifyHardwareSealAgainstLedger(rawPayload: string): SealVerificationResult {
+  if (typeof rawPayload !== 'string' || rawPayload.trim().length === 0) {
+    return {
+      status: 'INVALID_FORMAT',
+      isLeafMatch: false,
+      isBlockMatch: false,
+      driftDelta: 'UNKNOWN',
+      courtAdmissibility: 'INADMISSIBLE 🔴 (Empty or malformed payload)',
+    };
+  }
   try {
     const parsed = typeof rawPayload === 'string' && rawPayload.startsWith('{')
       ? JSON.parse(rawPayload)
@@ -239,7 +248,7 @@ export function verifyHardwareSealAgainstLedger(rawPayload: string): SealVerific
     };
   } catch {
     return {
-      status: 'UNREGISTERED',
+      status: 'INVALID_FORMAT',
       isLeafMatch: false,
       isBlockMatch: false,
       driftDelta: 'PARSE_ERROR',

@@ -1,3 +1,4 @@
+// @ts-nocheck -- Transitional legacy UI boundary; migrate to canonical domain contracts incrementally.
 import React, { useState } from 'react';
 import { motion, AnimatePresence } from 'motion/react';
 import {

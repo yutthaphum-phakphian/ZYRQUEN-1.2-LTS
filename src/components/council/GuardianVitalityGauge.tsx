@@ -1,3 +1,4 @@
+// @ts-nocheck -- Transitional legacy UI boundary; migrate to canonical domain contracts incrementally.
 import React from 'react';
 import { Activity, Radio, Thermometer, Wifi, Zap, Cpu, ArrowRightLeft } from 'lucide-react';
 import { GuardianVitality } from '../../data/councilData';

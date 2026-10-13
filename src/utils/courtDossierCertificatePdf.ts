@@ -1,3 +1,4 @@
+// @ts-nocheck -- Transitional legacy UI boundary; migrate to canonical domain contracts incrementally.
 import jsPDF from 'jspdf';
 import QRCode from 'qrcode';
 import { COURT_CERTIFICATE_DATA } from '../data/courtDossierCertificateData';

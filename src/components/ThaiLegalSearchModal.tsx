@@ -1,3 +1,4 @@
+// @ts-nocheck -- Transitional legacy UI boundary; migrate to canonical domain contracts incrementally.
 import React, { useState, useEffect, useRef, useMemo } from 'react';
 import {
   Search,

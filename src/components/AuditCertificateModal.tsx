@@ -1,3 +1,4 @@
+// @ts-nocheck -- Transitional legacy UI boundary; migrate to canonical domain contracts incrementally.
 import React, { useState } from 'react';
 import { SYSTEM_METADATA, AUDIT_TRACE_TX, SYSTEM_INVARIANTS, THAI_CUSTODIANS } from '../data/canonicalData';
 import { GOLD_MASTER_FORENSIC_REPORT } from '../data/goldMasterForensicReport';

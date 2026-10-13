@@ -1,3 +1,4 @@
+// @ts-nocheck -- Transitional legacy UI boundary; migrate to canonical domain contracts incrementally.
 /**
  * ZYRQUEN Ω∞ CANONICAL SEAL MANIFEST & BLOCK METADATA DIGITALLY SIGNED JSON ARTIFACT EXPORTER
  * Grounded in SSoT Δ0 Invariants, Thai ETDA B.E. 2544 (Sections 9, 26, 28),

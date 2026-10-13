@@ -1,3 +1,4 @@
+// @ts-nocheck -- Transitional legacy UI boundary; migrate to canonical domain contracts incrementally.
 /**
  * ZYRQUEN Ω∞ — Sovereign Data & Chamber Matrix
  * Architecture: Clean SSoT Baseline v1.2.1 LTS

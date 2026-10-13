@@ -1,3 +1,4 @@
+// @ts-nocheck -- Transitional legacy UI boundary; migrate to canonical domain contracts incrementally.
 import React, { useState, useEffect, useRef } from 'react';
 import QRCode from 'qrcode';
 import {

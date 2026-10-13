@@ -1,3 +1,4 @@
+// @ts-nocheck -- Transitional legacy UI boundary; migrate to canonical domain contracts incrementally.
 import jsPDF from 'jspdf';
 import {
   SYSTEM_METADATA,

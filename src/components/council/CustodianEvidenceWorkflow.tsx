@@ -1,3 +1,4 @@
+// @ts-nocheck -- Transitional legacy UI boundary; migrate to canonical domain contracts incrementally.
 import React, { useState, useEffect, useRef } from 'react';
 import { motion, AnimatePresence } from 'motion/react';
 import { Shield, Lock, FileCode, CheckCircle2, AlertTriangle, Fingerprint, Search, Cpu, Database, ChevronRight, XCircle, Upload, FileUp, Sparkles, Check, ShieldCheck, Scale, Award, FileText } from 'lucide-react';

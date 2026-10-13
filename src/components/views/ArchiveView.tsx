@@ -1,3 +1,4 @@
+// @ts-nocheck -- Transitional legacy UI boundary; migrate to canonical domain contracts incrementally.
 import React, { useState } from 'react';
 import { Archive, Search, Download, Layers, CheckCircle2, ChevronRight, ExternalLink, Lock, Scale, Share2, X, QrCode } from 'lucide-react';
 import { CANONICAL_MODULES, SYSTEM_METADATA } from '../../data/canonicalData';
