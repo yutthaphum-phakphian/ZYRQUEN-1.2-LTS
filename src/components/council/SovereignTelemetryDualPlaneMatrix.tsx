@@ -29,6 +29,7 @@ import {
 import { playAuditChime, playTone, toggleCryoHum55_110, isCryoHumActive } from '../AudioSynthesizer';
 import { copyToClipboard } from '../../utils/clipboard';
 import { ZYRQUEN_APEX_ULTIMATE_MANIFEST } from '../../data/sovereignApexUltimatePureGreenData';
+import { HsmNodeStatusTooltip } from './HsmNodeStatusTooltip';
 
 export const SovereignTelemetryDualPlaneMatrix: React.FC = () => {
   // Telemetry & State
@@ -550,7 +551,13 @@ Issued At: ${new Date().toISOString()}
                 >
                   <div className="flex items-center justify-between">
                     <span className="font-bold text-[11px]">{node.tc}</span>
-                    <span className="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse" />
+                    <HsmNodeStatusTooltip member={node.tc} isVerified={true} align="center">
+                      <span
+                        data-testid={`hsm-node-status-icon-${node.tc.toLowerCase()}`}
+                        className="w-2 h-2 rounded-full bg-emerald-400 animate-pulse block hover:scale-125 transition-transform"
+                        title={`HSM Node ${node.tc} Status`}
+                      />
+                    </HsmNodeStatusTooltip>
                   </div>
                   <div className="text-[9px] text-emerald-400 font-semibold truncate">
                     {node.health}

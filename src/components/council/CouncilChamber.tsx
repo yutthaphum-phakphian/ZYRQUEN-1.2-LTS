@@ -23,6 +23,7 @@ import { AUTHORITATIVE_STATE } from '../../utils/authoritativeState';
 import { CustodianEvidenceWorkflow } from './CustodianEvidenceWorkflow';
 import { SovereignTelemetryDualPlaneMatrix } from './SovereignTelemetryDualPlaneMatrix';
 import { FileText } from 'lucide-react';
+import { HsmNodeStatusTooltip } from './HsmNodeStatusTooltip';
 
 interface CouncilChamberProps {
   onSelectMember?: (member: CouncilMember) => void;
@@ -303,16 +304,25 @@ export const CouncilChamber: React.FC<CouncilChamberProps> = ({ onSelectMember }
                   </span>
                 </div>
 
-                <div className={`flex items-center gap-1.5 px-2 py-0.5 rounded-full text-[10px] font-bold border ${
-                  member.verificationStatus === 'REAL_HSM_SIGNED'
-                    ? 'bg-emerald-500/15 text-emerald-300 border-emerald-500/30'
-                    : 'bg-amber-500/15 text-amber-300 border-amber-500/30'
-                }`}>
-                  <span className={`w-1.5 h-1.5 rounded-full ${
-                    member.verificationStatus === 'REAL_HSM_SIGNED' ? 'bg-emerald-400' : 'bg-amber-400'
-                  }`} />
-                  <span>{member.verificationStatus === 'REAL_HSM_SIGNED' ? 'REAL_HSM' : 'CLAIMED'}</span>
-                </div>
+                <HsmNodeStatusTooltip
+                  member={member}
+                  isVerified={member.verificationStatus === 'REAL_HSM_SIGNED'}
+                  align="right"
+                >
+                  <div className={`flex items-center gap-1.5 px-2 py-0.5 rounded-full text-[10px] font-bold border transition-all hover:scale-105 ${
+                    member.verificationStatus === 'REAL_HSM_SIGNED'
+                      ? 'bg-emerald-500/15 text-emerald-300 border-emerald-500/30'
+                      : 'bg-amber-500/15 text-amber-300 border-amber-500/30'
+                  }`}>
+                    <span
+                      data-testid={`hsm-node-status-icon-${member.slotId}`}
+                      className={`w-1.5 h-1.5 rounded-full ${
+                        member.verificationStatus === 'REAL_HSM_SIGNED' ? 'bg-emerald-400' : 'bg-amber-400'
+                      }`}
+                    />
+                    <span>{member.verificationStatus === 'REAL_HSM_SIGNED' ? 'REAL_HSM' : 'CLAIMED'}</span>
+                  </div>
+                </HsmNodeStatusTooltip>
               </div>
 
               {/* Custodian Identity & Enclave Name */}

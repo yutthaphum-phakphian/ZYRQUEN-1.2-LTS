@@ -639,6 +639,28 @@ export const INITIAL_SYSTEM_EVENTS: SystemEvent[] = [
     severity: 'info',
   },
   {
+    id: 'evt-hsm-node-tc01',
+    type: 'HARDWARE',
+    title: 'HSM Deca-Node TC-01 (Alpha) Online & Calibrated',
+    description: 'Hardware cryptographic coprocessor TC-01 reached sub-Kelvin base temperature 14.98 mK. FIPS 140-3 Level 4 key ring initialized.',
+    timestamp: '05:01:05 ICT',
+    metaHash: 'hsm:node_state:tc01_online_1498mk',
+    statuteRef: 'FIPS 140-3 Level 4 Hardware Security Standard',
+    targetView: 'council',
+    severity: 'success',
+  },
+  {
+    id: 'evt-hsm-quorum-state',
+    type: 'HARDWARE',
+    title: 'HSM Cluster Hardware Quorum: 10/10 Nodes Operational',
+    description: 'Unanimous hardware state confirmed across all 10 physical HSM modules. Deca-Key cluster zero tamper trips detected.',
+    timestamp: '05:02:40 ICT',
+    metaHash: 'hsm:quorum_state:10_10_ratified',
+    statuteRef: 'FIPS 140-3 L4 Physical Cryptographic Module Security',
+    targetView: 'council',
+    severity: 'success',
+  },
+  {
     id: 'evt-000',
     type: 'COMPLIANCE',
     title: 'Thai Electronic Transactions Act (Sec 9, 26, 28) Bound',
@@ -1538,6 +1560,19 @@ function SovereignAppContent() {
     } else if (activeHsmNodes > prevActiveHsmNodesRef.current) {
       playTone(880, 0.05);
       showToast(`🟢 HSM Node Restored: Active Quorum now at ${activeHsmNodes}/10 Nodes Online.`, 'success');
+      dispatchAction({
+        type: 'EMIT_SYSTEM_EVENT',
+        payload: {
+          type: 'HARDWARE',
+          title: `HSM Node State Transition: Node Restored (${activeHsmNodes}/10)`,
+          description: `Hardware node reconnected and synchronized. Cluster state transitioned to ${activeHsmNodes}/10 online.`,
+          metaHash: `hsm:node_restored_event_${activeHsmNodes}`,
+          severity: 'success',
+          statuteRef: 'FIPS 140-3 L4 Hardware Custody & Quorum Invariant',
+          targetView: 'council',
+          bindingStatus: 'VERIFIED',
+        },
+      });
     }
     prevActiveHsmNodesRef.current = activeHsmNodes;
   }, [activeHsmNodes, showToast, handleRemediateHsmNodes]);

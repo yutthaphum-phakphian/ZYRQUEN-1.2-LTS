@@ -230,6 +230,7 @@ interface SystemEventsSidebarProps {
 export type SystemEventFilterType =
   | 'ALL'
   | 'PENDING'
+  | 'HSM_HARDWARE'
   | 'COMPLIANCE'
   | 'HARDWARE'
   | 'ANOMALY'
@@ -239,6 +240,76 @@ export type SystemEventFilterType =
   | 'LEGAL_SEARCH'
   | 'EVIDENCE_IMPORTED'
   | 'EVIDENCE_INGESTED';
+
+/**
+ * Specifically identifies HSM node hardware state changes (e.g. online/offline transitions,
+ * cluster quorum state, coprocessor telemetry, tamper alarms, physical calibration)
+ * completely independent of statutory compliance notifications.
+ */
+export function isHsmNodeHardwareEvent(ev: SystemEvent): boolean {
+  if (!ev) return false;
+  const title = (ev.title || '').toLowerCase();
+  const desc = (ev.description || '').toLowerCase();
+  const meta = (ev.metaHash || '').toLowerCase();
+
+  // Explicit HSM metadata hash prefixes / tags
+  if (
+    meta.includes('hsm:node_') ||
+    meta.includes('hsm:quorum_') ||
+    meta.includes('hsm_slot') ||
+    meta.includes('hsm_state') ||
+    meta.includes('hsm:node') ||
+    meta.includes('hsm:cluster')
+  ) {
+    return true;
+  }
+
+  // Keywords indicating HSM
+  const mentionsHsm = title.includes('hsm') || desc.includes('hsm') || meta.includes('hsm');
+
+  // Keywords indicating hardware node state changes
+  const mentionsHardwareState =
+    title.includes('node') ||
+    desc.includes('node') ||
+    title.includes('quorum') ||
+    desc.includes('quorum') ||
+    title.includes('offline') ||
+    desc.includes('offline') ||
+    title.includes('restored') ||
+    desc.includes('restored') ||
+    title.includes('online') ||
+    desc.includes('online') ||
+    title.includes('calibrated') ||
+    desc.includes('calibrated') ||
+    title.includes('hardware state') ||
+    desc.includes('hardware state') ||
+    title.includes('tamper') ||
+    desc.includes('tamper') ||
+    title.includes('zeroization') ||
+    desc.includes('zeroization') ||
+    title.includes('coprocessor') ||
+    desc.includes('coprocessor') ||
+    title.includes('cluster') ||
+    desc.includes('cluster') ||
+    /tc-0\d|tc-10/i.test(title) ||
+    /tc-0\d|tc-10/i.test(desc) ||
+    /node\s*#?\d+/i.test(title) ||
+    /node\s*#?\d+/i.test(desc) ||
+    title.includes('fips 140-3') ||
+    desc.includes('fips 140-3');
+
+  // Exclude pure statutory compliance declarations unless they explicitly record a hardware node transition
+  const isPureStatute =
+    (ev.type === 'COMPLIANCE' || ev.type === 'LEGAL_SEARCH') &&
+    !title.includes('node') &&
+    !title.includes('offline') &&
+    !title.includes('restored') &&
+    !meta.includes('hsm:node_');
+
+  if (isPureStatute) return false;
+
+  return mentionsHsm && mentionsHardwareState;
+}
 
 export const SystemEventsSidebar: React.FC<SystemEventsSidebarProps> = ({
   isOpen,
@@ -330,6 +401,7 @@ export const SystemEventsSidebar: React.FC<SystemEventsSidebarProps> = ({
     const counts: Record<SystemEventFilterType, number> = {
       ALL: mergedEvents.length,
       PENDING: 0,
+      HSM_HARDWARE: 0,
       COMPLIANCE: 0,
       HARDWARE: 0,
       ANOMALY: 0,
@@ -343,6 +415,9 @@ export const SystemEventsSidebar: React.FC<SystemEventsSidebarProps> = ({
     mergedEvents.forEach((ev) => {
       if (ev.bindingStatus === 'PENDING') {
         counts.PENDING += 1;
+      }
+      if (isHsmNodeHardwareEvent(ev)) {
+        counts.HSM_HARDWARE += 1;
       }
       if (ev.type === 'COMPLIANCE' || ev.type === 'LEGAL_SEARCH' || ev.isComplianceDrift) {
         counts.COMPLIANCE += 1;
@@ -368,6 +443,8 @@ export const SystemEventsSidebar: React.FC<SystemEventsSidebarProps> = ({
       let categoryMatch = true;
       if (filter === 'PENDING') {
         categoryMatch = ev.bindingStatus === 'PENDING';
+      } else if (filter === 'HSM_HARDWARE') {
+        categoryMatch = isHsmNodeHardwareEvent(ev);
       } else if (filter === 'COMPLIANCE') {
         categoryMatch = ev.type === 'COMPLIANCE' || ev.type === 'LEGAL_SEARCH' || Boolean(ev.isComplianceDrift);
       } else if (filter === 'ANOMALY') {
@@ -687,7 +764,19 @@ export const SystemEventsSidebar: React.FC<SystemEventsSidebarProps> = ({
     setTimeout(() => setCopiedId(null), 1800);
   };
 
-  const getEventBadge = (type: SystemEvent['type'], isComplianceDrift?: boolean, severity?: SystemEvent['severity']) => {
+  const getEventBadge = (
+    type: SystemEvent['type'],
+    isComplianceDrift?: boolean,
+    severity?: SystemEvent['severity'],
+    ev?: SystemEvent
+  ) => {
+    if (ev && isHsmNodeHardwareEvent(ev)) {
+      return {
+        label: 'HSM HARDWARE NODE STATE',
+        icon: <Cpu className="w-3.5 h-3.5 text-cyan-300 animate-pulse" />,
+        color: 'bg-[#091524] text-cyan-200 border-cyan-400/80 shadow-[0_0_12px_rgba(6,182,212,0.35)]',
+      };
+    }
     if (isComplianceDrift || severity === 'critical') {
       return {
         label: 'CRITICAL COMPLIANCE DRIFT',
@@ -1258,6 +1347,60 @@ export const SystemEventsSidebar: React.FC<SystemEventsSidebarProps> = ({
 
       {/* Event Filter Dropdown, Search Input & Quick Selector */}
       <div className="px-4 py-2.5 border-b border-white/8 bg-[#080c18] space-y-2.5">
+        {/* Dedicated Filter: Specifically toggle HSM node hardware state changes independent of compliance events */}
+        <div className="p-2.5 rounded-xl bg-gradient-to-r from-[#091526]/95 via-[#0d1f38]/95 to-[#091526]/95 border border-cyan-500/35 shadow-[0_0_15px_rgba(6,182,212,0.15)] flex items-center justify-between gap-2">
+          <div className="flex items-center gap-2.5 min-w-0">
+            <div className="relative flex items-center justify-center shrink-0">
+              <Cpu className={`w-4 h-4 ${filter === 'HSM_HARDWARE' ? 'text-cyan-300 animate-pulse' : 'text-zinc-400'}`} />
+              {filter === 'HSM_HARDWARE' && (
+                <span className="absolute -top-1 -right-1 w-2 h-2 rounded-full bg-cyan-400 animate-ping" />
+              )}
+            </div>
+            <div className="min-w-0">
+              <div className="flex items-center gap-1.5 flex-wrap">
+                <span className="text-[11px] font-bold text-white tracking-wide">HSM Node Hardware Filter</span>
+                <span className={`text-[8.5px] px-1.5 py-0.2 rounded font-mono font-bold ${
+                  filter === 'HSM_HARDWARE'
+                    ? 'bg-cyan-500/30 text-cyan-300 border border-cyan-400/60 shadow-[0_0_8px_rgba(6,182,212,0.3)]'
+                    : 'bg-black/50 text-zinc-400 border border-white/10'
+                }`}>
+                  INDEPENDENT OF COMPLIANCE
+                </span>
+              </div>
+              <p className="text-[9.5px] text-zinc-400 font-sans truncate mt-0.5">
+                Displays 10/10 REAL_HSM cluster hardware transitions, tamper &amp; quorum alerts
+              </p>
+            </div>
+          </div>
+
+          <button
+            id="btn-toggle-hsm-hardware-filter"
+            type="button"
+            onClick={() => {
+              triggerVibration('click');
+              playTone(filter === 'HSM_HARDWARE' ? 520 : 780, 0.04);
+              setFilter((prev) => (prev === 'HSM_HARDWARE' ? 'ALL' : 'HSM_HARDWARE'));
+            }}
+            className={`px-3 py-1.5 rounded-xl text-[10px] font-bold font-mono transition-all flex items-center gap-1.5 shrink-0 cursor-pointer shadow-sm ${
+              filter === 'HSM_HARDWARE'
+                ? 'bg-cyan-500/30 hover:bg-cyan-500/40 text-cyan-100 border border-cyan-400 shadow-[0_0_15px_rgba(6,182,212,0.45)] active:scale-95'
+                : 'bg-white/5 hover:bg-cyan-500/15 text-zinc-300 hover:text-white border border-white/15 hover:border-cyan-500/40 active:scale-95'
+            }`}
+            title="Specifically toggle the display of HSM node hardware state changes independent of compliance events"
+          >
+            <span>{filter === 'HSM_HARDWARE' ? 'FILTER ON' : 'FILTER OFF'}</span>
+            <span
+              className={`px-1.5 py-0.2 rounded-full text-[9px] font-mono font-bold ${
+                filter === 'HSM_HARDWARE'
+                  ? 'bg-cyan-400 text-black'
+                  : 'bg-black/60 text-cyan-300 border border-cyan-500/40'
+              }`}
+            >
+              {filterCounts.HSM_HARDWARE}
+            </span>
+          </button>
+        </div>
+
         {/* Text-based Filter Input (Title, Statute Reference, Severity, or Description) */}
         <div className="space-y-1.5">
           <div className="flex items-center justify-between text-zinc-400 text-xs">
@@ -1303,6 +1446,7 @@ export const SystemEventsSidebar: React.FC<SystemEventsSidebarProps> = ({
           <div className="flex items-center gap-1.5 overflow-x-auto text-[10px] font-mono no-scrollbar pt-0.5">
             <span className="text-zinc-500 shrink-0 text-[9px] uppercase tracking-wider">Statute:</span>
             {[
+              { label: 'HSM Hardware', query: 'HSM' },
               { label: 'ETDA §26', query: 'ETDA' },
               { label: 'PDPA §37', query: 'PDPA' },
               { label: 'FIPS 140-3', query: 'FIPS' },
@@ -1389,6 +1533,7 @@ export const SystemEventsSidebar: React.FC<SystemEventsSidebarProps> = ({
               className="px-2.5 py-1 rounded-xl bg-[#0e1428] border-cyan-500/40 text-cyan-200 text-xs font-mono font-medium focus:outline-none focus:border-cyan-300 transition-colors cursor-pointer shadow-sm max-w-[200px] truncate"
             >
               <option value="ALL">All Categories ({filterCounts.ALL})</option>
+              <option value="HSM_HARDWARE">🛡️ HSM Node Hardware States ({filterCounts.HSM_HARDWARE})</option>
               <option value="PENDING">⏳ PENDING Offline Logs ({filterCounts.PENDING})</option>
               <option value="COMPLIANCE">⚖️ COMPLIANCE & Legal Drift ({filterCounts.COMPLIANCE})</option>
               <option value="HARDWARE">💻 HARDWARE & Cryo ({filterCounts.HARDWARE})</option>
@@ -1422,14 +1567,14 @@ export const SystemEventsSidebar: React.FC<SystemEventsSidebarProps> = ({
 
         {/* Quick Filter Pill Buttons */}
         <div className="flex items-center gap-1.5 overflow-x-auto text-[11px] no-scrollbar pt-0.5">
-          {(['ALL', 'PENDING', 'COMPLIANCE', 'HARDWARE', 'ANOMALY', 'CRYPTO', 'SECURITY'] as const).map((f) => (
+          {(['ALL', 'HSM_HARDWARE', 'PENDING', 'COMPLIANCE', 'HARDWARE', 'ANOMALY', 'CRYPTO', 'SECURITY'] as const).map((f) => (
             <button
               key={f}
               onClick={() => {
                 playTone(550, 0.03);
                 setFilter(f);
               }}
-              className={`px-2.5 py-1 rounded-lg transition-all whitespace-nowrap text-[10px] font-mono flex items-center gap-1 ${
+              className={`px-2.5 py-1 rounded-lg transition-all whitespace-nowrap text-[10px] font-mono flex items-center gap-1 cursor-pointer ${
                 filter === f
                   ? 'bg-cyan-500/20 text-cyan-200 font-bold border-cyan-500/40 shadow-[0_0_8px_rgba(6,182,212,0.2)]'
                   : 'text-zinc-400 hover:text-zinc-200 bg-white/5 border-transparent'
@@ -1438,6 +1583,8 @@ export const SystemEventsSidebar: React.FC<SystemEventsSidebarProps> = ({
               <span>
                 {f === 'ALL'
                   ? 'All'
+                  : f === 'HSM_HARDWARE'
+                  ? '🛡️ HSM Nodes'
                   : f === 'PENDING'
                   ? '⏳ Pending'
                   : f === 'COMPLIANCE'
@@ -1451,7 +1598,9 @@ export const SystemEventsSidebar: React.FC<SystemEventsSidebarProps> = ({
                   : '🛡️ Security'}
               </span>
               <span className={`text-[9px] px-1 rounded font-normal ${
-                f === 'PENDING' && filterCounts.PENDING > 0
+                f === 'HSM_HARDWARE' && filterCounts.HSM_HARDWARE > 0
+                  ? 'bg-cyan-500/30 text-cyan-200 font-bold'
+                  : f === 'PENDING' && filterCounts.PENDING > 0
                   ? 'bg-amber-500/30 text-amber-200 font-bold'
                   : 'bg-black/40 text-zinc-400'
               }`}>
@@ -1700,8 +1849,9 @@ export const SystemEventsSidebar: React.FC<SystemEventsSidebarProps> = ({
           </div>
         ) : (
           paginatedEvents.map((ev) => {
-            const badge = getEventBadge(ev.type, ev.isComplianceDrift, ev.severity);
-            const isCompliance = ev.type === 'COMPLIANCE' || !!ev.statuteRef || !!ev.isComplianceDrift;
+            const badge = getEventBadge(ev.type, ev.isComplianceDrift, ev.severity, ev);
+            const isHsmState = isHsmNodeHardwareEvent(ev);
+            const isCompliance = !isHsmState && (ev.type === 'COMPLIANCE' || !!ev.statuteRef || !!ev.isComplianceDrift);
             const isSuccess = ev.severity === 'success' || ev.type === 'BACKUP';
             const isCritical = ev.isComplianceDrift || ev.severity === 'critical';
             const isWarning = ev.severity === 'warning' || ev.type === 'ANOMALY';
@@ -1719,6 +1869,8 @@ export const SystemEventsSidebar: React.FC<SystemEventsSidebarProps> = ({
                     ? 'ring-2 ring-cyan-400/80 bg-[#0f1b33] border-cyan-400 shadow-[0_0_20px_rgba(6,182,212,0.35)]'
                     : isPendingHighlighted
                     ? 'ring-2 ring-amber-400 bg-amber-950/60 border-amber-400 shadow-[0_0_25px_rgba(245,158,11,0.5)] animate-pulse'
+                    : isHsmState
+                    ? 'bg-[#091526] border-cyan-400/60 hover:border-cyan-300 hover:shadow-[0_0_20px_rgba(6,182,212,0.3)]'
                     : isCritical
                     ? 'bg-[#2a080c] border-rose-500/70 hover:border-rose-400 hover:shadow-[0_0_20px_rgba(244,63,94,0.3)]'
                     : isWarning || isPending

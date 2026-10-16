@@ -31,6 +31,7 @@ import { systemStateStore } from '../../store/systemStateStore';
 import { playAuditChime, playTone } from '../AudioSynthesizer';
 import { copyToClipboard } from '../../utils/clipboard';
 import { ZyrquenSelfAuditEngine, SelfAuditReport } from '../../utils/selfAuditEngineV12';
+import { HsmNodeStatusTooltip } from './HsmNodeStatusTooltip';
 
 interface RealHsmStatusGridProps {
   onSelectMember?: (member: CouncilMember) => void;
@@ -293,16 +294,25 @@ export const RealHsmStatusGrid: React.FC<RealHsmStatusGridProps> = ({ onSelectMe
                   </span>
                 </div>
 
-                <div className="flex items-center gap-1">
-                  <span className={`w-2 h-2 rounded-full ${
-                    member.verificationStatus === 'REAL_HSM_SIGNED' ? 'bg-emerald-400 animate-pulse' : 'bg-amber-400'
-                  }`} />
-                  <span className={`text-[10px] font-bold ${
-                    member.verificationStatus === 'REAL_HSM_SIGNED' ? 'text-emerald-400' : 'text-amber-400'
-                  }`}>
-                    {member.verificationStatus === 'REAL_HSM_SIGNED' ? 'REAL_HSM' : 'CLAIMED'}
-                  </span>
-                </div>
+                <HsmNodeStatusTooltip
+                  member={member}
+                  isVerified={member.verificationStatus === 'REAL_HSM_SIGNED'}
+                  align="right"
+                >
+                  <div className="flex items-center gap-1 px-1.5 py-0.5 rounded-full hover:bg-white/5 transition-all">
+                    <span
+                      data-testid={`hsm-node-status-icon-${member.slotId}`}
+                      className={`w-2 h-2 rounded-full ${
+                        member.verificationStatus === 'REAL_HSM_SIGNED' ? 'bg-emerald-400 animate-pulse' : 'bg-amber-400'
+                      }`}
+                    />
+                    <span className={`text-[10px] font-bold ${
+                      member.verificationStatus === 'REAL_HSM_SIGNED' ? 'text-emerald-400' : 'text-amber-400'
+                    }`}>
+                      {member.verificationStatus === 'REAL_HSM_SIGNED' ? 'REAL_HSM' : 'CLAIMED'}
+                    </span>
+                  </div>
+                </HsmNodeStatusTooltip>
               </div>
 
               {/* Custodian Identity */}
