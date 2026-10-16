@@ -371,14 +371,18 @@ export const CouncilView: React.FC<CouncilViewProps> = ({ onAddSystemEvent }) =>
     const radiusY = 140;
 
     return COUNCIL_MEMBERS.map((member, index) => {
+      const heartbeat = member.heartbeat || {
+        latencyMs: Number((0.85 + member.slotId * 0.12).toFixed(2)),
+        pulseFrequencyHz: Number((1.0 + (index % 4) * 0.25).toFixed(2)),
+      };
       if (member.slotId === 1) {
-        return { ...member, x: centerX, y: centerY, isCenter: true };
+        return { ...member, x: centerX, y: centerY, isCenter: true, heartbeat };
       }
       // Angle for 9 outer nodes
       const angle = ((index - 1) / 9) * 2 * Math.PI - Math.PI / 2;
       const x = centerX + radiusX * Math.cos(angle);
       const y = centerY + radiusY * Math.sin(angle);
-      return { ...member, x, y, isCenter: false };
+      return { ...member, x, y, isCenter: false, heartbeat };
     });
   }, []);
 
@@ -811,7 +815,7 @@ export const CouncilView: React.FC<CouncilViewProps> = ({ onAddSystemEvent }) =>
                           strokeDasharray="8 20"
                           className="animate-[dash_3s_linear_infinite]"
                           style={{
-                            animationDuration: `${node.heartbeat.latencyMs * 1.5 + 1.2}s`,
+                            animationDuration: `${(node.heartbeat?.latencyMs ?? 1.2) * 1.5 + 1.2}s`,
                           }}
                         />
 
@@ -819,7 +823,7 @@ export const CouncilView: React.FC<CouncilViewProps> = ({ onAddSystemEvent }) =>
                         <circle r={isHovered ? 3.5 : 2.5} fill={isVerified ? '#34D399' : '#FBBF24'}>
                           <animateMotion
                             path={`M 250 200 L ${node.x} ${node.y}`}
-                            dur={`${node.heartbeat.pulseFrequencyHz * 2}s`}
+                            dur={`${(node.heartbeat?.pulseFrequencyHz ?? 1.0) * 2}s`}
                             repeatCount="indefinite"
                           />
                         </circle>
@@ -1277,7 +1281,7 @@ export const CouncilView: React.FC<CouncilViewProps> = ({ onAddSystemEvent }) =>
                             <div className="flex items-center justify-between text-[10px] text-zinc-400">
                               <span>SHA-256 Output:</span>
                               <button
-                                onClick={() => handleCopy(diag.sha256Output, `diag-${member.slotId}`)}
+                                onClick={() => handleCopy(diag.sha256Output || '', `diag-${member.slotId}`)}
                                 className="text-cyan-400 hover:text-cyan-300 flex items-center gap-1"
                               >
                                 {copiedKey === `diag-${member.slotId}` ? (
@@ -1294,7 +1298,7 @@ export const CouncilView: React.FC<CouncilViewProps> = ({ onAddSystemEvent }) =>
                               </button>
                             </div>
                             <div className="p-1.5 rounded-lg bg-black font-mono text-[10px] text-emerald-300 break-all select-all border border-emerald-500/20">
-                              {diag.sha256Output.slice(0, 26)}...
+                              {(diag.sha256Output || '').slice(0, 26)}...
                             </div>
                           </div>
 

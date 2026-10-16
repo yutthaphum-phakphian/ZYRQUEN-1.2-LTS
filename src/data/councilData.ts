@@ -37,6 +37,10 @@ export interface CouncilMember {
   nameTh?: string;
   hardwareEnclave?: string;
   cryptoSignature?: string;
+  heartbeat?: {
+    latencyMs: number;
+    pulseFrequencyHz: number;
+  };
 }
 
 export const COUNCIL_MEMBERS: CouncilMember[] = [
