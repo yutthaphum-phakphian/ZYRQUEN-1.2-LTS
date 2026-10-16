@@ -129,14 +129,14 @@ export const AuditHistoryView: React.FC<AuditHistoryViewProps> = ({
       const q = searchQuery.toLowerCase().trim();
       list = list.filter(
         (s) =>
-          s.id.toLowerCase().includes(q) ||
-          s.sealedHash.toLowerCase().includes(q) ||
-          s.parentHash.toLowerCase().includes(q) ||
-          s.actor.toLowerCase().includes(q) ||
-          s.timestampIct.toLowerCase().includes(q) ||
-          s.verificationMetadata.pqcAlgorithm.toLowerCase().includes(q) ||
-          s.verificationMetadata.custodianName.toLowerCase().includes(q) ||
-          String(s.snapshotNumber).includes(q)
+          (s.id || '').toLowerCase().includes(q) ||
+          (s.sealedHash || '').toLowerCase().includes(q) ||
+          (s.parentHash || '').toLowerCase().includes(q) ||
+          (s.actor || '').toLowerCase().includes(q) ||
+          (s.timestampIct || '').toLowerCase().includes(q) ||
+          (s.verificationMetadata?.pqcAlgorithm || '').toLowerCase().includes(q) ||
+          (s.verificationMetadata?.custodianName || '').toLowerCase().includes(q) ||
+          String(s.snapshotNumber || '').includes(q)
       );
     }
 

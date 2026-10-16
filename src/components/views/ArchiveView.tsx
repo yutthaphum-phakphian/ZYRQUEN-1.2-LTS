@@ -2,6 +2,7 @@
 import React, { useState } from 'react';
 import { Archive, Search, Download, Layers, CheckCircle2, ChevronRight, ExternalLink, Lock, Scale, Share2, X, QrCode } from 'lucide-react';
 import { CANONICAL_MODULES, SYSTEM_METADATA } from '../../data/canonicalData';
+import { CHAMBERS_DATA } from '../../lib/ssot-data';
 import { ViewType, CanonicalModule } from '../../types';
 import { playAuditChime, playTone } from '../AudioSynthesizer';
 import { DeepFreezeColdStoragePanel } from '../DeepFreezeColdStoragePanel';
@@ -19,10 +20,12 @@ interface ArchiveViewProps {
   onNavigate: (view: ViewType) => void;
 }
 
+const ARCHIVE_MODULES = CHAMBERS_DATA;
+
 export const ArchiveView: React.FC<ArchiveViewProps> = ({ onNavigate }) => {
   const [archiveMode, setArchiveMode] = useState<'matrix_18' | 'modules_17'>('matrix_18');
   const [searchTerm, setSearchTerm] = useState('');
-  const [selectedModule, setSelectedModule] = useState<CanonicalModule>(CANONICAL_MODULES[0]);
+  const [selectedModule, setSelectedModule] = useState(ARCHIVE_MODULES[0]);
   const [isQrModalOpen, setIsQrModalOpen] = useState(false);
   const [qrCodeDataUrl, setQrCodeDataUrl] = useState<string>('');
 
@@ -45,13 +48,22 @@ export const ArchiveView: React.FC<ArchiveViewProps> = ({ onNavigate }) => {
     }
   };
 
-  const filteredModules = CANONICAL_MODULES.filter((m) =>
-    m.titleEn.toLowerCase().includes(searchTerm.toLowerCase()) ||
-    m.titleTh.toLowerCase().includes(searchTerm.toLowerCase()) ||
-    m.num.includes(searchTerm) ||
-    m.badge.toLowerCase().includes(searchTerm.toLowerCase()) ||
-    m.subModules.some((s) => s.nameEn.toLowerCase().includes(searchTerm.toLowerCase()) || s.nameTh.toLowerCase().includes(searchTerm.toLowerCase()))
-  );
+  const filteredModules = ARCHIVE_MODULES.filter((m) => {
+    const q = searchTerm.trim().toLowerCase();
+    if (!q) return true;
+    const titleEn = (m.titleEn || '').toLowerCase();
+    const titleTh = (m.titleTh || '').toLowerCase();
+    const num = (m.num || '').toLowerCase();
+    const badge = (m.badge || '').toLowerCase();
+    const subModules = m.subModules || [];
+    return (
+      titleEn.includes(q) ||
+      titleTh.includes(q) ||
+      num.includes(q) ||
+      badge.includes(q) ||
+      subModules.some((s) => (s.name || '').toLowerCase().includes(q) || (s.desc || '').toLowerCase().includes(q))
+    );
+  });
 
   const exportManifest = () => {
     const data = {
@@ -227,9 +239,9 @@ export const ArchiveView: React.FC<ArchiveViewProps> = ({ onNavigate }) => {
                 </div>
                 <div className="text-[11px] text-zinc-400 font-mono line-clamp-1">{mod.titleTh}</div>
                 <div className="flex items-center gap-3 text-[10px] font-mono text-zinc-500 pt-1">
-                  <span>{mod.subModules.length} Sub-modules</span>
+                  <span>{(mod.subModules || []).length} Sub-modules</span>
                   <span>•</span>
-                  <span className="text-emerald-400">{mod.metrics[0]?.value}</span>
+                  <span className="text-emerald-400">{mod.metrics?.[0]?.value || 'Nominal'}</span>
                 </div>
               </div>
             );
@@ -241,15 +253,15 @@ export const ArchiveView: React.FC<ArchiveViewProps> = ({ onNavigate }) => {
           <div className="p-6 rounded-[28px] bg-[#0b0e1a]/70 border border-white/8 backdrop-blur-xl space-y-5">
             <div className="flex items-center justify-between">
               <div>
-                <span className="text-xs font-mono font-bold text-cyan-400">MODULE {selectedModule.num}</span>
-                <h3 className="text-lg font-mono font-bold text-white mt-0.5">{selectedModule.titleEn}</h3>
-                <p className="text-xs font-mono text-zinc-400">{selectedModule.titleTh}</p>
+                <span className="text-xs font-mono font-bold text-cyan-400">MODULE {selectedModule?.num || selectedModule?.code || '00'}</span>
+                <h3 className="text-lg font-mono font-bold text-white mt-0.5">{selectedModule?.titleEn || selectedModule?.name || 'Canonical Module'}</h3>
+                <p className="text-xs font-mono text-zinc-400">{selectedModule?.titleTh || ''}</p>
               </div>
 
               <button
                 onClick={() => {
                   playTone(600, 0.05);
-                  onNavigate(selectedModule.targetView);
+                  onNavigate((selectedModule as any)?.targetView || 'matrix');
                 }}
                 className="px-3 py-1.5 rounded-xl bg-cyan-500/10 hover:bg-cyan-500/20 border border-cyan-500/30 text-cyan-300 font-mono text-xs flex items-center gap-1.5 transition-all"
               >
@@ -259,12 +271,12 @@ export const ArchiveView: React.FC<ArchiveViewProps> = ({ onNavigate }) => {
             </div>
 
             <p className="text-xs text-zinc-300 font-sans leading-relaxed">
-              {selectedModule.descriptionEn}
+              {selectedModule?.descriptionEn || selectedModule?.descriptionTh || 'Canonical architectural module running under LOCKED_FROZEN_v1.2_LTS.'}
             </p>
 
             {/* Metrics */}
             <div className="grid grid-cols-3 gap-2 text-xs font-mono">
-              {selectedModule.metrics.map((m, idx) => (
+              {(selectedModule?.metrics || []).map((m, idx) => (
                 <div key={idx} className="p-3 bg-black/40 rounded-xl border border-white/5 space-y-0.5">
                   <span className="text-zinc-500 text-[10px] block">{m.label}</span>
                   <span className="text-zinc-200 font-bold block">{m.value}</span>
@@ -275,33 +287,39 @@ export const ArchiveView: React.FC<ArchiveViewProps> = ({ onNavigate }) => {
             {/* Sub-modules list */}
             <div className="space-y-2">
               <div className="text-xs font-mono text-zinc-400 uppercase tracking-wider">
-                Canonical Sub-Components ({selectedModule.subModules.length})
+                Canonical Sub-Components ({(selectedModule?.subModules || []).length})
               </div>
 
               <div className="space-y-2">
-                {selectedModule.subModules.map((sub) => (
-                  <div
-                    key={sub.id}
-                    className="p-3.5 rounded-xl bg-white/[0.02] border border-white/5 hover:border-white/10 transition-all flex flex-col sm:flex-row sm:items-center justify-between gap-2"
-                  >
-                    <div>
-                      <div className="text-xs font-mono font-bold text-zinc-200">{sub.nameEn}</div>
-                      <div className="text-[11px] text-zinc-400 font-mono">{sub.nameTh}</div>
-                      <p className="text-[11px] text-zinc-500 font-sans mt-0.5">{sub.descriptionEn}</p>
-                    </div>
-
-                    <button
-                      onClick={() => {
-                        playTone(550, 0.04);
-                        onNavigate(sub.targetView);
-                      }}
-                      className="text-xs font-mono text-cyan-400 hover:text-cyan-300 flex items-center gap-1 shrink-0"
+                {(selectedModule?.subModules || []).map((sub, sIdx) => {
+                  const subTitle = (sub as any).name || (sub as any).nameEn || `Component #${sIdx + 1}`;
+                  const subSubtitle = (sub as any).nameTh || '';
+                  const subDesc = (sub as any).desc || (sub as any).descriptionEn || '';
+                  const target = (sub as any).viewTarget || (sub as any).targetView || 'matrix';
+                  return (
+                    <div
+                      key={(sub as any).id || sIdx}
+                      className="p-3.5 rounded-xl bg-white/[0.02] border border-white/5 hover:border-white/10 transition-all flex flex-col sm:flex-row sm:items-center justify-between gap-2"
                     >
-                      <span>Jump</span>
-                      <ChevronRight className="w-3.5 h-3.5" />
-                    </button>
-                  </div>
-                ))}
+                      <div>
+                        <div className="text-xs font-mono font-bold text-zinc-200">{subTitle}</div>
+                        {subSubtitle && <div className="text-[11px] text-zinc-400 font-mono">{subSubtitle}</div>}
+                        {subDesc && <p className="text-[11px] text-zinc-500 font-sans mt-0.5">{subDesc}</p>}
+                      </div>
+
+                      <button
+                        onClick={() => {
+                          playTone(550, 0.04);
+                          onNavigate(target);
+                        }}
+                        className="text-xs font-mono text-cyan-400 hover:text-cyan-300 flex items-center gap-1 shrink-0"
+                      >
+                        <span>Jump</span>
+                        <ChevronRight className="w-3.5 h-3.5" />
+                      </button>
+                    </div>
+                  );
+                })}
               </div>
             </div>
           </div>

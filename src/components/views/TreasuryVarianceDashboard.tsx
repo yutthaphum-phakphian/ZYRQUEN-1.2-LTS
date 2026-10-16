@@ -138,10 +138,10 @@ export const TreasuryVarianceDashboard: React.FC<TreasuryVarianceDashboardProps>
       if (searchQuery.trim()) {
         const q = searchQuery.toLowerCase();
         return (
-          r.sapEntry.documentNumber.toLowerCase().includes(q) ||
-          r.sapEntry.accountDescription.toLowerCase().includes(q) ||
-          r.sapEntry.accountCode.toLowerCase().includes(q) ||
-          r.zyrquenSeal.sealId.toLowerCase().includes(q)
+          (r.sapEntry?.documentNumber || '').toLowerCase().includes(q) ||
+          (r.sapEntry?.accountDescription || '').toLowerCase().includes(q) ||
+          (r.sapEntry?.accountCode || '').toLowerCase().includes(q) ||
+          (r.zyrquenSeal?.sealId || '').toLowerCase().includes(q)
         );
       }
       return true;

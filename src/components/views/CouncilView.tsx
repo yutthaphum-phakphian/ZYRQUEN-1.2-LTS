@@ -314,27 +314,30 @@ export const CouncilView: React.FC<CouncilViewProps> = ({ onAddSystemEvent }) =>
     return COUNCIL_MEMBERS.filter((member) => {
       const matchesSearch =
         !query ||
-        member.nameTh.toLowerCase().includes(query) ||
-        member.nameEn.toLowerCase().includes(query) ||
-        member.passportId.toLowerCase().includes(query) ||
-        member.councilCode.toLowerCase().includes(query) ||
-        member.roleTh.toLowerCase().includes(query) ||
-        member.roleEn.toLowerCase().includes(query) ||
-        member.jurisdictionTh.toLowerCase().includes(query) ||
-        member.jurisdictionEn.toLowerCase().includes(query) ||
-        member.hardwareEnclave.toLowerCase().includes(query) ||
-        member.pqcAlgorithm.toLowerCase().includes(query) ||
-        member.biographyTh.toLowerCase().includes(query) ||
-        member.biographyEn.toLowerCase().includes(query);
+        (member.name || '').toLowerCase().includes(query) ||
+        ((member as any).nameTh || '').toLowerCase().includes(query) ||
+        ((member as any).nameEn || '').toLowerCase().includes(query) ||
+        (member.passportId || '').toLowerCase().includes(query) ||
+        (member.councilCode || '').toLowerCase().includes(query) ||
+        (member.role || '').toLowerCase().includes(query) ||
+        ((member as any).roleTh || '').toLowerCase().includes(query) ||
+        ((member as any).roleEn || '').toLowerCase().includes(query) ||
+        (member.jurisdiction || '').toLowerCase().includes(query) ||
+        (member.hardwareModel || '').toLowerCase().includes(query) ||
+        ((member as any).hardwareEnclave || '').toLowerCase().includes(query) ||
+        (member.algorithm || '').toLowerCase().includes(query) ||
+        ((member as any).pqcAlgorithm || '').toLowerCase().includes(query) ||
+        ((member as any).biographyTh || '').toLowerCase().includes(query) ||
+        ((member as any).biographyEn || '').toLowerCase().includes(query);
 
       if (!matchesSearch) return false;
 
       if (selectedCategory === 'ALL') return true;
-      if (selectedCategory === 'VERIFIED') return member.verificationStatus === 'REAL_HSM_SIGNED';
-      if (selectedCategory === 'LEAD') return member.category === 'Lead Guardian';
-      if (selectedCategory === 'SECURITY') return member.category === 'Core Security Guardian';
-      if (selectedCategory === 'OPERATIONS') return member.category === 'Runtime Operations Guardian';
-      if (selectedCategory === 'AUDIT') return member.category === 'Compliance & Audit Guardian';
+      if (selectedCategory === 'VERIFIED') return member.verificationStatus === 'REAL_HSM_SIGNED' || member.status === 'ONLINE';
+      if (selectedCategory === 'LEAD') return (member.role || '').includes('Lead') || (member.role || '').includes('Supreme') || (member as any).category === 'Lead Guardian';
+      if (selectedCategory === 'SECURITY') return (member.role || '').includes('Security') || (member.role || '').includes('Crypt') || (member as any).category === 'Core Security Guardian';
+      if (selectedCategory === 'OPERATIONS') return (member.role || '').includes('Systems') || (member.role || '').includes('Network') || (member.role || '').includes('Infrastructure') || (member as any).category === 'Runtime Operations Guardian';
+      if (selectedCategory === 'AUDIT') return (member.role || '').includes('Audit') || (member.role || '').includes('Forensic') || (member.role || '').includes('Legal') || (member as any).category === 'Compliance & Audit Guardian';
 
       return true;
     });
