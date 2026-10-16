@@ -79,3 +79,26 @@ export const CHAIN_MODEL_CONFIG = {
   // Vc = 5 * 2.0 = 10 THB
   // Total Gen Z Segment Value = ฿134,400,000.00
 } as const;
+
+export const SOVEREIGN_API_CONFIG = {
+  contractPath: process.env.SOVEREIGN_CONTRACT_PATH || 'docs/sovereign-api-contract.template.json',
+  apiToken: process.env.SOVEREIGN_API_TOKEN || '',
+  endpoints: {
+    telemetry: '/api/v1/telemetry',
+    courtCertificate: '/api/v1/court-certificate',
+    hsmQuorumStatus: '/api/v1/hsm/quorum-status',
+    exhibits: '/api/v1/evidence/exhibits',
+    replayVerify: '/api/v1/replay/verify',
+    exportCourtDossier: '/api/v1/export/court-dossier',
+    auditRecords: '/api/v1/audit/records',
+    auditSync: '/api/v1/audit/sync',
+    sovereignContract: '/api/v1/sovereign-contract',
+    authRegister: '/api/v2/auth/register',
+    treasuryRefund: '/api/v2/treasury/refund',
+    quarantine: '/api/v1/system/quarantine',
+    legalOracle: '/api/v1/legal/oracle',
+    cli: '/api/zyrquen/cli',
+    wsNotifications: '/ws/notifications',
+  },
+} as const;
+

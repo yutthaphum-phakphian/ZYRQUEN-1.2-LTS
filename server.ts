@@ -464,6 +464,25 @@ async function startServer() {
     });
   });
 
+  // GET /api/v1/sovereign-contract (Expose canonical sovereign API contract JSON)
+  app.get('/api/v1/sovereign-contract', (_req: Request, res: Response) => {
+    const contractPath = process.env.SOVEREIGN_CONTRACT_PATH || 'docs/sovereign-api-contract.template.json';
+    const resolvedPath = path.isAbsolute(contractPath) ? contractPath : path.resolve(process.cwd(), contractPath);
+    try {
+      if (fs.existsSync(resolvedPath)) {
+        const raw = fs.readFileSync(resolvedPath, 'utf-8');
+        return res.status(200).json(JSON.parse(raw));
+      }
+    } catch (e) {
+      console.warn('Failed reading SOVEREIGN_CONTRACT_PATH:', e);
+    }
+    return res.status(404).json({
+      error: 'CONTRACT_FILE_NOT_FOUND',
+      path: resolvedPath,
+      message: 'Sovereign API Contract file could not be read.',
+    });
+  });
+
   app.get('/api/v1/court-certificate', (_req: Request, res: Response) => {
     res.status(200).json({
       certNumber: 'CERT-ZYRQUEN-2026-0928-849205',
@@ -998,8 +1017,9 @@ async function startServer() {
     if (!req || !req.headers) {
       return null;
     }
+    const sovereignApiToken = process.env.SOVEREIGN_API_TOKEN;
     const authHeader = req.headers['authorization'];
-    const tokenHeader = req.headers['x-zyrquen-session-token'] as string;
+    const tokenHeader = (req.headers['x-zyrquen-session-token'] || req.headers['x-sovereign-api-token']) as string;
     let token = tokenHeader;
     if (!token && authHeader && authHeader.startsWith('Bearer ')) {
       token = authHeader.substring(7).trim();
@@ -1009,6 +1029,9 @@ async function startServer() {
     }
     if (revokedTokens.has(token)) {
       return null;
+    }
+    if (sovereignApiToken && token === sovereignApiToken) {
+      return defaultArchitectSession;
     }
     const session = activeSessions.get(token);
     if (!session) {

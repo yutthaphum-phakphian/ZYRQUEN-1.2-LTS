@@ -21,6 +21,12 @@ export interface PinnedStatute {
   summary: string;
   fullText: string;
   citations: LegalCitation[];
+  categoryLabel?: string;
+  forensicProofBinding?: string;
+  pinnedAt?: string;
+  query?: string;
+  tags?: string[];
+  statutoryRef?: string;
 }
 
 export interface LegalCategoryDef {

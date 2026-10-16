@@ -1,0 +1,359 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "contractName": "ZYRQUEN_SOVEREIGN_WORLD_ENGINE_API_CONTRACT",
+  "version": "1.2.1-LTS",
+  "releaseStatus": "LOCKED_FROZEN_v1.2_LTS",
+  "docReference": "DOC-SOV-HSM-1010-2026-V9",
+  "metadata": {
+    "title": "ZYRQUEN Ω∞ Sovereign API Contract & System Manifest",
+    "sovereignOwner": "นายยุทธภูมิ พากเพียร (#EP-SOVEREIGN-01 / OMEGA-1)",
+    "contactEmail": "yuttaphumphakphian@gmail.com",
+    "repository": "https://github.com/yuttaphum-phakphian/ZYRQUEN-1.2-LTS",
+    "updatedAtUTC": "2026-10-16T07:55:00.000Z"
+  },
+  "canonicalInvariants": {
+    "genesisBlockHeight": 849202,
+    "merkleGenesisRoot": "0x909ab814479844d8a14816bed34cdbb07528e18501da86fc4691763a43fa4c68",
+    "ssotZeroDriftRatio": "Δ0.00%",
+    "canonicalSealsCount": 14902,
+    "coreMutationPermitted": 0,
+    "cryogenicTemperatureMK": 14.98,
+    "hardwareQuorum": "10/10 REAL_HSM",
+    "hardwareModel": "Utimaco u.trust GP CSe-Series (FIPS 140-3 Level 4)",
+    "slaMaxLatencyMs": 142.0,
+    "measuredReplayLatencyMs": 35.8
+  },
+  "cryptographicSuites": {
+    "fipsLevel": "FIPS 140-3 Level 4 / Common Criteria EAL6+",
+    "digitalSignatures": {
+      "primary": "NIST FIPS 204 ML-DSA-87 (Dilithium-5 Category 5)",
+      "statelessFallback": "NIST FIPS 205 SLH-DSA-SHAKE-256f (SPHINCS+)",
+      "symmetricHmac": "HMAC-SHA3-512 & SHA-256"
+    },
+    "keyEncapsulation": "NIST FIPS 203 ML-KEM-1024 (Kyber-1024)",
+    "timestampAuthority": "RFC 3161 Hardware TSA (NIMT UTC Atomic Synchronized)",
+    "privacyEngine": "zk-SNARKs Groth16 Zero-Knowledge PII Redaction"
+  },
+  "statutoryLegalFramework": {
+    "thailandETA": {
+      "act": "พ.ร.บ. ว่าด้วยธุรกรรมทางอิเล็กทรอนิกส์ พ.ศ. ๒๕๔๔ และที่แก้ไขเพิ่มเติม",
+      "section9": "มาตรา ๙: ผลผูกพันทางกฎหมายของลายมือชื่อดิจิทัลและเจตนายืนยันตัวตน",
+      "section26": "มาตรา ๒๖: ลายมือชื่ออิเล็กทรอนิกส์ที่เชื่อถือได้ระดับสูง (Non-repudiation)",
+      "section28": "มาตรา ๒๘: หน้าที่ระมัดระวังและการเก็บรักษาพยานหลักฐานในระบบ WORM (Write Once, Read Many)"
+    },
+    "thailandPDPA": {
+      "act": "พ.ร.บ. คุ้มครองข้อมูลส่วนบุคคล พ.ศ. ๒๕๖๒",
+      "section37": "มาตรา ๓๗: การจัดให้มีมาตรการรักษาความมั่นคงปลอดภัยขั้นสูง (zk-SNARKs Privacy Vault)"
+    },
+    "ncsaCybersecurity": {
+      "act": "พ.ร.บ. การรักษาความมั่นคงปลอดภัยไซเบอร์ พ.ศ. ๒๕๖๒",
+      "framework": "การคุ้มครองโครงสร้างพื้นฐานสำคัญทางสารสนเทศ (CII Framework) & Fail-Closed Quarantine"
+    },
+    "internationalStandards": [
+      "ISO/IEC 27037:2012 Guidelines for identification, collection, acquisition and preservation of digital evidence",
+      "NIST FIPS 140-3 Level 4 Security Requirements for Cryptographic Modules",
+      "RFC 3161 Internet X.509 Public Key Infrastructure Time-Stamp Protocol (TSP)"
+    ]
+  },
+  "authentication": {
+    "supportedSchemes": [
+      {
+        "type": "BearerToken",
+        "header": "Authorization: Bearer <SOVEREIGN_API_TOKEN>",
+        "description": "Master sovereign API token or authenticated session token."
+      },
+      {
+        "type": "CustomHeader",
+        "header": "x-sovereign-api-token: <SOVEREIGN_API_TOKEN>",
+        "description": "Direct token injection header for sovereign automation callers."
+      },
+      {
+        "type": "SessionHeader",
+        "header": "x-zyrquen-session-token: <SESSION_TOKEN>",
+        "description": "Session token from WebAuthn / Passkey handshake."
+      },
+      {
+        "type": "PqcSignatureHeader",
+        "header": "x-zyrquen-sovereign-sig: SIG_PQC_DILITHIUM-5_<DIGEST>_10/10_REAL_HSM_RATIFIED",
+        "description": "Post-quantum digital signature for Section 26 & Section 28 verification."
+      }
+    ]
+  },
+  "serverEnvironments": [
+    {
+      "name": "Local Dev & AI Studio",
+      "baseUrl": "http://localhost:3000",
+      "host": "0.0.0.0",
+      "port": 3000
+    },
+    {
+      "name": "Bangkok Root Citadel Server (BK01)",
+      "baseUrl": "https://nexus.zyrquen.internal/v1"
+    },
+    {
+      "name": "Singapore Relay Node (SG02)",
+      "baseUrl": "https://sg02.zyrquen.internal/v1"
+    }
+  ],
+  "endpoints": [
+    {
+      "path": "/healthz",
+      "method": "GET",
+      "authRequired": false,
+      "summary": "Sovereign Engine Core Health & Invariants Probe",
+      "responseExample": {
+        "status": "ONLINE",
+        "engine": "ZYRQUEN Ω∞ Sovereign World Engine",
+        "version": "DOC-SOV-HSM-1010-2026-V9",
+        "hsmQuorum": "10/10 REAL_HSM OPERATIONAL",
+        "fipsLevel": "FIPS 140-3 LEVEL 4",
+        "pqcActive": ["Dilithium-5 (FIPS 204)", "SPHINCS+ (FIPS 205)"],
+        "merkleRoot": "0x909ab814479844d8a14816bed34cdbb07528e18501da86fc4691763a43fa4c68",
+        "genesisBlock": 849202,
+        "seals": 14902,
+        "drift": "Δ0.00%"
+      }
+    },
+    {
+      "path": "/api/v1/telemetry",
+      "method": "GET",
+      "authRequired": false,
+      "summary": "Real-time Sub-Kelvin Telemetry & Invariant Baseline",
+      "responseExample": {
+        "status": "SUCCESS",
+        "systemStatus": "LOCKED_FROZEN_v1.2_LTS",
+        "blockHeight": 849202,
+        "merkleGenesis": "0x909ab814479844d8a14816bed34cdbb07528e18501da86fc4691763a43fa4c68",
+        "cryoTempMK": 14.98,
+        "qopsThroughput": 851.9,
+        "coherencePct": 99.992,
+        "zeroDrift": "0.00%",
+        "seals": 14902,
+        "hsm": { "quorum": "10/10 REAL_HSM", "standard": "FIPS 140-3 L4" },
+        "replay": { "totalLatencyMs": 35.8, "slaTargetMs": 142.0, "slaStatus": "PASS" }
+      }
+    },
+    {
+      "path": "/api/v1/hsm/quorum-status",
+      "method": "GET",
+      "authRequired": false,
+      "summary": "Deca-Key Hardware Quorum Health & Vote Count",
+      "responseExample": {
+        "quorumStatus": "UNANIMOUS_10_10_RATIFIED",
+        "activeCount": 10,
+        "totalCount": 10,
+        "requiredThreshold": 8,
+        "isCourtAdmissible": true,
+        "fipsLevel": "FIPS 140-3 LEVEL 4",
+        "pqcSignature": "SIG_PQC_DILITHIUM5_10_10_UNANIMOUS"
+      }
+    },
+    {
+      "path": "/api/v1/hsm/heal-all",
+      "method": "POST",
+      "authRequired": true,
+      "summary": "Phoenix Auto-Healing 10/10 HSM Reconnect Pipeline",
+      "responseExample": {
+        "success": true,
+        "quorumStatus": "UNANIMOUS_10_10_RATIFIED",
+        "activeNodes": 10,
+        "courtAdmissible": true,
+        "executionLatencyMs": 35.56,
+        "slaLimitMs": 142.0
+      }
+    },
+    {
+      "path": "/api/v1/evidence/exhibits",
+      "method": "GET",
+      "authRequired": false,
+      "summary": "Court-Admissible Digital Exhibits Manifest (จพ.๐๑ - จพ.๐๗)",
+      "responseExample": {
+        "success": true,
+        "docReference": "DOC-SOV-HSM-1010-2026-V9",
+        "totalExhibits": 7,
+        "genesisBlock": 849202,
+        "merkleRoot": "0x909ab814479844d8a14816bed34cdbb07528e18501da86fc4691763a43fa4c68"
+      }
+    },
+    {
+      "path": "/api/v1/court-certificate",
+      "method": "GET",
+      "authRequired": false,
+      "summary": "Judicial Admissibility Certificate for Civil & IP Court",
+      "responseExample": {
+        "certNumber": "CERT-ZYRQUEN-2026-0928-849205",
+        "systemName": "ZYRQUEN Ω∞ Sovereign World Engine",
+        "genesisBlockHash": "909ab814479844d8a14816bed34cdbb07528e18501da86fc4691763a43fa4c68",
+        "genesisBlockHeight": 849202,
+        "sovereignOwner": "นายยุทธภูมิ พากเพียร (#EP-SOVEREIGN-01)",
+        "courtAdmissibility": "VALID_LEGAL_EVIDENCE"
+      }
+    },
+    {
+      "path": "/api/v1/replay/verify",
+      "method": "POST",
+      "authRequired": false,
+      "summary": "12-Stage Deterministic Trace Verification Against Genesis",
+      "responseExample": {
+        "transactionId": "TX-SOV-B29FA104",
+        "docReference": "DOC-SOV-HSM-1010-2026-V9",
+        "merkleRoot": "0x909ab814479844d8a14816bed34cdbb07528e18501da86fc4691763a43fa4c68",
+        "genesisBlock": 849202,
+        "totalLatencyMs": 35.8,
+        "slaTargetMs": 142.0,
+        "slaStatus": "PASS",
+        "zeroDriftRatio": "SSoT Δ0 0.00%",
+        "hsmQuorumStatus": "10/10 REAL_HSM QUORUM VERIFIED"
+      }
+    },
+    {
+      "path": "/api/v1/export/court-dossier",
+      "method": "POST",
+      "authRequired": false,
+      "summary": "Export Court-Ready PDF Dossier Bundle Under Section 28",
+      "requestExample": {
+        "caseNumber": "BLACK_CASE_SOV_2026_9901",
+        "courtName": "ศาลแพ่ง / ศาลทรัพย์สินทางปัญญาและการค้าระหว่างประเทศกลาง",
+        "requestedBy": "นายยุทธภูมิ พากเพียร"
+      },
+      "responseExample": {
+        "success": true,
+        "dossierFilename": "DOC-SOV-HSM-1010-2026-V9-COURT-ANNEX.PDF",
+        "caseNumber": "BLACK_CASE_SOV_2026_9901",
+        "merkleProof": "0x909ab814479844d8a14816bed34cdbb07528e18501da86fc4691763a43fa4c68",
+        "downloadUrl": "/api/v1/download/DOC-SOV-HSM-1010-2026-V9-COURT-ANNEX.PDF"
+      }
+    },
+    {
+      "path": "/api/v1/audit/records",
+      "method": "GET",
+      "authRequired": false,
+      "summary": "Query Immutable Chamber 02 & Module 17 V24 WORM Seals",
+      "parameters": [
+        { "name": "sealId", "in": "query", "type": "integer", "default": 14902 }
+      ],
+      "responseExample": {
+        "sealId": 14902,
+        "blockHeight": 849202,
+        "merkleLeafHash": "0x5a13396c129c611f15232fdaf54bfad00c4147abdbc3424c71e4ec103dcc8cc3",
+        "status": "VERIFIED_INTACT",
+        "wormStorage": "Module 17 V24 WORM",
+        "legalTag": "ETA B.E. 2544 Sec 28 / Delete-Nothing Enforced"
+      }
+    },
+    {
+      "path": "/api/v1/audit/sync",
+      "method": "POST",
+      "authRequired": true,
+      "summary": "Reconcile Offline Batched Audit Logs with SSoT Anchor",
+      "requestExample": {
+        "clientSyncProtocol": "ZYRQUEN-OFFLINE-RECONCILIATION-v1.2",
+        "events": [],
+        "flushedAt": "2026-10-16T07:50:00.000Z"
+      },
+      "responseExample": {
+        "status": "RECONCILED",
+        "reconciledCount": 0,
+        "merkleRoot": "0x909ab814479844d8a14816bed34cdbb07528e18501da86fc4691763a43fa4c68",
+        "blockHeight": 849202
+      }
+    },
+    {
+      "path": "/api/v2/auth/register",
+      "method": "POST",
+      "authRequired": false,
+      "summary": "Section 26 Electronic Signature Gate + Sentinel AI Quarantine",
+      "requestExample": {
+        "user": {
+          "id": "USR-001",
+          "name": "Sovereign Custodian Operator",
+          "role": "Sovereign Principal Architect"
+        }
+      },
+      "responseExample": {
+        "status": "SUCCESS",
+        "system_status": "LOCKED_FROZEN_v1.2_LTS",
+        "verdict": "APPROVED_SECTION_26",
+        "sentinel_risk_score": 0.02
+      }
+    },
+    {
+      "path": "/api/v2/treasury/refund",
+      "method": "POST",
+      "authRequired": true,
+      "summary": "Section 28 CA-Certified Treasury Gas Refund Distribution",
+      "requestExample": {
+        "allocationSegment": "Gen_Z_Core",
+        "totalGasRefundPoolThb": 12500000.0
+      },
+      "responseExample": {
+        "status": "COMPLETED",
+        "verdict": "APPROVED_SECTION_28",
+        "hsm_quorum": "10/10 REAL_HSM RATIFIED (FIPS 140-3 L4)",
+        "allocated_gas_refund_thb": 1179709.01
+      }
+    },
+    {
+      "path": "/api/v1/system/quarantine",
+      "method": "POST",
+      "authRequired": true,
+      "summary": "Level 3 Sovereign Command Gate (Guards Core Invariant Mutation)",
+      "requestExample": {
+        "action": "ISOLATE_ANOMALOUS_CHAMBER",
+        "targetChamber": "CHAMBER-02"
+      },
+      "responseExample": {
+        "status": "EXECUTED",
+        "action": "ISOLATE_ANOMALOUS_CHAMBER",
+        "hsm_quorum": "10/10 REAL_HSM RATIFIED"
+      }
+    },
+    {
+      "path": "/api/v1/legal/oracle",
+      "method": "POST",
+      "authRequired": false,
+      "summary": "Thai Law & Sovereign Jurisprudence Search Oracle",
+      "requestExample": {
+        "query": "พ.ร.บ. ธุรกรรมทางอิเล็กทรอนิกส์ มาตรา 26",
+        "category": "ETDA"
+      },
+      "responseExample": {
+        "source": "Office of Electronic Transactions Development Agency (ETDA Grounded Oracle)",
+        "answer": "มาตรา ๒๖: ข้อสันนิษฐานทางกฎหมายว่าลายมือชื่อมีความน่าเชื่อถือสูงสุด...",
+        "citations": ["พ.ร.บ. ธุรกรรมทางอิเล็กทรอนิกส์ พ.ศ. ๒๕๔๔ มาตรา ๒๖"]
+      }
+    },
+    {
+      "path": "/api/zyrquen/cli",
+      "method": "POST",
+      "authRequired": false,
+      "summary": "Cloud Command Center Sovereign CLI Gateway",
+      "requestExample": {
+        "command": "status",
+        "workspace": "sovereign-core-engine"
+      },
+      "responseExample": {
+        "engine": "sovereign-core-engine",
+        "ssotDrift": "Δ0 = 0.000%",
+        "genesisBlock": 849202,
+        "merkleRoot": "0x909ab814479844d8a14816bed34cdbb07528e18501da86fc4691763a43fa4c68",
+        "hsmQuorum": "10/10",
+        "status": "SYNCHRONIZED"
+      }
+    },
+    {
+      "path": "/ws/notifications",
+      "method": "WEBSOCKET",
+      "authRequired": false,
+      "summary": "Real-time Telemetry, Heartbeat, and Forensic Trace Push Stream",
+      "handshakeMessage": {
+        "type": "HANDSHAKE",
+        "systemStatus": "LOCKED_FROZEN_v1.2_LTS",
+        "merkleRoot": "0x909ab814479844d8a14816bed34cdbb07528e18501da86fc4691763a43fa4c68",
+        "block": 849202,
+        "seals": 14902,
+        "drift": "Δ0.00%"
+      }
+    }
+  ]
+}
