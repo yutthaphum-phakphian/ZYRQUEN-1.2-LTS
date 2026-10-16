@@ -265,7 +265,9 @@ export const CouncilView: React.FC<CouncilViewProps> = ({ onAddSystemEvent }) =>
 
     setTimeout(() => {
       const member = COUNCIL_MEMBERS.find((m) => m.slotId === slotId);
-      const cleanFp = member?.keyFingerprint.replace(/[^a-fA-F0-9]/g, '').slice(0, 48) || 'a1b2c3d4e5f67890';
+      const cleanFp =
+        (member?.keyFingerprint ?? member?.fingerprint)?.replace(/[^a-fA-F0-9]/g, '').slice(0, 48) ||
+        'a1b2c3d4e5f67890';
       const sha256 = `0x${Math.abs((slotId * 982451653) ^ Date.now()).toString(16).padStart(16, '0')}${cleanFp}`;
 
       setDiagnostics((prev) => ({
@@ -893,7 +895,7 @@ export const CouncilView: React.FC<CouncilViewProps> = ({ onAddSystemEvent }) =>
                           fontFamily="sans-serif"
                           fontWeight="600"
                         >
-                          {node.nameTh.split(' ')[0]}
+                          {(node.nameTh || node.name).split(' ')[0]}
                         </text>
                       </g>
                     );
@@ -1065,6 +1067,7 @@ export const CouncilView: React.FC<CouncilViewProps> = ({ onAddSystemEvent }) =>
             {filteredMembers.map((member) => {
               const isVerified = member.verificationStatus === 'REAL_HSM_SIGNED';
               const isLead = member.isLead;
+              const keyFingerprint = member.keyFingerprint ?? member.fingerprint;
               const healthCheck = quickHealthChecks[member.slotId];
               const isRippled = activeRippleSlotId === member.slotId || activeRippleSlotId === 'ALL';
 
@@ -1258,12 +1261,12 @@ export const CouncilView: React.FC<CouncilViewProps> = ({ onAddSystemEvent }) =>
                       </span>
                       <div className="flex items-center gap-1.5">
                         <span className="text-zinc-400 font-mono text-[10px]">
-                          {member.keyFingerprint.slice(0, 16)}...
+                          {keyFingerprint.slice(0, 16)}...
                         </span>
                         <button
                           onClick={(e) => {
                             e.stopPropagation();
-                            handleCopy(member.keyFingerprint, member.passportId);
+                            handleCopy(keyFingerprint, member.passportId);
                           }}
                           className="text-zinc-400 hover:text-white p-1 rounded hover:bg-white/10 transition-colors"
                           title="คัดลอก Key Fingerprint"
@@ -1779,7 +1782,12 @@ export const CouncilView: React.FC<CouncilViewProps> = ({ onAddSystemEvent }) =>
                         Key Fingerprint (SHA-256 Digest)
                       </span>
                       <button
-                        onClick={() => handleCopy(selectedMember.keyFingerprint, 'modal-fp')}
+                        onClick={() =>
+                          handleCopy(
+                            selectedMember.keyFingerprint ?? selectedMember.fingerprint,
+                            'modal-fp'
+                          )
+                        }
                         className="inline-flex items-center gap-1 text-xs text-emerald-400 hover:text-emerald-300 font-mono"
                       >
                         {copiedKey === 'modal-fp' ? (
@@ -1796,7 +1804,7 @@ export const CouncilView: React.FC<CouncilViewProps> = ({ onAddSystemEvent }) =>
                       </button>
                     </div>
                     <div className="p-3 rounded-xl bg-zinc-950 font-mono text-xs text-emerald-400 break-all select-all border border-emerald-500/20">
-                      {selectedMember.keyFingerprint}
+                      {selectedMember.keyFingerprint ?? selectedMember.fingerprint}
                     </div>
                   </div>
                 </div>

@@ -135,15 +135,29 @@ export const CouncilChamber: React.FC<CouncilChamberProps> = ({ onSelectMember }
     }, 600);
   };
 
-  const filteredMembers = COUNCIL_MEMBERS.filter(
-    (m) =>
-      m.nameTh.toLowerCase().includes(searchTerm.toLowerCase()) ||
-      m.nameEn.toLowerCase().includes(searchTerm.toLowerCase()) ||
-      m.councilCode.toLowerCase().includes(searchTerm.toLowerCase()) ||
-      m.hardwareEnclave.toLowerCase().includes(searchTerm.toLowerCase()) ||
-      m.certificateSerial.toLowerCase().includes(searchTerm.toLowerCase()) ||
-      m.pqcAlgorithm.toLowerCase().includes(searchTerm.toLowerCase()) ||
-      m.roleTh.toLowerCase().includes(searchTerm.toLowerCase())
+  const membersWithDisplayFields = COUNCIL_MEMBERS.map((member) => ({
+    ...member,
+    nameTh: member.nameTh ?? member.name,
+    nameEn: member.nameEn ?? member.name,
+    roleTh: member.roleTh ?? member.role,
+    hardwareEnclave: member.hardwareEnclave ?? member.hardwareModel,
+    pqcAlgorithm: member.pqcAlgorithm ?? member.algorithm,
+  }));
+  const normalizedSearchTerm = searchTerm.toLowerCase();
+  const filteredMembers = membersWithDisplayFields.filter((member) =>
+    [
+      member.nameTh,
+      member.name,
+      member.nameEn,
+      member.councilCode,
+      member.hardwareEnclave,
+      member.hardwareModel,
+      member.certificateSerial,
+      member.pqcAlgorithm,
+      member.algorithm,
+      member.roleTh,
+      member.role,
+    ].some((value) => value?.toLowerCase().includes(normalizedSearchTerm))
   );
 
   return (

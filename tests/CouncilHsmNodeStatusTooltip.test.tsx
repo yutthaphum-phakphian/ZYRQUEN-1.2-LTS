@@ -1,7 +1,11 @@
 import React from 'react';
 import { describe, it, expect, vi } from 'vitest';
-import { render, screen, fireEvent, waitFor } from '@testing-library/react';
+import { render, screen, fireEvent } from '@testing-library/react';
 import '@testing-library/jest-dom';
+vi.mock('../src/components/ActiveEntropyRateMonitor', () => ({
+  ActiveEntropyRateMonitor: () => null,
+}));
+
 import { CouncilView } from '../src/components/views/CouncilView';
 import {
   HsmNodeStatusTooltip,

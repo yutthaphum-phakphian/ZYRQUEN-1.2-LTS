@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { Cpu, CheckCircle2, Clock, Thermometer, Zap, ShieldCheck } from 'lucide-react';
-import { CouncilMember, getMemberVitality } from '../../data/councilData';
+import { COUNCIL_MEMBERS, CouncilMember, getMemberVitality } from '../../data/councilData';
 
 export interface NodeMetricsResult {
   temp: string;
@@ -33,19 +33,24 @@ export function getNodeMetrics(member: CouncilMember | number | string): NodeMet
 
   const vitality = resolvedMember ? getMemberVitality(resolvedMember) : getMemberVitality(slotId);
 
-  const subKelvinTempMk = (vitality as any).subKelvinTempK !== undefined
-    ? Number(((vitality as any).subKelvinTempK * 1000).toFixed(2))
-    : vitality.subKelvinTemp !== undefined
-    ? Number(vitality.subKelvinTemp.toFixed(2))
-    : Number((14.92 + slotId * 0.012).toFixed(2));
+  const subKelvinTempK =
+    'subKelvinTempK' in vitality ? vitality.subKelvinTempK : undefined;
+  const subKelvinTempMk =
+    typeof subKelvinTempK === 'number' || typeof subKelvinTempK === 'string'
+      ? Number((Number(subKelvinTempK) * 1000).toFixed(2))
+      : vitality.subKelvinTemp !== undefined
+        ? Number(vitality.subKelvinTemp.toFixed(2))
+        : Number((14.92 + slotId * 0.012).toFixed(2));
 
-  const latencyMs = (vitality as any).lastPingMs !== undefined
-    ? Number((vitality as any).lastPingMs)
-    : vitality.latencyMs !== undefined
-    ? Number(vitality.latencyMs.toFixed(2))
-    : (resolvedMember?.heartbeat?.latencyMs !== undefined)
-    ? Number(resolvedMember.heartbeat.latencyMs.toFixed(2))
-    : Number((0.85 + slotId * 0.12).toFixed(2));
+  const lastPingMs = 'lastPingMs' in vitality ? vitality.lastPingMs : undefined;
+  const latencyMs =
+    typeof lastPingMs === 'number' || typeof lastPingMs === 'string'
+      ? Number(lastPingMs)
+      : vitality.latencyMs !== undefined
+        ? Number(vitality.latencyMs.toFixed(2))
+        : resolvedMember?.heartbeat?.latencyMs !== undefined
+          ? Number(resolvedMember.heartbeat.latencyMs.toFixed(2))
+          : Number((0.85 + slotId * 0.12).toFixed(2));
 
   return {
     temp: `${subKelvinTempMk} mK`,
@@ -286,4 +291,3 @@ export const HsmNodeStatusIcon: React.FC<HsmNodeStatusIconProps> = ({
     </HsmNodeStatusTooltip>
   );
 };
-

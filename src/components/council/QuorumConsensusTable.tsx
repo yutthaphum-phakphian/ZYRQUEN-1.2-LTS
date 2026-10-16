@@ -49,7 +49,7 @@ const buildVotesFromCouncil = (): QuorumVoteRecord[] => {
     hardwareEnclave: m.hardwareEnclave,
     proofVerificationStatus: m.verificationStatus === 'REAL_HSM_SIGNED' ? 'REAL_HSM_VERIFIED' : 'CLAIMED_PENDING_PROOF',
     proofStandard: m.verificationStatus === 'REAL_HSM_SIGNED' ? 'NIST FIPS 204 (ML-DSA-87 / Dilithium-5) - VERIFIED' : 'NIST FIPS 204 (Claimed / Pending Physical Enclave)',
-    signatureDigest: `0x${m.keyFingerprint.replace(/[^a-fA-F0-9]/g, '').slice(0, 32)}${idx * 1337}`,
+    signatureDigest: `0x${(m.keyFingerprint ?? m.fingerprint).replace(/[^a-fA-F0-9]/g, '').slice(0, 32)}${idx * 1337}`,
     verifiedTimestamp: m.verificationStatus === 'REAL_HSM_SIGNED' ? `14:2${idx}:0${idx + 2} ICT (27 ส.ค. 2026)` : 'Pending Physical Enclave Session',
     merkleLeafIndex: idx,
     weight: m.quorumWeight,

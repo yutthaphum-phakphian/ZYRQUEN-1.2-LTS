@@ -16,7 +16,16 @@ export const GuardianVitalityGauge: React.FC<GuardianVitalityGaugeProps> = ({
   isVerified,
   compact = false,
 }) => {
-  const pct = vitality.connectivityPct;
+  const pct = vitality.connectivityPct ?? vitality.coherencePct ?? vitality.uptimePct ?? 0;
+  const signalClarity = vitality.signalClarity ?? vitality.status ?? 'UNKNOWN';
+  const lastPingMs = vitality.lastPingMs ?? vitality.latencyMs ?? 0;
+  const subKelvinTempK =
+    vitality.subKelvinTempK ?? (vitality.subKelvinTemp !== undefined ? vitality.subKelvinTemp / 1000 : 0);
+  const jitterMs = vitality.jitterMs ?? 0;
+  const packetLossPct = vitality.packetLossPct ?? 0;
+  const hsmCoreStatus = vitality.hsmCoreStatus ?? vitality.status ?? 'UNKNOWN';
+  const busBandwidthGbps = vitality.busBandwidthGbps ?? 0;
+  const activeEntropyRateKBps = vitality.activeEntropyRateKBps ?? 0;
 
   // Gauge styling calculations
   const radius = compact ? 22 : 36;
@@ -93,7 +102,7 @@ export const GuardianVitalityGauge: React.FC<GuardianVitalityGaugeProps> = ({
                     : 'bg-amber-500/20 text-amber-300 border border-amber-500/30'
                 }`}
               >
-                {vitality.signalClarity.replace('_', ' ')}
+                {signalClarity.replace('_', ' ')}
               </span>
             </div>
 
@@ -102,7 +111,7 @@ export const GuardianVitalityGauge: React.FC<GuardianVitalityGaugeProps> = ({
               <span className="text-amber-400 font-semibold shrink-0">HSM</span>
               <ArrowRightLeft className="w-2.5 h-2.5 text-cyan-400 animate-pulse shrink-0" />
               <span className="text-cyan-300 font-semibold shrink-0">Runtime Core</span>
-              <span className="ml-auto text-emerald-400 font-bold shrink-0">{vitality.lastPingMs}ms</span>
+              <span className="ml-auto text-emerald-400 font-bold shrink-0">{lastPingMs}ms</span>
             </div>
           </div>
         </div>
@@ -111,15 +120,15 @@ export const GuardianVitalityGauge: React.FC<GuardianVitalityGaugeProps> = ({
         <div className="grid grid-cols-3 gap-1.5 pt-1 border-t border-white/5 text-[9px] font-mono">
           <div className="p-1 rounded bg-black/50 text-center">
             <span className="text-zinc-500 block">Cryo Temp</span>
-            <span className="text-cyan-300 font-bold">{vitality.subKelvinTempK} K</span>
+            <span className="text-cyan-300 font-bold">{subKelvinTempK} K</span>
           </div>
           <div className="p-1 rounded bg-black/50 text-center">
             <span className="text-zinc-500 block">Jitter</span>
-            <span className="text-emerald-400 font-bold">&plusmn;{vitality.jitterMs}ms</span>
+            <span className="text-emerald-400 font-bold">&plusmn;{jitterMs}ms</span>
           </div>
           <div className="p-1 rounded bg-black/50 text-center">
             <span className="text-zinc-500 block">Loss</span>
-            <span className="text-zinc-300 font-bold">{vitality.packetLossPct}%</span>
+            <span className="text-zinc-300 font-bold">{packetLossPct}%</span>
           </div>
         </div>
       </div>
@@ -189,10 +198,10 @@ export const GuardianVitalityGauge: React.FC<GuardianVitalityGaugeProps> = ({
         <div className="text-right font-mono space-y-1">
           <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-bold bg-emerald-500/20 text-emerald-300 border border-emerald-500/40">
             <Zap className="w-3.5 h-3.5 text-emerald-400" />
-            <span>{vitality.signalClarity.replace('_', ' ')}</span>
+            <span>{signalClarity.replace('_', ' ')}</span>
           </div>
           <span className="text-[11px] text-zinc-500 block">
-            Status: {vitality.hsmCoreStatus}
+            Status: {hsmCoreStatus}
           </span>
         </div>
       </div>
@@ -204,7 +213,7 @@ export const GuardianVitalityGauge: React.FC<GuardianVitalityGaugeProps> = ({
             <Thermometer className="w-3.5 h-3.5 text-cyan-400" />
             Cryo Temp
           </span>
-          <p className="text-sm font-bold text-cyan-300">{vitality.subKelvinTempK} K</p>
+          <p className="text-sm font-bold text-cyan-300">{subKelvinTempK} K</p>
           <span className="text-[10px] text-zinc-500">Superconducting State</span>
         </div>
 
@@ -213,8 +222,8 @@ export const GuardianVitalityGauge: React.FC<GuardianVitalityGaugeProps> = ({
             <Activity className="w-3.5 h-3.5 text-emerald-400" />
             Roundtrip Latency
           </span>
-          <p className="text-sm font-bold text-emerald-300">{vitality.lastPingMs} ms</p>
-          <span className="text-[10px] text-zinc-500">Jitter: &plusmn;{vitality.jitterMs} ms</span>
+          <p className="text-sm font-bold text-emerald-300">{lastPingMs} ms</p>
+          <span className="text-[10px] text-zinc-500">Jitter: &plusmn;{jitterMs} ms</span>
         </div>
 
         <div className="p-3 rounded-xl bg-black/60 border border-white/5 space-y-1">
@@ -222,8 +231,8 @@ export const GuardianVitalityGauge: React.FC<GuardianVitalityGaugeProps> = ({
             <Wifi className="w-3.5 h-3.5 text-amber-400" />
             Bus Bandwidth
           </span>
-          <p className="text-sm font-bold text-amber-300">{vitality.busBandwidthGbps} Gbps</p>
-          <span className="text-[10px] text-zinc-500">Loss: {vitality.packetLossPct}%</span>
+          <p className="text-sm font-bold text-amber-300">{busBandwidthGbps} Gbps</p>
+          <span className="text-[10px] text-zinc-500">Loss: {packetLossPct}%</span>
         </div>
 
         <div className="p-3 rounded-xl bg-black/60 border border-white/5 space-y-1">
@@ -231,7 +240,7 @@ export const GuardianVitalityGauge: React.FC<GuardianVitalityGaugeProps> = ({
             <Cpu className="w-3.5 h-3.5 text-purple-400" />
             Entropy Generation
           </span>
-          <p className="text-sm font-bold text-purple-300">{vitality.activeEntropyRateKBps} KB/s</p>
+          <p className="text-sm font-bold text-purple-300">{activeEntropyRateKBps} KB/s</p>
           <span className="text-[10px] text-zinc-500">Quantum Hardware TRNG</span>
         </div>
       </div>
