@@ -268,7 +268,7 @@ export const LedgerView: React.FC<LedgerViewProps> = ({
   events,
 }) => {
   const displayEvents = useMemo(() => {
-    return (events && events.length > 0) ? events : DEFAULT_AUDIT_LOG_EVENTS;
+    return events?.length ? events : DEFAULT_AUDIT_LOG_EVENTS;
   }, [events]);
 
   const [activeLedgerTab, setActiveLedgerTab] = useState<LedgerTabType>('timeline');

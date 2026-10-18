@@ -65,6 +65,14 @@ describe('LedgerView Audit Logs Search and Hover Tooltip', () => {
     expect(screen.getByText('Post-Quantum ML-DSA-87 State Anchor')).toBeInTheDocument();
   });
 
+  it('uses default audit logs when events are missing', () => {
+    render(<LedgerView />);
+    const auditTabBtn = document.getElementById('ledger-tab-audit-logs-btn');
+    if (auditTabBtn) fireEvent.click(auditTabBtn);
+
+    expect(screen.getByText('Evidence Ingested: TNT-TH-001 (Tenant Manifest)')).toBeInTheDocument();
+  });
+
   it('filters audit logs by title using the search bar', () => {
     render(<LedgerView events={mockEvents} />);
     const auditTabBtn = document.getElementById('ledger-tab-audit-logs-btn');
