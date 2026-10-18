@@ -49,11 +49,11 @@ The application includes:
 
 ## Verification Status
 
-Last checked in GitHub Codespaces on 2026-10-01:
+Last checked in GitHub Codespaces on 2026-10-18:
 
 | Check | Result |
 |:--|:--|
-| Unit tests (Vitest) | 128 of 128 passed; 21 of 21 test files passing |
+| Unit tests (Vitest) | 146 of 146 passed; 25 of 25 test files passing |
 | Production build (`npm run build`) | Succeeds |
 | GitHub Actions | 13 workflow files in `.github/workflows/` |
 | Genesis anchor | Block `849202`, recorded in `evidence/real-gates-verification.json` |
