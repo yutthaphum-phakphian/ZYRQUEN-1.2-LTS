@@ -2929,10 +2929,31 @@ function SovereignAppContent() {
     };
 
     window.addEventListener('zyrquen-stage-ai-approval', handleGlobalAiApprovalStage);
+
+    const handleGlobalEmitSystemEvent = (event: Event) => {
+      const customEvt = event as CustomEvent<any>;
+      if (customEvt.detail) {
+        dispatchAction({
+          type: 'EMIT_SYSTEM_EVENT',
+          payload: customEvt.detail,
+        });
+        if (customEvt.detail.severity === 'critical' || customEvt.detail.severity === 'warning') {
+          playTone(customEvt.detail.severity === 'critical' ? 280 : 440, 0.08);
+          triggerVibration('warning');
+          showToast(
+            `${customEvt.detail.severity === 'critical' ? '🚨' : '⚠️'} ${customEvt.detail.title}`,
+            customEvt.detail.severity === 'critical' ? 'critical' : 'warning'
+          );
+        }
+      }
+    };
+    window.addEventListener('zyrquen-emit-system-event', handleGlobalEmitSystemEvent);
+
     return () => {
       window.removeEventListener('zyrquen-stage-ai-approval', handleGlobalAiApprovalStage);
+      window.removeEventListener('zyrquen-emit-system-event', handleGlobalEmitSystemEvent);
     };
-  }, [handleStageAiProposalForApproval]);
+  }, [handleStageAiProposalForApproval, dispatchAction, showToast]);
 
   const renderCurrentView = () => {
     switch (currentView) {

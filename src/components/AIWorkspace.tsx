@@ -35,6 +35,7 @@ import {
   BookOpen,
   GitBranch,
   Compass,
+  Activity,
 } from 'lucide-react';
 import {
   ProvenanceState,
@@ -79,6 +80,9 @@ import {
   FileAnalysisReport,
   DiffProposal,
 } from '../services/sovereignCodingAgent';
+import { AgentOrchestratorPanel } from './workspace/AgentOrchestratorPanel';
+import { AIIntegrationGateway } from './workspace/AIIntegrationGateway';
+import { AgentLatencyHeatmapD3 } from './workspace/AgentLatencyHeatmapD3';
 
 export {
   computeArtifactSha256,
@@ -387,7 +391,9 @@ export function AIWorkspace({
   const [newNoteContent, setNewNoteContent] = useState('');
   const [inputMessage, setInputMessage] = useState('');
   const [isListening, setIsListening] = useState(false);
-  const [activeTab, setActiveTab] = useState<'preview' | 'code' | 'plan' | 'research' | 'coding'>('preview');
+  const [activeTab, setActiveTab] = useState<
+    'preview' | 'code' | 'plan' | 'research' | 'coding' | 'orchestrator' | 'gateway' | 'latency'
+  >('preview');
   const [activeMissionPlan, setActiveMissionPlan] = useState<MissionPlan | null>(null);
   const [activeResearchDossier, setActiveResearchDossier] = useState<ResearchDossier | null>(null);
   const [activeDiffProposal, setActiveDiffProposal] = useState<DiffProposal | null>(null);
@@ -2913,6 +2919,45 @@ export function AIWorkspace({
                 <GitBranch className="w-3.5 h-3.5 text-amber-400" />
                 <span>Coding Agent</span>
               </button>
+              <button
+                type="button"
+                data-testid="tab-agent-orchestrator"
+                onClick={() => setActiveTab('orchestrator')}
+                className={`flex items-center gap-1.5 px-2.5 py-1 rounded text-xs font-mono font-semibold transition cursor-pointer ${
+                  activeTab === 'orchestrator'
+                    ? 'bg-purple-950 text-purple-300 border border-purple-500/40 font-bold'
+                    : 'text-zinc-400 hover:text-white'
+                }`}
+              >
+                <Layers className="w-3.5 h-3.5 text-purple-400" />
+                <span>Orchestrator</span>
+              </button>
+              <button
+                type="button"
+                data-testid="tab-integration-gateway"
+                onClick={() => setActiveTab('gateway')}
+                className={`flex items-center gap-1.5 px-2.5 py-1 rounded text-xs font-mono font-semibold transition cursor-pointer ${
+                  activeTab === 'gateway'
+                    ? 'bg-emerald-950 text-emerald-300 border border-emerald-500/40 font-bold'
+                    : 'text-zinc-400 hover:text-white'
+                }`}
+              >
+                <Globe className="w-3.5 h-3.5 text-emerald-400" />
+                <span>Integration Gateway</span>
+              </button>
+              <button
+                type="button"
+                data-testid="tab-latency-heatmap"
+                onClick={() => setActiveTab('latency')}
+                className={`flex items-center gap-1.5 px-2.5 py-1 rounded text-xs font-mono font-semibold transition cursor-pointer ${
+                  activeTab === 'latency'
+                    ? 'bg-cyan-950 text-cyan-300 border border-cyan-500/40 font-bold'
+                    : 'text-zinc-400 hover:text-white'
+                }`}
+              >
+                <Activity className="w-3.5 h-3.5 text-cyan-400" />
+                <span>Latency Heatmap</span>
+              </button>
             </div>
 
             <div className="flex flex-wrap items-center gap-2 font-mono text-[10px]">
@@ -2944,7 +2989,40 @@ export function AIWorkspace({
           {/* Sandbox Content Area */}
           <div className="flex-1 relative bg-[#030712] flex flex-col">
             <AnimatePresence mode="wait">
-              {activeTab === 'plan' ? (
+              {activeTab === 'orchestrator' ? (
+                <motion.div
+                  key="agent-orchestrator-panel"
+                  data-testid="agent-orchestrator-panel"
+                  initial={{ opacity: 0, y: 6 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  exit={{ opacity: 0, y: -6 }}
+                  className="w-full flex-1 flex flex-col p-4 overflow-y-auto"
+                >
+                  <AgentOrchestratorPanel />
+                </motion.div>
+              ) : activeTab === 'gateway' ? (
+                <motion.div
+                  key="ai-integration-gateway-panel"
+                  data-testid="ai-integration-gateway-panel"
+                  initial={{ opacity: 0, y: 6 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  exit={{ opacity: 0, y: -6 }}
+                  className="w-full flex-1 flex flex-col p-4 overflow-y-auto"
+                >
+                  <AIIntegrationGateway />
+                </motion.div>
+              ) : activeTab === 'latency' ? (
+                <motion.div
+                  key="agent-latency-heatmap-panel"
+                  data-testid="agent-latency-heatmap-panel"
+                  initial={{ opacity: 0, y: 6 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  exit={{ opacity: 0, y: -6 }}
+                  className="w-full flex-1 flex flex-col p-4 overflow-y-auto"
+                >
+                  <AgentLatencyHeatmapD3 />
+                </motion.div>
+              ) : activeTab === 'plan' ? (
                 <motion.div
                   key="mission-plan-panel"
                   data-testid="mission-plan-panel"
