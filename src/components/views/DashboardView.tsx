@@ -32,12 +32,18 @@ import {
   FileSpreadsheet,
   CheckCircle2,
   Landmark,
+  Bot,
 } from 'lucide-react';
 import { playAuditChime, playTone } from '../AudioSynthesizer';
 import {
   sapTreasuryReconciliationService,
   TreasuryVarianceSummary,
 } from '../../services/sapTreasuryReconciliationService';
+import { AgentPerformanceMetricsTab } from '../dashboard/AgentPerformanceMetricsTab';
+import { AgentOrchestratorPanel } from '../workspace/AgentOrchestratorPanel';
+import { FeaturedAiWorkspaceSandbox } from '../dashboard/FeaturedAiWorkspaceSandbox';
+import { AIWorkspace } from '../AIWorkspace';
+import { ZyntheorModelTrainingHub } from '../workspace/ZyntheorModelTrainingHub';
 
 interface DashboardViewProps {
   snapshots?: HardwareSnapshot[];
@@ -51,6 +57,17 @@ interface DashboardViewProps {
   onNavigate: (view: ViewType) => void;
   onOpenCertificate: () => void;
   isForensicAuditMode?: boolean;
+  onStageProposalForApproval?: (
+    proposedBatchSize: number,
+    summary: string,
+    meta?: {
+      proposalId: string;
+      channel: any;
+      targetWorkspace: string;
+    }
+  ) => void;
+  onAuditRecord?: (action: string, details: string, status: 'VERIFIED' | 'BLOCKED') => void;
+  onOpenWebAuthn?: () => void;
 }
 
 export const DashboardView: React.FC<DashboardViewProps> = ({
@@ -59,6 +76,9 @@ export const DashboardView: React.FC<DashboardViewProps> = ({
   onNavigate,
   onOpenCertificate,
   isForensicAuditMode = false,
+  onStageProposalForApproval,
+  onAuditRecord,
+  onOpenWebAuthn,
 }) => {
   // Listen and alert on browser offline / online events
   useOfflineWarning();
@@ -72,6 +92,9 @@ export const DashboardView: React.FC<DashboardViewProps> = ({
   );
   const [isSyncingTreasury, setIsSyncingTreasury] = useState<boolean>(false);
   const [syncFeedback, setSyncFeedback] = useState<string | null>(null);
+
+  // Top-Level Dashboard Tab (System Overview vs AI Workspace vs Model Training vs Performance Metrics vs Agent Orchestrator)
+  const [activeDashboardTab, setActiveDashboardTab] = useState<'overview' | 'workspace' | 'training' | 'performance' | 'orchestrator'>('overview');
 
   // Export Settings Modal State
   const [isExportModalOpen, setIsExportModalOpen] = useState<boolean>(false);
@@ -352,8 +375,153 @@ export const DashboardView: React.FC<DashboardViewProps> = ({
         )}
       </div>
 
-      {/* 2. TOP 3 KEY EXECUTIVE METRICS CARDS (3-Column Grid) */}
-      <div className="grid grid-cols-1 md:grid-cols-3 gap-4 sm:gap-6">
+      {/* 1.5. DASHBOARD TOP-LEVEL NAVIGATION TABS */}
+      <div className="flex flex-wrap items-center justify-between gap-3 border-b border-zinc-800/80 pb-3 font-mono">
+        <div className="flex items-center gap-1.5 p-1 bg-zinc-950/90 rounded-xl border border-zinc-800 flex-wrap">
+          <button
+            type="button"
+            data-testid="tab-dashboard-overview"
+            onClick={() => {
+              playTone(550, 0.03);
+              setActiveDashboardTab('overview');
+            }}
+            className={`px-3.5 py-1.5 rounded-lg text-xs font-bold flex items-center gap-2 transition-all duration-200 cursor-pointer ${
+              activeDashboardTab === 'overview'
+                ? 'bg-cyan-950 text-cyan-300 border border-cyan-500/50 shadow-[0_0_12px_rgba(6,182,212,0.2)]'
+                : 'text-zinc-400 hover:text-zinc-200'
+            }`}
+          >
+            <Layers className="w-3.5 h-3.5 text-cyan-400" />
+            <span>System Overview</span>
+          </button>
+
+          <button
+            type="button"
+            data-testid="tab-dashboard-workspace"
+            onClick={() => {
+              playTone(580, 0.03);
+              setActiveDashboardTab('workspace');
+            }}
+            className={`px-3.5 py-1.5 rounded-lg text-xs font-bold flex items-center gap-2 transition-all duration-200 cursor-pointer ${
+              activeDashboardTab === 'workspace'
+                ? 'bg-cyan-950 text-cyan-300 border border-cyan-500/50 shadow-[0_0_12px_rgba(6,182,212,0.2)]'
+                : 'text-zinc-400 hover:text-zinc-200'
+            }`}
+          >
+            <Bot className="w-3.5 h-3.5 text-cyan-400" />
+            <span>AI Workspace &amp; Sandbox</span>
+            <span className="px-1.5 py-0.2 rounded text-[9px] bg-cyan-950/80 text-cyan-300 border border-cyan-500/30">
+              Featured Isolate
+            </span>
+          </button>
+
+          <button
+            type="button"
+            data-testid="tab-dashboard-training"
+            onClick={() => {
+              playTone(620, 0.03);
+              setActiveDashboardTab('training');
+            }}
+            className={`px-3.5 py-1.5 rounded-lg text-xs font-bold flex items-center gap-2 transition-all duration-200 cursor-pointer ${
+              activeDashboardTab === 'training'
+                ? 'bg-cyan-950 text-cyan-300 border border-cyan-500/50 shadow-[0_0_12px_rgba(6,182,212,0.2)]'
+                : 'text-zinc-400 hover:text-zinc-200'
+            }`}
+          >
+            <Cpu className="w-3.5 h-3.5 text-cyan-400" />
+            <span>ZYNTHEOR Training &amp; SFT</span>
+            <span className="px-1.5 py-0.2 rounded text-[9px] bg-emerald-950/80 text-emerald-300 border border-emerald-500/30">
+              Cloud QLoRA
+            </span>
+          </button>
+
+          <button
+            type="button"
+            data-testid="tab-dashboard-performance"
+            onClick={() => {
+              playTone(600, 0.03);
+              setActiveDashboardTab('performance');
+            }}
+            className={`px-3.5 py-1.5 rounded-lg text-xs font-bold flex items-center gap-2 transition-all duration-200 cursor-pointer ${
+              activeDashboardTab === 'performance'
+                ? 'bg-cyan-950 text-cyan-300 border border-cyan-500/50 shadow-[0_0_12px_rgba(6,182,212,0.2)]'
+                : 'text-zinc-400 hover:text-zinc-200'
+            }`}
+          >
+            <Activity className="w-3.5 h-3.5 text-cyan-400" />
+            <span>Performance Metrics</span>
+            <span className="px-1.5 py-0.2 rounded text-[9px] bg-emerald-950 text-emerald-300 border border-emerald-500/40">
+              Live Recharts
+            </span>
+          </button>
+
+          <button
+            type="button"
+            data-testid="tab-dashboard-orchestrator"
+            onClick={() => {
+              playTone(650, 0.03);
+              setActiveDashboardTab('orchestrator');
+            }}
+            className={`px-3.5 py-1.5 rounded-lg text-xs font-bold flex items-center gap-2 transition-all duration-200 cursor-pointer ${
+              activeDashboardTab === 'orchestrator'
+                ? 'bg-purple-950 text-purple-300 border border-purple-500/50 shadow-[0_0_12px_rgba(168,85,247,0.2)]'
+                : 'text-zinc-400 hover:text-zinc-200'
+            }`}
+          >
+            <Radio className="w-3.5 h-3.5 text-purple-400" />
+            <span>Agent Orchestrator</span>
+            <span className="px-1.5 py-0.2 rounded text-[9px] bg-purple-950/80 text-purple-300 border border-purple-500/30">
+              Front Mesh
+            </span>
+          </button>
+        </div>
+
+        <div className="flex items-center gap-2 text-xs text-zinc-400">
+          <span className="w-2 h-2 rounded-full bg-emerald-400 animate-pulse" />
+          <span className="text-[11px] text-zinc-400">
+            {activeDashboardTab === 'overview'
+              ? 'Canonical Block #849202 • SSoT Invariant Active'
+              : activeDashboardTab === 'workspace'
+              ? 'AST Zero-Egress Sandbox • ETDA Sec 26 Approval Gate Active'
+              : activeDashboardTab === 'training'
+              ? 'ZYNTHEOR CORE Online Training • QLoRA SFT on Cloud GPU'
+              : activeDashboardTab === 'performance'
+              ? 'Multi-Agent Mesh Latency Stream (Last 1 Hour)'
+              : 'Multi-Agent Routing & Fail-Closed Policies'}
+          </span>
+        </div>
+      </div>
+
+      {activeDashboardTab === 'workspace' ? (
+        <div className="space-y-4">
+          <AIWorkspace
+            targetWorkspaceId="ws-agent-02"
+            targetWorkspaceName="agentic-reasoning-mesh"
+            currentBatchSize={64}
+            onStageProposalForApproval={onStageProposalForApproval}
+            onAuditRecord={onAuditRecord}
+            onOpenWebAuthn={onOpenWebAuthn}
+          />
+        </div>
+      ) : activeDashboardTab === 'training' ? (
+        <div className="space-y-4">
+          <ZyntheorModelTrainingHub />
+        </div>
+      ) : activeDashboardTab === 'performance' ? (
+        <AgentPerformanceMetricsTab
+          onNavigateToOrchestrator={() => {
+            playTone(650, 0.03);
+            setActiveDashboardTab('orchestrator');
+          }}
+        />
+      ) : activeDashboardTab === 'orchestrator' ? (
+        <div className="space-y-4">
+          <AgentOrchestratorPanel />
+        </div>
+      ) : (
+        <>
+          {/* 2. TOP 3 KEY EXECUTIVE METRICS CARDS (3-Column Grid) */}
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-4 sm:gap-6">
         {/* Metric 1: Core Status & Cryptography */}
         <div className="p-4 sm:p-5 rounded-2xl bg-[#090e1c] border border-cyan-500/20 space-y-3 relative overflow-hidden">
           <div className="flex items-center justify-between text-xs font-mono">
@@ -457,6 +625,21 @@ export const DashboardView: React.FC<DashboardViewProps> = ({
         </div>
         <MutationDeltaChart />
       </div>
+
+      {/* 2.7. FEATURED INTEGRATION: AI WORKSPACE & ISOLATED SANDBOX BOUNDARY */}
+      <FeaturedAiWorkspaceSandbox
+        onNavigate={onNavigate}
+        onOpenFullWorkspaceTab={() => {
+          playTone(650, 0.03);
+          setActiveDashboardTab('workspace');
+        }}
+        onOpenTrainingTab={() => {
+          playTone(620, 0.03);
+          setActiveDashboardTab('training');
+        }}
+        onStageProposalForApproval={onStageProposalForApproval}
+        onAuditRecord={onAuditRecord}
+      />
 
       {/* 3. PRIMARY SYSTEM SUMMARY & OPERATIONS ROUTER (2-Column Grid) */}
       <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 items-start">
@@ -592,6 +775,8 @@ export const DashboardView: React.FC<DashboardViewProps> = ({
           </div>
         </div>
       </div>
+      </>
+      )}
 
       {/* Feature 3: Export Settings Modal (Signed CSV / JSON Artifact) */}
       {isExportModalOpen && (

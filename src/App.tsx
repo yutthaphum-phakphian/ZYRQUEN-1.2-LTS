@@ -2970,6 +2970,9 @@ function SovereignAppContent() {
               onNavigate={setCurrentView}
               onOpenCertificate={() => setIsCertificateOpen(true)}
               isForensicAuditMode={isForensicAuditMode}
+              onStageProposalForApproval={handleStageAiProposalForApproval}
+              onAuditRecord={handleAiAuditRecord}
+              onOpenWebAuthn={() => setIsWebAuthnModalOpen(true)}
             />
           </div>
         );
@@ -3165,7 +3168,15 @@ function SovereignAppContent() {
           />
         );
       default:
-        return <DashboardView onNavigate={setCurrentView} onOpenCertificate={() => setIsCertificateOpen(true)} />;
+        return (
+          <DashboardView
+            onNavigate={setCurrentView}
+            onOpenCertificate={() => setIsCertificateOpen(true)}
+            onStageProposalForApproval={handleStageAiProposalForApproval}
+            onAuditRecord={handleAiAuditRecord}
+            onOpenWebAuthn={() => setIsWebAuthnModalOpen(true)}
+          />
+        );
     }
   };
 
