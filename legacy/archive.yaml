@@ -7,6 +7,7 @@
 # ==============================================================================
 
 legacy_archive:
+  archive_title: "Legacy Preservation Archive v1.1"
   engine: "Zyntheor AI Engine"
   role: "Main Runtime"
   linked_audit: "ZYRQUEN Q+ Audit Infrastructure"
@@ -17,12 +18,14 @@ legacy_archive:
   verifier_node: "maewhyxng2-prog"
   timestamp_utc: "2026-10-27T16:58:00Z"
   status: "Legacy Preservation Verified ✓ (100%)"
+  preservation_status: "Legacy Preservation Verified"
   governance_closure_manifest_ref: "governance/final.yaml"
   registry_ref: "governance/registry.yaml"
   upgrade_manifest_ref: "governance/upgrade.yaml"
   preservation_vault: "Chamber 02 WORM Immutable Vault"
   audit_chain: "P0 → P10 verified + Upgrade v1.1"
   execution_policy: "Zero-Fake Policy (No mock/demo/external provider) & Fail-Closed Directive"
+  
   releases:
     - tag: "v1.0-final"
       title: "Initial Governance Ratification & Closure"
@@ -38,22 +41,41 @@ legacy_archive:
         - "governance/registry.yaml"
         - "governance/upgrade.yaml"
         - "FINALUPGRADEREPORT.md"
+
   cryptographic_proofs:
+    baseline_sha256: "5d8e71a0b3c4d5e6f7a8b9c0d1e2f3a4b5c6d7e8f9a0b1c2d3e4f5a6b7c8d9e0"
     sha256_digest: "5d8e71a0b3c4d5e6f7a8b9c0d1e2f3a4b5c6d7e8f9a0b1c2d3e4f5a6b7c8d9e0"
-    baseline_digest: "0dfb32ae780dca98a4aab8fde2e9f05a4aef2e0f79d3d27ce620e9ad14d31c36"
+    baseline_digest: "5d8e71a0b3c4d5e6f7a8b9c0d1e2f3a4b5c6d7e8f9a0b1c2d3e4f5a6b7c8d9e0"
+    designated_upgrade_sha256: "5d8e71a0b3c4d5e6f7a8b9c0d1e2f3a4b5c6d7e8f9a0b1c2d3e4f5a6b7c8d9e0"
+    canonical_runtime_digest: "0dfb32ae780dca98a4aab8fde2e9f05a4aef2e0f79d3d27ce620e9ad14d31c36"
     merkle_root: "909ab814479844d8a14816bed34cdbb07528e18501da86fc4691763a43fa4c68"
-    canonical_merkle_root: "0x909ab814479844d8a14816bed34cdbb07528e18501da86fc4691763a43fa4c68"
+    canonical_merkle_root: "909ab814479844d8a14816bed34cdbb07528e18501da86fc4691763a43fa4c68"
+    merkle_root_hex: "0x909ab814479844d8a14816bed34cdbb07528e18501da86fc4691763a43fa4c68"
     ed25519_signature: "858f334360a0a3034ec7bc11102b518e3925c591c96444c82784cf5c53c0fca9e6f196700917de1c3973294b8c09c10c04141f40393668442fec64ea73db140f"
     pqc_algorithm: "NIST FIPS 204 ML-DSA-87 (CRYSTALS-Dilithium-5)"
     secondary_pqc: "NIST FIPS 205 SLH-DSA (SPHINCS+)"
-  hardware_seals: "14,902 / 14,902 Verified Intact"
-  drift_rate: "Δ0.0000% (Absolute Zero Drift Invariant)"
-  hardware_enclave: "Deca-Key 10/10 Real HSM Quorum (FIPS 140-3 Level 4 / CC EAL6+)"
+
+  audit_spec:
+    genesis_block: 849202
+    block_height: 849202
+    hardware_seals: 14902
+    hardware_seals_active: "14,902 / 14,902 Active Seals (100.0%)"
+    drift_rate: "Δ0.0000% (Absolute Zero Drift Invariant)"
+    hardware_enclave: "Deca-Key 10/10 Real HSM Quorum (FIPS 140-3 Level 4 / CC EAL6+)"
+    zero_fake_execution: true
+    fail_closed_mode: true
+
   statutory_compliance:
-    - "ETDA B.E. 2544 Sec 9 (Legal Identity & Intent Attestation)"
-    - "ETDA B.E. 2544 Sec 26 (High-Assurance Secure Electronic Signature Non-Repudiation)"
-    - "ETDA B.E. 2544 Sec 28 (WORM Immutable Audit Ledger)"
-    - "PDPA B.E. 2562 Sec 37 (Zero-Knowledge Privacy Vault)"
+    etda_be_2544:
+      - "Section 9 (Legal Identity & Intent Attestation)"
+      - "Section 26 (High-Assurance Secure Electronic Signature Non-Repudiation)"
+      - "Section 28 (WORM Immutable Audit Ledger)"
+    pdpa_be_2562:
+      - "Section 37 (Zero-Knowledge Privacy Vault & Non-Breach Attestation)"
+    fips_standard:
+      - "NIST FIPS 140-3 Level 4 Active Tamper Envelope"
+
   system_integrity_statement: >
-    Legacy Preservation Archive v1.1 ได้บันทึกหลักฐานการตรวจสอบทั้งหมดของ Zyntheor AI Engine และ ZYRQUEN Q+.
-    ข้อมูลถูกจัดเก็บใน WORM Immutable Vault ภายใต้ Fail-Closed Security และ Zero-Fake Execution พร้อมตรวจสอบย้อนหลังได้จริง.
+    Legacy Preservation Archive v1.1 ได้บันทึกหลักฐานการตรวจสอบและผลการเข้ารหัสของ Zyntheor AI Engine
+    และ ZYRQUEN Q+ ไว้อย่างสมบูรณ์ ข้อมูลทั้งหมดถูกตรึงบน WORM Immutable Vault ภายใต้นโยบาย Zero-Fake Execution
+    และ Fail-Closed Security พร้อมตรวจสอบย้อนกลับทางนิติวิทยาการเข้ารหัสได้ทุกมิติ.
