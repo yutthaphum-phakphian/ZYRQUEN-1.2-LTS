@@ -1,0 +1,62 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 240 240" width="240" height="240" role="img" aria-label="ZYRQUEN Sovereign Crest v2">
+<title>ZYRQUEN Ω Sovereign Crest</title>
+<style>
+  .spin{transform-box:fill-box;transform-origin:center;animation:sp 30s linear infinite}
+  .spinr{transform-box:fill-box;transform-origin:center;animation:sp 20s linear infinite reverse}
+  @keyframes sp{to{transform:rotate(360deg)}}
+  .pulse{animation:pl 3s ease-in-out infinite}
+  @keyframes pl{0%,100%{opacity:.55}50%{opacity:1}}
+  .dia{transform-box:fill-box;transform-origin:center;animation:dp 2.4s ease-in-out infinite}
+  .d2{animation-delay:.6s}.d3{animation-delay:1.2s}.d4{animation-delay:1.8s}
+  @keyframes dp{0%,100%{opacity:.5;transform:scale(.85)}50%{opacity:1;transform:scale(1.25)}}
+  @media (prefers-reduced-motion:reduce){*{animation:none!important}}
+</style>
+<defs>
+  <linearGradient id="g" x1="0" y1="0" x2="1" y2="1">
+    <stop offset="0" stop-color="#00e5ff"/><stop offset=".5" stop-color="#4f8cff"/><stop offset="1" stop-color="#a855f7"/>
+  </linearGradient>
+  <linearGradient id="gold" x1="0" y1="0" x2="1" y2="1">
+    <stop offset="0" stop-color="#fff0a8"/><stop offset=".5" stop-color="#ffd700"/><stop offset="1" stop-color="#ff9f1a"/>
+  </linearGradient>
+  <radialGradient id="core" cx=".5" cy=".5" r=".55">
+    <stop offset="0" stop-color="#16345c"/><stop offset=".6" stop-color="#0c1830"/><stop offset="1" stop-color="#070b14"/>
+  </radialGradient>
+  <radialGradient id="halo" cx=".5" cy=".5" r=".5">
+    <stop offset="0" stop-color="#4f8cff" stop-opacity=".45"/><stop offset="1" stop-color="#4f8cff" stop-opacity="0"/>
+  </radialGradient>
+  <filter id="glow" x="-40%" y="-40%" width="180%" height="180%">
+    <feGaussianBlur stdDeviation="3.5" result="b"/><feMerge><feMergeNode in="b"/><feMergeNode in="SourceGraphic"/></feMerge>
+  </filter>
+  <filter id="soft" x="-40%" y="-40%" width="180%" height="180%"><feGaussianBlur stdDeviation="8"/></filter>
+</defs>
+
+<!-- aura -->
+<circle cx="120" cy="120" r="112" fill="url(#halo)" class="pulse"/>
+
+<!-- outer hexagon -->
+<polygon points="120,10 215,65 215,175 120,230 25,175 25,65" fill="url(#core)" stroke="url(#g)" stroke-width="3.5" stroke-linejoin="round" filter="url(#glow)"/>
+
+<!-- inner hexagon -->
+<polygon points="120,28 199,74 199,166 120,212 41,166 41,74" fill="none" stroke="url(#gold)" stroke-opacity=".75" stroke-width="1.5" stroke-linejoin="round"/>
+
+<!-- rotating rings -->
+<circle class="spin" cx="120" cy="120" r="78" fill="none" stroke="#00e5ff" stroke-opacity=".7" stroke-width="2" stroke-dasharray="3 9" stroke-linecap="round"/>
+<circle class="spinr" cx="120" cy="120" r="66" fill="none" stroke="#ffd700" stroke-opacity=".6" stroke-width="1.2" stroke-dasharray="14 6 2 6"/>
+
+<!-- omega glow + body -->
+<path d="M90 156 H109 C90 143 82 127 82 109 A38 38 0 1 1 158 109 C158 127 150 143 131 156 H150" fill="none" stroke="url(#g)" stroke-width="16" stroke-linecap="round" stroke-linejoin="round" opacity=".45" filter="url(#soft)"/>
+<path d="M90 156 H109 C90 143 82 127 82 109 A38 38 0 1 1 158 109 C158 127 150 143 131 156 H150" fill="none" stroke="url(#g)" stroke-width="10" stroke-linecap="round" stroke-linejoin="round" filter="url(#glow)"/>
+<path d="M90 156 H109 C90 143 82 127 82 109 A38 38 0 1 1 158 109 C158 127 150 143 131 156 H150" fill="none" stroke="#fff" stroke-opacity=".7" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+
+<!-- gold diamonds on hexagon corners -->
+<g filter="url(#glow)">
+  <rect class="dia" x="114.5" y="4.5" width="11" height="11" rx="1.5" transform="rotate(45 120 10)" fill="url(#gold)"/>
+  <rect class="dia d2" x="209.5" y="59.5" width="11" height="11" rx="1.5" transform="rotate(45 215 65)" fill="#00e5ff"/>
+  <rect class="dia d3" x="114.5" y="224.5" width="11" height="11" rx="1.5" transform="rotate(45 120 230)" fill="#a855f7"/>
+  <rect class="dia d4" x="19.5" y="59.5" width="11" height="11" rx="1.5" transform="rotate(45 25 65)" fill="#00e5ff"/>
+</g>
+
+<!-- base spark line under omega -->
+<path d="M96 176 H144" stroke="url(#gold)" stroke-width="2.5" stroke-linecap="round" opacity=".9"/>
+<circle cx="120" cy="176" r="2.5" fill="#fff" class="pulse"/>
+</svg>
