@@ -127,6 +127,12 @@ Last checked in Sovereign Verified Runtime:
 
 ### ZYRQUEN Ω∞ — SOVEREIGN BUFFALO EDITION
 
+![Grass Availability](https://img.shields.io/badge/Grass%20Availability-100%25-4cae3a?style=flat-square&labelColor=0d1117&logo=leaflet&logoColor=4cae3a)
+![Buffalo Happiness](https://img.shields.io/badge/%E0%B8%84%E0%B8%A7%E0%B8%B2%E0%B8%A1%E0%B8%AA%E0%B8%B8%E0%B8%82%E0%B8%82%E0%B8%AD%E0%B8%87%E0%B8%84%E0%B8%A7%E0%B8%B2%E0%B8%A2-100%25-ffd700?style=flat-square&labelColor=0d1117)
+![Root Authority](https://img.shields.io/badge/Root%20Authority-%E0%B8%8A%E0%B8%B2%E0%B8%A7%E0%B8%99%E0%B8%B2-a855f7?style=flat-square&labelColor=0d1117)
+![Drift](https://img.shields.io/badge/Drift-%CE%940.00%25-00e5ff?style=flat-square&labelColor=0d1117)
+![Run](https://img.shields.io/badge/%E0%B8%A3%E0%B8%B1%E0%B8%99%E0%B9%82%E0%B8%84-%3D%20%E0%B8%A3%E0%B8%B1%E0%B8%84%E0%B8%A7%E0%B8%B2%E0%B8%A2-f97316?style=flat-square&labelColor=0d1117)
+
 </div>
 
 > 🐃 **จาก Cloud สู่กลางทุ่ง**
@@ -140,6 +146,17 @@ Last checked in Sovereign Verified Runtime:
 | 🐃 ความสุขของควาย | **100%** |
 
 > **AI คุมระบบได้ แต่ชาวนาคุมควาย!** 555555 😂
+
+```text
+┌─────────────────────────────┐
+│ 🪧 ประกาศทุ่งนา              │
+│ ✓ ควายมีสิทธิ์แค่กินหญ้า     │
+│ ✓ ไม่มีสิทธิ์อนุมัติแทนชาวนา! │
+│ ✓ นี่มัน AgriTech Sovereign  │
+│   ไม่ใช่แค่ AI แต่มันคือ     │
+│   ...วิถีชีวิต!              │
+└─────────────────────────────┘
+```
 
 ---
 
