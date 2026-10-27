@@ -1,5 +1,6 @@
 import { useState, useEffect } from 'react';
 import { TelemetrySnapshot, getEntropyDrift } from '../utils/telemetrySnapshot';
+import { isGranularTelemetryEnabled } from '../utils/telemetry';
 
 export interface UseTelemetryReturn {
   snapshots: TelemetrySnapshot[];
@@ -33,6 +34,10 @@ export const useTelemetry = (): UseTelemetryReturn => {
 
   useEffect(() => {
     const interval = setInterval(() => {
+      if (!isGranularTelemetryEnabled()) {
+        // Granular sampling disabled: save CPU core cycles & eliminate array churn
+        return;
+      }
       setSnapshots((prev) => {
         const now = Date.now();
         const baseQops = 850 + (Math.random() * 80 - 40);

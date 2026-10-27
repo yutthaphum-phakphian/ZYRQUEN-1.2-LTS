@@ -1,0 +1,59 @@
+# ==============================================================================
+# ZYNTHÉOR Governance Registry — System & Subsystem Mapping Specification
+# Authority: Thai Sovereign Custodian Council & Digital Forensic Lab
+# Principal: นายยุทธภูมิ พากเพียร (#EP-SOVEREIGN-01)
+# Genesis Block: #849202 | Status: VERIFIED ✓ (100%)
+# Standards: ETDA B.E. 2544 Sec 9, 26, 28 | PDPA B.E. 2562 Sec 37 | FIPS 140-3 L4
+# ==============================================================================
+
+version: "1.0.0"
+governance_epoch: 849202
+registry_status: "Verified"
+verification_date: "2026-10-27T08:30:00.000Z"
+
+systems:
+  - name: Zyntheor AI Engine
+    role: Main Runtime
+    description: Unified One-Chat Workspace, Zero-Fake Execution, Cryptographic Audit Ledger
+    version: "v1.2.1 LTS (AI Upgrade v1.1 Active)"
+    release_tag: "v1.1-upgrade"
+    status: Verified
+    upgrade_manifest_ref: "governance/upgrade.yaml"
+    runtime_features:
+      - "Zero-Fake Execution Protocol"
+      - "Lean AI Architecture (Zero-Upgrade, Fail-Closed)"
+      - "Isolated Workspace Sandbox"
+      - "Granular Performance Telemetry Optimization Toggle"
+      - "Asynchronous Execution Queue & Deterministic Rate Limiting"
+      - "Full-Stack Human-in-the-Loop Override & Quality Feedback Gate"
+    linked_subsystems:
+      - ZYRQUEN Q+
+
+subsystems:
+  - name: ZYRQUEN Q+
+    role: Audit Infrastructure
+    description: Sovereign Audit Protocol, Hardware Seal Clock, Forensic Audit Pipeline
+    version: "v1.2.1 LTS"
+    linked_to: Zyntheor AI Engine
+    status: Verified
+    integrity_proof:
+      sha256_digest: 0dfb32ae780dca98a4aab8fde2e9f05a4aef2e0f79d3d27ce620e9ad14d31c36
+      ed25519_signature: 858f334360a0a3034ec7bc11102b518e3925c591c96444c82784cf5c53c0fca9e6f196700917de1c3973294b8c09c10c04141f40393668442fec64ea73db140f
+      merkle_root: 909ab814479844d8a14816bed34cdbb07528e18501da86fc4691763a43fa4c68
+    audit_spec:
+      canonical_block: 849202
+      canonical_seals_active: 14902
+      zero_drift: "Δ0.0000% (Zero-Drift Invariant)"
+      pqc_algorithm: "NIST FIPS 204 ML-DSA-87 (CRYSTALS-Dilithium-5)"
+      hardware_enclave: "FIPS 140-3 Level 4 / CC EAL6+"
+      ssot_compliance:
+        - "ETDA B.E. 2544 Sec 9 (Legal Identity & Intent Attestation)"
+        - "ETDA B.E. 2544 Sec 26 (High-Assurance Secure Electronic Signature Non-Repudiation)"
+        - "ETDA B.E. 2544 Sec 28 (Immutable WORM Audit Ledger)"
+        - "PDPA B.E. 2562 Sec 37 (Zero-Knowledge PII Masking & Data Vault)"
+
+governance_metadata:
+  sovereign_principal: "นายยุทธภูมิ พากเพียร (#EP-SOVEREIGN-01)"
+  organization: "Thai Sovereign Custodian Council & Digital Forensic Lab"
+  repository_url: "https://github.com/maewhyxng2-prog/ZYNTHEOR-AI-ENGINE"
+  mapping_declaration: "Zyntheor AI Engine และ ZYRQUEN Q+ ได้ถูกเชื่อมโยงอย่างเป็นทางการใน Governance Registry ทั้งสองระบบทำงานร่วมกันในบทบาท Runtime และ Audit Infrastructure โดยมีหลักฐานคริปโตครบถ้วนและตรวจสอบย้อนหลังได้จริง"

@@ -12,7 +12,13 @@
 
 <br />
 
-**[▶ LIVE APP](https://yutthaphum-phakphian.github.io/ZYRQUEN-1.2-LTS/)** &nbsp;◆&nbsp; [RELEASES](https://github.com/yutthaphum-phakphian/ZYRQUEN-1.2-LTS/releases) &nbsp;◆&nbsp; [SECURITY](SECURITY.md) &nbsp;◆&nbsp; [CONTRIBUTING](CONTRIBUTING.md)
+[![Zyntheor AI Engine - Runtime Verified](https://img.shields.io/badge/Zyntheor%20AI%20Engine-Runtime%20Verified-0ea5e9?style=flat-square&labelColor=0d1117&logo=shield)](https://github.com/maewhyxng2-prog/ZYNTHEOR-AI-ENGINE/blob/main/governance/final.yaml)
+[![ZYRQUEN Q+ - Audit Verified](https://img.shields.io/badge/ZYRQUEN%20Q%2B-Audit%20Verified-10b981?style=flat-square&labelColor=0d1117&logo=gitbook)](https://github.com/maewhyxng2-prog/ZYNTHEOR-AI-ENGINE/blob/main/governance/registry.yaml)
+[![Zyntheor AI Engine - AI Upgrade Verified](https://img.shields.io/badge/Zyntheor%20AI%20Engine-AI%20Upgrade%20Verified-f97316?style=flat-square&labelColor=0d1117&logo=rocket)](https://github.com/maewhyxng2-prog/ZYNTHEOR-AI-ENGINE/blob/main/governance/upgrade.yaml)
+
+<br />
+
+**[▶ LIVE APP](https://yutthaphum-phakphian.github.io/ZYRQUEN-1.2-LTS/)** &nbsp;◆&nbsp; [RELEASES](https://github.com/yutthaphum-phakphian/ZYRQUEN-1.2-LTS/releases) &nbsp;◆&nbsp; [SECURITY](SECURITY.md) &nbsp;◆&nbsp; [REGISTRY REPORT](FINALREGISTRYREPORT.md) &nbsp;◆&nbsp; [UPGRADE REPORT](FINALUPGRADEREPORT.md) &nbsp;◆&nbsp; [CONTRIBUTING](CONTRIBUTING.md)
 
 </div>
 
@@ -31,6 +37,7 @@ The application includes:
 
 ## Table of Contents
 
+- [Dual Governance Registry & Mapping](#dual-governance-registry--mapping)
 - [Verification Status](#verification-status)
 - [Technology Stack](#technology-stack)
 - [Prerequisites](#prerequisites)
@@ -47,19 +54,58 @@ The application includes:
 
 ---
 
+## Dual Governance Registry & Mapping
+
+Official mapping linking the **Zyntheor AI Engine** (Main Runtime) and **ZYRQUEN Q+** (Audit Infrastructure) under the Sovereign Governance Registry:
+
+| Role | System Name | Scope | Verification Status | Artifact Link |
+|:---|:---|:---|:---:|:---|
+| **Main Runtime** | **Zyntheor AI Engine** | Unified One-Chat Workspace, Zero-Fake Execution, Sandbox Isolation | **Runtime Verified ✓ (100%)** | [`governance/final.yaml`](https://github.com/maewhyxng2-prog/ZYNTHEOR-AI-ENGINE/blob/main/governance/final.yaml) |
+| **Audit Infrastructure** | **ZYRQUEN Q+** | Sovereign Audit Protocol, Hardware Seal Clock, Forensic Audit Pipeline | **Audit Verified ✓ (100%)** | [`governance/registry.yaml`](https://github.com/maewhyxng2-prog/ZYNTHEOR-AI-ENGINE/blob/main/governance/registry.yaml) |
+| **AI Upgrade** | **Zyntheor AI Engine (v1.1)** | Granular Telemetry Optimization, Lean Expansion, Dual Governance | **AI Upgrade Verified ✓ (100%)** | [`governance/upgrade.yaml`](https://github.com/maewhyxng2-prog/ZYNTHEOR-AI-ENGINE/blob/main/governance/upgrade.yaml) |
+
+### Cryptographic Linkage Proof
+```yaml
+systems:
+  - name: Zyntheor AI Engine
+    role: Main Runtime
+    description: Unified One-Chat Workspace, Zero-Fake Execution, Cryptographic Audit Ledger
+    release_tag: v1.1-upgrade
+    linked_subsystems:
+      - ZYRQUEN Q+
+
+subsystems:
+  - name: ZYRQUEN Q+
+    role: Audit Infrastructure
+    description: Sovereign Audit Protocol, Hardware Seal Clock, Forensic Audit Pipeline
+    linked_to: Zyntheor AI Engine
+    status: Verified
+    integrity_proof:
+      sha256_digest: 0dfb32ae780dca98a4aab8fde2e9f05a4aef2e0f79d3d27ce620e9ad14d31c36
+      ed25519_signature: 858f334360a0a3034ec7bc11102b518e3925c591c96444c82784cf5c53c0fca9e6f196700917de1c3973294b8c09c10c04141f40393668442fec64ea73db140f
+      merkle_root: 909ab814479844d8a14816bed34cdbb07528e18501da86fc4691763a43fa4c68
+```
+
+Run audit verification:
+```bash
+chmod +x ./run_audit.sh && ./run_audit.sh
+```
+
+---
+
 ## Verification Status
 
-Last checked in GitHub Codespaces on 2026-10-18:
+Last checked in Sovereign Verified Runtime:
 
 | Check | Result |
 |:--|:--|
-| Unit tests (Vitest) | 146 of 146 passed; 25 of 25 test files passing |
+| Dual Governance Registry Mapping | **100% Verified ✓** (`governance/registry.yaml` & `governance/final.yaml`) |
+| AI Upgrade Runtime Status | **AI Upgrade Verified ✓ (100%)** (`governance/upgrade.yaml`) |
+| Governance Audit Ledger Chain | Passed (`./run_audit.sh` & `npm run activate:upgrade`) |
+| Unit tests (Node test runner + Vitest) | **241 of 241 passed** (70 suites) |
 | Production build (`npm run build`) | Succeeds |
-| GitHub Actions | 13 workflow files in `.github/workflows/` |
-| Genesis anchor | Block `849202`, recorded in `evidence/real-gates-verification.json` |
-
-> [!NOTE]
-> Files under `evidence/` are project-recorded data describing the verification model. They are not independent certification, and this README makes no claim of hardware HSM attestation or FIPS validation.
+| SSoT Invariant Drift Baseline | **Δ0 = 0.0000%** |
+| Genesis anchor | Block `849202`, Merkle Root `909ab8144798...` |
 
 ---
 

@@ -17,6 +17,10 @@ import {
   Bot,
   Zap,
   Check,
+  ThumbsUp,
+  ThumbsDown,
+  Star,
+  Activity,
   Radio,
 } from 'lucide-react';
 import {
@@ -26,6 +30,7 @@ import {
   RealExecutionTrace,
 } from '../../adapters/zyrquenAdapter';
 import { offlineAuditSyncService } from '../../services/offlineAuditSyncService';
+import { aiAgentRegistryService } from '../../services/aiAgentRegistryService';
 import { playTone, playAuditChime } from '../AudioSynthesizer';
 import { ViewType } from '../../types';
 
@@ -92,6 +97,12 @@ export const FeaturedAiWorkspaceSandbox: React.FC<FeaturedAiWorkspaceSandboxProp
     'Generate court-admissible forensic attestation for Chamber 04 under ETDA B.E. 2544 Sec 26. Validate 14,902 immutable seals with SHA3-512 and NIST FIPS 204 ML-DSA-87 signature.'
   );
   const [selectedChannel, setSelectedChannel] = useState<'TEXT_INPUT' | 'VOICE_STT'>('TEXT_INPUT');
+  const [executionMode, setExecutionMode] = useState<'REAL' | 'DRY_RUN'>('REAL');
+  const [feedbackRating, setFeedbackRating] = useState<number>(5);
+  const [feedbackNotes, setFeedbackNotes] = useState<string>('');
+  const [feedbackSubmitted, setFeedbackSubmitted] = useState<boolean>(false);
+  const [manualOverrideAgent, setManualOverrideAgent] = useState<string>('');
+  const [cacheStatus, setCacheStatus] = useState<{ isCached: boolean; cacheHitRatePct: number }>({ isCached: false, cacheHitRatePct: 0 });
   const [isExecuting, setIsExecuting] = useState<boolean>(false);
   const [executionResult, setExecutionResult] = useState<{
     success: boolean;
@@ -114,7 +125,7 @@ export const FeaturedAiWorkspaceSandbox: React.FC<FeaturedAiWorkspaceSandboxProp
     setSelectedAgent(preset.agent);
   };
 
-  const handleInitiateTask = () => {
+  const handleInitiateTask = async () => {
     if (!promptInput.trim() || isExecuting) return;
 
     playTone(600, 0.04);
@@ -151,6 +162,27 @@ export async function executeSovereignDirective() {
       evidenceRef: `EV-SANDBOX-HOME:${workspaceId}:${requestId}`,
       timestamp: new Date().toISOString(),
     });
+
+    // Lean AI Expansion: Check Agent Orchestrator LRU Cache & Async Queue
+    let wasCached = false;
+    try {
+      const sim = await aiAgentRegistryService.executeWorkflowSimulation('route-code-assist', promptInput, {
+        executionMode,
+        overrideAgentId: manualOverrideAgent || undefined,
+        operator: 'Human In-The-Loop Operator',
+      });
+      wasCached = Boolean(sim.cached);
+      setCacheStatus({
+        isCached: wasCached,
+        cacheHitRatePct: aiAgentRegistryService.getCacheStats().hitRatePct,
+      });
+    } catch {
+      // Safe fallback
+    }
+
+    // Reset feedback state for new execution
+    setFeedbackSubmitted(false);
+    setFeedbackNotes('');
 
     // Execute actual preflight workflow and AST sandbox evaluation instantly (zero artificial delay)
     const result = executeAiWorkspacePreflightWorkflow({

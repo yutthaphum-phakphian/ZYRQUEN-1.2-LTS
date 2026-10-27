@@ -109,10 +109,53 @@ class OpenTelemetryCollector {
   private spans: OtelSpan[] = [];
   private maxSpans = 200;
   private listeners: Array<(span: OtelSpan) => void> = [];
+  private configListeners: Array<(enabled: boolean) => void> = [];
   private blockedMutationCount = 14;
+  private granularTelemetryEnabled: boolean = (() => {
+    try {
+      if (typeof window !== 'undefined' && window.localStorage) {
+        const stored = window.localStorage.getItem('zyrquen_granular_telemetry_enabled');
+        if (stored !== null) {
+          return JSON.parse(stored);
+        }
+      }
+    } catch {
+      // fallback
+    }
+    return true;
+  })();
 
   constructor() {
     this.seedInitialTelemetry();
+  }
+
+  public isGranularTelemetryEnabled(): boolean {
+    return this.granularTelemetryEnabled;
+  }
+
+  public setGranularTelemetryEnabled(enabled: boolean): void {
+    this.granularTelemetryEnabled = enabled;
+    try {
+      if (typeof window !== 'undefined' && window.localStorage) {
+        window.localStorage.setItem('zyrquen_granular_telemetry_enabled', JSON.stringify(enabled));
+      }
+    } catch {
+      // ignore
+    }
+    this.configListeners.forEach((fn) => {
+      try {
+        fn(enabled);
+      } catch {
+        // ignore
+      }
+    });
+  }
+
+  public subscribeConfig(listener: (enabled: boolean) => void): () => void {
+    this.configListeners.push(listener);
+    return () => {
+      this.configListeners = this.configListeners.filter((l) => l !== listener);
+    };
   }
 
   private seedInitialTelemetry() {
@@ -229,6 +272,15 @@ class OpenTelemetryCollector {
   }
 
   public recordSpan(span: OtelSpan) {
+    if (
+      !this.granularTelemetryEnabled &&
+      span.status !== 'FAIL_CLOSED' &&
+      span.status !== 'ERROR' &&
+      span.status !== 'BLOCKED'
+    ) {
+      // Suppress high-frequency routine span storage to optimize CPU core utilization and memory throughput
+      return;
+    }
     this.spans.unshift(span);
     if (this.spans.length > this.maxSpans) {
       this.spans.pop();
@@ -356,6 +408,30 @@ export function logTrace(params: {
   tenantId?: string;
   attributes?: Record<string, any>;
 }): OtelSpan {
+  const isCritical =
+    params.resultState === 'FAIL_CLOSED' ||
+    params.resultState === 'ERROR' ||
+    params.resultState === 'BLOCKED';
+
+  if (!telemetry.isGranularTelemetryEnabled() && !isCritical) {
+    // Ultra-lean virtual span: bypasses deep sanitization, memory allocations, and event dispatch
+    const now = Date.now();
+    return {
+      traceId: params.traceId || 'TRACE-LEAN-SUPPRESSED',
+      spanId: params.spanId || 'SP-LEAN',
+      operationName: params.operationName,
+      planeId: params.planeId,
+      tenantId: params.tenantId || 'TNT-TH-001',
+      status: params.resultState,
+      durationMs: params.latencyMs,
+      startTime: now,
+      endTime: now,
+      mutationDelta: 0,
+      attributes: {},
+      events: [],
+    };
+  }
+
   const startWallTime = Date.now() - Math.round(params.latencyMs);
   const endWallTime = Date.now();
   const traceId = params.traceId || generateTraceId();
@@ -396,6 +472,10 @@ export function recordMetric(params: {
   unit?: string;
   attributes?: Record<string, any>;
 }) {
+  if (!telemetry.isGranularTelemetryEnabled()) {
+    return; // Bypass high-frequency metric tracking to conserve CPU core cycles
+  }
+
   const sanitizedAttrs = sanitizeTelemetryAttributes({
     ...(params.attributes || {}),
     'metric.name': params.metricName,
@@ -413,3 +493,15 @@ export function recordMetric(params: {
 }
 
 export const telemetry = new OpenTelemetryCollector();
+
+export function isGranularTelemetryEnabled(): boolean {
+  return telemetry.isGranularTelemetryEnabled();
+}
+
+export function setGranularTelemetryEnabled(enabled: boolean): void {
+  telemetry.setGranularTelemetryEnabled(enabled);
+}
+
+export function subscribeGranularTelemetryConfig(listener: (enabled: boolean) => void): () => void {
+  return telemetry.subscribeConfig(listener);
+}

@@ -337,6 +337,78 @@ class ZyntheorTrainingService {
     return [...this.dataset];
   }
 
+
+  /**
+   * Lean AI Expansion: Incremental Dataset Delta Sync
+   * Ingests delta samples without requiring a full reload, validating and deduplicating on the fly.
+   */
+  /**
+   * Lean AI Expansion: Incremental Dataset Delta Sync
+   * Ingests delta samples without requiring a full reload, validating and deduplicating on the fly.
+   */
+  public ingestIncrementalBatch(items: Array<Omit<DatasetItem, 'id' | 'hash' | 'tokenCount'>>): {
+    addedCount: number;
+    duplicateCount: number;
+    invalidCount: number;
+    addedItems: DatasetItem[];
+  } {
+    let addedCount = 0;
+    let duplicateCount = 0;
+    let invalidCount = 0;
+    const addedItems: DatasetItem[] = [];
+
+    const existingHashes = new Set(this.dataset.map((d) => d.hash));
+
+    for (const item of items) {
+      const instruction = (item.instruction || '').trim();
+      const output = (item.output || '').trim();
+      const input = (item.input || '').trim();
+
+      // Pre-ingestion validation
+      if (!instruction || !output || instruction.length < 5 || output.length < 5) {
+        invalidCount++;
+        continue;
+      }
+
+      // Compute hash for deduplication
+      const contentStr = `${instruction}::${input}::${output}`;
+      let hashNum = 0;
+      for (let i = 0; i < contentStr.length; i++) {
+        hashNum = (hashNum << 5) - hashNum + contentStr.charCodeAt(i);
+        hashNum |= 0;
+      }
+      const hash = 'DS_' + Math.abs(hashNum).toString(16).padStart(16, '0');
+
+      if (existingHashes.has(hash)) {
+        duplicateCount++;
+        continue;
+      }
+
+      existingHashes.add(hash);
+      const tokenCount = Math.round((instruction.length + input.length + output.length) / 3.8);
+      const newItem: DatasetItem = {
+        id: `DS-${Math.random().toString(36).substring(2, 9).toUpperCase()}`,
+        instruction,
+        input: input || undefined,
+        output,
+        language: item.language || 'th',
+        category: item.category || 'REASONING',
+        tokenCount,
+        hash,
+      };
+
+      this.dataset.unshift(newItem);
+      addedItems.push(newItem);
+      addedCount++;
+    }
+
+    if (addedCount > 0) {
+      this.notify();
+    }
+
+    return { addedCount, duplicateCount, invalidCount, addedItems };
+  }
+
   public addDatasetItem(item: Omit<DatasetItem, 'id' | 'hash'>): { ok: boolean; item?: DatasetItem; error?: string } {
     if (!item.instruction.trim() || !item.output.trim()) {
       return { ok: false, error: 'Instruction and output are strictly required.' };

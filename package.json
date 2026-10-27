@@ -10,6 +10,7 @@
     "test": "npm run test:unit && vitest run",
     "test:coverage": "vitest run --coverage",
     "test:unit": "tsx --test tests/unit/*.test.ts",
+    "activate:upgrade": "tsx scripts/activate-upgrade.ts",
     "preview": "vite preview",
     "start": "node server.ts"
   },

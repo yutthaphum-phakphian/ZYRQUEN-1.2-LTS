@@ -6,6 +6,7 @@ import { SovereignSelfAuditEngine } from '../audit/SovereignSelfAuditEngine';
 import { DataPersistenceSettingsTab } from '../settings/DataPersistenceSettingsTab';
 import { AuditChimeSettingsCard } from '../settings/AuditChimeSettingsCard';
 import { ChartAnimationToggle } from '../dashboard/ChartAnimationToggle';
+import { GranularTelemetryToggle } from '../settings/GranularTelemetryToggle';
 import { offlineAuditSyncService } from '../../services/offlineAuditSyncService';
 import React, { useState, useEffect } from 'react';
 import {
@@ -710,6 +711,7 @@ export const SettingsView: React.FC<SettingsViewProps> = ({
 
       {/* Quantum Login & Warp Ingress */}
       {(activeSettingsTab === 'GENERAL' || activeSettingsTab === 'ALL') && (
+        <>
         <section className="p-5 rounded-[28px] bg-black/40 border border-[#D4AF37]/30 backdrop-blur-xl">
           <h2 className="flex items-center gap-2 text-[#D4AF37] font-bold mb-2 font-mono text-sm">
             <User className="w-4 h-4" /> AUTH &amp; WARP INGRESS
@@ -747,6 +749,13 @@ export const SettingsView: React.FC<SettingsViewProps> = ({
             </button>
           </div>
         </section>
+
+        {/* Granular Performance Telemetry CPU & Memory Optimization Toggle */}
+        <GranularTelemetryToggle
+          onNotifyEvent={onNotifyEvent}
+          onAddSystemEvent={onAddSystemEvent}
+        />
+        </>
       )}
 
       {/* Sovereign Audit & Red Team Modules */}
@@ -855,6 +864,12 @@ export const SettingsView: React.FC<SettingsViewProps> = ({
 
       {/* High-Performance Mode / Chart Animations User Setting */}
       <ChartAnimationToggle variant="card" />
+
+      {/* Granular Performance Telemetry CPU & Memory Optimization Toggle */}
+      <GranularTelemetryToggle
+        onNotifyEvent={onNotifyEvent}
+        onAddSystemEvent={onAddSystemEvent}
+      />
 
       <FirmwareLifecycleManager onNotifyEvent={onNotifyEvent} onAddSystemEvent={onAddSystemEvent} />
 
@@ -1438,6 +1453,12 @@ export const SettingsView: React.FC<SettingsViewProps> = ({
           <div className="space-y-4">
             <PhysicalAttestation />
           </div>
+
+          {/* Granular Performance Telemetry CPU & Memory Optimization Toggle */}
+          <GranularTelemetryToggle
+            onNotifyEvent={onNotifyEvent}
+            onAddSystemEvent={onAddSystemEvent}
+          />
 
           {/* Firmware Lifecycle Manager */}
           <div className="space-y-4">

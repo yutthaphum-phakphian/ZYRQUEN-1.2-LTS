@@ -95,6 +95,24 @@ export interface WorkflowExecutionResult {
   totalLatencyMs: number;
   hops: WorkflowExecutionHop[];
   timestamp: string;
+  cached?: boolean;
+  executionMode?: 'REAL' | 'DRY_RUN';
+}
+
+export interface OperatorDecisionFeedback {
+  rating: number; // 1 to 5
+  score: 'POSITIVE' | 'NEUTRAL' | 'NEGATIVE';
+  notes?: string;
+  operator: string;
+  timestamp: string;
+}
+
+export interface OperatorManualOverride {
+  overriddenBy: string;
+  newAgentId: string;
+  newAgentName: string;
+  reason: string;
+  timestamp: string;
 }
 
 export interface RoutingDecisionLog {
@@ -111,6 +129,9 @@ export interface RoutingDecisionLog {
   approvalRequired: boolean;
   hopCount: number;
   evidenceRef: string;
+  cached?: boolean;
+  manualOverride?: OperatorManualOverride;
+  feedback?: OperatorDecisionFeedback;
 }
 
 export interface AgentLatencyMeasurementLog {
@@ -393,6 +414,13 @@ class AiAgentRegistryService {
   private flaggedHighLatencyAgentIds: Set<string> = new Set();
   private listeners: Array<() => void> = [];
   private latencyHistory: Map<string, LatencyDataPoint[]> = new Map();
+
+  // Lean AI Expansion: In-memory LRU Cache & Async Task Queue
+  private routingCache: Map<string, { result: WorkflowExecutionResult; cachedAt: number }> = new Map();
+  private readonly maxCacheCapacity = 100;
+  private cacheHits = 0;
+  private cacheMisses = 0;
+  private executionQueue: Promise<unknown> = Promise.resolve();
 
   constructor() {
     this.loadState();
@@ -841,87 +869,288 @@ class AiAgentRegistryService {
     return true;
   }
 
-  public async executeWorkflowSimulation(routeId: string, testPrompt: string): Promise<WorkflowExecutionResult> {
-    const route = this.routes.find((r) => r.id === routeId) || this.routes[0];
-    const primary = this.getAgent(route.primaryAgentId) || this.agents[0];
-    const fallback = route.fallbackAgentId ? this.getAgent(route.fallbackAgentId) : undefined;
-
-    const executionId = `EXEC-${Date.now().toString(36).toUpperCase()}`;
-    const hops: WorkflowExecutionHop[] = [];
-    let totalLatency = 0;
-
-    // Hop 1: Preflight & Primary Agent Routing
-    hops.push({
-      hopNumber: 1,
-      agentId: primary.id,
-      agentName: primary.name,
-      action: `Inbound Routing -> ${primary.role} (${route.taskType})`,
-      latencyMs: primary.latencyMs || 42,
-      status: 'SUCCESS',
-      outputSummary: `Processed task '${testPrompt.slice(0, 40)}...' via ${primary.modelIdentifier}`,
+    /**
+   * Lean AI Expansion: Non-blocking Async Queue for Agent Orchestrator
+   */
+  public enqueueExecution<T>(fn: () => Promise<T>): Promise<T> {
+    const next = this.executionQueue.then(async () => {
+      return await fn();
     });
-    totalLatency += primary.latencyMs || 42;
-    primary.requestsHandled++;
+    this.executionQueue = next.catch(() => {});
+    return next as Promise<T>;
+  }
 
-    // Hop 2: Sequential Chain or Invariant Verification via ZYNTHEOR Core
-    if (route.executionMode === 'SEQUENTIAL_CHAIN' || route.requiresApproval) {
-      hops.push({
-        hopNumber: 2,
-        agentId: 'agent-zyrquen-sovereign-core',
-        agentName: 'ZYNTHEOR Sovereign Core Engine',
-        action: route.requiresApproval
-          ? 'Approval Gate Interceptor (Zero Core Mutation Verified)'
-          : 'SSoT Invariant Validation & Post-Quantum Seal Verification',
-        latencyMs: 35.8,
-        status: 'SUCCESS',
-        outputSummary: 'Verified against Genesis #849202 (Δ0.00% Zero Drift). 10/10 REAL_HSM Quorum Approved.',
-      });
-      totalLatency += 35.8;
-    }
+  /**
+   * LRU Cache key generation
+   */
+  private getCacheKey(routeId: string, testPrompt: string, mode: string, overrideAgentId?: string): string {
+    const promptPrefix = testPrompt.trim().slice(0, 120);
+    return `${routeId}::${overrideAgentId || 'auto'}::${mode}::${promptPrefix}`;
+  }
 
-    // Hop 3: Sentinel Security Telemetry Sweep
-    hops.push({
-      hopNumber: hops.length + 1,
-      agentId: 'agent-chamber18-sentinel',
-      agentName: 'Chamber 18 Neural Sentinel',
-      action: 'Entropy Telemetry Sweep & Audit Log Recording',
-      latencyMs: 18.2,
-      status: 'SUCCESS',
-      outputSummary: 'Payload entropy: 3.42 bits/byte (SAFE < 7.20). Replay SLA verified within 142ms target.',
-    });
-    totalLatency += 18.2;
-
-    const roundedLatency = Math.round(totalLatency * 10) / 10;
-
-    // Record decision log
-    const decisionLog: RoutingDecisionLog = {
-      id: `DEC-${Date.now().toString(36).toUpperCase()}`,
-      timestamp: new Date().toISOString(),
-      routeId: route.id,
-      routeName: route.name,
-      taskType: route.taskType,
-      promptSnippet: testPrompt.length > 50 ? testPrompt.slice(0, 48) + '...' : testPrompt,
-      primaryAgentName: primary.name,
-      executionMode: route.executionMode,
-      totalLatencyMs: roundedLatency,
-      status: 'SUCCESS',
-      approvalRequired: route.requiresApproval,
-      hopCount: hops.length,
-      evidenceRef: `EVIDENCE:DECISION:${executionId}:${route.id}`,
+  public getCacheStats(): { size: number; capacity: number; hits: number; misses: number; hitRatePct: number } {
+    const total = this.cacheHits + this.cacheMisses;
+    const hitRatePct = total > 0 ? Math.round((this.cacheHits / total) * 100) : 0;
+    return {
+      size: this.routingCache.size,
+      capacity: this.maxCacheCapacity,
+      hits: this.cacheHits,
+      misses: this.cacheMisses,
+      hitRatePct,
     };
-    this.addDecisionLog(decisionLog);
+  }
+
+  public clearRoutingCache(): void {
+    this.routingCache.clear();
+    this.cacheHits = 0;
+    this.cacheMisses = 0;
+  }
+
+  /**
+   * Human-AI Collaboration: Submit Operator Feedback on a routing decision
+   */
+  public submitDecisionFeedback(
+    decisionId: string,
+    feedback: {
+      rating: number; // 1-5
+      score?: 'POSITIVE' | 'NEUTRAL' | 'NEGATIVE';
+      notes?: string;
+      operator?: string;
+    }
+  ): boolean {
+    const index = this.decisionLogs.findIndex((log) => log.id === decisionId);
+    if (index === -1) return false;
+
+    const rating = Math.max(1, Math.min(5, Math.round(feedback.rating)));
+    const score = feedback.score || (rating >= 4 ? 'POSITIVE' : rating === 3 ? 'NEUTRAL' : 'NEGATIVE');
+
+    this.decisionLogs[index] = {
+      ...this.decisionLogs[index],
+      feedback: {
+        rating,
+        score,
+        notes: feedback.notes?.trim() || undefined,
+        operator: feedback.operator || 'Human In-The-Loop Operator',
+        timestamp: new Date().toISOString(),
+      },
+    };
+
+    offlineAuditSyncService.enqueueEvent({
+      type: 'OPERATOR_DECISION_FEEDBACK',
+      title: `Feedback on Routing ${decisionId}: ${rating}/5 [${score}]`,
+      description: `Operator feedback logged for route: ${this.decisionLogs[index].routeName}. Notes: ${feedback.notes || 'None'}`,
+      severity: rating >= 3 ? 'success' : 'warning',
+      statuteRef: 'ETDA Sec 26 Human-In-The-Loop',
+    });
 
     this.saveState();
+    this.notify();
+    return true;
+  }
 
-    return {
-      executionId,
-      routeId: route.id,
-      taskType: route.taskType,
-      status: 'COMPLETED',
-      totalLatencyMs: roundedLatency,
-      hops,
-      timestamp: new Date().toISOString(),
+  /**
+   * Human-AI Collaboration: Manual Override on an agent routing decision
+   */
+  public applyManualOverride(
+    decisionId: string,
+    newAgentId: string,
+    reason: string,
+    operator: string = 'Sovereign Operator #EP-01'
+  ): boolean {
+    const logIndex = this.decisionLogs.findIndex((log) => log.id === decisionId);
+    if (logIndex === -1) return false;
+
+    const targetAgent = this.getAgent(newAgentId);
+    if (!targetAgent) return false;
+
+    this.decisionLogs[logIndex] = {
+      ...this.decisionLogs[logIndex],
+      primaryAgentName: targetAgent.name,
+      manualOverride: {
+        overriddenBy: operator,
+        newAgentId: targetAgent.id,
+        newAgentName: targetAgent.name,
+        reason: reason.trim(),
+        timestamp: new Date().toISOString(),
+      },
     };
+
+    // Invalidate cached executions for this route to prevent stale override
+    this.clearRoutingCache();
+
+    offlineAuditSyncService.enqueueEvent({
+      type: 'OPERATOR_MANUAL_OVERRIDE',
+      title: `Manual Route Override: ${this.decisionLogs[logIndex].routeName}`,
+      description: `Rerouted decision ${decisionId} to ${targetAgent.name} by ${operator}. Reason: ${reason}`,
+      severity: 'info',
+      statuteRef: 'ETDA Sec 26 / Fail-Closed Sovereign Control',
+    });
+
+    this.saveState();
+    this.notify();
+    return true;
+  }
+
+  public async executeWorkflowSimulation(
+    routeId: string,
+    testPrompt: string,
+    options?: {
+      executionMode?: 'REAL' | 'DRY_RUN';
+      bypassCache?: boolean;
+      overrideAgentId?: string;
+      operator?: string;
+    }
+  ): Promise<WorkflowExecutionResult> {
+    return this.enqueueExecution(async () => {
+      const mode = options?.executionMode || 'REAL';
+      const cacheKey = this.getCacheKey(routeId, testPrompt, mode, options?.overrideAgentId);
+
+      // LRU Cache Check (Performance Optimization)
+      if (!options?.bypassCache && this.routingCache.has(cacheKey)) {
+        const cachedEntry = this.routingCache.get(cacheKey)!;
+        this.cacheHits++;
+        // Refresh key in map to maintain LRU order
+        this.routingCache.delete(cacheKey);
+        this.routingCache.set(cacheKey, cachedEntry);
+
+        // Record cached decision log
+        const cachedDecisionLog: RoutingDecisionLog = {
+          id: `DEC-CACHE-${Date.now().toString(36).toUpperCase()}`,
+          timestamp: new Date().toISOString(),
+          routeId: cachedEntry.result.routeId,
+          routeName: this.routes.find((r) => r.id === cachedEntry.result.routeId)?.name || 'Cached Route',
+          taskType: cachedEntry.result.taskType,
+          promptSnippet: testPrompt.length > 50 ? testPrompt.slice(0, 48) + '...' : testPrompt,
+          primaryAgentName: cachedEntry.result.hops[0]?.agentName || 'Cached Agent',
+          executionMode: mode,
+          totalLatencyMs: 0.4, // Near-zero instant cache latency
+          status: 'SUCCESS',
+          approvalRequired: false,
+          hopCount: cachedEntry.result.hops.length,
+          evidenceRef: `EVIDENCE:CACHE:${cachedEntry.result.executionId}`,
+          cached: true,
+        };
+        this.addDecisionLog(cachedDecisionLog);
+
+        return {
+          ...cachedEntry.result,
+          executionId: `EXEC-CACHE-${Date.now().toString(36).toUpperCase()}`,
+          totalLatencyMs: 0.4,
+          timestamp: new Date().toISOString(),
+          cached: true,
+          executionMode: mode,
+        };
+      }
+
+      this.cacheMisses++;
+
+      const route = this.routes.find((r) => r.id === routeId) || this.routes[0];
+      const selectedAgentId = options?.overrideAgentId || route.primaryAgentId;
+      const primary = this.getAgent(selectedAgentId) || this.getAgent(route.primaryAgentId) || this.agents[0];
+      const fallback = route.fallbackAgentId ? this.getAgent(route.fallbackAgentId) : undefined;
+
+      const executionId = `EXEC-${Date.now().toString(36).toUpperCase()}`;
+      const hops: WorkflowExecutionHop[] = [];
+      let totalLatency = 0;
+
+      // Hop 1: Preflight & Primary Agent Routing
+      const primaryLatency = mode === 'DRY_RUN' ? 2.5 : (primary.latencyMs || 42);
+      hops.push({
+        hopNumber: 1,
+        agentId: primary.id,
+        agentName: primary.name,
+        action: `Inbound Routing -> ${primary.role} (${route.taskType})${mode === 'DRY_RUN' ? ' [DRY_RUN]' : ''}`,
+        latencyMs: primaryLatency,
+        status: 'SUCCESS',
+        outputSummary: `${mode === 'DRY_RUN' ? '[SIMULATED] ' : ''}Processed task '${testPrompt.slice(0, 40)}...' via ${primary.modelIdentifier}`,
+      });
+      totalLatency += primaryLatency;
+      primary.requestsHandled++;
+
+      // Hop 2: Sequential Chain or Invariant Verification via ZYNTHEOR Core
+      if (route.executionMode === 'SEQUENTIAL_CHAIN' || route.requiresApproval) {
+        const coreLatency = mode === 'DRY_RUN' ? 3.0 : 35.8;
+        hops.push({
+          hopNumber: 2,
+          agentId: 'agent-zyrquen-sovereign-core',
+          agentName: 'ZYNTHEOR Sovereign Core Engine',
+          action: route.requiresApproval
+            ? 'Approval Gate Interceptor (Zero Core Mutation Verified)'
+            : 'SSoT Invariant Validation & Post-Quantum Seal Verification',
+          latencyMs: coreLatency,
+          status: 'SUCCESS',
+          outputSummary: 'Verified against Genesis #849202 (Δ0.00% Zero Drift). 10/10 REAL_HSM Quorum Approved.',
+        });
+        totalLatency += coreLatency;
+      }
+
+      // Hop 3: Sentinel Security Telemetry Sweep
+      const sentinelLatency = mode === 'DRY_RUN' ? 1.5 : 18.2;
+      hops.push({
+        hopNumber: hops.length + 1,
+        agentId: 'agent-chamber18-sentinel',
+        agentName: 'Chamber 18 Neural Sentinel',
+        action: 'Entropy Telemetry Sweep & Audit Log Recording',
+        latencyMs: sentinelLatency,
+        status: 'SUCCESS',
+        outputSummary: 'Payload entropy: 3.42 bits/byte (SAFE < 7.20). Replay SLA verified within 142ms target.',
+      });
+      totalLatency += sentinelLatency;
+
+      const roundedLatency = Math.round(totalLatency * 10) / 10;
+
+      // Record decision log
+      const decisionLog: RoutingDecisionLog = {
+        id: `DEC-${Date.now().toString(36).toUpperCase()}`,
+        timestamp: new Date().toISOString(),
+        routeId: route.id,
+        routeName: route.name,
+        taskType: route.taskType,
+        promptSnippet: testPrompt.length > 50 ? testPrompt.slice(0, 48) + '...' : testPrompt,
+        primaryAgentName: primary.name,
+        executionMode: mode === 'DRY_RUN' ? `${route.executionMode} (DRY_RUN)` : route.executionMode,
+        totalLatencyMs: roundedLatency,
+        status: 'SUCCESS',
+        approvalRequired: route.requiresApproval,
+        hopCount: hops.length,
+        evidenceRef: `EVIDENCE:DECISION:${executionId}:${route.id}`,
+        cached: false,
+        manualOverride: options?.overrideAgentId
+          ? {
+              overriddenBy: options.operator || 'Human Operator',
+              newAgentId: primary.id,
+              newAgentName: primary.name,
+              reason: 'Direct selection in UI',
+              timestamp: new Date().toISOString(),
+            }
+          : undefined,
+      };
+      this.addDecisionLog(decisionLog);
+
+      const result: WorkflowExecutionResult = {
+        executionId,
+        routeId: route.id,
+        taskType: route.taskType,
+        status: 'COMPLETED',
+        totalLatencyMs: roundedLatency,
+        hops,
+        timestamp: new Date().toISOString(),
+        cached: false,
+        executionMode: mode,
+      };
+
+      // Store in LRU Cache
+      if (this.routingCache.size >= this.maxCacheCapacity) {
+        const oldestKey = this.routingCache.keys().next().value;
+        if (oldestKey) {
+          this.routingCache.delete(oldestKey);
+        }
+      }
+      this.routingCache.set(cacheKey, { result, cachedAt: Date.now() });
+
+      this.saveState();
+      return result;
+    });
   }
 
   public getRoutingDecisionLogs(): RoutingDecisionLog[] {
