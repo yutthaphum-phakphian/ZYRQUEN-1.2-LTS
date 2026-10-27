@@ -4,7 +4,7 @@
 
 <br /><br />
 
-<img src="assets/zyrquen-crest.svg" alt="ZYRQUEN Ω Sovereign Crest" width="180" />
+<img src="assets/zyrquen-crest-v2.svg" alt="ZYRQUEN Ω Sovereign Crest" width="180" />
 
 <br />
 
