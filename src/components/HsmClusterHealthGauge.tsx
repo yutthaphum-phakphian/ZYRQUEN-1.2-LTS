@@ -20,6 +20,14 @@ import {
   Copy,
   Check,
   Info,
+  Layers,
+  Grid,
+  Table,
+  HardDrive,
+  Sliders,
+  ExternalLink,
+  Shield,
+  Maximize2,
 } from 'lucide-react';
 import { playAuditChime, playTone } from './AudioSynthesizer';
 import { FULL_DECA_HSM_RESTORED_DATA } from '../data/decaHsmRestoredPayload';
@@ -46,11 +54,76 @@ export interface DecaHsmNodeMetric {
   dataSource?: 'REAL_HARDWARE' | 'SIMULATED_TEST';
 }
 
+export interface DatacenterRackConfig {
+  id: string;
+  name: string;
+  facility: string;
+  location: string;
+  tier: string;
+  cooling: string;
+  pdu: string;
+  nodeIds: string[];
+}
+
+export const SOVEREIGN_DATACENTER_RACKS: DatacenterRackConfig[] = [
+  {
+    id: 'RACK-01',
+    name: 'Bangkok Sovereign Alpha',
+    facility: 'True IDC Sovereign Alpha',
+    location: 'Bangkok, Thailand (Master Root)',
+    tier: 'Tier-IV Fault-Tolerant (99.995%)',
+    cooling: 'Dilution Cryo-Chiller Alpha (14.92 mK)',
+    pdu: 'Dual 230V 32A Redundant A+B Feed',
+    nodeIds: ['HSM-NODE-01', 'HSM-NODE-02'],
+  },
+  {
+    id: 'RACK-02',
+    name: 'Bangkok Sovereign Beta',
+    facility: 'CAT Telecom Sovereign Enclave',
+    location: 'Bangkok, Thailand (Backup Core)',
+    tier: 'Tier-III+ Sovereign Secure Cage',
+    cooling: 'Sub-Kelvin Loop Beta (14.98 mK)',
+    pdu: 'Dual Isolated Generator Feed',
+    nodeIds: ['HSM-NODE-03', 'HSM-NODE-04'],
+  },
+  {
+    id: 'RACK-03',
+    name: 'Chiang Mai DR Core',
+    facility: 'Northern Gateway Secure DC',
+    location: 'Chiang Mai, Thailand (Disaster Recovery)',
+    tier: 'Tier-III Air-Gapped DR Site',
+    cooling: 'Cryogenic Chiller Loop Gamma (15.01 mK)',
+    pdu: 'Dedicated Hydro & Solar Hybrid',
+    nodeIds: ['HSM-NODE-05', 'HSM-NODE-06'],
+  },
+  {
+    id: 'RACK-04',
+    name: 'Hong Kong Financial Edge',
+    facility: 'Equinix HK1 Sovereign Cage',
+    location: 'Hong Kong SAR (Cross-Border Edge)',
+    tier: 'Tier-IV Financial Custody',
+    cooling: 'Liquid Nitrogen Cryo-Bus Delta (14.99 mK)',
+    pdu: 'Equinix Redundant Dual-Grid',
+    nodeIds: ['HSM-NODE-07', 'HSM-NODE-08'],
+  },
+  {
+    id: 'RACK-05',
+    name: 'Singapore Sovereign Vault',
+    facility: 'Equinix SG3 Sovereign Cage',
+    location: 'Singapore (International Gateway)',
+    tier: 'Tier-IV Sovereign Interconnect',
+    cooling: 'Sub-Kelvin Cryo-Bus Epsilon (15.02 mK)',
+    pdu: 'Dual Substation Continuous Feed',
+    nodeIds: ['HSM-NODE-09', 'HSM-NODE-10'],
+  },
+];
+
 export interface HsmClusterHealthGaugeProps {
   className?: string;
   onSelectNode?: (node: DecaHsmNodeMetric) => void;
   compact?: boolean;
   showTitle?: boolean;
+  initialDisplayMode?: 'unfurled-blades' | 'compact-grid' | 'datacenter-racks' | 'forensic-matrix';
 }
 
 export const HsmClusterHealthGauge: React.FC<HsmClusterHealthGaugeProps> = ({
@@ -58,8 +131,13 @@ export const HsmClusterHealthGauge: React.FC<HsmClusterHealthGaugeProps> = ({
   onSelectNode,
   compact = false,
   showTitle = true,
+  initialDisplayMode = 'unfurled-blades',
 }) => {
   const { animationsEnabled } = useChartAnimationPreference();
+  const [displayMode, setDisplayMode] = useState<
+    'unfurled-blades' | 'compact-grid' | 'datacenter-racks' | 'forensic-matrix'
+  >(initialDisplayMode);
+  const [copiedBladeHash, setCopiedBladeHash] = useState<string | null>(null);
   const [nodes, setNodes] = useState<DecaHsmNodeMetric[]>(() => {
     return (FULL_DECA_HSM_RESTORED_DATA.decaHsmNodes as DecaHsmNodeMetric[]).map((n, i) => ({
       ...n,
@@ -76,6 +154,13 @@ export const HsmClusterHealthGauge: React.FC<HsmClusterHealthGaugeProps> = ({
     new Date().toLocaleTimeString('th-TH', { hour12: false })
   );
   const [copiedHash, setCopiedHash] = useState<string | null>(null);
+
+  const handleCopyBladeHash = (hash: string) => {
+    copyToClipboard(hash);
+    setCopiedBladeHash(hash);
+    playAuditChime();
+    setTimeout(() => setCopiedBladeHash(null), 2000);
+  };
 
   // Sync with global hsmClusterService
   useEffect(() => {
@@ -517,137 +602,531 @@ export const HsmClusterHealthGauge: React.FC<HsmClusterHealthGaugeProps> = ({
         </div>
       </div>
 
-      {/* 10 Individual HSM Nodes Grid */}
-      <div className="space-y-3 pt-3 border-t border-white/10 relative z-10">
-        <div className="flex items-center justify-between text-xs flex-wrap gap-2">
-          <div className="flex items-center gap-2">
-            <Server className="w-4 h-4 text-cyan-400" />
-            <span className="font-bold text-zinc-100">
-              สถานะรายโหนดฮาร์ดแวร์ทั้ง 10 โหนด (Individual HSM Node Telemetry)
-            </span>
+      {/* 10 Individual HSM Nodes Section with Dynamic Unfurling Modes */}
+      <div className="space-y-4 pt-4 border-t border-white/10 relative z-10">
+        <div className="flex flex-col md:flex-row md:items-center justify-between text-xs gap-3">
+          <div className="space-y-1">
+            <div className="flex items-center gap-2 flex-wrap">
+              <Server className="w-4 h-4 text-cyan-400" />
+              <span className="font-bold text-zinc-100 text-sm">
+                กางสถาปัตยกรรมฮาร์ดแวร์ความมั่นคงสูง 10/10 โหนด (Deca-Key HSM Cluster)
+              </span>
+              <span className="px-2 py-0.5 rounded-full bg-cyan-500/15 text-cyan-300 border border-cyan-500/30 text-[10px] font-bold">
+                10/10 SEALS ACTIVE
+              </span>
+            </div>
+            <p className="text-zinc-400 text-[11px]">
+              กางโทรมาตรสด โครงสร้างตู้แร็คศูนย์ข้อมูล พยานหลักฐานดิจิทัล SHA-256 และซีลตาม พ.ร.บ. ธุรกรรมฯ ม.๒๖, ๒๘
+            </p>
           </div>
-          <span className="text-zinc-400 text-[11px]">คลิกเลือกโหนดเพื่อตรวจสอบข้อมูลเชิงลึกทางนิติวิทยาศาสตร์ (Deep Forensic Inspector)</span>
+
+          {/* View Mode Selector Tabs */}
+          <div className="flex items-center gap-1.5 p-1 rounded-xl bg-black/60 border border-white/10 text-xs flex-wrap">
+            <button
+              onClick={() => {
+                setDisplayMode('unfurled-blades');
+                playTone(660, 0.04);
+              }}
+              className={`px-3 py-1.5 rounded-lg flex items-center gap-1.5 font-bold transition cursor-pointer ${
+                displayMode === 'unfurled-blades'
+                  ? 'bg-gradient-to-r from-emerald-600 to-cyan-600 text-white shadow-sm ring-1 ring-cyan-400/50'
+                  : 'text-zinc-400 hover:text-white'
+              }`}
+              title="กางเบลดฮาร์ดแวร์ทั้ง 10 โหนดพร้อมโทรมาตรและพยานหลักฐาน"
+            >
+              <Layers className="w-3.5 h-3.5 text-cyan-300" />
+              <span>กาง 10 เบลด (Unfurled Blades)</span>
+            </button>
+
+            <button
+              onClick={() => {
+                setDisplayMode('datacenter-racks');
+                playTone(680, 0.04);
+              }}
+              className={`px-3 py-1.5 rounded-lg flex items-center gap-1.5 font-bold transition cursor-pointer ${
+                displayMode === 'datacenter-racks'
+                  ? 'bg-emerald-600/30 text-emerald-200 border border-emerald-500/40 ring-1 ring-emerald-400/50'
+                  : 'text-zinc-400 hover:text-white'
+              }`}
+              title="กาง 5 แร็คศูนย์ข้อมูลอธิปไตย"
+            >
+              <Server className="w-3.5 h-3.5 text-emerald-400" />
+              <span>5 ตู้แร็คดาต้าเซ็นเตอร์ (Datacenter Racks)</span>
+            </button>
+
+            <button
+              onClick={() => {
+                setDisplayMode('compact-grid');
+                playTone(640, 0.04);
+              }}
+              className={`px-3 py-1.5 rounded-lg flex items-center gap-1.5 font-bold transition cursor-pointer ${
+                displayMode === 'compact-grid'
+                  ? 'bg-cyan-600/30 text-cyan-200 border border-cyan-500/40 ring-1 ring-cyan-400/50'
+                  : 'text-zinc-400 hover:text-white'
+              }`}
+              title="มุมมองกริด 10 โหนดแบบกะทัดรัด"
+            >
+              <Grid className="w-3.5 h-3.5" />
+              <span>กริดกะทัดรัด (Compact Grid)</span>
+            </button>
+
+            <button
+              onClick={() => {
+                setDisplayMode('forensic-matrix');
+                playTone(700, 0.04);
+              }}
+              className={`px-3 py-1.5 rounded-lg flex items-center gap-1.5 font-bold transition cursor-pointer ${
+                displayMode === 'forensic-matrix'
+                  ? 'bg-purple-600/30 text-purple-200 border border-purple-500/40 ring-1 ring-purple-400/50'
+                  : 'text-zinc-400 hover:text-white'
+              }`}
+              title="ตารางนิติวิทยาศาสตร์และบัญชีพยานหลักฐานดิจิทัล"
+            >
+              <Table className="w-3.5 h-3.5 text-purple-400" />
+              <span>ตารางนิติวิทยาศาสตร์ (Forensic Ledger)</span>
+            </button>
+          </div>
         </div>
 
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-3">
-          {nodes.map((node) => {
-            const isSelected = node.id === selectedNodeId;
-            const isOnline = node.status === 'ONLINE';
-            const isDegraded = node.status === 'DEGRADED';
-            const isBreached = node.status === 'BREACHED';
+        {/* 1. Unfurled Blades Mode: Full High-Tech Hardware Blades View */}
+        {displayMode === 'unfurled-blades' && (
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
+            {nodes.map((node, idx) => {
+              const isSelected = node.id === selectedNodeId;
+              const isOnline = node.status === 'ONLINE';
+              const isDegraded = node.status === 'DEGRADED';
+              const isBreached = node.status === 'BREACHED';
 
-            const latencyPct = Math.min(100, Math.round((node.lastPingMs / 142) * 100));
-            const cpuPct = Math.min(100, node.cpuLoadPct);
-            const tempPct = Math.min(100, Math.round((node.tempC / 85) * 100));
+              const latencyPct = Math.min(100, Math.round((node.lastPingMs / 142) * 100));
+              const cpuPct = Math.min(100, node.cpuLoadPct);
 
-            return (
-              <button
-                key={node.id}
-                onClick={() => handleSelectNode(node)}
-                className={`p-3 rounded-2xl border text-left transition-all relative overflow-hidden cursor-pointer flex flex-col justify-between gap-2.5 ${
-                  isSelected
-                    ? 'bg-cyan-500/20 border-cyan-400 text-white shadow-[0_0_20px_rgba(6,182,212,0.45)] ring-1 ring-cyan-400/80 scale-[1.02]'
-                    : isOnline
-                    ? 'bg-black/50 hover:bg-white/5 border-white/10 text-zinc-300'
-                    : isDegraded
-                    ? 'bg-amber-950/40 border-amber-500/50 text-amber-200'
-                    : 'bg-rose-950/50 border-rose-500/60 text-rose-200 animate-pulse'
-                }`}
-              >
-                {/* Node Title & Status Badge */}
-                <div className="flex items-center justify-between text-xs">
-                  <div className="flex items-center gap-1.5 font-bold">
-                    <span
-                      className={`w-2 h-2 rounded-full ${
-                        isOnline
-                          ? 'bg-emerald-400 shadow-[0_0_6px_#10b981]'
-                          : isDegraded
-                          ? 'bg-amber-400 animate-ping'
-                          : 'bg-rose-500 animate-pulse'
-                      }`}
-                    />
-                    <span className="text-white font-mono">{node.id}</span>
+              return (
+                <div
+                  key={node.id}
+                  onClick={() => handleSelectNode(node)}
+                  className={`p-4 rounded-2xl border text-left transition-all relative overflow-hidden cursor-pointer space-y-3.5 ${
+                    isSelected
+                      ? 'bg-gradient-to-br from-cyan-950/40 via-black to-[#040e1e] border-cyan-400 text-white shadow-[0_0_25px_rgba(6,182,212,0.35)] ring-1 ring-cyan-400/80'
+                      : isOnline
+                      ? 'bg-black/60 hover:bg-white/[0.04] border-white/10 text-zinc-300'
+                      : isDegraded
+                      ? 'bg-amber-950/40 border-amber-500/50 text-amber-200'
+                      : 'bg-rose-950/50 border-rose-500/60 text-rose-200 animate-pulse'
+                  }`}
+                >
+                  {/* Blade Header */}
+                  <div className="flex items-center justify-between border-b border-white/10 pb-2.5 flex-wrap gap-2">
+                    <div className="flex items-center gap-2">
+                      <span className="px-2 py-0.5 rounded bg-white/10 text-[10px] font-mono text-zinc-300">
+                        SLOT #{String(idx + 1).padStart(2, '0')}
+                      </span>
+                      <button
+                        type="button"
+                        className="text-white font-mono font-bold text-sm tracking-wide flex items-center gap-1.5 focus:outline-none"
+                      >
+                        <Server className="w-4 h-4 text-cyan-400" />
+                        <span>{node.id}</span>
+                      </button>
+                    </div>
+
+                    <div className="flex items-center gap-1.5">
+                      {/* LED array */}
+                      <div className="flex items-center gap-1 px-2 py-1 rounded-md bg-black/60 border border-white/10 text-[9px]">
+                        <span
+                          className={`w-1.5 h-1.5 rounded-full ${isOnline ? 'bg-emerald-400 animate-pulse' : 'bg-zinc-600'}`}
+                          title="Power LED"
+                        />
+                        <span className="text-[9px] text-zinc-400 mr-1">PWR</span>
+                        <span
+                          className={`w-1.5 h-1.5 rounded-full ${isOnline ? 'bg-cyan-400 animate-pulse' : 'bg-zinc-600'}`}
+                          title="Cryo LED"
+                        />
+                        <span className="text-[9px] text-zinc-400 mr-1">CRYO</span>
+                        <span
+                          className={`w-1.5 h-1.5 rounded-full ${isOnline ? 'bg-purple-400' : 'bg-zinc-600'}`}
+                          title="PQC Engine LED"
+                        />
+                        <span className="text-[9px] text-zinc-400">PQC</span>
+                      </div>
+
+                      <span
+                        className={`px-2 py-0.5 rounded-md text-[10px] font-bold border ${
+                          isOnline
+                            ? 'bg-emerald-500/20 text-emerald-300 border-emerald-500/30'
+                            : isDegraded
+                            ? 'bg-amber-500/20 text-amber-300 border-amber-500/30'
+                            : 'bg-rose-500/20 text-rose-300 border-rose-500/30'
+                        }`}
+                      >
+                        {node.status}
+                      </span>
+                    </div>
                   </div>
-                  <span
-                    className={`px-1.5 py-0.5 rounded text-[9px] font-bold ${
-                      isOnline
-                        ? 'bg-emerald-500/20 text-emerald-300 border border-emerald-500/30'
-                        : isDegraded
-                        ? 'bg-amber-500/20 text-amber-300 border border-amber-500/30'
-                        : 'bg-rose-500/20 text-rose-300 border border-rose-500/30'
+
+                  {/* Physical Placement & Hardware Specs */}
+                  <div className="grid grid-cols-2 sm:grid-cols-3 gap-2 text-[10px]">
+                    <div className="p-2 rounded-xl bg-black/40 border border-white/5 space-y-0.5">
+                      <span className="text-zinc-500 block text-[9px]">ศูนย์ข้อมูล / แร็ค:</span>
+                      <div className="text-zinc-200 font-semibold truncate">{node.datacenter}</div>
+                      <div className="text-cyan-400/90 font-mono text-[9px]">{node.rack} • {node.location}</div>
+                    </div>
+
+                    <div className="p-2 rounded-xl bg-black/40 border border-white/5 space-y-0.5">
+                      <span className="text-zinc-500 block text-[9px]">เฟิร์มแวร์ & Enclave:</span>
+                      <div className="text-zinc-200 font-semibold truncate">{node.firmware}</div>
+                      <div className="text-purple-400 font-mono text-[9px]">FIPS 140-3 L4 Boundary</div>
+                    </div>
+
+                    <div className="p-2 rounded-xl bg-black/40 border border-white/5 space-y-0.5 col-span-2 sm:col-span-1">
+                      <span className="text-zinc-500 block text-[9px]">อัลกอริทึม PQC:</span>
+                      <div className="text-emerald-300 font-semibold truncate">{node.pqcAlgorithm || 'ML-DSA-87'}</div>
+                      <div className="text-zinc-400 font-mono text-[9px]">Post-Quantum Key</div>
+                    </div>
+                  </div>
+
+                  {/* Telemetry Metrics Bar */}
+                  <div className="grid grid-cols-4 gap-2 text-[10px] font-mono p-2.5 rounded-xl bg-black/50 border border-white/5">
+                    <div>
+                      <span className="text-zinc-500 block text-[9px]">PING LATENCY</span>
+                      <span className="text-cyan-300 font-bold">{node.lastPingMs} ms</span>
+                      <span className="text-[8px] text-emerald-400 block">&lt;142 ms PASS</span>
+                    </div>
+                    <div>
+                      <span className="text-zinc-500 block text-[9px]">CRYO TEMP</span>
+                      <span className="text-cyan-400 font-bold">{node.cryoTempMk || 14.92} mK</span>
+                      <span className="text-[8px] text-zinc-500 block">Sub-Kelvin</span>
+                    </div>
+                    <div>
+                      <span className="text-zinc-500 block text-[9px]">CHASSIS</span>
+                      <span className="text-amber-300 font-bold">{node.tempC}°C</span>
+                      <span className="text-[8px] text-zinc-500 block">Normal &lt;50</span>
+                    </div>
+                    <div>
+                      <span className="text-zinc-500 block text-[9px]">CPU LOAD</span>
+                      <span className="text-purple-300 font-bold">{node.cpuLoadPct}%</span>
+                      <span className="text-[8px] text-zinc-500 block">Workload</span>
+                    </div>
+                  </div>
+
+                  {/* Bit-Exact SHA-256 Digest Box */}
+                  <div className="p-2 rounded-xl bg-black/70 border border-white/10 flex items-center justify-between gap-2">
+                    <div className="min-w-0 flex-1">
+                      <div className="flex items-center gap-1.5 text-[9px] text-zinc-400">
+                        <Lock className="w-2.5 h-2.5 text-emerald-400" />
+                        <span>แฮช SHA-256 (Bit-Exact):</span>
+                        <span className="text-emerald-400 font-bold text-[8px] px-1 py-0.2 rounded bg-emerald-950">VERIFIED</span>
+                      </div>
+                      <div
+                        className="text-amber-300 font-mono text-[10px] truncate select-all pt-0.5"
+                        title={node.forensicHash}
+                      >
+                        {node.forensicHash}
+                      </div>
+                    </div>
+
+                    <button
+                      type="button"
+                      onClick={(e) => {
+                        e.stopPropagation();
+                        handleCopyBladeHash(node.forensicHash);
+                      }}
+                      className="px-2 py-1 rounded-md bg-white/5 hover:bg-white/10 text-zinc-300 text-[9px] font-mono flex items-center gap-1 shrink-0 border border-white/10 transition cursor-pointer"
+                      title="คัดลอกรหัสแฮชประจำโหนด"
+                    >
+                      {copiedBladeHash === node.forensicHash ? (
+                        <>
+                          <Check className="w-3 h-3 text-emerald-400" />
+                          <span className="text-emerald-300">คัดลอกแล้ว</span>
+                        </>
+                      ) : (
+                        <>
+                          <Copy className="w-3 h-3 text-zinc-400" />
+                          <span>คัดลอก Digest</span>
+                        </>
+                      )}
+                    </button>
+                  </div>
+
+                  {/* Seal Footer */}
+                  <div className="flex items-center justify-between text-[9px] text-zinc-400 border-t border-white/5 pt-1.5">
+                    <span className="flex items-center gap-1 text-emerald-300 font-mono">
+                      <ShieldCheck className="w-3 h-3 text-emerald-400" />
+                      <span>{node.sealNumber}</span>
+                    </span>
+                    <span className="text-zinc-500">ม.๒๖, ๒๘ แห่ง พ.ร.บ. ธุรกรรมฯ (SEALED_VALID)</span>
+                  </div>
+                </div>
+              );
+            })}
+          </div>
+        )}
+
+        {/* 2. Datacenter Racks Mode: Grouped by 5 Sovereign Server Cabinets */}
+        {displayMode === 'datacenter-racks' && (
+          <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-4">
+            {SOVEREIGN_DATACENTER_RACKS.map((rack) => {
+              const rackNodes = nodes.filter((n) => rack.nodeIds.includes(n.id));
+              const allOnline = rackNodes.every((n) => n.status === 'ONLINE');
+
+              return (
+                <div
+                  key={rack.id}
+                  className="p-4 rounded-2xl bg-black/60 border border-cyan-500/30 space-y-3 relative overflow-hidden"
+                >
+                  <div className="flex items-center justify-between border-b border-white/10 pb-2">
+                    <div>
+                      <div className="flex items-center gap-2">
+                        <span className="px-2 py-0.5 rounded bg-cyan-950 text-cyan-300 border border-cyan-800 text-[10px] font-mono font-bold">
+                          {rack.id}
+                        </span>
+                        <h4 className="font-bold text-white text-sm">{rack.name}</h4>
+                      </div>
+                      <p className="text-[10px] text-zinc-400 pt-0.5">{rack.facility} • {rack.location}</p>
+                    </div>
+                    <span
+                      className={`px-2 py-0.5 rounded text-[9px] font-bold border ${
+                        allOnline
+                          ? 'bg-emerald-500/20 text-emerald-300 border-emerald-500/40'
+                          : 'bg-amber-500/20 text-amber-300 border-amber-500/40'
+                      }`}
+                    >
+                      {allOnline ? 'RACK ONLINE' : 'ATTENTION'}
+                    </span>
+                  </div>
+
+                  <div className="grid grid-cols-2 gap-2 text-[9px] text-zinc-400">
+                    <div className="p-1.5 rounded bg-black/40 border border-white/5">
+                      <span className="text-zinc-500 block">มาตรฐานศูนย์ข้อมูล:</span>
+                      <span className="text-zinc-200 font-semibold">{rack.tier}</span>
+                    </div>
+                    <div className="p-1.5 rounded bg-black/40 border border-white/5">
+                      <span className="text-zinc-500 block">ระบบหล่อเย็น (Cryo):</span>
+                      <span className="text-cyan-300 font-semibold">{rack.cooling}</span>
+                    </div>
+                    <div className="col-span-2 p-1.5 rounded bg-black/40 border border-white/5">
+                      <span className="text-zinc-500 block">ระบบจ่ายไฟ (PDU):</span>
+                      <span className="text-zinc-300">{rack.pdu}</span>
+                    </div>
+                  </div>
+
+                  {/* Blades installed in this rack */}
+                  <div className="space-y-2 pt-1">
+                    <span className="text-[10px] text-zinc-400 block font-bold">เบลดฮาร์ดแวร์ที่ติดตั้งในตู้แร็ค:</span>
+                    {rackNodes.map((node) => (
+                      <button
+                        key={node.id}
+                        onClick={() => handleSelectNode(node)}
+                        className={`w-full p-2.5 rounded-xl border text-left flex items-center justify-between text-xs transition cursor-pointer ${
+                          node.id === selectedNodeId
+                            ? 'bg-cyan-500/25 border-cyan-400 text-white shadow-md'
+                            : 'bg-black/50 hover:bg-white/5 border-white/10 text-zinc-300'
+                        }`}
+                      >
+                        <div className="flex items-center gap-2">
+                          <span
+                            className={`w-2 h-2 rounded-full ${
+                              node.status === 'ONLINE' ? 'bg-emerald-400' : 'bg-rose-500'
+                            }`}
+                          />
+                          <span className="font-mono font-bold text-white">{node.id}</span>
+                          <span className="text-[10px] text-cyan-300 font-mono">{node.pqcAlgorithm}</span>
+                        </div>
+                        <div className="text-right text-[10px] font-mono">
+                          <div className="text-cyan-300 font-bold">{node.lastPingMs} ms</div>
+                          <div className="text-emerald-400 text-[9px]">{node.sealNumber}</div>
+                        </div>
+                      </button>
+                    ))}
+                  </div>
+                </div>
+              );
+            })}
+          </div>
+        )}
+
+        {/* 3. Compact Grid Mode: The classic 5-column grid */}
+        {displayMode === 'compact-grid' && (
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-3">
+            {nodes.map((node) => {
+              const isSelected = node.id === selectedNodeId;
+              const isOnline = node.status === 'ONLINE';
+              const isDegraded = node.status === 'DEGRADED';
+
+              const latencyPct = Math.min(100, Math.round((node.lastPingMs / 142) * 100));
+              const cpuPct = Math.min(100, node.cpuLoadPct);
+              const tempPct = Math.min(100, Math.round((node.tempC / 85) * 100));
+
+              return (
+                <button
+                  key={node.id}
+                  onClick={() => handleSelectNode(node)}
+                  className={`p-3 rounded-2xl border text-left transition-all relative overflow-hidden cursor-pointer flex flex-col justify-between gap-2.5 ${
+                    isSelected
+                      ? 'bg-cyan-500/20 border-cyan-400 text-white shadow-[0_0_20px_rgba(6,182,212,0.45)] ring-1 ring-cyan-400/80 scale-[1.02]'
+                      : isOnline
+                      ? 'bg-black/50 hover:bg-white/5 border-white/10 text-zinc-300'
+                      : isDegraded
+                      ? 'bg-amber-950/40 border-amber-500/50 text-amber-200'
+                      : 'bg-rose-950/50 border-rose-500/60 text-rose-200 animate-pulse'
+                  }`}
+                >
+                  <div className="flex items-center justify-between text-xs">
+                    <div className="flex items-center gap-1.5 font-bold">
+                      <span
+                        className={`w-2 h-2 rounded-full ${
+                          isOnline
+                            ? 'bg-emerald-400 shadow-[0_0_6px_#10b981]'
+                            : isDegraded
+                            ? 'bg-amber-400 animate-ping'
+                            : 'bg-rose-500 animate-pulse'
+                        }`}
+                      />
+                      <span className="text-white font-mono">{node.id}</span>
+                    </div>
+                    <span
+                      className={`px-1.5 py-0.5 rounded text-[9px] font-bold ${
+                        isOnline
+                          ? 'bg-emerald-500/20 text-emerald-300 border border-emerald-500/30'
+                          : isDegraded
+                          ? 'bg-amber-500/20 text-amber-300 border border-amber-500/30'
+                          : 'bg-rose-500/20 text-rose-300 border border-rose-500/30'
+                      }`}
+                    >
+                      {node.status}
+                    </span>
+                  </div>
+
+                  <div className="space-y-0.5">
+                    <div className="text-[10px] text-zinc-400 truncate font-sans">{node.datacenter}</div>
+                    <div className="text-[9px] text-cyan-300 font-mono truncate">{node.pqcAlgorithm || 'ML-DSA-87'}</div>
+                  </div>
+
+                  <div className="space-y-1.5 pt-1 border-t border-white/10 text-[9px]">
+                    <div>
+                      <div className="flex justify-between text-[9px] mb-0.5">
+                        <span className="text-zinc-400">LATENCY:</span>
+                        <span className="text-cyan-300 font-bold">{node.lastPingMs} ms</span>
+                      </div>
+                      <div className="w-full h-1 bg-white/10 rounded-full overflow-hidden">
+                        <div
+                          className="h-full bg-cyan-400 rounded-full transition-all duration-500"
+                          style={{ width: `${Math.max(8, latencyPct)}%` }}
+                        />
+                      </div>
+                    </div>
+
+                    <div>
+                      <div className="flex justify-between text-[9px] mb-0.5">
+                        <span className="text-zinc-400">CPU LOAD:</span>
+                        <span className="text-purple-300 font-bold">{node.cpuLoadPct}%</span>
+                      </div>
+                      <div className="w-full h-1 bg-white/10 rounded-full overflow-hidden">
+                        <div
+                          className={`h-full rounded-full transition-all duration-500 ${
+                            cpuPct > 75 ? 'bg-rose-400' : cpuPct > 50 ? 'bg-amber-400' : 'bg-purple-400'
+                          }`}
+                          style={{ width: `${Math.max(8, cpuPct)}%` }}
+                        />
+                      </div>
+                    </div>
+
+                    <div>
+                      <div className="flex justify-between text-[9px] mb-0.5">
+                        <span className="text-zinc-400">TEMP:</span>
+                        <span className="text-amber-300 font-bold">{node.tempC}°C</span>
+                      </div>
+                      <div className="w-full h-1 bg-white/10 rounded-full overflow-hidden">
+                        <div
+                          className={`h-full rounded-full transition-all duration-500 ${
+                            tempPct > 70 ? 'bg-rose-400' : 'bg-amber-400'
+                          }`}
+                          style={{ width: `${Math.max(8, tempPct)}%` }}
+                        />
+                      </div>
+                    </div>
+                  </div>
+
+                  <div className="pt-1 flex items-center justify-between text-[9px] text-zinc-400 border-t border-white/5">
+                    <span className="flex items-center gap-1">
+                      <Lock className="w-2.5 h-2.5 text-emerald-400" />
+                      <span>{node.sealNumber}</span>
+                    </span>
+                    <span className="text-emerald-400 font-bold">SEALED</span>
+                  </div>
+                </button>
+              );
+            })}
+          </div>
+        )}
+
+        {/* 4. Forensic Matrix Mode: High-density Ledger Table */}
+        {displayMode === 'forensic-matrix' && (
+          <div className="rounded-2xl border border-white/10 bg-black/60 overflow-x-auto shadow-inner">
+            <table className="w-full text-left text-xs font-mono">
+              <thead>
+                <tr className="border-b border-white/10 bg-white/[0.03] text-zinc-400 text-[10px]">
+                  <th className="p-3">#</th>
+                  <th className="p-3">โหนดฮาร์ดแวร์</th>
+                  <th className="p-3">ศูนย์ข้อมูล &amp; แร็ค</th>
+                  <th className="p-3">สถานะ</th>
+                  <th className="p-3">PQC SCHEME</th>
+                  <th className="p-3">LATENCY</th>
+                  <th className="p-3">CRYO TEMP</th>
+                  <th className="p-3">WORM SEAL</th>
+                  <th className="p-3">FORENSIC SHA-256 HASH</th>
+                </tr>
+              </thead>
+              <tbody className="divide-y divide-white/5">
+                {nodes.map((node, idx) => (
+                  <tr
+                    key={node.id}
+                    onClick={() => handleSelectNode(node)}
+                    className={`hover:bg-cyan-500/10 cursor-pointer transition ${
+                      node.id === selectedNodeId ? 'bg-cyan-500/20' : ''
                     }`}
                   >
-                    {node.status}
-                  </span>
-                </div>
-
-                {/* Location & PQC Cipher */}
-                <div className="space-y-0.5">
-                  <div className="text-[10px] text-zinc-400 truncate font-sans">{node.datacenter}</div>
-                  <div className="text-[9px] text-cyan-300 font-mono truncate">{node.pqcAlgorithm || 'ML-DSA-87'}</div>
-                </div>
-
-                {/* Progress Indicators */}
-                <div className="space-y-1.5 pt-1 border-t border-white/10 text-[9px]">
-                  {/* Latency */}
-                  <div>
-                    <div className="flex justify-between text-[9px] mb-0.5">
-                      <span className="text-zinc-400">LATENCY:</span>
-                      <span className="text-cyan-300 font-bold">{node.lastPingMs} ms</span>
-                    </div>
-                    <div className="w-full h-1 bg-white/10 rounded-full overflow-hidden">
-                      <div
-                        className="h-full bg-cyan-400 rounded-full transition-all duration-500"
-                        style={{ width: `${Math.max(8, latencyPct)}%` }}
-                      />
-                    </div>
-                  </div>
-
-                  {/* CPU Load */}
-                  <div>
-                    <div className="flex justify-between text-[9px] mb-0.5">
-                      <span className="text-zinc-400">CPU LOAD:</span>
-                      <span className="text-purple-300 font-bold">{node.cpuLoadPct}%</span>
-                    </div>
-                    <div className="w-full h-1 bg-white/10 rounded-full overflow-hidden">
-                      <div
-                        className={`h-full rounded-full transition-all duration-500 ${
-                          cpuPct > 75 ? 'bg-rose-400' : cpuPct > 50 ? 'bg-amber-400' : 'bg-purple-400'
-                        }`}
-                        style={{ width: `${Math.max(8, cpuPct)}%` }}
-                      />
-                    </div>
-                  </div>
-
-                  {/* Temp */}
-                  <div>
-                    <div className="flex justify-between text-[9px] mb-0.5">
-                      <span className="text-zinc-400">TEMP:</span>
-                      <span className="text-amber-300 font-bold">{node.tempC}°C</span>
-                    </div>
-                    <div className="w-full h-1 bg-white/10 rounded-full overflow-hidden">
-                      <div
-                        className={`h-full rounded-full transition-all duration-500 ${
-                          tempPct > 70 ? 'bg-rose-400' : 'bg-amber-400'
-                        }`}
-                        style={{ width: `${Math.max(8, tempPct)}%` }}
-                      />
-                    </div>
-                  </div>
-                </div>
-
-                {/* Seal Status Pill */}
-                <div className="pt-1 flex items-center justify-between text-[9px] text-zinc-400 border-t border-white/5">
-                  <span className="flex items-center gap-1">
-                    <Lock className="w-2.5 h-2.5 text-emerald-400" />
-                    <span>{node.sealNumber}</span>
-                  </span>
-                  <span className="text-emerald-400 font-bold">SEALED</span>
-                </div>
-              </button>
-            );
-          })}
-        </div>
+                    <td className="p-3 text-zinc-500">{String(idx + 1).padStart(2, '0')}</td>
+                    <td className="p-3 font-bold text-white flex items-center gap-1.5">
+                      <span className="w-2 h-2 rounded-full bg-emerald-400" />
+                      <span>{node.id}</span>
+                    </td>
+                    <td className="p-3 text-zinc-300">
+                      <div className="font-semibold">{node.datacenter}</div>
+                      <div className="text-[10px] text-zinc-500">{node.rack}</div>
+                    </td>
+                    <td className="p-3">
+                      <span className="px-2 py-0.5 rounded bg-emerald-500/20 text-emerald-300 border border-emerald-500/30 text-[10px] font-bold">
+                        {node.status}
+                      </span>
+                    </td>
+                    <td className="p-3 text-cyan-300">{node.pqcAlgorithm}</td>
+                    <td className="p-3 text-cyan-400 font-bold">{node.lastPingMs} ms</td>
+                    <td className="p-3 text-cyan-300">{node.cryoTempMk || 14.92} mK</td>
+                    <td className="p-3 text-emerald-300 font-semibold">{node.sealNumber}</td>
+                    <td className="p-3">
+                      <div className="flex items-center gap-1.5">
+                        <span className="text-amber-300 text-[10px] truncate max-w-[140px]" title={node.forensicHash}>
+                          {node.forensicHash}
+                        </span>
+                        <button
+                          type="button"
+                          onClick={(e) => {
+                            e.stopPropagation();
+                            handleCopyBladeHash(node.forensicHash);
+                          }}
+                          className="p-1 rounded bg-white/5 hover:bg-white/10 text-zinc-400 hover:text-white"
+                          title="คัดลอกแฮช"
+                        >
+                          <Copy className="w-3 h-3" />
+                        </button>
+                      </div>
+                    </td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
+        )}
       </div>
 
       {/* Selected Node Deep Forensic Inspector Card */}

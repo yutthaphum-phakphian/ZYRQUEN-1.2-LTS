@@ -151,7 +151,7 @@ export const CouncilView: React.FC<CouncilViewProps> = ({ onAddSystemEvent }) =>
   const [jitterOverlayEnabled, setJitterOverlayEnabled] = useState<boolean>(true);
   const [councilViewMode, setCouncilViewMode] = useState<
     'roster' | 'council-chamber' | 'hsm-status' | 'hsm-gauge' | 'genesis-deploy' | 'custodian-pulse' | 'consensus-mesh' | 'senate-dossier' | 'dual-plane'
-  >('dual-plane');
+  >('hsm-gauge');
 
   // Trigger Vote Consensus Ripple Propagation across the Council Grid
   const triggerConsensusRipple = (
@@ -437,6 +437,23 @@ export const CouncilView: React.FC<CouncilViewProps> = ({ onAddSystemEvent }) =>
             </div>
 
             <div className="flex flex-col sm:flex-row items-stretch sm:items-center gap-3">
+              {/* Unfurl HSM Blades Feature Button */}
+              <button
+                onClick={() => {
+                  setCouncilViewMode('hsm-gauge');
+                  playTone(740, 0.05, 'sine');
+                }}
+                className={`inline-flex items-center justify-center gap-2 px-4 py-2.5 rounded-xl font-bold text-xs shadow-xl transition-all active:scale-95 border cursor-pointer ${
+                  councilViewMode === 'hsm-gauge'
+                    ? 'bg-gradient-to-r from-emerald-400 via-teal-400 to-cyan-400 text-black shadow-cyan-500/30 border-cyan-200 ring-2 ring-cyan-400/50'
+                    : 'bg-gradient-to-r from-emerald-600 via-teal-600 to-cyan-600 text-white hover:from-emerald-500 hover:to-cyan-500 shadow-emerald-500/20 border-emerald-400/50'
+                }`}
+                title="กางแสดงสถาปัตยกรรมฮาร์ดแวร์ความมั่นคงสูงทั้ง 10 โหนดแบบเต็มรูปแบบทันที"
+              >
+                <Server className="w-4 h-4" />
+                <span>{councilViewMode === 'hsm-gauge' ? '⚡ กำลังกางโชว์ HSM 10/10' : 'กาง HSM โชว์เต็มพิกัด'}</span>
+              </button>
+
               {/* Batch Quick Health Check Button */}
               <button
                 onClick={handleRunAllQuickHealthChecks}
