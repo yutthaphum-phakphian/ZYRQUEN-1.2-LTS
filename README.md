@@ -48,6 +48,7 @@ The application includes:
 
 - [Dual Governance Registry & Mapping](#dual-governance-registry--mapping)
 - [Verification Status](#verification-status)
+- [Sovereign Buffalo Edition 🐃](#-sovereign-buffalo-edition)
 - [Technology Stack](#technology-stack)
 - [Prerequisites](#prerequisites)
 - [Quick Start](#quick-start)
@@ -115,6 +116,30 @@ Last checked in Sovereign Verified Runtime:
 | Production build (`npm run build`) | Succeeds |
 | SSoT Invariant Drift Baseline | **Δ0 = 0.0000%** |
 | Genesis anchor | Block `849202`, Merkle Root `909ab8144798...` |
+
+---
+
+## 🐃 Sovereign Buffalo Edition
+
+<div align="center">
+
+<img src="assets/zyrquen-buffalo-meme.svg" alt="ZYRQUEN Ω∞ Sovereign Buffalo Edition" width="420" />
+
+### ZYRQUEN Ω∞ — SOVEREIGN BUFFALO EDITION
+
+</div>
+
+> 🐃 **จาก Cloud สู่กลางทุ่ง**
+> `RunPod` → `รันโค` → `รัควาย` 👑
+
+| 🌾 Sovereign Status | ค่า |
+|:--|:--:|
+| 👑 อธิปไตยเหนือทุ่งหญ้า | **LOCKED** |
+| 🚫 ห้ามยึดอำนาจชาวนา! | **Root Authority = ชาวนา** |
+| 🌱 Grass Availability | **100%** |
+| 🐃 ความสุขของควาย | **100%** |
+
+> **AI คุมระบบได้ แต่ชาวนาคุมควาย!** 555555 😂
 
 ---
 
