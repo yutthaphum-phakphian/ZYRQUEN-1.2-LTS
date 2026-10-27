@@ -1,10 +1,10 @@
 <div align="center">
 
-<img src="zyrquen_sovereign_banner.jpg" alt="ZYRQUEN Ω™ Sovereign AI Engine" width="100%" />
+<img src="assets/zyrquen-banner.svg" alt="ZYRQUEN Ω Sovereign AI Engine" width="100%" />
 
 <br /><br />
 
-<img src="zyrquen_sovereign_logo.jpg" alt="ZYRQUEN Ω™ Sovereign Crest Seal" width="180" style="border-radius: 50%; box-shadow: 0 0 25px rgba(0, 229, 255, 0.4);" />
+<img src="assets/zyrquen-crest.svg" alt="ZYRQUEN Ω Sovereign Crest" width="180" />
 
 <br />
 
@@ -24,6 +24,10 @@
 <br />
 
 **[▶ LIVE APP](https://yutthaphum-phakphian.github.io/ZYRQUEN-1.2-LTS/)** &nbsp;◆&nbsp; [RELEASES](https://github.com/yutthaphum-phakphian/ZYRQUEN-1.2-LTS/releases) &nbsp;◆&nbsp; [SECURITY](SECURITY.md) &nbsp;◆&nbsp; [REGISTRY REPORT](FINALREGISTRYREPORT.md) &nbsp;◆&nbsp; [UPGRADE REPORT](FINALUPGRADEREPORT.md) &nbsp;◆&nbsp; [LEGACY ARCHIVE](FINALLEGACYARCHIVE_REPORT.md) &nbsp;◆&nbsp; [CONTRIBUTING](CONTRIBUTING.md)
+
+<br />
+
+<img src="assets/zyrquen-divider.svg" alt="divider" width="100%" />
 
 </div>
 
@@ -174,6 +178,7 @@ npm run preview
 ```text
 ZYRQUEN-1.2-LTS/
 ├── .github/          # GitHub Actions and repository automation
+├── assets/           # README images (SVG banner, crest, divider)
 ├── config/           # Configuration files
 ├── docs/             # Specs, manuals, and docs
 ├── public/           # Static assets
