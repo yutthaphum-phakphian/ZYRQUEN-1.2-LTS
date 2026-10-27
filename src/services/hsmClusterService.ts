@@ -128,4 +128,24 @@ export const hsmClusterService = {
     notify();
     return this.getState();
   },
+
+  /**
+   * Reset cluster to default pristine state (10/10 Online) synchronously
+   */
+  reset(): HsmClusterState {
+    clusterState = {
+      totalNodes: 10,
+      activeNodes: 10,
+      quorumPercentage: 100,
+      isDegraded: false,
+      quorumThresholdPct: 80,
+      subKelvinTemp: 14.98,
+      qopsThroughput: 24960,
+      lastRemediationAt: new Date().toISOString(),
+      isRemediating: false,
+      nodes: INITIAL_NODES.map((node) => ({ ...node, status: 'ONLINE' })),
+    };
+    notify();
+    return this.getState();
+  },
 };

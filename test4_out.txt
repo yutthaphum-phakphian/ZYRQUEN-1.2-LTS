@@ -1,0 +1,338 @@
+
+[1m[30m[46m RUN [49m[39m[22m [36mv5.0.1 [39m[90m/app/applet[39m
+
+ [31m❯[39m tests/HsmClusterHealthGauge.test.tsx [2m([22m[2m4 tests[22m[2m | [22m[31m1 failed[39m[2m | [22m[33m3 skipped[39m[2m)[22m[33m 4259[2mms[22m[39m
+   [31m❯[39m HsmClusterHealthGauge Component Suite [2m(4)[22m
+     [2m[90m↓[39m[22m renders aggregate quorum health 100% with healthy tier label and real hardware telemetry badge
+     [2m[90m↓[39m[22m allows selecting individual nodes and reveals deep forensic properties
+     [2m[90m↓[39m[22m handles simulated stress scenario (7/10 breach) and toggles telemetry origin badge to SIMULATED
+[31m     [31m×[31m executes Phoenix Recovery restoring 10/10 100% quorum back to real hardware state[39m[33m 4255[2mms[22m[39m
+
+[31m⎯⎯⎯⎯⎯⎯⎯[39m[1m[41m Failed Tests 1 [49m[22m[31m⎯⎯⎯⎯⎯⎯⎯[39m
+
+[41m[1m FAIL [22m[49m tests/HsmClusterHealthGauge.test.tsx[2m > [22mHsmClusterHealthGauge Component Suite[2m > [22mexecutes Phoenix Recovery restoring 10/10 100% quorum back to real hardware state
+[31m[1mTestingLibraryElementError[22m[39m: Found multiple elements with the text: 100%
+
+Here are the matching elements:
+
+Ignored nodes: comments, script, style
+[36m<span[39m
+  [33mclass[39m=[32m"text-3xl sm:text-4xl font-extrabold font-mono text-white tracking-tighter drop-shadow-md"[39m
+[36m>[39m
+  [0m100[0m
+  [0m%[0m
+[36m</span>[39m
+
+Ignored nodes: comments, script, style
+[36m<span>[39m
+  [0m100%[0m
+[36m</span>[39m
+
+(If this is intentional, then use the `*AllBy*` variant of the query (like `queryAllByText`, `getAllByText`, or `findAllByText`)).
+
+Ignored nodes: comments, script, style
+[36m<body>[39m
+  [36m<div>[39m
+    [36m<div[39m
+      [33mclass[39m=[32m"p-5 sm:p-6 rounded-3xl bg-gradient-to-br from-[#070d1a] via-[#091122] to-[#030612] border border-cyan-500/30 shadow-2xl relative overflow-hidden font-mono text-zinc-300 "[39m
+    [36m>[39m
+      [36m<div[39m
+        [33mclass[39m=[32m"absolute top-0 right-0 w-96 h-96 bg-cyan-500/10 rounded-full blur-3xl pointer-events-none"[39m
+      [36m/>[39m
+      [36m<div[39m
+        [33mclass[39m=[32m"absolute bottom-0 left-0 w-80 h-80 bg-emerald-500/5 rounded-full blur-3xl pointer-events-none"[39m
+      [36m/>[39m
+      [36m<div[39m
+        [33mclass[39m=[32m"flex flex-col sm:flex-row sm:items-center justify-between gap-3 pb-5 border-b border-white/10 relative z-10"[39m
+      [36m>[39m
+        [36m<div[39m
+          [33mclass[39m=[32m"space-y-1.5"[39m
+        [36m>[39m
+          [36m<div[39m
+            [33mclass[39m=[32m"flex items-center gap-2 flex-wrap"[39m
+          [36m>[39m
+            [36m<span[39m
+              [33mclass[39m=[32m"px-2.5 py-0.5 rounded-full bg-cyan-500/15 text-cyan-300 border border-cyan-500/30 text-[10px] font-bold tracking-wider"[39m
+            [36m>[39m
+              [0m10/10 REAL_HSM DECA-KEY QUORUM[0m
+            [36m</span>[39m
+            [36m<span[39m
+              [33mclass[39m=[32m"px-2.5 py-0.5 rounded-full text-[10px] font-bold border transition-all bg-emerald-500/15 text-emerald-300 border-emerald-500/40"[39m
+            [36m>[39m
+              [0m⚖️ องค์ประชุมแข็งแรง (10/10 PASS)[0m
+            [36m</span>[39m
+            [36m<span[39m
+              [33mclass[39m=[32m"px-2.5 py-0.5 rounded-full text-[10px] font-bold border flex items-center gap-1.5 bg-emerald-500/15 text-emerald-300 border-emerald-500/40"[39m
+            [36m>[39m
+              [36m<span[39m
+                [33mclass[39m=[32m"w-1.5 h-1.5 rounded-full bg-emerald-400"[39m
+              [36m/>[39m
+              [36m<span>[39m
+                [0mแหล่งข้อมูล: ฮาร์ดแวร์จริง (REAL HSM TELEMETRY)[0m
+              [36m</span>[39m
+            [36m</span>[39m
+            [36m<span[39m
+              [33mclass[39m=[32m"px-2.5 py-0.5 rounded-full bg-purple-500/15 text-purple-300 border border-purple-500/30 text-[10px]"[39m
+            [36m>[39m
+              [0mFIPS 140-3 LEVEL 4[0m
+            [36m</span>[39m
+          [36m</div>[39m
+          [36m<h2[39m
+            [33mclass[39m=[32m"text-lg sm:text-xl font-bold text-white flex items-center gap-2.5 pt-0.5"[39m
+          [36m>[39m
+            [36m<svg[39m
+              [33mclass[39m=[32m"lucide lucide-server w-5 h-5 text-cyan-400"[39m
+              [33mfill[39m=[32m"none"[39m
+              [33mheight[39m=[32m"24"[39m
+              [33mstroke[39m=[32m"currentColor"[39m
+              [33mstroke-linecap[39m=[32m"round"[39m
+              [33mstroke-linejoin[39m=[32m"round"[39m
+              [33mstroke-width[39m=[32m"2"[39m
+              [33mviewBox[39m=[32m"0 0 24 24"[39m
+              [33mwidth[39m=[32m"24"[39m
+              [33mxmlns[39m=[32m"http://www.w3.org/2000/svg"[39m
+            [36m>[39m
+              [36m<rect[39m
+                [33mheight[39m=[32m"8"[39m
+                [33mrx[39m=[32m"2"[39m
+                [33mry[39m=[32m"2"[39m
+                [33mwidth[39m=[32m"20"[39m
+                [33mx[39m=[32m"2"[39m
+                [33my[39m=[32m"2"[39m
+              [36m/>[39m
+              [36m<rect[39m
+                [33mheight[39m=[32m"8"[39m
+                [33mrx[39m=[32m"2"[39m
+                [33mry[39m=[32m"2"[39m
+                [33mwidth[39m=[32m"20"[39m
+                [33mx[39m=[32m"2"[39m
+                [33my[39m=[32m"14"[39m
+              [36m/>[39m
+              [36m<line[39m
+                [33mx1[39m=[32m"6"[39m
+                [33mx2[39m=[32m"6.01"[39m
+                [33my1[39m=[32m"6"[39m
+                [33my2[39m=[32m"6"[39m
+              [36m/>[39m
+              [36m<line[39m
+                [33mx1[39m=[32m"6"[39m
+                [33mx2[39m=[32m"6.01"[39m
+                [33my1[39m=[32m"18"[39m
+                [33my2[39m=[32m"18"[39m
+              [36m/>[39m
+            [36m</svg>[39m
+            [36m<span>[39m
+              [0mเกจสุขภาพฉันทามติฮาร์ดแวร์เรียลไทม์ (HSM Quorum Health Gauge)[0m
+            [36m</span>[39m
+          [36m</h2>[39m
+          [36m<p[39m
+            [33mclass[39m=[32m"text-xs text-zinc-400"[39m
+          [36m>[39m
+            [0mโทรมาตรสดวัดความสมบูรณ์รวม 0-100% และสถานะรายโหนดของ 10/10 Hardware Security Modules ตาม ม.26, 28[0m
+          [36m</p>[39m
+        [36m</div>[39m
+        [36m<div[39m
+          [33mclass[39m=[32m"flex items-center gap-2 flex-wrap"[39m
+        [36m>[39m
+          [36m<button[39m
+            [33mclass[39m=[32m"px-3 py-1.5 rounded-xl border text-xs font-semibold flex items-center gap-1.5 transition cursor-pointer bg-emerald-500/15 text-emerald-300 border-emerald-500/40 shadow-sm"[39m
+            [33mtitle[39m=[32m"Toggle continuous real-time telemetry streaming (2.4s pulse)"[39m
+          [36m>[39m
+            [36m<svg[39m
+              [33mclass[39m=[32m"lucide lucide-radio w-3.5 h-3.5 text-emerald-400 animate-pulse"[39m
+              [33mfill[39m=[32m"none"[39m
+              [33mheight[39m=[32m"24"[39m
+              [33mstroke[39m=[32m"currentColor"[39m
+              [33mstroke-linecap[39m=[32m"round"[39m
+              [33mstroke-linejoin[39m=[32m"round"[39m
+              [33mstroke-width[39m=[32m"2"[39m
+              [33mviewBox[39m=[32m"0 0 24 24"[39m
+              [33mwidth[39m=[32m"24"[39m
+              [33mxmlns[39m=[32m"http://www.w3.org/2000/svg"[39m
+            [36m>[39m
+              [36m<path[39m
+                [33md[39m=[32m"M4.9 19.1C1 15.2 1 8.8 4.9 4.9"[39m
+              [36m/>[39m
+              [36m<path[39m
+                [33md[39m=[32m"M7.8 16.2c-2.3-2.3-2.3-6.1 0-8.5"[39m
+              [36m/>[39m
+              [36m<circle[39m
+                [33mcx[39m=[32m"12"[39m
+                [33mcy[39m=[32m"12"[39m
+                [33mr[39m=[32m"2"[39m
+              [36m/>[39m
+              [36m<path[39m
+                [33md[39m=[32m"M16.2 7.8c2.3 2.3 2.3 6.1 0 8.5"[39m
+              [36m/>[39m
+              [36m<path[39m
+                [33md[39m=[32m"M19.1 4.9C23 8.8 23 15.1 19.1 19"[39m
+              [36m/>[39m
+            [36m</svg>[39m
+            [36m<span>[39m
+              [0mLIVE (10:41:00)[0m
+            [36m</span>[39m
+          [36m</button>[39m
+          [36m<div[39m
+            [33mclass[39m=[32m"flex items-center gap-2"[39m
+          [36m>[39m
+            [36m<button[39m
+              [33mclass[39m=[32m"px-3 py-1.5 rounded-xl bg-amber-500/15 hover:...
+
+Ignored nodes: comments, script, style
+[36m<html[39m
+  [33mdata-chart-animations[39m=[32m"true"[39m
+  [33mdata-perf-mode[39m=[32m"standard"[39m
+[36m>[39m
+  [36m<head />[39m
+  [36m<body>[39m
+    [36m<div>[39m
+      [36m<div[39m
+        [33mclass[39m=[32m"p-5 sm:p-6 rounded-3xl bg-gradient-to-br from-[#070d1a] via-[#091122] to-[#030612] border border-cyan-500/30 shadow-2xl relative overflow-hidden font-mono text-zinc-300 "[39m
+      [36m>[39m
+        [36m<div[39m
+          [33mclass[39m=[32m"absolute top-0 right-0 w-96 h-96 bg-cyan-500/10 rounded-full blur-3xl pointer-events-none"[39m
+        [36m/>[39m
+        [36m<div[39m
+          [33mclass[39m=[32m"absolute bottom-0 left-0 w-80 h-80 bg-emerald-500/5 rounded-full blur-3xl pointer-events-none"[39m
+        [36m/>[39m
+        [36m<div[39m
+          [33mclass[39m=[32m"flex flex-col sm:flex-row sm:items-center justify-between gap-3 pb-5 border-b border-white/10 relative z-10"[39m
+        [36m>[39m
+          [36m<div[39m
+            [33mclass[39m=[32m"space-y-1.5"[39m
+          [36m>[39m
+            [36m<div[39m
+              [33mclass[39m=[32m"flex items-center gap-2 flex-wrap"[39m
+            [36m>[39m
+              [36m<span[39m
+                [33mclass[39m=[32m"px-2.5 py-0.5 rounded-full bg-cyan-500/15 text-cyan-300 border border-cyan-500/30 text-[10px] font-bold tracking-wider"[39m
+              [36m>[39m
+                [0m10/10 REAL_HSM DECA-KEY QUORUM[0m
+              [36m</span>[39m
+              [36m<span[39m
+                [33mclass[39m=[32m"px-2.5 py-0.5 rounded-full text-[10px] font-bold border transition-all bg-emerald-500/15 text-emerald-300 border-emerald-500/40"[39m
+              [36m>[39m
+                [0m⚖️ องค์ประชุมแข็งแรง (10/10 PASS)[0m
+              [36m</span>[39m
+              [36m<span[39m
+                [33mclass[39m=[32m"px-2.5 py-0.5 rounded-full text-[10px] font-bold border flex items-center gap-1.5 bg-emerald-500/15 text-emerald-300 border-emerald-500/40"[39m
+              [36m>[39m
+                [36m<span[39m
+                  [33mclass[39m=[32m"w-1.5 h-1.5 rounded-full bg-emerald-400"[39m
+                [36m/>[39m
+                [36m<span>[39m
+                  [0mแหล่งข้อมูล: ฮาร์ดแวร์จริง (REAL HSM TELEMETRY)[0m
+                [36m</span>[39m
+              [36m</span>[39m
+              [36m<span[39m
+                [33mclass[39m=[32m"px-2.5 py-0.5 rounded-full bg-purple-500/15 text-purple-300 border border-purple-500/30 text-[10px]"[39m
+              [36m>[39m
+                [0mFIPS 140-3 LEVEL 4[0m
+              [36m</span>[39m
+            [36m</div>[39m
+            [36m<h2[39m
+              [33mclass[39m=[32m"text-lg sm:text-xl font-bold text-white flex items-center gap-2.5 pt-0.5"[39m
+            [36m>[39m
+              [36m<svg[39m
+                [33mclass[39m=[32m"lucide lucide-server w-5 h-5 text-cyan-400"[39m
+                [33mfill[39m=[32m"none"[39m
+                [33mheight[39m=[32m"24"[39m
+                [33mstroke[39m=[32m"currentColor"[39m
+                [33mstroke-linecap[39m=[32m"round"[39m
+                [33mstroke-linejoin[39m=[32m"round"[39m
+                [33mstroke-width[39m=[32m"2"[39m
+                [33mviewBox[39m=[32m"0 0 24 24"[39m
+                [33mwidth[39m=[32m"24"[39m
+                [33mxmlns[39m=[32m"http://www.w3.org/2000/svg"[39m
+              [36m>[39m
+                [36m<rect[39m
+                  [33mheight[39m=[32m"8"[39m
+                  [33mrx[39m=[32m"2"[39m
+                  [33mry[39m=[32m"2"[39m
+                  [33mwidth[39m=[32m"20"[39m
+                  [33mx[39m=[32m"2"[39m
+                  [33my[39m=[32m"2"[39m
+                [36m/>[39m
+                [36m<rect[39m
+                  [33mheight[39m=[32m"8"[39m
+                  [33mrx[39m=[32m"2"[39m
+                  [33mry[39m=[32m"2"[39m
+                  [33mwidth[39m=[32m"20"[39m
+                  [33mx[39m=[32m"2"[39m
+                  [33my[39m=[32m"14"[39m
+                [36m/>[39m
+                [36m<line[39m
+                  [33mx1[39m=[32m"6"[39m
+                  [33mx2[39m=[32m"6.01"[39m
+                  [33my1[39m=[32m"6"[39m
+                  [33my2[39m=[32m"6"[39m
+                [36m/>[39m
+                [36m<line[39m
+                  [33mx1[39m=[32m"6"[39m
+                  [33mx2[39m=[32m"6.01"[39m
+                  [33my1[39m=[32m"18"[39m
+                  [33my2[39m=[32m"18"[39m
+                [36m/>[39m
+              [36m</svg>[39m
+              [36m<span>[39m
+                [0mเกจสุขภาพฉันทามติฮาร์ดแวร์เรียลไทม์ (HSM Quorum Health Gauge)[0m
+              [36m</span>[39m
+            [36m</h2>[39m
+            [36m<p[39m
+              [33mclass[39m=[32m"text-xs text-zinc-400"[39m
+            [36m>[39m
+              [0mโทรมาตรสดวัดความสมบูรณ์รวม 0-100% และสถานะรายโหนดของ 10/10 Hardware Security Modules ตาม ม.26, 28[0m
+            [36m</p>[39m
+          [36m</div>[39m
+          [36m<div[39m
+            [33mclass[39m=[32m"flex items-center gap-2 flex-wrap"[39m
+          [36m>[39m
+            [36m<button[39m
+              [33mclass[39m=[32m"px-3 py-1.5 rounded-xl border text-xs font-semibold flex items-center gap-1.5 transition cursor-pointer bg-emerald-500/15 text-emerald-300 border-emerald-500/40 shadow-sm"[39m
+              [33mtitle[39m=[32m"Toggle continuous real-time telemetry streaming (2.4s pulse)"[39m
+            [36m>[39m
+              [36m<svg[39m
+                [33mclass[39m=[32m"lucide lucide-radio w-3.5 h-3.5 text-emerald-400 animate-pulse"[39m
+                [33mfill[39m=[32m"none"[39m
+                [33mheight[39m=[32m"24"[39m
+                [33mstroke[39m=[32m"currentColor"[39m
+                [33mstroke-linecap[39m=[32m"round"[39m
+                [33mstroke-linejoin[39m=[32m"round"[39m
+                [33mstroke-width[39m=[32m"2"[39m
+                [33mviewBox[39m=[32m"0 0 24 24"[39m
+                [33mwidth[39m=[32m"24"[39m
+                [33mxmlns[39m=[32m"http://www.w3.org/2000/svg"[39m
+              [36m>[39m
+                [36m<path[39m
+                  [33md[39m=[32m"M4.9 19.1C1 15.2 1 8.8 4.9 4.9"[39m
+                [36m/>[39m
+                [36m<path[39m
+                  [33md[39m=[32m"M7.8 16.2c-2.3-2.3-2.3-6.1 0-8.5"[39m
+                [36m/>[39m
+                [36m<circle[39m
+                  [33mcx[39m=[32m"12"[39m
+                  [33mcy[39m=[32m"12"[39m
+                  [33mr[39m=[32m"2"[39m
+                [36m/>[39m
+                [36m<path[39m
+                  [33md[39m=[32m"M16.2 7.8c2.3 2.3 2.3 6.1 0 8.5"[39m
+                [36m/>[39m
+                [36m<path[39m
+                  [33md[39m=[32m"M19.1 4.9C23 8.8 23 15.1 1...
+[90m [2m❯[22m waitForWrapper node_modules/@testing-library/dom/dist/wait-for.js:[2m163:27[22m[39m
+[36m [2m❯[22m tests/HsmClusterHealthGauge.test.tsx:[2m80:11[22m[39m
+    [90m 78|[39m
+    [90m 79|[39m     // Should return to 100% and real hardware telemetry
+    [90m 80|[39m     await waitFor(
+    [90m   |[39m           [31m^[39m
+    [90m 81|[39m       () => {
+    [90m 82|[39m         expect(screen.getByText('100%')).toBeInTheDocument();
+
+[31m[2m⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[1/1]⎯[22m[39m
+
+
+[2m Test Files [22m [1m[31m1 failed[39m[22m[90m (1)[39m
+[2m      Tests [22m [1m[31m1 failed[39m[22m[2m | [22m[33m3 skipped[39m[90m (4)[39m
+[2m   Start at [22m 10:40:55
+[2m   Duration [22m 6.57s[2m (tests 67%, import 19%, environment 9%, transform 4%)[22m
+
