@@ -238,9 +238,9 @@ export default function CopilotSovereignPanel() {
 
       {/* CHAT / LOG STREAM AREA */}
       <div className="flex-1 bg-black/80 p-3 sm:p-4 overflow-y-auto space-y-4 font-mono text-xs custom-scrollbar">
-        {messages.map((msg) => (
+        {messages.map((msg, idx) => (
           <div
-            key={msg.id}
+            key={`${msg.id || 'msg'}-${idx}`}
             className={`flex flex-col ${
               msg.sender === 'user' ? 'items-end' : 'items-start'
             }`}

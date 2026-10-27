@@ -38,6 +38,7 @@ import {
   ShieldCheck,
   Vote,
   Rocket,
+  Server,
 } from 'lucide-react';
 import { SystemEvent } from '../SystemEventsSidebar';
 import {

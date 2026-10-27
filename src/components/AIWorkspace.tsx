@@ -339,7 +339,15 @@ export function AIWorkspace({
         const stored = localStorage.getItem('zyrquen_one_chat_messages_v1');
         if (stored) {
           const parsed = JSON.parse(stored);
-          if (Array.isArray(parsed) && parsed.length > 0) return parsed;
+          if (Array.isArray(parsed) && parsed.length > 0) {
+            const seenIds = new Set<string>();
+            return parsed.map((m: AiConversationMessage, idx: number) => {
+              const baseId = m.id || `msg-${idx}`;
+              const uniqueId = seenIds.has(baseId) ? `${baseId}-restored-${idx}-${Date.now()}` : baseId;
+              seenIds.add(uniqueId);
+              return { ...m, id: uniqueId };
+            });
+          }
         }
       } catch {
         // safe fallback
@@ -552,7 +560,7 @@ export function AIWorkspace({
         initialArtifact?.traceId || `TRC-AI-849202-${String(seq).padStart(4, '0')}`;
 
       const userMsg: AiConversationMessage = {
-        id: `usr-${seq}`,
+        id: `usr-${seq}-${Date.now()}-${Math.random().toString(36).slice(2, 7)}`,
         sender: 'user',
         channel,
         text: promptText,
@@ -624,7 +632,7 @@ export function AIWorkspace({
           onExecutionTraceUpdate?.(haltedTrace);
 
           const blockedMsg: AiConversationMessage = {
-            id: `ai-preflight-${seq}`,
+            id: `ai-preflight-${seq}-${Date.now()}-${Math.random().toString(36).slice(2, 7)}`,
             sender: 'system',
             channel,
             text: `WAITING FOR VERIFIED AI ARTIFACT — Preflight (${preCheck.status} · ${preCheck.reason}): Halted before Analysis & Proposal (Core Mutation = 0 · SSoT Mutation = 0).`,
@@ -750,7 +758,7 @@ export function AIWorkspace({
         }
 
         const aiMsg: AiConversationMessage = {
-          id: `ai-${seq}`,
+          id: `ai-${seq}-${Date.now()}-${Math.random().toString(36).slice(2, 7)}`,
           sender: 'ai',
           channel,
           text:
@@ -925,7 +933,7 @@ export function AIWorkspace({
         onExecutionTraceUpdate?.(haltedTrace);
 
         const errRecord: AiConversationMessage = {
-          id: `err-${seq}`,
+          id: `err-${seq}-${Date.now()}-${Math.random().toString(36).slice(2, 7)}`,
           sender: 'system',
           channel,
           text: isProviderUnavailable
@@ -938,7 +946,7 @@ export function AIWorkspace({
         setMessages((prev) => [...prev, errRecord]);
 
         const errHistoryEntry: CommandHistoryEntry = {
-          id: `cmd-err-${seq}`,
+          id: `cmd-err-${seq}-${Date.now()}-${Math.random().toString(36).slice(2, 7)}`,
           commandText: promptText,
           channel,
           timestamp: new Date().toISOString(),
@@ -1288,7 +1296,7 @@ export function AIWorkspace({
       const seq = msgSeqRef.current + 1;
       msgSeqRef.current = seq;
       const verifiedMsg: AiConversationMessage = {
-        id: `ai-preflight-${seq}`,
+        id: `ai-preflight-${seq}-${Date.now()}-${Math.random().toString(36).slice(2, 7)}`,
         sender: 'ai',
         channel: 'TEXT_INPUT',
         text: `Preflight = VERIFIED (${check.computedHash?.slice(0, 23)}...) — Artifact passed Preflight Gate and forwarded through Analysis -> Proposal (${workflow.proposal?.proposalId}) -> Preview. Awaiting Explicit Approval (#EP-SOVEREIGN-01).`,
@@ -2190,9 +2198,9 @@ export function AIWorkspace({
                   </span>
                   <span>{targetWorkspaceId}</span>
                 </div>
-                {filteredNotes.map((note) => (
+                {filteredNotes.map((note, idx) => (
                   <motion.div
-                    key={note.id}
+                    key={`${note.id || 'note'}-${idx}`}
                     initial={{ opacity: 0, y: 6 }}
                     animate={{ opacity: 1, y: 0 }}
                     transition={{ duration: 0.2, ease: [0.22, 1, 0.36, 1] }}
@@ -2255,9 +2263,9 @@ export function AIWorkspace({
                     )}
                   </div>
                 ) : (
-                  filteredMessages.map((msg) => (
+                  filteredMessages.map((msg, idx) => (
                     <motion.div
-                      key={msg.id}
+                      key={`${msg.id || 'msg'}-${idx}`}
                       initial={{ opacity: 0, y: 8 }}
                       animate={{ opacity: 1, y: 0 }}
                       transition={{ duration: 0.22, ease: [0.22, 1, 0.36, 1] }}
@@ -2493,13 +2501,13 @@ export function AIWorkspace({
                 {/* Horizontal Carousel / Command Selector Strip */}
                 {filteredCommandHistory.length > 0 ? (
                   <div className="flex items-center gap-1.5 overflow-x-auto pb-1 scrollbar-thin scrollbar-thumb-zinc-700">
-                    {filteredCommandHistory.map((cmd) => {
+                    {filteredCommandHistory.map((cmd, idx) => {
                       const isSelected = activeHistoryContext?.id === cmd.id;
                       const isCompleted = cmd.uiStatus === 'COMPLETED';
                       const isBlocked = cmd.uiStatus === 'BLOCKED' || cmd.uiStatus === 'FAILED';
                       return (
                         <button
-                          key={cmd.id}
+                          key={`${cmd.id || 'cmd'}-${idx}`}
                           type="button"
                           onClick={() => setActiveHistoryContext(cmd)}
                           className={`px-2.5 py-1 rounded-lg border text-left shrink-0 transition cursor-pointer max-w-[210px] ${
@@ -3492,11 +3500,11 @@ export function AIWorkspace({
                     No command executions recorded yet.
                   </div>
                 ) : (
-                  commandHistory.map((cmd) => {
+                  commandHistory.map((cmd, idx) => {
                     const isSelected = activeHistoryContext?.id === cmd.id;
                     return (
                       <div
-                        key={cmd.id}
+                        key={`${cmd.id || 'cmd'}-${idx}`}
                         className={`p-3.5 rounded-xl border transition space-y-2.5 ${
                           isSelected
                             ? 'bg-cyan-950/40 border-cyan-500/60 shadow-lg'
