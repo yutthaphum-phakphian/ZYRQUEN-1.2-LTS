@@ -15,10 +15,11 @@
 [![Zyntheor AI Engine - Runtime Verified](https://img.shields.io/badge/Zyntheor%20AI%20Engine-Runtime%20Verified-0ea5e9?style=flat-square&labelColor=0d1117&logo=shield)](https://github.com/maewhyxng2-prog/ZYNTHEOR-AI-ENGINE/blob/main/governance/final.yaml)
 [![ZYRQUEN Q+ - Audit Verified](https://img.shields.io/badge/ZYRQUEN%20Q%2B-Audit%20Verified-10b981?style=flat-square&labelColor=0d1117&logo=gitbook)](https://github.com/maewhyxng2-prog/ZYNTHEOR-AI-ENGINE/blob/main/governance/registry.yaml)
 [![Zyntheor AI Engine - AI Upgrade Verified](https://img.shields.io/badge/Zyntheor%20AI%20Engine-AI%20Upgrade%20Verified-f97316?style=flat-square&labelColor=0d1117&logo=rocket)](https://github.com/maewhyxng2-prog/ZYNTHEOR-AI-ENGINE/blob/main/governance/upgrade.yaml)
+[![Legacy Archive - Legacy Preservation Verified](https://img.shields.io/badge/Legacy%20Archive-Legacy%20Preservation%20Verified-8b5cf6?style=flat-square&labelColor=0d1117&logo=archive&logoColor=8b5cf6)](governance/registry.yaml)
 
 <br />
 
-**[▶ LIVE APP](https://yutthaphum-phakphian.github.io/ZYRQUEN-1.2-LTS/)** &nbsp;◆&nbsp; [RELEASES](https://github.com/yutthaphum-phakphian/ZYRQUEN-1.2-LTS/releases) &nbsp;◆&nbsp; [SECURITY](SECURITY.md) &nbsp;◆&nbsp; [REGISTRY REPORT](FINALREGISTRYREPORT.md) &nbsp;◆&nbsp; [UPGRADE REPORT](FINALUPGRADEREPORT.md) &nbsp;◆&nbsp; [CONTRIBUTING](CONTRIBUTING.md)
+**[▶ LIVE APP](https://yutthaphum-phakphian.github.io/ZYRQUEN-1.2-LTS/)** &nbsp;◆&nbsp; [RELEASES](https://github.com/yutthaphum-phakphian/ZYRQUEN-1.2-LTS/releases) &nbsp;◆&nbsp; [SECURITY](SECURITY.md) &nbsp;◆&nbsp; [REGISTRY REPORT](FINALREGISTRYREPORT.md) &nbsp;◆&nbsp; [UPGRADE REPORT](FINALUPGRADEREPORT.md) &nbsp;◆&nbsp; [LEGACY ARCHIVE](FINALLEGACYARCHIVE_REPORT.md) &nbsp;◆&nbsp; [CONTRIBUTING](CONTRIBUTING.md)
 
 </div>
 

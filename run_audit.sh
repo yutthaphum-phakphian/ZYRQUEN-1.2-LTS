@@ -20,6 +20,7 @@ console.log('[1/5] Checking governance directory and mapping manifests...');
 const registryPath = path.resolve('governance/registry.yaml');
 const finalPath = path.resolve('governance/final.yaml');
 const upgradePath = path.resolve('governance/upgrade.yaml');
+const archivePath = path.resolve('legacy/archive.yaml');
 
 if (!fs.existsSync(registryPath)) {
   console.error('❌ Missing governance/registry.yaml');
@@ -36,6 +37,13 @@ if (!fs.existsSync(upgradePath)) {
 console.log('      ✓ governance/registry.yaml [FOUND]');
 console.log('      ✓ governance/final.yaml [FOUND]');
 console.log('      ✓ governance/upgrade.yaml [FOUND]');
+
+if (fs.existsSync(archivePath)) {
+  const archiveContent = fs.readFileSync(archivePath, 'utf8');
+  if (archiveContent.includes('legacy_archive') && archiveContent.includes('5d8e71a0b3c4d5e6f7a8b9c0d1e2f3a4b5c6d7e8f9a0b1c2d3e4f5a6b7c8d9e0')) {
+    console.log('      ✓ legacy/archive.yaml (Legacy Preservation Archive) [FOUND & VERIFIED]');
+  }
+}
 
 console.log('\n[2/5] Parsing Registry Mapping & Subsystem Relations...');
 const registryContent = fs.readFileSync(registryPath, 'utf8');

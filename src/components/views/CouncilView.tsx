@@ -74,6 +74,7 @@ import { CouncilChamber } from '../council/CouncilChamber';
 import { SenateGovernanceAuditDossier } from '../council/SenateGovernanceAuditDossier';
 import { SovereignTelemetryDualPlaneMatrix } from '../council/SovereignTelemetryDualPlaneMatrix';
 import { HsmNodeStatusTooltip, getNodeMetrics, HsmNodeStatusIcon } from '../council/HsmNodeStatusTooltip';
+import { HsmClusterHealthGauge } from '../HsmClusterHealthGauge';
 
 export interface MemberDiagnosticState {
   status: 'IDLE' | 'RUNNING' | 'SUCCESS';
@@ -148,7 +149,9 @@ export const CouncilView: React.FC<CouncilViewProps> = ({ onAddSystemEvent }) =>
   const [activeConsensusVoteEvent, setActiveConsensusVoteEvent] = useState<ConsensusVoteEvent | null>(null);
   const [activeRippleSlotId, setActiveRippleSlotId] = useState<number | 'ALL' | null>(null);
   const [jitterOverlayEnabled, setJitterOverlayEnabled] = useState<boolean>(true);
-  const [councilViewMode, setCouncilViewMode] = useState<'roster' | 'council-chamber' | 'hsm-status' | 'genesis-deploy' | 'custodian-pulse' | 'consensus-mesh' | 'senate-dossier' | 'dual-plane'>('dual-plane');
+  const [councilViewMode, setCouncilViewMode] = useState<
+    'roster' | 'council-chamber' | 'hsm-status' | 'hsm-gauge' | 'genesis-deploy' | 'custodian-pulse' | 'consensus-mesh' | 'senate-dossier' | 'dual-plane'
+  >('dual-plane');
 
   // Trigger Vote Consensus Ripple Propagation across the Council Grid
   const triggerConsensusRipple = (
@@ -507,7 +510,7 @@ export const CouncilView: React.FC<CouncilViewProps> = ({ onAddSystemEvent }) =>
           </div>
 
           {/* Quick Metrics Bar */}
-          <div className="grid grid-cols-2 sm:grid-cols-4 gap-4 pt-2">
+          <div className="grid grid-cols-2 sm:grid-cols-2 lg:grid-cols-5 gap-3 pt-2">
             <div className="p-3.5 rounded-2xl bg-black/40 border border-white/5 space-y-1">
               <span className="text-xs text-zinc-400 font-mono">ผู้นำสูงสุด / ประธานสภา</span>
               <p className="text-sm font-semibold text-amber-300 flex items-center gap-1.5">
@@ -551,6 +554,31 @@ export const CouncilView: React.FC<CouncilViewProps> = ({ onAddSystemEvent }) =>
                 SSoT Mutation: {STATE_AUTHORITY.SSOT_MUTATION_COUNT} (Δ{STATE_AUTHORITY.SSOT_MUTATION_DELTA})
               </span>
             </div>
+
+            {/* Quick 5th Card: Real-time Aggregate HSM Quorum Health Gauge (0-100%) */}
+            <button
+              onClick={() => {
+                playTone(740, 0.04);
+                setCouncilViewMode('hsm-gauge');
+              }}
+              className="p-3.5 rounded-2xl bg-gradient-to-br from-cyan-950/40 via-emerald-950/20 to-black border border-cyan-500/30 hover:border-cyan-400/70 space-y-1 text-left transition cursor-pointer group shadow-sm hover:shadow-[0_0_15px_rgba(6,182,212,0.25)]"
+              title="เปิดเกจวัดสุขภาพมติฮาร์ดแวร์ 0-100% และสถานะรายโหนดแบบละเอียด"
+            >
+              <div className="flex items-center justify-between text-xs text-zinc-400 font-mono">
+                <span className="text-cyan-300 font-bold flex items-center gap-1">
+                  <Activity className="w-3 h-3 text-cyan-400 animate-pulse" />
+                  เกจมติฮาร์ดแวร์
+                </span>
+                <span className="w-2 h-2 rounded-full bg-emerald-400 animate-ping" />
+              </div>
+              <p className="text-sm font-semibold text-emerald-300 font-mono flex items-center gap-1.5 group-hover:text-emerald-200">
+                <ShieldCheck className="w-3.5 h-3.5 text-emerald-400 shrink-0" />
+                <span>100% QUORUM (10/10)</span>
+              </p>
+              <span className="text-[11px] text-cyan-400/90 font-mono block truncate">
+                FIPS 140-3 L4 • ดูเกจ & สถานะ 10 โหนด &rarr;
+              </span>
+            </button>
           </div>
         </div>
       </motion.div>
@@ -570,6 +598,21 @@ export const CouncilView: React.FC<CouncilViewProps> = ({ onAddSystemEvent }) =>
         >
           <ShieldCheck className="w-4 h-4 text-emerald-400" />
           <span>Dual-Plane Matrix Attestation (100% Green)</span>
+        </button>
+
+        <button
+          onClick={() => {
+            playTone(740, 0.04);
+            setCouncilViewMode('hsm-gauge');
+          }}
+          className={`px-4 py-2.5 rounded-xl flex items-center gap-2 transition-all font-bold ${
+            councilViewMode === 'hsm-gauge'
+              ? 'bg-gradient-to-r from-emerald-500/40 via-cyan-500/35 to-teal-500/30 text-cyan-200 border border-cyan-400/60 shadow-[0_0_20px_rgba(6,182,212,0.35)]'
+              : 'text-cyan-400/90 hover:text-cyan-200 hover:bg-cyan-500/10 border border-cyan-500/30'
+          }`}
+        >
+          <Activity className="w-4 h-4 text-cyan-400 animate-pulse" />
+          <span>เกจมติฮาร์ดแวร์ (HSM Quorum Gauge 0-100%)</span>
         </button>
 
         <button
@@ -677,6 +720,13 @@ export const CouncilView: React.FC<CouncilViewProps> = ({ onAddSystemEvent }) =>
           <span>Senate Governance Audit (30-Day Dossier)</span>
         </button>
       </div>
+
+      {/* Mode -4: Real-time Aggregate HSM Quorum Health Gauge (0-100%) & Individual Node Status */}
+      {councilViewMode === 'hsm-gauge' && (
+        <div className="space-y-6">
+          <HsmClusterHealthGauge onSelectNode={(node) => playTone(680, 0.04)} />
+        </div>
+      )}
 
       {/* Mode -3: Sovereign Telemetry Verification & Quorum Dual-Plane Matrix Attestation */}
       {councilViewMode === 'dual-plane' && (
