@@ -1,6 +1,10 @@
 <div align="center">
 
-![ZYRQUEN Ω™ Banner](banner.svg)
+<img src="zyrquen_sovereign_banner.jpg" alt="ZYRQUEN Ω™ Sovereign AI Engine" width="100%" />
+
+<br /><br />
+
+<img src="zyrquen_sovereign_logo.jpg" alt="ZYRQUEN Ω™ Sovereign Crest Seal" width="160" style="border-radius: 50%; box-shadow: 0 0 25px rgba(0, 229, 255, 0.4);" />
 
 </div>
 
