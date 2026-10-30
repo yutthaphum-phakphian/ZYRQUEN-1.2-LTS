@@ -8,25 +8,25 @@
 
 <br />
 
-[[PWA](https://img.shields.io/badge/PWA-LIVE-00e5ff?style=flat-square&labelColor=0d1117&logo=googlechrome&logoColor=00e5ff)](https://yutthaphum-phakphian.github.io/ZYRQUEN-1.2-LTS/)
-[[Release](https://img.shields.io/badge/RELEASE-v1.2.1%20LTS-a855f7?style=flat-square&labelColor=0d1117)](https://github.com/yutthaphum-phakphian/ZYRQUEN-1.2-LTS/releases/tag/v1.2.1)
-[[CI](https://img.shields.io/github/actions/workflow/status/yutthaphum-phakphian/ZYRQUEN-1.2-LTS/ci.yml?style=flat-square&labelColor=0d1117&label=CI&logo=githubactions&logoColor=ffd700)](https://github.com/yutthaphum-phakphian/ZYRQUEN-1.2-LTS/actions)
-[[TypeScript](https://img.shields.io/badge/TYPESCRIPT-~5.8-ffd700?style=flat-square&labelColor=0d1117&logo=typescript&logoColor=ffd700)](https://www.typescriptlang.org/)
-[[Node](https://img.shields.io/badge/NODE-%E2%89%A522-00e5ff?style=flat-square&labelColor=0d1117&logo=nodedotjs&logoColor=00e5ff)](https://nodejs.org/)
+[![PWA](https://img.shields.io/badge/PWA-LIVE-00e5ff?style=flat-square&labelColor=0d1117&logo=googlechrome&logoColor=00e5ff)](https://yutthaphum-phakphian.github.io/ZYRQUEN-1.2-LTS/)
+[![Release](https://img.shields.io/badge/RELEASE-v1.2.1%20LTS-a855f7?style=flat-square&labelColor=0d1117)](https://github.com/yutthaphum-phakphian/ZYRQUEN-1.2-LTS/releases/tag/v1.2.1)
+[![CI](https://img.shields.io/github/actions/workflow/status/yutthaphum-phakphian/ZYRQUEN-1.2-LTS/ci.yml?style=flat-square&labelColor=0d1117&label=CI&logo=githubactions&logoColor=ffd700)](https://github.com/yutthaphum-phakphian/ZYRQUEN-1.2-LTS/actions)
+[![TypeScript](https://img.shields.io/badge/TYPESCRIPT-~5.8-ffd700?style=flat-square&labelColor=0d1117&logo=typescript&logoColor=ffd700)](https://www.typescriptlang.org/)
+[![Node](https://img.shields.io/badge/NODE-%E2%89%A522-00e5ff?style=flat-square&labelColor=0d1117&logo=nodedotjs&logoColor=00e5ff)](https://nodejs.org/)
 
 <br />
 
-[[Zyntheor AI Engine - Runtime Verified](https://img.shields.io/badge/Zyntheor%20AI%20Engine-Runtime%20Verified-0ea5e9?style=flat-square&labelColor=0d1117&logo=shield)](https://github.com/maewhyxng2-prog/ZYNTHEOR-AI-ENGINE/blob/main/governance/final.yaml)
-[[ZYRQUEN Q+ - Audit Verified](https://img.shields.io/badge/ZYRQUEN%20Q%2B-Audit%20Verified-10b981?style=flat-square&labelColor=0d1117&logo=gitbook)](https://github.com/maewhyxng2-prog/ZYNTHEOR-AI-ENGINE/blob/main/governance/registry.yaml)
-[[Zyntheor AI Engine - AI Upgrade Verified](https://img.shields.io/badge/Zyntheor%20AI%20Engine-AI%20Upgrade%20Verified-f97316?style=flat-square&labelColor=0d1117&logo=rocket)](https://github.com/maewhyxng2-prog/ZYNTHEOR-AI-ENGINE/blob/main/governance/upgrade.yaml)
-[[Legacy Archive - Legacy Preservation Verified](https://img.shields.io/badge/Legacy%20Archive-Legacy%20Preservation%20Verified-8b5cf6?style=flat-square&labelColor=0d1117&logo=archive&logoColor=8b5cf6)](governance/registry.yaml)
+[![Zyntheor AI Engine - Runtime Verified](https://img.shields.io/badge/Zyntheor%20AI%20Engine-Runtime%20Verified-0ea5e9?style=flat-square&labelColor=0d1117&logo=shield)](https://github.com/maewhyxng2-prog/ZYNTHEOR-AI-ENGINE/blob/main/governance/final.yaml)
+[![ZYRQUEN Q+ - Audit Verified](https://img.shields.io/badge/ZYRQUEN%20Q%2B-Audit%20Verified-10b981?style=flat-square&labelColor=0d1117&logo=gitbook)](https://github.com/maewhyxng2-prog/ZYNTHEOR-AI-ENGINE/blob/main/governance/registry.yaml)
+[![Zyntheor AI Engine - AI Upgrade Verified](https://img.shields.io/badge/Zyntheor%20AI%20Engine-AI%20Upgrade%20Verified-f97316?style=flat-square&labelColor=0d1117&logo=rocket)](https://github.com/maewhyxng2-prog/ZYNTHEOR-AI-ENGINE/blob/main/governance/upgrade.yaml)
+[![Legacy Archive - Legacy Preservation Verified](https://img.shields.io/badge/Legacy%20Archive-Legacy%20Preservation%20Verified-8b5cf6?style=flat-square&labelColor=0d1117&logo=archive&logoColor=8b5cf6)](governance/registry.yaml)
 
 <br />
 
-[[GEO AUDIT - 15723 BLOCKED 100%](https://img.shields.io/badge/GEO_AUDIT-15723_BLOCKED_100%25-00ff88?style=flat-square&labelColor=0d1117&logo=shieldcheck&logoColor=00ff88)](#-sovereign-gateway-geo-auth-heatmap--15723-blocked)
-[[COURT READY - SELF PROVING](https://img.shields.io/badge/COURT_READY-SELF_PROVING_EVIDENCE-ff3b30?style=flat-square&labelColor=0d1117&logo=scale&logoColor=ff3b30)](#-court-ready-certificate)
-[[ZERO DRIFT - Δ0 0.0000%](https://img.shields.io/badge/ZERO_DRIFT-%CE%940.0000%25-00e5ff?style=flat-square&labelColor=0d1117)](#verification-status)
-[[FAIL CLOSED - ZERO BREACH](https://img.shields.io/badge/FAIL_CLOSED-ZERO_BREACH_GUARANTEE-ffd700?style=flat-square&labelColor=0d1117)](#sovereign-flow-diagram)
+[![GEO AUDIT - 15723 BLOCKED 100%](https://img.shields.io/badge/GEO_AUDIT-15723_BLOCKED_100%25-00ff88?style=flat-square&labelColor=0d1117&logo=shieldcheck&logoColor=00ff88)](#-sovereign-gateway-geo-auth-heatmap--15723-blocked)
+[![COURT READY - SELF PROVING](https://img.shields.io/badge/COURT_READY-SELF_PROVING_EVIDENCE-ff3b30?style=flat-square&labelColor=0d1117&logo=scale&logoColor=ff3b30)](#-court-ready-certificate)
+[![ZERO DRIFT - Δ0 0.0000%](https://img.shields.io/badge/ZERO_DRIFT-%CE%940.0000%25-00e5ff?style=flat-square&labelColor=0d1117)](#verification-status)
+[![FAIL CLOSED - ZERO BREACH](https://img.shields.io/badge/FAIL_CLOSED-ZERO_BREACH_GUARANTEE-ffd700?style=flat-square&labelColor=0d1117)](#sovereign-flow-diagram)
 
 <br />
 
@@ -138,11 +138,11 @@ Last checked in Sovereign Verified Runtime:
 
 ### ZYRQUEN Ω∞ — SOVEREIGN BUFFALO EDITION
 
-[Grass Availability](https://img.shields.io/badge/Grass%20Availability-100%25-4cae3a?style=flat-square&labelColor=0d1117&logo=leaflet&logoColor=4cae3a)
-[Buffalo Happiness](https://img.shields.io/badge/%E0%B8%84%E0%B8%A7%E0%B8%B2%E0%B8%A1%E0%B8%AA%E0%B8%B8%E0%B8%82%E0%B8%82%E0%B8%AD%E0%B8%87%E0%B8%84%E0%B8%A7%E0%B8%B2%E0%B8%A2-100%25-ffd700?style=flat-square&labelColor=0d1117)
-[Root Authority](https://img.shields.io/badge/Root%20Authority-%E0%B8%8A%E0%B8%B2%E0%B8%A7%E0%B8%99%E0%B8%B2-a855f7?style=flat-square&labelColor=0d1117)
-[Drift](https://img.shields.io/badge/Drift-%CE%940.00%25-00e5ff?style=flat-square&labelColor=0d1117)
-[Run](https://img.shields.io/badge/%E0%B8%A3%E0%B8%B1%E0%B8%99%E0%B9%82%E0%B8%84-%3D%20%E0%B8%A3%E0%B8%B1%E0%B8%84%E0%B8%A7%E0%B8%B2%E0%B8%A2-f97316?style=flat-square&labelColor=0d1117)
+![Grass Availability](https://img.shields.io/badge/Grass%20Availability-100%25-4cae3a?style=flat-square&labelColor=0d1117&logo=leaflet&logoColor=4cae3a)
+![Buffalo Happiness](https://img.shields.io/badge/%E0%B8%84%E0%B8%A7%E0%B8%B2%E0%B8%A1%E0%B8%AA%E0%B8%B8%E0%B8%82%E0%B8%82%E0%B8%AD%E0%B8%87%E0%B8%84%E0%B8%A7%E0%B8%B2%E0%B8%A2-100%25-ffd700?style=flat-square&labelColor=0d1117)
+![Root Authority](https://img.shields.io/badge/Root%20Authority-%E0%B8%8A%E0%B8%B2%E0%B8%A7%E0%B8%99%E0%B8%B2-a855f7?style=flat-square&labelColor=0d1117)
+![Drift](https://img.shields.io/badge/Drift-%CE%940.00%25-00e5ff?style=flat-square&labelColor=0d1117)
+![Run](https://img.shields.io/badge/%E0%B8%A3%E0%B8%B1%E0%B8%99%E0%B9%82%E0%B8%84-%3D%20%E0%B8%A3%E0%B8%B1%E0%B8%84%E0%B8%A7%E0%B8%B2%E0%B8%A2-f97316?style=flat-square&labelColor=0d1117)
 
 </div>
 
@@ -378,3 +378,4 @@ See [CONTRIBUTING.md](CONTRIBUTING.md) for repository guidance.
 Copyright © ZYRQUEN Ω™ Sovereign Systems. All rights reserved.
 
 For security concerns, see [SECURITY.md](SECURITY.md).
+
