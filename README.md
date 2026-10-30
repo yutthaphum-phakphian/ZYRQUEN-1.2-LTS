@@ -8,11 +8,23 @@
 
 <br />
 
+<img src="assets/zyrquen-rainbow-line.svg" width="640" height="4" alt="" />
+
+<br />
+
 [![PWA](https://img.shields.io/badge/PWA-LIVE-00e5ff?style=flat-square&labelColor=0d1117&logo=googlechrome&logoColor=00e5ff)](https://yutthaphum-phakphian.github.io/ZYRQUEN-1.2-LTS/)
 [![Release](https://img.shields.io/badge/RELEASE-v1.2.1%20LTS-a855f7?style=flat-square&labelColor=0d1117)](https://github.com/yutthaphum-phakphian/ZYRQUEN-1.2-LTS/releases/tag/v1.2.1)
 [![CI](https://img.shields.io/github/actions/workflow/status/yutthaphum-phakphian/ZYRQUEN-1.2-LTS/ci.yml?style=flat-square&labelColor=0d1117&label=CI&logo=githubactions&logoColor=ffd700)](https://github.com/yutthaphum-phakphian/ZYRQUEN-1.2-LTS/actions)
 [![TypeScript](https://img.shields.io/badge/TYPESCRIPT-~5.8-ffd700?style=flat-square&labelColor=0d1117&logo=typescript&logoColor=ffd700)](https://www.typescriptlang.org/)
 [![Node](https://img.shields.io/badge/NODE-%E2%89%A522-00e5ff?style=flat-square&labelColor=0d1117&logo=nodedotjs&logoColor=00e5ff)](https://nodejs.org/)
+
+<br />
+
+<img src="assets/zyrquen-rainbow-line.svg" width="640" height="4" alt="" />
+
+<br />
+
+<img src="assets/zyrquen-rainbow-line.svg" width="640" height="4" alt="" />
 
 <br />
 
@@ -23,10 +35,22 @@
 
 <br />
 
+<img src="assets/zyrquen-rainbow-line.svg" width="640" height="4" alt="" />
+
+<br />
+
+<img src="assets/zyrquen-rainbow-line.svg" width="640" height="4" alt="" />
+
+<br />
+
 [![GEO AUDIT - 15723 BLOCKED 100%](https://img.shields.io/badge/GEO_AUDIT-15723_BLOCKED_100%25-00ff88?style=flat-square&labelColor=0d1117&logo=shieldcheck&logoColor=00ff88)](#-sovereign-gateway-geo-auth-heatmap--15723-blocked)
 [![COURT READY - SELF PROVING](https://img.shields.io/badge/COURT_READY-SELF_PROVING_EVIDENCE-ff3b30?style=flat-square&labelColor=0d1117&logo=scale&logoColor=ff3b30)](#-court-ready-certificate)
 [![ZERO DRIFT - Δ0 0.0000%](https://img.shields.io/badge/ZERO_DRIFT-%CE%940.0000%25-00e5ff?style=flat-square&labelColor=0d1117)](#verification-status)
 [![FAIL CLOSED - ZERO BREACH](https://img.shields.io/badge/FAIL_CLOSED-ZERO_BREACH_GUARANTEE-ffd700?style=flat-square&labelColor=0d1117)](#sovereign-flow-diagram)
+
+<br />
+
+<img src="assets/zyrquen-rainbow-line.svg" width="640" height="4" alt="" />
 
 <br />
 
@@ -378,4 +402,3 @@ See [CONTRIBUTING.md](CONTRIBUTING.md) for repository guidance.
 Copyright © ZYRQUEN Ω™ Sovereign Systems. All rights reserved.
 
 For security concerns, see [SECURITY.md](SECURITY.md).
-
