@@ -17,6 +17,7 @@
 [![CI](https://img.shields.io/github/actions/workflow/status/yutthaphum-phakphian/ZYRQUEN-1.2-LTS/ci.yml?style=flat-square&labelColor=0d1117&label=CI&logo=githubactions&logoColor=ffd700)](https://github.com/yutthaphum-phakphian/ZYRQUEN-1.2-LTS/actions)
 [![TypeScript](https://img.shields.io/badge/TYPESCRIPT-~5.8-ffd700?style=flat-square&labelColor=0d1117&logo=typescript&logoColor=ffd700)](https://www.typescriptlang.org/)
 [![Node](https://img.shields.io/badge/NODE-%E2%89%A522-00e5ff?style=flat-square&labelColor=0d1117&logo=nodedotjs&logoColor=00e5ff)](https://nodejs.org/)
+[![Sponsor](https://img.shields.io/badge/Sponsor-GitHub-ea4aaa?style=flat-square&logo=githubsponsors&logoColor=white)](https://github.com/sponsors/yutthaphum-phakphian)
 
 <br />
 
