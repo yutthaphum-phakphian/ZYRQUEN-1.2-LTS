@@ -5,7 +5,7 @@ status: Legacy Preservation Verified ✓ (100%)
 authority: นายยุทธภูมิ พากเพียร (#EP-SOVEREIGN-01)
 
 integrity_proof:
-  designated_sha256_digest_v11: [STRIPPED 79 bytes]: 0dfb32ae780dca98a4aab8fde2e9f05a4aef2e0f79d3d27ce620e9ad14d31c36
+  designated_sha256_digest_v11: "[STRIPPED 79 bytes]: 0dfb32ae780dca98a4aab8fde2e9f05a4aef2e0f79d3d27ce620e9ad14d31c36"
   canonical_merkle_root_0x: [STRIPPED 66 bytes]
   ed25519_signature: [STRIPPED 128 bytes]
 

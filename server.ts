@@ -6,7 +6,6 @@ import cors from 'cors';
 import crypto from 'crypto';
 import path from 'path';
 import fs from 'fs';
-import { createServer as createViteServer } from 'vite';
 import {
   createVerifiedAiArtifactEnvelope,
   inspectAiArtifactPreflight,
@@ -2444,6 +2443,7 @@ Rules:
   // Vite middleware setup
   const distExists = fs.existsSync(path.join(process.cwd(), 'dist', 'index.html'));
   if (process.env.NODE_ENV !== 'production' || !distExists) {
+    const { createServer: createViteServer } = await import('vite');
     const vite = await createViteServer({
       root: process.cwd(),
       configFile: path.resolve(process.cwd(), 'vite.config.ts'),

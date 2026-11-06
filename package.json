@@ -12,7 +12,7 @@
     "test:unit": "tsx --test tests/unit/*.test.ts",
     "activate:upgrade": "tsx scripts/activate-upgrade.ts",
     "preview": "vite preview",
-    "start": "node server.ts"
+    "start": "tsx server.ts"
   },
   "dependencies": {
     "@google/genai": "^2.24.0",
@@ -20,6 +20,7 @@
     "clsx": "^2.1.1",
     "cors": "^2.8.5",
     "d3": "^7.9.0",
+    "dompurify": "^3.4.16",
     "dotenv": "^16.4.7",
     "express": "^4.21.2",
     "html2canvas": "^1.4.1",

@@ -16,14 +16,14 @@ describe('HsmClusterHealthGauge Component Suite', () => {
 
     // Health Score 100%
     expect(screen.getAllByText('100%').length).toBeGreaterThan(0);
-    expect(screen.getByText('10/10 โหนด')).toBeInTheDocument();
+    expect(screen.getAllByText('10/10 โหนด')[0]).toBeInTheDocument();
     expect(screen.getAllByText(/องค์ประชุมแข็งแรง/i).length).toBeGreaterThan(0);
 
     // Telemetry source origin
-    expect(screen.getByText(/แหล่งข้อมูล: ฮาร์ดแวร์จริง/i)).toBeInTheDocument();
+    expect(screen.getAllByText(/แหล่งข้อมูล: ฮาร์ดแวร์จริง/i)[0]).toBeInTheDocument();
 
     // 80% legal threshold label
-    expect(screen.getByText(/80% เกณฑ์ขั้นต่ำ/i)).toBeInTheDocument();
+    expect(screen.getAllByText(/80% เกณฑ์ขั้นต่ำ/i)[0]).toBeInTheDocument();
   });
 
   it('allows selecting individual nodes and reveals deep forensic properties', () => {
@@ -36,8 +36,8 @@ describe('HsmClusterHealthGauge Component Suite', () => {
 
     // Deep inspector should show forensic details for HSM-NODE-03
     expect(screen.getAllByText(/HSM-NODE-03/i).length).toBeGreaterThan(0);
-    expect(screen.getByText(/Forensic SHA-256 Digest/i)).toBeInTheDocument();
-    expect(screen.getByText(/คัดลอกแฮช/i)).toBeInTheDocument();
+    expect(screen.getAllByText(/Forensic SHA-256 Digest/i)[0]).toBeInTheDocument();
+    expect(screen.getAllByText(/คัดลอกแฮช/i)[0]).toBeInTheDocument();
   });
 
   it('handles simulated stress scenario (7/10 breach) and toggles telemetry origin badge to SIMULATED', async () => {
@@ -50,10 +50,10 @@ describe('HsmClusterHealthGauge Component Suite', () => {
 
     // Score should reflect 70% and critical breach alert
     await waitFor(() => {
-      expect(screen.getByText('70%')).toBeInTheDocument();
-      expect(screen.getByText('7/10 โหนด')).toBeInTheDocument();
+      expect(screen.getAllByText('70%')[0]).toBeInTheDocument();
+      expect(screen.getAllByText('7/10 โหนด')[0]).toBeInTheDocument();
       expect(screen.getAllByText(/วิกฤต — องค์ประชุมไม่ครบ/i).length).toBeGreaterThan(0);
-      expect(screen.getByText(/โหมดทดสอบสถานการณ์/i)).toBeInTheDocument();
+      expect(screen.getAllByText(/โหมดทดสอบสถานการณ์/i)[0]).toBeInTheDocument();
     });
 
     // Phoenix recovery button should appear
@@ -69,7 +69,7 @@ describe('HsmClusterHealthGauge Component Suite', () => {
     fireEvent.click(breachBtn);
 
     await waitFor(() => {
-      expect(screen.getByText('70%')).toBeInTheDocument();
+      expect(screen.getAllByText('70%')[0]).toBeInTheDocument();
     });
 
     // Trigger Phoenix Recovery
@@ -80,9 +80,9 @@ describe('HsmClusterHealthGauge Component Suite', () => {
     await waitFor(
       () => {
         expect(screen.getAllByText('100%').length).toBeGreaterThan(0);
-        expect(screen.getByText('10/10 โหนด')).toBeInTheDocument();
+        expect(screen.getAllByText('10/10 โหนด')[0]).toBeInTheDocument();
         expect(screen.getAllByText(/องค์ประชุมแข็งแรง/i).length).toBeGreaterThan(0);
-        expect(screen.getByText(/แหล่งข้อมูล: ฮาร์ดแวร์จริง/i)).toBeInTheDocument();
+        expect(screen.getAllByText(/แหล่งข้อมูล: ฮาร์ดแวร์จริง/i)[0]).toBeInTheDocument();
       },
       { timeout: 4000 }
     );
